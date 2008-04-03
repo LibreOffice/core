@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:33:41 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,16 +116,13 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 {
     mpObj = pObj;
     mnShowPage = nShowPage;
-    delete mpSlideShow;
-    mpSlideShow = 0;
-
+    mxSlideShow.clear();
     updateViewSettings();
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 : Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
-    mpSlideShow = 0;
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
     Wallpaper aEmpty;
@@ -135,7 +132,6 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 : Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
-    mpSlideShow = 0;
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
     Wallpaper aEmpty;
@@ -146,15 +142,14 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 
 SdDocPreviewWin::~SdDocPreviewWin()
 {
-    delete mpSlideShow;
     delete pMetaFile;
 }
 
 void SdDocPreviewWin::Resize()
 {
     Invalidate();
-    if( mpSlideShow )
-        mpSlideShow->resize( GetSizePixel() );
+    if( mxSlideShow.is() )
+        mxSlideShow->resize( GetSizePixel() );
 }
 
 void SdDocPreviewWin::SetGDIFile( GDIMetaFile* pFile )
@@ -210,9 +205,9 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
     }
 }
 
-void SdDocPreviewWin::Paint( const Rectangle& )
+void SdDocPreviewWin::Paint( const Rectangle& rRect )
 {
-    if(( mpSlideShow == 0) || (mpSlideShow->isTerminated() ) )
+    if( (!mxSlideShow.is()) || (!mxSlideShow->isRunning() ) )
     {
         SvtAccessibilityOptions aAccOptions;
         bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -221,18 +216,15 @@ void SdDocPreviewWin::Paint( const Rectangle& )
             : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
 
         ImpPaint( pMetaFile, (VirtualDevice*)this );
-
+    }
+    else
+    {
+        mxSlideShow->paint( rRect );
     }
 }
 
 void SdDocPreviewWin::startPreview()
 {
-    if( mpSlideShow )
-    {
-        delete mpSlideShow;
-        mpSlideShow = 0;
-    }
-
     ::sd::DrawDocShell* pDocShell = dynamic_cast< ::sd::DrawDocShell * >( mpObj );
     if( mpObj )
     {
@@ -244,13 +236,13 @@ void SdDocPreviewWin::startPreview()
 
             if( pPage && (pPage->getTransitionType() != 0) )
             {
-                std::auto_ptr<sd::Slideshow> pSlideShow( new sd::Slideshow( 0, 0, pDoc, this ) );
+                if( !mxSlideShow.is() )
+                    mxSlideShow = sd::SlideShow::Create( pDoc );
 
                 Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
                 Reference< XAnimationNode > xAnimationNode;
 
-                if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
-                    mpSlideShow = pSlideShow.release();
+                mxSlideShow->startPreview( xDrawPage, xAnimationNode, this );
             }
         }
     }
