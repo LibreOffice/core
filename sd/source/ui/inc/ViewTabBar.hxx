@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:09:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace tools {
     class EventMultiplexerEvent;
@@ -98,8 +99,7 @@ namespace sd {
 */
 class ViewTabBar
     : private sd::MutexOwner,
-      public ViewTabBarInterfaceBase,
-      public TabControl
+      public ViewTabBarInterfaceBase
 {
 public:
     ViewTabBar (
@@ -111,6 +111,9 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
+    ::boost::shared_ptr< ::TabControl> GetTabControl (void) const;
+
+    bool ActivatePage (void);
 
     //----- drawing::framework::XConfigurationChangeListener ------------------
 
@@ -161,6 +164,9 @@ public:
         ::com::sun::star::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+        throw (com::sun::star::uno::RuntimeException);
+
 
     //----- XUnoTunnel --------------------------------------------------------
 
@@ -180,8 +186,6 @@ public:
     */
     int GetHeight (void);
 
-    virtual void Paint (const Rectangle& rRect);
-
     void AddTabBarButton (
         const ::com::sun::star::drawing::framework::TabBarButton& rButton,
         const ::com::sun::star::drawing::framework::TabBarButton& rAnchor);
@@ -195,6 +199,7 @@ public:
         GetTabBarButtons (void);
 
 private:
+    ::boost::shared_ptr< ::TabControl> mpTabControl;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController> mxController;
     ::com::sun::star::uno::Reference<
@@ -206,7 +211,6 @@ private:
         ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
 
-    virtual void ActivatePage (void);
     void UpdateActiveButton (void);
     void AddTabBarButton (
         const ::com::sun::star::drawing::framework::TabBarButton& rButton,
