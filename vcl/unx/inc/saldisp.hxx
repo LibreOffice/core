@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:32:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,6 +418,9 @@ protected:
     void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
+    void            InitRandR( XLIB_Window aRoot ) const;
+    void            DeInitRandR();
+    int             processRandREvent( XEvent* );
 
     void            doDestruct();
 public:
