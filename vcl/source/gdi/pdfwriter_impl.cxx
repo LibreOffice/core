@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-31 13:25:42 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5228,10 +5228,27 @@ bool PDFWriterImpl::emitCatalog()
         default:
             break;
     }
+    sal_Int32 nMediaBoxWidth = 0;
+    sal_Int32 nMediaBoxHeight = 0;
+    if( m_aPages.empty() ) // sanity check, this should not happen
+    {
+        nMediaBoxWidth = m_nInheritedPageWidth;
+        nMediaBoxHeight = m_nInheritedPageHeight;
+    }
+    else
+    {
+        for( std::vector<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter )
+        {
+            if( iter->m_nPageWidth > nMediaBoxWidth )
+                nMediaBoxWidth = iter->m_nPageWidth;
+            if( iter->m_nPageHeight > nMediaBoxHeight )
+                nMediaBoxHeight = iter->m_nPageHeight;
+        }
+    }
     aLine.append( "/MediaBox[ 0 0 " );
-    aLine.append( m_nInheritedPageWidth );
+    aLine.append( nMediaBoxWidth );
     aLine.append( ' ' );
-    aLine.append( m_nInheritedPageHeight );
+    aLine.append( nMediaBoxHeight );
     aLine.append( " ]\n"
                   "/Kids[ " );
     unsigned int i = 0;
