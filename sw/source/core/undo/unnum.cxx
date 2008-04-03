@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:22:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,9 @@ SV_IMPL_PTRARR( _SfxPoolItems, SfxPoolItem* );
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
-                            const SwNumRule& rNewRule )
-    : SwUndo( UNDO_INSNUM ),
+                            const SwNumRule& rNewRule,
+                            SwUndoId nUndoId )
+    : SwUndo( nUndoId ),
     aNumRule( rNewRule ), pHistory( 0 ), nSttSet( ULONG_MAX ),
     pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
@@ -101,6 +102,14 @@ SwUndoInsNum::~SwUndoInsNum()
 {
     delete pHistory;
     delete pOldNumRule;
+}
+
+SwRewriter SwUndoInsNum::GetRewriter() const
+{
+    SwRewriter aResult;
+    if( UNDO_INSFMTATTR == GetId() )
+        aResult.AddRule(UNDO_ARG1, aNumRule.GetName());
+    return aResult;
 }
 
 void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
