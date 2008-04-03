@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 16:05:13 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:46:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,13 @@ LINKC*=$(CC)
 
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
-LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+    #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OXT=
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
