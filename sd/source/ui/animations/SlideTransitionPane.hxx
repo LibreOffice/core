@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #ifndef SD_TOOLS_EVENT_MULTIPLEXER_HXX
 #include "EventMultiplexer.hxx"
 #endif
+
+#include "SlideSorterViewShell.hxx"
 
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
@@ -110,7 +112,7 @@ private:
     void addListener();
     void removeListener();
 
-    ::std::vector< SdPage * > getSelectedPages();
+    ::sd::slidesorter::SharedPageSelection getSelectedPages (void) const;
 
     DECL_LINK( ApplyToAllButtonClicked, void * );
     DECL_LINK( PlayButtonClicked, void * );
@@ -157,6 +159,7 @@ private:
 
     bool         mbHasSelection;
     bool         mbUpdatingControls;
+    bool         mbIsMainViewChangePending;
 
     typedef ::std::vector< String > tSoundListType;
     tSoundListType  maSoundList;
