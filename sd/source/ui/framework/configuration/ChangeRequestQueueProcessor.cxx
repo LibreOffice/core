@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChangeRequestQueueProcessor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:44:15 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,16 @@
 #include "precompiled_sd.hxx"
 
 #include "ChangeRequestQueueProcessor.hxx"
+#include "ConfigurationTracer.hxx"
 
 #include "framework/ConfigurationController.hxx"
 #include "ConfigurationUpdater.hxx"
 
 #include <vcl/svapp.hxx>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_CONFIGURATIONCHANGEEVENT_HPP_
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -69,28 +64,6 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
     if (xNamed.is())
         OSL_TRACE("    %s",
             ::rtl::OUStringToOString(xNamed->getName(), RTL_TEXTENCODING_UTF8).getStr());
-}
-
-
-
-
-void TraceConfiguration (const Reference<XConfiguration>& rxConfiguration)
-{
-    OSL_TRACE("Configuration at %p {", rxConfiguration.get());
-    Sequence<ResourceId> aResourceList (rxConfiguration->getResources(ResourceId()));
-    for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
-    {
-        OSL_TRACE("    %s",
-            ::rtl::OUStringToOString(aResourceList[nIndex].ResourceURL, RTL_TEXTENCODING_UTF8).getStr());
-        Sequence<ResourceId> aRelationList (
-            rxConfiguration->getResources(aResourceList[nIndex]));
-        for (sal_Int32 nIndex=0; nIndex<aRelationList.getLength(); ++nIndex)
-        {
-            OSL_TRACE("        %s",
-                ::rtl::OUStringToOString(aRelationList[nIndex].ResourceURL, RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-    OSL_TRACE("}");
 }
 
 #endif
@@ -127,6 +100,8 @@ ChangeRequestQueueProcessor::~ChangeRequestQueueProcessor (void)
 void ChangeRequestQueueProcessor::SetConfiguration (
     const Reference<XConfiguration>& rxConfiguration)
 {
+    ::osl::MutexGuard aGuard (maMutex);
+
     mxConfiguration = rxConfiguration;
     StartProcessing();
 }
@@ -137,11 +112,14 @@ void ChangeRequestQueueProcessor::SetConfiguration (
 void ChangeRequestQueueProcessor::AddRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
 {
+    ::osl::MutexGuard aGuard (maMutex);
+
 #ifdef VERBOSE
     if (maQueue.empty())
     {
         OSL_TRACE("Adding requests to empty queue");
-        TraceConfiguration(mxConfiguration);
+        ConfigurationTracer::TraceConfiguration(
+            mxConfiguration, "current configuration of queue processor");
     }
     OSL_TRACE("Adding request");
     TraceRequest(rxRequest);
@@ -166,20 +144,38 @@ void ChangeRequestQueueProcessor::StartProcessing (void)
         OSL_TRACE("ChangeRequestQueueProcessor scheduling processing");
 #endif
         mnUserEventId = Application::PostUserEvent(
-            LINK(this,ChangeRequestQueueProcessor,ProcessOneEvent));
+            LINK(this,ChangeRequestQueueProcessor,ProcessEvent));
     }
 }
 
 
 
 
-IMPL_LINK(ChangeRequestQueueProcessor, ProcessOneEvent, void*, pUnused)
+IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
 {
     (void)pUnused;
 
     ::osl::MutexGuard aGuard (maMutex);
 
     mnUserEventId = 0;
+
+    ProcessOneEvent();
+
+    if ( ! maQueue.empty())
+    {
+        // Schedule the processing of the next event.
+        StartProcessing();
+    }
+
+    return 0;
+}
+
+
+
+
+void ChangeRequestQueueProcessor::ProcessOneEvent (void)
+{
+    ::osl::MutexGuard aGuard (maMutex);
 
 #ifdef VERBOSE
     OSL_TRACE("ProcessOneEvent");
@@ -195,6 +191,9 @@ IMPL_LINK(ChangeRequestQueueProcessor, ProcessOneEvent, void*, pUnused)
         // Execute the change request.
         if (xRequest.is())
         {
+#ifdef VERBOSE
+            TraceRequest(xRequest);
+#endif
             xRequest->execute(mxConfiguration);
         }
 
@@ -208,14 +207,7 @@ IMPL_LINK(ChangeRequestQueueProcessor, ProcessOneEvent, void*, pUnused)
             if (mpConfigurationUpdater.get() != NULL)
                 mpConfigurationUpdater->RequestUpdate(mxConfiguration);
         }
-        else
-        {
-            // Schedule the processing of the next event.
-            StartProcessing();
-        }
     }
-
-    return 0;
 }
 
 
@@ -226,6 +218,23 @@ bool ChangeRequestQueueProcessor::IsEmpty (void) const
     return maQueue.empty();
 }
 
+
+
+
+void ChangeRequestQueueProcessor::ProcessUntilEmpty (void)
+{
+    while ( ! IsEmpty())
+        ProcessOneEvent();
+}
+
+
+
+
+void ChangeRequestQueueProcessor::Clear (void)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    maQueue.clear();
+}
 
 
 } } // end of namespace sd::framework::configuration
