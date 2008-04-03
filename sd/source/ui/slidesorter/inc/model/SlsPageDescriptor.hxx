@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageDescriptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:20:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,16 @@
 #ifndef SD_SLIDESORTER_PAGE_DESCRIPTOR_HXX
 #define SD_SLIDESORTER_PAGE_DESCRIPTOR_HXX
 
-#ifndef _SV_GEN_HXX
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <tools/gen.hxx>
-#endif
 #include <tools/link.hxx>
 #include <vcl/bitmap.hxx>
 #include <sfx2/viewfrm.hxx>
 
-class SdPage;
-
 #include <memory>
+#include <boost/enable_shared_from_this.hpp>
+
+class SdPage;
 
 namespace sdr { namespace contact {
 class ObjectContact;
@@ -62,8 +62,9 @@ class PageObjectFactory;
 
 namespace sd { namespace slidesorter { namespace model {
 
-class SlideSorterView;
 class SlideRenderer;
+
+namespace css = ::com::sun::star;
 
 /** Each PageDescriptor object represents the preview of one draw page,
     slide, or master page of a Draw or Impress document as they are displayed
@@ -76,16 +77,43 @@ class SlideRenderer;
     fade symbol.</p>
 */
 class PageDescriptor
+    : public ::boost::enable_shared_from_this<PageDescriptor>
 {
 public:
+    /** Create a PageDescriptor for the given SdPage object.
+        @param rxPage
+            The page that is represented by the new PageDescriptor object.
+        @param pPage
+            The page pointer can in some situations not be detected from
+            rxPage, e.g. after undo of page deletion.  Therefore supply it
+            seperately.
+        @param nIndex
+            This index is displayed in the view as page number.  It is not
+            necessaryily the page index (not even when you add or subtract 1
+            or use (x-1)/2 magic).
+    */
     PageDescriptor (
-        SdPage& rPage,
+        const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
+        SdPage* pPage,
+        const sal_Int32 nIndex,
         const controller::PageObjectFactory& rPageObjectFactory);
+
     ~PageDescriptor (void);
 
-    /** Return the page that is represented by the descriptor.
+    /** Return the page that is represented by the descriptor as SdPage pointer .
     */
     SdPage* GetPage (void) const;
+
+    /** Return the page that is represented by the descriptor as XDrawPage reference.
+    */
+    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const;
+
+    /** Returns the index of the page as it is displayed in the view as page
+        number.  The value may differ from the index returned by the
+        XDrawPage when there are hidden slides and the XIndexAccess used to
+        access the model filters them out.
+    */
+    sal_Int32 GetPageIndex (void) const;
 
     /** Return the page shape that is used for visualizing the page.
     */
@@ -116,7 +144,7 @@ public:
     bool IsSelected (void) const;
 
     /** Set the internal mbIsSelected flag to the selection state of the
-        page.  Use this method to synchornize a page descriptor with the
+        page.  Use this method to synchronize a page descriptor with the
         page it describes and determine whether a redraw to update the
         selection indicator is necessary.
         @return
@@ -156,8 +184,21 @@ public:
     void SetPageNumberAreaModelSize (const Size& rSize);
     Size GetPageNumberAreaModelSize (void) const;
 
+    /** Returns <TRUE/> when the slide is the current slide.
+    */
+    bool IsCurrentPage (void) const;
+
+    /** Set or revoke the state of this slide being the current slide.
+    */
+    void SetIsCurrentPage (const bool bIsCurrent);
+
 private:
-    SdPage& mrPage;
+    SdPage* mpPage;
+    css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    /** This index is displayed as page number in the view.  It may or may
+        not be actual page index.
+    */
+    const sal_Int32 mnIndex;
 
     /// The factory that is used to create PageObject objects.
     const controller::PageObjectFactory* mpPageObjectFactory;
@@ -168,8 +209,9 @@ private:
     view::PageObject* mpPageObject;
 
     bool mbIsSelected;
-    bool mbVisible;
-    bool mbFocused;
+    bool mbIsVisible;
+    bool mbIsFocused;
+    bool mbIsCurrent;
 
     view::PageObjectViewObjectContact* mpViewObjectContact;
 
