@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 14:45:55 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:46:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ CUSTOM_PREFERRED_FALLBACK_1*=$(SOLARSRC)$/ooo_custom_images$/tango
 CUSTOM_PREFERRED_FALLBACK_2*=$(SOLARSRC)$/ooo_custom_images$/industrial
 CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
+CUSTOM_IMAGES+=$(COMMONBIN)$/nologo$/images.zip
 
 CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
 
