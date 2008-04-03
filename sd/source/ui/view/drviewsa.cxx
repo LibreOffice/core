@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:34:54 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ DrawViewShell::~DrawViewShell()
     EndListening (*GetDoc());
     EndListening (*GetDocSh());
 
-    if (mpSlideShow != NULL)
+    if( SlideShow::IsRunning(*this) )
         StopSlideShow(false);
 
     DisposeFunctions();
@@ -496,7 +496,7 @@ void DrawViewShell::Shutdown (void)
 {
     ViewShell::Shutdown();
 
-    if (GetSlideShow() != NULL)
+    if(SlideShow::IsRunning( GetViewShellBase() ) )
     {
         // Turn off effects.
         GetDrawView()->SetAnimationMode(SDR_ANIMATION_DISABLE);
@@ -506,23 +506,21 @@ void DrawViewShell::Shutdown (void)
 
 
 
-::std::auto_ptr<DrawSubController> DrawViewShell::CreateSubController (void)
+css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController (void)
 {
-    ::std::auto_ptr<DrawSubController> pResult;
+    css::uno::Reference<css::drawing::XDrawSubController> xSubController;
 
     if (IsMainViewShell())
     {
-        // Create uno controller for the main view shell.  For the ones
-        // displayed in the non-center panes we may later introduce
-        // sub-controllers.
-        ViewShellBase& rBase (GetViewShellBase());
-        pResult.reset(new SdUnoDrawView (
-            rBase.GetDrawController(),
-            *this,
-            *GetView()));
+        // Create uno sub controller for the main view shell.
+        xSubController = css::uno::Reference<css::drawing::XDrawSubController>(
+            new SdUnoDrawView (
+                GetViewShellBase().GetDrawController(),
+                *this,
+                *GetView()));
     }
 
-    return pResult;
+    return xSubController;
 }
 
 
@@ -709,7 +707,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Seite) mit Hilfe des ZoomItems weitergegeben werden !!!
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        if (GetDocSh()->IsUIActive() || mpSlideShow)
+        if (GetDocSh()->IsUIActive() || (SlideShow::IsRunning(GetViewShellBase())) )
         {
             rSet.DisableItem( SID_ATTR_ZOOM );
         }
