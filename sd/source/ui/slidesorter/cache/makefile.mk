@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:14:08 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:21:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,17 @@ PRJINC=..$/..
 SLOFILES =      							\
     $(SLO)$/SlsBitmapCache.obj				\
     $(SLO)$/SlsBitmapCompressor.obj			\
+    $(SLO)$/SlsBitmapFactory.obj			\
     $(SLO)$/SlsCacheCompactor.obj			\
     $(SLO)$/SlsCacheConfiguration.obj		\
+    $(SLO)$/SlsGenericPageCache.obj			\
+    $(SLO)$/SlsIdleDetector.obj				\
     $(SLO)$/SlsPageCache.obj				\
     $(SLO)$/SlsPageCacheManager.obj			\
-    $(SLO)$/SlsQueueProcessor.obj				
+    $(SLO)$/SlsQueueProcessor.obj			\
+    $(SLO)$/SlsRequestFactory.obj			\
+    $(SLO)$/SlsRequestQueue.obj				
+
 
 EXCEPTIONSFILES= 
 
