@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectFactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:43:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define SD_SLIDESORTER_PAGE_OBJECT_FACTORY_HEADER
 
 #include <boost/shared_ptr.hpp>
+#include "model/SlsSharedPageDescriptor.hxx"
 
 class SdPage;
 
@@ -45,10 +46,6 @@ class ObjectContact;
 class ViewContact;
 class ViewObjectContact;
 } }
-
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
 
 namespace sd { namespace slidesorter { namespace view {
 class PageObject;
@@ -61,26 +58,37 @@ class PageCache;
 
 namespace sd { namespace slidesorter { namespace controller {
 
+class Properties;
+
 /** This class is a factory for the creation of objects that represent page
     objects (shapes).  This includes the contact objects of the drawing
     layer.
 
-    The factory methods are called by the model::PageDescriptor and the
-    standard implementations of the contact objects.
+    <p>The factory methods are called by the model::PageDescriptor and the
+    standard implementations of the contact objects.</p>
+
+    <p>The factory forwars the preview cache and Properties object to page
+    objects and contact objects.</p>
 */
 class PageObjectFactory
 {
 public:
+    /** Create a new PageObjectFactory object that has references to the
+        given cache and properties.
+    */
+    PageObjectFactory (
+        const ::boost::shared_ptr<cache::PageCache>& rpCache,
+        const ::boost::shared_ptr<controller::Properties>& rpProperties);
     PageObjectFactory (const ::boost::shared_ptr<cache::PageCache>& rpCache);
     virtual ~PageObjectFactory (void);
 
     virtual view::PageObject* CreatePageObject (
         SdPage* pPage,
-        model::PageDescriptor& rDescriptor) const;
+        const model::SharedPageDescriptor& rpDescriptor) const;
 
     virtual ::sdr::contact::ViewContact* CreateViewContact (
         view::PageObject* pPageObject,
-        model::PageDescriptor& rDescriptor) const;
+        const model::SharedPageDescriptor& rpDescriptor) const;
 
     virtual ::sdr::contact::ViewObjectContact* CreateViewObjectContact (
         ::sdr::contact::ObjectContact& rObjectContact,
@@ -88,6 +96,7 @@ public:
 
 private:
     ::boost::shared_ptr<cache::PageCache> mpPageCache;
+    ::boost::shared_ptr<controller::Properties> mpProperties;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
