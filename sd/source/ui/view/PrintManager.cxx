@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:40:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,7 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
-#endif
+//#include "SlideSorterViewShell.hxx"
 #include "Outliner.hxx"
 #include "Window.hxx"
 #include "FrameView.hxx"
@@ -254,10 +252,10 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
             pDlg->SetRangeText(UniString::CreateFromInt32(
                 static_cast<DrawViewShell*>(pShell)->GetCurPageId()));
         }
-        else //if( this->ISA( SlideViewShell ) )
+        /*      else if(pShell->ISA(::sd::slidesorter::SlideSorterViewShell))
         {
             String aStrRange(
-                static_cast<SlideViewShell*>(pShell)->GetPageRangeString());
+                dynamic_cast<sd::slidesorter::SlideSorterViewShell*>(pShell)->GetPageRangeString());
             if( aStrRange.Len() )
             {
                 pDlg->SetRangeText( aStrRange );
@@ -265,6 +263,7 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
                 // pDlg->CheckRange( PRINTDIALOG_RANGE );
             }
         }
+        */
     }
     else
     {
