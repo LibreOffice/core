@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:03:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@ namespace jfw_plugin
 #else
 #  define JFW_PLUGIN_ARCH "mips32"
 #endif
+#elif defined S390X
+#define JFW_PLUGIN_ARCH "s390x"
 #elif defined S390
 #define JFW_PLUGIN_ARCH "s390"
 #elif defined X86_64
