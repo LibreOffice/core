@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:42:14 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,7 @@
 #include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx"
 #include "SlideSorterViewShell.hxx"
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 
 #define RET_DELETE  100
@@ -837,16 +838,20 @@ bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
 
         // Tell the slide sorter about the name change (necessary for
         // accessibility.)
-        slidesorter::SlideSorterViewShell* pSlideSorter
+        slidesorter::SlideSorterViewShell* pSlideSorterViewShell
             = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
-        if (pSlideSorter != NULL)
+        if (pSlideSorterViewShell != NULL)
         {
-            pSlideSorter->GetSlideSorterController().PageNameHasChanged(nPageId-1, rName);
+            pSlideSorterViewShell->GetSlideSorter().GetController().PageNameHasChanged(
+                nPageId-1, rName);
         }
     }
 
     return bSuccess;
 }
+
+
+
 
 IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
 {
@@ -914,7 +919,7 @@ void DrawViewShell::ModifyLayer (
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
         // Call Invalidate at the form shell.
-        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
         if (pFormShell != NULL)
             pFormShell->Invalidate();
     }
