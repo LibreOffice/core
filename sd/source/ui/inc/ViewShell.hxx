@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:54:08 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef SD_VIEW_SHELL_HXX
 #define SD_VIEW_SHELL_HXX
+
+#include <rtl/ref.hxx>
 
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
@@ -70,10 +72,9 @@
 #include "sddllapi.h"
 #endif
 
-#ifndef INCLUDED_MEMORY
+#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <memory>
-#define INCLUDED_MEMORY
-#endif
+#include <boost/shared_ptr.hpp>
 
 class SdPage;
 class SvxRuler;
@@ -92,6 +93,8 @@ namespace embed {
     class XEmbeddedObject;
 }}}}
 
+namespace css = ::com::sun::star;
+
 namespace sd {
 
 class Client;
@@ -100,7 +103,7 @@ class DrawSubController;
 class FrameView;
 class FuPoor;
 class FuSearch;
-class Slideshow;
+class SlideShow;
 class LayerTabBar;
 class View;
 class ViewShellBase;
@@ -138,8 +141,7 @@ public:
         ST_NOTES,
         ST_HANDOUT,
         ST_OUTLINE,
-        ST_SLIDE,         // Old slide view shell
-        ST_SLIDE_SORTER,  // New Slide sorter.
+        ST_SLIDE_SORTER,
         ST_PRESENTATION,
         ST_TASK_PANE
     };
@@ -312,9 +314,6 @@ public:
     void SetOldFunction(const FunctionReference& xFunction);
     void DeactivateCurrentFunction( bool bPermanent = false );
 
-    Slideshow* GetSlideShow() const { return mpSlideShow; }
-    void SetSlideShow(Slideshow* pSlideShow );
-
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
                             BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
@@ -430,10 +429,10 @@ public:
     */
     void SetIsMainViewShell (bool bIsMainViewShell);
 
-    /** Return an sub controller that implements the view shell specific
+    /** Return a sub controller that implements the view shell specific
         part of the DrawController.
     */
-    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void) = 0;
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void) = 0;
 
     /** Return the type of the shell.
     */
@@ -486,18 +485,18 @@ protected:
         document.
     */
 
-    ::std::auto_ptr< ::sd::Window> mpContentWindow;
+    ::boost::shared_ptr<sd::Window> mpContentWindow;
 
     /// Horizontal scroll bar for the current slide is displayed when needed.
-    ::std::auto_ptr<ScrollBar> mpHorizontalScrollBar;
+    ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
     /// Vertical scroll bar for whole document is always visible.
-    ::std::auto_ptr<ScrollBar> mpVerticalScrollBar;
+    ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
     /// Horizontal ruler is not shown by default.
     ::std::auto_ptr<SvxRuler> mpHorizontalRuler;
     /// Vertical ruler is not shown by default.
     ::std::auto_ptr<SvxRuler> mpVerticalRuler;
     /// Filler of the little square enclosed by the two scroll bars.
-    ::std::auto_ptr<ScrollBarBox> mpScrollBarBox;
+    ::boost::shared_ptr<ScrollBarBox> mpScrollBarBox;
     /// Layer tab bar.
     ::std::auto_ptr<LayerTabBar> mpLayerTabBar;
 
@@ -511,7 +510,6 @@ protected:
 
     FunctionReference   mxCurrentFunction;
     FunctionReference   mxOldFunction;
-    Slideshow*  mpSlideShow;
     ZoomList*   mpZoomList;
 
     Point       maViewPos;
