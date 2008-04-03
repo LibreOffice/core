@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-04-03 16:49:30 $
+dnl * Date: $Date: 2008-04-03 17:27:56 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.257 $ )
+AC_REVISION( $Revision: 1.258 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -259,6 +259,9 @@ AC_ARG_ENABLE(crypt-link,
 AC_ARG_ENABLE(xrender-link,
 [  --enable-xrender-link   link with libXrender instead of dynamically open it
 ],,)
+AC_ARG_ENABLE(randr,
+[  --disable-randr          disable RandR support in the vcl project
+],,enable_randr=yes)
 AC_ARG_WITH(myspell-dicts,
 [  --without-myspell-dicts Removes myspell dictionaries from openoffice.org
                           installation set, for people building for specific
@@ -802,6 +805,7 @@ case "$build_os" in
 		build_cairo=yes
 		test_kde=yes
 		test_cups=yes
+        test_randr=yes
 		_os=SunOS
 
 		dnl ===========================================================
@@ -828,6 +832,7 @@ case "$build_os" in
 		build_cairo=yes
 		test_kde=yes
 		test_cups=yes
+        test_randr=yes
 		if getconf GNU_LIBPTHREAD_VERSION |grep -q NPTL; then
 			PTHREAD_CFLAGS="-DNPTL"
 		fi
@@ -846,6 +851,7 @@ case "$build_os" in
 		test_cups=yes
 		test_gtk=yes
 		build_cairo=yes
+        test_randr=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
@@ -856,6 +862,7 @@ case "$build_os" in
 	os2*)
 		test_x=no
 		test_cups=no
+        test_randr=no
 		test_gtk=no
 		_os=OS2
 		;;
@@ -864,6 +871,7 @@ case "$build_os" in
 		build_cairo=yes
 		test_kde=yes
 		test_cups=yes
+        test_randr=yes
 		AC_MSG_CHECKING([the FreeBSD operating system release])
 		if test -n "$with_os_version"; then
 			OSVERSION="$with_os_version"
@@ -887,6 +895,7 @@ case "$build_os" in
 		;;
 	osf)
 		test_cups=no
+        test_randr=no
 		_os=OSF1
 		;;
 	netbsd)
@@ -894,16 +903,19 @@ case "$build_os" in
 		build_cairo=yes
 		test_kde=yes
 		test_cups=no
+        test_randr=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
 		;;
 	irix*)
 		test_cups=no
+        test_randr=no
 		_os=IRIX
 		;;
 	aix*)
 		test_cups=no
+        test_randr=no
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
@@ -1081,6 +1093,19 @@ else
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_FONTCONFIG)
+
+dnl ===================================================================
+dnl Build options
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable RandR support])
+if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \) ; then
+   ENABLE_RANDR="TRUE"
+   AC_MSG_RESULT([yes])
+else
+   ENABLE_RANDR=""
+   AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_RANDR)
 
 dnl ===================================================================
 dnl Disable legacy binary file formats filters
@@ -1761,6 +1786,14 @@ dnl ===================================================================
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
     AC_CHECK_HEADER(cups/cups.h, [],
                     [AC_MSG_ERROR([cups/cups.h could not be found. libcupsys2-dev or cups???-devel missing?])], [])
+fi
+
+dnl ===================================================================
+dnl Check if X11/extensions/Xrandr.h is available 
+dnl ===================================================================
+if test "$test_randr" = "yes" -a "$ENABLE_RANDR" = "TRUE" ; then
+    AC_CHECK_HEADER(X11/extensions/Xrandr.h, [],
+                    [AC_MSG_ERROR([X11/extensions/Xrandr.h could not be found. X11 dev missing?])], [])
 fi
 
 dnl ===================================================================
