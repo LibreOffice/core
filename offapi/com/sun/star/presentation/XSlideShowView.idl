@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSlideShowView.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:38:32 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XSlideShowView_idl__
+#define __com_sun_star_presentation_XSlideShowView_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#endif
+#ifndef __com_sun_star_util_XModifyListener_idl__
+#include <com/sun/star/util/XModifyListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XPaintListener_idl__
+#include <com/sun/star/awt/XPaintListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XMouseListener_idl__
+#include <com/sun/star/awt/XMouseListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XMouseMotionListener_idl__
+#include <com/sun/star/awt/XMouseMotionListener.idl>
+#endif
+
+module com {  module sun {  module star {  module presentation {
+
+/** View interface to display slideshow presentations on.<p>
+
+    This interface provides the necessary methods to enable an
+    XSlideShow interface to display a presentation. The slideshow can
+    be displayed simultaneously on multiple views<p>
+
+    @since OOo 2.4
+ */
+interface XSlideShowView : ::com::sun::star::uno::XInterface
+{
+    /** Get view canvas.<p>
+
+        This method gets the underlying XCanvas to display on this
+        view.<p>
+
+        @return XSpriteCanvas to display on. Must be valid, and the
+        same object, as long as this view is added to any slide show.
+     */
+    ::com::sun::star::rendering::XSpriteCanvas getCanvas();
+
+    /** This method clears the whole view area.
+
+        The slideshow uses this method to fully erase the view
+        content. Since the slideshow has no notion of view size, this
+        is the only reliable way to wholly clear the view.
+     */
+    void clear();
+
+    /** Query the current transformation matrix for this view.<p>
+
+           This method returns the transformation matrix of the
+           view. When notified via the transformation change listener,
+           the show will be displayed using the new transformation.<p>
+
+        @return the view transformation matrix. Note that the slide
+        show itself will paint all slides as one-by-one boxes, one
+        therefore has to at least provide a scaling at this matrix to
+        blow this up to the desired device pixel size (640 times 480,
+        or whatever size the output view has). Furthermore, the aspect
+        ratio of the scaling should match that of the slides
+        (otherwise, the slides will be scaled anisotrophically).
+     */
+    ::com::sun::star::geometry::AffineMatrix2D getTransformation();
+
+    /** Add a listener to get notified when the transformation matrix changes.<p>
+
+        This method registers a listener with the view, which will get
+        called everytime the transformation matrix changes.<p>
+
+        @param xListener
+        Listener interface to call when the transformation matrix changes.
+     */
+    void addTransformationChangedListener( [in] ::com::sun::star::util::XModifyListener xListener );
+
+    /** Revoke a previously registered transformation matrix change listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+     */
+    void removeTransformationChangedListener( [in] ::com::sun::star::util::XModifyListener xListener );
+
+    /** Add a listener to get notified when this view needs a repaint.<p>
+
+        This method registers a listener with the view, which will get
+        called everytime the view needs an update of their screen
+        representation.<p>
+
+        @param xListener
+        Listener interface to call when the view needs a repaint.
+     */
+    void addPaintListener( [in] ::com::sun::star::awt::XPaintListener xListener );
+
+    /** Revoke a previously registered paint listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+     */
+    void removePaintListener( [in] ::com::sun::star::awt::XPaintListener xListener );
+
+    /** Add a mouse listener to the view.<p>
+
+        This method registers a listener with the view, which will get
+        called everytime the mouse is clicked on the view.<p>
+
+        @param xListener
+        Listener interface to call when the mouse is clicked on the view.
+     */
+    void addMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
+    /** Revoke a previously registered mouse listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+     */
+    void removeMouseListener( [in] com::sun::star::awt::XMouseListener xListener );
+
+    /** Add a mouse motion listener to the view.<p>
+
+        This method registers a listener with the view, which will get
+        called everytime the mouse is moved on the view.<p>
+
+        @param xListener
+        Listener interface to call when the mouse is moved on the view.
+     */
+    void addMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
+
+    /** Revoke a previously registered mouse move listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+     */
+    void removeMouseMotionListener( [in] com::sun::star::awt::XMouseMotionListener xListener );
+
+    /** Change the mouse cursor currently in effect.<p>
+
+        This method changes the mouse cursor currently in effect, for
+        this view.<p>
+
+        @param nPointerShape
+        New mouse cursor shape to display for this view. Must be from
+        the ::com::sun::star::awt::SystemPointer constant group.
+     */
+    void setMouseCursor( [in] short nPointerShape );
+
+};
+
+}; }; }; };
+
+
+#endif
