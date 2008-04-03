@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsLayouter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:44:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,11 @@ public:
 
     /** Set the minimal, the maximal, and the desired width of the page
         objects.  The three parameters have to fullfill the constraint
-        nMinimalWidth <= nDesiredWidth <= nMaximalWidth or the call is
+        nMinimalWidth <= nPreferredWidth <= nMaximalWidth or the call is
         ignored.
     */
     void SetObjectWidth (sal_Int32 nMinimalWidth, sal_Int32 nMaximalWidth,
-        sal_Int32 nDesiredWidth);
+        sal_Int32 nPreferredWidth);
 
     /** Set the horizontal and vertical borders in pixel coordinates between
         the enclosing window and page objects.  The borders may be painted
@@ -155,7 +155,12 @@ public:
             The return value indicates whether the Get... methods can be
             used to obtain valid values (<TRUE/>).
     */
-    bool Rearrange (
+    bool RearrangeHorizontal (
+        const Size& rWindowSize,
+        const Size& rPageObjectSize,
+        OutputDevice* pDevice,
+        const sal_uInt32 nPageCount);
+    bool RearrangeVertical (
         const Size& rWindowSize,
         const Size& rPageObjectSize,
         OutputDevice* pDevice);
@@ -318,7 +323,7 @@ private:
     ScreenAndModelValue mnTotalVerticalGap;
     ScreenAndModelValue mnTotalHorizontalGap;
     sal_Int32 mnMinimalWidth;
-    sal_Int32 mnDesiredWidth;
+    sal_Int32 mnPreferredWidth;
     sal_Int32 mnMaximalWidth;
     sal_Int32 mnMinimalColumnCount;
     sal_Int32 mnMaximalColumnCount;
@@ -370,8 +375,6 @@ private:
         sal_Int32 nXPosition,
         bool bIncludeBordersAndGaps,
         GapMembership eGapMembership = GM_NONE) const;
-
-    void BuildBackgroundRectangleList (void);
 
     /** This method is typically called from GetRowAtPosition() and
         GetColumnAtPosition() to handle a position that lies inside the gap
