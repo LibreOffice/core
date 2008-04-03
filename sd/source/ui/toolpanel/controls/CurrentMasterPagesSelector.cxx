@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CurrentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:38:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
 
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
-    rBase.GetEventMultiplexer().AddEventListener(aLink,
+    rBase.GetEventMultiplexer()->AddEventListener(aLink,
         sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE
         | sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER
@@ -88,7 +88,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
-    mrBase.GetEventMultiplexer().RemoveEventListener(aLink);
+    mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 }
 
 
