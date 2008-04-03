@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:19:30 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -1201,12 +1203,56 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, nFmt, GetLanguage(), aName);
 }
 
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, const String& rValue, sal_uInt32 nFmt) :
+    SwValueField(pTyp, nFmt), nSubType(nSub)
+{
+    aName = rName;
+    aContent = rValue;
+}
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 String SwDocInfoField::Expand() const
 {
-    if (!IsFixed()) // aContent fuer Umschaltung auf fixed mitpflegen
+    if ( ( nSubType & 0xFF ) == DI_CUSTOM )
+    {
+         // custom properties currently need special treatment
+         // we don't have a secure way to detect "real" custom properties in Word  Import of text fields
+        // so we treat *every* unknown property as a custom property, even the "built-in" section in Word's document summary information stream
+        // as these properties have not been inserted when the document summary information was imported, we do it here
+        // this approach is still a lot better than the old one to import such fields as "user fields" and simple text
+        try
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS( GetDoc()->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+            uno::Reference<document::XDocumentProperties> xDocProps( xDPS->getDocumentProperties());
+            uno::Reference < beans::XPropertySet > xSet( xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
+            uno::Any aAny = xSet->getPropertyValue( aName );
+            if ( aAny.getValueType() != ::getVoidCppuType() )
+            {
+                // "void" type means that the property has not been inserted until now
+                if ( !IsFixed() )
+                {
+                    // if the field is "fixed" we don't update it from the property
+                    ::rtl::OUString sVal;
+                    uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
+                        ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
+                    uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                    aNew >>= sVal;
+                    ((SwDocInfoField*)this)->aContent = sVal;
+                }
+            }
+            else
+            {
+                // property is "void" - means it has not been added until now - do it!
+                aAny <<= ::rtl::OUString(aContent);
+                uno::Reference < beans::XPropertyContainer > xCont( xSet, uno::UNO_QUERY );
+                xCont->addProperty( aName, ::com::sun::star::beans::PropertyAttribute::REMOVEABLE, aAny );
+            }
+        }
+        catch (uno::Exception&) {}
+    }
+    else if ( !IsFixed() )
         ((SwDocInfoField*)this)->aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, GetFormat(), GetLanguage(), aName);
 
     return aContent;
