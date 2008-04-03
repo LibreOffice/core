@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:57:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include "ViewShellImplementation.hxx"
 #include "ViewShellHint.hxx"
 #include "framework/FrameworkHelper.hxx"
+
+#include <com/sun/star/presentation/XPresentation2.hpp>
 
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -178,9 +180,7 @@
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
 #endif
-#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
-#endif
 #include "sdpage.hxx"
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
@@ -222,8 +222,10 @@
 #include "Window.hxx"
 
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
@@ -273,7 +275,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
 
-    if (mpSlideShow)
+    if (SlideShow::IsRunning(GetViewShellBase()))
         return;
 
     USHORT nSId = rReq.GetSlot();
@@ -745,7 +747,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-    if(mpSlideShow &&
+    if(SlideShow::IsRunning(GetViewShellBase()) &&
         (rReq.GetSlot() != SID_PRESENTATION_END &&
          rReq.GetSlot() != SID_SIZE_PAGE))
         return;
@@ -795,43 +797,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION:
         case SID_REHEARSE_TIMINGS:
         {
-            if( mpSlideShow )
+            Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+            if( xPresentation.is() )
             {
-                mpSlideShow->deactivate();
-                delete mpSlideShow;
-                mpSlideShow = 0;
-            }
-
-            if( !mpSlideShow )
-            {
-                if( mpDrawView->IsTextEdit() )
-                    mpDrawView->SdrEndTextEdit();
-
-                SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : GetDoc()->getPresentationSettings().mbFullScreen;
-
-                if( bFullScreen )
-                    PresentationViewShell::CreateFullScreenShow( this, rReq );
+                if( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) )
+                    xPresentation->start();
                 else
-                {
-                    // Save the current view shell type so that it can be
-                    // restored after the show has ended.  If there already
-                    // is a saved shell type then that is not overwritten.
-                    if (mpFrameView->GetPreviousViewShellType() == ViewShell::ST_NONE)
-                        mpFrameView->SetPreviousViewShellType(GetShellType());
-
-                    mpSlideShow = new Slideshow( this, mpDrawView, GetDoc(),
-                        GetViewShellBase().GetViewWindow() );
-                    mpSlideShow->setRehearseTimings(
-                        nSId == SID_REHEARSE_TIMINGS );
-                    if (!mpSlideShow->startShow())
-                    {
-                        delete mpSlideShow;
-                        mpSlideShow = 0;
-                    }
-                }
+                    xPresentation->rehearseTimings();
             }
-
             rReq.Ignore ();
         }
         break;
@@ -1784,40 +1757,15 @@ void DrawViewShell::ShowUIControls (bool bVisible)
     maTabControl.Show (bVisible);
 }
 
-
-
-
-void DrawViewShell::StopSlideShow (bool bCloseFrame)
+void DrawViewShell::StopSlideShow (bool /*bCloseFrame*/)
 {
-    if (mpSlideShow != NULL)
+    Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+    if(xPresentation.is() && xPresentation->isRunning())
     {
         if( mpDrawView->IsTextEdit() )
             mpDrawView->SdrEndTextEdit();
 
-        delete mpSlideShow;
-        mpSlideShow = NULL;
-
-        if( ISA(PresentationViewShell))
-        {
-
-            if (bCloseFrame)
-                GetViewFrame()->DoClose();
-        }
-        else if( mpFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
-        {
-            ViewShell::ShellType ePreviousType (mpFrameView->GetPreviousViewShellType());
-            mpFrameView->SetPreviousViewShellType(ViewShell::ST_NONE);
-
-            mpFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
-            mpFrameView->SetSlotId(SID_OBJECT_SELECT);
-            mpFrameView->SetPreviousViewShellType(GetShellType());
-
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
-                framework::FrameworkHelper::GetViewURL(ePreviousType),
-                framework::FrameworkHelper::msCenterPaneURL);
-
-            GetViewFrame()->GetBindings().InvalidateAll( TRUE );
-        }
+        xPresentation->end();
     }
 }
 
