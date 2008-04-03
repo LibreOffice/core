@@ -1,0 +1,329 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSlideShow.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:37:58 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _com_sun_star_presentation_XSlideShow_idl
+#define _com_sun_star_presentation_XSlideShow_idl
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealRectangle2D_idl__
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#endif
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+#endif
+#ifndef __com_sun_star_animations_XAnimationNode_idl__
+#include <com/sun/star/animations/XAnimationNode.idl>
+#endif
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+#ifndef __com_sun_star_presentation_XSlideShowView_idl__
+#include <com/sun/star/presentation/XSlideShowView.idl>
+#endif
+#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
+#include <com/sun/star/presentation/XSlideShowListener.idl>
+#endif
+#ifndef __com_sun_star_presentation_XShapeEventListener_idl__
+#include <com/sun/star/presentation/XShapeEventListener.idl>
+#endif
+
+module com {  module sun {  module star {  module presentation {
+
+/** Slideshow interface to perform slideshow presentations.<p>
+
+    This interface provides the necessary methods to run and control a
+    slideshow from a given set of XDrawPage slides. The slideshow can
+    be displayed simultaneously on multiple targets.<p>
+
+    @since OOo 2.4
+ */
+interface XSlideShow : ::com::sun::star::uno::XInterface
+{
+    /** Trigger the next effect of the slideshow.<p>
+
+        This method triggers the next effect on the currently
+        displayed slide. If there is currently no slideshow running,
+        this method does nothing. If there are no more effects on the
+        current slide, a possible slide transition effect is issued
+        and the next slide is displayed.<p>
+
+        @return <TRUE>, if the next effect was successfully
+        triggered. This method returns <FALSE>, if there is no show
+        running, the last effect on the last slide was already
+        triggered, or the implementation failed to trigger the next
+        effect.
+     */
+    boolean nextEffect();
+
+    /** Start a shape-intrinsic animation or activity.<p>
+
+        This method starts an animation or activity intrinsic to the
+        given shape. Shape-intrinsic activities are things like video
+        playback for multimedia shapes, sounds, GIF animations and
+        drawing layer animations (flipping between shapes in a group,
+        or scroll text).<p>
+
+        @param xShape
+        The shape to start the activity for
+     */
+    boolean startShapeActivity( [in] ::com::sun::star::drawing::XShape xShape );
+
+    /** Stop a shape-intrinsic animation or activity.<p>
+
+        This method stops an animation or activity intrinsic to the
+        given shape. Shape-intrinsic activities are things like video
+        playback for multimedia shapes, sounds, GIF animations and
+        drawing layer animations (flipping between shapes in a group,
+        or scroll text).<p>
+
+        @param xShape
+        The shape to stop the activity for
+     */
+    boolean stopShapeActivity( [in] ::com::sun::star::drawing::XShape xShape );
+
+    /** Jump to the given slide.<p>
+
+        This method ends all effects on the current slide, displays a
+        possible slide transition, followed by the given slide. If the
+        current slide is equal to the requested slide here, this
+        method does nothing (this especially means, that any currently
+        active effects will remain running).<p>
+
+        @param xPage
+        The slide to display.
+
+        @param xAnimationNode
+        The animation node determine the animations to display.
+
+        @param aProperties
+        Sequence of property values, which influence the way the
+        slide is displayed. Currently, the
+        following values are recognized:
+        <ul>
+            <li>name: Prefetch, value: ::com::sun::star::drawing::XDrawPage. When given,
+                this slide is prepared in the background to be displayed next. The next
+                call to displaySlide() with the given slide may be faster if there was
+                enough time for prefatching. If the next call to displaySlide() uses
+                a different slide, this will still work but will not have any performance
+                improvements
+                </li>
+        </ul>
+
+    */
+    void displaySlide(
+        [in] ::com::sun::star::drawing::XDrawPage xSlide,
+        [in] ::com::sun::star::animations::XAnimationNode aAnimationNode,
+        [in] sequence< ::com::sun::star::beans::PropertyValue > aProperties );
+
+    /** Change the pause state of the slide show.<p>
+
+        This method either pauses the slide show (all currently
+        running effects are stopped), or starts a previously stopped
+        show again (all paused effects start again).<p>
+
+        @param bPauseShow
+        When <TRUE>, the show is paused. When <FALSE>, and the show
+        was paused, it starts running at the paused position again.
+
+        @return <TRUE>, if the requested action was successfully
+        performed.
+     */
+    boolean pause( [in] boolean bPauseShow );
+
+    /** Query the currently displayed slide.<p>
+
+        @return the instance of the current slide. If there's no
+        slideshow running at the moment, this method returns an
+        empty reference.
+     */
+    ::com::sun::star::drawing::XDrawPage getCurrentSlide();
+
+    /** Change a property of the slideshow.<p>
+
+        @param aShowProperty
+        Property values, which influence the way the slides are
+        shown. Note that this might possibly be a subset of what is
+        supported on show(). Currently, the following values
+        are recognized:
+        <ul>
+            <li>name: AutomaticAdvancement, value: double. When given, effects
+                and slides are advanced automatically. The double value specifies
+                the timeout between the end of one effect until the start of the
+                next one. Negative values are truncated to zero here. When given,
+                but with empty value, automatic advancement is disabled again.</li>
+            <li>name: UserPaintColor, value: long. When given, the slide show
+                will display a small stylus as the mouse cursor. When pressing the
+                left mouse key, the user can paint a thin line in the given color.</li>
+        </ul>
+        A changed property is effective immediately.
+     */
+    boolean setProperty(
+        [in] ::com::sun::star::beans::PropertyValue aShowProperty );
+
+    /** Add a view to the slide show.<p>
+
+        This method adds a view to the slide show. After successful
+        completion of this method, the slide show will be visible on
+        the added view, scaled according to the view's output area.<p>
+
+        @param xView
+        The view to add
+
+        @return <TRUE>, if the view has been successfully
+        added. Otherwise, <FALSE> is returned (e.g. if the view is
+        already added).
+     */
+    boolean addView( [in] XSlideShowView xView );
+
+    /** Remove view from the slide show.<p>
+
+        This method removes the given view from the slide show. After
+        successful completion of this method, the slide show will
+        cease to display on this view.<p>
+
+        @param xView
+        View to remove
+
+        @return <TRUE>, if the view was successfully removed, <FALSE>
+        otherwise (e.g. if the view was not added in the first place).
+     */
+    boolean removeView( [in] XSlideShowView xView );
+
+    /** Update the animations.<p>
+
+        This method updates all currently active slide animations. The
+        XSlideShow implementations do not render animations
+        automatically, but must be called from their clients. This
+        allows for various update mechanisms to be employed, ranging
+        from a dedicated rendering thread, over timer-based updates,
+        to rendering in an idle function. Either way, the client of
+        this interface decide about the details.<p>
+
+        @param nNextTimeout
+        Via this value, the implementation can return a timeout value,
+        denoting the maximal time span that must not be exceeded from
+        the return of this method to the next update call. Otherwise,
+        the animations might show visible jerks.
+
+        @return <TRUE>, if further update calls are required. If
+        <FALSE> is returned, no further update calls are necessary,
+        until anyone of the other interface methods is called (most
+        notably, the next/previousSlide(), nextEffect() and show()
+        methods will nearly always make further update() calls
+        necessary).
+     */
+    boolean update( [out] double nNextTimeout );
+
+    /** Add a slide show listener.<p>
+
+        This method adds a listener to the slide show, which will get
+        notified when a registerend shape is clicked upon, or a new
+        slide is about to be displayed. Note that the listeners will
+        <em>not</em> be notified, when the slide change is directly
+        requested by one of the nextSlide(), previousSlide() or
+        displaySlide() methods.
+
+        @param xListener
+        Listener to add.
+     */
+    void addSlideShowListener( [in] XSlideShowListener xListener );
+
+    /** Revoke a previously registered slide show listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+     */
+    void removeSlideShowListener( [in] XSlideShowListener xListener );
+
+    /** Add a shape event listener.<p>
+
+        This method adds a listener to the slide show, which will get
+        notified when a mouse click is performed on the given
+        shape. This can be used by clients of the slide show to
+        trigger external actions, such as jumps to different slides.<p>
+
+        @param xListener
+        Listener to add.
+
+        @param xShape
+        Shape to register a listener for.
+     */
+    void addShapeEventListener(
+        [in] XShapeEventListener xListener,
+        [in] ::com::sun::star::drawing::XShape xShape );
+
+    /** Revoke a previously registered shape event listener.<p>
+
+        @param xListener
+        Listener interface to revoke from being called.
+
+        @param xShape
+        Shape for which the listener should be revoked.
+     */
+    void removeShapeEventListener(
+        [in] XShapeEventListener xListener,
+        [in] ::com::sun::star::drawing::XShape xShape );
+
+    /** Set a special mouse cursor for a shape.<p>
+
+        This method requests the slide show to display a special
+        cursor, whenever the mouse is hovering over the given shape.<p>
+
+        @param xShape
+        Shape to display a special mouse cursor.
+
+        @param nPointerShape
+        Type of mouse cursor to display. Must be one of the
+        ::com::sun::star::awt::SystemPointer values.
+     */
+    void setShapeCursor(
+        [in] ::com::sun::star::drawing::XShape xShape,
+        [in] short nPointerShape );
+
+};
+
+service SlideShow : XSlideShow;
+
+}; }; }; };
+
+#endif
+
