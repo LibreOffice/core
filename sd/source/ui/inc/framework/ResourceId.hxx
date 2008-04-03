@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceId.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:12:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,20 @@
 #ifndef SD_FRAMEWORK_RESOURCE_ID_HXX
 #define SD_FRAMEWORK_RESOURCE_ID_HXX
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/compbase2.hxx>
-#endif
+#include <boost/scoped_ptr.hpp>
+
+namespace css = ::com::sun::star;
+
 
 namespace {
 
 typedef ::cppu::WeakImplHelper2 <
-    ::com::sun::star::drawing::framework::XResourceId,
-    ::com::sun::star::lang::XInitialization
+    css::drawing::framework::XResourceId,
+    css::lang::XInitialization
     > ResourceIdInterfaceBase;
 
 } // end of anonymous namespace.
@@ -61,8 +59,8 @@ typedef ::cppu::WeakImplHelper2 <
 
 namespace sd { namespace framework {
 
-/** Implementation of the com::sun::star::drawing::framework::ResourceId
-    service and the com::sun::star::drawing::framework::XResourceId
+/** Implementation of the css::drawing::framework::ResourceId
+    service and the css::drawing::framework::XResourceId
     interface.
 */
 class ResourceId
@@ -126,7 +124,7 @@ public:
     ResourceId (
         const ::rtl::OUString& rsResourceURL,
         const ::rtl::OUString& rsFirstAnchorURL,
-        const ::com::sun::star::uno::Sequence<rtl::OUString>& rAnchorURLs);
+        const css::uno::Sequence<rtl::OUString>& rAnchorURLs);
 
     virtual ~ResourceId (void);
 
@@ -139,59 +137,67 @@ public:
 
     virtual ::rtl::OUString SAL_CALL
         getResourceURL (void)
-        throw(com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
+
+    virtual css::util::URL SAL_CALL
+        getFullResourceURL (void)
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
         hasAnchor (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId> SAL_CALL
+    virtual css::uno::Reference<
+        css::drawing::framework::XResourceId> SAL_CALL
         getAnchor (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL
+    virtual css::uno::Sequence<rtl::OUString> SAL_CALL
         getAnchorURLs (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual ::rtl::OUString SAL_CALL
         getResourceTypePrefix (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual sal_Int16 SAL_CALL
-        compareTo (const com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId>& rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException);
+        compareTo (const css::uno::Reference<
+            css::drawing::framework::XResourceId>& rxResourceId)
+        throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
         isBoundTo (
-            const com::sun::star::uno::Reference<
-                com::sun::star::drawing::framework::XResourceId>& rxResourceId,
-            com::sun::star::drawing::framework::AnchorBindingMode eMode)
-        throw(com::sun::star::uno::RuntimeException);
+            const css::uno::Reference<
+                css::drawing::framework::XResourceId>& rxResourceId,
+            css::drawing::framework::AnchorBindingMode eMode)
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
         isBoundToURL (
             const ::rtl::OUString& rsAnchorURL,
-            com::sun::star::drawing::framework::AnchorBindingMode eMode)
-        throw (::com::sun::star::uno::RuntimeException);
+            css::drawing::framework::AnchorBindingMode eMode)
+        throw (css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId> SAL_CALL
+    virtual css::uno::Reference<
+        css::drawing::framework::XResourceId> SAL_CALL
         clone (void)
-        throw(com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     //===== XInitialization ===================================================
 
     void SAL_CALL initialize (
-        const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArguments)
-        throw (com::sun::star::uno::RuntimeException);
+        const css::uno::Sequence<css::uno::Any>& aArguments)
+        throw (css::uno::RuntimeException);
 
 private:
     /** The set of URLs that consist of the resource URL at index 0 and the
         anchor URLs and indices 1 and above.
     */
     ::std::vector<rtl::OUString> maResourceURLs;
+
+    ::boost::scoped_ptr<css::util::URL> mpURL;
+
+    static css::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
 
     /** Compare the called ResourceId object to the given ResourceId object.
         This uses the implementation of both objects to speed up the
@@ -204,8 +210,8 @@ private:
         it uses the getResourceURL() and the getAnchorURLs() methods to get
         access to the URLs of the given objec.
     */
-    sal_Int16 CompareToExternalImplementation (const ::com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId>& rxId) const;
+    sal_Int16 CompareToExternalImplementation (const css::uno::Reference<
+        css::drawing::framework::XResourceId>& rxId) const;
 
     /** Return whether the called ResourceId object is bound to the anchor
         consisting of the URLs given by psFirstAnchorURL and paAnchorURLs.
@@ -222,8 +228,8 @@ private:
     */
     bool IsBoundToAnchor (
         const rtl::OUString* psFirstAnchorURL,
-        const ::com::sun::star::uno::Sequence<rtl::OUString>* paAnchorURLs,
-        com::sun::star::drawing::framework::AnchorBindingMode eMode) const;
+        const css::uno::Sequence<rtl::OUString>* paAnchorURLs,
+        css::drawing::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the called ResourceId object is bound to the anchor
         consisting of the URLs in rResourceURLs.
@@ -236,9 +242,11 @@ private:
     */
     bool IsBoundToAnchor (
         const ::std::vector<rtl::OUString>& rResourceURLs,
-        com::sun::star::drawing::framework::AnchorBindingMode eMode) const;
+        css::drawing::framework::AnchorBindingMode eMode) const;
 
     bool IsValid (void) const;
+
+    void ParseResourceURL (void);
 };
 
 } } // end of namespace sd::framework
