@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:23:14 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,46 +58,77 @@ using ::rtl::OUString;
 namespace sd { namespace tools {
 
 ConfigurationAccess::ConfigurationAccess (
+    const Reference<XComponentContext>& rxContext,
     const OUString& rsRootName,
-    WriteMode eMode)
+    const WriteMode eMode)
     : mxRoot()
+{
+    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
+    if (xFactory.is())
+    {
+        Reference<lang::XMultiServiceFactory> xProvider (
+            xFactory->createInstanceWithContext(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"),
+                rxContext),
+            UNO_QUERY);
+        if (xProvider.is())
+            Initialize(xProvider, rsRootName, eMode);
+    }
+}
+
+
+
+
+ConfigurationAccess::ConfigurationAccess (
+    const OUString& rsRootName,
+    const WriteMode eMode)
+    : mxRoot()
+{
+    Reference<lang::XMultiServiceFactory> xProvider (
+        ::comphelper::getProcessServiceFactory()->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+        UNO_QUERY);
+    if (xProvider.is())
+        Initialize(xProvider, rsRootName, eMode);
+}
+
+
+
+
+void ConfigurationAccess::Initialize (
+    const Reference<lang::XMultiServiceFactory>& rxProvider,
+    const OUString& rsRootName,
+    const WriteMode eMode)
 {
     try
     {
-        Reference<lang::XMultiServiceFactory> xProvider (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
-            UNO_QUERY);
-        if (xProvider.is())
-        {
-            Sequence<Any> aCreationArguments(3);
-            aCreationArguments[0] = makeAny(beans::PropertyValue(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                0,
-                makeAny(rsRootName),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[1] = makeAny(beans::PropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
-                0,
-                makeAny((sal_Int32)-1),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[2] = makeAny(beans::PropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
-                0,
-                makeAny(true),
-                beans::PropertyState_DIRECT_VALUE));
-            OUString sAccessService;
-            if (eMode == READ_ONLY)
-                sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess"));
-            else
-                sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess"));
+        Sequence<Any> aCreationArguments(3);
+        aCreationArguments[0] = makeAny(beans::PropertyValue(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+            0,
+            makeAny(rsRootName),
+            beans::PropertyState_DIRECT_VALUE));
+        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+            0,
+            makeAny((sal_Int32)-1),
+            beans::PropertyState_DIRECT_VALUE));
+        aCreationArguments[2] = makeAny(beans::PropertyValue(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
+            0,
+            makeAny(true),
+            beans::PropertyState_DIRECT_VALUE));
+        OUString sAccessService;
+        if (eMode == READ_ONLY)
+            sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationAccess"));
+        else
+            sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationUpdateAccess"));
 
-            mxRoot = xProvider->createInstanceWithArguments(
-                sAccessService, aCreationArguments);
-        }
+        mxRoot = rxProvider->createInstanceWithArguments(
+            sAccessService,
+            aCreationArguments);
     }
     catch (Exception& rException)
     {
@@ -110,29 +141,39 @@ ConfigurationAccess::ConfigurationAccess (
 
 
 
-Reference<XInterface> ConfigurationAccess::GetConfigurationNode (
+Any ConfigurationAccess::GetConfigurationNode (
     const OUString& sPathToNode)
 {
-    Reference<XInterface> xNode;
+    return GetConfigurationNode(
+        Reference<container::XHierarchicalNameAccess>(mxRoot, UNO_QUERY),
+        sPathToNode);
+}
+
+
+
+
+Any ConfigurationAccess::GetConfigurationNode (
+    const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
+    const OUString& sPathToNode)
+{
+    if (sPathToNode.getLength() == 0)
+        return Any(rxNode);
 
     try
     {
-        Reference<container::XHierarchicalNameAccess> xHierarchy (mxRoot, UNO_QUERY);
-        if (xHierarchy.is())
+        if (rxNode.is())
         {
-            xHierarchy->getByHierarchicalName(sPathToNode) >>= xNode;
+            return rxNode->getByHierarchicalName(sPathToNode);
         }
     }
     catch (Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            ::rtl::OUStringToOString(sPathToNode,
-                RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
+            ::rtl::OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
+            ::rtl::OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 
-    return xNode;
+    return Any();
 }
 
 
@@ -159,8 +200,8 @@ void ConfigurationAccess::ForAll (
         Sequence<OUString> aKeys (rxContainer->getElementNames());
         for (sal_Int32 nItemIndex=0; nItemIndex<aKeys.getLength(); ++nItemIndex)
         {
-            Reference<container::XNameAccess> xSetItem (
-                rxContainer->getByName(aKeys[nItemIndex]), UNO_QUERY);
+            const OUString& rsKey (aKeys[nItemIndex]);
+            Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
             if (xSetItem.is())
             {
                 // Get from the current item of the container the children
@@ -168,7 +209,7 @@ void ConfigurationAccess::ForAll (
                 for (sal_uInt32 nValueIndex=0; nValueIndex<aValues.size(); ++nValueIndex)
                     aValues[nValueIndex] = xSetItem->getByName(rArguments[nValueIndex]);
             }
-            rFunctor(aValues);
+            rFunctor(rsKey, aValues);
         }
     }
 }
