@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CenterViewFocusModule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:50:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,18 +38,9 @@
 
 #include "MutexOwner.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XViewController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -78,10 +69,10 @@ class ViewShellBase;
 
 namespace sd { namespace framework {
 
-/** This module waits for new views to be created and then moves the center
-    view to the top most place on the shell stack.  As we are moving away
-    from the shell stack this module may become obsolete or has to be
-    modified.
+/** This module waits for new views to be created for the center pane and
+    then moves the center view to the top most place on the shell stack.  As
+    we are moving away from the shell stack this module may become obsolete
+    or has to be modified.
 */
 class CenterViewFocusModule
     : private sd::MutexOwner,
@@ -111,8 +102,6 @@ private:
     class ViewShellContainer;
 
     bool mbValid;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XViewController>
-        mxViewController;
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
         mxConfigurationController;
     ViewShellBase* mpBase;
@@ -122,7 +111,13 @@ private:
     */
     bool mbNewViewCreated;
 
-    void ConfigurationUpdateEnd(void);
+    /** At the end of an update of the current configuration this method
+        handles a new view in the center pane by moving the associated view
+        shell to the top of the shell stack.
+    */
+    void HandleNewView(
+        const ::com::sun::star::uno::Reference<
+            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
 };
 
 } } // end of namespace sd::framework
