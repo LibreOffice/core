@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_linepolypolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:56:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,11 @@ namespace dxcanvas
         // as any of the modifying methods above touches the
         // B2DPolyPolygon).
         if( !mpPath )
+        {
             mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygon() );
+            mpPath->SetFillMode( const_cast<LinePolyPolygon*>(this)->getFillRule() == rendering::FillRule_EVEN_ODD ?
+                                 Gdiplus::FillModeAlternate : Gdiplus::FillModeWinding );
+        }
 
         return mpPath;
     }
