@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:13:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,8 +299,6 @@ public:
                                 // _pFilterDesc must already have been added to _pFilter
     inline  SvtFileDialogFilter_Impl*   GetSelectedFilterEntry( String& /* [out] */ _rDisplayName ) const;
     inline  sal_Bool        IsFilterListTravelSelect() const;
-
-    SvtFileDialogFilter_Impl*   FindFilter( const String& _rFilterName );
 
     // ------------------------------------------
     // access to the current filter via methods only - need to care for consistency between _pCurFilter and m_sCurrentFilterDisplayName
