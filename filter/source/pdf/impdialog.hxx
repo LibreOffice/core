@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:15:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,7 @@ public:
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent );
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+    sal_Bool                    IsPdfaSelected() { return maCbPDFA1b.IsChecked(); };
 };
 
 //class tab page viewer
@@ -374,6 +375,7 @@ public:
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+    void    ImplPDFASecurityControl( sal_Bool bEnableSecurity );
 };
 
 //class to implement the relative link stuff
