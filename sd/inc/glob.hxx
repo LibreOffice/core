@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:21:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #define SD_IF_SDDRAWDOCSHELL            SFX_INTERFACE_SD_START + 1
 #define SD_IF_SDVIEWSHELL               SFX_INTERFACE_SD_START + 2
 #define SD_IF_SDDRAWVIEWSHELL           SFX_INTERFACE_SD_START + 3
-#define SD_IF_SDSLIDEVIEWSHELL          SFX_INTERFACE_SD_START + 4
 #define SD_IF_SDOUTLINEVIEWSHELL        SFX_INTERFACE_SD_START + 5
 #define SD_IF_SDDRAWSTDOBJECTBAR        SFX_INTERFACE_SD_START + 6
 #define SD_IF_SDDRAWTEXTOBJECTBAR       SFX_INTERFACE_SD_START + 7
