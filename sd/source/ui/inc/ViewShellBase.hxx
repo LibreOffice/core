@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:01:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,14 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 
-#ifndef SD_GLOB_HXX
 #include "glob.hxx"
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _VIEWFAC_HXX
 #include <sfx2/viewfac.hxx>
-#endif
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <set>
 
@@ -66,7 +59,6 @@ namespace sd {
 class DrawController;
 class DrawDocShell;
 class FormShellManager;
-class PrintManager;
 class ToolBarManager;
 class UpdateLockManager;
 class ViewShell;
@@ -107,7 +99,7 @@ public:
     */
     virtual void LateInit (const ::rtl::OUString& rsDefaultView);
 
-    ViewShellManager& GetViewShellManager (void) const;
+    ::boost::shared_ptr<ViewShellManager> GetViewShellManager (void) const;
 
     /** Return the main view shell stacked on the called ViewShellBase
         object.  This is usually the view shell displayed in the center
@@ -243,15 +235,11 @@ public:
         executing the slot SID_PRESENTATION asynchronous */
     void StartPresentation();
 
-    /** this methods ends the presentation by
-        executing the slot SID_PRESENTATION_END asynchronous */
-    void StopPresentation();
-
     /** Return an event multiplexer.  It is a single class that forwards
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
-    tools::EventMultiplexer& GetEventMultiplexer (void);
+    ::boost::shared_ptr<tools::EventMultiplexer> GetEventMultiplexer (void);
 
     /** returns the complete area of the current view relative to the frame
         window
@@ -262,7 +250,7 @@ public:
 
     ::boost::shared_ptr<ToolBarManager> GetToolBarManager (void) const;
 
-    FormShellManager& GetFormShellManager (void) const;
+    ::boost::shared_ptr<FormShellManager> GetFormShellManager (void) const;
 
     DrawController& GetDrawController (void) const;
 
@@ -288,21 +276,9 @@ protected:
 
 private:
     class Implementation;
-    ::std::auto_ptr<Implementation> mpImpl;
-    ::std::auto_ptr<ViewShellManager> mpViewShellManager;
+    ::boost::scoped_ptr<Implementation> mpImpl;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
-
-    /// The print manager is responsible for printing documents.
-    ::std::auto_ptr<PrintManager> mpPrintManager;
-
-    ::std::auto_ptr<FormShellManager> mpFormShellManager;
-
-    ::std::auto_ptr<tools::EventMultiplexer> mpEventMultiplexer;
-
-    ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
-
-    ::std::auto_ptr<CustomHandleManager> mpCustomHandleManager;
 
     /** Determine from the properties of the document shell the initial type
         of the view shell in the center pane.  We use this method to avoid
