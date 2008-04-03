@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:09:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:11:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 
 #include "vcl/metric.hxx"
 #include "vcl/gradient.hxx"
+#include "vcl/mnemonic.hxx"
+#include "vcl/menu.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -73,7 +75,7 @@ using namespace framework;
 #define DRAW_URL        "private:factory/sdraw"
 #define BASE_URL        "private:factory/sdatabase?Interactive"
 #define TEMPLATE_URL    "slot:5500"
-
+#define OPEN_URL        ".uno:Open"
 
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
@@ -128,10 +130,10 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maDrawButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maDBText( this, WB_WORDBREAK | WB_VCENTER ),
     maDBButton( this, WB_CENTER | WB_BEVELBUTTON ),
-    maOpenText( this, WB_WORDBREAK | WB_VCENTER ),
-    maOpenButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maTemplateText( this, WB_WORDBREAK | WB_VCENTER ),
     maTemplateButton( this, WB_CENTER | WB_BEVELBUTTON ),
+    maOpenText( this, WB_WORDBREAK | WB_VCENTER ),
+    maOpenButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maToolbox( this, WB_DIALOGCONTROL ),
     maBackgroundLeft( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) ),
     maBackgroundMiddle( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) ),
@@ -141,9 +143,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maCreateString( FwkResId( STR_BACKING_CREATE ) ),
     maOpenString( FwkResId( STR_BACKING_FILE ) ),
     maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
-    maLabelTextColor( 0x40, 0x40, 0x40 ),
-    maWelcomeTextColor( 0x40, 0x40, 0x40 ),
-    maButtonImageSize( 10, 10 )
+    maLabelTextColor( 0x26, 0x35, 0x42 ),
+    maWelcomeTextColor( 0x26, 0x35, 0x42 ),
+    maButtonImageSize( 10, 10 ),
+    mbInitControls( false ),
+    mpAccExec( NULL )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
 
@@ -179,11 +183,51 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maButtonImageSize.Width() += 12;
     maButtonImageSize.Height() += 12;
 
+    // insert toolbox items
+    maToolbox.InsertItem( nItemId_Extensions, Image( aExtImage ) );
+    maToolbox.SetQuickHelpText( nItemId_Extensions, aExtHelpText );
+    maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
+    maToolbox.ShowItem( nItemId_Extensions );
+
+    maToolbox.InsertItem( nItemId_Reg, Image( aRegImage ) );
+    maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
+    maToolbox.SetItemCommand( nItemId_Reg, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Register" ) ) );
+    maToolbox.ShowItem( nItemId_Reg );
+
+    maToolbox.InsertItem( nItemId_Info, Image( aInfoImage ) );
+    maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
+    maToolbox.SetItemCommand( nItemId_Info, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Info" ) ) );
+    maToolbox.ShowItem( nItemId_Info );
+
+    // get dispatch provider
     mxDesktop = Reference<XDesktop>( comphelper::getProcessServiceFactory()->createInstance(
                                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                         UNO_QUERY );
     if( mxDesktop.is() )
         mxDesktopDispatchProvider = Reference< XDispatchProvider >( mxDesktop, UNO_QUERY );
+
+    maWriterButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:WriterButton" ) ) ) );
+    maCalcButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:CalcButton" ) ) ) );
+    maImpressButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:ImpressButton" ) ) ) );
+    maDrawButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DrawButton" ) ) ) );
+    maDBButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DBButton" ) ) ) );
+    maTemplateButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateButton" ) ) ) );
+    maOpenButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:OpenButton" ) ) ) );
+    maToolbox.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Toolbox" ) ) ) );
+}
+
+
+BackingWindow::~BackingWindow()
+{
+    delete mpAccExec;
+}
+
+void BackingWindow::initControls()
+{
+    if( mbInitControls )
+        return;
+
+    mbInitControls = true;
 
     // calculate dialog size
     // begin with background bitmap
@@ -232,7 +276,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     nW = (maProduct.GetFontMetric().GetWidth()*95)/100;
     maTextFont.SetSize( Size( nW, 28 ) );
 
-    maWelcome.SetFont( maTextFont );
+    maProduct.SetFont( maTextFont );
     maProduct.SetControlFont( maTextFont );
     maProduct.SetText( maProductString );
     maProductSize = Size( maProduct.GetTextWidth( maProductString ), maProduct.GetTextHeight() );
@@ -277,49 +321,58 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             aFileNewAppsAvailable.insert( sURL );
     }
 
+    // create mnemonics on the fly, preregister the mnemonics of the menu
+    MnemonicGenerator aMnemns;
+    maTemplateString = MnemonicGenerator::EraseAllMnemonicChars( maTemplateString );
+    maOpenString = MnemonicGenerator::EraseAllMnemonicChars( maOpenString );
+
+    SystemWindow* pSysWin = GetSystemWindow();
+    if( pSysWin )
+    {
+        MenuBar* pMBar = pSysWin->GetMenuBar();
+        if( pMBar )
+        {
+            for( USHORT i = 0; i < pMBar->GetItemCount(); i++ )
+            {
+                USHORT nItemId = pMBar->GetItemId( i );
+                String aItemText( pMBar->GetItemText( nItemId ) );
+                if( aItemText.Len() )
+                    aMnemns.RegisterMnemonic( aItemText );
+            }
+        }
+    }
+
+    // layout the buttons
     layoutButtonAndText( WRITER_URL, 0, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maWriterButton, maWriterText );
+                         maWriterButton, maWriterText, aMnemns );
     layoutButtonAndText( CALC_URL, 1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SCALC,
-                         maCalcButton, maCalcText );
+                         maCalcButton, maCalcText, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
     layoutButtonAndText( IMPRESS_WIZARD_URL, 0, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SIMPRESS,
-                         maImpressButton, maImpressText );
+                         maImpressButton, maImpressText, aMnemns );
     layoutButtonAndText( DRAW_URL, 1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SDRAW,
-                         maDrawButton, maDrawText );
+                         maDrawButton, maDrawText, aMnemns );
     nYPos += maButtonImageSize.Height() + 10;
     layoutButtonAndText( BASE_URL, 0, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SDATABASE,
-                         maDBButton, maDBText );
+                         maDBButton, maDBText, aMnemns );
     layoutButtonAndText( NULL, 1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maTemplateButton, maTemplateText, maTemplateString );
+                         maTemplateButton, maTemplateText, aMnemns, maTemplateString );
 
     nYPos += 2*maButtonImageSize.Height();
     layoutButtonAndText( NULL, -1, aFileNewAppsAvailable,
                          aModuleOptions, SvtModuleOptions::E_SWRITER,
-                         maOpenButton, maOpenText, maOpenString );
+                         maOpenButton, maOpenText, aMnemns, maOpenString );
     nYPos += 10;
 
     DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" )
     if( mnColumnWidth[0] + mnColumnWidth[1] + nBtnPos + 20 > maControlRect.GetWidth() )
         maControlRect.Right() = maControlRect.Left() + mnColumnWidth[0] + mnColumnWidth[1] + nBtnPos + 20;
-
-
-    maToolbox.InsertItem( nItemId_Extensions, Image( aExtImage ) );
-    maToolbox.SetQuickHelpText( nItemId_Extensions, aExtHelpText );
-    maToolbox.ShowItem( nItemId_Extensions );
-
-    maToolbox.InsertItem( nItemId_Reg, Image( aRegImage ) );
-    maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
-    maToolbox.ShowItem( nItemId_Reg );
-
-    maToolbox.InsertItem( nItemId_Info, Image( aInfoImage ) );
-    maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
-    maToolbox.ShowItem( nItemId_Info );
 
     maToolbox.SetSelectHdl( LINK( this, BackingWindow, ToolboxHdl ) );
     maToolbox.Show();
@@ -338,10 +391,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     }
     else
         maBackgroundMiddle = BitmapEx();
-}
 
-BackingWindow::~BackingWindow()
-{
+    Resize();
 }
 
 void BackingWindow::loadImage( const ResId& i_rId, ImageButton& i_rButton )
@@ -360,6 +411,7 @@ void BackingWindow::layoutButtonAndText(
                           const std::set<rtl::OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                           ImageButton& i_rBtn, FixedText& i_rText,
+                          MnemonicGenerator& i_rMnemns,
                           const String& i_rStr
                           )
 {
@@ -376,15 +428,10 @@ void BackingWindow::layoutButtonAndText(
     i_rText.SetFont( maTextFont );
     i_rText.SetControlFont( maTextFont );
     i_rText.SetControlForeground( maLabelTextColor );
-    if( i_rStr.Len() )
-        i_rText.SetText( i_rStr );
-    else
-    {
-        rtl::OUStringBuffer aBuf( 128 );
-        aBuf.append( sal_Unicode( '~') );
-        aBuf.append( SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
-        i_rText.SetText( aBuf.makeStringAndClear() );
-    }
+    String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
+    i_rMnemns.CreateMnemonic( aText );
+    i_rText.SetText( aText );
+
     long nTextWidth = i_rText.GetTextWidth( i_rText.GetText() );
     i_rText.SetPaintTransparent( TRUE );
     i_rText.SetControlBackground( Color( COL_WHITE ) );
@@ -440,6 +487,30 @@ void BackingWindow::Paint( const Rectangle& )
         }
         DrawBitmapEx( aTL, maBackgroundRight );
     }
+}
+
+long BackingWindow::Notify( NotifyEvent& rNEvt )
+{
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        if( ! mpAccExec )
+        {
+            mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccExec->init( comphelper::getProcessServiceFactory(), mxFrame);
+        }
+
+        const KeyEvent* pEvt = rNEvt.GetKeyEvent();
+        if( pEvt && mpAccExec->execute(pEvt->GetKeyCode()) )
+            return 1;
+    }
+    return Window::Notify( rNEvt );
+}
+
+void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame )
+{
+    mxFrame = xFrame;
+    if( ! mbInitControls )
+        initControls();
 }
 
 void BackingWindow::Resize()
@@ -573,13 +644,19 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     else if( pButton == &maDBButton )
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(BASE_URL) ) );
     else if( pButton == &maOpenButton )
-        executeFileOpen();
+    {
+        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+
+        Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
+        PropertyValue* pArg = aArgs.getArray();
+        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+
+        dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(OPEN_URL) ), rtl::OUString(), xFrame, aArgs );
+    }
     else if( pButton == &maTemplateButton )
     {
-        Reference< XDispatchProvider > xFrame;
-        Reference< XFramesSupplier > xSup( mxDesktop, UNO_QUERY );
-        if( xSup.is() )
-            xFrame = Reference < XDispatchProvider >( xSup->getActiveFrame(), UNO_QUERY );
+        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
@@ -633,52 +710,4 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
         }
     }
 }
-
-bool BackingWindow::executeFileOpen()
-{
-    const Any mode( static_cast<sal_Int16>(
-        ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) );
-    const Reference<ui::dialogs::XFilePicker> xFilePicker(
-        comphelper::getProcessServiceFactory()
-        ->createInstanceWithArguments(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker")),
-            Sequence<Any>(&mode, 1) ), UNO_QUERY_THROW );
-    xFilePicker->setMultiSelectionMode(true);
-
-    // collect and set filter list:
-    String aAllFiles;
-    ResMgr* pResMgr = ResMgr::CreateResMgr( "fps_office" MAKE_NUMSTR(SUPD) );
-    if( pResMgr )
-    {
-        aAllFiles = String( ResId( STR_FILTERNAME_ALL, *pResMgr ) );
-    }
-    // FIXME: TODO
-
-    const Reference<ui::dialogs::XFilterManager> xFilterManager(
-        xFilePicker, UNO_QUERY_THROW );
-    // All files at top:
-    xFilterManager->appendFilter( aAllFiles, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*.*")) );
-    // then supported ones:
-    // FIXME: TODO
-
-    if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
-        return false; // cancelled
-
-    Sequence<rtl::OUString> aFiles( xFilePicker->getFiles() );
-    if( aFiles.getLength() == 1 )
-        dispatchURL( aFiles.getConstArray()[0] );
-    else
-    for( sal_Int32 nFile = 1; nFile < aFiles.getLength(); nFile++ )
-    {
-        // need to concatenate base dir and file
-        rtl::OUStringBuffer aURL( 256 );
-        aURL.append( aFiles.getConstArray()[0] );
-        aURL.append( sal_Unicode('/') );
-        aURL.append( aFiles.getConstArray()[nFile] );
-        dispatchURL( aURL.makeStringAndClear() );
-    }
-
-    return aFiles.getLength() > 0;
-}
-
 
