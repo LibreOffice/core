@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:59:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,14 +138,13 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
-#ifndef SD_SLIDE_VIEW_HXX
-#include "SlideView.hxx"
-#endif
 #include "helpids.h"
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+
+#include "slideshow.hxx"
 
 namespace sd {
 
@@ -703,7 +702,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                         mpDropMarkerObj = NULL;
                     }
 
-                    if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && ( !mpViewSh || mpViewSh->GetSlideShow() ) )
+                    if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && mpViewSh && SlideShow::IsRunning(mpViewSh->GetViewShellBase()) )
                         bBookmark = FALSE;
 
                     if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
