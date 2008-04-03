@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:50:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1462,13 +1462,15 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
     USHORT nLRSavePos;
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
-    SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule );
+    SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
+                  SwUndoId nUndoId = UNDO_INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const String& rReplaceRule );
     virtual ~SwUndoInsNum();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+    virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory();        // wird ggfs. neu angelegt!
     void SetSttNum( ULONG nNdIdx ) { nSttSet = nNdIdx; }
