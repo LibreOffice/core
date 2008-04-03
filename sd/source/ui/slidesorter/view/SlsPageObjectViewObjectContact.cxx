@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:29:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "view/SlsPageObjectViewObjectContact.hxx"
 
+#include "controller/SlsProperties.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsPageObjectViewContact.hxx"
 #include "view/SlsPageObject.hxx"
@@ -56,13 +56,13 @@
 #include "drawdoc.hxx"
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xoutx.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/sdrpagewindow.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -82,26 +82,34 @@ using namespace ::sd::slidesorter::model;
 namespace sd { namespace slidesorter { namespace view {
 
 
-const sal_Int32 PageObjectViewObjectContact::mnSelectionIndicatorOffset = 1;
+const sal_Int32 PageObjectViewObjectContact::mnSelectionIndicatorOffset = 2;
 const sal_Int32 PageObjectViewObjectContact::mnSelectionIndicatorThickness = 3;
-const sal_Int32 PageObjectViewObjectContact::mnFocusIndicatorOffset = 2;
+const sal_Int32 PageObjectViewObjectContact::mnFocusIndicatorOffset = 3;
 const sal_Int32 PageObjectViewObjectContact::mnFadeEffectIndicatorOffset = 9;
 const sal_Int32 PageObjectViewObjectContact::mnFadeEffectIndicatorSize = 14;
 const sal_Int32 PageObjectViewObjectContact::mnPageNumberOffset = 9;
-const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectOffset = 2;
+const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectOffset = 3;
 const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectThickness = 1;
 
 PageObjectViewObjectContact::PageObjectViewObjectContact (
     ObjectContact& rObjectContact,
     ViewContact& rViewContact,
-    const ::boost::shared_ptr<cache::PageCache>& rpCache)
+    const ::boost::shared_ptr<cache::PageCache>& rpCache,
+    const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : ViewObjectContact (rObjectContact, rViewContact),
+      mpPageDescriptor(GetPageDescriptor()),
       mbIsValid(true),
+      mbInPrepareDelete(false),
+      mbIsBackgroundColorUpdatePending(true),
       mpCache(rpCache),
       mpNotifier(NULL),
-      mbInPrepareDelete(false)
+      mpProperties(rpProperties),
+      maBackgroundColor()
 {
-    GetPageDescriptor().SetViewObjectContact (this);
+    SharedPageDescriptor pDescriptor (GetPageDescriptor());
+    OSL_ASSERT(pDescriptor.get()!=NULL);
+    if (pDescriptor.get() != NULL)
+        pDescriptor->SetViewObjectContact(this);
 }
 
 
@@ -111,7 +119,7 @@ PageObjectViewObjectContact::~PageObjectViewObjectContact (void)
 {
     if (mpCache.get() != NULL)
     {
-        mpCache->ReleasePreviewBitmap(*this);
+        mpCache->ReleasePreviewBitmap(GetPage());
     }
 
     if (mpNotifier.get() != NULL)
@@ -184,7 +192,7 @@ Rectangle PageObjectViewObjectContact::GetBoundingBox (
         case PageNumberBoundingBox:
         {
             Size aModelOffset = rDevice.PixelToLogic(Size(mnPageNumberOffset,mnPageNumberOffset));
-            Size aNumberSize (GetPageDescriptor().GetPageNumberAreaModelSize());
+            Size aNumberSize (GetPageDescriptor()->GetPageNumberAreaModelSize());
             aBoundingBox = Rectangle (
                 Point (
                     aBoundingBox.Left() - aModelOffset.Width() - aNumberSize.Width(),
@@ -228,13 +236,12 @@ Rectangle PageObjectViewObjectContact::GetBoundingBox (
 
 
 
-BitmapEx PageObjectViewObjectContact::CreatePreview (DisplayInfo& rDisplayInfo)
+BitmapEx PageObjectViewObjectContact::CreatePreview (OutputDevice& rDevice) const
 {
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPreviewPixelBox (GetBoundingBox(*pDevice,PreviewBoundingBox,PixelCoordinateSystem));
+    Rectangle aPreviewPixelBox (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
 
-    PreviewRenderer aRenderer (pDevice);
+    PreviewRenderer aRenderer(&rDevice);
     Image aPreview (aRenderer.RenderPage(
         pPage,
         aPreviewPixelBox.GetSize(),
@@ -247,7 +254,7 @@ BitmapEx PageObjectViewObjectContact::CreatePreview (DisplayInfo& rDisplayInfo)
 
 
 BitmapEx PageObjectViewObjectContact::GetPreview (
-    DisplayInfo& rDisplayInfo,
+    OutputDevice& rDevice,
     const Rectangle& rNewSizePixel)
 {
     BitmapEx aBitmap;
@@ -259,12 +266,12 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
             if (mpCache != NULL)
             {
                 aBitmap = mpCache->GetPreviewBitmap(
-                    *this,
+                    GetPage(),
                     rNewSizePixel.GetSize());
-                mpCache->SetPreciousFlag(*this, true);
+                mpCache->SetPreciousFlag(GetPage(), true);
             }
             else
-                aBitmap = CreatePreview (rDisplayInfo);
+                aBitmap = CreatePreview(rDevice);
         }
     }
     catch (const ::com::sun::star::uno::Exception&)
@@ -309,22 +316,7 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
             // call to PaintObject(..).
             mbIsPainted = sal_True;
 
-            // Save (a part of) the state of the output device.
-            ULONG nPreviousDrawMode = pDevice->GetDrawMode();
-            const Color aOriginalFillColor (pDevice->GetFillColor());
-            const Color aOriginalLineColor (pDevice->GetLineColor());
-            Font aOriginalFont (pDevice->GetFont());
-
-            // Set default font.
-            pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
-
-            PaintContent (rDisplayInfo);
-
-            // Restore old device state.
-            pDevice->SetFont (aOriginalFont);
-            pDevice->SetLineColor (aOriginalLineColor);
-            pDevice->SetFillColor (aOriginalFillColor);
-            pDevice->SetDrawMode (nPreviousDrawMode);
+            PaintContent(*pDevice);
 
             // set painted rectangle
             maPaintedRectangle = GetViewContact().GetPaintRectangle();
@@ -354,10 +346,10 @@ void PageObjectViewObjectContact::PrepareDelete (void)
     mbIsValid = false;
     mbInPrepareDelete = true;
 
-    GetPageDescriptor().SetViewObjectContact (NULL);
+    GetPageDescriptor()->SetViewObjectContact(NULL);
 
     if (mpCache != NULL)
-        mpCache->ReleasePreviewBitmap(*this);
+        mpCache->ReleasePreviewBitmap(GetPage());
 
     ViewObjectContact::PrepareDelete();
 
@@ -384,45 +376,109 @@ void PageObjectViewObjectContact::ActionChanged (void)
     if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
     {
         cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
-            pDocument,
+            pDocument->getUnoModel(),
             GetPage());
     }
 
     ViewObjectContact::ActionChanged();
+
+    mbIsBackgroundColorUpdatePending = true;
 }
 
 
 
 
-void PageObjectViewObjectContact::PaintContent  (
-    DisplayInfo& rDisplayInfo)
+void PageObjectViewObjectContact::PaintContent  (OutputDevice& rDevice)
 {
-    PaintPreview (rDisplayInfo);
-    PaintFrame (*rDisplayInfo.GetOutputDevice());
-    PaintFadeEffectIndicator (rDisplayInfo);
-    PaintPageName (rDisplayInfo);
-    PaintPageNumber (rDisplayInfo);
+    // Save (a part of) the state of the output device.
+    const ULONG nPreviousDrawMode (rDevice.GetDrawMode());
+    const Color aOriginalFillColor (rDevice.GetFillColor());
+    const Color aOriginalLineColor (rDevice.GetLineColor());
+    const Font aOriginalFont (rDevice.GetFont());
+
+    // Set default font.
+    rDevice.SetFont(*FontProvider::Instance().GetFont(rDevice));
+
+    // Do the actual painting.
+    PaintBackground(rDevice);
+    PaintPreview(rDevice);
+    PaintFrame(rDevice);
+    PaintFadeEffectIndicator(rDevice);
+    PaintPageName(rDevice);
+    PaintPageNumber(rDevice);
+
+    // Restore old device state.
+    rDevice.SetFont(aOriginalFont);
+    rDevice.SetLineColor(aOriginalLineColor);
+    rDevice.SetFillColor(aOriginalFillColor);
+    rDevice.SetDrawMode(nPreviousDrawMode);
 }
 
 
 
 
-void PageObjectViewObjectContact::PaintPreview  (
-    DisplayInfo& rDisplayInfo)
+void PageObjectViewObjectContact::PaintBackground  (OutputDevice& rDevice) const
 {
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    if (pDevice != NULL)
+    if (mpProperties.get()!=NULL
+        && mpProperties->IsHighlightCurrentSlide()
+        && GetPageDescriptor()->IsCurrentPage())
     {
-        Rectangle aNewSizePixel (
-            GetBoundingBox(*pDevice,PreviewBoundingBox,PixelCoordinateSystem));
-        BitmapEx aPreview (GetPreview(rDisplayInfo, aNewSizePixel));
+        Rectangle aOuterBox (GetBoundingBox(rDevice,PageObjectBoundingBox,PixelCoordinateSystem));
+        Rectangle aInnerBox (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
 
-        // Paint using cached bitmap.
-        const sal_Bool bWasEnabled(pDevice->IsMapModeEnabled());
-        pDevice->EnableMapMode(sal_False);
-        pDevice->DrawBitmapEx(aNewSizePixel.TopLeft(), aPreview);
-        pDevice->EnableMapMode(bWasEnabled);
+        const Color aOldFillColor (rDevice.GetFillColor());
+        const Color aOldLineColor (rDevice.GetLineColor());
+        const sal_Bool bWasEnabled(rDevice.IsMapModeEnabled());
+
+        rDevice.SetLineColor();
+        rDevice.SetFillColor(GetColor(rDevice, CS_BACKGROUND));
+        rDevice.EnableMapMode(sal_False);
+
+        // Paint the background without painting over the preview.
+        rDevice.DrawRect(
+            Rectangle(aOuterBox.Left(),aOuterBox.Top(),aInnerBox.Left(),aOuterBox.Bottom()));
+        rDevice.DrawRect(
+            Rectangle(aInnerBox.Left(),aOuterBox.Top(),aInnerBox.Right(),aInnerBox.Top()));
+        rDevice.DrawRect(
+            Rectangle(aInnerBox.Right(),aOuterBox.Top(),aOuterBox.Right(),aInnerBox.Bottom()));
+        rDevice.DrawRect(
+            Rectangle(aInnerBox.Left(),aInnerBox.Bottom(),aOuterBox.Right(),aOuterBox.Bottom()));
+
+        // Draw the frame around the background.
+        rDevice.SetLineColor(GetColor(rDevice, CS_SELECTION));
+        rDevice.SetFillColor();
+        rDevice.DrawRect(aOuterBox);
+
+        // Erase the corner pixel to have somewhat rounded corners.
+        const Color aCornerColor (GetColor(rDevice, CS_WINDOW));
+        Point aCorner (aOuterBox.TopLeft());
+        rDevice.DrawPixel (aCorner, aCornerColor);
+        aCorner = aOuterBox.TopRight();
+        rDevice.DrawPixel (aCorner, aCornerColor);
+        aCorner = aOuterBox.BottomLeft();
+        rDevice.DrawPixel (aCorner, aCornerColor);
+        aCorner = aOuterBox.BottomRight();
+        rDevice.DrawPixel (aCorner, aCornerColor);
+
+        rDevice.SetFillColor(aOldFillColor);
+        rDevice.SetLineColor(aOldLineColor);
+        rDevice.EnableMapMode(bWasEnabled);
     }
+}
+
+
+
+
+void PageObjectViewObjectContact::PaintPreview  (OutputDevice& rDevice)
+{
+    Rectangle aNewSizePixel (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
+    BitmapEx aPreview (GetPreview(rDevice, aNewSizePixel));
+
+    // Paint using cached bitmap.
+    const sal_Bool bWasEnabled(rDevice.IsMapModeEnabled());
+    rDevice.EnableMapMode(sal_False);
+    rDevice.DrawBitmapEx(aNewSizePixel.TopLeft(), aPreview);
+    rDevice.EnableMapMode(bWasEnabled);
 }
 
 
@@ -434,12 +490,11 @@ void PageObjectViewObjectContact::PaintFrame (
 {
     PaintBorder (rDevice);
     PaintSelectionIndicator (rDevice);
-    if ( ! GetPageDescriptor().IsSelected())
-        PaintMouseOverEffect (rDevice, bShowMouseOverEffect);
+    PaintMouseOverEffect (rDevice, bShowMouseOverEffect);
     // else the mouse over effect is not visible when the selection
     // indicator is painted already.
     PaintFocusIndicator (rDevice,
-        GetPageDescriptor().IsSelected() || ! bShowMouseOverEffect);
+        GetPageDescriptor()->IsSelected() || ! bShowMouseOverEffect);
 }
 
 
@@ -449,12 +504,16 @@ void PageObjectViewObjectContact::PaintBorder (
     OutputDevice& rDevice) const
 {
     Rectangle aFrameBox (GetBoundingBox(rDevice, PreviewBoundingBox, PixelCoordinateSystem));
+    aFrameBox.Left() -= 1;
+    aFrameBox.Top() -= 1;
+    aFrameBox.Right() += 1;
+    aFrameBox.Bottom() += 1;
     rDevice.EnableMapMode(FALSE);
-    rDevice.SetFillColor ();
+    rDevice.SetFillColor();
     svtools::ColorConfig aColorConfig;
     Color aColor = aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor;
-    rDevice.SetLineColor (aColor);
-    rDevice.DrawRect (aFrameBox);
+    rDevice.SetLineColor(aColor);
+    rDevice.DrawRect(aFrameBox);
     rDevice.EnableMapMode(TRUE);
 }
 
@@ -464,87 +523,86 @@ void PageObjectViewObjectContact::PaintBorder (
 void PageObjectViewObjectContact::PaintSelectionIndicator (
     OutputDevice& rDevice) const
 {
-    if (GetPageDescriptor().IsSelected())
+    if ( ! GetPageDescriptor()->IsSelected())
+        return;
+
+    if (mpProperties.get()!=NULL && ! mpProperties->IsShowSelection())
+        return;
+
+    const Color aOldFillColor (rDevice.GetFillColor());
+    const Color aOldLineColor (rDevice.GetLineColor());
+
+    // Determine colors for the frame and the background and mix them to
+    // obtain a third color that is used for an antialiasing effect.
+    Color aFrameColor (GetColor(rDevice, CS_SELECTION));
+    Color aBackgroundColor (GetColor(rDevice, CS_BACKGROUND));
+    Color aCornerColor (aFrameColor);
+    aCornerColor.Merge (aBackgroundColor, 128);
+
+    // Set default draw mode to be able to correctly draw the selected
+    // (and only that) frame.
+    ULONG nPreviousDrawMode = rDevice.GetDrawMode();
+    rDevice.SetDrawMode (DRAWMODE_DEFAULT);
+
+    Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
+    rDevice.EnableMapMode (FALSE);
+
+    rDevice.SetFillColor();
+    rDevice.SetLineColor(aFrameColor);
+
+    // Paint the frame.
+    for (int nOffset=mnSelectionIndicatorOffset;
+         nOffset<mnSelectionIndicatorOffset+mnSelectionIndicatorThickness;
+         nOffset++)
     {
-        const Color aOldFillColor (rDevice.GetFillColor());
-        const Color aOldLineColor (rDevice.GetLineColor());
-
-        // Determine colors for the frame and the background and mix them to
-        // obtain a third color that is used for an antialiasing effect.
-        svtools::ColorConfig aColorConfig;
-        Color aFrameColor (
-            rDevice.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-        Color aBackgroundColor (
-            rDevice.GetSettings().GetStyleSettings().GetWindowColor());
-        Color aCornerColor (aFrameColor);
-        aCornerColor.Merge (aBackgroundColor, 128);
-
-        // Set default draw mode to be able to correctly draw the selected
-        // (and only that) frame.
-        ULONG nPreviousDrawMode = rDevice.GetDrawMode();
-        rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-
-        Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
-        rDevice.EnableMapMode (FALSE);
-
-        rDevice.SetFillColor ();
-        rDevice.SetLineColor (aFrameColor);
-
-        // Paint the frame.
-        for (int nOffset=mnSelectionIndicatorOffset;
-             nOffset<mnSelectionIndicatorOffset+mnSelectionIndicatorThickness;
-             nOffset++)
-        {
-            Rectangle aFrame (aInner);
-            aFrame.Left() -= nOffset;
-            aFrame.Top() -= nOffset;
-            aFrame.Right() += nOffset;
-            aFrame.Bottom() += nOffset;
-            rDevice.DrawRect (aFrame);
-        }
-
-
-        // Paint the four corner pixels in backround color for a rounded
-        // effect.
-        int nFrameWidth (mnSelectionIndicatorOffset
-            + mnSelectionIndicatorThickness - 1);
-        Rectangle aOuter (aInner);
-        aOuter.Left() -= nFrameWidth;
-        aOuter.Top() -= nFrameWidth;
-        aOuter.Right() += nFrameWidth;
-        aOuter.Bottom() += nFrameWidth;
-        Point aCorner (aOuter.TopLeft());
-        rDevice.DrawPixel (aCorner, aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()+1,aCorner.Y()),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+1),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()+2,aCorner.Y()),aCornerColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+2),aCornerColor);
-        aCorner = aOuter.TopRight();
-        rDevice.DrawPixel (aCorner, aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()-1,aCorner.Y()),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+1),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()-2,aCorner.Y()), aCornerColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+2), aCornerColor);
-        aCorner = aOuter.BottomLeft();
-        rDevice.DrawPixel (aCorner, aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()+1,aCorner.Y()),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-1),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()+2,aCorner.Y()), aCornerColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-2), aCornerColor);
-        aCorner = aOuter.BottomRight();
-        rDevice.DrawPixel (aCorner, aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()-1,aCorner.Y()),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-1),aBackgroundColor);
-        rDevice.DrawPixel (Point(aCorner.X()-2,aCorner.Y()), aCornerColor);
-        rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-2), aCornerColor);
-
-        rDevice.EnableMapMode (TRUE);
-
-        // Restore old values.
-        rDevice.SetLineColor (aOldLineColor);
-        rDevice.SetFillColor (aOldFillColor);
-        rDevice.SetDrawMode (nPreviousDrawMode);
+        Rectangle aFrame (aInner);
+        aFrame.Left() -= nOffset;
+        aFrame.Top() -= nOffset;
+        aFrame.Right() += nOffset;
+        aFrame.Bottom() += nOffset;
+        rDevice.DrawRect (aFrame);
     }
+
+    // Paint the four corner pixels in backround color for a rounded
+    // effect.
+    int nFrameWidth (mnSelectionIndicatorOffset
+        + mnSelectionIndicatorThickness - 1);
+    Rectangle aOuter (aInner);
+    aOuter.Left() -= nFrameWidth;
+    aOuter.Top() -= nFrameWidth;
+    aOuter.Right() += nFrameWidth;
+    aOuter.Bottom() += nFrameWidth;
+    Point aCorner (aOuter.TopLeft());
+    rDevice.DrawPixel (aCorner, aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()+1,aCorner.Y()),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+1),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()+2,aCorner.Y()),aCornerColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+2),aCornerColor);
+    aCorner = aOuter.TopRight();
+    rDevice.DrawPixel (aCorner, aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()-1,aCorner.Y()),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+1),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()-2,aCorner.Y()), aCornerColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()+2), aCornerColor);
+    aCorner = aOuter.BottomLeft();
+    rDevice.DrawPixel (aCorner, aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()+1,aCorner.Y()),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-1),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()+2,aCorner.Y()), aCornerColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-2), aCornerColor);
+    aCorner = aOuter.BottomRight();
+    rDevice.DrawPixel (aCorner, aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()-1,aCorner.Y()),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-1),aBackgroundColor);
+    rDevice.DrawPixel (Point(aCorner.X()-2,aCorner.Y()), aCornerColor);
+    rDevice.DrawPixel (Point(aCorner.X(),aCorner.Y()-2), aCornerColor);
+
+    rDevice.EnableMapMode (TRUE);
+
+    // Restore old values.
+    rDevice.SetLineColor (aOldLineColor);
+    rDevice.SetFillColor (aOldFillColor);
+    rDevice.SetDrawMode (nPreviousDrawMode);
 }
 
 
@@ -554,16 +612,19 @@ void PageObjectViewObjectContact::PaintMouseOverEffect (
     OutputDevice& rDevice,
     bool bVisible) const
 {
+    // When the selection frame is painted the mouse over frame is not
+    // visible and does not have to be painted.
+    if (GetPageDescriptor()->IsSelected())
+        if (mpProperties.get()!=NULL && mpProperties->IsShowSelection())
+            return;
+
     ULONG nPreviousDrawMode = rDevice.GetDrawMode();
     rDevice.SetDrawMode (DRAWMODE_DEFAULT);
     Rectangle aInner (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
     rDevice.EnableMapMode (FALSE);
 
-    svtools::ColorConfig aColorConfig;
-    Color aSelectionColor (
-        rDevice.GetSettings().GetStyleSettings().GetMenuHighlightColor());
-    Color aBackgroundColor (
-        rDevice.GetSettings().GetStyleSettings().GetWindowColor());
+    Color aSelectionColor (GetColor(rDevice, CS_SELECTION));
+    Color aBackgroundColor (GetColor(rDevice, CS_BACKGROUND));
     Color aFrameColor (bVisible ? aSelectionColor : aBackgroundColor);
     Color aCornerColor (aBackgroundColor);
 
@@ -614,10 +675,16 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
 {
     (void)bEraseBackground;
 
-    if (GetPageDescriptor().IsFocused())
+    if (GetPageDescriptor()->IsSelected()
+        && mpProperties.get()!=NULL
+        && ! mpProperties->IsShowFocus())
     {
-        Rectangle aPagePixelBBox (
-            GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
+        return;
+    }
+
+    if (GetPageDescriptor()->IsFocused())
+    {
+        Rectangle aPagePixelBBox (GetBoundingBox(rDevice,PreviewBoundingBox,PixelCoordinateSystem));
 
         aPagePixelBBox.Left() -= mnFocusIndicatorOffset;
         aPagePixelBBox.Top() -= mnFocusIndicatorOffset;
@@ -631,55 +698,46 @@ void PageObjectViewObjectContact::PaintFocusIndicator (
 
 
 
-void PageObjectViewObjectContact::PaintFadeEffectIndicator (
-    DisplayInfo& rDisplayInfo,
-    bool ) const
+void PageObjectViewObjectContact::PaintFadeEffectIndicator (OutputDevice& rDevice) const
 {
     if (GetPage() != NULL
         && static_cast<const SdPage*>(GetPage())->getTransitionType() > 0)
     {
-        OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-        if (pDevice != NULL)
-        {
-            Rectangle aIndicatorBox (
-                GetBoundingBox(*pDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
+        Rectangle aIndicatorBox (
+            GetBoundingBox(rDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
 
-            USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
-            if (pDevice->GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
-                nIconId = BMP_FADE_EFFECT_INDICATOR_H;
+        USHORT nIconId (BMP_FADE_EFFECT_INDICATOR);
+        if (rDevice.GetSettings().GetStyleSettings().GetHighContrastMode()!=0)
+            nIconId = BMP_FADE_EFFECT_INDICATOR_H;
 
-            pDevice->DrawImage (
-                aIndicatorBox.TopLeft(),
-                IconCache::Instance().GetIcon(nIconId));
-        }
+        rDevice.DrawImage (
+            aIndicatorBox.TopLeft(),
+            IconCache::Instance().GetIcon(nIconId));
     }
 }
 
 
 
 
-void PageObjectViewObjectContact::PaintPageName (
-    DisplayInfo& rDisplayInfo) const
+void PageObjectViewObjectContact::PaintPageName (OutputDevice& rDevice) const
 {
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPageBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
+    Rectangle aPageBox (GetBoundingBox(rDevice, PreviewBoundingBox, ModelCoordinateSystem));
 
-    Font aOriginalFont (pDevice->GetFont());
-    pDevice->SetFont(*FontProvider::Instance().GetFont(*pDevice));
+    Font aOriginalFont (rDevice.GetFont());
+    rDevice.SetFont(*FontProvider::Instance().GetFont(rDevice));
 
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
     int nPage = (pPage->GetPageNum()-1) / 2;
     // Name der Seite
     Point aPos = aPageBox.BottomLeft();
-    Size aPageSize (aPageBox.GetSize());
-    Size aSize (pDevice->PixelToLogic (Size (0, mnFadeEffectIndicatorOffset)));
-    Rectangle aIndicatorBox (
-        GetBoundingBox(*pDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
+    const Size aSize (rDevice.PixelToLogic (Size (0, mnFadeEffectIndicatorOffset)));
+    const Rectangle aIndicatorBox (
+        GetBoundingBox(rDevice, FadeEffectIndicatorBoundingBox, ModelCoordinateSystem));
 
     aPos.Y() += aSize.Height();
     aPos.X() += 2 * aIndicatorBox.GetWidth();
 
-    Size aTextBoxSize (aPageBox.Right() - aPos.X(), pDevice->GetFont().GetSize().Height());
+    Size aTextBoxSize (aPageBox.Right() - aPos.X(), rDevice.GetFont().GetSize().Height());
 
     String sName (const_cast<SdPage*>(pPage)->GetName());
     if (sName.Len() == 0)
@@ -692,37 +750,32 @@ void PageObjectViewObjectContact::PaintPageName (
         = TEXT_DRAW_RIGHT
         | TEXT_DRAW_NEWSELLIPSIS;
 
-    pDevice->DrawText (Rectangle(aPos,aTextBoxSize), sName, nTextStyle);
+    rDevice.SetTextColor(GetColor(rDevice, CS_TEXT));
+    rDevice.DrawText(Rectangle(aPos,aTextBoxSize), sName, nTextStyle);
 
-    pDevice->SetFont (aOriginalFont);
+    rDevice.SetFont(aOriginalFont);
 }
 
 
 
 
-void PageObjectViewObjectContact::PaintPageNumber (
-    DisplayInfo& rDisplayInfo)
+void PageObjectViewObjectContact::PaintPageNumber (OutputDevice& rDevice) const
 {
-    OutputDevice* pDevice = rDisplayInfo.GetOutputDevice();
-    Rectangle aPageBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
+    const Rectangle aPageBox (GetBoundingBox(rDevice, PreviewBoundingBox, ModelCoordinateSystem));
 
     const SdPage* pPage = static_cast<const SdPage*>(GetPage());
-    int nPageNumber ((pPage->GetPageNum()-1) / 2 + 1);
-    String sPageNumber (String::CreateFromInt32 (nPageNumber));
+    const sal_Int32 nPageNumber (mpPageDescriptor->GetPageIndex() + 1);
+    const String sPageNumber (String::CreateFromInt32 (nPageNumber));
     Point aPos = aPageBox.TopLeft();
-    Rectangle aBox (GetPageNumberArea (pDevice));
+    Rectangle aBox (GetBoundingBox(rDevice, PageNumberBoundingBox, ModelCoordinateSystem));
 
     // Paint the page number centered in its box.
     // TODO: What when the page number is wider than the page number box?
-    USHORT nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
-    Rectangle aTextBox (pDevice->GetTextRect (aBox, sPageNumber, nTextStyle));
-    //    int nLeft = aTextBox.Left();
-    //    int nTop = aBox.Top() + (aBox.Top() - aTextBox.GetHeight()) / 2;
-    pDevice->SetFillColor ();
-    svtools::ColorConfig aColorConfig;
-    pDevice->SetLineColor (
-            pDevice->GetSettings().GetStyleSettings().GetActiveTextColor());
-    pDevice->DrawText (aTextBox, sPageNumber, nTextStyle);
+    const USHORT nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
+    const Rectangle aTextBox (rDevice.GetTextRect (aBox, sPageNumber, nTextStyle));
+    rDevice.SetFillColor();
+    rDevice.SetTextColor(GetColor(rDevice, CS_TEXT));
+    rDevice.DrawText(aTextBox, sPageNumber, nTextStyle);
 
     // Paint box arround the page number.  Strike through when slide is
     // excluded from the presentation
@@ -730,34 +783,14 @@ void PageObjectViewObjectContact::PaintPageNumber (
     {
         // Make the box a little bit larger at the left so that the digits
         // do not touch the border.
-        Size aOffset (pDevice->PixelToLogic(Size(1,0)));
+        const Size aOffset (rDevice.PixelToLogic(Size(1,0)));
         aBox.Left() -= aOffset.Width();
 
-        pDevice->SetLineColor (
-            pDevice->GetSettings().GetStyleSettings().GetActiveColor());
-        pDevice->DrawRect (aBox);
-        pDevice->DrawLine (aBox.TopLeft(), aBox.BottomRight());
+        rDevice.SetLineColor(
+            rDevice.GetSettings().GetStyleSettings().GetActiveColor());
+        rDevice.DrawRect(aBox);
+        rDevice.DrawLine(aBox.TopLeft(), aBox.BottomRight());
     }
-}
-
-
-
-
-Rectangle PageObjectViewObjectContact::GetPageNumberArea (
-    OutputDevice* pDevice)
-{
-    Rectangle aPageModelBox (GetBoundingBox(*pDevice, PreviewBoundingBox, ModelCoordinateSystem));
-    Size aModelOffset = pDevice->PixelToLogic (
-        Size (mnPageNumberOffset, mnPageNumberOffset));
-    Size aNumberSize (GetPageDescriptor().GetPageNumberAreaModelSize());
-
-    Rectangle aPageNumberArea (
-        Point (
-            aPageModelBox.Left() - aModelOffset.Width() - aNumberSize.Width(),
-            aPageModelBox.Top()),
-        aNumberSize);
-
-    return aPageNumberArea;
 }
 
 
@@ -839,7 +872,7 @@ Size PageObjectViewObjectContact::CalculatePageNumberAreaModelSize (
 
 
 
-model::PageDescriptor&
+model::SharedPageDescriptor
     PageObjectViewObjectContact::GetPageDescriptor (void) const
 {
     PageObjectViewContact& rViewContact (
@@ -847,6 +880,71 @@ model::PageDescriptor&
     PageObject& rPageObject (
         static_cast<PageObject&>(rViewContact.GetPageObject()));
     return rPageObject.GetDescriptor();
+}
+
+
+
+
+Color PageObjectViewObjectContact::GetColor (
+    const OutputDevice& rDevice,
+    const ColorSpec eSpec,
+    const double nOpacity) const
+{
+    (void)rDevice;
+    if (mbIsBackgroundColorUpdatePending)
+    {
+        mbIsBackgroundColorUpdatePending = false;
+        maBackgroundColor = mpProperties->GetBackgroundColor();
+    }
+
+    Color aColor;
+
+    switch (eSpec)
+    {
+        case CS_SELECTION:
+            aColor = mpProperties->GetSelectionColor();
+            break;
+
+        case CS_BACKGROUND:
+            if (mpProperties.get()!=NULL
+                && mpProperties->IsHighlightCurrentSlide()
+                && GetPageDescriptor()->IsCurrentPage())
+            {
+                aColor = mpProperties->GetHighlightColor();
+            }
+            else
+                aColor = maBackgroundColor;
+            break;
+
+        case CS_WINDOW:
+            aColor = maBackgroundColor;
+            break;
+
+        case CS_TEXT:
+        default:
+            aColor = mpProperties->GetTextColor();
+            break;
+    }
+    aColor.Merge(maBackgroundColor, BYTE(255*(nOpacity) + 0.5));
+    return aColor;
+}
+
+
+
+
+Color PageObjectViewObjectContact::GetBackgroundColor (
+    const OutputDevice& rDevice) const
+{
+    Color aBackgroundColor (COL_AUTO);
+    bool bBackgroundColorSet (false);
+
+    if ( ! bBackgroundColorSet)
+    {
+        aBackgroundColor = rDevice.GetSettings().GetStyleSettings().GetWindowColor();
+    }
+
+    aBackgroundColor.SetTransparency(0);
+    return aBackgroundColor;
 }
 
 
@@ -896,5 +994,6 @@ void PageObjectViewObjectContact::PaintDottedRectangle (
     rDevice.SetFillColor(aOriginalFillColor);
     rDevice.SetLineColor(aOriginalLineColor);
 }
+
 
 } } } // end of namespace ::sd::slidesorter::view
