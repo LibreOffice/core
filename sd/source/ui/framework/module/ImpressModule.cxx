@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImpressModule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:19:48 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
 #include "TaskPaneModule.hxx"
+#include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
 
 using namespace ::com::sun::star;
@@ -62,6 +63,7 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
     TaskPaneModule::Initialize(rxController);
+    new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }
 
