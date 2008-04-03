@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-02 09:21:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
     // Disable the shape filter drop down menu when there is a running slide
     // show.
-    if (pViewShell!=NULL && pViewShell->GetSlideShow()!=NULL)
+    if (pViewShell!=NULL && sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ))
         maToolbox.EnableItem(TBI_SHAPE_FILTER, FALSE);
     else
         maToolbox.EnableItem(TBI_SHAPE_FILTER);
@@ -833,11 +833,16 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
             }
             else
             {
-                ::sd::ViewShellBase* pBase =
-                    ::sd::ViewShellBase::GetViewShellBase(
-                        mpBindings->GetDispatcher()->GetFrame());
+                ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
                 if( pBase )
-                    pBase->StopPresentation();
+                {
+                    sd::SlideShow::Stop( *pBase );
+                    // Stopping the slide show may result in a synchronous
+                    // deletion of the navigator window.  Calling the
+                    // parents Notify after this is unsafe.  Therefore we
+                    // return now.
+                    return TRUE;
+                }
             }
         }
     }
@@ -868,19 +873,10 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
         }
         else
         {
-            ::sd::ViewShellBase* pBase =
-                ::sd::ViewShellBase::GetViewShellBase(
-                    mpBindings->GetDispatcher()->GetFrame());
-            ::sd::ViewShell* pViewShell = pBase->GetMainViewShell().get();
-            if (pViewShell != NULL)
+            ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase( mpBindings->GetDispatcher()->GetFrame());
+            if(pBase)
             {
-                ::sd::Slideshow* pSlideShow = pViewShell->GetSlideShow();
-
-                if(pSlideShow)
-                {
-                    nOK = TRUE;
-                    pSlideShow->stopShow();
-                }
+                ::sd::SlideShow::Stop( *pBase );
             }
         }
     }
