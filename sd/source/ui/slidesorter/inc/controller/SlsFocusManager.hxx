@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsFocusManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:21:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_FOCUS_MANAGER_HXX
 #define SD_SLIDESORTER_FOCUS_MANAGER_HXX
 
@@ -43,9 +44,12 @@
 #endif
 #include <vector>
 
-namespace sd { namespace slidesorter { namespace controller {
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
-class SlideSorterController;
+
+namespace sd { namespace slidesorter { namespace controller {
 
 /** This class manages the focus of the slide sorter.  There is the focus
     page which is or is not focused.  Initialized to point to the first page
@@ -60,7 +64,7 @@ public:
         associated with the given controller.  The focus page is set to the
         first page.  Focused state is off.
     */
-    FocusManager (SlideSorterController& rController);
+    FocusManager (SlideSorter& rSlideSorter);
 
     ~FocusManager (void);
 
@@ -187,8 +191,7 @@ public:
     };
 
 private:
-    /// The controller that is used for accessing the pages.
-    SlideSorterController& mrController;
+    SlideSorter& mrSlideSorter;
 
     /** Index of the page that may be focused.  It is -1 when the model
         contains no page.
