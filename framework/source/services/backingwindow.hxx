@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:10:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,11 @@
 #include "vcl/toolbox.hxx"
 
 #include "svtools/moduleoptions.hxx"
+#include "svtools/acceleratorexecute.hxx"
 
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/XFrame.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"
 #include "com/sun/star/document/XEventListener.hpp"
 #include "com/sun/star/document/XEventBroadcaster.hpp"
@@ -60,6 +62,7 @@
 
 #include <set>
 
+class MnemonicGenerator;
 
 namespace framework
 {
@@ -84,6 +87,7 @@ namespace framework
     {
         com::sun::star::uno::Reference<com::sun::star::frame::XDesktop>                  mxDesktop;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
+        com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
         com::sun::star::uno::Reference<com::sun::star::document::XEventBroadcaster>      mxBroadcaster;
 
         FixedText                       maWelcome;
@@ -102,10 +106,10 @@ namespace framework
         ImageButton                     maDrawButton;
         FixedText                       maDBText;
         ImageButton                     maDBButton;
-        FixedText                       maOpenText;
-        ImageButton                     maOpenButton;
         FixedText                       maTemplateText;
         ImageButton                     maTemplateButton;
+        FixedText                       maOpenText;
+        ImageButton                     maOpenButton;
 
         DecoToolBox                     maToolbox;
 
@@ -128,6 +132,10 @@ namespace framework
 
         Size                            maButtonImageSize;
 
+        bool                            mbInitControls;
+        svt::AcceleratorExecute*        mpAccExec;
+
+
         static const long nBtnPos = 240;
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
@@ -142,10 +150,10 @@ namespace framework
         void layoutButtonAndText( const char* i_pURL, int nColumn, const std::set<rtl::OUString>& i_rURLS,
                                   SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                                   ImageButton& i_rBtn, FixedText& i_rText,
+                                  MnemonicGenerator& i_rMnemonicGen,
                                   const String& i_rStr = String()
                                   );
 
-        bool executeFileOpen();
         void dispatchURL( const rtl::OUString& i_rURL,
                           const rtl::OUString& i_rTarget = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ),
                           const com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >& i_xProv = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchProvider >(),
@@ -154,12 +162,17 @@ namespace framework
 
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
+
+        void initControls();
         public:
         BackingWindow( Window* pParent );
         ~BackingWindow();
 
         virtual void        Paint( const Rectangle& rRect );
         virtual void        Resize();
+        virtual long        Notify( NotifyEvent& rNEvt );
+
+        void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };
 
 }
