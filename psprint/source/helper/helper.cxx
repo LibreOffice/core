@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 12:13:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,12 @@
 #include <unistd.h>
 #include <limits.h>
 
-#include <psprint/helper.hxx>
-#include <tools/string.hxx>
-#include <tools/urlobj.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <osl/thread.h>
-#include <tools/config.hxx>
-#include <rtl/bootstrap.hxx>
-#include <sal/config.h>
-#ifdef SOLAR_JAVA
-#include <jvmfwk/framework.h>
-#endif // SOLAR_JAVA
+#include "psprint/helper.hxx"
+#include "tools/string.hxx"
+#include "tools/urlobj.hxx"
+#include "osl/file.hxx"
+#include "osl/process.h"
+#include "rtl/bootstrap.hxx"
 
 #ifdef MACOSX
 // directories of OS X fonts
@@ -257,56 +251,18 @@ const OUString& psp::getFontPath()
 
 #ifdef MACOSX   // Search for truetype fonts also in the MACOSX system paths
 
-    aPathBuffer.append(sal_Unicode(';') );
-    aPath += OUString( RTL_CONSTASCII_USTRINGPARAM(MACXP_FONT_DIR) );
+        aPathBuffer.append(sal_Unicode(';') );
+        aPath += OUString( RTL_CONSTASCII_USTRINGPARAM(MACXP_FONT_DIR) );
 
-    //Userfonts
-    aPath += aUserPath;
-    // #i67231# [ericb 07/06] aPath was not concatened with other paths
-    if (aUserPath.getLength() )
-    {
-        aPathBuffer.append(aPath);
-        aPathBuffer.appendAscii("/../../Fonts");
-    }
+        //Userfonts
+        aPath += aUserPath;
+        // #i67231# [ericb 07/06] aPath was not concatened with other paths
+        if (aUserPath.getLength() )
+        {
+            aPathBuffer.append(aPath);
+            aPathBuffer.appendAscii("/../../Fonts");
+        }
 #endif // MACOSX
-
-        // append jre/jdk fonts if possible
-        OString aJREpath;
-
-#ifdef SOLAR_JAVA
-        JavaInfo * pInfo = NULL;
-        javaFrameworkError jerr = jfw_getSelectedJRE( & pInfo);
-        if (jerr == JFW_E_NONE && pInfo != NULL)
-        {
-            OUString aSys;
-            if( osl_getSystemPathFromFileURL( pInfo->sLocation, &aSys.pData ) == osl_File_E_None )
-                aJREpath = OUStringToOString( aSys, osl_getThreadTextEncoding() );
-        }
-        jfw_freeJavaInfo(pInfo);
-#endif
-
-        if( aJREpath.getLength() > 0 )
-        {
-            OString aTestPath( aJREpath );
-            aTestPath += "/jre/lib/fonts";
-            if( access( aTestPath.getStr(), R_OK ) )
-            {
-                aTestPath = aJREpath;
-                aTestPath += "/lib/fonts";
-                if( access( aTestPath.getStr(), R_OK ) )
-                    aJREpath = OString();
-                else
-                    aJREpath = aTestPath;
-            }
-            else
-                aJREpath = aTestPath;
-        }
-
-        if( aJREpath.getLength() )
-        {
-            aPathBuffer.append( sal_Unicode(';') );
-            aPathBuffer.append( OStringToOUString( aJREpath, osl_getThreadTextEncoding() ) );
-        }
 
         aPath = aPathBuffer.makeStringAndClear();
 #if OSL_DEBUG_LEVEL > 1
