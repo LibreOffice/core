@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:22:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,6 +715,9 @@ SalX11Display::~SalX11Display()
         XCloseDisplay( pDisp_ );
         pDisp_ = NULL;
     }
+    // don't do this in doDestruct since RandR extension adds hooks into Display
+    // that is XCloseDisplay still needs the RandR library if it was used
+    DeInitRandR();
 }
 
 void SalDisplay::initScreen( int nScreen ) const
@@ -743,6 +746,9 @@ void SalDisplay::initScreen( int nScreen ) const
     rSD.m_aRoot = RootWindow( pDisp_, nScreen );
     rSD.m_aVisual = SalVisual( &aVI );
     rSD.m_aColormap = SalColormap( this, aColMap, nScreen );
+
+    // we're interested in configure notification of root windows
+    InitRandR( rSD.m_aRoot );
 
     // - - - - - - - - - - Reference Window/Default Drawable - -
     XSetWindowAttributes aXWAttributes;
@@ -2419,6 +2425,9 @@ long SalX11Display::Dispatch( XEvent *pEvent )
 
     // dispatch to salobjects
     X11SalObject::Dispatch( pEvent );
+
+    // is this perhaps a root window that changed size ?
+    processRandREvent( pEvent );
 
     return 0;
 }
