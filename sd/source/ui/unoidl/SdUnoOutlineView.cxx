@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:55:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ SdUnoOutlineView::SdUnoOutlineView(
     DrawController& rController,
     OutlineViewShell& rViewShell,
     View& rView) throw()
-    :   DrawSubController(),
+    :   DrawSubControllerInterfaceBase(m_aMutex),
         mrController(rController),
         mrOutlineViewShell(rViewShell),
         mrView(rView)
@@ -87,8 +87,14 @@ SdUnoOutlineView::~SdUnoOutlineView (void) throw()
 
 
 
-// XSelectionSupplier
+void SAL_CALL SdUnoOutlineView::disposing (void)
+{
+}
 
+
+
+
+//----- XSelectionSupplier ----------------------------------------------------
 
 sal_Bool SAL_CALL SdUnoOutlineView::select( const Any&  )
     throw(lang::IllegalArgumentException, RuntimeException)
@@ -108,7 +114,27 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 
 
 
-// XDrawView
+void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
+{
+    (void)rxListener;
+}
+
+
+
+
+void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
+{
+    (void)rxListener;
+}
+
+
+
+
+//----- XDrawView -------------------------------------------------------------
 
 
 void SAL_CALL SdUnoOutlineView::setCurrentPage (
@@ -139,7 +165,7 @@ Reference< drawing::XDrawPage > SAL_CALL SdUnoOutlineView::getCurrentPage (void)
 
 
 
-
+/*
 // Return sal_True, value change
 sal_Bool SdUnoOutlineView::convertFastPropertyValue (
     Any & rConvertedValue,
@@ -172,16 +198,17 @@ sal_Bool SdUnoOutlineView::convertFastPropertyValue (
 
     return bResult;
 }
+*/
 
 
-
-/**
- * only set the value.
- */
-void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
+void SdUnoOutlineView::setFastPropertyValue (
     sal_Int32 nHandle,
-    const Any& rValue)
-    throw ( com::sun::star::uno::Exception)
+        const Any& rValue)
+    throw(css::beans::UnknownPropertyException,
+        css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
     switch( nHandle )
     {
@@ -194,7 +221,7 @@ void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
         break;
 
         default:
-            break;
+            throw beans::UnknownPropertyException();
     }
 }
 
@@ -209,23 +236,29 @@ void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventOb
 
 
 
-void SdUnoOutlineView::getFastPropertyValue(
-    Any & rRet,
-    sal_Int32 nHandle ) const
+Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
+    sal_Int32 nHandle)
+    throw(css::beans::UnknownPropertyException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
+    Any aValue;
+
     switch( nHandle )
     {
         case DrawController::PROPERTY_CURRENTPAGE:
         {
             SdPage* pPage = const_cast<OutlineViewShell&>(mrOutlineViewShell).GetActualPage();
             if (pPage != NULL)
-                rRet <<= pPage->getUnoPage();
+                aValue <<= pPage->getUnoPage();
         }
         break;
 
         default:
-            break;
+            throw beans::UnknownPropertyException();
     }
+
+    return aValue;
 }
 
 
