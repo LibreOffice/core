@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:49:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,16 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "AccessibleSlideSorterView.hxx"
 #include "AccessibleSlideSorterObject.hxx"
 
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsFocusManager.hxx"
+#include "controller/SlsSelectionManager.hxx"
 #include "view/SlideSorterView.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -87,7 +88,7 @@ class AccessibleSlideSorterView::Implementation
 public:
     Implementation (
         AccessibleSlideSorterView& rAccessibleSlideSorter,
-        ::sd::slidesorter::controller::SlideSorterController& rController,
+        ::sd::slidesorter::SlideSorter& rSlideSorter,
         ::Window* pWindow);
     ~Implementation (void);
 
@@ -107,7 +108,7 @@ public:
 
 private:
     AccessibleSlideSorterView& mrAccessibleSlideSorter;
-    ::sd::slidesorter::controller::SlideSorterController& mrController;
+    ::sd::slidesorter::SlideSorter& mrSlideSorter;
     typedef ::std::vector<rtl::Reference<AccessibleSlideSorterObject> > PageObjectList;
     PageObjectList maPageObjects;
     sal_Int32 mnFirstVisibleChild;
@@ -124,12 +125,12 @@ private:
 //===== AccessibleSlideSorterView =============================================
 
 AccessibleSlideSorterView::AccessibleSlideSorterView(
-    ::sd::slidesorter::controller::SlideSorterController& rController,
+    ::sd::slidesorter::SlideSorter& rSlideSorter,
     const Reference<XAccessible>& rxParent,
     ::Window* pContentWindow)
     : AccessibleSlideSorterViewBase(MutexOwner::maMutex),
-      mpImpl(new Implementation(*this,rController,pContentWindow)),
-      mrSlideSorterController(rController),
+      mpImpl(new Implementation(*this,rSlideSorter,pContentWindow)),
+      mrSlideSorter(rSlideSorter),
       mxParent(rxParent),
       mnClientId(0),
       mpContentWindow(pContentWindow)
@@ -455,7 +456,7 @@ Reference<XAccessible> SAL_CALL
 
     const Point aTestPoint (aPoint.X, aPoint.Y);
     ::sd::slidesorter::model::SharedPageDescriptor pHitDescriptor (
-        mrSlideSorterController.GetPageAt(aTestPoint));
+        mrSlideSorter.GetController().GetPageAt(aTestPoint));
     if (pHitDescriptor.get() != NULL)
         xAccessible = mpImpl->GetAccessibleChild(
             (pHitDescriptor->GetPage()->GetPageNum()-1)/2);
@@ -604,7 +605,7 @@ void SAL_CALL AccessibleSlideSorterView::selectAccessibleChild (sal_Int32 nChild
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
     if (pChild != NULL)
-        mrSlideSorterController.GetPageSelector().SelectPage(pChild->GetPageNumber());
+        mrSlideSorter.GetController().GetPageSelector().SelectPage(pChild->GetPageNumber());
     else
         throw lang::IndexOutOfBoundsException();
 }
@@ -622,7 +623,8 @@ sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int3
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
     if (pChild != NULL)
-        bIsSelected = mrSlideSorterController.GetPageSelector().IsPageSelected(pChild->GetPageNumber());
+        bIsSelected = mrSlideSorter.GetController().GetPageSelector().IsPageSelected(
+            pChild->GetPageNumber());
     else
         throw lang::IndexOutOfBoundsException();
 
@@ -638,7 +640,7 @@ void SAL_CALL AccessibleSlideSorterView::clearAccessibleSelection (void)
     ThrowIfDisposed();
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
 
-    mrSlideSorterController.GetPageSelector().DeselectAllPages();
+    mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
 }
 
 
@@ -650,7 +652,7 @@ void SAL_CALL AccessibleSlideSorterView::selectAllAccessibleChildren (void)
     ThrowIfDisposed();
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
 
-    mrSlideSorterController.GetPageSelector().SelectAllPages();
+    mrSlideSorter.GetController().GetPageSelector().SelectAllPages();
 }
 
 
@@ -660,7 +662,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getSelectedAccessibleChildCount (v
     throw (uno::RuntimeException)
 {
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
-    return mrSlideSorterController.GetPageSelector().GetSelectedPageCount();
+    return mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
 }
 
 
@@ -673,7 +675,8 @@ Reference<XAccessible > SAL_CALL
     const vos::OGuard aSolarGuard (Application::GetSolarMutex());
     Reference<XAccessible> xChild;
 
-    ::sd::slidesorter::controller::PageSelector& rSelector (mrSlideSorterController.GetPageSelector());
+    ::sd::slidesorter::controller::PageSelector& rSelector (
+        mrSlideSorter.GetController().GetPageSelector());
     sal_Int32 nPageCount(rSelector.GetPageCount());
     sal_Int32 nSelectedCount = 0;
     for (sal_Int32 i=0; i<nPageCount; i++)
@@ -706,7 +709,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
     if (pChild != NULL)
-        mrSlideSorterController.GetPageSelector().DeselectPage(pChild->GetPageNumber());
+        mrSlideSorter.GetController().GetPageSelector().DeselectPage(pChild->GetPageNumber());
     else
         throw lang::IndexOutOfBoundsException();
 }
@@ -784,10 +787,10 @@ sal_Bool AccessibleSlideSorterView::IsDisposed (void)
 
 AccessibleSlideSorterView::Implementation::Implementation (
     AccessibleSlideSorterView& rAccessibleSlideSorter,
-    ::sd::slidesorter::controller::SlideSorterController& rController,
+    ::sd::slidesorter::SlideSorter& rSlideSorter,
     ::Window* pWindow)
     : mrAccessibleSlideSorter(rAccessibleSlideSorter),
-      mrController(rController),
+      mrSlideSorter(rSlideSorter),
       maPageObjects(),
       mnFirstVisibleChild(0),
       mnLastVisibleChild(-1),
@@ -816,7 +819,7 @@ AccessibleSlideSorterView::Implementation::~Implementation (void)
 void AccessibleSlideSorterView::Implementation::UpdateVisibility (void)
 {
     ::sd::slidesorter::view::SlideSorterView::PageRange aRange (
-        mrController.GetView().GetVisiblePageRange());
+        mrSlideSorter.GetView().GetVisiblePageRange());
     mnFirstVisibleChild = aRange.first;
     mnLastVisibleChild = aRange.second;
 }
@@ -829,7 +832,7 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren (void)
     // Clear the list of accessible children and adapt its size.  It is
     // refilled on demand when later the children are requested.
     Clear();
-    maPageObjects.resize(mrController.GetModel().GetPageCount());
+    maPageObjects.resize(mrSlideSorter.GetModel().GetPageCount());
     UpdateVisibility();
 }
 
@@ -888,11 +891,11 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
         if (maPageObjects[nIndex] == NULL)
         {
             ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
-                mrController.GetModel().GetPageDescriptor(nIndex));
+                mrSlideSorter.GetModel().GetPageDescriptor(nIndex));
             if (pDescriptor.get() != NULL)
                 maPageObjects[nIndex] = new AccessibleSlideSorterObject(
                     &mrAccessibleSlideSorter,
-                    mrController,
+                    mrSlideSorter,
                     (pDescriptor->GetPage()->GetPageNum()-1)/2);
         }
 
@@ -907,18 +910,19 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
 
 void AccessibleSlideSorterView::Implementation::ConnectListeners (void)
 {
-    StartListening (*mrController.GetModel().GetDocument());
-    StartListening (mrController.GetViewShell());
+    StartListening (*mrSlideSorter.GetModel().GetDocument());
+    if (mrSlideSorter.GetViewShell() != NULL)
+        StartListening (*mrSlideSorter.GetViewShell());
     mbListeningToDocument = true;
 
     if (mpWindow != NULL)
         mpWindow->AddEventListener(
             LINK(this,AccessibleSlideSorterView::Implementation,WindowEventListener));
 
-    mrController.AddSelectionChangeListener(
+    mrSlideSorter.GetController().GetSelectionManager()->AddSelectionChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,SelectionChangeListener));
 
-    mrController.GetFocusManager().AddFocusChangeListener(
+    mrSlideSorter.GetController().GetFocusManager().AddFocusChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,FocusChangeListener));
 }
 
@@ -927,10 +931,10 @@ void AccessibleSlideSorterView::Implementation::ConnectListeners (void)
 
 void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
 {
-    mrController.GetFocusManager().RemoveFocusChangeListener(
+    mrSlideSorter.GetController().GetFocusManager().RemoveFocusChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,FocusChangeListener));
 
-    mrController.RemoveSelectionChangeListener(
+    mrSlideSorter.GetController().GetSelectionManager()->RemoveSelectionChangeListener(
         LINK(this,AccessibleSlideSorterView::Implementation,SelectionChangeListener));
 
     if (mpWindow != NULL)
@@ -939,8 +943,9 @@ void AccessibleSlideSorterView::Implementation::ReleaseListeners (void)
 
     if (mbListeningToDocument)
     {
-        StartListening (mrController.GetViewShell());
-        EndListening (*mrController.GetModel().GetDocument());
+        if (mrSlideSorter.GetViewShell() != NULL)
+            StartListening(*mrSlideSorter.GetViewShell());
+        EndListening (*mrSlideSorter.GetModel().GetDocument());
         mbListeningToDocument = false;
     }
 }
@@ -1038,7 +1043,8 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, vo
 
 IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*, EMPTYARG )
 {
-    sal_Int32 nNewFocusedIndex (mrController.GetFocusManager().GetFocusedPageIndex());
+    sal_Int32 nNewFocusedIndex (
+        mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex());
 
     if (nNewFocusedIndex != mnFocusedIndex)
     {
