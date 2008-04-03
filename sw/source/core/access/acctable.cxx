@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:16:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1707,6 +1707,10 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
 
     OUString sDesc2 = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
     SetDesc( sDesc2 );
+
+    // --> OD 2008-03-10 #i85634#
+    NotRegisteredAtAccessibleMap();
+    // <--
 }
 
 SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
