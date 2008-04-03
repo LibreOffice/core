@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XPresentation2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:37:37 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XPresentation2_idl__
+#define __com_sun_star_presentation_XPresentation2_idl__
+
+#ifndef __com_sun_star_presentation_XPresentation_idl__
+#include <com/sun/star/presentation/XPresentation.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
+#include <com/sun/star/presentation/XSlideShowListener.idl>
+#endif
+
+#ifndef __com_sun_star_presentation_XSlideShowController_idl__
+#include <com/sun/star/presentation/XSlideShowController.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** enhances the XPresentation interface to give access to
+    a <type>XSlideShowController</type>  and
+    to start a presentation with arguments.
+
+    @since OOo 2.4
+*/
+interface XPresentation2
+{
+    //-------------------------------------------------------------------------
+
+    /** allows to start and stop the presentation.
+    */
+    interface XPresentation;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the properties of the slideshow.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** start the slideshow with the given arguments.
+        All arguments overide the values from <service>Presentation</service>
+    */
+    void startWithArguments( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
+
+    //-------------------------------------------------------------------------
+
+    /** returns true if the slideshow is currently running */
+    boolean isRunning();
+
+    //-------------------------------------------------------------------------
+
+    /** if the slideshow is running, this returns a controler object to
+        control the running slideshow. */
+    XSlideShowController getController();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
