@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,8 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
     }
 
     Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
-    mpOutlineViewShell->GetViewShellBase().GetEventMultiplexer().AddEventListener( aLink,
+    mpOutlineViewShell->GetViewShellBase().GetEventMultiplexer()->AddEventListener(
+        aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_PAGE_ORDER);
 }
@@ -259,7 +260,7 @@ OutlineView::~OutlineView()
     DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!" );
 
     Link aLink( LINK(this,OutlineView,EventMultiplexerListener) );
-    mpOutlineViewShell->GetViewShellBase().GetEventMultiplexer().RemoveEventListener( aLink );
+    mpOutlineViewShell->GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
     DisconnectFromApplication();
 
     if( mpProgress )
