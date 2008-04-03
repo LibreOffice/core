@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:13:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,7 +279,6 @@ class SalGtkFilePicker :
         void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
         void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-        void SAL_CALL dialogSizeChanged( );
 
     private:
         // prevent copy and assignment
