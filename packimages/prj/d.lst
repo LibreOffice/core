@@ -6,3 +6,5 @@ mkdir: %COMMON_DEST%\bin%_EXT%\c01
 ..\%__SRC%\bin\c01\*.zip %COMMON_DEST%\bin%_EXT%\c01
 mkdir: %COMMON_DEST%\bin%_EXT%\c08
 ..\%__SRC%\bin\c08\*.zip %COMMON_DEST%\bin%_EXT%\c08
+mkdir: %COMMON_DEST%\bin%_EXT%\nologo
+..\%__SRC%\bin\nologo\*.zip %COMMON_DEST%\bin%_EXT%\nologo
