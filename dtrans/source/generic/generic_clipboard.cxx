@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generic_clipboard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:56:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,15 +59,6 @@ using ::rtl::OUString;
 GenericClipboard::GenericClipboard() :
     WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
     m_bInitialized(sal_False)
-{
-}
-
-// ------------------------------------------------------------------------
-
-GenericClipboard::GenericClipboard(const ::rtl::OUString& rName) :
-    WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),
-    m_aName(rName),
-    m_bInitialized(sal_True)
 {
 }
 
