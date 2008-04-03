@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 16:31:19 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:19:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,6 @@ SLOFILES =	\
         $(SLO)$/drvwshrg.obj \
         $(SLO)$/drawview.obj \
         $(SLO)$/grviewsh.obj \
-        $(SLO)$/slidvish.obj \
-        $(SLO)$/slidview.obj \
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/outlnvs2.obj \
         $(SLO)$/presvish.obj \
