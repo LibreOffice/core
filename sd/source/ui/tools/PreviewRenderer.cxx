@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:29:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,15 @@ namespace sd {
 const int PreviewRenderer::snSubstitutionTextSize = 11;
 const int PreviewRenderer::snFrameWidth = 1;
 
-PreviewRenderer::PreviewRenderer (OutputDevice* pTemplate)
+PreviewRenderer::PreviewRenderer (
+    OutputDevice* pTemplate,
+    const bool bHasFrame)
     : mpPreviewDevice (new VirtualDevice()),
       mpView(NULL),
       mpDocShellOfView(NULL),
       mnWidthOfView(0),
-      maFrameColor (svtools::ColorConfig().GetColorValue(
-          svtools::DOCBOUNDARIES).nColor)
+      maFrameColor (svtools::ColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor),
+      mbHasFrame(bHasFrame)
 {
     if (pTemplate != NULL)
     {
@@ -88,16 +90,17 @@ PreviewRenderer::~PreviewRenderer (void)
 
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
-    int nWidth,
+    const sal_Int32 nWidth,
     const String& rSubstitutionText)
 {
     if (pPage != NULL)
     {
-        Size aPageModelSize (pPage->GetSize());
-        double nAspectRatio (
+        const Size aPageModelSize (pPage->GetSize());
+        const double nAspectRatio (
             double(aPageModelSize.Width()) / double(aPageModelSize.Height()));
-        int nHeight = (int)((nWidth - 2*snFrameWidth) / nAspectRatio
-            + 2*snFrameWidth + 0.5);
+        const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
+        const sal_Int32 nHeight (sal::static_int_cast<sal_Int32>(
+            (nWidth - 2*nFrameWidth) / nAspectRatio + 2*nFrameWidth + 0.5));
         return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText);
     }
     else
@@ -169,8 +172,9 @@ Image PreviewRenderer::RenderSubstitution (
         double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
         aMapMode.SetScaleX(nFinalScale);
         aMapMode.SetScaleY(nFinalScale);
+        const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(
-            Point(snFrameWidth,snFrameWidth),aMapMode));
+            Point(nFrameWidth,nFrameWidth),aMapMode));
         mpPreviewDevice->SetMapMode (aMapMode);
 
         // Clear the background.
@@ -218,7 +222,7 @@ bool PreviewRenderer::Initialize (
         if (pModel == NULL)
             break;
 
-        SetupOutputSize (pPage, rPixelSize);
+        SetupOutputSize(*pPage, rPixelSize);
 
         SdDrawDocument* pDocument
             = static_cast<SdDrawDocument*>(pPage->GetModel());
@@ -347,22 +351,25 @@ void PreviewRenderer::PaintSubstitutionText (const String& rSubstitutionText)
 
 void PreviewRenderer::PaintFrame (void)
 {
-    // Paint a frame arround the preview.
-    Rectangle aPaintRectangle (
-        Point(0,0),
-        mpPreviewDevice->GetOutputSizePixel());
-    mpPreviewDevice->EnableMapMode (FALSE);
-    mpPreviewDevice->SetLineColor (maFrameColor);
-    mpPreviewDevice->SetFillColor ();
-    mpPreviewDevice->DrawRect (aPaintRectangle);
-    mpPreviewDevice->EnableMapMode (TRUE);
+    if (mbHasFrame)
+    {
+        // Paint a frame arround the preview.
+        Rectangle aPaintRectangle (
+            Point(0,0),
+            mpPreviewDevice->GetOutputSizePixel());
+        mpPreviewDevice->EnableMapMode(FALSE);
+        mpPreviewDevice->SetLineColor(maFrameColor);
+        mpPreviewDevice->SetFillColor();
+        mpPreviewDevice->DrawRect(aPaintRectangle);
+        mpPreviewDevice->EnableMapMode(TRUE);
+     }
 }
 
 
 
 
 void PreviewRenderer::SetupOutputSize (
-    const SdPage* pPage,
+    const SdPage& rPage,
     const Size& rFramePixelSize)
 {
     // First set the map mode to some arbitrary scale that is numerically
@@ -375,19 +382,15 @@ void PreviewRenderer::SetupOutputSize (
     aMapMode.SetOrigin (Point(0,0));
 
     // Adapt it to the desired width.
-    Size aPageModelSize (pPage->GetSize());
-    /*    double nAspectRatio (
-        double(aPageModelSize.Width()) / double(aPageModelSize.Height()));
-    Size aFramePixelSize (nWidth, (int)((nWidth-2) / nAspectRatio + 2 + 0.5));
-    */
-    Size aOutputSize = mpPreviewDevice->LogicToPixel(
-        pPage->GetSize(), aMapMode);
-    double nFinalScale (nInitialScale * (rFramePixelSize.Width()-snFrameWidth)
+    const Size aPageModelSize (rPage.GetSize());
+    const Size aOutputSize = mpPreviewDevice->LogicToPixel(rPage.GetSize(), aMapMode);
+    const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
+    const double nFinalScale (nInitialScale * (rFramePixelSize.Width()-2*nFrameWidth)
         / aOutputSize.Width());
     aMapMode.SetScaleX (nFinalScale);
     aMapMode.SetScaleY (nFinalScale);
     aMapMode.SetOrigin (mpPreviewDevice->PixelToLogic(
-        Point(snFrameWidth,snFrameWidth),aMapMode));
+        Point(nFrameWidth,nFrameWidth),aMapMode));
 
     mpPreviewDevice->SetMapMode (aMapMode);
     mpPreviewDevice->SetOutputSizePixel(rFramePixelSize);
