@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:33:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1396,7 +1396,23 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
             aGradient.SetEndIntensity( rXGrad.GetEndIntens() );
             aGradient.SetSteps( 255 );
 
-            pDevice->DrawGradient( aRect, aGradient );
+            // #i76307# always paint the preview in LTR, because this is what the document does
+            Window* pWin = dynamic_cast<Window*>(pDevice);
+            if( pWin && pWin->IsRTLEnabled() && Application::GetSettings().GetLayoutRTL())
+            {
+                long nWidth = pDevice->GetOutputSize().Width();
+
+                pWin->EnableRTL( FALSE );
+
+                Rectangle aMirrorRect( Point( nWidth - aRect.Left() - aRect.GetWidth(), aRect.Top() ),
+                                       aRect.GetSize() );
+
+                pDevice->DrawGradient( aMirrorRect, aGradient );
+
+                pWin->EnableRTL( TRUE );
+            }
+            else
+                pDevice->DrawGradient( aRect, aGradient );
 
             pDevice->SetLineColor( COL_BLACK );
             pDevice->SetFillColor();
