@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 13:24:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,7 @@ SvXMLImportContext* ODBFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_STYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateStylesContext( nPrefix,rLocalName, xAttrList, sal_False);
+            pContext = CreateStylesContext(nPrefix, rLocalName, xAttrList, sal_False);
             break;
         case XML_TOK_DOC_AUTOSTYLES:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
