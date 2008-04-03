@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:40:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,17 +287,21 @@ struct TransitionEffect
 namespace
 {
 
-void lcl_ApplyToPages( ::std::vector< SdPage * > aPages, const ::sd::impl::TransitionEffect & rEffect )
+void lcl_ApplyToPages(
+    const ::sd::slidesorter::SharedPageSelection& rpPages,
+    const ::sd::impl::TransitionEffect & rEffect )
 {
-    ::std::vector< SdPage * >::const_iterator aIt( aPages.begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( aPages.end());
+    ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
+    const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
     for( ; aIt != aEndIt; ++aIt )
     {
         rEffect.applyTo( *(*aIt) );
     }
 }
 
-void lcl_CreateUndoForPages(  ::std::vector< SdPage * > aPages, ::sd::ViewShellBase& rBase )
+void lcl_CreateUndoForPages(
+    const ::sd::slidesorter::SharedPageSelection& rpPages,
+    ::sd::ViewShellBase& rBase )
 {
     ::sd::DrawDocShell* pDocSh  = rBase.GetDocShell();
     SfxUndoManager* pManager    = pDocSh->GetUndoManager();
@@ -309,8 +313,8 @@ void lcl_CreateUndoForPages(  ::std::vector< SdPage * > aPages, ::sd::ViewShellB
         SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
         pUndoGroup->SetComment( aComment );
 
-        ::std::vector< SdPage * >::const_iterator aIt( aPages.begin());
-        const ::std::vector< SdPage * >::const_iterator aEndIt( aPages.end());
+        ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
+        const ::std::vector< SdPage * >::const_iterator aEndIt( rpPages->end());
         for( ; aIt != aEndIt; ++aIt )
         {
             pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
@@ -503,6 +507,7 @@ SlideTransitionPane::SlideTransitionPane(
         maSTR_NO_TRANSITION( SdResId( STR_NO_TRANSITION ) ),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
+        mbIsMainViewChangePending( false ),
         maLateInitTimer()
 {
     // use no resource ids from here on
@@ -575,25 +580,29 @@ void SlideTransitionPane::onChangeCurrentPage()
     updateControls();
 }
 
-::std::vector< SdPage * > SlideTransitionPane::getSelectedPages()
+::sd::slidesorter::SharedPageSelection SlideTransitionPane::getSelectedPages (void) const
 {
-    ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-        ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
+    ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
+        = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
 //    DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
-    ::std::vector< SdPage * > aSelectedPages;
+    ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
 
     if( pSlideSorterViewShell )
     {
-        pSlideSorterViewShell->GetSelectedPages( aSelectedPages );
+        pSelection = pSlideSorterViewShell->GetPageSelection();
     }
-    else if( mxView.is() )
+    else
     {
-        SdPage* pPage = SdPage::getImplementation( mxView->getCurrentPage() );
-        if( pPage )
-            aSelectedPages.push_back( pPage );
+        pSelection.reset(new sd::slidesorter::SlideSorterViewShell::PageSelection());
+        if( mxView.is() )
+        {
+            SdPage* pPage = SdPage::getImplementation( mxView->getCurrentPage() );
+            if( pPage )
+                pSelection->push_back(pPage);
+        }
     }
 
-    return aSelectedPages;
+    return pSelection;
 }
 
 void SlideTransitionPane::updateLayout()
@@ -787,8 +796,8 @@ void SlideTransitionPane::updateLayout()
 
 void SlideTransitionPane::updateControls()
 {
-    ::std::vector< SdPage * > aSelectedPages( getSelectedPages());
-    if( aSelectedPages.empty())
+    ::sd::slidesorter::SharedPageSelection pSelectedPages(getSelectedPages());
+    if( pSelectedPages->empty())
     {
         mbHasSelection = false;
         return;
@@ -799,14 +808,16 @@ void SlideTransitionPane::updateControls()
     mbUpdatingControls = true;
 
     // get model data for first page
-    SdPage * pFirstPage = aSelectedPages.front();
+    SdPage * pFirstPage = pSelectedPages->front();
     DBG_ASSERT( pFirstPage, "Invalid Page" );
 
     impl::TransitionEffect aEffect( *pFirstPage );
 
     // merge with other pages
-    ::std::vector< SdPage * >::const_iterator aIt( aSelectedPages.begin());
-    const ::std::vector< SdPage * >::const_iterator aEndIt( aSelectedPages.end());
+    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aIt(
+        pSelectedPages->begin());
+    ::sd::slidesorter::SlideSorterViewShell::PageSelection::const_iterator aEndIt(
+        pSelectedPages->end());
 
     // start with second page (note aIt != aEndIt, because ! aSelectedPages.empty())
     for( ++aIt ;aIt != aEndIt; ++aIt )
@@ -1115,11 +1126,11 @@ void SlideTransitionPane::applyToSelectedPages()
 {
     if( ! mbUpdatingControls )
     {
-        ::std::vector< SdPage * > aSelectedPages( getSelectedPages());
-        if( ! aSelectedPages.empty())
+        ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
+        if( ! pSelectedPages->empty())
         {
-            lcl_CreateUndoForPages( aSelectedPages, mrBase );
-            lcl_ApplyToPages( aSelectedPages, getTransitionEffectFromControls() );
+            lcl_CreateUndoForPages( pSelectedPages, mrBase );
+            lcl_ApplyToPages( pSelectedPages, getTransitionEffectFromControls() );
             mrBase.GetDocShell()->SetModified();
         }
         if( maCB_AUTO_PREVIEW.IsEnabled() &&
@@ -1134,38 +1145,29 @@ void SlideTransitionPane::playCurrentEffect()
 {
     if( mxView.is() )
     {
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-        if( pViewShell == 0 )
-            return;
 
-        DrawView* pView = pViewShell->GetDrawView();
-
-        pViewShell->SetSlideShow( 0 );
-        std::auto_ptr<Slideshow> pSlideshow(
-            new Slideshow( pViewShell, pView, pViewShell->GetDoc(), mrBase.GetViewWindow() ) );
         Reference< ::com::sun::star::animations::XAnimationNode > xNode;
-        if (pSlideshow->startPreview( mxView->getCurrentPage(), xNode ))
-            pViewShell->SetSlideShow( pSlideshow.release() );
+        SlideShow::StartPreview( mrBase, mxView->getCurrentPage(), xNode );
     }
 }
 
 void SlideTransitionPane::addListener()
 {
     Link aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().AddEventListener (
+    mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
         | tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
         | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
 }
 
 void SlideTransitionPane::removeListener()
 {
     Link aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().RemoveEventListener( aLink );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
@@ -1189,14 +1191,23 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            // At this moment the controller may not yet been set at model
-            // or ViewShellBase.  Take it from the view shell passed with
-            // the event.
-            if (mrBase.GetMainViewShell() != NULL)
+            mbIsMainViewChangePending = true;
+            break;
+
+        case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+            if (mbIsMainViewChangePending)
             {
-                mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
-                onSelectionChanged();
-                onChangeCurrentPage();
+                mbIsMainViewChangePending = false;
+
+                // At this moment the controller may not yet been set at
+                // model or ViewShellBase.  Take it from the view shell
+                // passed with the event.
+                if (mrBase.GetMainViewShell() != NULL)
+                {
+                    mxView = Reference<drawing::XDrawView>::query(mrBase.GetController());
+                    onSelectionChanged();
+                    onChangeCurrentPage();
+                }
             }
             break;
 
@@ -1212,21 +1223,22 @@ IMPL_LINK( SlideTransitionPane, ApplyToAllButtonClicked, void *, EMPTYARG )
     if( !mpDrawDoc )
         return 0;
 
-    ::std::vector< SdPage * > aPages;
+    ::sd::slidesorter::SharedPageSelection pPages (
+        new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
 
     sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PK_STANDARD );
-    aPages.reserve( nPageCount );
+    pPages->reserve( nPageCount );
     for( sal_uInt16 i=0; i<nPageCount; ++i )
     {
         SdPage * pPage = mpDrawDoc->GetSdPage( i, PK_STANDARD );
         if( pPage )
-            aPages.push_back( pPage );
+            pPages->push_back( pPage );
     }
 
-    if( ! aPages.empty())
+    if( ! pPages->empty())
     {
-        lcl_CreateUndoForPages( aPages, mrBase );
-        lcl_ApplyToPages( aPages, getTransitionEffectFromControls() );
+        lcl_CreateUndoForPages( pPages, mrBase );
+        lcl_ApplyToPages( pPages, getTransitionEffectFromControls() );
     }
 
     return 0;
