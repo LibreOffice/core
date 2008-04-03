@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:29:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,7 @@
 #include "strings.hrc"
 #include "imapinfo.hxx"
 #include "sdpage.hxx"
-#ifndef SD_SLIDE_VIEW_HXX
-#include "SlideView.hxx"
-#endif
+#include "view/SlideSorterView.hxx"
 #include "undo/undoobjects.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -168,7 +166,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
 
-    if(pPV && this->ISA(SlideView))
+    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView))
     {
         if(!pPV->GetPageRect().IsInside(rPos))
             pPV = 0L;
@@ -271,7 +269,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 && mpViewSh->GetViewShell()!=NULL
                 && mpViewSh->GetViewShell()->GetIPClient()
                 && mpViewSh->GetViewShell()->GetIPClient()->IsObjectInPlaceActive())
-            || this->ISA(SlideView))
+            || this->ISA(::sd::slidesorter::view::SlideSorterView))
             nOptions |= SDRINSERT_DONTMARK;
 
         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj && (pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall()) )
@@ -336,7 +334,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = NULL;
 
-    if(pPV && this->ISA( SlideView ))
+    if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
     {
         if(!pPV->GetPageRect().IsInside(rPos))
             pPV = 0L;
