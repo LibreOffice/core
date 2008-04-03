@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdGlobalResourceContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:24:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 #include <algorithm>
 #include <vector>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+
 namespace sd {
 
 
@@ -62,6 +66,9 @@ private:
 
     typedef ::std::vector<boost::shared_ptr<SdGlobalResource> > SharedResourceList;
     SharedResourceList maSharedResources;
+
+    typedef ::std::vector<Reference<XInterface> > XInterfaceResourceList;
+    XInterfaceResourceList maXInterfaceResources;
 };
 
 
@@ -123,6 +130,27 @@ void SdGlobalResourceContainer::AddResource (
         pResource);
     if (iResource == mpImpl->maSharedResources.end())
         mpImpl->maSharedResources.push_back(pResource);
+    else
+    {
+        DBG_ASSERT (false,
+            "SdGlobalResourceContainer:AddResource(): Resource added twice.");
+    }
+}
+
+
+
+
+void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxResource)
+{
+    ::osl::MutexGuard aGuard (mpImpl->maMutex);
+
+    Implementation::XInterfaceResourceList::iterator iResource;
+    iResource = ::std::find (
+        mpImpl->maXInterfaceResources.begin(),
+        mpImpl->maXInterfaceResources.end(),
+        rxResource);
+    if (iResource == mpImpl->maXInterfaceResources.end())
+        mpImpl->maXInterfaceResources.push_back(rxResource);
     else
     {
         DBG_ASSERT (false,
@@ -196,6 +224,17 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
             DBG_ASSERT(iSharedResource->unique(),
                 "SdGlobalResource still held in ~SdGlobalResourceContainer");
         }
+    }
+
+    Implementation::XInterfaceResourceList::reverse_iterator iXInterfaceResource;
+    for (iXInterfaceResource = mpImpl->maXInterfaceResources.rbegin();
+         iXInterfaceResource != mpImpl->maXInterfaceResources.rend();
+         ++iXInterfaceResource)
+    {
+        Reference<lang::XComponent> xComponent (*iXInterfaceResource, UNO_QUERY);
+        *iXInterfaceResource = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
     }
 
     DBG_ASSERT(Implementation::mpInstance == this,
