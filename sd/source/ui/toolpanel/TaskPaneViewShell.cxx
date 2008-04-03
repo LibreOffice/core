@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:48:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEACTIVATIONMODE_HPP_
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #endif
+#include <com/sun/star/drawing/XDrawSubController.hpp>
 
 #ifndef _SVX_DLG_CTRL_HXX
 #include <svx/dlgctrl.hxx>
@@ -445,7 +446,7 @@ TaskPaneViewShell::TaskPaneViewShell (
     mpSubShellManager.reset (new TaskPaneShellManager(
         GetViewShellBase().GetViewShellManager(),
         *this));
-    GetViewShellBase().GetViewShellManager().AddSubShellFactory(this, mpSubShellManager);
+    GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this, mpSubShellManager);
 }
 
 
@@ -453,7 +454,7 @@ TaskPaneViewShell::TaskPaneViewShell (
 
 TaskPaneViewShell::~TaskPaneViewShell (void)
 {
-    GetViewShellBase().GetViewShellManager().RemoveSubShellFactory(this, mpSubShellManager);
+    GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(this, mpSubShellManager);
 }
 
 
@@ -694,22 +695,60 @@ DockingWindow* TaskPaneViewShell::GetDockingWindow (void)
 
 
 
-void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
+void TaskPaneViewShell::ShowPanel (const PanelId nPublicId)
 {
     Initialize();
-    sal_uInt32 nId (mpImpl->GetInternalId (nPublicId));
+    sal_uInt32 nId (mpImpl->GetInternalId(nPublicId));
     if (nId != Implementation::mnInvalidId)
     {
-        // First make the control visible.  At least its title bar is then
-        // visible.
         mpTaskPane->GetControlContainer().SetVisibilityState (
             nId,
             ControlContainer::VS_SHOW);
+    }
+}
 
-        // Now expand it so that the whole control becomes visible.
+
+
+
+void TaskPaneViewShell::HidePanel (const PanelId nPublicId)
+{
+    Initialize();
+    sal_uInt32 nId (mpImpl->GetInternalId(nPublicId));
+    if (nId != Implementation::mnInvalidId)
+    {
+        mpTaskPane->GetControlContainer().SetVisibilityState (
+            nId,
+            ControlContainer::VS_HIDE);
+    }
+}
+
+
+
+
+void TaskPaneViewShell::ExpandPanel (const PanelId nPublicId)
+{
+   Initialize();
+    sal_uInt32 nId (mpImpl->GetInternalId(nPublicId));
+    if (nId != Implementation::mnInvalidId)
+    {
         mpTaskPane->GetControlContainer().SetExpansionState (
             nId,
             ControlContainer::ES_EXPAND);
+    }
+}
+
+
+
+
+void TaskPaneViewShell::CollapsePanel (const PanelId nPublicId)
+{
+    Initialize();
+    sal_uInt32 nId (mpImpl->GetInternalId(nPublicId));
+    if (nId != Implementation::mnInvalidId)
+    {
+        mpTaskPane->GetControlContainer().SetExpansionState (
+            nId,
+            ControlContainer::ES_COLLAPSE);
     }
 }
 
@@ -739,11 +778,11 @@ void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
 
 
 
-::std::auto_ptr<DrawSubController> TaskPaneViewShell::CreateSubController (void)
+Reference<drawing::XDrawSubController> TaskPaneViewShell::CreateSubController (void)
 {
     // This view shell is not designed to be the main view shell and thus
-    // does not support a UNO controller.
-    return ::std::auto_ptr<DrawSubController>();
+    // does not support a UNO sub controller.
+    return Reference<drawing::XDrawSubController>();
 }
 
 
