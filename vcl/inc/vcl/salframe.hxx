@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:04:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ class SalBitmap;
 class SalMenu;
 class Window;
 
+
 struct SalFrameState;
 struct SalInputContext;
 struct SystemEnvData;
@@ -103,6 +104,7 @@ struct SystemEnvData;
 
 #define SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE  ((USHORT)0x0001)
 #define SAL_FRAME_ENDEXTTEXTINPUT_CANCEL    ((USHORT)0x0002)
+
 
 // -----------------
 // - SalFrameStyle -
@@ -122,9 +124,11 @@ struct SystemEnvData;
 // dialogs
 #define SAL_FRAME_STYLE_DIALOG              ((ULONG)0x00000080)
 // partial fullscreen: fullscreen on one monitor of a multimonitor display
-#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((ULONG)0x08000000)
-// system child window
-#define SAL_FRAME_STYLE_CHILD               ((ULONG)0x10000000)
+#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((ULONG)0x00800000)
+// plugged system child window
+#define SAL_FRAME_STYLE_PLUG                ((ULONG)0x10000000)
+// system child window inside another SalFrame
+#define SAL_FRAME_STYLE_SYSTEMCHILD         ((ULONG)0x08000000)
 // floating window
 #define SAL_FRAME_STYLE_FLOAT               ((ULONG)0x20000000)
 // toolwindows should be painted with a smaller decoration
@@ -265,6 +269,7 @@ public:
     // but should copy its contents to an own buffer
     virtual void                SetBackgroundBitmap( SalBitmap* ) = 0;
 
+
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {
@@ -281,6 +286,9 @@ public:
     // return false to indicate failure
     virtual bool                SetPluginParent( SystemParentData* pNewParent ) = 0;
 
+    // move the frame to a new screen
+    virtual void                SetScreenNumber( unsigned int nScreen ) = 0;
+
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion() = 0;
@@ -290,6 +298,7 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() = 0;
+
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
@@ -305,6 +314,8 @@ public:
     long                        CallCallback( USHORT nEvent, const void* pEvent ) const
     { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
+
+
 
 #endif // __cplusplus
 
