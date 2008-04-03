@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:48:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define SD_TOOLPANEL_CONTROLS_DCUMENT_HELPER_HXX
 
 #include <tools/solar.h>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SdDrawDocument;
@@ -82,7 +83,7 @@ public:
     static void AssignMasterPageToPageList (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
-        const ::std::vector<SdPage*>& rPageList);
+        const ::boost::shared_ptr<std::vector<SdPage*> >& rPageList);
 
 private:
     static SdPage* AddMasterPage (
@@ -95,7 +96,7 @@ private:
     static SdPage* ProvideMasterPage (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
-        const ::std::vector<SdPage*>& rPageList);
+        const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList);
 
     /** Assign the given master page to the given page.
         @param pMasterPage
