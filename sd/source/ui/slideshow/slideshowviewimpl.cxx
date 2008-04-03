@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:30:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,16 +297,6 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(Runtime
     }
 }
 
-static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
-{
-    if( pSlideShow )
-    {
-        SlideShowImplGuard aSLGuard( pSlideShow );
-        rGuard.clear();
-        pSlideShow->startUpdateTimer();
-    }
-}
-
 void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -369,6 +359,11 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
     const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
+
+    if (rTmpSize.Width()<=0 || rTmpSize.Height()<=0)
+    {
+        return geometry::AffineMatrix2D (1,0,0,0,1,0);
+    }
 
     // Reduce available width by one, as the slides might actually
     // render one pixel wider and higher as aPageSize below specifies
@@ -502,6 +497,16 @@ void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (Ru
 
     if( mxWindowPeer.is() )
         mxWindowPeer->setPointer( mxPointer );
+}
+
+void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
+{
+    if( pSlideShow )
+    {
+        ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
+        rGuard.clear();
+        pSlideShow->startUpdateTimer();
+    }
 }
 
 // XWindowListener methods
