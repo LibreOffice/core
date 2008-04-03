@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:00:31 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,6 +585,7 @@ class SwDocInfoField : public SwValueField
 
 public:
     SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, sal_uInt32 nFmt=0);
+    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, const String& rValue, sal_uInt32 nFmt=0);
 
     virtual void            SetSubType(USHORT);
     virtual USHORT          GetSubType() const;
