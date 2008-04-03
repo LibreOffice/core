@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:55:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:40:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,10 @@
 
 #include "ResourceManager.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
+#include <com/sun/star/drawing/framework/XTabBar.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace framework {
 
@@ -52,7 +53,7 @@ class SlideSorterModule
 {
 public:
     SlideSorterModule (
-        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController,
+        const css::uno::Reference<css::frame::XController>& rxController,
         const ::rtl::OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule (void);
 
@@ -60,16 +61,15 @@ public:
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
-        const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XControllerManager> mxControllerManager;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 
-    void UpdateViewTabBar (void);
+    void UpdateViewTabBar (
+        const css::uno::Reference<css::drawing::framework::XTabBar>& rxViewTabBar);
 };
 
 } } // end of namespace sd::framework
