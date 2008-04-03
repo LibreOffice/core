@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:27:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #include <tools/gen.hxx>
 #endif
 
+#include <rtl/ref.hxx>
+
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
 #endif
@@ -63,7 +65,7 @@
 #endif
 
 namespace sd {
-    class Slideshow;
+    class SlideShow;
 }
 
 class GDIMetaFile;
@@ -77,7 +79,7 @@ protected:
     SfxObjectShell* mpObj;
     sal_uInt16      mnShowPage;
     Color           maDocumentColor;
-    sd::Slideshow*  mpSlideShow;
+    rtl::Reference< sd::SlideShow > mxSlideShow;
 
     virtual void    Paint( const Rectangle& rRect );
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
