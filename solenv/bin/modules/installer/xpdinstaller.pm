@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-20 10:54:29 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:09:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1215,14 +1215,13 @@ sub create_xpd_file
 
     my $modulegid = $onepackage->{'module'};
 
-    my $onelanguage = "";
     my $solslanguage = "";
-    my $islanguagemodule = 0;
-    if ( $onepackage->{'islanguagemodule'} ) { $islanguagemodule = $onepackage->{'islanguagemodule'}; }
-    if ( $islanguagemodule )
+    if ( $installer::globals::issolarispkgbuild )
     {
-        $onelanguage = $onepackage->{'language'};
-        if ( $installer::globals::issolarispkgbuild ) { $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onelanguage); }
+        if ( $onepackage->{'specificlanguage'} )
+        {
+            $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onepackage->{'specificlanguage'});
+        }
     }
 
     installer::logger::include_header_into_logfile("Creating xpd file ($modulegid):");
