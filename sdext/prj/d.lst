@@ -1,3 +1,4 @@
 mkdir: %_DEST%\bin%_EXT%\minimizer
 ..\%__SRC%\bin\sun-presentation-minimizer.oxt %_DEST%\bin%_EXT%\minimizer\sun-presentation-minimizer.oxt
+..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin%_EXT%\presenter-screen.oxt
 
