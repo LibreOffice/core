@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:38:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #endif
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
-#endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
 #endif
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
@@ -162,12 +159,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
                 nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
             }
-            else if( mpViewShell->ISA( SlideViewShell ) )
-            {
-                nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-                nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
-                nZoomValues &= ~(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
-            }
         }
 
         pZoomItem->SetValueSet( nZoomValues );
@@ -228,15 +219,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
                         // --> Wird als Optimal im Programm angeboten
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                     }
-                    else if( mpViewShell->ISA( SlideViewShell ) )
-                        mpViewShell->SetZoom( 20 );
-                        // Hier sollte sich noch etwas besseres ueberlegt werden !!!
-                    // ???!!
-                    /*
-                        aNewAttr.Put( SvxZoomItem( SVX_ZOOM_PERCENT, 20 ) );
-                    rReq.Done( aNewAttr );
-                    pArgs = rReq.GetArgs();
-                    */
                 }
                 break;
 
