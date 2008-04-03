@@ -1,12 +1,11 @@
 pe	slideshow	:	tools sal cppu vcl comphelper cppuhelper offuh cppcanvas basegfx goodies unotools toolkit animations avmedia NULL
 pe	slideshow								usr1	-	all	pe_mkout NULL
 pe	slideshow\inc							nmake	-	all	pe_inc NULL
-pe	slideshow\source\api					nmake	-	all	pe_api pe_inc NULL
-pe	slideshow\source\engine					nmake	-	all	pe_engine pe_api pe_inc NULL
-pe	slideshow\source\engine\slide			nmake	-	all	pe_slide pe_api pe_inc NULL
-pe	slideshow\source\engine\shapes			nmake	-	all	pe_shapes pe_api pe_inc NULL
-pe  slideshow\source\engine\OGLTrans        nmake   -   u pe_ogltrans pe_api pe_inc NULL
-pe	slideshow\source\engine\transitions		nmake	-	all	pe_transitions pe_api pe_inc NULL
-pe	slideshow\source\engine\animationnodes	nmake	-	all	pe_animationnodes pe_api pe_inc NULL
-pe	slideshow\source\engine\activities		nmake	-	all	pe_activities pe_api pe_inc NULL
-pe	slideshow\util							nmake	-	all	pe_util pe_shapes pe_slide pe_activities pe_animationnodes pe_transitions pe_engine pe_api NULL
+pe	slideshow\source\engine					nmake	-	all	pe_engine pe_inc NULL
+pe	slideshow\source\engine\slide			nmake	-	all	pe_slide pe_inc NULL
+pe	slideshow\source\engine\shapes			nmake	-	all	pe_shapes pe_inc NULL
+pe  slideshow\source\engine\OGLTrans        nmake   -   u pe_ogltrans pe_inc NULL
+pe	slideshow\source\engine\transitions		nmake	-	all	pe_transitions pe_inc NULL
+pe	slideshow\source\engine\animationnodes	nmake	-	all	pe_animationnodes pe_inc NULL
+pe	slideshow\source\engine\activities		nmake	-	all	pe_activities pe_inc NULL
+pe	slideshow\util							nmake	-	all	pe_util pe_shapes pe_slide pe_activities pe_animationnodes pe_transitions pe_engine NULL
