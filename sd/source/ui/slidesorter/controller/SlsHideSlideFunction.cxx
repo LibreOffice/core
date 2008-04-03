@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 10:45:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,19 +33,19 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "SlsHideSlideFunction.hxx"
 
-#include "controller/SlideSorterController.hxx"
-#include "model/SlideSorterModel.hxx"
+#include "SlideSorter.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 
 #include "app.hrc"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
+#include "ViewShell.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -57,10 +57,10 @@ namespace sd { namespace slidesorter { namespace controller {
 TYPEINIT1(HideSlideFunction, SlideFunction);
 
 HideSlideFunction::HideSlideFunction (
-    SlideSorterController& rController,
+    SlideSorter& rSlideSorter,
     SfxRequest& rRequest)
-    : SlideFunction( rController, rRequest),
-      mrController(rController)
+    : SlideFunction( rSlideSorter, rRequest),
+      mrSlideSorter(rSlideSorter)
 {
 }
 
@@ -75,10 +75,10 @@ HideSlideFunction::~HideSlideFunction (void)
 
 
 FunctionReference HideSlideFunction::Create (
-    SlideSorterController& rController,
+    SlideSorter& rSlideSorter,
     SfxRequest& rRequest )
 {
-    FunctionReference xFunc( new HideSlideFunction( rController, rRequest ) );
+    FunctionReference xFunc( new HideSlideFunction( rSlideSorter, rRequest ) );
     xFunc->DoExecute(rRequest);
     return xFunc;
 }
@@ -90,8 +90,8 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
 {
     SlideFunction::DoExecute(rRequest);
 
-    model::SlideSorterModel::Enumeration aSelectedPages (
-        mrController.GetModel().GetSelectedPagesEnumeration());
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
 
     ExclusionState eState (UNDEFINED);
 
@@ -134,7 +134,7 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
 
 
 HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
-    model::SlideSorterModel::Enumeration& rPageSet)
+    model::PageEnumeration& rPageSet)
 {
     ExclusionState eState (UNDEFINED);
     BOOL bState;
