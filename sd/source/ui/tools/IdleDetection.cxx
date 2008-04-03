@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:23:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,19 +113,13 @@ sal_Int32 IdleDetection::CheckSlideShowRunning (void)
         ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pViewFrame);
         if (pBase != NULL)
         {
-            ViewShell* pViewShell = pBase->GetMainViewShell().get();
-            // Test whether the view shell has a running full screen
-            // show.
-            if (pViewShell != NULL)
+            rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( *pBase ) );
+            if( xSlideShow.is() && xSlideShow->isRunning() )
             {
-                Slideshow* pSlideShow = pViewShell->GetSlideShow();
-                if (pSlideShow != NULL)
-                {
-                    if (pSlideShow->isFullScreen())
-                        eResult |= IDET_FULL_SCREEN_SHOW_ACTIVE;
-                    else
-                        eResult |= IDET_WINDOW_SHOW_ACTIVE;
-                }
+                if (xSlideShow->isFullScreen())
+                    eResult |= IDET_FULL_SCREEN_SHOW_ACTIVE;
+                else
+                    eResult |= IDET_WINDOW_SHOW_ACTIVE;
             }
         }
     }
