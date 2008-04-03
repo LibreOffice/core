@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageDescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:08:42 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,21 +48,30 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+
 namespace sd {  namespace slidesorter { namespace model {
 
 PageDescriptor::PageDescriptor (
-    SdPage& rPage,
+    const Reference<drawing::XDrawPage>& rxPage,
+    SdPage* pPage,
+    const sal_Int32 nIndex,
     const controller::PageObjectFactory& rPageObjectFactory)
-    : mrPage (rPage),
+    : mpPage(pPage),
+      mxPage(rxPage),
+      mnIndex(nIndex),
       mpPageObjectFactory(&rPageObjectFactory),
-      mpPageObject (NULL),
-      mbIsSelected (false),
-      mbVisible (false),
-      mbFocused (false),
-      mpViewObjectContact (NULL),
-      maModelBorder (0,0,0,0),
+      mpPageObject(NULL),
+      mbIsSelected(false),
+      mbIsVisible(false),
+      mbIsFocused(false),
+      mbIsCurrent(false),
+      mpViewObjectContact(NULL),
+      maModelBorder(0,0,0,0),
       maPageNumberAreaModelSize(0,0)
 {
+    OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
 }
 
 
@@ -77,7 +86,23 @@ PageDescriptor::~PageDescriptor (void)
 
 SdPage* PageDescriptor::GetPage (void) const
 {
-    return &mrPage;
+    return mpPage;
+}
+
+
+
+
+Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
+{
+    return mxPage;
+}
+
+
+
+
+sal_Int32 PageDescriptor::GetPageIndex (void) const
+{
+    return mnIndex;
 }
 
 
@@ -87,7 +112,7 @@ view::PageObject* PageDescriptor::GetPageObject (void)
 {
     if (mpPageObject==NULL && mpPageObjectFactory!=NULL)
     {
-        mpPageObject = mpPageObjectFactory->CreatePageObject(&mrPage, *this);
+        mpPageObject = mpPageObjectFactory->CreatePageObject(mpPage, shared_from_this());
     }
 
     return mpPageObject;
@@ -106,15 +131,15 @@ void PageDescriptor::ReleasePageObject (void)
 
 bool PageDescriptor::IsVisible (void) const
 {
-    return mbVisible;
+    return mbIsVisible;
 }
 
 
 
 
-void PageDescriptor::SetVisible (bool bVisible)
+void PageDescriptor::SetVisible (bool bIsVisible)
 {
-    mbVisible = bVisible;
+    mbIsVisible = bIsVisible;
 }
 
 
@@ -125,7 +150,6 @@ bool PageDescriptor::Select (void)
     if ( ! IsSelected())
     {
         mbIsSelected = true;
-        //        mrPage.SetSelected (TRUE);
         return true;
     }
     else
@@ -140,7 +164,6 @@ bool PageDescriptor::Deselect (void)
     if (IsSelected())
     {
         mbIsSelected = false;
-        //        mrPage.SetSelected (FALSE);
         return true;
     }
     else
@@ -152,7 +175,7 @@ bool PageDescriptor::Deselect (void)
 
 bool PageDescriptor::IsSelected (void) const
 {
-    return mbIsSelected;//mrPage.IsSelected();
+    return mbIsSelected;
 }
 
 
@@ -160,7 +183,7 @@ bool PageDescriptor::IsSelected (void) const
 
 bool PageDescriptor::UpdateSelection (void)
 {
-    if ((mrPage.IsSelected()==TRUE) != mbIsSelected)
+    if (mpPage!=NULL && (mpPage->IsSelected()==TRUE) != mbIsSelected)
     {
         mbIsSelected = ! mbIsSelected;
         return true;
@@ -174,7 +197,7 @@ bool PageDescriptor::UpdateSelection (void)
 
 bool PageDescriptor::IsFocused (void) const
 {
-    return mbFocused;
+    return mbIsFocused;
 }
 
 
@@ -182,7 +205,7 @@ bool PageDescriptor::IsFocused (void) const
 
 void PageDescriptor::SetFocus (void)
 {
-    mbFocused = true;
+    mbIsFocused = true;
 }
 
 
@@ -190,7 +213,7 @@ void PageDescriptor::SetFocus (void)
 
 void PageDescriptor::RemoveFocus (void)
 {
-    mbFocused = false;
+    mbIsFocused = false;
 }
 
 
@@ -260,6 +283,23 @@ Size PageDescriptor::GetPageNumberAreaModelSize (void) const
 {
     return maPageNumberAreaModelSize;
 }
+
+
+
+
+bool PageDescriptor::IsCurrentPage (void) const
+{
+    return mbIsCurrent;
+}
+
+
+
+
+void PageDescriptor::SetIsCurrentPage (const bool bIsCurrent)
+{
+    mbIsCurrent = bIsCurrent;
+}
+
 
 
 } } } // end of namespace ::sd::slidesorter::model
