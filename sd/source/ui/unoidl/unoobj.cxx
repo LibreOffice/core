@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:52:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
 
-extern OUString getPageApiNameFromUiNameImpl( const String& rUIName );
+extern OUString getPageApiNameFromUiName( const String& rUIName );
 extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 ///////////////////////////////////////////////////////////////////////
@@ -1632,7 +1632,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
         case presentation::ClickAction_BOOKMARK:
             {
-                const OUString aStrBookmark( getPageApiNameFromUiNameImpl( pInfo->maBookmark ) );
+                const OUString aStrBookmark( getPageApiNameFromUiName( pInfo->maBookmark ) );
                 pProperties->Name = maStrBookmark;
                 pProperties->Handle = -1;
                 pProperties->Value <<= aStrBookmark;
@@ -1648,7 +1648,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
                 if( nPos >= 0 )
                 {
                     OUString aURL( aString.copy( 0, nPos+1 ) );
-                    aURL += getPageApiNameFromUiNameImpl( aString.copy( nPos+1 ) );
+                    aURL += getPageApiNameFromUiName( aString.copy( nPos+1 ) );
                     aString = aURL;
                 }
                 pProperties->Name = maStrBookmark;
