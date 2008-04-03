@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:38:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,9 @@ namespace sd { namespace slidesorter { namespace view {
 PageObject::PageObject (
     const Rectangle& rRectangle,
     SdrPage* _pPage,
-    PageDescriptor& rDescriptor)
-    : SdrPageObj (rRectangle, _pPage),
-      mrDescriptor (rDescriptor)
+    const SharedPageDescriptor& rpDescriptor)
+    : SdrPageObj(rRectangle, _pPage),
+      mpDescriptor(rpDescriptor)
 {
 }
 
@@ -67,9 +67,9 @@ PageObject::~PageObject (void)
 
 
 
-PageDescriptor& PageObject::GetDescriptor (void) const
+SharedPageDescriptor PageObject::GetDescriptor (void) const
 {
-    return mrDescriptor;
+    return mpDescriptor;
 }
 
 
@@ -77,9 +77,10 @@ PageDescriptor& PageObject::GetDescriptor (void) const
 
 sdr::contact::ViewContact* PageObject::CreateObjectSpecificViewContact (void)
 {
-    return mrDescriptor.GetPageObjectFactory().CreateViewContact (
-        this,
-        mrDescriptor);
+    if (mpDescriptor.get() != NULL)
+        return mpDescriptor->GetPageObjectFactory().CreateViewContact(this, mpDescriptor);
+    else
+        return NULL;
 }
 
 
