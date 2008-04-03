@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:14:53 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:45:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,14 @@ PRJINC=..$/..
 
 SLOFILES =      								\
     $(SLO)$/SlsFontProvider.obj					\
+    $(SLO)$/SlsHighlightObject.obj				\
     $(SLO)$/SlsPageNotificationObjectContact.obj\
     $(SLO)$/SlsPageObject.obj					\
     $(SLO)$/SlsPageObjectViewContact.obj		\
     $(SLO)$/SlsPageObjectViewObjectContact.obj	\
     $(SLO)$/SlsLayouter.obj						\
     $(SLO)$/SlideSorterView.obj					\
+    $(SLO)$/SlsViewCacheContext.obj				\
     $(SLO)$/SlsViewOverlay.obj
 
 EXCEPTIONSFILES=								\
