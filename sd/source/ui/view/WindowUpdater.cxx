@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowUpdater.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:09:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #include "Window.hxx"
 #endif
 #include "drawdoc.hxx"
-#ifndef SD_SHOW_WINDOW_HXX
-#include "ShowWindow.hxx"
-#endif
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
