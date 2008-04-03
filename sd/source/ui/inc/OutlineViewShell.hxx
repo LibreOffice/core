@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:03:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ public:
     */
     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
-    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the
