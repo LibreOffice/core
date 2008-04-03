@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:32:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ SdUnoDrawView::SdUnoDrawView(
     DrawController& rController,
     DrawViewShell& rViewShell,
     View& rView) throw()
-    :   DrawSubController(),
+    :   DrawSubControllerInterfaceBase(m_aMutex),
         mrController(rController),
         mrDrawViewShell(rViewShell),
         mrView(rView)
@@ -357,141 +357,36 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 }
 
 
-//----------------------------------------------------------------------
-//------ XPropertySet & OPropertySetHelper -----------------------------
-//----------------------------------------------------------------------
 
 
-// Return sal_True, value change
-sal_Bool SdUnoDrawView::convertFastPropertyValue
-(
-    Any & rConvertedValue,
-    Any & rOldValue,
-    sal_Int32 nHandle,
-    const Any& rValue
-) throw ( com::sun::star::lang::IllegalArgumentException)
+void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
 {
-    sal_Bool bResult = sal_False;
-
-    switch( nHandle )
-    {
-        case DrawController::PROPERTY_CURRENTPAGE:
-            {
-                Reference< drawing::XDrawPage > xOldPage( getCurrentPage() );
-                Reference< drawing::XDrawPage > xNewPage;
-                ::cppu::convertPropertyValue( xNewPage, rValue );
-                if( xOldPage != xNewPage )
-                {
-                    rConvertedValue <<= xNewPage;
-                    rOldValue <<= xOldPage;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_MASTERPAGEMODE:
-            {
-                sal_Bool bOldValue = getMasterPageMode();
-                sal_Bool b;
-                ::cppu::convertPropertyValue( b , rValue );
-                if( b != bOldValue )
-                {
-
-                    rConvertedValue.setValue( &b , ::getCppuBooleanType()  );
-                    rOldValue.setValue( & bOldValue , ::getCppuBooleanType() );
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_LAYERMODE:
-            {
-                sal_Bool bOldValue = getLayerMode();
-                sal_Bool b;
-                ::cppu::convertPropertyValue( b , rValue );
-                if( b != bOldValue )
-                {
-                    rConvertedValue.setValue( &b , ::getCppuBooleanType()  );
-                    rOldValue.setValue( & bOldValue , ::getCppuBooleanType() );
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_ACTIVE_LAYER:
-            {
-                Reference<drawing::XLayer> xOldLayer (getActiveLayer());
-                Reference<drawing::XLayer> xNewLayer;
-                ::cppu::convertPropertyValue (xNewLayer, rValue);
-                if (xOldLayer != xNewLayer)
-                {
-                    rConvertedValue <<= xNewLayer;
-                    rOldValue <<= xOldLayer;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_ZOOMVALUE:
-            {
-                sal_Int16 nOldZoom = GetZoom();
-                sal_Int16 nNewZoom;
-                ::cppu::convertPropertyValue( nNewZoom, rValue );
-                if( nNewZoom != nOldZoom )
-                {
-                    rConvertedValue <<= nNewZoom;
-                    rOldValue <<= nOldZoom;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_ZOOMTYPE:
-            {
-                sal_Int16 nOldType = com::sun::star::view::DocumentZoomType::BY_VALUE;
-                sal_Int16 nNewType;
-                ::cppu::convertPropertyValue( nNewType, rValue );
-                if( nNewType != nOldType )
-                {
-                    rConvertedValue <<= nNewType;
-                    rOldValue <<= nOldType;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        case DrawController::PROPERTY_VIEWOFFSET:
-            {
-                awt::Point aOld( GetViewOffset() );
-                awt::Point aNew;
-                ::cppu::convertPropertyValue( aNew, rValue );
-                if( (aOld.X != aNew.X) && (aOld.Y != aNew.Y) )
-                {
-                    rConvertedValue <<= aNew;
-                    rOldValue <<= aOld;
-                    bResult = sal_True;
-                }
-            }
-            break;
-
-        default:
-            bResult = sal_False;
-            break;
-    }
-
-    return bResult;
+    (void)rxListener;
 }
 
-//----------------------------------------------------------------------
 
-/**
- * only set the value.
- */
-void SdUnoDrawView::setFastPropertyValue_NoBroadcast
-(
+
+
+void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
+{
+    (void)rxListener;
+}
+
+
+
+
+void SdUnoDrawView::setFastPropertyValue (
     sal_Int32 nHandle,
-    const Any& rValue
-) throw ( com::sun::star::uno::Exception)
+        const Any& rValue)
+    throw(css::beans::UnknownPropertyException,
+        css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
     switch( nHandle )
     {
@@ -548,45 +443,53 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
             break;
 
         default:
-            break;
+            throw beans::UnknownPropertyException();
     }
 }
 
-//----------------------------------------------------------------------
 
-void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
+
+
+Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
+    sal_Int32 nHandle)
+    throw(css::beans::UnknownPropertyException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
 {
+    Any aValue;
     switch( nHandle )
     {
         case DrawController::PROPERTY_CURRENTPAGE:
-            rRet <<= (const_cast<SdUnoDrawView*>(this))->getCurrentPage();
+            aValue <<= (const_cast<SdUnoDrawView*>(this))->getCurrentPage();
             break;
 
         case DrawController::PROPERTY_MASTERPAGEMODE:
-            rRet <<= getMasterPageMode();
+            aValue <<= getMasterPageMode();
             break;
 
         case DrawController::PROPERTY_LAYERMODE:
-            rRet <<= getLayerMode();
+            aValue <<= getLayerMode();
             break;
 
         case DrawController::PROPERTY_ACTIVE_LAYER:
-            rRet <<= (const_cast<SdUnoDrawView*>(this))->getActiveLayer();
+            aValue <<= (const_cast<SdUnoDrawView*>(this))->getActiveLayer();
             break;
 
         case DrawController::PROPERTY_ZOOMVALUE:
-            rRet <<= GetZoom();
+            aValue <<= GetZoom();
             break;
         case DrawController::PROPERTY_ZOOMTYPE:
-            rRet <<= (sal_Int16)com::sun::star::view::DocumentZoomType::BY_VALUE;
+            aValue <<= (sal_Int16)com::sun::star::view::DocumentZoomType::BY_VALUE;
             break;
         case DrawController::PROPERTY_VIEWOFFSET:
-            rRet <<= GetViewOffset();
+            aValue <<= GetViewOffset();
             break;
 
         default:
-            break;
+            throw beans::UnknownPropertyException();
     }
+
+    return aValue;
 }
 
 
