@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:40:20 $
+ *  last change: $Author: rt $ $Date: 2008-04-03 07:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1230,7 +1230,7 @@
       </node>
       <node oor:name="arialnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
+          <value>arialnarrowmt;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
