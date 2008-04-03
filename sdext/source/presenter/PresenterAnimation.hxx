@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: PresenterAnimation.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:54:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef SDEXT_PRESENTER_ANIMATION_HXX
+#define SDEXT_PRESENTER_ANIMATION_HXX
+
+#include <sal/types.h>
+#include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <vector>
+
+namespace sdext { namespace presenter {
+
+/** Base class for animations handled by a PresenterAnimator object.
+    A PresenterAnimation objects basically states when it wants to be
+    started, how long it runs, and in what steps it wants to be called back
+    while running.
+    When a PresenterAnimation object is active/running its Run() method is
+    called back with increasing values between 0 and 1.
+*/
+class PresenterAnimation
+    : private ::boost::noncopyable
+{
+public:
+    /** Create a new PresenterAnimation object.
+        @param nStartDelay
+            The delay in ms (milliseconds) from this call until the new
+            object is to be activated.
+        @param nTotalDuration
+            The duration in ms the Run() method is to be called with
+            increasing values between 0 and 1.
+        @param nStepDuration
+            The duration between calls to Run().  This leads to approximately
+            nTotalDuration/nStepDuration calls to Run().  The exact duration
+            of each step may vary depending on system load an other influences.
+    */
+    PresenterAnimation (
+        const sal_uInt64 nStartDelay,
+        const sal_uInt64 nTotalDuration,
+        const sal_uInt64 nStepDuration);
+    virtual ~PresenterAnimation (void);
+
+    /** Return the absolute start time in a system dependent format.
+        At about this time the Run() method will be called with a value of 0.
+    */
+    sal_uInt64 GetStartTime (void);
+
+    /** Return the absolute end time in a system dependent format.
+        At about this time the Run() method will be called with a value of 1.
+    */
+    sal_uInt64 GetEndTime (void);
+
+    /** Return the duration of each step in ms.
+    */
+    sal_uInt64 GetStepDuration (void);
+
+    typedef ::boost::function<void(void)> Callback;
+
+    /** Add a callback that is executed before Run() is called for the first
+        time.
+    */
+    void AddStartCallback (const Callback& rCallback);
+
+    /** Add a callback that is executed after Run() is called for the last
+        time.
+    */
+    void AddEndCallback (const Callback& rCallback);
+
+    /** Called with nProgress taking on values between 0 and 1.
+        @param nProgress
+            A value between 0 and 1.
+        @param nCurrentTime
+            Current time in a system dependent format.
+    */
+    virtual void Run (const double nProgress, const sal_uInt64 nCurrentTime) = 0;
+
+    /** Called just before Run() is called for the first time to trigger the
+        callbacks registered via the <method>AddStartCallback()</method>.
+    */
+    void RunStartCallbacks (void);
+
+    /** Called just after Run() is called for the last time to trigger the
+        callbacks registered via the <method>AddEndCallback()</method>.
+    */
+    void RunEndCallbacks (void);
+
+private:
+    const sal_uInt64 mnStartTime;
+    const sal_uInt64 mnTotalDuration;
+    const sal_uInt64 mnStepDuration;
+    ::boost::scoped_ptr<std::vector<Callback> > mpStartCallbacks;
+    ::boost::scoped_ptr<std::vector<Callback> > mpEndCallbacks;
+};
+
+sal_uInt64 GetCurrentTime (void);
+inline sal_uInt32 GetSeconds (const sal_uInt64 nTime) { return sal_uInt32(nTime / 1000); }
+inline sal_uInt32 GetNanoSeconds (const sal_uInt64 nTime) { return sal_uInt32((nTime % 1000) * 1000000); }
+
+typedef ::boost::shared_ptr<PresenterAnimation> SharedPresenterAnimation;
+
+
+} } // end of namespace ::sdext::presenter
+
+#endif
