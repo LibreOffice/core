@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XShapeEventListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:37:47 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XShapeEventListener_idl__
+#define __com_sun_star_presentation_XShapeEventListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+#ifndef __com_sun_star_awt_XMouseListener_idl__
+#include <com/sun/star/awt/XMouseListener.idl>
+#endif
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+
+module com {  module sun {  module star {  module presentation {
+
+/** Listener interface to receive shape-specific events.<p>
+
+    @since OOo 2.4
+ */
+interface XShapeEventListener : ::com::sun::star::lang::XEventListener
+{
+    /** Notify a clicked shape.<p>
+
+        This method notifies the listener that a shape was
+        clicked.<p>
+
+        @param xShape
+        The shape that was clicked upon.
+
+        @param aOriginalEvent
+        The original mouse click event that generated this notification.
+     */
+    void click( [in] ::com::sun::star::drawing::XShape  xShape,
+                [in] ::com::sun::star::awt::MouseEvent  aOriginalEvent );
+};
+
+}; }; }; };
+
+
+#endif
