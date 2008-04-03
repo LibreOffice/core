@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationControllerBroadcaster.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:46:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,15 @@
 #ifndef SD_FRAMEWORK_CONFIGURATION_CONTROLLER_BROADCASTER_HXX
 #define SD_FRAMEWORK_CONFIGURATION_CONTROLLER_BROADCASTER_HXX
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_CONFIGURATIONCHANGEEVENT_HPP_
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
-#endif
 
 #include <comphelper/stl_types.hxx>
 #include <vector>
 #include <hash_map>
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace framework {
 
@@ -67,8 +63,8 @@ public:
     /** The given controller is used as origin of thrown exceptions.
     */
     ConfigurationControllerBroadcaster (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationController>& rxController);
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationController>& rxController);
 
     /** Add a listener for one type of event.  When one listener is
         interested in more than one event type this method has to be called
@@ -88,10 +84,10 @@ public:
             when an empty listener reference is given.
     */
     void AddListener(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeListener>& rxListener,
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeListener>& rxListener,
         const ::rtl::OUString& rsEventType,
-        const ::com::sun::star::uno::Any& rUserData);
+        const css::uno::Any& rUserData);
 
     /** Remove all references to the given listener.  When one listener has
         been registered for more than one type of event then it is removed
@@ -102,8 +98,8 @@ public:
             when an empty listener reference is given.
     */
     void RemoveListener(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeListener>& rxListener);
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeListener>& rxListener);
 
     /** Broadcast the given event to all listeners that have been registered
         for its type of event as well as all universal listeners.
@@ -112,8 +108,15 @@ public:
         the listener is unregistered automatically.
     */
     void NotifyListeners (
-        const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent);
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 
+    /** This convenience variant of NotifyListeners create the event from
+        the given arguments.
+    */
+    void NotifyListeners (
+        const ::rtl::OUString& rsEventType,
+        const ::css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const ::css::uno::Reference<css::drawing::framework::XResource>& rxResourceObject);
 
     /** Call all listeners and inform them that the
         ConfigurationController is being disposed.  When this method returns
@@ -123,12 +126,12 @@ public:
     void DisposeAndClear (void);
 
 private:
-    ::com::sun::star::uno::Reference<
+    css::uno::Reference<
         com::sun::star::drawing::framework::XConfigurationController> mxConfigurationController;
     class ListenerDescriptor {public:
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeListener> mxListener;
-        ::com::sun::star::uno::Any maUserData;
+        css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeListener> mxListener;
+        css::uno::Any maUserData;
     };
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     typedef ::std::hash_map
@@ -145,7 +148,7 @@ private:
     */
     void NotifyListeners (
         const ListenerList& rList,
-        const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent);
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent);
 };
 
 
