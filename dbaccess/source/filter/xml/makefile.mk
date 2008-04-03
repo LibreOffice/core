@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-25 16:24:20 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:47:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,14 @@ SHL1STDLIBS=\
     $(SOTLIB)			\
     $(SO2LIB)			\
     $(SALLIB)
+
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL1STDLIBS+= \
+        -ldbu$(DLLPOSTFIX)
+.ELSE
+SHL1STDLIBS+= \
+        idbu.lib
+.ENDIF
 
 
 SHL1DEPN=
