@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:42:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1328,12 +1328,35 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     BOOL bShift = aKeyCode.IsShift();
-    BOOL bCtrl  = aKeyCode.IsMod1();
+    BOOL bCtrl  = aKeyCode.IsMod1() || aKeyCode.IsMod3();
     BOOL bMod2 = aKeyCode.IsMod2();
     BOOL bDone = FALSE;
 
     switch( aKeyCode.GetCode() )
     {
+
+        case KEY_A:
+        {
+            if( bCtrl && mbMulti )
+            {
+                // paint only once
+                BOOL bUpdates = IsUpdateMode();
+                SetUpdateMode( FALSE );
+
+                USHORT nEntryCount = mpEntryList->GetEntryCount();
+                for( USHORT i = 0; i < nEntryCount; i++ )
+                    SelectEntry( i, TRUE );
+
+                // restore update mode
+                SetUpdateMode( bUpdates );
+                Invalidate();
+
+                bDone = TRUE;
+            }
+            maSearchStr.Erase();
+        }
+        break;
+
         case KEY_UP:
         {
             if ( IsReadOnly() )
