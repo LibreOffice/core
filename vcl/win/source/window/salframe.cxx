@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:51:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,10 +428,20 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
 
     // determine creation data
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD )
+    if ( nSalFrameStyle & (SAL_FRAME_STYLE_PLUG | SAL_FRAME_STYLE_SYSTEMCHILD) )
+    {
         nSysStyle |= WS_CHILD;
+        if( nSalFrameStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
+            nSysStyle |= WS_CLIPSIBLINGS;
+    }
     else
     {
+        // #i87402# commenting out WS_CLIPCHILDREN
+        // this breaks SAL_FRAME_STYLE_SYSTEMCHILD handling, which is not
+        // used currently. Probably SAL_FRAME_STYLE_SYSTEMCHILD should be
+        // removed again.
+
+        // nSysStyle  |= WS_CLIPCHILDREN;
         if ( hWndParent )
         {
             nSysStyle |= WS_POPUP;
@@ -1057,6 +1067,27 @@ WinSalFrame::WinSalFrame()
 }
 
 // -----------------------------------------------------------------------
+void WinSalFrame::updateScreenNumber()
+{
+    WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
+    if( pSys )
+    {
+        const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
+            pSys->getMonitors();
+        Point aPoint( maGeometry.nX, maGeometry.nY );
+        size_t nMon = rMonitors.size();
+        for( size_t i = 0; i < nMon; i++ )
+        {
+            if( rMonitors[i].m_aArea.IsInside( aPoint ) )
+            {
+                mnDisplay = static_cast<sal_Int32>(i);
+                maGeometry.nScreenNumber = static_cast<unsigned int>(i);
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
 
 WinSalFrame::~WinSalFrame()
 {
@@ -1352,6 +1383,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
         }
 
         pFrame->mbInShow = FALSE;
+        pFrame->updateScreenNumber();
 
         // Direct Paint only, if we get the SolarMutx
         if ( ImplSalYieldMutexTryToAcquire() )
@@ -2018,6 +2050,38 @@ BOOL WinSalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
+void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
+{
+    WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
+    if( pSys )
+    {
+        const std::vector<WinSalSystem::DisplayMonitor>& rMonitors =
+            pSys->getMonitors();
+        size_t nMon = rMonitors.size();
+        if( nNewScreen < nMon )
+        {
+            Point aOldMonPos, aNewMonPos( rMonitors[nNewScreen].m_aArea.TopLeft() );
+            Point aCurPos( maGeometry.nX, maGeometry.nY );
+            for( size_t i = 0; i < nMon; i++ )
+            {
+                if( rMonitors[i].m_aArea.IsInside( aCurPos ) )
+                {
+                    aOldMonPos = rMonitors[i].m_aArea.TopLeft();
+                    break;
+                }
+            }
+            mnDisplay = nNewScreen;
+            maGeometry.nScreenNumber = nNewScreen;
+            SetPosSize( aNewMonPos.X() + (maGeometry.nX - aOldMonPos.X()),
+                        aNewMonPos.Y() + (maGeometry.nY - aOldMonPos.Y()),
+                        0, 0,
+                        SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void WinSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 {
     if ( (mbFullScreen == bFullScreen) && (!bFullScreen || (mnDisplay == nDisplay)) )
@@ -2153,6 +2217,10 @@ void WinSalFrame::SetAlwaysOnTop( BOOL bOnTop )
 
 static void ImplSalToTop( HWND hWnd, USHORT nFlags )
 {
+    WinSalFrame* pToTopFrame = GetWindowPtr( hWnd );
+    if( pToTopFrame && (pToTopFrame->mnStyle & SAL_FRAME_STYLE_SYSTEMCHILD) != 0 )
+        BringWindowToTop( hWnd );
+
     if ( nFlags & SAL_FRAME_TOTOP_FOREGROUNDTASK )
         SetForegroundWindow( hWnd );
 
@@ -4106,7 +4174,6 @@ static bool ImplHandlePaintMsg( HWND hWnd )
             PAINTSTRUCT aPs;
             BeginPaint( hWnd, &aPs );
             CopyRect( &aUpdateRect, &aPs.rcPaint );
-            EndPaint( hWnd, &aPs );
 
             // Paint
             // ClipRegion wieder herstellen
@@ -4118,7 +4185,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
 
             if ( bMutex )
             {
-                SalPaintEvent aPEvt( aUpdateRect.left, aUpdateRect.top, aUpdateRect.right-aUpdateRect.left, aUpdateRect.bottom-aUpdateRect.top );
+                SalPaintEvent aPEvt( aUpdateRect.left, aUpdateRect.top, aUpdateRect.right-aUpdateRect.left, aUpdateRect.bottom-aUpdateRect.top, pFrame->mbPresentation );
                 pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
             }
             else
@@ -4127,6 +4194,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
                 CopyRect( pRect, &aUpdateRect );
                 ImplPostMessage( hWnd, SAL_MSG_POSTPAINT, (WPARAM)pRect, 0 );
             }
+            EndPaint( hWnd, &aPs );
         }
         else
         {
@@ -4244,6 +4312,7 @@ static void UpdateFrameGeometry( HWND hWnd, WinSalFrame* pFrame )
     // clamp to zero
     pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
     pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
+    pFrame->updateScreenNumber();
 }
 
 // -----------------------------------------------------------------------
