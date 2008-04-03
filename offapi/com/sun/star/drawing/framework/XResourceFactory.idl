@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XResourceFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:34:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XResourceFactory_idl__
+#define __com_sun_star_drawing_framework_XResourceFactory_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XResource;
+interface XResourceId;
+
+/** Factory and possibly cache for creating and releasing resources.
+    <p>A resource factory is created and used by the
+    <type>XConfigurationController</type> object.</p>
+    <p>A factory may want to implement a cache to reuse previously released
+    resources.</p>
+*/
+interface XResourceFactory
+{
+    /** Create a resource for the given <type>XResourceId</type> object.
+        @param xResourceId
+            The resourc URL of this id specifies the type of resource to
+            create.  The anchor can be used to obtain the associated object
+            from the configuration controller.  For example, when a view is
+            created, then the new object can be initialized with the pane
+            that is its anchor.
+            <p>Valid values are those for which the factory has previously been
+            registered at the <type>XConfigurationController</type></p>.
+        @return
+            Returns a resource object that has been just created or was
+            taken from a cache.  When the requested resource can not be
+            created then an empty reference is returned.  A later call may
+            be successfull.  This, for example, can be the case with SFX
+            based side panes.  They are not available right after the
+            creation of a new application frame.
+        @throws InvalidArgumentException
+            when the given URL is not supported by the factory.
+    */
+    XResource createResource (
+        [in] XResourceId xResourceId);
+
+    /** Call this method to tell a factory that the given resource is no
+        longer in use.  The factory can decide whether to destroy the
+        resource or to keep it in a cache in order to reuse it later.
+        @param xResource
+            The given resource has to be one created by the same factory.
+        @throws InvalidArgumentException
+            when the given pane was not created by the same factory.
+    */
+    void releaseResource ([in] XResource xResource);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
