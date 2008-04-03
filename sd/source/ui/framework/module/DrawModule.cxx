@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawModule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:51:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
+#include "ToolBarModule.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -56,6 +57,7 @@ void DrawModule::Initialize (Reference<frame::XController>& rxController)
     new sd::framework::SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftDrawPaneURL);
+    new ToolBarModule(rxController);
 }
 
 
