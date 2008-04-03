@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:45:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,7 @@ void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 void CustomAnimationPane::addListener()
 {
     Link aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().AddEventListener (
+    mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
         | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
@@ -437,7 +437,7 @@ void CustomAnimationPane::addListener()
 void CustomAnimationPane::removeListener()
 {
     Link aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().RemoveEventListener( aLink );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
@@ -2101,10 +2101,7 @@ void CustomAnimationPane::onChange( bool bCreate )
     updateControls();
 
     // stop running preview from dialog
-    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-    if( pViewShell )
-        pViewShell->SetSlideShow( 0 );
+    SlideShow::Stop( mrBase );
 }
 
 void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTargets, double fDuration)
@@ -2486,14 +2483,6 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
-    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-    if( pViewShell == 0 )
-        return;
-
-    DrawView* pView = pViewShell->GetDrawView();
-
-
     Reference< XTimeContainer > xRoot(::comphelper::getProcessServiceFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.ParallelTimeContainer"))), UNO_QUERY);
     if( xRoot.is() )
     {
@@ -2503,12 +2492,8 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
         xRoot->setUserData( aUserData );
         xRoot->appendChild( xAnimationNode );
 
-        pViewShell->SetSlideShow( 0 );
-        std::auto_ptr<Slideshow> pSlideshow(
-            new Slideshow( pViewShell, pView, pViewShell->GetDoc(), mrBase.GetViewWindow() ) );
         Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
-        if (pSlideshow->startPreview( mxCurrentPage, xNode ))
-            pViewShell->SetSlideShow( pSlideshow.release() );
+        SlideShow::StartPreview( mrBase, mxCurrentPage, xNode );
     }
 }
 
