@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSlideShowListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:38:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XSlideShowListener_idl__
+#define __com_sun_star_presentation_XSlideShowListener_idl__
+
+#ifndef __com_sun_star_animations_XAnimationListener_idl__
+#include <com/sun/star/animations/XAnimationListener.idl>
+#endif
+
+module com {  module sun {  module star {  module presentation {
+
+/** Listener interface to receive global slide show events.<p>
+
+    @see XShapeEventListener
+
+    @since OOo 2.4
+ */
+interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
+{
+    /** Notify that the slide show is paused
+    */
+    void paused();
+
+    /** Notify that the slide show is resumed from a paused state */
+    void resumed();
+
+    /** Notify that a new slide starts to become visible. */
+    void slideTransitionStarted();
+
+    /** Notify that the slide transtion of the current slide ended. */
+    void slideTransitionEnded();
+
+    /** Notify that the last animation from the main sequence
+            of the current slide has ended. */
+    void slideAnimationsEnded();
+
+    /** Notify that the current slide has ended,
+        e.g. the user has clicked on the slide.
+        Calling displaySlide() twice will not issue this event.
+    */
+    void slideEnded();
+
+    /** Notifies that a hyperlink has been clicked.
+        @param hyperLink hyperlink URL
+     */
+    void hyperLinkClicked( [in] string hyperLink );
+};
+
+}; }; }; };
+
+
+#endif
