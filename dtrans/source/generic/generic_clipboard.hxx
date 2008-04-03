@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generic_clipboard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 06:00:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ namespace dtrans
 
     public:
 
-        GenericClipboard(const ::rtl::OUString& rName);
         GenericClipboard();
 
         /*
