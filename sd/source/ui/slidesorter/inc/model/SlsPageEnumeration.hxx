@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:35:20 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,12 @@
 
 #include "pres.hxx"
 
-#include "memory"
 
 #include "model/SlsEnumeration.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
+
+#include <boost/function.hpp>
+#include <memory>
 
 namespace sd { namespace slidesorter { namespace model {
 
@@ -49,49 +51,34 @@ class SlideSorterModel;
 
 
 /** Public class of page enumerations that delegates its calls to an
-    implementation object that can filter pages by using one of several
-    predicates.
+    implementation object that can filter pages by using a given predicate.
+
+    @see PageEnumerationProvider
+        The PageEnumerationProvider has methods for creating different types
+        of page enumerations.
 */
 class PageEnumeration
     : public Enumeration<SharedPageDescriptor>
 {
 public:
-    /** The type of the predicate that is used to filter pages from the set
-        of all pages provided by the slide sorter model:
-            PET_ALL enumerates all pages.
-            PET_SELECTED gives access to only the selected pages.
-            PET_VISIBLE gives access to only the visible pages.
-    */
-    enum PageEnumerationType { PET_ALL, PET_SELECTED, PET_VISIBLE };
-
     /** Create a new page enumeration that enumerates a subset of the pages
         of the given model.
         @param rModel
             The new page enumeration enumerates the pages of this model.
-        @param eType
-            This value determines which predicate/filter to use.  See the
-            PageEnumerationType enum above for a description of the
-            available values.
+        @param rPredicate
+            This predicate determines which pages to include in the
+            enumeration.  Pages for which rPredicate returns <FALSE/> are
+            exclude.
     */
+    typedef ::boost::function<bool(const SharedPageDescriptor&)> PagePredicate;
     static PageEnumeration Create (
         const SlideSorterModel& rModel,
-        PageEnumerationType eType);
+        const PagePredicate& rPredicate);
 
-    /** This constructor expects an implementation object that implements
-        the predicate that filters the pages.  If you do not know where to
-        get such an object from you may want to use the static Create()
-        factory method for creating a page enumeration.  Otherwise you may
-        want to use that method as well.
-    */
-    PageEnumeration (::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl);
-
-    /** This copy constructor creates a copy of the given enumeration.  This
-        new enumeration points to the same element as the given one.
+    /** This copy constructor creates a copy of the given enumeration.
     */
     PageEnumeration (const PageEnumeration& rEnumeration);
 
-    /**
-    */
     virtual ~PageEnumeration();
 
     /** Create a new enumeration object.  The ownership of the
@@ -133,6 +120,11 @@ public:
 private:
     /// Implementation object.
     ::std::auto_ptr<Enumeration<SharedPageDescriptor> > mpImpl;
+
+    /** This constructor expects an implementation object that holds
+        the predicate that filters the pages.
+    */
+    PageEnumeration (::std::auto_ptr<Enumeration<SharedPageDescriptor> > pImpl);
 
     // Default constructor not implemented.
     PageEnumeration (void);
