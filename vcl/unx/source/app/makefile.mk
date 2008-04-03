@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 17:12:23 $
+#   last change: $Author: kz $ $Date: 2008-04-03 17:07:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ SLOFILES=\
             $(SLO)$/saldata.obj			\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/saldisp.obj			\
+            $(SLO)$/randrwrapper.obj	\
             $(SLO)$/salinst.obj			\
             $(SLO)$/salsys.obj			\
             $(SLO)$/soicon.obj			\
@@ -80,6 +81,12 @@ EXCEPTIONSFILES=\
             $(SLO)$/i18n_ic.obj				\
             $(SLO)$/salsys.obj
 
+
+.IF "$(ENABLE_RANDR)" != ""
+.IF "$(OS)" != "SOLARIS"
+CDEFS+=-DUSE_RANDR
+.ENDIF
+.ENDIF
 
 .IF "$(USE_XINERAMA)" != "NO"
 CDEFS+=-DUSE_XINERAMA
