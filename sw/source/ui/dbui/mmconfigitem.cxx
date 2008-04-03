@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:31:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1499,7 +1499,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
     const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
     const Sequence< ::rtl::OUString> aBlocks = GetAddressBlocks();
 
-    if(aBlocks.getLength() < m_pImpl->GetCurrentAddressBlockIndex())
+    if(aBlocks.getLength() <= m_pImpl->GetCurrentAddressBlockIndex())
         return false;
     SwAddressIterator aIter(aBlocks[m_pImpl->GetCurrentAddressBlockIndex()]);
     while(aIter.HasMore())
