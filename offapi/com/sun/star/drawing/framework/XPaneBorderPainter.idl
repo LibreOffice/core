@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XPaneBorderPainter.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:33:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XPaneBorderPainter_idl__
+#define __com_sun_star_drawing_framework_XPaneBorderPainter_idl__
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+#ifndef __com_sun_star_rendering_XCanvas_idl__
+#include <com/sun/star/rendering/XCanvas.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+/** See XPaneBorderPainter and its addBorder() and removeBorder() methods
+    for an explanation of the border type and its values.
+*/
+enum BorderType
+{
+    INNER_BORDER,
+    OUTER_BORDER,
+    TOTAL_BORDER
+};
+
+
+/** Paint the border around a rectangular region, typically a pane.
+
+    <p>Calling objects have to be able to derive inner bounding boxs of the
+    border from the outer ones and inner ones from outer ones.  This
+    conversion and the painting of the border involves three rectangles.
+    The inner and outer bounding box of the border.  This is a logical
+    bounding box which the paint methods may paint over.  The center box is
+    the third rectangle.  This is the actual border between outer and inner
+    background color or bitmap and it is used for placing the bitmaps that are used
+    paint the border.  The inner sides and corners are places relative to
+    this center box, i.e. when not further offsets are given then the upper
+    left corner bitmap is painted with its lower right at the upper left of
+    the center box.</p>
+*/
+interface XPaneBorderPainter
+{
+    /** Enlarge the given rectangle by the size of the specified part of the
+        border.  This method can be used to convert an inner bounding box
+        into the center box or the outer bounding box.
+        @param sPaneBorderStyleName
+            The pane style defines the sizes of the border.
+        @param aRectangle
+            This rectangle will be converted into a larger one.  This should
+            be the center box or the inner bounding box of the border.
+        @param eBorderType
+            The part of the border to add to the given rectangle.
+            Use INNER_BORDER to convert an inner bounding box into the
+            center box or TOTAL_BORDER to convert it into the outer bounding
+            box.  OUTER_BORDER can be used to convert the center box into
+            the outer bounding box.
+    */
+    ::com::sun::star::awt::Rectangle addBorder (
+        [in] string sPaneBorderStyleName,
+        [in] ::com::sun::star::awt::Rectangle aRectangle,
+        [in] BorderType eBorderType);
+
+    /** Shring the given rectangle by the size of the specified part of the
+        border.  This method can be used to convert an outer bounding box
+        into the center box or the inner bounding box.
+        @param sPaneBorderStyleName
+            The pane style defines the sizes of the border.
+        @param aRectangle
+            This rectangle will be converted into a smaller one that lies
+            inside it.  It should be the center box or the outer bounding
+            box of the border.
+        @param eBorderType
+            The part of the border to remove from the given rectangle.
+            Use OUTER_BORDER to convert an outer bounding box into the
+            center box or TOTAL_BORDER to convert it into the inner bounding
+            box.  INNER_BORDER can be used to convert the center box into
+            the inner bounding box.
+    */
+    ::com::sun::star::awt::Rectangle removeBorder (
+        [in] string sPaneBorderStyleName,
+        [in] ::com::sun::star::awt::Rectangle aRectangle,
+        [in] BorderType eBorderType);
+
+    /** Paint the border around a pane.
+        @param sPaneBorderStyleName
+            The pane style to use for painting the border.
+        @param xCanvas
+            The canvas onto which the border is painted.
+        @param aOuterBorderRectangle
+            The outer bounding box of the border.  Use addBorder to convert
+            the bounding box of a pane (the inner bounding box of the
+            border) into this outer bounding box of the border.
+        @param aRepaintArea
+            The area in which the border has to be repainted.  The clip
+            rectangle.
+        @param sTitle
+            The pane title.  Supply an empty string for panes without
+            title.  It is the responsibility of the caller to supply a title
+            only for pane border styles that support a title.
+    */
+    void paintBorder (
+        [in] string sPaneBorderStyleName,
+        [in] ::com::sun::star::rendering::XCanvas xCanvas,
+        [in] ::com::sun::star::awt::Rectangle aOuterBorderRectangle,
+        [in] ::com::sun::star::awt::Rectangle aRepaintArea,
+        [in] string sTitle);
+
+    /** Paint the border around a pane where the border includes a callout
+        that is anchored at the given point.  Most arguments have the same
+        meaning as in the <method>paintBorder</method>.
+        @param aCalloutAnchor
+            The anchor point of the callout.  It is usually located outside
+            the border.
+    */
+    void paintBorderWithCallout (
+        [in] string sPaneBorderStyleName,
+        [in] ::com::sun::star::rendering::XCanvas xCanvas,
+        [in] ::com::sun::star::awt::Rectangle aOuterBorderRectangle,
+        [in] ::com::sun::star::awt::Rectangle aRepaintArea,
+        [in] string sTitle,
+        [in] ::com::sun::star::awt::Point aCalloutAnchor);
+
+    /** Return the offset of a callout anchor with respect to the outer
+        border.  This value is used when the callout is realized by a fixed
+        bitmap in order to determine the size and/or location of the outer
+        border for a given callout.
+    */
+    ::com::sun::star::awt::Point getCalloutOffset (
+        [in] string sPaneBorderStyleName);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
