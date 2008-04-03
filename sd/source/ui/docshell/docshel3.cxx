@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:37:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@
 #include "slideshow.hxx"
 #endif
 #include "fuhhconv.hxx"
-
+#include "slideshow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -123,7 +123,7 @@ namespace sd {
 
 void DrawDocShell::Execute( SfxRequest& rReq )
 {
-    if(mpViewShell && mpViewShell->GetSlideShow())
+    if(mpViewShell && SlideShow::IsRunning( mpViewShell->GetViewShellBase() ))
     {
         // during a running presentation no slot will be executed
         return;
