@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:15:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1877,6 +1877,30 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     SwCrsrMoveState aMoveState;
     aMoveState.bPosMatchesBounds = TRUE;
     sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
+
+    SwIndex aCntntIdx = aPos.nContent;
+    const xub_StrLen nIndex = aCntntIdx.GetIndex();
+    if ( nIndex > 0 )
+    {
+        SwRect aResultRect;
+        pFrm->GetCharRect( aResultRect, aPos );
+        bool bVert = pFrm->IsVertical();
+        bool bR2L = pFrm->IsRightToLeft();
+
+        if ( (!bVert && aResultRect.Pos().X() > aCorePoint.X()) ||
+             ( bVert && aResultRect.Pos().Y() > aCorePoint.Y()) ||
+             ( bR2L  && aResultRect.Right()   < aCorePoint.X()) )
+        {
+            SwIndex aIdxPrev( pNode, nIndex - 1);
+            SwPosition aPosPrev( *pNode, aIdxPrev );
+            SwRect aResultRectPrev;
+            pFrm->GetCharRect( aResultRectPrev, aPosPrev );
+            if ( (!bVert && aResultRectPrev.Pos().X() < aCorePoint.X() && aResultRect.Pos().Y() == aResultRectPrev.Pos().Y()) ||
+                 ( bVert && aResultRectPrev.Pos().Y() < aCorePoint.Y() && aResultRect.Pos().X() == aResultRectPrev.Pos().X()) ||
+                 (  bR2L && aResultRectPrev.Right()   > aCorePoint.X() && aResultRect.Pos().Y() == aResultRectPrev.Pos().Y()) )
+                aPos = aPosPrev;
+        }
+    }
 
     return bSuccess ?
         GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
