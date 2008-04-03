@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,6 @@
 #endif
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
 #endif
 #include "app.hxx"
 #include "sdresid.hxx"
@@ -165,7 +162,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                             mnPresViewShellId = SID_VIEWSHELL0;
                             break;
 
-                        case ViewShell::ST_SLIDE:
+                        case ViewShell::ST_SLIDE_SORTER:
                             mnPresViewShellId = SID_VIEWSHELL1;
                             break;
 
