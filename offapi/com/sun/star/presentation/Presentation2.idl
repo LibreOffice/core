@@ -1,0 +1,285 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Presentation2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:37:26 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XSlideShowController_idl__
+#define __com_sun_star_presentation_XSlideShowController_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** gives control over a running slide show in the presentation module.
+
+    @since #i71351#
+*/
+interface XSlideShowController
+{
+    //-------------------------------------------------------------------------
+
+    /** allows to dispose this controller and manage event listener.
+
+        <p> You can add <type>XSlideShowListener</type> using the methods
+            <member>::com::sun::star::lang::XComponent::addEventListener()</member>
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the properties of this controller.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the slides that will be shown in this slideshow.
+        <p>Slides are returned in the order they will be displayed in the
+        presentation which can be different than the orders of slides in
+        the document. Not all slides must be present and each slide can
+        be used more than once.
+    */
+    interface ::com::sun::star::container::XIndexAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** start the slideshow */
+    void start( [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments );
+
+    //-------------------------------------------------------------------------
+
+    /** stop the slideshow
+        <p>a stopped show can only be restarted from the beginning with a call to
+        <member>start</member>
+    */
+    void stop();
+
+    //-------------------------------------------------------------------------
+
+    /** returns true if the slideshow is currently stopped */
+    boolean isStopped();
+
+    //-------------------------------------------------------------------------
+
+    /** start next effects that wait on a generic trigger.
+        <p>If no generic triggers are waiting the next
+        slide will be displayed.
+    */
+    void gotoNextEffect();
+
+    //-------------------------------------------------------------------------
+
+    /** goto and display first slide */
+    void gotoFirstSlide();
+
+    //-------------------------------------------------------------------------
+
+    /** goto and display next slide */
+    void gotoNextSlide();
+
+    //-------------------------------------------------------------------------
+
+    /** goto and display previous slide */
+    void gotoPreviousSlide();
+
+    //-------------------------------------------------------------------------
+
+    /** goto and display last slide */
+    void gotoLastSlide();
+
+    //-------------------------------------------------------------------------
+
+    /** goto the given textual bookmark */
+    void gotoBookmark( [in] string Bookmark );
+
+    //-------------------------------------------------------------------------
+
+    /** jumps to the given slide.
+        <p>The slide can be a slide that would normaly not be shown during
+        the current slideshow.
+    */
+    void gotoSlide( [in] com::sun::star::drawing::XDrawPage Page );
+
+    //-------------------------------------------------------------------------
+
+    /** jumps to the slide at the given index.
+    */
+    void gotoSlideIndex( [in] long Index );
+
+    //-------------------------------------------------------------------------
+
+    /** stop all currently played sounds */
+    void stopSound();
+
+    //-------------------------------------------------------------------------
+
+    /** pauses the slideshow. All effects are paused.
+        <p>The slideshow continues on next user input or if
+        <member>resume</member> is called.
+    */
+    void pause();
+
+    //-------------------------------------------------------------------------
+
+    /** resumes a paused slideshow.
+    */
+    void resume();
+
+    //-------------------------------------------------------------------------
+
+    /** returns <TRUE/> if the slideshow is currently paused.
+
+        @see <member>pause</member>
+        @see <member>resume</member>
+    */
+    boolean isPaused();
+
+    //-------------------------------------------------------------------------
+
+    /** pauses the slideshow and blanks the screen in the given color.
+        <p>Change attribute <member>Pause</member> to false to unpause
+        the slideshow.
+    */
+    void blankScreen( [in] long Color );
+
+    //-------------------------------------------------------------------------
+
+    /** activates the user interface of this slideshow.
+
+        @see <member>deactivate()</member>
+        @see <member>isActive()</member>
+    */
+    void activate();
+
+    //-------------------------------------------------------------------------
+    /** can be called to deactivate the user interface of this slideshow.
+
+        <p>A deactivated
+        @see <member>activate()</member>
+        @see <member>isActive()</member>
+     */
+    void deactivate();
+
+    //-------------------------------------------------------------------------
+    /** determines if the slideshow is active.
+
+        @return
+            <TRUE/> for UI active slideshow
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean isActive();
+
+    //-------------------------------------------------------------------------
+
+    /** returns slide that is currently displayed */
+    com::sun::star::drawing::XDrawPage getCurrentSlide();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the index of the current slide */
+    long getCurrentSlideIndex();
+
+    //-------------------------------------------------------------------------
+
+    /** the slide that is displayed next. */
+    long getNextSlideIndex();
+
+    //-------------------------------------------------------------------------
+
+    /** returns <TRUE/> if the slideshow was started to run endlessly.
+     */
+    boolean isEndless();
+
+    //-------------------------------------------------------------------------
+
+    /** Returns <TRUE/> if the slideshow was started in full-screen mode.
+     */
+    boolean isFullScreen();
+
+    //-------------------------------------------------------------------------
+
+    /** If this attribute is set to <TRUE/>, the window of the slideshow is
+        always on top of all other windows.
+     */
+    [attribute] boolean AlwaysOnTop;
+
+    //-------------------------------------------------------------------------
+
+    /** If this attribute is <TRUE/>, the mouse is visible during the
+        slideshow.
+     */
+    [attribute] boolean MouseVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** If this is <TRUE/>, a pen is shown during presentation.
+
+        <p>You can draw on the presentation with this pen.</p>
+     */
+    [attribute] boolean UsePen;
+
+    //-------------------------------------------------------------------------
+
+    /** This attribute changes the color of the pen. */
+    [attribute] long PenColor;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
