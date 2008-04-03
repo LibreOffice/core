@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationAccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:07:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,14 @@
 #define SD_TOOLS_CONFIGURATION_ACCESS_HXX
 
 #include <rtl/ustring.hxx>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vector>
 #include <boost/function.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace tools {
 
@@ -65,13 +68,35 @@ public:
     */
     ConfigurationAccess(
         const ::rtl::OUString& rsRootName,
-        WriteMode eMode);
+        const WriteMode eMode);
+
+    ConfigurationAccess(
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::OUString& rsRootName,
+        const WriteMode eMode);
 
     /** Return a configuration node below the root of the called object.
         @param rsPathToNode
-            The relative path from the root (as given the constructor) to the node.
+            The relative path from the root (as given the constructor) to
+            the node.
+        @return
+            The type of the returned node varies with the requested node.
+            It is empty when the node was not found.
     */
-    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetConfigurationNode (
+    css::uno::Any GetConfigurationNode (
+        const ::rtl::OUString& rsPathToNode);
+
+    /** Return a configuration node below the given node.
+        @param rxNode
+            The node that acts as root to the given relative path.
+        @param rsPathToNode
+            The relative path from the given node to the requested node.
+        @return
+            The type of the returned node varies with the requested node.
+            It is empty when the node was not found.
+    */
+    static css::uno::Any GetConfigurationNode (
+        const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
         const ::rtl::OUString& rsPathToNode);
 
     /** Write any changes that have been made back to the configuration.
@@ -80,7 +105,13 @@ public:
     */
     void CommitChanges (void);
 
-    typedef ::boost::function<void(const std::vector<com::sun::star::uno::Any>&) > Functor;
+    /** This functor is typically called for every item in a set.  Its two
+        parameters are the name of key item (often of no further interest)
+        and the value of the item.
+    */
+    typedef ::boost::function<void(
+        const ::rtl::OUString&,
+        const std::vector<css::uno::Any>&) > Functor;
 
     /** Execute a functor for all elements of the given container.
         @param rxContainer
@@ -95,7 +126,7 @@ public:
             the given container.
     */
     static void ForAll (
-        const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& rxContainer,
+        const css::uno::Reference<css::container::XNameAccess>& rxContainer,
         const ::std::vector<rtl::OUString>& rArguments,
         const Functor& rFunctor);
 
@@ -111,12 +142,17 @@ public:
             The list to be filled.
     */
     static void FillList(
-        const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& rxContainer,
+        const css::uno::Reference<css::container::XNameAccess>& rxContainer,
         const ::rtl::OUString& rsArgument,
         ::std::vector<rtl::OUString>& rList);
 
 private:
-    ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> mxRoot;
+    css::uno::Reference<css::uno::XInterface> mxRoot;
+
+    void Initialize (
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& rxProvider,
+        const ::rtl::OUString& rsRootName,
+        const WriteMode eMode);
 };
 
 } } // end of namespace sd::tools
