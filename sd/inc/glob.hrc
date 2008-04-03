@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:21:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@
 #define BMP_PRESOBJ_ORGCHART                    RID_GLOB_START+17
 #define BMP_PRESOBJ_TABLE                       RID_GLOB_START+18
 #define BMP_PRESOBJ_IMAGE                       RID_GLOB_START+19
-#define STR_SLIDEVIEWSHELL                      RID_GLOB_START+20
 #define STR_OUTLINEVIEWSHELL                    RID_GLOB_START+21
 #define STR_DRAWVIEWSHELL                       RID_GLOB_START+22
 #define STR_TEXTOBJECTBARSHELL                  RID_GLOB_START+23
