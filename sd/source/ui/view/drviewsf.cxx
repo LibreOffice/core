@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:49:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
-        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+        FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
         if (pFormShell != NULL)
         {
             UINT16 nState = 0;
