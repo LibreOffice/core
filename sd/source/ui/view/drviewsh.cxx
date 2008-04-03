@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:39:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@
 #include "drawview.hxx"
 #endif
 
+#include "slideshow.hxx"
+
 namespace sd {
 
 #define TABCONTROL_INITIAL_SIZE     500
@@ -128,7 +130,7 @@ void DrawViewShell::MakeVisible(const Rectangle& rRect, ::Window& rWin)
     Rectangle aVisArea(rWin.PixelToLogic(Rectangle(Point(0,0), aVisSizePixel)));
     Size aVisAreaSize(aVisArea.GetSize());
 
-    if(!aVisArea.IsInside(rRect) && !mpSlideShow)
+    if(!aVisArea.IsInside(rRect) && !SlideShow::IsRunning( GetViewShellBase() ) )
     {
         // Objekt liegt nicht komplett im sichtbaren Bereich
         sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
