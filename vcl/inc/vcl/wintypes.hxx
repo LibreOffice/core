@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wintypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:06:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,16 @@ typedef sal_Int64 WinBits;
 #define WB_APP                  ((WinBits)0x00001000)
 #define WB_PINABLE              ((WinBits)0x00002000)
 #define WB_SYSTEMWINDOW         ((WinBits)SAL_CONST_INT64(0x40000000))
+// warning: do not confuse WB_SYSTEMCHILDWINDOW with the SystemChildWindow class
+
+// the SystemChildWindow class was there first and is a very specialized
+// sytem child window type for plugged applications. The SystemChildWindow class
+// explicitly should never use the WB_SYSTEMCHILDWINDOW WinBit
+
+// WB_SYSTEMCHILDWINDOW on the other hand is to be used on system windows
+// which should be created as system child windows with (more or less)
+// normal event handling
+#define WB_SYSTEMCHILDWINDOW    ((WinBits)SAL_CONST_INT64(0x8000000000))
 #define WB_SIZEMOVE             (WB_SIZEABLE | WB_MOVEABLE)
 
 // Standard-Window-Bits fuer ChildWindows
