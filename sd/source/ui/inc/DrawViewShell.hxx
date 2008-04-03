@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:41:54 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,7 +387,7 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const String& rLayerName, const String& rLayerTitle, const String& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
-    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
     DrawView*   GetDrawView() const { return mpDrawView; }
 
