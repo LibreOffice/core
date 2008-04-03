@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewContact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:19:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "view/SlsPageObjectViewContact.hxx"
@@ -54,10 +53,10 @@ namespace sd { namespace slidesorter { namespace view {
 
 PageObjectViewContact::PageObjectViewContact (
     SdrPageObj& rPageObj,
-    model::PageDescriptor& rDescriptor)
+    const model::SharedPageDescriptor& rpDescriptor)
     : ViewContactOfPageObj (rPageObj),
       mbIsValid(true),
-      mrDescriptor(rDescriptor)
+      mpDescriptor(rpDescriptor)
 {
 }
 
@@ -75,8 +74,10 @@ ViewObjectContact&
     PageObjectViewContact::CreateObjectSpecificViewObjectContact(
         ObjectContact& rObjectContact)
 {
+    OSL_ASSERT(mpDescriptor.get()!=NULL);
+
     ViewObjectContact* pResult
-        = mrDescriptor.GetPageObjectFactory().CreateViewObjectContact (
+        = mpDescriptor->GetPageObjectFactory().CreateViewObjectContact (
             rObjectContact,
             *this);
     DBG_ASSERT (pResult!=NULL,
@@ -103,8 +104,10 @@ void PageObjectViewContact::CalcPaintRectangle (void)
     ViewContactOfPageObj::CalcPaintRectangle();
     if (mbIsValid)
     {
+        OSL_ASSERT(mpDescriptor.get()!=NULL);
+
         maPageObjectBoundingBox = maPaintRectangle;
-        SvBorder aBorder (mrDescriptor.GetModelBorder());
+        SvBorder aBorder (mpDescriptor->GetModelBorder());
         maPaintRectangle.Left() -= aBorder.Left();
         maPaintRectangle.Right() += aBorder.Right();
         maPaintRectangle.Top() -= aBorder.Top();
