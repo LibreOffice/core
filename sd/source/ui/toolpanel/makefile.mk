@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 16:21:58 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:47:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ SLOFILES =      								\
     $(SLO)$/ToolPanel.obj						\
     $(SLO)$/TaskPaneControlFactory.obj 			\
     $(SLO)$/TaskPaneFocusManager.obj 			\
-    $(SLO)$/TaskPaneService.obj 				\
     $(SLO)$/TaskPaneShellManager.obj 			\
     $(SLO)$/TaskPaneTreeNode.obj 			    \
     $(SLO)$/TaskPaneViewShell.obj 				\
