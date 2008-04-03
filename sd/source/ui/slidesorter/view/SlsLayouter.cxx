@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsLayouter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:10:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "view/SlsLayouter.hxx"
@@ -62,7 +61,7 @@ Layouter::Layouter (void)
       mnTotalVerticalGap(0),
       mnTotalHorizontalGap(0),
       mnMinimalWidth (100),
-      mnDesiredWidth (200),
+      mnPreferredWidth (200),
       mnMaximalWidth (300),
       mnMinimalColumnCount (1),
       mnMaximalColumnCount (5),
@@ -83,13 +82,13 @@ Layouter::~Layouter (void)
 void Layouter::SetObjectWidth (
     sal_Int32 nMinimalWidth,
     sal_Int32 nMaximalWidth,
-    sal_Int32 nDesiredWidth)
+    sal_Int32 nPreferredWidth)
 {
-    if (nMinimalWidth <= nDesiredWidth && nDesiredWidth <= nMaximalWidth)
+    if (nMinimalWidth <= nPreferredWidth && nPreferredWidth <= nMaximalWidth)
     {
         mnMinimalWidth = nMinimalWidth;
-        mnDesiredWidth = nMaximalWidth;
-        mnMaximalWidth = nDesiredWidth;
+        mnPreferredWidth = nMaximalWidth;
+        mnMaximalWidth = nPreferredWidth;
     }
 }
 
@@ -162,7 +161,99 @@ void Layouter::SetColumnCount (
 
 
 
-bool Layouter::Rearrange (
+bool Layouter::RearrangeHorizontal (
+    const Size& rWindowSize,
+    const Size& rPageObjectSize,
+    OutputDevice* pDevice,
+    const sal_uInt32 nPageCount)
+{
+    if (rWindowSize.Width() > 0
+        && rWindowSize.Height() > 0
+        && rPageObjectSize.Width() > 0
+        && rPageObjectSize.Height() > 0)
+    {
+        mnTotalHorizontalGap.mnScreen = mnHorizontalGap.mnScreen
+            + mnRightPageBorder.mnScreen + mnLeftPageBorder.mnScreen;
+        mnTotalVerticalGap.mnScreen = mnVerticalGap.mnScreen
+            + mnTopPageBorder.mnScreen + mnBottomPageBorder.mnScreen;
+
+        // Calculate the column count.
+        mnColumnCount = nPageCount;
+
+        // Update the border values.  The insertion marker has to have space.
+        mnLeftBorder.mnScreen = mnRequestedLeftBorder.mnScreen;
+        mnTopBorder.mnScreen = mnRequestedTopBorder.mnScreen;
+        mnRightBorder.mnScreen = mnRequestedRightBorder.mnScreen;
+        mnBottomBorder.mnScreen = mnRequestedBottomBorder.mnScreen;
+        if (mnColumnCount > 1)
+        {
+            int nMinimumBorderWidth = mnInsertionMarkerThickness.mnScreen
+                + mnHorizontalGap.mnScreen/2;
+            if (mnLeftBorder.mnScreen < nMinimumBorderWidth)
+                mnLeftBorder.mnScreen = nMinimumBorderWidth;
+            if (mnRightBorder.mnScreen < nMinimumBorderWidth)
+                mnRightBorder.mnScreen = nMinimumBorderWidth;
+        }
+        else
+        {
+            int nMinimumBorderHeight = mnInsertionMarkerThickness.mnScreen
+                + mnVerticalGap.mnScreen/2;
+            if (mnTopBorder.mnScreen < nMinimumBorderHeight)
+                mnTopBorder.mnScreen = nMinimumBorderHeight;
+            if (mnBottomBorder.mnScreen < nMinimumBorderHeight)
+                mnBottomBorder.mnScreen = nMinimumBorderHeight;
+        }
+
+        // Calculate the width of each page object.
+        sal_uInt32 nTargetHeight = 0;
+        sal_uInt32 nRowCount = 1;
+        if (mnColumnCount > 0)
+            nTargetHeight = (rWindowSize.Height()
+                - mnTopBorder.mnScreen
+                - mnBottomBorder.mnScreen
+                - nRowCount * (mnTopPageBorder.mnScreen
+                    + mnBottomPageBorder.mnScreen)
+                - (nRowCount-1) * mnTotalVerticalGap.mnScreen
+                )
+            / nRowCount;
+        sal_uInt32 nMinimalHeight (
+            mnMinimalWidth * rPageObjectSize.Height() / rPageObjectSize.Width());
+        sal_uInt32 nMaximalHeight (
+            mnMaximalWidth * rPageObjectSize.Height() / rPageObjectSize.Width());
+        if (nTargetHeight < nMinimalHeight)
+            nTargetHeight = nMinimalHeight;
+        if (nTargetHeight > nMaximalHeight)
+            nTargetHeight = nMaximalHeight;
+
+        // Initialize the device with some arbitrary zoom factor just in
+        // case that the current zoom factor is numerically instable when
+        // used in a multiplication.
+        MapMode aMapMode (pDevice->GetMapMode());
+        aMapMode.SetScaleX (Fraction(1,1));
+        aMapMode.SetScaleY (Fraction(1,1));
+        pDevice->SetMapMode (aMapMode);
+
+        // Calculate the resulting scale factor and the page object size in
+        // pixels.
+        maPageObjectModelSize = rPageObjectSize;
+        int nPagePixelHeight (pDevice->LogicToPixel(maPageObjectModelSize).Height());
+
+        // Adapt the layout of the given output device to the new layout of
+        // page objects.  The zoom factor is set so that the page objects in
+        // one row fill the screen.
+        Fraction aScaleFactor (nTargetHeight, nPagePixelHeight);
+        SetZoom (aMapMode.GetScaleX() * aScaleFactor, pDevice);
+
+        return true;
+    }
+    else
+        return false;
+}
+
+
+
+
+bool Layouter::RearrangeVertical (
     const Size& rWindowSize,
     const Size& rPageObjectSize,
     OutputDevice* pDevice)
@@ -180,7 +271,7 @@ bool Layouter::Rearrange (
         // Calculate the column count.
         mnColumnCount = (rWindowSize.Width()
             - mnRequestedLeftBorder.mnScreen - mnRequestedRightBorder.mnScreen)
-            / (mnDesiredWidth  + mnTotalHorizontalGap.mnScreen);
+            / (mnPreferredWidth  + mnTotalHorizontalGap.mnScreen);
         if (mnColumnCount < mnMinimalColumnCount)
             mnColumnCount = mnMinimalColumnCount;
         if (mnColumnCount > mnMaximalColumnCount)
@@ -722,17 +813,6 @@ const Layouter::BackgroundRectangleList&
     Layouter::GetBackgroundRectangleList (void) const
 {
     return maBackgroundRectangleList;
-}
-
-
-
-
-void Layouter::BuildBackgroundRectangleList (void)
-{
-    maBackgroundRectangleList.clear();
-    maBackgroundRectangleList.resize(mnColumnCount*5);
-    maBackgroundRectangleList.push_back (
-        GetPageObjectBox (10));
 }
 
 
