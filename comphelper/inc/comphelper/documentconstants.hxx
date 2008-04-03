@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentconstants.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:28:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #define MIMETYPE_VND_SUN_XML_CALC_ASCII                 "application/vnd.sun.xml.calc"
 #define MIMETYPE_VND_SUN_XML_CHART_ASCII                "application/vnd.sun.xml.chart"
 #define MIMETYPE_VND_SUN_XML_MATH_ASCII                 "application/vnd.sun.xml.math"
+#define MIMETYPE_VND_SUN_XML_BASE_ASCII                 "application/vnd.sun.xml.base"
 
 #define MIMETYPE_VND_SUN_XML_WRITER                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_ASCII ) )
 #define MIMETYPE_VND_SUN_XML_WRITER_WEB                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII ) )
@@ -57,6 +58,7 @@
 #define MIMETYPE_VND_SUN_XML_CALC                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CALC_ASCII ) )
 #define MIMETYPE_VND_SUN_XML_CHART                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CHART_ASCII ) )
 #define MIMETYPE_VND_SUN_XML_MATH                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_MATH_ASCII ) )
+#define MIMETYPE_VND_SUN_XML_BASE                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_BASE_ASCII ) )
 
 // template formats of SO6/7
 #define MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII               "application/vnd.sun.xml.writer.template"
@@ -78,7 +80,7 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII   "application/vnd.oasis.opendocument.spreadsheet"
 #define MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII         "application/vnd.oasis.opendocument.chart"
 #define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII       "application/vnd.oasis.opendocument.formula"
-#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.sun.xml.base"
+#define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.oasis.opendocument.base"
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII        "application/vnd.sun.xml.report"
 #define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART_ASCII  "application/vnd.sun.xml.report.chart"
 
