@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentMasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:50:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,11 +134,11 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 
 void RecentMasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
-    const ::std::vector<SdPage*>& rPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     USHORT nSelectedItemId = mpPageSet->GetSelectItemId();
 
-    MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rPageList);
+    MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
 
     // Restore the selection.
     if (mpPageSet->GetItemCount() > 0)
