@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:54:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,13 @@
 #define SD_FRAMEWORK_RESOURCE_MANAGER_HXX
 
 #include "MutexOwner.hxx"
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
 #include <boost/scoped_ptr.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace {
 
@@ -62,11 +56,11 @@ typedef ::cppu::WeakComponentImplHelper1 <
 
 namespace sd { namespace framework {
 
-/** Manage the activation state of one resource depending on the view
-    in the center pane.  The ResourceManager remembers in which
-    configuration to show and in which to hide the resource.  When the
-    resource is deactivated or activated manually by the user then the
-    ResourceManager detects this and remembers this for the future.
+/** Manage the activation state of one resource depending on the view in the
+    center pane.  The ResourceManager remembers in which configuration to
+    activate and in which to deactivate the resource.  When the resource is
+    deactivated or activated manually by the user then the ResourceManager
+    detects this and remembers it for the future.
 */
 class ResourceManager
     : private sd::MutexOwner,
@@ -80,6 +74,9 @@ public:
             ::com::sun::star::drawing::framework::XResourceId>& rxResourceId);
     virtual ~ResourceManager (void);
 
+    /** Remember the given URL as one of a center pane view for which to
+        activate the resource managed by the called object.
+    */
     void AddActiveMainView (const ::rtl::OUString& rsMainViewURL);
 
     virtual void SAL_CALL disposing (void);
@@ -89,11 +86,12 @@ public:
     */
     void Enable (void);
 
-    /** Hide the resource.  When called the ResourceManager requests the
-        resource to be deactivated.  Until enabled again it does not make
-        any further requests for resource activation or deactivation.
+    /** Disable the resource management.  When called, the ResourceManager
+        requests the resource to be deactivated.  Until enabled again it
+        does not make any further requests for resource activation or
+        deactivation.
 
-        Call this for instance to hide resources in read-only mode.
+        Call this for example to hide resources in read-only mode.
     */
     void Disable (void);
 
@@ -117,8 +115,11 @@ private:
     class MainViewContainer;
     ::boost::scoped_ptr<MainViewContainer> mpActiveMainViewContainer;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> mxResourceId;
+    /// The resource managed by this class.
+    css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+
+    /// The anchor of the main view.
+    css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
 
     ::rtl::OUString msCurrentMainViewURL;
     bool mbIsEnabled;
@@ -126,7 +127,8 @@ private:
     void HandleMainViewSwitch (
         const ::rtl::OUString& rsViewURL,
         const ::com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
+            com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
+        const bool bIsActivated);
     void HandleResourceRequest(
         bool bActivation,
         const ::com::sun::star::uno::Reference<
