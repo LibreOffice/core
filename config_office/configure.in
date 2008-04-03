@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-04-03 17:27:56 $
+dnl * Date: $Date: 2008-04-03 18:02:26 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.258 $ )
+AC_REVISION( $Revision: 1.259 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -335,6 +335,29 @@ AC_ARG_ENABLE(minimizer,
 AC_ARG_ENABLE(presenter-screen,
 [  --enable-presenter-screen          enables the build of the Presenter Screen extension
 ],,)
+AC_ARG_ENABLE(mediawiki,
+[  --disable-mediawiki     disables the build of the MediaWiki Editor extension
+],,)
+AC_ARG_WITH(commons-codec-jar,
+[  --with-commons-codec-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_CODEC_JAR="$withval"
+])
+AC_ARG_WITH(commons-lang-jar,
+[  --with-commons-lang-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_LANG_JAR="$withval"
+])
+AC_ARG_WITH(commons-httpclient-jar,
+[  --with-commons-httpclient-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_HTTPCLIENT_JAR="$withval"
+])
+AC_ARG_WITH(commons-logging-jar,
+[  --with-commons-logging-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_LOGGING_JAR="$withval"
+])
+AC_ARG_WITH(servlet-api-jar,
+[  --servlet-api-jar=JARFILE   Specify path to jarfile manually ],
+[ SERVLETAPI_JAR="$withval"
+])
 AC_ARG_ENABLE(ogltrans,
 [  --enable-ogltrans       enables the build of the OGLTrans extension
 ],,)
@@ -5123,6 +5146,70 @@ AC_SUBST(ENABLE_PRESENTER_SCREEN)
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$(ENABLE_MINIMIZER" = "YES"; then
    BUILD_TYPE="$BUILD_TYPE SDEXT"
 fi
+
+AC_MSG_CHECKING([whether to build the MediaWiki Editor extension])
+if test -z "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
+  AC_MSG_RESULT([yes])
+  ENABLE_MEDIAWIKI=YES
+  AC_MSG_CHECKING([which Apache commons-* libs to use])
+  if test "$with_system_apache_commons" == "yes"; then
+  	SYSTEM_APACHE_COMMONS=YES
+	AC_MSG_RESULT([external])
+	if test -z "$COMMONS_CODEC_JAR"; then
+		COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
+	fi
+        AC_CHECK_FILE($COMMONS_CODEC_JAR, [],
+               [AC_MSG_ERROR(commons-codec.jar not found.)], [])
+	if test -z "$COMMONS_LANG_JAR"; then
+		COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
+	fi
+        AC_CHECK_FILE($COMMONS_LANG_JAR, [],
+               [AC_MSG_ERROR(commons-lang.jar not found.)], [])
+	if test -z "$COMMONS_HTTPCLIENT_JAR"; then
+		COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
+	fi
+        AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
+               [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+	if test -z "$COMMONS_LOGGING_JAR"; then
+		COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
+	fi
+        AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+               [AC_MSG_ERROR(commons-logging.jar not found.)], [])
+  else
+	AC_MSG_RESULT([internal])
+  	SYSTEM_APACHE_COMMONS=NO
+  	BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
+  fi
+  BUILD_TYPE="$BUILD_TYPE SWEXT"
+else
+  AC_MSG_RESULT([no])
+  ENABLE_MEDIAWIKI=NO
+fi
+AC_SUBST(ENABLE_MEDIAWIKI)
+AC_SUBST(SYSTEM_APACHE_COMMONS)
+AC_SUBST(COMMONS_CODEC_JAR)
+AC_SUBST(COMMONS_LANG_JAR)
+AC_SUBST(COMMONS_HTTPCLIENT_JAR)
+AC_SUBST(COMMONS_LOGGING_JAR)
+
+if test "$ENABLE_MEDIAWIKI" == "YES"; then
+  AC_MSG_CHECKING([which Servlet API Jar to use])
+  if test -n "$with_system_servlet_api"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_SERVLETAPI=YES
+      if test -z "$SERVLETAPI_JAR"; then
+	SERVLETAPI_JAR=/usr/share/java/servlet-api.jar
+      fi
+      AC_CHECK_FILE($SERVLETAPI_JAR, [],
+             [AC_MSG_ERROR(servlet-api.jar not found.)], [])
+  else
+    AC_MSG_RESULT([internal])
+    SYSTEM_SERVLETAPI=NO
+    BUILD_TYPE="$BUILD_TYPE TOMCAT"
+  fi
+fi
+AC_SUBST(SYSTEM_SERVLETAPI)
+AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
 if test -z "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
