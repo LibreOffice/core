@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionCommand.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:29:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,15 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "SlsSelectionCommand.hxx"
 
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
+
+#include "sdpage.hxx"
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -47,47 +49,42 @@ namespace sd { namespace slidesorter { namespace controller {
 
 SelectionCommand::SelectionCommand (
     PageSelector& rSelector,
+    const ::boost::shared_ptr<CurrentSlideManager>& rpCurrentSlideManager,
     const model::SlideSorterModel& rModel)
     : mrPageSelector(rSelector),
+      mpCurrentSlideManager(rpCurrentSlideManager),
       mrModel(rModel),
       maPagesToSelect(),
-      mpCurrentPage(NULL)
+      mnCurrentPageIndex(-1)
 {
 }
 
 
 
 
-void SelectionCommand::AddPages (::std::auto_ptr<PageSelector::PageSelection> pSelection)
+void SelectionCommand::AddSlides (
+    const ::boost::shared_ptr<PageSelector::PageSelection>& rpSelection)
 {
-    PageSelector::PageSelection::iterator iPageIndex = pSelection->begin();
-    PageSelector::PageSelection::iterator iEnd = pSelection->end();
-    for (; iPageIndex!=iEnd; ++iPageIndex)
-        AddPage((USHORT)(*iPageIndex));
+    PageSelector::PageSelection::iterator iPage = rpSelection->begin();
+    PageSelector::PageSelection::iterator iEnd = rpSelection->end();
+    for (; iPage!=iEnd; ++iPage)
+        AddSlide(((*iPage)->GetPageNum()-1)/2);
 }
 
 
 
 
-void SelectionCommand::AddPage (USHORT nPageIndex)
+void SelectionCommand::AddSlide (USHORT nPageIndex)
 {
-    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != NULL)
-    {
-        maPagesToSelect.push_back(pDescriptor->GetPage());
-        if (mpCurrentPage == NULL)
-            mpCurrentPage = pDescriptor->GetPage();
-    }
+    maPagesToSelect.push_back(nPageIndex);
 }
 
 
 
 
-void SelectionCommand::SetCurrentPage (USHORT nPageIndex)
+void SelectionCommand::SetCurrentSlide (USHORT nPageIndex)
 {
-    model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != NULL)
-        mpCurrentPage = pDescriptor->GetPage();
+    mnCurrentPageIndex = nPageIndex;
 }
 
 
@@ -95,11 +92,21 @@ void SelectionCommand::SetCurrentPage (USHORT nPageIndex)
 
 void SelectionCommand::operator() (void)
 {
-    mrPageSelector.SetCurrentPage(mpCurrentPage);
+    OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
+
+    mrPageSelector.DeselectAllPages();
+
+    if (mnCurrentPageIndex >= 0)
+        mpCurrentSlideManager->SwitchCurrentSlide(mnCurrentPageIndex);
+
     PageList::iterator iPage = maPagesToSelect.begin();
     PageList::iterator iEnd = maPagesToSelect.end();
     for (; iPage!=iEnd; ++iPage)
-        mrPageSelector.SelectPage(*iPage);
+    {
+        sal_Int32 nIndex (*iPage);
+        if (nIndex >= 0)
+            mrPageSelector.SelectPage(mrModel.GetPageDescriptor(nIndex));
+    }
 }
 
 
