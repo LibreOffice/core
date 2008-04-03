@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:33:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,15 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "SdUnoSlideView.hxx"
 
-#include "SlideSorterViewShell.hxx"
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "controller/SlsSelectionManager.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "sdpage.hxx"
@@ -57,11 +58,11 @@ namespace sd {
 
 SdUnoSlideView::SdUnoSlideView (
     DrawController& rController,
-    slidesorter::SlideSorterViewShell& rViewShell,
+    slidesorter::SlideSorter& rSlideSorter,
     View& rView) throw()
-    : DrawSubController(),
+    : DrawSubControllerInterfaceBase(m_aMutex),
       mrController(rController),
-      mrSlideSorterViewShell(rViewShell),
+      mrSlideSorter(rSlideSorter),
       mrView(rView)
 {
 }
@@ -76,7 +77,7 @@ SdUnoSlideView::~SdUnoSlideView (void) throw()
 
 
 
-//===== XSelectionSupplier ====================================================
+//----- XSelectionSupplier ----------------------------------------------------
 
 sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
       throw(lang::IllegalArgumentException, RuntimeException)
@@ -84,7 +85,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
     bool bOk = true;
 
     slidesorter::controller::SlideSorterController& rSlideSorterController
-        = mrSlideSorterViewShell.GetSlideSorterController();
+        = mrSlideSorter.GetController();
     slidesorter::controller::PageSelector& rSelector (rSlideSorterController.GetPageSelector());
     rSelector.DeselectAllPages();
     Sequence<Reference<drawing::XDrawPage> > xPages;
@@ -109,7 +110,7 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
             }
         }
     }
-    rSlideSorterController.MakeSelectionVisible();
+    rSlideSorterController.GetSelectionManager()->MakeSelectionVisible();
 
     return bOk;
 }
@@ -122,11 +123,11 @@ Any SAL_CALL SdUnoSlideView::getSelection (void)
 {
     Any aResult;
 
-    slidesorter::controller::SlideSorterController& rSlideSorterController
-        = mrSlideSorterViewShell.GetSlideSorterController();
-    slidesorter::model::SlideSorterModel::Enumeration aSelectedPages (
-        rSlideSorterController.GetModel().GetSelectedPagesEnumeration());
-    int nSelectedPageCount (rSlideSorterController.GetPageSelector().GetSelectedPageCount());
+    slidesorter::model::PageEnumeration aSelectedPages (
+        slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+            mrSlideSorter.GetModel()));
+    int nSelectedPageCount (
+        mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount());
 
     Sequence<Reference<XInterface> > aPages(nSelectedPageCount);
     int nIndex = 0;
@@ -143,7 +144,27 @@ Any SAL_CALL SdUnoSlideView::getSelection (void)
 
 
 
-//===== XDraw View ============================================================
+void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
+{
+    (void)rxListener;
+}
+
+
+
+
+void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
+    const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+    throw(css::uno::RuntimeException)
+{
+    (void)rxListener;
+}
+
+
+
+
+//----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL SdUnoSlideView::setCurrentPage (
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& )
@@ -163,10 +184,45 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
 
 
 
+
+//----- XFastPropertySet ------------------------------------------------------
+
+void SdUnoSlideView::setFastPropertyValue (
+    sal_Int32 nHandle,
+        const Any& rValue)
+    throw(css::beans::UnknownPropertyException,
+        css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    (void)nHandle;
+    (void)rValue;
+
+    throw beans::UnknownPropertyException();
+}
+
+
+
+
+Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
+    sal_Int32 nHandle)
+    throw(css::beans::UnknownPropertyException,
+        css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    (void)nHandle;
+
+    throw beans::UnknownPropertyException();
+}
+
+
+
+
+/*
 void SdUnoSlideView::FillPropertyTable (
     ::std::vector< ::com::sun::star::beans::Property>& )
 {
-    /* no additional properties */
 }
 
 
@@ -199,6 +255,6 @@ void SAL_CALL SdUnoSlideView::getFastPropertyValue( ::com::sun::star::uno::Any&,
 {
 }
 
-
+*/
 
 } // end of namespace sd
