@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:43:48 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
+#include "dsntypes.hxx"
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -121,6 +122,8 @@ using namespace ::com::sun::star::xml::sax;
 
 class ODBExport : public SvXMLExport
 {
+    typedef ::std::map< ::xmloff::token::XMLTokenEnum, ::rtl::OUString> TSettingsMap;
+
     typedef ::std::pair< ::rtl::OUString ,::rtl::OUString> TStringPair;
     struct TDelimiter
     {
@@ -138,16 +141,28 @@ class ODBExport : public SvXMLExport
     ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
     ::std::vector< Any>                             m_aDataSourceSettings;
     TPropertyStyleMap                               m_aAutoStyleNames;
+    TPropertyStyleMap                               m_aCellAutoStyleNames;
+    TPropertyStyleMap                               m_aRowAutoStyleNames;
     ::rtl::OUString                                 m_sCharSet;
     UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xColumnExportHelper;
+    UniReference < SvXMLExportPropertyMapper>       m_xCellExportHelper;
+    UniReference < SvXMLExportPropertyMapper>       m_xRowExportHelper;
 
     mutable UniReference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
+    mutable UniReference < XMLPropertySetMapper >   m_xRowStylesPropertySetMapper;
+
     Reference<XPropertySet>                         m_xDataSource;
+    ::dbaui::ODsnTypeCollection                     m_aTypeCollection;
     sal_Bool                                        m_bAllreadyFilled;
 
     void                    exportDataSource();
+    void                    exportConnectionData();
+    void                    exportDriverSettings(const TSettingsMap& _aSettings);
+    void                    exportJavaClassPath(const TSettingsMap& _aSettings);
+    void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
     void                    exportSequence(const Sequence< ::rtl::OUString>& _aValue
                                         ,::xmloff::token::XMLTokenEnum _eTokenFilter
@@ -161,6 +176,7 @@ class ODBExport : public SvXMLExport
     void                    exportQueries(sal_Bool _bExportContext);
     void                    exportTables(sal_Bool _bExportContext);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt);
+    void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const Reference<XPropertySet>& _xProp,SvXMLAttributeList& _rAtt,TPropertyStyleMap& _rMap);
     void                    exportCollection(const Reference< XNameAccess >& _xCollection
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
@@ -204,6 +220,7 @@ public:
     DECLARE_SERVICE_INFO_STATIC( );
 
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
+    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
