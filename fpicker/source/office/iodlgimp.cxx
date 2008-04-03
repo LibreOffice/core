@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:26:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,7 +514,7 @@ void SvtExpFileDlg_Impl::SetStandardDir( const String& _rDir )
 }
 
 //*****************************************************************************
-
+#if OSL_DEBUG_LEVEL > 0
 //-----------------------------------------------------------------------------
 namespace {
     String lcl_DecoratedFilter( const String& _rOriginalFilter )
@@ -525,7 +525,7 @@ namespace {
         return aDecoratedFilter;
     }
 }
-
+#endif
 //-----------------------------------------------------------------------------
 
 void SvtExpFileDlg_Impl::ClearFilterList( )
@@ -588,19 +588,4 @@ void SvtExpFileDlg_Impl::CreateFilterListControl( Window* _pParent, const ResId&
         _pLbFilter = new ListBox( _pParent, _rId );
         _pLbFilter->SetDropDownLineCount( 10 );
     }
-}
-
-//-----------------------------------------------------------------------------
-
-SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::FindFilter( const String& _rFilterName )
-{
-    // simply loop through the filter list and compare names ...
-    USHORT nPos = _pFilter->Count();
-    while ( nPos-- )
-    {
-        SvtFileDialogFilter_Impl* pFilter = _pFilter->GetObject( nPos );
-        if ( pFilter->GetName() == _rFilterName )
-            return pFilter;
-    }
-    return NULL;
 }
