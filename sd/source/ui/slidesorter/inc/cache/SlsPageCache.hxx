@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageCache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:43:14 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,21 @@
 #ifndef SD_SLIDESORTER_PAGE_CACHE_HXX
 #define SD_SLIDESORTER_PAGE_CACHE_HXX
 
+#include "cache/SlsCacheContext.hxx"
 #include <sal/types.h>
 #include <vcl/bitmapex.hxx>
-#include <memory>
-
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
+#include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
 class PageObjectViewObjectContact;
 } } }
 
 namespace sd { namespace slidesorter { namespace cache {
 
+class GenericPageCache;
+class RequestData;
 
 /** The page cache is responsible for the creation and storage of preview
     bitmaps of pages that are shown by the slide sorter.
@@ -93,19 +93,16 @@ namespace sd { namespace slidesorter { namespace cache {
 class PageCache
 {
 public:
-    typedef view::PageObjectViewObjectContact RequestData;
-
-    /** The page chache is created with references both to the view and the
-        model so that it can fill itself with requests for all or just the
-        visible pages.
+    /** The page chache is created with a reference to the slide sorter so
+        that it has access to both the view and the model and so can fill
+        itself with requests for all or just the visible pages.
 
         It is the task of the PageCacheManager to create new objects of this
         class.
     */
     PageCache (
-        view::SlideSorterView& rView,
-        model::SlideSorterModel& rModel,
-        const Size& rPreviewSize);
+        const Size& rPreviewSize,
+        const SharedCacheContext& rpCacheContext);
 
     ~PageCache (void);
 
@@ -128,7 +125,7 @@ public:
             down) version or is the requested bitmap.
     */
     BitmapEx GetPreviewBitmap (
-        RequestData& rRequestData,
+        CacheKey aKey,
         const Size& rSize);
 
     /** When the requested preview bitmap does not yet exist or is not
@@ -136,7 +133,7 @@ public:
         method does nothing.
     */
     void RequestPreviewBitmap (
-        RequestData& rRequestData,
+        CacheKey aKey,
         const Size& rSize);
 
     /** Tell the cache that the bitmap associated with the given request
@@ -147,13 +144,13 @@ public:
             It is safe to pass a (barly) living object.  It will called only
             once to obtain its page object.
     */
-    void InvalidatePreviewBitmap (const RequestData& rRequestData);
+    void InvalidatePreviewBitmap (CacheKey aKey);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested new bitmap.
     */
-    void ReleasePreviewBitmap (RequestData& rRequestData);
+    void ReleasePreviewBitmap (CacheKey aKey);
 
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
@@ -170,11 +167,13 @@ public:
         precious that it will not touched.  A typical use is to set the
         precious flag for exactly the visible pages.
     */
-    void SetPreciousFlag (RequestData& rRequestData, bool bIsPrecious);
+    void SetPreciousFlag (CacheKey aKey, bool bIsPrecious);
+
+    void Pause (void);
+    void Resume (void);
 
 private:
-    class PageCacheImplementation;
-    ::std::auto_ptr<PageCacheImplementation> mpImplementation;
+    ::boost::scoped_ptr<GenericPageCache> mpImplementation;
 };
 
 } } } // end of namespace ::sd::slidesorter::cache
