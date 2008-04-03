@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-26 10:44:56 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -954,8 +954,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             {
                 uno::Reference<beans::XPropertySet> xUserDefinedProps(
                     xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-                //FIXME: this should be removed before 3.0!
-                // the new property "ODFVersion" is a temporary solution for OOo2.4
                 uno::Any aAny;
                 try
                 {
@@ -971,9 +969,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( (aAny >>= sTemp) && sTemp.getLength() )
                 {
                     double nVersion = sTemp.toDouble();
-                    if ( nVersion > 1.10001 )
+                    if ( nVersion > 1.20001 )
                     {
-                        // ODF version greater than 1.1 - added some decimal places to be safe against floating point conversion errors (hack)
+                        // ODF version greater than 1.2 - added some decimal places to be safe against floating point conversion errors (hack)
                         sfx2::NewerVersionWarningDialog aDlg( NULL );
                         aDlg.Execute();
                     }
