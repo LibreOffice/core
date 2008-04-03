@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:49:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,6 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
-#include "ShowWindow.hxx"
 #include "undo/undomanager.hxx"
 
 using namespace ::com::sun::star;
@@ -176,16 +175,12 @@ TYPEINIT1(DrawView, View);
 |*
 \************************************************************************/
 
-DrawView::DrawView (
-    DrawDocShell* pDocSh,
-    OutputDevice* pOutDev,
-    DrawViewShell* pShell)
-    : ::sd::View(pDocSh->GetDoc(), pOutDev, pShell),
-      mpDocShell(pDocSh),
-      mpDrawViewShell(pShell),
-      mpVDev(NULL),
-      mnPOCHSmph(0),
-      mpSlideShow(NULL)
+DrawView::DrawView( DrawDocShell* pDocSh, OutputDevice* pOutDev, DrawViewShell* pShell)
+: ::sd::View(pDocSh->GetDoc(), pOutDev, pShell)
+, mpDocShell(pDocSh)
+, mpDrawViewShell(pShell)
+, mpVDev(NULL)
+, mnPOCHSmph(0)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
 }
@@ -199,9 +194,6 @@ DrawView::DrawView (
 DrawView::~DrawView()
 {
     delete mpVDev;
-
-    if( mpSlideShow )
-        mpSlideShow->dispose();
 }
 
 /*************************************************************************
@@ -584,18 +576,13 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT 
     BOOL bStandardPaint = TRUE;
 
     SdDrawDocument* pDoc = mpDocShell->GetDoc();
-    if(pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
+    if( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
     {
-        sd::Slideshow* pSlideShow = mpSlideShow;
-
-        // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-        if(!pSlideShow && mpViewSh)
-            pSlideShow = mpViewSh->GetSlideShow();
-
-        if(pSlideShow)
+        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( pDoc ) );
+        if(xSlideshow.is() && xSlideshow->isRunning())
         {
-            OutputDevice* pShowWindow = ( OutputDevice* )pSlideShow->getShowWindow();
-            if (pShowWindow == pOutDev || pSlideShow->getAnimationMode() == ANIMATIONMODE_PREVIEW)
+            OutputDevice* pShowWindow = ( OutputDevice* )xSlideshow->getShowWindow();
+            if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
             {
                 if( pShowWindow == pOutDev )
                     PresPaint(rReg);
@@ -604,7 +591,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT 
         }
     }
 
-    if (bStandardPaint)
+    if(bStandardPaint)
     {
         ::sd::View::CompleteRedraw(pOutDev, rReg, nPaintMode, pRedirector);
     }
@@ -655,13 +642,12 @@ void DrawViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOrigina
 
 void DrawView::PresPaint(const Region& rRegion)
 {
-    Slideshow* pSlideShow = mpSlideShow;
-
-    if(!pSlideShow && mpViewSh)
-        pSlideShow = mpViewSh->GetSlideShow();
-
-    if( pSlideShow )
-        pSlideShow->paint( rRegion.GetBoundRect() );
+    if(mpViewSh)
+    {
+        rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
+        if( xSlideshow.is() && xSlideshow->isRunning() )
+            xSlideshow->paint( rRegion.GetBoundRect() );
+    }
 }
 
 /*************************************************************************
