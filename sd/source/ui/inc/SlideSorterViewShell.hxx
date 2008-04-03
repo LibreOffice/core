@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:06:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,50 +37,29 @@
 #define SD_SLIDESORTER_SLIDE_SORTER_VIEW_SHELL_HXX
 
 #include "ViewShell.hxx"
-#include "SlideSorterViewShell.hxx"
 #include "glob.hxx"
-#ifndef _SFX_SHELL_HXX
 #include <sfx2/shell.hxx>
-#endif
-#ifndef _VIEWFAC_HXX
 #include <sfx2/viewfac.hxx>
-#endif
-
-class ScrollBarBox;
-class TabBar;
-class Window;
-
-namespace sd { namespace slidesorter { namespace model {
-class SlideSorterModel;
-} } }
-
-namespace sd { namespace slidesorter { namespace view {
-class SlideSorterView;
-} } }
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace sd { namespace slidesorter { namespace controller {
-class Listener;
-class SlideSorterController;
 class SlotManager;
 } } }
 
+
 namespace sd { namespace slidesorter {
 
+class SlideSorter;
 
 class SlideSorterViewShell
     : public ViewShell
 {
     friend class controller::SlotManager;
+
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
-
-    enum TabBarEntry
-    {
-        TBE_SWITCH = 0,
-        TBE_SLIDES = 1,
-        TBE_MASTER_PAGES = 2
-    };
 
     static SfxShell* CreateInstance (
         sal_Int32 nId,
@@ -88,7 +67,7 @@ public:
         void* pUserData,
         ViewShellBase& rBase);
 
-    SlideSorterViewShell (
+    static ::boost::shared_ptr<SlideSorterViewShell> Create(
         SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
@@ -151,27 +130,6 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    /** Return the control of the vertical scroll bar.
-    */
-    ScrollBar* GetVerticalScrollBar (void) const;
-
-    /** Return the control of the horizontal scroll bar.
-    */
-    ScrollBar* GetHorizontalScrollBar (void) const;
-
-    /** Return the scroll bar filler that paints the little square that is
-        enclosed by the two scroll bars.
-    */
-    ScrollBarBox* GetScrollBarFiller (void) const;
-
-    /** Set the tab bar to the given mode.
-        @param eEntry
-            When TBE_SWITCH is given, then switch between the two tabs.
-    */
-    TabBarEntry SwitchTabBar (TabBarEntry eEntry);
-
-    controller::SlideSorterController& GetSlideSorterController (void);
-
     //===== Drag and Drop =====================================================
 
     virtual void StartDrag (
@@ -192,10 +150,13 @@ public:
         USHORT nPage = SDRPAGE_NOTFOUND,
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
-    /** Return the selected pages by putting them into the given container.
-        The container does not have to be empty.  It is not cleared.
+    typedef ::std::vector<SdPage*> PageSelection;
+
+    /** Return the set of selected pages.
     */
-    void GetSelectedPages (::std::vector<SdPage*>& pPageContainer);
+    ::boost::shared_ptr<PageSelection> GetPageSelection (void) const;
+
+    void SetPageSelection (const ::boost::shared_ptr<PageSelection>& rSelection);
 
     /** Add a listener that is called when the selection of the slide sorter
         changes.
@@ -214,7 +175,7 @@ public:
     */
     void RemoveSelectionChangeListener (const Link& rListener);
 
-    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -227,43 +188,16 @@ public:
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
+    SlideSorter& GetSlideSorter (void) const;
+
     /** Try to relocate all toplevel window elements to the given parent
         window.
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
 protected:
-    ::std::auto_ptr<controller::SlideSorterController> mpSlideSorterController;
-    ::std::auto_ptr<model::SlideSorterModel> mpSlideSorterModel;
-    ::std::auto_ptr<view::SlideSorterView> mpSlideSorterView;
 
     virtual SvBorder GetBorder (bool bOuterResize);
-
-    /** This virtual method makes it possible to create a specialization of
-        the slide sorter view shell that works with its own implementation
-        of model, view, and controller.  The default implementation simply
-        calls the CreateModel(), CreateView(), and CreateController()
-        methods in this order.
-    */
-    virtual void CreateModelViewController (void);
-
-    /** Create the model for the view shell.  When called from the default
-        implementation of CreateModelViewController() then neither view nor
-        controller do exist.  Test their pointers when in doubt.
-    */
-    virtual model::SlideSorterModel* CreateModel (void);
-
-    /** Create the view for the view shell.  When called from the default
-        implementation of CreateModelViewController() then the model but not
-        the controller does exist.  Test their pointers when in doubt.
-    */
-    virtual view::SlideSorterView* CreateView (void);
-
-    /** Create the controller for the view shell.  When called from the default
-        implementation of CreateModelViewController() then both the view and
-        the controller do exist.  Test their pointers when in doubt.
-    */
-    virtual controller::SlideSorterController* CreateController (void);
 
     /** This method is overloaded to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
@@ -271,28 +205,14 @@ protected:
     virtual SfxUndoManager* ImpGetUndoManager (void) const;
 
 private:
-    ::std::auto_ptr<TabBar> mpTabBar;
+    ::boost::shared_ptr<SlideSorter> mpSlideSorter;
 
-    /** Set this flag to <TRUE/> to force a layout before the next paint.
-    */
-    bool mbLayoutPending;
-
-    /** Create the controls for the slide sorter.  This are the tab bar
-       for switching the edit mode, the scroll bar, and the actual
-       slide sorter view window.
-       This method is usually called exactly one time from the
-       constructor.
-    */
-    void SetupControls (::Window* pParentWindow);
-
-    /** This method is usually called exactly one time from the
-        constructor.
-    */
-    void SetupListeners (void);
-
-    /** Release the listeners that have been installed in SetupListeners().
-    */
-    void ReleaseListeners (void);
+    SlideSorterViewShell (
+        SfxViewFrame* pFrame,
+        ViewShellBase& rViewShellBase,
+        ::Window* pParentWindow,
+        FrameView* pFrameView);
+    void Initialize (void);
 
     /** This method overwrites the one from our base class:  We do our own
         scroll bar and the base class call is thus unnecessary.  It simply
@@ -300,6 +220,8 @@ private:
     */
     virtual void UpdateScrollBars (void);
 };
+
+typedef ::boost::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;
 
 } } // end of namespace ::sd::slidesorter
 
