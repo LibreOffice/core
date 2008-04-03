@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:14:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,7 +756,13 @@ namespace vclcanvas
                     // #i75339# don't apply mirror flags, having
                     // negative size values is enough to make
                     // GraphicObject flip the bitmap
-                    aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround( nRotate*10.0 )) );
+
+                    // The angle has to be mapped from radian to tenths of
+                    // degress with the orientation reversed: [0,2Pi) ->
+                    // (3600,0].  Note that the original angle may have
+                    // values outside the [0,2Pi) interval.
+                    const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
+                    aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
                     pGrfObj.reset( new GraphicObject( aBmpEx ) );
                 }
