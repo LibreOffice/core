@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-31 13:23:54 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,9 @@ class VCL_DLLPUBLIC SalLayout
 public:
     // used by upper layers
     Point&          DrawBase()                              { return maDrawBase; }
+    const Point&    DrawBase() const                        { return maDrawBase; }
     Point&          DrawOffset()                            { return maDrawOffset; }
+    const Point&    DrawOffset() const                      { return maDrawOffset; }
     Point           GetDrawPosition( const Point& rRelative = Point(0,0) ) const;
 
     virtual bool    LayoutText( ImplLayoutArgs& ) = 0;  // first step of layouting
