@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:12:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,5 +127,8 @@ public:
     virtual void                BeginSetClipRegion( ULONG nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
+
+    /*TODO: functional implementation */
+    virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
 };
 #endif // _SVP_SVPFRAME_HXX
