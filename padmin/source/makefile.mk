@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 12:23:00 $
+#   last change: $Author: kz $ $Date: 2008-04-03 17:17:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ SLOFILES=\
     $(SLO)$/progress.obj		\
     $(SLO)$/newppdlg.obj		\
     $(SLO)$/prtsetup.obj		\
-    $(SLO)$/prgsbar.obj			\
     $(SLO)$/fontentry.obj		\
     $(SLO)$/helper.obj			\
     $(SLO)$/adddlg.obj			\
@@ -86,6 +85,7 @@ OBJFILES=\
 SHL1TARGET= spa$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
+    $(SVTOOLLIB)					\
     $(VCLLIB)						\
     -lpsp$(DLLPOSTFIX)		\
     $(UNOTOOLSLIB)					\
@@ -103,6 +103,7 @@ APP1OBJS=\
 
 APP1STDLIBS=	\
     -l$(SHL1TARGET)		\
+    $(SVTOOLLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
