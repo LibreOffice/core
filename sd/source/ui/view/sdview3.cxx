@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:00:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,9 +153,7 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "imapinfo.hxx"
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
-#endif
+#include "SlideSorterViewShell.hxx"
 #include "strmname.h"
 #include "unomodel.hxx"
 #include "ViewClipboard.hxx"
@@ -390,7 +388,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         OSL_ASSERT (mpViewSh->GetViewShell()!=NULL);
         SfxInPlaceClient* pIpClient = mpViewSh->GetViewShell()->GetIPClient();
-        if( mpViewSh->ISA(SlideViewShell)
+        if( mpViewSh->ISA(::sd::slidesorter::SlideSorterViewShell)
             || (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive()))
         nPasteOptions |= SDRINSERT_DONTMARK;
     }
