@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc_animations.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:54:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include "drawdoc.hxx"
 #include "cusshow.hxx"
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
+
 /** replaces a slide from all custom shows with a new one or removes a slide from
     all custom shows if pNewPage is 0.
 */
@@ -57,3 +60,13 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
     }
 }
 
+extern Reference< XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument );
+
+const Reference< XPresentation2 >& SdDrawDocument::getPresentation() const
+{
+    if( !mxPresentation.is() )
+    {
+        const_cast< SdDrawDocument* >( this )->mxPresentation = CreatePresentation(*this);
+    }
+    return mxPresentation;
+}
