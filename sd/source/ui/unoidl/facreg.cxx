@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:59:14 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
+#include "sddll.hxx"
+
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
@@ -69,6 +71,7 @@
 using namespace rtl;
 using namespace com::sun::star;
 
+
 // Forward declarations of the factories.
 
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory, const sal_uInt64 _nCreationFlags );
@@ -95,11 +98,12 @@ extern uno::Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() 
 }
 
 namespace sd { namespace framework {
-extern uno::Reference<uno::XInterface> SAL_CALL PaneController_createInstance(
+
+extern uno::Reference<uno::XInterface> SAL_CALL Configuration_createInstance(
     const uno::Reference<uno::XComponentContext>& rxContext)
     throw(uno::Exception);
-extern OUString PaneController_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL PaneController_getSupportedServiceNames (void)
+extern OUString Configuration_getImplementationName(void) throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
 extern uno::Reference<uno::XInterface> SAL_CALL ConfigurationController_createInstance(
@@ -109,32 +113,11 @@ extern OUString ConfigurationController_getImplementationName(void) throw (uno::
 extern uno::Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
-extern uno::Reference<uno::XInterface> SAL_CALL ViewController_createInstance(
-    const uno::Reference<uno::XComponentContext>& rxContext)
-    throw(uno::Exception);
-extern OUString ViewController_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL ViewController_getSupportedServiceNames (void)
-    throw (uno::RuntimeException);
-
 extern uno::Reference<uno::XInterface> SAL_CALL ModuleController_createInstance(
     const uno::Reference<uno::XComponentContext>& rxContext)
     throw(uno::Exception);
 extern OUString ModuleController_getImplementationName(void) throw (uno::RuntimeException);
 extern uno::Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
-    throw (uno::RuntimeException);
-
-extern uno::Reference<uno::XInterface> SAL_CALL ToolbarController_createInstance(
-    const uno::Reference<uno::XComponentContext>& rxContext)
-    throw(uno::Exception);
-extern OUString ToolbarController_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL ToolbarController_getSupportedServiceNames (void)
-    throw (uno::RuntimeException);
-
-extern uno::Reference<uno::XInterface> SAL_CALL CommandController_createInstance(
-    const uno::Reference<uno::XComponentContext>& rxContext)
-    throw(uno::Exception);
-extern OUString CommandController_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL CommandController_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
 extern uno::Reference<uno::XInterface> SAL_CALL BasicPaneFactory_createInstance(
@@ -158,11 +141,11 @@ extern OUString BasicViewFactory_getImplementationName(void) throw (uno::Runtime
 extern uno::Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
-extern uno::Reference<uno::XInterface> SAL_CALL TaskPaneService_createInstance(
+extern uno::Reference<uno::XInterface> SAL_CALL TaskPanelFactory_createInstance(
     const uno::Reference<uno::XComponentContext>& rxContext)
     throw(uno::Exception);
-extern OUString TaskPaneService_getImplementationName(void) throw (uno::RuntimeException);
-extern uno::Sequence<OUString> SAL_CALL TaskPaneService_getSupportedServiceNames (void)
+extern OUString TaskPanelFactory_getImplementationName(void) throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
 
 extern uno::Reference<uno::XInterface> SAL_CALL ResourceId_createInstance(
@@ -171,10 +154,74 @@ extern uno::Reference<uno::XInterface> SAL_CALL ResourceId_createInstance(
 extern OUString ResourceId_getImplementationName(void) throw (uno::RuntimeException);
 extern uno::Sequence<OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     throw (uno::RuntimeException);
+
+extern uno::Reference<uno::XInterface> SAL_CALL PresentationFactoryProvider_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString PresentationFactoryProvider_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+} }
+
+
+namespace sd { namespace presenter {
+extern uno::Reference<uno::XInterface> SAL_CALL SlideRenderer_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString SlideRenderer_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+
+extern uno::Reference<uno::XInterface> SAL_CALL PresenterCanvas_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString PresenterCanvas_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+
+extern uno::Reference<uno::XInterface> SAL_CALL PresenterTextViewService_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString PresenterTextViewService_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+
+extern uno::Reference<uno::XInterface> SAL_CALL PresenterHelperService_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString PresenterHelperService_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+
+extern uno::Reference<uno::XInterface> SAL_CALL PresenterPreviewCache_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString PresenterPreviewCache_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
+} }
+
+
+namespace sd { namespace slidesorter {
+extern uno::Reference<uno::XInterface> SAL_CALL SlideSorterService_createInstance(
+    const uno::Reference<uno::XComponentContext>& rxContext)
+    throw(uno::Exception);
+extern OUString SlideSorterService_getImplementationName(void)
+    throw (uno::RuntimeException);
+extern uno::Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
+    throw (uno::RuntimeException);
 } }
 
 using namespace ::sd;
 using namespace ::sd::framework;
+using namespace ::sd::presenter;
+using namespace ::sd::slidesorter;
 
 
 
@@ -185,24 +232,27 @@ using namespace ::sd::framework;
 
 enum FactoryId
 {
-    SdDrawingDocumentFactory,
-    SdPresentationDocumentFactory,
-    SdHtmlOptionsDialogFactory,
-    SdUnoModuleFactory,
-    RandomNodeFactory,
+    SdDrawingDocumentFactoryId,
+    SdPresentationDocumentFactoryId,
+    SdHtmlOptionsDialogFactoryId,
+    SdUnoModuleFactoryId,
+    RandomNodeFactoryId,
 
-    PaneControllerFactory,
-
-    ConfigurationControllerFactory,
-    ViewControllerFactory,
-    ModuleControllerFactory,
-    ToolbarControllerFactory,
-    CommandControllerFactory,
-    BasicPaneFactoryFactory,
-    BasicToolBarFactoryFactory,
-    BasicViewFactoryFactory,
-    TaskPaneServiceFactory,
-    ResourceIdFactory
+    ConfigurationFactoryId,
+    ConfigurationControllerFactoryId,
+    ModuleControllerFactoryId,
+    BasicPaneFactoryFactoryId,
+    BasicToolBarFactoryFactoryId,
+    BasicViewFactoryFactoryId,
+    TaskPanelFactoryFactoryId,
+    ResourceIdFactoryId,
+    PresentationFactoryProviderFactoryId,
+    SlideRendererFactoryId,
+    PresenterCanvasFactoryId,
+    PresenterTextViewServiceFactoryId,
+    PresenterHelperServiceFactoryId,
+    PresenterPreviewCacheFactoryId,
+    SlideSorterServiceFactoryId
 };
 typedef ::std::hash_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
 
@@ -214,31 +264,26 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
     if (spFactoryMap.get() == NULL)
     {
         spFactoryMap.reset(new FactoryMap);
-        (*spFactoryMap)[SdDrawingDocument_getImplementationName()] = SdDrawingDocumentFactory;
-        (*spFactoryMap)[SdPresentationDocument_getImplementationName()] = SdPresentationDocumentFactory;
-        (*spFactoryMap)[SdHtmlOptionsDialog_getImplementationName()] = SdHtmlOptionsDialogFactory;
-        (*spFactoryMap)[SdUnoModule_getImplementationName()] = SdUnoModuleFactory;
-        (*spFactoryMap)[RandomNode__getImplementationName()] = RandomNodeFactory;
-        (*spFactoryMap)[PaneController_getImplementationName()] = PaneControllerFactory;
-        (*spFactoryMap)[ConfigurationController_getImplementationName()] = ConfigurationControllerFactory;
-        (*spFactoryMap)[ViewController_getImplementationName()] = ViewControllerFactory;
-        (*spFactoryMap)[ModuleController_getImplementationName()] = ModuleControllerFactory;
-        (*spFactoryMap)[ToolbarController_getImplementationName()] = ToolbarControllerFactory;
-        (*spFactoryMap)[CommandController_getImplementationName()] = CommandControllerFactory;
-        (*spFactoryMap)[BasicPaneFactory_getImplementationName()] = BasicPaneFactoryFactory;
-        (*spFactoryMap)[BasicToolBarFactory_getImplementationName()] = BasicToolBarFactoryFactory;
-        (*spFactoryMap)[BasicViewFactory_getImplementationName()] = BasicViewFactoryFactory;
-        (*spFactoryMap)[TaskPaneService_getImplementationName()] = TaskPaneServiceFactory;
-        (*spFactoryMap)[ResourceId_getImplementationName()] = ResourceIdFactory;
-
-        for (FactoryMap::const_iterator iEntry (spFactoryMap->begin());
-             iEntry != spFactoryMap->end();
-             ++iEntry)
-        {
-            OSL_TRACE("    %s -> %d",
-                OUStringToOString(iEntry->first,RTL_TEXTENCODING_UTF8).getStr(),
-                iEntry->second);
-        }
+        (*spFactoryMap)[SdDrawingDocument_getImplementationName()] = SdDrawingDocumentFactoryId;
+        (*spFactoryMap)[SdPresentationDocument_getImplementationName()] = SdPresentationDocumentFactoryId;
+        (*spFactoryMap)[SdHtmlOptionsDialog_getImplementationName()] = SdHtmlOptionsDialogFactoryId;
+        (*spFactoryMap)[SdUnoModule_getImplementationName()] = SdUnoModuleFactoryId;
+        (*spFactoryMap)[RandomNode__getImplementationName()] = RandomNodeFactoryId;
+        (*spFactoryMap)[Configuration_getImplementationName()] = ConfigurationFactoryId;
+        (*spFactoryMap)[ConfigurationController_getImplementationName()] = ConfigurationControllerFactoryId;
+        (*spFactoryMap)[ModuleController_getImplementationName()] = ModuleControllerFactoryId;
+        (*spFactoryMap)[BasicPaneFactory_getImplementationName()] = BasicPaneFactoryFactoryId;
+        (*spFactoryMap)[BasicToolBarFactory_getImplementationName()] = BasicToolBarFactoryFactoryId;
+        (*spFactoryMap)[BasicViewFactory_getImplementationName()] = BasicViewFactoryFactoryId;
+        (*spFactoryMap)[TaskPanelFactory_getImplementationName()] = TaskPanelFactoryFactoryId;
+        (*spFactoryMap)[ResourceId_getImplementationName()] = ResourceIdFactoryId;
+        (*spFactoryMap)[PresentationFactoryProvider_getImplementationName()] = PresentationFactoryProviderFactoryId;
+        (*spFactoryMap)[SlideRenderer_getImplementationName()] = SlideRendererFactoryId;
+        (*spFactoryMap)[PresenterCanvas_getImplementationName()] = PresenterCanvasFactoryId;
+        (*spFactoryMap)[PresenterTextViewService_getImplementationName()] = PresenterTextViewServiceFactoryId;
+        (*spFactoryMap)[PresenterHelperService_getImplementationName()] = PresenterHelperServiceFactoryId;
+        (*spFactoryMap)[PresenterPreviewCache_getImplementationName()] = PresenterPreviewCacheFactoryId;
+        (*spFactoryMap)[SlideSorterService_getImplementationName()] = SlideSorterServiceFactoryId;
     }
     return spFactoryMap;
 };
@@ -287,24 +332,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
             writeInfo( pKey, sd::RandomNode__getImplementationName(), sd::RandomNode_getSupportedServiceNames() );
             writeInfo(
                 pKey,
-                sd::framework::PaneController_getImplementationName(),
-                sd::framework::PaneController_getSupportedServiceNames());
+                sd::framework::Configuration_getImplementationName(),
+                sd::framework::Configuration_getSupportedServiceNames());
             writeInfo(
                 pKey,
                 sd::framework::ConfigurationController_getImplementationName(),
                 sd::framework::ConfigurationController_getSupportedServiceNames());
-            writeInfo(
-                pKey,
-                sd::framework::ViewController_getImplementationName(),
-                sd::framework::ViewController_getSupportedServiceNames());
-            writeInfo(
-                pKey,
-                sd::framework::ToolbarController_getImplementationName(),
-                sd::framework::ToolbarController_getSupportedServiceNames());
-            writeInfo(
-                pKey,
-                sd::framework::CommandController_getImplementationName(),
-                sd::framework::CommandController_getSupportedServiceNames());
             writeInfo(
                 pKey,
                 sd::framework::ModuleController_getImplementationName(),
@@ -323,12 +356,40 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
                 sd::framework::BasicViewFactory_getSupportedServiceNames());
             writeInfo(
                 pKey,
-                sd::framework::TaskPaneService_getImplementationName(),
-                sd::framework::TaskPaneService_getSupportedServiceNames());
+                sd::framework::TaskPanelFactory_getImplementationName(),
+                sd::framework::TaskPanelFactory_getSupportedServiceNames());
             writeInfo(
                 pKey,
                 sd::framework::ResourceId_getImplementationName(),
                 sd::framework::ResourceId_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::framework::PresentationFactoryProvider_getImplementationName(),
+                sd::framework::PresentationFactoryProvider_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::SlideRenderer_getImplementationName(),
+                sd::presenter::SlideRenderer_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterCanvas_getImplementationName(),
+                sd::presenter::PresenterCanvas_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterTextViewService_getImplementationName(),
+                sd::presenter::PresenterTextViewService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterHelperService_getImplementationName(),
+                sd::presenter::PresenterHelperService_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::presenter::PresenterPreviewCache_getImplementationName(),
+                sd::presenter::PresenterPreviewCache_getSupportedServiceNames());
+            writeInfo(
+                pKey,
+                sd::slidesorter::SlideSorterService_getImplementationName(),
+                sd::slidesorter::SlideSorterService_getSupportedServiceNames());
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -359,7 +420,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         {
             switch (iFactory->second)
             {
-                case SdHtmlOptionsDialogFactory:
+                case SdHtmlOptionsDialogFactoryId:
                     xFactory = ::cppu::createSingleFactory(
                         xMSF,
                         SdHtmlOptionsDialog_getImplementationName(),
@@ -367,7 +428,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdHtmlOptionsDialog_getSupportedServiceNames());
                     break;
 
-                case SdDrawingDocumentFactory:
+                case SdDrawingDocumentFactoryId:
                     xFactory = ::sfx2::createSfxModelFactory(
                         xMSF,
                         SdDrawingDocument_getImplementationName(),
@@ -375,7 +436,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdDrawingDocument_getSupportedServiceNames());
                     break;
 
-                case SdPresentationDocumentFactory:
+                case SdPresentationDocumentFactoryId:
                     xFactory = ::sfx2::createSfxModelFactory(
                         xMSF,
                         SdPresentationDocument_getImplementationName(),
@@ -383,7 +444,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdPresentationDocument_getSupportedServiceNames());
                     break;
 
-                case SdUnoModuleFactory:
+                case SdUnoModuleFactoryId:
                     xFactory = ::cppu::createSingleFactory(
                         xMSF,
                         SdUnoModule_getImplementationName(),
@@ -391,7 +452,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         SdUnoModule_getSupportedServiceNames());
                     break;
 
-                case RandomNodeFactory:
+                case RandomNodeFactoryId:
                     xFactory = ::cppu::createSingleFactory(
                         xMSF,
                         sd::RandomNode__getImplementationName(),
@@ -399,81 +460,109 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                         sd::RandomNode_getSupportedServiceNames());
                     break;
 
-                case PaneControllerFactory:
+                case ConfigurationFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::PaneController_createInstance,
-                        sd::framework::PaneController_getImplementationName(),
-                        sd::framework::PaneController_getSupportedServiceNames());
+                        sd::framework::Configuration_createInstance,
+                        sd::framework::Configuration_getImplementationName(),
+                        sd::framework::Configuration_getSupportedServiceNames());
                     break;
 
-                case ConfigurationControllerFactory:
+                case ConfigurationControllerFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::ConfigurationController_createInstance,
                         sd::framework::ConfigurationController_getImplementationName(),
                         sd::framework::ConfigurationController_getSupportedServiceNames());
                     break;
 
-                case ViewControllerFactory:
-                    xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::ViewController_createInstance,
-                        sd::framework::ViewController_getImplementationName(),
-                        sd::framework::ViewController_getSupportedServiceNames());
-                    break;
-
-                case ModuleControllerFactory:
+                case ModuleControllerFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::ModuleController_createInstance,
                         sd::framework::ModuleController_getImplementationName(),
                         sd::framework::ModuleController_getSupportedServiceNames());
                     break;
 
-                case ToolbarControllerFactory:
-                    xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::ToolbarController_createInstance,
-                        sd::framework::ToolbarController_getImplementationName(),
-                        sd::framework::ToolbarController_getSupportedServiceNames());
-                    break;
-
-                case CommandControllerFactory:
-                    xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::CommandController_createInstance,
-                        sd::framework::CommandController_getImplementationName(),
-                        sd::framework::CommandController_getSupportedServiceNames());
-                    break;
-
-                case BasicPaneFactoryFactory:
+                case BasicPaneFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicPaneFactory_createInstance,
                         sd::framework::BasicPaneFactory_getImplementationName(),
                         sd::framework::BasicPaneFactory_getSupportedServiceNames());
                     break;
 
-                case BasicToolBarFactoryFactory:
+                case BasicToolBarFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicToolBarFactory_createInstance,
                         sd::framework::BasicToolBarFactory_getImplementationName(),
                         sd::framework::BasicToolBarFactory_getSupportedServiceNames());
                     break;
 
-                case BasicViewFactoryFactory:
+                case BasicViewFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::BasicViewFactory_createInstance,
                         sd::framework::BasicViewFactory_getImplementationName(),
                         sd::framework::BasicViewFactory_getSupportedServiceNames());
                     break;
 
-                case TaskPaneServiceFactory:
+                case TaskPanelFactoryFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
-                        sd::framework::TaskPaneService_createInstance,
-                        sd::framework::TaskPaneService_getImplementationName(),
-                        sd::framework::TaskPaneService_getSupportedServiceNames());
+                        sd::framework::TaskPanelFactory_createInstance,
+                        sd::framework::TaskPanelFactory_getImplementationName(),
+                        sd::framework::TaskPanelFactory_getSupportedServiceNames());
                     break;
 
-                case ResourceIdFactory:
+                case ResourceIdFactoryId:
                     xComponentFactory = ::cppu::createSingleComponentFactory(
                         sd::framework::ResourceId_createInstance,
                         sd::framework::ResourceId_getImplementationName(),
                         sd::framework::ResourceId_getSupportedServiceNames());
+                    break;
+
+                case PresentationFactoryProviderFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::framework::PresentationFactoryProvider_createInstance,
+                        sd::framework::PresentationFactoryProvider_getImplementationName(),
+                        sd::framework::PresentationFactoryProvider_getSupportedServiceNames());
+                    break;
+
+                case SlideRendererFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::presenter::SlideRenderer_createInstance,
+                        sd::presenter::SlideRenderer_getImplementationName(),
+                        sd::presenter::SlideRenderer_getSupportedServiceNames());
+                    break;
+
+                case PresenterCanvasFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::presenter::PresenterCanvas_createInstance,
+                        sd::presenter::PresenterCanvas_getImplementationName(),
+                        sd::presenter::PresenterCanvas_getSupportedServiceNames());
+                    break;
+
+                case PresenterTextViewServiceFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::presenter::PresenterTextViewService_createInstance,
+                        sd::presenter::PresenterTextViewService_getImplementationName(),
+                        sd::presenter::PresenterTextViewService_getSupportedServiceNames());
+                    break;
+
+                case PresenterHelperServiceFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::presenter::PresenterHelperService_createInstance,
+                        sd::presenter::PresenterHelperService_getImplementationName(),
+                        sd::presenter::PresenterHelperService_getSupportedServiceNames());
+                    break;
+
+                case PresenterPreviewCacheFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::presenter::PresenterPreviewCache_createInstance,
+                        sd::presenter::PresenterPreviewCache_getImplementationName(),
+                        sd::presenter::PresenterPreviewCache_getSupportedServiceNames());
+                    break;
+
+                case SlideSorterServiceFactoryId:
+                    xComponentFactory = ::cppu::createSingleComponentFactory(
+                        sd::slidesorter::SlideSorterService_createInstance,
+                        sd::slidesorter::SlideSorterService_getImplementationName(),
+                        sd::slidesorter::SlideSorterService_getSupportedServiceNames());
                     break;
 
                 default:
@@ -482,7 +571,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
             if (xComponentFactory.is())
             {
                 xComponentFactory->acquire();
-                pRet =  xComponentFactory.get();
+                pRet = xComponentFactory.get();
             }
             else if (xFactory.is())
             {
@@ -491,6 +580,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
             }
         }
     }
+
+    if (pRet != NULL)
+        SdDLL::Init();
     return pRet;
 }
 
