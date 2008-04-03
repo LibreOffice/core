@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 11:24:12 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:22:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ SVSDI1DEPEND= \
     mediaob.sdi \
     tables.sdi\
     outlnvsh.sdi \
-    slidvish.sdi \
     SlideSorterController.sdi \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
@@ -85,7 +84,6 @@ SVSDI2DEPEND= \
     grviewsh.sdi \
     mediaob.sdi \
     outlnvsh.sdi \
-    slidvish.sdi \
     ViewShellBase.sdi \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
