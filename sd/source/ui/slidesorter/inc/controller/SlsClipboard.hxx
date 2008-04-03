@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:29:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@ namespace sd {
 class Window;
 }
 
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
+
 namespace sd { namespace slidesorter { namespace model {
 class PageDescriptor;
 } } }
@@ -69,7 +73,7 @@ class Clipboard
     : public ViewClipboard
 {
 public:
-    Clipboard (SlideSorterController& rController);
+    Clipboard (SlideSorter& rSlideSorter);
     ~Clipboard (void);
 
     void HandleSlotCall (SfxRequest& rRequest);
@@ -109,6 +113,7 @@ protected:
         USHORT nInsertPosition);
 
 private:
+    SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
     typedef ::std::vector<SdPage*> PageList;
