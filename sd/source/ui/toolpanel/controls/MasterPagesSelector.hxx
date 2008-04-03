@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:50:08 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "taskpane/TaskPaneTreeNode.hxx"
 #include "MasterPageContainer.hxx"
+#include "SlideSorterViewShell.hxx"
 
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
@@ -185,7 +186,7 @@ protected:
 
     virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
-        const ::std::vector<SdPage*>& rPageList);
+        const ::sd::slidesorter::SharedPageSelection& rPageList);
 
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 
