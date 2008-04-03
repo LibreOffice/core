@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,15 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "controller/SlideSorterController.hxx"
 
-#include "SlideSorterViewShell.hxx"
+#include "SlideSorter.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsSelectionFunction.hxx"
+#include "controller/SlsProperties.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "SlsListener.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "SlsSlotManager.hxx"
@@ -48,16 +49,19 @@
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
+#include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumeration.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsFontProvider.hxx"
+#include "view/SlsHighlightObject.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "cache/SlsPageCacheManager.hxx"
-// other
+
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
 #include "TextLogger.hxx"
@@ -71,12 +75,9 @@
 #include "strings.hrc"
 #include "app.hrc"
 #include "glob.hrc"
-#include "slideshow.hxx"
 #include "sdmod.hxx"
 #include "sdxfer.hxx"
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "ViewShellHint.hxx"
 #include "AccessibleSlideSorterView.hxx"
 #include "AccessibleSlideSorterObject.hxx"
@@ -92,26 +93,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/topfrm.hxx>
 #include <tools/link.hxx>
-
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
-#include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
-#include <com/sun/star/drawing/XDrawPages.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -122,26 +111,18 @@ using namespace ::sd::slidesorter::controller;
 namespace sd { namespace slidesorter { namespace controller {
 
 
-SlideSorterController::SlideSorterController (
-    SfxViewFrame *,
-    ::Window* pParentWindow,
-    SlideSorterViewShell& rViewShell,
-    model::SlideSorterModel& rModel,
-    view::SlideSorterView& rView)
-    : mrViewShell(rViewShell),
-      mrModel (rModel),
-      mrView (rView),
-      mpPageSelector (new PageSelector (mrModel, *this)),
-      mpFocusManager (new FocusManager (*this)),
-      mpSlotManager (new SlotManager (*this)),
-      mpClipboard (new Clipboard (*this)),
-      mpScrollBarManager (new ScrollBarManager (
-          *this,
-          pParentWindow,
-          GetViewShell().GetActiveWindow(),
-          rViewShell.GetHorizontalScrollBar(),
-          rViewShell.GetVerticalScrollBar(),
-          rViewShell.GetScrollBarFiller())),
+SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
+    : mrSlideSorter(rSlideSorter),
+      mrModel(mrSlideSorter.GetModel()),
+      mrView(mrSlideSorter.GetView()),
+      mpPageSelector(),
+      mpFocusManager(),
+      mpSlotManager(),
+      mpClipboard(),
+      mpScrollBarManager(),
+      mpCurrentSlideManager(),
+      mpSelectionManager(),
+      mpAnimator(new Animator(rSlideSorter)),
       mpListener(),
       mnModelChangeLockCount (0),
       mbPostModelChangePending (false),
@@ -149,30 +130,39 @@ SlideSorterController::SlideSorterController (
       mnCurrentPageBeforeSwitch(0),
       mpEditModeChangeMasterPage(NULL),
       maTotalWindowArea(),
-      mbIsMakeSelectionVisiblePending(false),
       mnPaintEntranceCount(0),
-      mbIsContextMenuOpen(false)
+      mbIsContextMenuOpen(false),
+      mpProperties(new Properties()),
+      mpHighlightObject(NULL)
 {
-    OSL_ASSERT(pParentWindow!=NULL);
+    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
+    OSL_ASSERT(pWindow!=NULL);
+    if (pWindow != NULL)
+    {
+        // The whole background is painted by the view and controls.
+        ::Window* pParentWindow = pWindow->GetParent();
+        OSL_ASSERT(pParentWindow!=NULL);
+        pParentWindow->SetBackground (Wallpaper());
 
-    // The whole background is painted by the view and controls.
-    pParentWindow->SetBackground (Wallpaper());
+        // Connect the view with the window that has been created by our base
+        // class.
+        pWindow->SetBackground (Wallpaper());
+        mrView.AddWindowToPaintView(pWindow);
+        mrView.SetActualWin(pWindow);
+        pWindow->SetCenterAllowed (false);
+        pWindow->SetViewSize (mrView.GetModelArea().GetSize());
+        pWindow->EnableRTL(FALSE);
 
-    // Connect the view with the window that has been created by our base
-    // class.
-    ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
-    pWindow->SetBackground (Wallpaper());
-    mrView.AddWindowToPaintView(pWindow);
-    mrView.SetActualWin(pWindow);
-    pWindow->SetCenterAllowed (false);
-    pWindow->SetViewSize (mrView.GetModelArea().GetSize());
-    pWindow->EnableRTL(FALSE);
-    mrView.HandleModelChange();
-
-    // Now that the window is present we can create the preview cache and
-    // with it the page object factory.
-    mrModel.SetPageObjectFactory (::std::auto_ptr<PageObjectFactory> (
-        new PageObjectFactory (mrView.GetPreviewCache())));
+        // Reinitialize colors in Properties with window specific values.
+        mpProperties->SetBackgroundColor(
+            pWindow->GetSettings().GetStyleSettings().GetWindowColor());
+        mpProperties->SetTextColor(
+            pWindow->GetSettings().GetStyleSettings().GetWindowTextColor());
+        mpProperties->SetSelectionColor(
+            pWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
+        mpProperties->SetHighlightColor(
+            pWindow->GetSettings().GetStyleSettings().GetMenuHighlightColor());
+    }
 }
 
 
@@ -180,23 +170,29 @@ SlideSorterController::SlideSorterController (
 
 void SlideSorterController::Init (void)
 {
+    mrView.HandleModelChange();
+
+    mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
+    mpPageSelector.reset(new PageSelector(mrSlideSorter));
+    mpFocusManager.reset(new FocusManager(mrSlideSorter));
+    mpSlotManager.reset(new SlotManager(mrSlideSorter));
+    mpClipboard.reset(new Clipboard(mrSlideSorter));
+    mpScrollBarManager.reset(new ScrollBarManager(mrSlideSorter));
+    mpSelectionManager.reset(new SelectionManager(mrSlideSorter));
+
     mpScrollBarManager->LateInitialization();
 
-          // Create the selection function.
+    // Create the selection function.
     SfxRequest aRequest (
         SID_OBJECT_SELECT,
         0,
-        GetModel().GetDocument()->GetItemPool());
-    FunctionReference xFunc( CreateSelectionFunction (aRequest) );
-    GetViewShell().SetCurrentFunction(xFunc);
-    GetViewShell().SetOldFunction(xFunc);
+        mrModel.GetDocument()->GetItemPool());
+    mrSlideSorter.SetCurrentFunction(CreateSelectionFunction(aRequest));
 
-    Listener* pListener = new Listener (*this);
-    mpListener = ::comphelper::ImplementationReference
-        <Listener, uno::XInterface, uno::XWeak> (pListener);
+    mpListener = new Listener(mrSlideSorter);
 
     mpPageSelector->UpdateAllPages();
-    mbIsMakeSelectionVisiblePending = true;
+    GetSelectionManager()->SelectionHasChanged();
 }
 
 
@@ -207,7 +203,7 @@ SlideSorterController::~SlideSorterController (void)
     try
     {
         uno::Reference<lang::XComponent> xComponent (
-            mpListener.getRef(), uno::UNO_QUERY);
+            static_cast<XWeak*>(mpListener.get()), uno::UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -224,25 +220,9 @@ SlideSorterController::~SlideSorterController (void)
 
 
 
-SlideSorterViewShell& SlideSorterController::GetViewShell (void) const
+SlideSorter& SlideSorterController::GetSlideSorter (void) const
 {
-    return mrViewShell;
-}
-
-
-
-
-model::SlideSorterModel& SlideSorterController::GetModel (void) const
-{
-    return mrModel;
-}
-
-
-
-
-view::SlideSorterView& SlideSorterController::GetView (void) const
-{
-    return mrView;
+    return mrSlideSorter;
 }
 
 
@@ -278,6 +258,7 @@ model::SharedPageDescriptor SlideSorterController::GetFadePageAt (
 
 PageSelector& SlideSorterController::GetPageSelector (void)
 {
+    OSL_ASSERT(mpPageSelector.get()!=NULL);
     return *mpPageSelector.get();
 }
 
@@ -286,6 +267,7 @@ PageSelector& SlideSorterController::GetPageSelector (void)
 
 FocusManager& SlideSorterController::GetFocusManager (void)
 {
+    OSL_ASSERT(mpFocusManager.get()!=NULL);
     return *mpFocusManager.get();
 }
 
@@ -294,6 +276,7 @@ FocusManager& SlideSorterController::GetFocusManager (void)
 
 Clipboard& SlideSorterController::GetClipboard (void)
 {
+    OSL_ASSERT(mpClipboard.get()!=NULL);
     return *mpClipboard.get();
 }
 
@@ -302,7 +285,35 @@ Clipboard& SlideSorterController::GetClipboard (void)
 
 ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 {
+    OSL_ASSERT(mpScrollBarManager.get()!=NULL);
     return *mpScrollBarManager.get();
+}
+
+
+
+
+::boost::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager (void) const
+{
+    OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
+    return mpCurrentSlideManager;
+}
+
+
+
+
+::boost::shared_ptr<SlotManager> SlideSorterController::GetSlotManager (void) const
+{
+    OSL_ASSERT(mpSlotManager.get()!=NULL);
+    return mpSlotManager;
+}
+
+
+
+
+::boost::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager (void) const
+{
+    OSL_ASSERT(mpSelectionManager.get()!=NULL);
+    return mpSelectionManager;
 }
 
 
@@ -310,24 +321,19 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 
 void SlideSorterController::Paint (
     const Rectangle& rBBox,
-    ::sd::Window* pWindow)
+    ::Window* pWindow)
 {
-    if (mnPaintEntranceCount == 0)
+    //    if (mnPaintEntranceCount == 0)
     {
         ++mnPaintEntranceCount;
 
         try
         {
-            Rectangle aBBox(rBBox);
-            if (mbIsMakeSelectionVisiblePending)
-            {
-                sal_Int32 nVerticalOffset = MakeSelectionVisible();
-                aBBox.Move(0,-nVerticalOffset);
-                mbIsMakeSelectionVisiblePending = false;
-                GetView().GetWindow()->Invalidate();
-            }
+            if (GetSelectionManager()->IsMakeSelectionVisiblePending())
+                GetSelectionManager()->MakeSelectionVisible();
 
-            GetView().CompleteRedraw(pWindow, Region(aBBox), 0, 0);
+            mrView.SetApplicationDocumentColor(GetProperties()->GetBackgroundColor());
+            mrView.CompleteRedraw(pWindow, Region(rBBox), 0, 0);
         }
         catch (const Exception&)
         {
@@ -336,44 +342,6 @@ void SlideSorterController::Paint (
 
         --mnPaintEntranceCount;
     }
-}
-
-
-
-
-SdPage* SlideSorterController::GetActualPage (void)
-{
-    SdPage* pCurrentPage = NULL;
-
-    // 1. Try to get the current page from the view shell in the center pane
-    // (if we are that not ourself).
-    if ( ! GetViewShell().IsMainViewShell())
-    {
-        ViewShell* pMainViewShell = GetViewShell().GetViewShellBase().GetMainViewShell().get();
-        if (pMainViewShell != NULL)
-            pCurrentPage = pMainViewShell->GetActualPage();
-    }
-
-    // 2. Try the currently focused page.
-    if (pCurrentPage == NULL)
-    {
-        model::SharedPageDescriptor pDescriptor;
-        if (GetFocusManager().IsFocusShowing())
-            pDescriptor = GetFocusManager().GetFocusedPageDescriptor();
-        if (pDescriptor.get() == NULL)
-        {
-            // 3. Take the first selected page.
-            model::SlideSorterModel::Enumeration aEnumeration (
-                GetModel().GetSelectedPagesEnumeration());
-            if (aEnumeration.HasMoreElements())
-                pDescriptor = aEnumeration.GetNextElement();
-        }
-
-        if (pDescriptor.get() != NULL)
-            pCurrentPage = pDescriptor->GetPage();
-    }
-
-    return pCurrentPage;
 }
 
 
@@ -409,6 +377,8 @@ bool SlideSorterController::Command (
 {
     bool bEventHasBeenHandled = false;
 
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+
     switch (rEvent.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
@@ -416,17 +386,17 @@ bool SlideSorterController::Command (
             SdPage* pPage = NULL;
             USHORT nPopupId;
 
-            model::SlideSorterModel::Enumeration aSelectedPages (
-                GetModel().GetSelectedPagesEnumeration());
+            model::PageEnumeration aSelectedPages (
+                PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
             if (aSelectedPages.HasMoreElements())
                 pPage = aSelectedPages.GetNextElement()->GetPage();
 
             // Choose the popup menu depending on a) the type of the main
             // view shell, b) the edit mode, and c) on whether the selection
             // is empty or not.
-            ::boost::shared_ptr<ViewShell> pMainViewShell(
-                GetViewShell().GetViewShellBase().GetMainViewShell());
             ViewShell::ShellType eMainViewShellType (ViewShell::ST_NONE);
+            ::boost::shared_ptr<ViewShell> pMainViewShell (
+                pViewShell->GetViewShellBase().GetMainViewShell());
             if (pMainViewShell.get() != NULL)
                 eMainViewShellType = pMainViewShell->GetShellType();
             switch (eMainViewShellType)
@@ -456,17 +426,18 @@ bool SlideSorterController::Command (
                 // When there is no selection, then we show the insertion
                 // indicator so that the user knows where a page insertion
                 // would take place.
-                GetView().GetOverlay().GetInsertionIndicatorOverlay()
+                mrView.GetOverlay().GetInsertionIndicatorOverlay()
                     .SetPosition(
                         pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
-                GetView().GetOverlay().GetInsertionIndicatorOverlay().Show();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().Show();
             }
 
             pWindow->ReleaseMouse();
             if (rEvent.IsMouseEvent())
             {
                 mbIsContextMenuOpen = true;
-                GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nPopupId));
+                if (pViewShell != NULL)
+                    pViewShell->GetDispatcher()->ExecutePopup(SdResId(nPopupId));
             }
             else
             {
@@ -478,22 +449,23 @@ bool SlideSorterController::Command (
                         GetFocusManager().GetFocusedPageDescriptor());
                     if (pDescriptor.get() != NULL)
                     {
-                        Rectangle aBBox (GetView().GetPageBoundingBox (
+                        Rectangle aBBox (mrView.GetPageBoundingBox (
                             pDescriptor,
                             view::SlideSorterView::CS_SCREEN,
                             view::SlideSorterView::BBT_SHAPE));
                         Point aPosition (aBBox.Center());
                         mbIsContextMenuOpen = true;
-                        GetViewShell().GetViewFrame()->GetDispatcher()->ExecutePopup(
-                            SdResId(nPopupId),
-                            pWindow,
-                            &aPosition);
+                        if (pViewShell != NULL)
+                            pViewShell->GetViewFrame()->GetDispatcher()->ExecutePopup(
+                                SdResId(nPopupId),
+                                pWindow,
+                                &aPosition);
                     }
                 }
             }
             mbIsContextMenuOpen = false;
             if (pPage == NULL)
-                GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
             bEventHasBeenHandled = true;
         }
         break;
@@ -534,26 +506,60 @@ void SlideSorterController::UnlockModelChange (void)
 
 void SlideSorterController::PreModelChange (void)
 {
-    GetViewShell().Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
-    mpPageSelector->PrepareModelChange ();
-    ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
+    if (mrSlideSorter.GetViewShell() != NULL)
+        mrSlideSorter.GetViewShell()->Broadcast(
+            ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
+
+    mpPageSelector->PrepareModelChange();
+    GetCurrentSlideManager()->PrepareModelChange();
+
+    // The highlight object will be destroyed in
+    // SlideSorterView::PreModelChange() along with the page objects.
+    mpHighlightObject = NULL;
+
+    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     if (pWindow != NULL)
         mrView.PreModelChange();
 
+    if (mpHighlightObject != NULL)
+    {
+        SdrPage* pPage = mpHighlightObject->GetPage();
+        if (pPage != NULL)
+        {
+            pPage->RemoveObject(mpHighlightObject->GetOrdNum());
+            delete mpHighlightObject;
+        }
+        mpHighlightObject = NULL;
+    }
     mbPostModelChangePending = true;
 }
 
 
 
 
-void SlideSorterController::PostModelChange (void)
+void SlideSorterController::PostModelChange (const bool bSkipModelResync)
 {
-    mrModel.Resync();
+    if ( ! bSkipModelResync)
+        mrModel.Resync();
 
-    ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
+    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     if (pWindow != NULL)
     {
+        GetCurrentSlideManager()->HandleModelChange();
+
         mrView.PostModelChange ();
+
+        mpHighlightObject = new HighlightObject(mrSlideSorter);
+        if (mpHighlightObject != NULL)
+        {
+            mrView.AddSdrObject(*mpHighlightObject);
+            // Move to below all other objects in paint order.
+            SdrPage* pPage = mpHighlightObject->GetPage();
+            if (pPage != NULL)
+            {
+                pPage->SetObjectOrdNum(mpHighlightObject->GetOrdNum(), 0);
+            }
+        }
 
         pWindow->SetViewOrigin (Point (0,0));
         pWindow->SetViewSize (mrView.GetModelArea().GetSize());
@@ -567,7 +573,9 @@ void SlideSorterController::PostModelChange (void)
     mpPageSelector->HandleModelChange ();
 
     mbPostModelChangePending = false;
-    GetViewShell().Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
+    if (mrSlideSorter.GetViewShell() != NULL)
+        mrSlideSorter.GetViewShell()->Broadcast(
+            ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
 }
 
 
@@ -577,7 +585,7 @@ void SlideSorterController::HandleModelChange (void)
 {
     // Ignore this call when the document is not in a valid state, i.e. has
     // not the same number of regular and notes pages.
-    bool bIsDocumentValid = (GetModel().GetDocument()->GetPageCount() % 2 == 1);
+    bool bIsDocumentValid = (mrModel.GetDocument()->GetPageCount() % 2 == 1);
 
 
     if (bIsDocumentValid)
@@ -601,255 +609,60 @@ void SlideSorterController::HandleModelChange (void)
 
 
 
-IMPL_LINK(SlideSorterController, TabBarHandler, TabBar*, pTabBar)
-{
-    EditMode eEditMode = EM_PAGE;
-    switch (pTabBar->GetCurPageId())
-    {
-        case SlideSorterViewShell::TBE_SLIDES :
-            eEditMode = EM_PAGE;
-            break;
-        case SlideSorterViewShell::TBE_MASTER_PAGES :
-            eEditMode = EM_MASTERPAGE;
-            break;
-    }
-    if (mrModel.GetEditMode() != eEditMode)
-    {
-        PreModelChange();
-        mrModel.SetEditMode (eEditMode);
-        PostModelChange();
-    }
-
-    return TRUE;
-}
-
-
-
-
 IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 {
     if (pEvent != NULL)
     {
-        SlideSorterViewShell& rShell = GetViewShell();
-        ::Window* pWindow = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
-        if (pWindow == rShell.GetParentWindow())
+        ::Window* pWindow = pEvent->GetWindow();
+        ::sd::Window* pActiveWindow = mrSlideSorter.GetActiveWindow();
+        switch (pEvent->GetId())
         {
-            switch (pEvent->GetId())
-            {
-                case VCLEVENT_WINDOW_ACTIVATE:
-                case VCLEVENT_WINDOW_SHOW:
+            case VCLEVENT_WINDOW_ACTIVATE:
+            case VCLEVENT_WINDOW_SHOW:
+                if (pActiveWindow != NULL && pWindow == pActiveWindow->GetParent())
                     mrView.RequestRepaint();
-                    break;
-            }
-        }
-        else if (pWindow == rShell.GetActiveWindow())
-        {
-            switch (pEvent->GetId())
-            {
-                case VCLEVENT_WINDOW_GETFOCUS:
-                    // Show focus but only when the focus was not set to the
-                    // window as a result of a mouse click.
+                break;
+
+            case VCLEVENT_WINDOW_GETFOCUS:
+                // Show focus but only when the focus was not set to the
+                // window as a result of a mouse click.
+                if (pActiveWindow != NULL && pWindow == pActiveWindow)
                     if (pWindow->GetPointerState().mnState==0)
                         GetFocusManager().ShowFocus();
-                    break;
+                break;
 
-                case VCLEVENT_WINDOW_LOSEFOCUS:
+            case VCLEVENT_WINDOW_LOSEFOCUS:
+                if (pActiveWindow != NULL && pWindow == pActiveWindow)
                     GetFocusManager().HideFocus();
-                    break;
+                break;
+
+            case VCLEVENT_APPLICATION_DATACHANGED:
+            {
+                // Invalidate the preview cache.
+                cache::PageCacheManager::Instance()->InvalidateAllCaches();
+
+                // Update the draw mode.
+                ULONG nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                    ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+                    : ViewShell::OUTPUT_DRAWMODE_COLOR);
+                if (mrSlideSorter.GetViewShell() != NULL)
+                    mrSlideSorter.GetViewShell()->GetFrameView()->SetDrawMode(nDrawMode);
+                if (pActiveWindow != NULL)
+                    pActiveWindow->SetDrawMode(nDrawMode);
+                mrView.HandleDrawModeChange();
+
+                // When the system font has changed a layout has to be done.
+                mrView.Resize();
+                FontProvider::Instance().Invalidate();
             }
-        }
-        else if (pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED)
-        {
-            // Invalidate the preview cache.
-            cache::PageCacheManager::Instance()->InvalidateAllCaches();
+            break;
 
-            // Update the draw mode.
-            ULONG nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
-                : ViewShell::OUTPUT_DRAWMODE_COLOR);
-            rShell.GetFrameView()->SetDrawMode(nDrawMode);
-            ::sd::Window* pActiveWindow = GetViewShell().GetActiveWindow();
-            if (pActiveWindow != NULL)
-                pActiveWindow->SetDrawMode(nDrawMode);
-            mrView.HandleDrawModeChange();
-
-            // When the system font has changed a layout has to be done.
-            mrView.Resize();
-            FontProvider::Instance().Invalidate();
-        }
-        else
-        {
-            //            DBG_ASSERT(FALSE, "SlideSorter: received event from unknown window");
+            default:
+                break;
         }
     }
 
     return TRUE;
-}
-
-
-
-
-void SlideSorterController::DeleteSelectedPages (void)
-{
-    ModelChangeLock aLock (*this);
-
-    // Hide focus.
-    bool bIsFocusShowing = GetFocusManager().IsFocusShowing();
-    if (bIsFocusShowing)
-        GetFocusManager().ToggleFocus();
-
-    // Store pointers to all selected page descriptors.  This is necessary
-    // because the pages get deselected when the first one is deleted.
-    model::SlideSorterModel::Enumeration aPageEnumeration (
-        GetModel().GetSelectedPagesEnumeration());
-    ::std::vector<SdPage*> aSelectedPages;
-    while (aPageEnumeration.HasMoreElements())
-        aSelectedPages.push_back (aPageEnumeration.GetNextElement()->GetPage());
-
-    // The actual deletion of the selected pages is done in one of two
-    // helper functions.  They are specialized for normal respectively for
-    // master pages.
-    GetView().BegUndo (SdResId(STR_UNDO_DELETEPAGES));
-    if (GetModel().GetEditMode() == EM_PAGE)
-        DeleteSelectedNormalPages(aSelectedPages);
-    else
-        DeleteSelectedMasterPages(aSelectedPages);
-    GetView().EndUndo ();
-
-    HandleModelChange();
-    aLock.Release();
-
-    // Show focus and move it to next valid location.
-    if (bIsFocusShowing)
-        GetFocusManager().ToggleFocus ();
-    GetFocusManager().MoveFocus (FocusManager::FMD_NONE);
-}
-
-
-
-
-void SlideSorterController::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
-{
-    // Prepare the deletion via the UNO API.
-    Reference<drawing::XDrawPages> xPages;
-    OSL_ASSERT(GetModel().GetEditMode() == EM_PAGE);
-
-    Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (
-        GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
-    if (xDrawPagesSupplier.is())
-        xPages = xDrawPagesSupplier->getDrawPages();
-
-    SdDrawDocument* pDocument = GetModel().GetDocument();
-    OSL_ASSERT(pDocument!=NULL);
-
-    // Iterate over all pages that where seleted when this method was called
-    // and delete the draw page the notes page.  The iteration is done in
-    // reverse order so that when one slide is not deleted (to avoid an
-    // empty document) the remaining slide is the first one.
-    ::std::vector<SdPage*>::const_reverse_iterator aI;
-    for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
-    {
-        // Do not delete the last slide in the document.
-        if (pDocument->GetSdPageCount(PK_STANDARD) <= 1)
-            break;
-
-        USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
-
-        // Get pointers to the page and its notes page.
-        SdPage* pPage = pDocument->GetSdPage (nPage, PK_STANDARD);
-        SdPage* pNotesPage = pDocument->GetSdPage (nPage, PK_NOTES);
-
-        DBG_ASSERT(pPage!=NULL, "page does not exist");
-        DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
-
-        // Remove regular slides with the API.
-        if (xPages.is())
-        {
-            // Add undo actions and delete the pages.  The order of adding
-            // the undo actions is important.
-            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
-            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-
-            // The XDrawPagesSupplier deletes both the slide and notes page.
-            xPages->remove (Reference<drawing::XDrawPage>(
-                pPage->getUnoPage(), UNO_QUERY));
-        }
-    }
-}
-
-
-
-
-void SlideSorterController::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedPages)
-{
-    // Prepare the deletion via the UNO API.
-    OSL_ASSERT(GetModel().GetEditMode() == EM_MASTERPAGE);
-
-    SdDrawDocument* pDocument = GetModel().GetDocument();
-    OSL_ASSERT(pDocument!=NULL);
-
-    // Iterate over all pages that where seleted when this method was called
-    // and delete the draw page the notes page.  The iteration is done in
-    // reverse order so that when one slide is not deleted (to avoid an
-    // empty document) the remaining slide is the first one.
-    ::std::vector<SdPage*>::const_reverse_iterator aI;
-    for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
-    {
-        // Do not delete the last slide in the document.
-        if (pDocument->GetMasterSdPageCount(PK_STANDARD) <= 1)
-            break;
-
-        USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
-
-        // Get pointers to the page and its notes page.
-        SdPage* pPage = pDocument->GetMasterSdPage (nPage, PK_STANDARD);
-        SdPage* pNotesPage = pDocument->GetMasterSdPage (nPage, PK_NOTES);
-
-        DBG_ASSERT(pPage!=NULL, "page does not exist");
-        DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
-
-        // Remove master slides with the core since the API does not only
-        // remove but also delete the page.
-        if (pDocument->GetMasterPageUserCount(pPage) == 0)
-        {
-            // Add undo actions and delete the pages.  The order of adding
-            // the undo actions is important.
-            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
-            GetView().AddUndo(GetView().GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-
-            pDocument->RemoveMasterPage (pPage->GetPageNum());
-            pDocument->RemoveMasterPage (pNotesPage->GetPageNum());
-        }
-    }
-}
-
-
-
-
-bool SlideSorterController::MoveSelectedPages (USHORT nTargetPageIndex)
-{
-    bool bMoved (false);
-    PageSelector& rSelector (GetPageSelector());
-
-    mrView.LockRedraw (TRUE);
-    ModelChangeLock aLock (*this);
-
-    // Transfer selection of the slide sorter to the document.
-    mrModel.SynchronizeDocumentSelection ();
-
-    // Prepare to select the moved pages.
-    SelectionCommand* pCommand = new SelectionCommand(rSelector,mrModel);
-    pCommand->AddPages(rSelector.GetPageSelection());
-
-    // At the moment we can not move master pages.
-    if (mrModel.GetEditMode() == EM_PAGE)
-        bMoved = mrModel.GetDocument()->MovePages(nTargetPageIndex);
-    if (bMoved)
-        mpSlotManager->ExecuteCommandAsynchronously(::std::auto_ptr<controller::Command>(pCommand));
-
-    mrView.LockRedraw (FALSE);
-
-    return bMoved;
 }
 
 
@@ -879,9 +692,10 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
     {
-        if( GetViewShell().GetActiveWindow() )
+        ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
+        if (pWindow != NULL)
         {
-            ULONG nMode = GetViewShell().GetActiveWindow()->GetDrawMode();
+            ULONG nMode = pWindow->GetDrawMode();
             UINT16 nQuality = 0;
 
             switch (nMode)
@@ -968,165 +782,6 @@ void SlideSorterController::UpdateAllPages (void)
 
 
 
-void SlideSorterController::SelectionHasChanged (
-    bool bMakeSelectionVisible)
-{
-    if (bMakeSelectionVisible)
-        mbIsMakeSelectionVisiblePending = true;
-
-    SlideSorterViewShell& rViewShell (GetViewShell());
-    rViewShell.Invalidate (SID_EXPAND_PAGE);
-    rViewShell.Invalidate (SID_SUMMARY_PAGE);
-    rViewShell.Invalidate(SID_SHOW_SLIDE);
-    rViewShell.Invalidate(SID_HIDE_SLIDE);
-
-    // StatusBar
-    rViewShell.Invalidate (SID_STATUS_PAGE);
-    rViewShell.Invalidate (SID_STATUS_LAYOUT);
-
-    rViewShell.UpdatePreview (GetActualPage());
-
-    // Tell the slection change listeners that the selection has changed.
-    ::std::vector<Link>::iterator iListener (
-        maSelectionChangeListeners.begin());
-    ::std::vector<Link>::iterator iEnd (
-        maSelectionChangeListeners.end());
-    for (; iListener!=iEnd; ++iListener)
-    {
-        iListener->Call(NULL);
-    }
-}
-
-
-
-
-
-/** We have to distinguish three cases: 1) the selection is empty, 2) the
-    selection fits completely into the visible area, 3) it does not.
-    1) The visible area is not modified.
-    2) When the selection fits completely into the visible area we have to
-    decide how to align it.  It is done by scrolling it there and thus when
-    we scoll up the (towards the end of the document) the bottom of the
-    selection is aligned with the bottom of the window.  When we scroll
-    down (towards the beginning of the document) the top of the selection is
-    aligned with the top of the window.
-    3) We have to decide what part of the selection to make visible.  Here
-    we use the eSelectionHint and concentrate on either the first, the last,
-    or the most recently selected page.  We then again apply the algorithm
-    of a).
-
-*/
-sal_Int32 SlideSorterController::MakeSelectionVisible (
-    SelectionHint eSelectionHint)
-{
-    // Determine the descriptors of the first, last, and most recently
-    // selected page and the bounding box that encloses their page objects.
-    model::SharedPageDescriptor pFirst;
-    model::SharedPageDescriptor pLast;
-    Rectangle aSelectionBox;
-    model::SlideSorterModel::Enumeration aSelectedPages (
-        mrModel.GetSelectedPagesEnumeration());
-    while (aSelectedPages.HasMoreElements())
-    {
-        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-
-        if (pFirst.get() == NULL)
-            pFirst = pDescriptor;
-        pLast = pDescriptor;
-
-        aSelectionBox.Union (mrView.GetPageBoundingBox (
-            pDescriptor,
-            view::SlideSorterView::CS_MODEL,
-            view::SlideSorterView::BBT_INFO));
-    }
-
-    if (pFirst != NULL)
-    {
-        // The mose recently selected page is assumed to lie in the range
-        // between first and last selected page.  Therefore the bounding box
-        // is not modified.
-        model::SharedPageDescriptor pRecent (GetPageSelector().GetMostRecentlySelectedPage());
-
-        // Determine scroll direction and the position in model coordinates
-        // that will be aligned with the top or bottom window border.
-        Rectangle aVisibleArea (GetViewShell().GetActiveWindow()->PixelToLogic(
-            Rectangle(
-                Point(0,0),
-                GetViewShell().GetActiveWindow()->GetOutputSizePixel())));
-        if (aSelectionBox.GetHeight() > aVisibleArea.GetHeight())
-        {
-            // We can show only a part of the selection.
-
-            // Get the bounding box of the page object on which to concentrate.
-            model::SharedPageDescriptor pRepresentative;
-            switch (eSelectionHint)
-            {
-                case SH_FIRST:
-                    pRepresentative = pFirst;
-                    break;
-
-                case SH_LAST:
-                    pRepresentative = pLast;
-                    break;
-
-                case SH_RECENT:
-                    if (pRecent == NULL)
-                        pRepresentative = pFirst;
-                    else
-                        pRepresentative = pRecent;
-                    break;
-            }
-            if (pRepresentative != NULL)
-                aSelectionBox = mrView.GetPageBoundingBox (
-                    pRepresentative,
-                    view::SlideSorterView::CS_MODEL,
-                    view::SlideSorterView::BBT_INFO);
-        }
-
-        return MakeRectangleVisible (aSelectionBox);
-    }
-    else
-        return 0;
-}
-
-
-
-
-sal_Int32 SlideSorterController::MakeRectangleVisible (const Rectangle& rBox)
-{
-    Rectangle aVisibleArea (GetViewShell().GetActiveWindow()->PixelToLogic(
-        Rectangle(
-            Point(0,0),
-            GetViewShell().GetActiveWindow()->GetOutputSizePixel())));
-
-    // Scroll the visible area to make aSelectionBox visible.
-    long nNewTop = aVisibleArea.Top();
-    if (rBox.Top() < aVisibleArea.Top())
-        nNewTop = rBox.Top();
-    else if (rBox.Bottom() > aVisibleArea.Bottom())
-        nNewTop = rBox.Bottom() - aVisibleArea.GetHeight();
-    // otherwise we do not modify the visible area.
-
-    // Make some corrections of the new visible area.
-    Rectangle aModelArea (mrView.GetModelArea());
-    if (nNewTop + aVisibleArea.GetHeight() > aModelArea.Bottom())
-        nNewTop = aModelArea.GetHeight() - aVisibleArea.GetHeight();
-    if (nNewTop < aModelArea.Top())
-        nNewTop = aModelArea.Top();
-
-    // Scroll.
-    if (nNewTop != aVisibleArea.Top())
-    {
-        mrView.InvalidatePageObjectVisibilities ();
-        GetScrollBarManager().SetTop (nNewTop);
-    }
-
-    return (aVisibleArea.Top() - nNewTop);
-}
-
-
-
-
 Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 {
     Rectangle aContentArea (rAvailableSpace);
@@ -1147,8 +802,8 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 {
     Rectangle aNewContentArea (maTotalWindowArea);
 
-    ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
-    if (pWindow != NULL)
+    ::boost::shared_ptr<sd::Window> pWindow = mrSlideSorter.GetContentWindow();
+    if (pWindow.get() != NULL)
     {
         // Place the scroll bars.
         aNewContentArea = GetScrollBarManager().PlaceScrollBars(maTotalWindowArea);
@@ -1183,7 +838,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 
 void SlideSorterController::SetZoom (long int nZoom)
 {
-    ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
+    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
     long int nCurrentZoom ((long int)(
         pWindow->GetMapMode().GetScaleX().operator double() * 100));
 
@@ -1227,31 +882,12 @@ void SlideSorterController::SetZoom (long int nZoom)
 
 FunctionReference SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 {
-    FunctionReference xFunc( SelectionFunction::Create(*this, rRequest) );
+    FunctionReference xFunc( SelectionFunction::Create(mrSlideSorter, rRequest) );
     return xFunc;
 }
 
 
 
-void SlideSorterController::AddSelectionChangeListener (const Link& rListener)
-{
-    if (::std::find (
-        maSelectionChangeListeners.begin(),
-        maSelectionChangeListeners.end(),
-        rListener) == maSelectionChangeListeners.end())
-    {
-        maSelectionChangeListeners.push_back (rListener);
-    }
-}
-
-void SlideSorterController::RemoveSelectionChangeListener(const Link&rListener)
-{
-    maSelectionChangeListeners.erase (
-        ::std::find (
-            maSelectionChangeListeners.begin(),
-            maSelectionChangeListeners.end(),
-            rListener));
-}
 
 void SlideSorterController::PrepareEditModeChange (void)
 {
@@ -1265,7 +901,8 @@ void SlideSorterController::PrepareEditModeChange (void)
         // Search for the first selected page and determine the master page
         // used by its page object.  It will be selected after the switch.
         // In the same loop the current selection is stored.
-        PageEnumeration aSelectedPages (mrModel.GetSelectedPagesEnumeration());
+        PageEnumeration aSelectedPages (
+            PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
         while (aSelectedPages.HasMoreElements())
         {
             SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
@@ -1279,7 +916,8 @@ void SlideSorterController::PrepareEditModeChange (void)
         }
 
         // Remember the current page.
-        mnCurrentPageBeforeSwitch = (GetViewShell().GetViewShellBase()
+        if (mrSlideSorter.GetViewShell() != NULL)
+            mnCurrentPageBeforeSwitch = (mrSlideSorter.GetViewShell()->GetViewShellBase()
             .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
     }
 }
@@ -1312,20 +950,21 @@ void SlideSorterController::FinishEditModeChange (void)
     {
         // Search for the master page that was determined in
         // PrepareEditModeChange() and make it the current page.
-        PageEnumeration aAllPages (mrModel.GetAllPagesEnumeration ());
+        PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
         while (aAllPages.HasMoreElements())
         {
             SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
             if (pDescriptor->GetPage() == mpEditModeChangeMasterPage)
             {
-                mpPageSelector->SetCurrentPage(pDescriptor);
+                GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
                 break;
             }
         }
     }
     else
     {
-        mpPageSelector->SetCurrentPage (mnCurrentPageBeforeSwitch);
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnCurrentPageBeforeSwitch));
+        GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
 
         // Restore the selection.
         ::std::vector<SdPage*>::iterator iPage;
@@ -1354,7 +993,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
     // that of the name change.
     do
     {
-        ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
+        ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
         if (pWindow == NULL)
             break;
 
@@ -1402,6 +1041,45 @@ bool SlideSorterController::IsContextMenuOpen (void) const
 }
 
 
+
+
+::boost::shared_ptr<Properties> SlideSorterController::GetProperties (void) const
+{
+    return mpProperties;
+}
+
+
+
+
+void SlideSorterController::SetDocumentSlides (const Reference<container::XIndexAccess>& rxSlides)
+{
+    if (mrModel.GetDocumentSlides() != rxSlides)
+    {
+        PreModelChange();
+        mrModel.SetDocumentSlides(rxSlides);
+        mrView.Layout();
+        PostModelChange(false);
+    }
+}
+
+
+
+
+::boost::shared_ptr<Animator> SlideSorterController::GetAnimator (void) const
+{
+    return mpAnimator;
+}
+
+
+
+
+view::HighlightObject* SlideSorterController::GetHighlightObject (void) const
+{
+    if (GetProperties()->IsHighlightCurrentSlide())
+        return mpHighlightObject;
+    else
+        return NULL;
+}
 
 
 //===== SlideSorterController::ModelChangeLock ================================
