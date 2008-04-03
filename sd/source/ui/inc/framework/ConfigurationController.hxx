@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:10:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,34 +38,17 @@
 
 #include "MutexOwner.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGEREQUEST_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_CONFIGURATIONCHANGEEVENT_HPP_
-#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/XResourceFactoryManager.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
@@ -73,11 +56,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
+namespace css = ::com::sun::star;
+
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper2 <
-    ::com::sun::star::drawing::framework::XConfigurationController,
-    ::com::sun::star::lang::XInitialization
+    ::css::drawing::framework::XConfigurationController,
+    ::css::lang::XInitialization
     > ConfigurationControllerInterfaceBase;
 
 } // end of anonymous namespace.
@@ -93,11 +78,10 @@ class ConfigurationControllerBroadcaster;
 class ConfigurationUpdater;
 class ConfigurationUpdaterLock;
 
-/** The configuration controller is responsible for the synchronization of
-    other controllers for the management of resources like panes, views,
-    tool bars, and command groups.
+/** The configuration controller is responsible for maintaining the current
+    configuration.
 
-    @see com::sun::star::drawing::framework::XConfigurationController
+    @see css::drawing::framework::XConfigurationController
         for an extended documentation.
 */
 class ConfigurationController
@@ -106,13 +90,8 @@ class ConfigurationController
       public ConfigurationControllerInterfaceBase
 {
 public:
-    /** Create a new instance of this class for the given component
-        context.
-    */
-    static ::com::sun::star::uno::Reference<
-    ::com::sun::star::drawing::framework::XConfigurationController> Create (
-        const ::com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& rxContext);
-        // NOTHROW
+    ConfigurationController (void) throw();
+    virtual ~ConfigurationController (void) throw();
 
     virtual void SAL_CALL disposing (void);
 
@@ -120,72 +99,101 @@ public:
     // XConfigurationController
 
     virtual void SAL_CALL lock (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL unlock (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL requestResourceActivation (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
-            rxResourceId,
-        ::com::sun::star::drawing::framework::ResourceActivationMode eMode)
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        css::drawing::framework::ResourceActivationMode eMode)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL requestResourceDeactivation (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
+        const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::framework::XResource>
+        SAL_CALL getResource (
+            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL update (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
-    virtual  ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration>
-        SAL_CALL getConfiguration (void)
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual  css::uno::Reference<
+        css::drawing::framework::XConfiguration>
+        SAL_CALL getRequestedConfiguration (void)
+        throw (css::uno::RuntimeException);
+
+    virtual  css::uno::Reference<
+        css::drawing::framework::XConfiguration>
+        SAL_CALL getCurrentConfiguration (void)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL restoreConfiguration (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration>&
+        const css::uno::Reference<css::drawing::framework::XConfiguration>&
         rxConfiguration)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
 
     // XConfigurationControllerBroadcaster
 
     virtual void SAL_CALL addConfigurationChangeListener (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeListener>& rxListener,
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeListener>& rxListener,
         const ::rtl::OUString& rsEventType,
-        const ::com::sun::star::uno::Any& rUserData)
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::uno::Any& rUserData)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL removeConfigurationChangeListener (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeListener>& rxListener)
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeListener>& rxListener)
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL notifyEvent (
-        const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException);
 
 
     // XConfigurationRequestQueue
 
     virtual sal_Bool SAL_CALL hasPendingRequests (void)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL postChangeRequest (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationChangeRequest>& rxRequest)
-        throw (::com::sun::star::uno::RuntimeException);
+        const css::uno::Reference<
+            css::drawing::framework::XConfigurationChangeRequest>& rxRequest)
+        throw (css::uno::RuntimeException);
 
+
+    // XResourceFactoryManager
+
+    virtual void SAL_CALL addResourceFactory(
+        const ::rtl::OUString& sResourceURL,
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeResourceFactoryForURL(
+        const ::rtl::OUString& sResourceURL)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeResourceFactoryForReference(
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::framework::XResourceFactory>
+        SAL_CALL getResourceFactory (
+        const ::rtl::OUString& sResourceURL)
+        throw (css::uno::RuntimeException);
 
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
-        const ::com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rArguments)
-        throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        const css::uno::Sequence<css::uno::Any>& rArguments)
+        throw (css::uno::Exception, css::uno::RuntimeException);
 
 
     /** Use this class instead of calling lock() and unlock() directly in
@@ -194,51 +202,24 @@ public:
     class Lock
     {
     public:
-        Lock (const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationController>& rxController);
+        Lock (const css::uno::Reference<
+            css::drawing::framework::XConfigurationController>& rxController);
         ~Lock (void);
     private:
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XConfigurationController> mxController;
+        css::uno::Reference<
+            css::drawing::framework::XConfigurationController> mxController;
     };
 
 private:
-
-   /** The queue processor ownes the queue of configuration change request
-        objects and processes the objects.
-    */
-    ::boost::scoped_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
-
-    /** The Broadcaster class implements storing and calling of listeners.
-    */
-    ::boost::scoped_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
-
-    /** The requested configuration which is modifed (asynchronously) by
-        calls to requestResourceActivation() and
-        requestResourceDeactivation().  The mpConfigurationUpdater makes the
-        current configuration reflect the content of this one.
-    */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
-
-    ViewShellBase* mpBase;
-
-    bool mbIsInitialized;
-
-    ::boost::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
-    ::boost::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
-
-    sal_Int32 mnLockCount;
-
-    ConfigurationController (void) throw();
-    void Initialize (void);
-    virtual ~ConfigurationController (void) throw();
+    class Implementation;
+    ::boost::scoped_ptr<Implementation> mpImplementation;
+    bool mbIsDisposed;
 
     /** When the called object has already been disposed this method throws
         an exception and does not return.
     */
     void ThrowIfDisposed (void) const
-        throw (::com::sun::star::lang::DisposedException);
+        throw (css::lang::DisposedException);
 };
 
 } } // end of namespace sd::framework
