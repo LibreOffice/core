@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:57:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,12 +71,7 @@
 #include <basic/sbstar.hxx>
 #include "undo/undoobjects.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XViewController.hpp>
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -376,7 +371,6 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         case ViewShell::ST_OUTLINE:
             return OUTLINE_FACTORY_ID;
 
-        case ViewShell::ST_SLIDE:
         case ViewShell::ST_SLIDE_SORTER:
             return SLIDE_SORTER_FACTORY_ID;
 
