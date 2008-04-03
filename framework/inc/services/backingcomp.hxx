@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,6 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
-#include <svtools/acceleratorexecute.hxx>
-#endif
-
 //__________________________________________
 // definition
 
@@ -153,9 +149,6 @@ class BackingComp : public  css::lang::XTypeProvider
 
         /** helper for drag&drop. */
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > m_xDropTargetListener;
-
-        /** helper, which handle shortcuts for us. */
-        ::svt::AcceleratorExecute* m_pAccExec;
 
     //______________________________________
     // interface
