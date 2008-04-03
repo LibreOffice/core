@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:50:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <com/sun/star/awt/Key.hpp>
 
-#include "ShowWindow.hxx"
+#include "showwindow.hxx"
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
@@ -56,9 +56,6 @@
 
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
 #endif
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
@@ -80,16 +77,16 @@ static const ULONG SHOW_MOUSE_TIMEOUT = 1000;
 
 // =============================================================================
 
-ShowWindow::ShowWindow( ::Window* pParent )
-: ::sd::Window( pParent ),
-    mnPauseTimeout( SLIDE_NO_TIMEOUT ),
-    mnRestartPageIndex( PAGE_NO_END ),
-    meShowWindowMode(SHOWWINDOWMODE_NORMAL),
-    mbShowNavigatorAfterSpecialMode( FALSE ),
-    mbMouseAutoHide(true),
-    mbMouseCursorHidden(false),
-    mnFirstMouseMove(0),
-    mpSlideshow(0)
+ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::Window* pParent )
+: ::sd::Window( pParent )
+, mnPauseTimeout( SLIDE_NO_TIMEOUT )
+, mnRestartPageIndex( PAGE_NO_END )
+, meShowWindowMode(SHOWWINDOWMODE_NORMAL)
+, mbShowNavigatorAfterSpecialMode( FALSE )
+, mbMouseAutoHide(true)
+, mbMouseCursorHidden(false)
+, mnFirstMouseMove(0)
+, mxController( xController )
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
 
@@ -191,11 +188,20 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 
     if( !bReturn )
     {
-        if( mpViewShell )
-            bReturn = mpViewShell->KeyInput(rKEvt, this);
+        if( mxController.is() )
+            bReturn = mxController->keyInput(rKEvt);
 
         if( !bReturn )
-            Window::KeyInput(rKEvt);
+        {
+            if( mpViewShell )
+            {
+                mpViewShell->KeyInput(rKEvt,this);
+            }
+            else
+            {
+                Window::KeyInput(rKEvt);
+            }
+        }
     }
 
     if( mpViewShell )
@@ -208,16 +214,11 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void ShowWindow::MouseButtonDown(const MouseEvent& rMEvt)
+void ShowWindow::MouseButtonDown(const MouseEvent& /*rMEvt*/)
 {
     if( SHOWWINDOWMODE_PREVIEW == meShowWindowMode )
     {
         TerminateShow();
-    }
-    else if( SHOWWINDOWMODE_NORMAL == meShowWindowMode )
-    {
-        if( mpViewShell )
-            mpViewShell->MouseButtonDown( rMEvt, this );
     }
     else if( mpViewShell )
     {
@@ -231,7 +232,7 @@ void ShowWindow::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void ShowWindow::MouseMove(const MouseEvent& rMEvt)
+void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
 {
     if( mbMouseAutoHide )
     {
@@ -269,16 +270,7 @@ void ShowWindow::MouseMove(const MouseEvent& rMEvt)
     }
 
     if( mpViewShell )
-    {
-        if( SHOWWINDOWMODE_NORMAL == meShowWindowMode )
-        {
-            mpViewShell->MouseMove( rMEvt, this );
-        }
-        else
-        {
-            mpViewShell->SetActiveWindow( this );
-        }
-    }
+        mpViewShell->SetActiveWindow( this );
 }
 
 /*************************************************************************
@@ -302,9 +294,10 @@ void ShowWindow::MouseButtonUp(const MouseEvent& rMEvt)
     {
         RestartShow();
     }
-    else if( mpViewShell )
+    else
     {
-        mpViewShell->MouseButtonUp( rMEvt, this );
+        if( mxController.is() )
+            mxController->mouseButtonUp( rMEvt );
     }
 }
 
@@ -329,20 +322,13 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
         SetClipRegion( aOldClipRegion );
 */
-        if( mpSlideshow )
+        if( mxController.is() )
         {
-            mpSlideshow->paint(rRect);
+            mxController->paint(rRect);
         }
-        else
+        else if(mpViewShell )
         {
-            if(mpViewShell )
-            {
-                Slideshow* pSlideShow = mpViewShell->GetSlideShow();
-                if( pSlideShow )
-                    pSlideShow->paint(rRect);
-                else
-                    mpViewShell->Paint(rRect, this);
-            }
+            mpViewShell->Paint(rRect, this);
         }
     }
     else
@@ -432,7 +418,7 @@ BOOL ShowWindow::SetEndMode()
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
+        DeleteWindowFromPaintView();
         meShowWindowMode = SHOWWINDOWMODE_END;
 //      maShowBackground = GetBackground();
 //      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
@@ -455,13 +441,18 @@ BOOL ShowWindow::SetEndMode()
 
 BOOL ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
-    if( mpViewShell && mpViewShell->GetSlideShow() && !nTimeout )
+    rtl::Reference< SlideShow > xSlideShow;
+
+    if( mpViewShell )
+        xSlideShow = SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() );
+
+    if( xSlideShow.is() && !nTimeout )
     {
-        mpViewShell->GetSlideShow()->jumpToPageIndex( nPageIndexToRestart );
+        xSlideShow->jumpToPageIndex( nPageIndexToRestart );
     }
     else if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
+        DeleteWindowFromPaintView();
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
@@ -494,7 +485,7 @@ BOOL ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
 {
     if( ( SHOWWINDOWMODE_NORMAL == meShowWindowMode ) && mpViewShell && mpViewShell->GetView() )
     {
-        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
+        DeleteWindowFromPaintView();
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
 //      maShowBackground = GetBackground();
@@ -542,9 +533,10 @@ void ShowWindow::TerminateShow()
             mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, TRUE );
             mbShowNavigatorAfterSpecialMode = FALSE;
         }
-
-        mpViewShell->GetViewShellBase().StopPresentation();
     }
+
+    if( mxController.is() )
+        mxController->endPresentation();
 
     mnRestartPageIndex = PAGE_NO_END;
 }
@@ -573,21 +565,20 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
     if( mpViewShell )
     {
-        sd::Slideshow* pSlideShow = mpViewShell->GetSlideShow();
+        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( mpViewShell->GetViewShellBase() ) );
 
-        if( pSlideShow )
+         if( xSlideShow.is() )
         {
-            if( mpViewShell->GetView() )
-                mpViewShell->GetView()->AddWindowToPaintView( this );
+            AddWindowToPaintView();
 
             if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode )
             {
-                pSlideShow->pause(false);
+                xSlideShow->pause(false);
                 Invalidate();
             }
             else
             {
-                pSlideShow->jumpToPageIndex( nPageIndexToRestart );
+                xSlideShow->jumpToPageIndex( nPageIndexToRestart );
             }
         }
     }
@@ -752,6 +743,26 @@ IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent*, pEvent )
 void ShowWindow::SetPresentationArea( const Rectangle& rPresArea )
 {
     maPresArea = rPresArea;
+}
+
+void ShowWindow::DeleteWindowFromPaintView()
+{
+    if( mpViewShell->GetView() )
+        mpViewShell->GetView()->DeleteWindowFromPaintView( this );
+
+    USHORT nChild = GetChildCount();
+    while( nChild-- )
+        GetChild( nChild )->Show( FALSE );
+}
+
+void ShowWindow::AddWindowToPaintView()
+{
+    if( mpViewShell->GetView() )
+        mpViewShell->GetView()->AddWindowToPaintView( this );
+
+    USHORT nChild = GetChildCount();
+    while( nChild-- )
+        GetChild( nChild )->Show( TRUE );
 }
 
 } // end of namespace sd
