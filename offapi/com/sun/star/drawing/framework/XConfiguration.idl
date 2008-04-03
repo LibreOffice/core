@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConfiguration.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:43:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,9 @@ interface XConfiguration
             all resource ids are returned that belong to the configuration.
         @return
             The set of returned resource ids may be empty when there are no
-            resource ids that match all conditions.
+            resource ids that match all conditions.  The resources in the
+            sequence are ordered with respect to the
+            XResourceId::compareTo() method.
     */
     sequence<XResourceId> getResources (
         [in] XResourceId xAnchorId,
