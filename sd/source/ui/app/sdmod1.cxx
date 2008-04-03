@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:43:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:26:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include "slideshow.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -297,13 +298,9 @@ void SdModule::Execute(SfxRequest& rReq)
                 ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
                 if (pViewShell)
                 {
-                    if (pViewShell->GetSlideShow())
+                    if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
                     {
-                        if (rReq.GetArgs() == NULL)
-                        {
-                            // e.g. open button during a presentation.
-                            bIntercept = TRUE;
-                        }
+                        bIntercept = TRUE;
                     }
                 }
             }
@@ -427,7 +424,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
                 ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
                 if (pViewShell)
                 {
-                    if (pViewShell->GetSlideShow())
+                    if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
                     {
                         rItemSet.DisableItem(SID_SD_AUTOPILOT);
                     }
