@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:11:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1875,7 +1875,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
 {
     // Alle WindowBits entfernen, die wir nicht haben wollen
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW );
     if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
@@ -1884,7 +1884,13 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     mbSmallOutBorder    = FALSE;
     if ( nTypeStyle & BORDERWINDOW_STYLE_FRAME )
     {
-        if( nStyle & WB_OWNERDRAWDECORATION )
+        if( (nStyle & WB_SYSTEMCHILDWINDOW) )
+        {
+            mpWindowImpl->mbOverlapWin  = TRUE;
+            mpWindowImpl->mbFrame       = TRUE;
+            mbFrameBorder               = FALSE;
+        }
+        else if( (nStyle & WB_OWNERDRAWDECORATION) )
         {
             mpWindowImpl->mbOverlapWin  = TRUE;
             mpWindowImpl->mbFrame       = TRUE;
