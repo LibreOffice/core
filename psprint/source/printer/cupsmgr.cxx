@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ typedef void cups_option_t;
 #include <cupsmgr.hxx>
 
 #include <algorithm>
+
+#include <setjmp.h>
+#include <signal.h>
 
 // FIXME: SAL_MODULENAME_WITH_VERSION needs to be fixed on OS X
 #ifdef MACOSX
@@ -432,6 +435,17 @@ void CUPSManager::runDestThread( void* pThis )
     ((CUPSManager*)pThis)->runDests();
 }
 
+static sigjmp_buf aViolationBuffer;
+
+extern "C"
+{
+    static void lcl_signal_action(int nSignal)
+    {
+        fprintf( stderr, "Signal %d during fontconfig initialization called, ignoring fontconfig\n", nSignal );
+        siglongjmp( aViolationBuffer, 1 );
+    }
+}
+
 void CUPSManager::runDests()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -439,18 +453,51 @@ void CUPSManager::runDests()
 #endif
     int nDests = 0;
     cups_dest_t* pDests = NULL;
-    nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "came out of cupsGetDests\n" );
-#endif
 
-    osl::MutexGuard aGuard( m_aCUPSMutex );
-    m_nDests = nDests;
-    m_pDests = pDests;
-    m_bNewDests = true;
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "finished cupsGetDests\n" );
-#endif
+    // #i86306# prepare against really broken CUPS installations / missing servers
+
+    // install signal handler for SEGV, BUS and ABRT
+    struct sigaction act;
+    struct sigaction oact[3];
+
+    act.sa_handler = lcl_signal_action;
+    act.sa_flags   = 0;
+    sigemptyset(&(act.sa_mask));
+
+    int nSegvSignalInstalled = sigaction(SIGSEGV, &act, &oact[0]);
+    int nBusSignalInstalled = sigaction(SIGBUS, &act, &oact[1]);
+    int nAbortSignalInstalled = sigaction(SIGABRT, &act, &oact[2]);
+
+    // prepare against a signal during FcInit or FcConfigGetCurrent
+    if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
+    {
+        nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "came out of cupsGetDests\n" );
+        #endif
+
+        osl::MutexGuard aGuard( m_aCUPSMutex );
+        m_nDests = nDests;
+        m_pDests = pDests;
+        m_bNewDests = true;
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "finished cupsGetDests\n" );
+        #endif
+    }
+    else
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "cupsGetDests crashed, not using CUPS\n" );
+        #endif
+    }
+
+    // restore old signal handlers
+    if( nSegvSignalInstalled == 0 )
+        sigaction( SIGSEGV, &oact[0], NULL );
+    if( nBusSignalInstalled == 0 )
+        sigaction( SIGBUS, &oact[1], NULL );
+    if( nAbortSignalInstalled == 0 )
+        sigaction( SIGABRT, &oact[2], NULL );
 }
 
 void CUPSManager::initialize()
@@ -997,7 +1044,7 @@ bool CUPSManager::setDefaultPrinter( const OUString& rName )
     }
     else
 #endif
-        PrinterInfoManager::setDefaultPrinter( rName );
+        bSuccess = PrinterInfoManager::setDefaultPrinter( rName );
 
     return bSuccess;
 }
