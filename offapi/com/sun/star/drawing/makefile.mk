@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 09:18:07 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:29:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,8 @@ IDLFILES=\
     Shape.idl\
     ShapeCollection.idl\
     Shapes.idl\
+    SlideRenderer.idl\
+    SlideSorter.idl\
     SnapObjectType.idl\
     Text.idl\
     TextAdjust.idl\
@@ -201,6 +203,7 @@ IDLFILES=\
     XDrawPagesSupplier.idl\
     XDrawPageSummarizer.idl\
     XDrawPageSupplier.idl\
+    XDrawSubController.idl\
     XDrawView.idl\
     XEnhancedCustomShapeDefaulter.idl\
     XGluePointsSupplier.idl\
@@ -209,6 +212,7 @@ IDLFILES=\
     XLayerSupplier.idl\
     XMasterPagesSupplier.idl\
     XMasterPageTarget.idl\
+    XPresenterHelper.idl\
     XShape.idl\
     XShapeAligner.idl\
     XShapeArranger.idl\
@@ -219,6 +223,8 @@ IDLFILES=\
     XShapeGrouper.idl\
     XShapeMirror.idl\
     XShapes.idl\
+    XSlidePreviewCache.idl\
+    XSlideRenderer.idl\
     XUniversalShapeDescriptor.idl\
     XSelectionFunction.idl
 
