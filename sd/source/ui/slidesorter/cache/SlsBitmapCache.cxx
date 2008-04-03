@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsBitmapCache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:03:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ typedef ::std::vector<
 
 //=====  BitmapCache  =========================================================
 
-BitmapCache::BitmapCache (void)
+BitmapCache::BitmapCache (const sal_Int32 nMaximalNormalCacheSize)
     : maMutex(),
       mpBitmapContainer(new CacheBitmapContainer()),
       mnNormalCacheSize(0),
@@ -149,10 +149,15 @@ BitmapCache::BitmapCache (void)
       mpCacheCompactor(),
       mbIsFull(false)
 {
-    Any aCacheSize (CacheConfiguration::Instance()->GetValue(
+    if (nMaximalNormalCacheSize > 0)
+        mnMaximalNormalCacheSize = nMaximalNormalCacheSize;
+    else
+    {
+        Any aCacheSize (CacheConfiguration::Instance()->GetValue(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CacheSize"))));
-    if (aCacheSize.has<sal_Int32>())
-        aCacheSize >>= mnMaximalNormalCacheSize;
+        if (aCacheSize.has<sal_Int32>())
+            aCacheSize >>= mnMaximalNormalCacheSize;
+    }
 
     mpCacheCompactor = CacheCompactor::Create(*this,mnMaximalNormalCacheSize);
 }
