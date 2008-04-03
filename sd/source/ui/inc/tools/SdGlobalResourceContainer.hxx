@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdGlobalResourceContainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:46:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #include "sdmod.hxx"
 #include <memory>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace sd {
 
@@ -50,9 +53,9 @@ public:
 
 /** The purpose of this container is to hold references to resources that
     are globally available to all interested objects and to destroy them
-    when the sd module is destroyed.  Resources can be containers of bitmaps
-    or the container of master pages used by the MasterPagesSelector objects
-    in the task panel.
+    when the sd module is destroyed.  Examples for resources can be
+    containers of bitmaps or the container of master pages used by the
+    MasterPagesSelector objects in the task panel.
 
     It works like a singleton in that there is one instance per sd module.
     Resources can be added (by themselves or their owners) to the
@@ -90,6 +93,12 @@ public:
         references exist the resource is destroyed as well.
     */
     void AddResource (::boost::shared_ptr<SdGlobalResource> pResource);
+
+    /** Add a resource that is implemented as UNO object.  Destruction
+        (when the sd modules is unloaded) is done by a) calling dispose()
+        when the XComponent is supported and by b) releasing the reference.
+    */
+    void AddResource (const ::css::uno::Reference<css::uno::XInterface>& rxResource);
 
     /** Tell the container that it is not any longer responsible for the
         specified resource.
