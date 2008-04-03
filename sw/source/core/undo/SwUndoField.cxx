@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:48:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 
 using namespace ::com::sun::star::uno;
 
-SwUndoField::SwUndoField(const SwPosition & rPos)
-    : SwUndo(UNDO_FIELD)
+SwUndoField::SwUndoField(const SwPosition & rPos, SwUndoId _nId )
+    : SwUndo(_nId)
 {
     nNodeIndex = rPos.nNode.GetIndex();
     nOffset = rPos.nContent.GetIndex();
@@ -73,8 +73,8 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                                        const SwField & _aOldField,
                          const SwField & _aNewField,
-                         SwMsgPoolItem * _pHnt, BOOL _bUpdate)
-    : SwUndoField(rPos), pOldField(_aOldField.Copy()),
+                         SwMsgPoolItem * _pHnt, BOOL _bUpdate, SwUndoId _nId)
+    : SwUndoField(rPos,_nId), pOldField(_aOldField.Copy()),
       pNewField(_aNewField.Copy()), pHnt(_pHnt),
       bUpdate(_bUpdate)
 {
