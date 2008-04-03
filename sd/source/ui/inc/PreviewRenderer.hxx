@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,14 @@ public:
         from the given output device.
         @param pTemplate
             May be NULL.
+        @param bPaintFrame
+            When <TRUE/> (the default) then a frame is painted around the
+            preview.  This makes the actual preview smaller.
     */
-    PreviewRenderer (OutputDevice* pTemplate = NULL);
+    PreviewRenderer (
+        OutputDevice* pTemplate = NULL,
+        const bool bPaintFrame = true);
+
     ~PreviewRenderer (void);
 
     /** Render a page with the given pixel size.
@@ -80,7 +86,7 @@ public:
     */
     Image RenderPage (
         const SdPage* pPage,
-        int nWidth,
+        const sal_Int32 nWidth,
         const String& sSubstitutionText);
 
     /** Render a page with the given pixel size.
@@ -95,9 +101,14 @@ public:
     */
     Image RenderPage (
         const SdPage* pPage,
-        Size aPreviewPixelSize,
+        const Size aPreviewPixelSize,
         const String& sSubstitutionText);
 
+    /** Render an image that contains the given substitution text instead of a
+        slide preview.
+        @param aPreviewPixelSize
+            The size in device coordinates of the image.
+    */
     Image RenderSubstitution (
         const Size& rPreviewPixelSize,
         const String& sSubstitutionText);
@@ -120,7 +131,8 @@ private:
     ::std::auto_ptr<DrawView> mpView;
     DrawDocShell* mpDocShellOfView;
     int mnWidthOfView;
-    Color maFrameColor;
+    const Color maFrameColor;
+    const bool mbHasFrame;
     static const int snSubstitutionTextSize;
     // Width of the frame that is painted arround the preview.
     static const int snFrameWidth;
@@ -135,8 +147,13 @@ private:
 
     /** Set up the map mode so that the given page is renderer into a bitmap
         with the specified width.
+        @param rPage
+            The page for which the preview is created.
+        @param rPixelSize
+            The size of the resulting preview bitmap.  Note that this size
+            includes the frame.  The actual preview is smaller accordingly.
      */
-    void SetupOutputSize (const SdPage* pPage, const Size& rPixelSize);
+    void SetupOutputSize (const SdPage& rPage, const Size& rPixelSize);
 
     /** When mpView is empty then create a new view and initialize it.
         Otherwise just initialize it.
