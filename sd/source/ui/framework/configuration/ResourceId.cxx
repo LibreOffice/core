@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceId.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:47:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,11 @@
 #include "precompiled_sd.hxx"
 
 #include "framework/ResourceId.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include "framework/FrameworkHelper.hxx"
+#include "tools/SdGlobalResourceContainer.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
+#include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
@@ -94,9 +91,12 @@ Sequence<rtl::OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
 
 //===== ResourceId ============================================================
 
+WeakReference<util::XURLTransformer> ResourceId::mxURLTransformerWeak;
+
 ResourceId::ResourceId (void)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(0)
+      maResourceURLs(0),
+      mpURL()
 {
 }
 
@@ -106,8 +106,10 @@ ResourceId::ResourceId (void)
 ResourceId::ResourceId (
     const std::vector<OUString>& rResourceURLs)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(rResourceURLs)
+      maResourceURLs(rResourceURLs),
+      mpURL()
 {
+    ParseResourceURL();
 }
 
 
@@ -116,11 +118,13 @@ ResourceId::ResourceId (
 ResourceId::ResourceId (
     const OUString& rsResourceURL)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(1, rsResourceURL)
+      maResourceURLs(1, rsResourceURL),
+      mpURL()
 {
     // Handle the special case of an empty resource URL.
     if (rsResourceURL.getLength() == 0)
         maResourceURLs.clear();
+    ParseResourceURL();
 }
 
 
@@ -130,10 +134,12 @@ ResourceId::ResourceId (
     const OUString& rsResourceURL,
     const OUString& rsAnchorURL)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(2)
+      maResourceURLs(2),
+      mpURL()
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsAnchorURL;
+    ParseResourceURL();
 }
 
 
@@ -143,11 +149,13 @@ ResourceId::ResourceId (
     const OUString& rsResourceURL,
     const ::std::vector<OUString>& rAnchorURLs)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(1+rAnchorURLs.size())
+      maResourceURLs(1+rAnchorURLs.size()),
+      mpURL()
 {
     maResourceURLs[0] = rsResourceURL;
     for (sal_uInt32 nIndex=0; nIndex<rAnchorURLs.size(); ++nIndex)
         maResourceURLs[nIndex+1] = rAnchorURLs[nIndex];
+    ParseResourceURL();
 }
 
 
@@ -158,12 +166,14 @@ ResourceId::ResourceId (
     const OUString& rsFirstAnchorURL,
     const Sequence<OUString>& rAnchorURLs)
     : ResourceIdInterfaceBase(),
-      maResourceURLs(2+rAnchorURLs.getLength())
+      maResourceURLs(2+rAnchorURLs.getLength()),
+      mpURL()
 {
     maResourceURLs[0] = rsResourceURL;
     maResourceURLs[1] = rsFirstAnchorURL;
     for (sal_Int32 nIndex=0; nIndex<rAnchorURLs.getLength(); ++nIndex)
         maResourceURLs[nIndex+2] = rAnchorURLs[nIndex];
+    ParseResourceURL();
 }
 
 
@@ -171,6 +181,7 @@ ResourceId::ResourceId (
 
 ResourceId::~ResourceId (void)
 {
+    mpURL.reset();
 }
 
 
@@ -184,6 +195,31 @@ OUString SAL_CALL
         return maResourceURLs[0];
     else
         return OUString();
+}
+
+
+
+
+util::URL SAL_CALL
+    ResourceId::getFullResourceURL (void)
+ throw(com::sun::star::uno::RuntimeException)
+{
+    if (mpURL.get() != NULL)
+        return *mpURL;
+
+    Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);
+    if (xURLTransformer.is() && maResourceURLs.size() > 0)
+    {
+        mpURL.reset(new util::URL);
+        mpURL->Complete = maResourceURLs[0];
+        xURLTransformer->parseStrict(*mpURL);
+        return *mpURL;
+    }
+
+    util::URL aURL;
+    if (maResourceURLs.size() > 0)
+        aURL.Complete = maResourceURLs[0];
+    return aURL;
 }
 
 
@@ -305,29 +341,37 @@ sal_Int16 ResourceId::CompareToLocalImplementation (const ResourceId& rId) const
 {
     sal_Int16 nResult (0);
 
-    sal_uInt32 nLocalURLCount (maResourceURLs.size());
-    sal_uInt32 nURLCount(rId.maResourceURLs.size());
-    if (nLocalURLCount != nURLCount)
+    const sal_uInt32 nLocalURLCount (maResourceURLs.size());
+    const sal_uInt32 nURLCount(rId.maResourceURLs.size());
+
+    // Start comparison with the top most anchors.
+    for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
+         nIndex>=0 && nLocalIndex>=0;
+         --nIndex,--nLocalIndex)
     {
-        if (nLocalURLCount < nURLCount)
-            nResult = -1;
-        else
-            nResult = +1;
-    }
-    else
-    {
-        for (sal_uInt32 nIndex=0; nIndex<nLocalURLCount; ++nIndex)
+        const OUString sLocalURL (maResourceURLs[nLocalIndex]);
+        const OUString sURL (rId.maResourceURLs[nIndex]);
+        const sal_Int32 nLocalResult (sURL.compareTo(sLocalURL));
+        if (nLocalResult != 0)
         {
-            sal_Int32 nLocalResult ( maResourceURLs[nIndex].compareTo(rId.maResourceURLs[nIndex]));
-            if (nLocalResult != 0)
-            {
-                if (nLocalResult < 0)
-                    nResult = -1;
-                else
-                    nResult = +1;
-                break;
-            }
+            if (nLocalResult < 0)
+                nResult = -1;
+            else
+                nResult = +1;
+            break;
         }
+    }
+
+    if (nResult == 0)
+    {
+        // No difference found yet.  When the lengths are the same then the
+        // two resource ids are equivalent.  Otherwise the shorter comes
+        // first.
+        if (nLocalURLCount != nURLCount)
+            if (nLocalURLCount < nURLCount)
+                nResult = -1;
+            else
+                nResult = +1;
     }
 
     return nResult;
@@ -341,33 +385,40 @@ sal_Int16 ResourceId::CompareToExternalImplementation (const Reference<XResource
     sal_Int16 nResult (0);
 
     const Sequence<OUString> aAnchorURLs (rxId->getAnchorURLs());
-    sal_uInt32 nLocalURLCount (maResourceURLs.size());
-    sal_uInt32 nURLCount(1+aAnchorURLs.getLength());
+    const sal_uInt32 nLocalURLCount (maResourceURLs.size());
+    const sal_uInt32 nURLCount(1+aAnchorURLs.getLength());
 
-    if (nLocalURLCount != nURLCount)
+    // Start comparison with the top most anchors.
+    sal_Int32 nLocalResult (0);
+    for (sal_Int32 nIndex=nURLCount-1,nLocalIndex=nLocalURLCount-1;
+         nIndex>=0&&nLocalIndex>=0;
+         --nIndex,--nLocalIndex)
     {
-        if (nLocalURLCount < nURLCount)
-            nResult = -1;
+        if (nIndex == 0 )
+            nLocalResult = maResourceURLs[nIndex].compareTo(rxId->getResourceURL());
         else
-            nResult = +1;
-    }
-    else
-    {
-        sal_Int32 nLocalResult (0);
-        for (sal_uInt32 nIndex=0; nIndex<nLocalURLCount; ++nIndex)
+            nLocalResult = maResourceURLs[nIndex].compareTo(aAnchorURLs[nIndex-1]);
+        if (nLocalResult != 0)
         {
-            if (nIndex == 0 )
-                nLocalResult = maResourceURLs[nIndex].compareTo(rxId->getResourceURL());
+            if (nLocalResult < 0)
+                nResult = -1;
             else
-                nLocalResult = maResourceURLs[nIndex].compareTo(aAnchorURLs[nIndex-1]);
-            if (nLocalResult != 0)
-            {
-                if (nLocalResult < 0)
-                    nResult = -1;
-                else
-                    nResult = +1;
-                break;
-            }
+                nResult = +1;
+            break;
+        }
+    }
+
+    if (nResult == 0)
+    {
+        // No difference found yet.  When the lengths are the same then the
+        // two resource ids are equivalent.  Otherwise the shorter comes
+        // first.
+        if (nLocalURLCount != nURLCount)
+        {
+            if (nLocalURLCount < nURLCount)
+                nResult = -1;
+            else
+                nResult = +1;
         }
     }
 
@@ -456,9 +507,9 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
                     }
                 }
             }
-
         }
     }
+    ParseResourceURL();
 }
 
 
@@ -555,6 +606,38 @@ bool ResourceId::IsValid (void) const
 
 }
 
+
+
+
+void ResourceId::ParseResourceURL (void)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
+    Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);
+    if ( ! xURLTransformer.is())
+    {
+        // Create the URL transformer.
+        Reference<lang::XMultiServiceFactory> xServiceManager (
+            ::comphelper::getProcessServiceFactory());
+        xURLTransformer = Reference<util::XURLTransformer>(
+            xServiceManager->createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+            UNO_QUERY);
+        mxURLTransformerWeak = xURLTransformer;
+        SdGlobalResourceContainer::Instance().AddResource(
+            Reference<XInterface>(xURLTransformer,UNO_QUERY));
+    }
+
+    if (xURLTransformer.is() && maResourceURLs.size() > 0)
+    {
+        mpURL.reset(new util::URL);
+        mpURL->Complete = maResourceURLs[0];
+        xURLTransformer->parseStrict(*mpURL);
+        if (mpURL->Main == maResourceURLs[0])
+            mpURL.reset();
+        else
+            maResourceURLs[0] = mpURL->Main;
+    }
+}
 
 
 } } // end of namespace sd::framework
