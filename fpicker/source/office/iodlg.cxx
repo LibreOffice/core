@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 14:17:56 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,6 @@ namespace
             // no old extension
             rFile += sal_Unicode( '.' );
         rFile += rExtension;
-    }
-
-    //-----------------------------------------------------------------------------
-    sal_Bool IsFileURL( const String& rURL )
-    {
-        return ( INetURLObject::CompareProtocolScheme( rURL ) == INET_PROT_FILE );
     }
 
     //-----------------------------------------------------------------------------
@@ -2589,26 +2583,6 @@ const String& SvtFileDialog::GetFilterName( USHORT nPos ) const
 {
     DBG_ASSERT( nPos < GetFilterCount(), "invalid index" );
     return _pImp->_pFilter->GetObject( nPos )->GetName();
-}
-
-//*****************************************************************************
-
-const String& SvtFileDialog::GetFilterType( USHORT nPos ) const
-{
-    DBG_ASSERT( nPos < GetFilterCount(), "invalid index" );
-    return _pImp->_pFilter->GetObject( nPos )->GetType();
-}
-
-//*****************************************************************************
-
-void SvtFileDialog::SetDefaultButtonText( const XubString& rText, ULONG nHelpId )
-{
-    if ( _pImp && _pImp->_pBtnFileOpen )
-    {
-        _pImp->_pBtnFileOpen->SetText( rText );
-        if ( nHelpId )
-            _pImp->_pBtnFileOpen->SetHelpId( nHelpId );
-    }
 }
 
 //*****************************************************************************
