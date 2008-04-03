@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignPane.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:46:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,7 +538,7 @@ void TableDesignPane::updateControls()
 void TableDesignPane::addListener()
 {
     Link aLink( LINK(this,TableDesignPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().AddEventListener (
+    mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
         | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
@@ -552,7 +552,7 @@ void TableDesignPane::addListener()
 void TableDesignPane::removeListener()
 {
     Link aLink( LINK(this,TableDesignPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().RemoveEventListener( aLink );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 // --------------------------------------------------------------------
