@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:00:23 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:27:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ IDLFILES=\
     XTargetPropertiesCreator.idl \
     XTimeContainer.idl\
     XTransitionFilter.idl\
-    XCommand.idl
+    XCommand.idl\
+    XAnimationListener.idl
 
 # ------------------------------------------------------------------
 
