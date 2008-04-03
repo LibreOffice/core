@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:17:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,12 @@
 #include "precompiled_sd.hxx"
 #include "SlsListener.hxx"
 
+#include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "ViewShellHint.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "view/SlideSorterView.hxx"
 #include "drawdoc.hxx"
@@ -79,22 +81,24 @@ using namespace ::com::sun::star;
 namespace sd { namespace slidesorter { namespace controller {
 
 
-Listener::Listener (SlideSorterController& rController)
+Listener::Listener (
+    SlideSorter& rSlideSorter)
     : ListenerInterfaceBase(maMutex),
-      mrController (rController),
+      mrSlideSorter(rSlideSorter),
+      mrController(mrSlideSorter.GetController()),
+      mpBase(mrSlideSorter.GetViewShellBase()),
       mbListeningToDocument (false),
       mbListeningToUNODocument (false),
       mbListeningToController (false),
-      mbListeningToFrame (false)
+      mbListeningToFrame (false),
+      mbIsMainViewChangePending(false)
 {
-    ViewShellBase& rBase (mrController.GetViewShell().GetViewShellBase());
-
-    StartListening (*mrController.GetModel().GetDocument());
+    StartListening (*mrSlideSorter.GetModel().GetDocument());
     mbListeningToDocument = true;
 
     // Connect to the UNO document.
     Reference<document::XEventBroadcaster> xBroadcaster (
-        mrController.GetModel().GetDocument()->getUnoModel(), uno::UNO_QUERY);
+        mrSlideSorter.GetModel().GetDocument()->getUnoModel(), uno::UNO_QUERY);
     if (xBroadcaster.is())
     {
         xBroadcaster->addEventListener (this);
@@ -109,11 +113,17 @@ Listener::Listener (SlideSorterController& rController)
                 static_cast<XWeak*>(this), UNO_QUERY));
 
     // Connect to the frame to listen for controllers being exchanged.
-    if ( ! mrController.GetViewShell().IsMainViewShell())
+    bool bIsMainViewShell (false);
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell != NULL)
+        bIsMainViewShell = pViewShell->IsMainViewShell();
+    if ( ! bIsMainViewShell)
     {
         // Listen to changes of certain properties.
-        Reference<frame::XFrame> xFrame (rBase.GetFrame()->GetTopFrame()->GetFrameInterface(),
-            uno::UNO_QUERY);
+        Reference<frame::XFrame> xFrame;
+        Reference<frame::XController> xController (mrSlideSorter.GetXController());
+        if (xController.is())
+            xFrame = xController->getFrame();
         mxFrameWeak = xFrame;
         if (xFrame.is())
         {
@@ -129,20 +139,24 @@ Listener::Listener (SlideSorterController& rController)
 
     // Listen for hints of the MainViewShell as well.  If that is not yet
     // present then the EventMultiplexer will tell us when it is available.
-    ViewShell* pMainViewShell = rBase.GetMainViewShell().get();
-    if (pMainViewShell != NULL
-        && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
+    if (mpBase != NULL)
     {
-        StartListening (*pMainViewShell);
-    }
+        ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
+        if (pMainViewShell != NULL
+            && pMainViewShell!=pViewShell)
+        {
+            StartListening (*pMainViewShell);
+        }
 
-    Link aLink (LINK(this, Listener, EventMultiplexerCallback));
-    rBase.GetEventMultiplexer().AddEventListener(
-        aLink,
-        tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
-        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
+        Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+        mpBase->GetEventMultiplexer()->AddEventListener(
+            aLink,
+            tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+            | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+            | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
+            | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
+            | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+    }
 }
 
 
@@ -161,14 +175,14 @@ void Listener::ReleaseListeners (void)
 {
     if (mbListeningToDocument)
     {
-        EndListening (*mrController.GetModel().GetDocument());
+        EndListening (*mrSlideSorter.GetModel().GetDocument());
         mbListeningToDocument = false;
     }
 
     if (mbListeningToUNODocument)
     {
         Reference<document::XEventBroadcaster> xBroadcaster (
-            mrController.GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
+            mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
         if (xBroadcaster.is())
             xBroadcaster->removeEventListener (this);
 
@@ -197,13 +211,17 @@ void Listener::ReleaseListeners (void)
 
     DisconnectFromController ();
 
-    Link aLink (LINK(this, Listener, EventMultiplexerCallback));
-    mrController.GetViewShell().GetViewShellBase().GetEventMultiplexer().RemoveEventListener(
-        aLink,
-        tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
-        | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED);
+    if (mpBase != NULL)
+    {
+        Link aLink (LINK(this, Listener, EventMultiplexerCallback));
+        mpBase->GetEventMultiplexer()->RemoveEventListener(
+            aLink,
+            tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+            | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+            | tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
+            | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
+            | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+    }
 }
 
 
@@ -211,14 +229,15 @@ void Listener::ReleaseListeners (void)
 
 void Listener::ConnectToController (void)
 {
-    ViewShell& rShell (mrController.GetViewShell());
+    ViewShell* pShell = mrSlideSorter.GetViewShell();
 
     // Register at the controller of the main view shell (if we are that not
     // ourself).
-    if ( ! rShell.IsMainViewShell())
+    if (pShell==NULL || ! pShell->IsMainViewShell())
     {
+        Reference<frame::XController> xController (mrSlideSorter.GetXController());
+
         // Listen to changes of certain properties.
-        Reference<frame::XController> xController (rShell.GetViewShellBase().GetController());
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         if (xSet.is())
         {
@@ -300,7 +319,7 @@ void Listener::DisconnectFromController (void)
 
 
 void Listener::Notify (
-    SfxBroadcaster&,
+    SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
     if (rHint.ISA(SdrHint))
@@ -308,7 +327,16 @@ void Listener::Notify (
         SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
         if(rSdrHint.GetKind() == HINT_PAGEORDERCHG )
         {
-            mrController.HandleModelChange();
+            if (rBroadcaster.ISA(SdDrawDocument))
+            {
+                SdDrawDocument& rDocument (
+                    static_cast<SdDrawDocument&>(rBroadcaster));
+                if (rDocument.GetMasterSdPageCount(PK_STANDARD)
+                    == rDocument.GetMasterSdPageCount(PK_NOTES))
+                {
+                    mrController.HandleModelChange();
+                }
+            }
         }
     }
     else if (rHint.ISA(ViewShellHint))
@@ -356,54 +384,38 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
     {
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
         {
-            ViewShell* pMainViewShell
-                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get();
-            if (pMainViewShell != NULL)
-                EndListening(*pMainViewShell);
+            if (mpBase != NULL)
+            {
+                ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
+                if (pMainViewShell != NULL)
+                    EndListening(*pMainViewShell);
+            }
         }
         break;
 
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-        {
-            ViewShell* pMainViewShell
-                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get();
-            if (pMainViewShell != NULL
-                && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
-            {
-                StartListening (*pMainViewShell);
-            }
-        }
-        break;
+            mbIsMainViewChangePending = true;
+            break;
 
+        case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+            if (mbIsMainViewChangePending && mpBase != NULL)
+            {
+                mbIsMainViewChangePending = false;
+                ViewShell* pMainViewShell = mpBase->GetMainViewShell().get();
+                if (pMainViewShell != NULL
+                    && pMainViewShell!=mrSlideSorter.GetViewShell())
+                {
+                    StartListening (*pMainViewShell);
+                }
+            }
+            break;
 
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
         {
             ConnectToController();
             mrController.GetPageSelector().UpdateAllPages();
-
-            // When there is a new controller then the edit mode may have
-            // changed at the same time.
-            Reference<frame::XController> xController (mxControllerWeak);
-            Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-            bool bIsMasterPageMode = false;
-            if (xSet != NULL)
-            {
-                try
-                {
-                    Any aValue (xSet->getPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
-                    aValue >>= bIsMasterPageMode;
-                }
-                catch (beans::UnknownPropertyException e)
-                {
-                    // When the property is not supported then the master
-                    // page mode is not supported, too.
-                    bIsMasterPageMode = false;
-                }
-            }
-            mrController.ChangeEditMode (
-                bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+            UpdateEditMode();
         }
         break;
 
@@ -421,6 +433,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
 
 
 
+
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL Listener::disposing (
@@ -428,9 +441,9 @@ void SAL_CALL Listener::disposing (
     throw (RuntimeException)
 {
     if ((mbListeningToDocument || mbListeningToUNODocument)
-        && mrController.GetModel().GetDocument()!=NULL
+        && mrSlideSorter.GetModel().GetDocument()!=NULL
         && rEventObject.Source
-           == mrController.GetModel().GetDocument()->getUnoModel())
+           == mrSlideSorter.GetModel().GetDocument()->getUnoModel())
     {
         mbListeningToDocument = false;
         mbListeningToUNODocument = false;
@@ -490,6 +503,7 @@ void SAL_CALL Listener::propertyChange (
                 // last recently selected page of the PageSelector.  This is
                 // used when making the selection visible.
                 mrController.GetPageSelector().SelectPage(nCurrentPage-1);
+                mrController.GetCurrentSlideManager()->CurrentSlideHasChanged(nCurrentPage-1);
             }
             catch (beans::UnknownPropertyException aEvent)
             {
@@ -526,29 +540,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
         {
             ConnectToController();
             mrController.GetPageSelector().UpdateAllPages();
-
-            // When there is a new controller then the edit mode may have
-            // changed at the same time.
-            Reference<frame::XController> xController (mxControllerWeak);
-            Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-            bool bIsMasterPageMode = false;
-            if (xSet != NULL)
-            {
-                try
-                {
-                    Any aValue (xSet->getPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
-                    aValue >>= bIsMasterPageMode;
-                }
-                catch (beans::UnknownPropertyException e)
-                {
-                    // When the property is not supported then the master
-                    // page mode is not supported, too.
-                    bIsMasterPageMode = false;
-                }
-            }
-            mrController.ChangeEditMode (
-                bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+            UpdateEditMode();
         }
         break;
 
@@ -574,6 +566,35 @@ void SAL_CALL Listener::notifyEvent (
 void SAL_CALL Listener::disposing (void)
 {
     ReleaseListeners();
+}
+
+
+
+
+void Listener::UpdateEditMode (void)
+{
+    // When there is a new controller then the edit mode may have changed at
+    // the same time.
+    Reference<frame::XController> xController (mxControllerWeak);
+    Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
+    bool bIsMasterPageMode = false;
+    if (xSet != NULL)
+    {
+        try
+        {
+            Any aValue (xSet->getPropertyValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
+            aValue >>= bIsMasterPageMode;
+        }
+        catch (beans::UnknownPropertyException e)
+        {
+            // When the property is not supported then the master page mode
+            // is not supported, too.
+            bIsMasterPageMode = false;
+        }
+    }
+    mrController.ChangeEditMode (
+        bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }
 
 
