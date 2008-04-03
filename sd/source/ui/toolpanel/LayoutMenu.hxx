@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:40:31 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,8 @@ private:
     ::com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> mxListener;
 
     bool mbSelectionUpdatePending;
+
+    bool mbIsMainViewChangePending;
 
     /** Calculate the number of displayed rows.  This depends on the given
         item size, the given number of columns, and the size of the
