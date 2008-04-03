@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-30 08:56:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@
 #endif
 
 #ifndef SD_SHOW_WINDOW_HXX
-#include "ShowWindow.hxx"
+#include "showwindow.hxx"
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -271,18 +271,15 @@ public:
     SlideShowViewPaintListeners( ::osl::Mutex& rMutex );
 
 protected:
-    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener,
-                             const ::com::sun::star::awt::PaintEvent&                       rEvent ) throw( ::com::sun::star::uno::Exception );
+    virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener, const ::com::sun::star::awt::PaintEvent& rEvent ) throw( ::com::sun::star::uno::Exception );
 };
 typedef ::std::auto_ptr< SlideShowViewPaintListeners >  SlideShowViewPaintListenersPtr;
-
 
 ///////////////////////////////////////////////////////////////////////
 // SlideShowViewMouseListeners
 ///////////////////////////////////////////////////////////////////////
 
-typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseListener,
-                                                WrappedMouseEvent >     SlideShowViewMouseListeners_Base;
+typedef ::comphelper::OListenerContainerBase< ::com::sun::star::awt::XMouseListener, WrappedMouseEvent > SlideShowViewMouseListeners_Base;
 
 class SlideShowViewMouseListeners : public SlideShowViewMouseListeners_Base
 {
@@ -385,6 +382,8 @@ protected:
 
 private:
     void init();
+
+    void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow );
 
     ::cppcanvas::SpriteCanvasSharedPtr                                              mpCanvas;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              mxWindow;
