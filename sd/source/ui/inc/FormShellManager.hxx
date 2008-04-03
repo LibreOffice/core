@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:02:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,10 @@ private:
         ViewShellManager when the FormShellManager is destroyed.
     */
     ViewShellManager::SharedShellFactory mpSubShellFactory;
+
+    bool mbIsMainViewChangePending;
+
+    ::Window* mpMainViewShellWindow;
 
     /** Register at window of center pane and at the form shell that
         represents the form tool bar.  The former informs this manager about
