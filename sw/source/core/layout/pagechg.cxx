@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:26:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2393,8 +2393,11 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         if ( pSh )
         {
             pSh->SetFirstVisPageInvalid();
-            pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
-            pSh->GetDoc()->GetDocShell()->Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+            if (bOldCallbackActionEnabled)
+            {
+                pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+                pSh->GetDoc()->GetDocShell()->Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
+            }
         }
     }
 
