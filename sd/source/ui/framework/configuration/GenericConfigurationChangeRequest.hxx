@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GenericConfigurationChangeRequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:47:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,24 +38,15 @@
 
 #include "MutexOwner.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGEREQUEST_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <cppuhelper/compbase2.hxx>
-#endif
+
+namespace css = ::com::sun::star;
 
 namespace {
 
@@ -74,10 +65,6 @@ namespace sd { namespace framework {
     execution it may result in other, implicit, configuration changes.  For
     example this is the case when the deactivation of a unique resource is
     requested: the resources linked to it have to be deactivated as well.
-
-    The name of this class implies that other sub controllers may have
-    specialized implementations of the XConfigurationChangeRequest
-    interface.
 */
 class GenericConfigurationChangeRequest
     : private MutexOwner,
@@ -91,11 +78,8 @@ public:
 
     /** Create a new object that represents the request for activation or
         deactivation of the specified resource.
-        @param rsResourceURL
-            URL of the resource that is to be activated or deactivated.  It
-            may be a unique or a linked resource.
-        @param rsAnchorURL
-            When not empty then this is the resource anchor.
+        @param rxsResourceId
+            Id of the resource that is to be activated or deactivated.
         @param eMode
             The mode specifies whether to activate or to deactivate the
             resource.
@@ -103,7 +87,7 @@ public:
     GenericConfigurationChangeRequest (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>&
             rxResourceId,
-        Mode eMode)
+        const Mode eMode)
         throw (::com::sun::star::lang::IllegalArgumentException);
 
     virtual ~GenericConfigurationChangeRequest (void) throw();
@@ -139,8 +123,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxResourceId;
-    Mode meMode;
+    const css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+    const Mode meMode;
 };
 
 } } // end of namespace sd::framework
