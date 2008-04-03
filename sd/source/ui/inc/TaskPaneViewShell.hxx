@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:42:42 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,17 +130,36 @@ public:
     DECL_LINK(ToolboxClickHandler, ToolBox*);
     DECL_LINK(MenuSelectHandler, Menu*);
 
-    /** Make the specified panel visible.
+    /** Make the specified panel visible and expand it.
         @param nId
             The id of the panel that is to be made visible.
     */
-    void ShowPanel (PanelId nId);
+    void ShowPanel (const PanelId nId);
+
+    /** Hide and collapse the specified panel.
+        @param nId
+            The id of the panel that is to hide.
+    */
+    void HidePanel (const PanelId nId);
+
+    /** Expand the specified panel.  Its visibility state is not modified.
+        @param nId
+            The id of the panel that is to expand.
+    */
+    void ExpandPanel (const PanelId nId);
+
+    /** Collapse the specified panel.   Its visibility state is not
+        modified.
+        @param nId
+            The id of the panel that is to collapse.
+    */
+    void CollapsePanel (const PanelId nId);
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
-    virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
+    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController (void);
 
     /** Relocate all toplevel controls to the given parent window.
     */
