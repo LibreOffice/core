@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Pane.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:11:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,18 +38,11 @@
 
 #include "MutexOwner.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANE_HPP_
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_TABBARBUTTON_HPP_
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
+#include <tools/link.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 
@@ -69,13 +62,11 @@ namespace sd { namespace framework {
 /** A pane is a wrapper for a window and possibly for a tab bar (for view
     switching).  Panes are unique resources.
 
-    This class has several responsibilities:
+    This class has two responsibilities:
     1. It implements the XPane interface.  This is the most important
     interface of this class for API based views (of which there not that
     many yet) because it gives access to the XWindow.
-    2. It gives access to an optional tab bar by implementing the XTabBar
-    interface.  At the moment only the center pane has a tab bar.
-    3. It gives access to the underlying VCL Window by implementing the
+    2. It gives access to the underlying VCL Window by implementing the
     XUnoTunnel interface.  This is necessary at the moment and in the
     foreseeable future because many parts of the Draw and Impress views rely
     on direct access on the Window class.
@@ -124,11 +115,18 @@ public:
         SAL_CALL getCanvas (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+
     // XResource
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
         SAL_CALL getResourceId (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    /** For the typical pane it makes no sense to be dislayed without a
+        view.  Therefore this default implementation returns always <TRUE/>.
+    */
+    virtual sal_Bool SAL_CALL isAnchorOnly (void)
+        throw (com::sun::star::uno::RuntimeException);
 
 
     // XUnoTunnel
@@ -140,6 +138,14 @@ protected:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;
     ::Window* mpWindow;
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
+    ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas> mxCanvas;
+
+    /** Overload this method, not getCanvas(), when you want to provide a
+        different canvas.
+    */
+    virtual ::com::sun::star::uno::Reference<com::sun::star::rendering::XCanvas>
+        CreateCanvas (void)
+        throw (::com::sun::star::uno::RuntimeException);
 
     /** Throw DisposedException when the object has already been disposed or
         is currently being disposed.  Otherwise this method returns
