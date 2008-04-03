@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:45:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #endif
 
+#include <rtl/ref.hxx>
+
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
@@ -116,6 +118,9 @@ class SdXCustomPresentations;
 namespace sd {
 class DrawDocShell;
 }
+
+extern ::rtl::OUString getPageApiName( SdPage* pPage );
+extern ::rtl::OUString getPageApiNameFromUiName( const String& rUIName );
 
 /***********************************************************************
 *                                                                      *
@@ -154,6 +159,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxMasterPagesAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxLayerManager;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameContainer > mxCustomPresentationAccess;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxStyleFamilies;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::presentation::XPresentation > mxPresentation;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::i18n::XForbiddenCharacters > mxForbidenCharacters;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLinks;
@@ -177,6 +183,8 @@ public:
     SdXImpressDocument( ::sd::DrawDocShell* pShell ) throw();
     SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard = sal_False ) throw();
     virtual ~SdXImpressDocument() throw();
+
+    static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument* pDoc );
 
     // intern
     virtual int operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
