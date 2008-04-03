@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-31 13:36:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
+#include <osl/file.h>
 
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -70,6 +71,8 @@
 
 #ifdef USE_UNISCRIBE
 #include <Usp10.h>
+#include <ShLwApi.h>
+#include <winver.h>
 #endif // USE_UNISCRIBE
 
 #include <hash_map>
@@ -1144,6 +1147,8 @@ static HRESULT ((WINAPI *pScriptTextOut)( const HDC, SCRIPT_CACHE*,
 static HRESULT ((WINAPI *pScriptGetFontProperties)( HDC, SCRIPT_CACHE*, SCRIPT_FONTPROPERTIES* ));
 static HRESULT ((WINAPI *pScriptFreeCache)( SCRIPT_CACHE* ));
 
+static bool bManualCellAlign = true;
+
 // -----------------------------------------------------------------------
 
 static bool InitUSP()
@@ -1216,6 +1221,36 @@ static bool InitUSP()
         osl_unloadModule( aUspModule );
         aUspModule = NULL;
     }
+
+    // get the DLL version info
+    int nUspVersion = 0;
+    // TODO: there must be a simpler way to get the friggin version info from OSL?
+    rtl_uString* pModuleURL = NULL;
+    osl_getModuleURLFromAddress( (void*)pScriptIsComplex, &pModuleURL );
+    rtl_uString* pModuleFileName = NULL;
+    if( pModuleURL )
+        osl_getSystemPathFromFileURL( pModuleURL, &pModuleFileName );
+    const sal_Unicode* pModuleFileCStr = NULL;
+    if( pModuleFileName )
+        pModuleFileCStr = rtl_uString_getStr( pModuleFileName );
+    if( pModuleFileCStr )
+    {
+        DWORD nHandle;
+        DWORD nBufSize = ::GetFileVersionInfoSizeW( pModuleFileCStr, &nHandle );
+        char* pBuffer = (char*)alloca( nBufSize );
+        WIN_BOOL bRC = ::GetFileVersionInfoW( pModuleFileCStr, nHandle, nBufSize, pBuffer );
+        VS_FIXEDFILEINFO* pFixedFileInfo = NULL;
+        UINT nFixedFileSize = 0;
+        if( bRC )
+            ::VerQueryValueW( pBuffer, L"\\", (void**)&pFixedFileInfo, &nFixedFileSize );
+        if( pFixedFileInfo && pFixedFileInfo->dwSignature == 0xFEEF04BD )
+            nUspVersion = HIWORD(pFixedFileInfo->dwProductVersionMS) * 10000
+                        + LOWORD(pFixedFileInfo->dwProductVersionMS);
+    }
+
+    // #i77976# USP>=1.0600 changed the need to manually align glyphs in their cells
+    if( nUspVersion >= 10600 )
+        bManualCellAlign = false;
 
     return bUspEnabled;
 }
@@ -1745,12 +1780,12 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         return 0;
 
     // find the visual item for the nStart glyph position
-    int nItem;
+    int nItem = 0;
     const VisualItem* pVI = mpVisualItems;
-    if( nStart == 0 )                 // nStart==0 for first visible glyph
+    if( nStart <= 0 )                 // nStart<=0 requests the first visible glyph
     {
         // find first visible item
-        for( nItem = 0; nItem < mnItemCount; ++nItem, ++pVI )
+        for(; nItem < mnItemCount; ++nItem, ++pVI )
             if( !pVI->IsEmpty() )
                 break;
         // it is possible that there are glyphs but no valid visual item
@@ -1763,7 +1798,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         --nStart;
 
         // find matching item
-        for( nItem = 0; nItem < mnItemCount; ++nItem, ++pVI )
+        for(; nItem < mnItemCount; ++nItem, ++pVI )
             if( (nStart >= pVI->mnMinGlyphPos)
             &&  (nStart < pVI->mnEndGlyphPos) )
                 break;
@@ -1822,6 +1857,10 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         while( (--c >= pVI->mnMinCharPos)
             && (nTmpIndex == mpLogClusters[c]) )
             nXOffset += mpCharWidths[c];
+
+        // adjust the xoffset if justified glyphs are not positioned at their justified positions yet
+        if( mpJustifications && !bManualCellAlign )
+           nXOffset += mpJustifications[ nStart ] - mpGlyphAdvances[ nStart ];
     }
 
     // create mpGlyphs2Chars[] if it is needed later
@@ -1874,6 +1913,11 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             nStart = nNextItemStart;
             break;
         }
+
+        // RTL-justified glyph positioning is not easy
+        // simplify the code by just returning only one glyph at a time
+        if( mpJustifications && !bManualCellAlign && pVI->mpScriptItem->a.fRTL )
+            break;
 
         // stop when the x-position of the next glyph is unexpected
         if( !pGlyphAdvances  )
@@ -2306,14 +2350,33 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
          || (rVisualItem.mnEndCharPos <= mnMinCharPos) )
             continue;
 
+        bool bHasKashida = false;
         if( rVisualItem.mpScriptItem->a.fRTL )
         {
-            // HACK: make sure kashida justification is used when possible
-            // TODO: make sure this works on all usp versions
             for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
-                if( (1U << mpVisualAttrs[i].uJustification) & 0x7F89 )
-                    mpVisualAttrs[i].uJustification = SCRIPT_JUSTIFY_ARABIC_KASHIDA;
+                if ( (1U << mpVisualAttrs[i].uJustification) & 0x7F89 )  //  any Arabic justification ?
+                {
+                    // yes
+                    bHasKashida = true;
+                    break;
+                }
+            if ( bHasKashida )
+                for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
+                {
+                    if ( mpVisualAttrs[i].uJustification == SCRIPT_JUSTIFY_NONE )
+                        // usp decided that justification can't be applied here
+                        // but maybe our Kashida algorithm thinks differently.
+                        // To avoid trouble (gaps within words, last character of
+                        // a word gets a Kashida appended) override this.
+
+                        // I chose SCRIPT_JUSTIFY_ARABIC_KASHIDA to replace SCRIPT_JUSTIFY_NONE
+                        // just because this previous hack (which I haven't understand, sorry) used
+                        // the same value to replace. Don't know if this is really the best
+                        // thing to do, but it seems to fix things
+                        mpVisualAttrs[i].uJustification = SCRIPT_JUSTIFY_ARABIC_KASHIDA;
+                }
         }
+
 
         // convert virtual charwidths to glyph justification values
         HRESULT nRC = (*pScriptApplyLogicalWidth)(
@@ -2334,23 +2397,34 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
             break;
         }
 
-        // update nXOffset to the position of the next visual item
-        int nEndGlyphPos;
-        if( GetItemSubrange( rVisualItem, i, nEndGlyphPos ) )
-            for(; i < nEndGlyphPos; ++i )
+        // TODO: for kashida justification
+        // check the widths which are added to mpJustification
+        // if added width is smaller than iKashidaWidth returned by
+        // ScriptGetFontProperties, do something (either enlarge to
+        // iKashidaWidth, or reduce to original width).
+        // Need to think of a way to compensate the change in overall
+        // width.
+
+        // to prepare for the next visual item
+        // update nXOffset to the next items position
+        // before the mpJustifications[] array gets modified
+        int nMinGlyphPos, nEndGlyphPos;
+        if( GetItemSubrange( rVisualItem, nMinGlyphPos, nEndGlyphPos ) )
+            for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
                 nXOffset += mpJustifications[ i ];
 
-        if( rVisualItem.mpScriptItem->a.fRTL )
+        // right align the justification-adjusted glyphs in their cells for RTL-items
+        if( bManualCellAlign && rVisualItem.mpScriptItem->a.fRTL && !bHasKashida )
         {
-            // right align adjusted glyph positions for RTL item
-            // exception: kashida aligned glyphs
-            // TODO: make sure this works on all usp versions
-            for( i = rVisualItem.mnMinGlyphPos+1; i < rVisualItem.mnEndGlyphPos; ++i )
-                if( mpVisualAttrs[i].uJustification != SCRIPT_JUSTIFY_ARABIC_KASHIDA )
-                {
-                    mpJustifications[i-1] += mpJustifications[ i ] - mpGlyphAdvances[ i ];
-                    mpJustifications[ i ] = mpGlyphAdvances[ i ];
-                }
+            for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
+            {
+                const int nXOffsetAdjust = mpJustifications[i] - mpGlyphAdvances[i];
+                if( i == nMinGlyphPos )
+                    rVisualItem.mnXOffset += nXOffsetAdjust;
+                else
+                    mpJustifications[i-1] += nXOffsetAdjust;
+                mpJustifications[i] -= nXOffsetAdjust;
+            }
         }
     }
 }
