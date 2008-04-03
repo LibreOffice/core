@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:40:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,8 @@
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
 #endif
+
+#include "slideshow.hxx"
 
 // #108981#
 #ifndef _SVDUNDO_HXX
@@ -1494,7 +1496,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         if (!bAnimated                               &&
             mpView->ISA(DrawView)                 &&
             !mpDocSh->ISA(GraphicDocShell)        &&
-            static_cast<DrawView*>(mpView)->GetSlideShow()  &&
+            SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) &&
             mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
