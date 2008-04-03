@@ -1,4 +1,4 @@
-sd	sd	:	svx stoc uui slideshow NULL
+sd	sd	:	svx stoc uui canvas NULL
 sd	sd										usr1	-	all	sd_mkout NULL
 sd	sd\inc									nmake		-	all	sd_inc NULL
 sd	sd\prj									get		-	all	sd_prj NULL
@@ -6,16 +6,15 @@ sd	sd\source\ui\inc						get		-	all	sd_sinc NULL
 sd	sd\res									get		-	all	sd_res NULL
 sd	sd\res\imagelst							get		-	all	sd_resil NULL
 sd	sd\sdi									nmake	-	all	sd_sdi NULL
-sd	sd\source\unotypes						nmake	-	all	sd_unotypes sd_inc NULL
 sd	sd\source\helper						nmake	-	all sd_helper sd_inc NULL
 sd	sd\source\ui\func						nmake	-	all	sd_func sd_sdi sd_inc NULL
-sd	sd\source\ui\view						nmake	-	all	sd_view sd_sdi sd_unotypes sd_inc NULL
+sd	sd\source\ui\view						nmake	-	all	sd_view sd_sdi sd_inc NULL
 sd	sd\source\ui\app						nmake	-	all	sd_app sd_sdi sd_inc NULL
 sd	sd\source\ui\dlg						nmake	-	all	sd_dlg sd_sdi sd_inc NULL
 sd	sd\source\core							nmake	-	all	sd_core sd_sdi sd_inc NULL
 sd	sd\source\core\undo						nmake	-	all	sd_undo sd_core sd_inc NULL
 sd	sd\source\ui\docshell					nmake	-	all	sd_docsh sd_sdi sd_inc NULL
-sd	sd\source\ui\unoidl						nmake	-	all	sd_unid sd_unotypes sd_sdi sd_inc NULL
+sd	sd\source\ui\unoidl						nmake	-	all	sd_unid sd_sdi sd_inc NULL
 sd	sd\source\ui\accessibility				nmake	-	all	sd_accessibility sd_inc NULL
 sd	sd\source\ui\toolpanel  				nmake	-	all	sd_toolpanel sd_sdi sd_inc NULL
 sd	sd\source\ui\toolpanel\controls			nmake	-	all	sd_toolpanel_controls sd_sdi sd_inc NULL
@@ -27,20 +26,18 @@ sd	sd\source\ui\slidesorter\controller		nmake	-	all	sd_slscontroller sd_sdi sd_i
 sd	sd\source\ui\slidesorter\cache			nmake	-	all	sd_slscache sd_inc NULL
 sd	sd\source\ui\notes						nmake	-	all	sd_notes sd_inc NULL
 sd	sd\source\ui\table						nmake	-	all	sd_table sd_inc NULL
-sd	sd\source\filter\ppt					nmake	-	all	sd_ppt sd_unotypes sd_inc NULL
+sd	sd\source\filter\ppt					nmake	-	all	sd_ppt sd_inc NULL
 sd	sd\source\filter						nmake	-	all	sd_filt sd_sdi sd_ppt sd_inc NULL
 sd	sd\source\filter\cgm					nmake	-	all	sd_cgm sd_inc NULL
-sd	sd\source\filter\eppt					nmake	-	all	sd_eppt sd_unotypes sd_inc NULL
+sd	sd\source\filter\eppt					nmake	-	all	sd_eppt sd_inc NULL
 sd	sd\source\filter\grf					nmake	-	all	sd_grf sd_inc NULL
 sd	sd\source\filter\xml					nmake	-	all	sd_xml sd_inc NULL
 sd	sd\source\filter\html					nmake	-	all	sd_html sd_inc NULL
-sd	sd\source\ui\animations					nmake	-	all sd_animations sd_unotypes sd_inc NULL
-sd	sd\source\ui\slideshow					nmake	-	all sd_slideshow sd_unotypes sd_sdi sd_inc NULL
-sd	sd\source\ui\framework\pane				nmake	-	all sd_framework_pane sd_inc NULL
-sd	sd\source\ui\framework\view				nmake	-	all sd_framework_view sd_inc NULL
+sd	sd\source\ui\animations					nmake	-	all sd_animations sd_inc NULL
+sd	sd\source\ui\slideshow					nmake	-	all sd_slideshow sd_sdi sd_inc NULL
+sd	sd\source\ui\presenter       	        nmake	-	all sd_presenter sd_inc NULL
 sd	sd\source\ui\framework\configuration	nmake	-	all sd_framework_configuration sd_inc NULL
 sd	sd\source\ui\framework\module       	nmake	-	all sd_framework_module sd_inc NULL
-sd	sd\source\ui\framework\toolbar         	nmake	-	all sd_framework_toolbar sd_inc NULL
+sd	sd\source\ui\framework\factories       	nmake	-	all sd_framework_factories sd_inc NULL
 sd	sd\source\ui\framework\tools           	nmake	-	all sd_framework_tools sd_inc NULL
-sd	sd\source\ui\framework\command         	nmake	-	all sd_framework_command sd_inc NULL
-sd	sd\util									nmake	-	all	sd_util sd_app sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_ppt sd_accessibility sd_animations sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes sd_table sd_slideshow sd_undo sd_helper sd_framework_pane sd_framework_view sd_framework_configuration sd_framework_module sd_framework_toolbar sd_framework_tools sd_framework_command NULL
+sd	sd\util									nmake	-	all	sd_util sd_app sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_ppt sd_accessibility sd_animations sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes sd_table sd_slideshow sd_presenter sd_undo sd_helper sd_framework_configuration sd_framework_module sd_framework_tools NULL
