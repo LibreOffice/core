@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CenterViewFocusModule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:50:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ namespace sd { namespace framework {
 CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxController)
     : CenterViewFocusModuleInterfaceBase(MutexOwner::maMutex),
       mbValid(false),
-      mxViewController(),
       mxConfigurationController(),
       mpBase(NULL),
       mbNewViewCreated(false)
@@ -80,7 +79,6 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (xControllerManager.is())
     {
-        mxViewController = xControllerManager->getViewController();
         mxConfigurationController = xControllerManager->getConfigurationController();
 
         // Tunnel through the controller to obtain a ViewShellBase.
@@ -94,9 +92,7 @@ CenterViewFocusModule::CenterViewFocusModule (Reference<frame::XController>& rxC
         }
 
         // Check, if all required objects do exist.
-        if (mxViewController.is()
-            && mxConfigurationController.is()
-            && mpBase!=NULL)
+        if (mxConfigurationController.is() && mpBase!=NULL)
         {
             mbValid = true;
         }
@@ -131,7 +127,6 @@ void SAL_CALL CenterViewFocusModule::disposing (void)
         mxConfigurationController->removeConfigurationChangeListener(this);
 
     mbValid = false;
-    mxViewController = NULL;
     mxConfigurationController = NULL;
     mpBase = NULL;
 }
@@ -147,7 +142,7 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
     {
         if (rEvent.Type.equals(FrameworkHelper::msConfigurationUpdateEndEvent))
         {
-            ConfigurationUpdateEnd();
+            HandleNewView(rEvent.Configuration);
         }
         else if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
         {
@@ -160,15 +155,23 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
 
 
 
-void CenterViewFocusModule::ConfigurationUpdateEnd (void)
+void CenterViewFocusModule::HandleNewView (
+    const Reference<XConfiguration>& rxConfiguration)
 {
     if (mbNewViewCreated)
     {
         mbNewViewCreated = false;
         // Make the center pane the active one.  Tunnel through the
         // controller to obtain a ViewShell pointer.
-        Reference<XView> xView (mxViewController->getFirstViewForAnchor(
-            FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL)));
+
+        Sequence<Reference<XResourceId> > xViewIds (rxConfiguration->getResources(
+            FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+            FrameworkHelper::msViewURLPrefix,
+            AnchorBindingMode_DIRECT));
+        Reference<XView> xView;
+        if (xViewIds.getLength() > 0)
+            xView = Reference<XView>(
+                mxConfigurationController->getResource(xViewIds[0]),UNO_QUERY);
         Reference<lang::XUnoTunnel> xTunnel (xView, UNO_QUERY);
         if (xTunnel.is() && mpBase!=NULL)
         {
@@ -178,7 +181,7 @@ void CenterViewFocusModule::ConfigurationUpdateEnd (void)
             {
                 ::boost::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
                 if (pViewShell.get() != NULL)
-                    mpBase->GetViewShellManager().MoveToTop(*pViewShell);
+                    mpBase->GetViewShellManager()->MoveToTop(*pViewShell);
             }
         }
     }
@@ -196,7 +199,6 @@ void SAL_CALL CenterViewFocusModule::disposing (
         {
             mbValid = false;
             mxConfigurationController = NULL;
-            mxViewController = NULL;
             mpBase = NULL;
         }
 }
