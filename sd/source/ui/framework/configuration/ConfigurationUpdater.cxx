@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationUpdater.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:19:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "ConfigurationUpdater.hxx"
 #include "ConfigurationTracer.hxx"
 #include "ConfigurationClassifier.hxx"
+#include "ConfigurationControllerBroadcaster.hxx"
 #include "framework/Configuration.hxx"
 #include "framework/FrameworkHelper.hxx"
 
@@ -49,6 +50,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
+using ::rtl::OUString;
+using ::std::vector;
 
 #undef VERBOSE
 //#define VERBOSE 2
@@ -82,22 +85,26 @@ private:
 //===== ConfigurationUpdater ==================================================
 
 ConfigurationUpdater::ConfigurationUpdater (
-    const Reference<XConfigurationControllerBroadcaster>& rxBroadcaster)
+    const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
+    const ::boost::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
+    const Reference<XControllerManager>& rxControllerManager)
     : mxControllerManager(),
-      mxBroadcaster(rxBroadcaster),
+      mpBroadcaster(rpBroadcaster),
       mxCurrentConfiguration(Reference<XConfiguration>(new Configuration(NULL, false))),
       mxRequestedConfiguration(),
       mbUpdatePending(false),
       mbUpdateBeingProcessed(false),
       mnLockCount(0),
       maUpdateTimer(),
-      mnFailedUpdateCount(0)
+      mnFailedUpdateCount(0),
+      mpResourceManager(rpResourceManager)
 {
     // Prepare the timer that is started when after an update the current
     // and the requested configuration differ.  With the timer we try
     // updates until the two configurations are the same.
     maUpdateTimer.SetTimeout(snNormalTimeout);
     maUpdateTimer.SetTimeoutHdl(LINK(this,ConfigurationUpdater,TimeoutHandler));
+    SetControllerManager(rxControllerManager);
 }
 
 
@@ -123,15 +130,15 @@ void ConfigurationUpdater::SetControllerManager(
 void ConfigurationUpdater::RequestUpdate (
     const Reference<XConfiguration>& rxRequestedConfiguration)
 {
-#if defined VERBOSE && VERBOSE>=1
-    OSL_TRACE("UpdateConfiguration start");
-#endif
-
     mxRequestedConfiguration = rxRequestedConfiguration;
 
     // Find out whether we really can update the configuration.
     if (IsUpdatePossible())
     {
+#if defined VERBOSE && VERBOSE>=1
+        OSL_TRACE("UpdateConfiguration start");
+#endif
+
         // Call UpdateConfiguration while that is possible and while someone
         // set mbUpdatePending to true in the middle of it.
         do
@@ -163,6 +170,14 @@ Reference<XConfiguration> ConfigurationUpdater::GetCurrentConfiguration (void) c
 
 
 
+Reference<XConfiguration> ConfigurationUpdater::GetRequestedConfiguration (void) const
+{
+    return mxRequestedConfiguration;
+}
+
+
+
+
 bool ConfigurationUpdater::IsUpdatePossible (void)
 {
     return ! mbUpdateBeingProcessed
@@ -182,15 +197,13 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 #endif
     SetUpdateBeingProcessed(true);
     comphelper::ScopeGuard aScopeGuard (
-        ::boost::bind(
-            &ConfigurationUpdater::SetUpdateBeingProcessed,
-            this,
-            false));
+        ::boost::bind(&ConfigurationUpdater::SetUpdateBeingProcessed, this, false));
 
     try
     {
         mbUpdatePending = false;
 
+        CleanRequestedConfiguration();
         ConfigurationClassifier aClassifier(mxRequestedConfiguration, mxCurrentConfiguration);
         if (aClassifier.Partition())
         {
@@ -205,8 +218,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             ConfigurationChangeEvent aEvent;
             aEvent.Type = FrameworkHelper::msConfigurationUpdateStartEvent;
             aEvent.Configuration = mxRequestedConfiguration;
-            if (mxBroadcaster.is())
-                mxBroadcaster->notifyEvent(aEvent);
+            mpBroadcaster->NotifyListeners(aEvent);
 
             // Do the actual update.  All exceptions are caught and ignored,
             // so that the the end of the update is notified always.
@@ -221,8 +233,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 
             // Notify the end of the update.
             aEvent.Type = FrameworkHelper::msConfigurationUpdateEndEvent;
-            if (mxBroadcaster.is())
-                mxBroadcaster->notifyEvent(aEvent);
+            mpBroadcaster->NotifyListeners(aEvent);
 
             CheckUpdateSuccess();
         }
@@ -243,6 +254,28 @@ void ConfigurationUpdater::UpdateConfiguration (void)
     OSL_TRACE("ConfigurationUpdater::UpdateConfiguration)");
     OSL_TRACE("UpdateConfiguration end");
 #endif
+}
+
+
+
+
+void ConfigurationUpdater::CleanRequestedConfiguration (void)
+{
+    if (mxControllerManager.is())
+    {
+        // Request the deactivation of pure anchors that have no child.
+        vector<Reference<XResourceId> > aResourcesToDeactivate;
+        CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
+        if (aResourcesToDeactivate.size() > 0)
+        {
+            Reference<XConfigurationController> xCC (
+                mxControllerManager->getConfigurationController());
+            vector<Reference<XResourceId> >::iterator iId;
+            for (iId=aResourcesToDeactivate.begin(); iId!=aResourcesToDeactivate.end(); ++iId)
+                if (iId->is())
+                    xCC->requestResourceDeactivation(*iId);
+        }
+    }
 }
 
 
@@ -275,97 +308,114 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
 
 void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifier)
 {
-#if defined VERBOSE && VERBOSE>=2
-    rClassifier.TraceResourceIdVector(
-        "requested but not current resources:", rClassifier.GetC1minusC2());
-    rClassifier.TraceResourceIdVector(
-        "current but not requested resources:", rClassifier.GetC2minusC1());
-    rClassifier.TraceResourceIdVector(
-        "requested and current resources:", rClassifier.GetC1andC2());
-#endif
-
-    // Updating of the sub controllers is done in two steps.  In the
-    // first the sub controllers typically shut down resources that
-    // are not requested anymore.  In the second the sub controllers
-    // typically set up resources that have been newly requested.
-    UpdateStart(rClassifier.GetC2minusC1());
-    UpdateEnd(rClassifier.GetC1minusC2());
-
-#if defined VERBOSE && VERBOSE>=2
-    OSL_TRACE("ConfigurationController::UpdateConfiguration)");
-    ConfigurationTracer::TraceConfiguration(
-        mxRequestedConfiguration, "requested configuration");
-    ConfigurationTracer::TraceConfiguration(
-        mxCurrentConfiguration, "current configuration");
-#endif
-}
-
-
-
-
-void ConfigurationUpdater::UpdateStart (
-    const ::std::vector<Reference<XResourceId> >& rResources)
-{
-    // Convert vector into sequence.
-    sal_Int32 nCount (rResources.size());
-    Sequence<Reference<XResourceId> > aResourcesToDeactivate (nCount);
-    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-        aResourcesToDeactivate[nIndex] = rResources[nIndex];
-
-    // Call all resource controllers known to the controller manager and
-    // tell them to start the configuration update.
-    Sequence<Reference<XResourceController> > aResourceControllers(
-        mxControllerManager->getResourceControllers());
-    for (sal_Int32 nIndex=0; nIndex<aResourceControllers.getLength(); ++nIndex)
+    try
     {
-        if (aResourceControllers[nIndex].is())
-        {
-            try
-            {
-                aResourceControllers[nIndex]->updateStart(
-                    mxRequestedConfiguration,
-                    mxCurrentConfiguration,
-                    aResourcesToDeactivate);
-            }
-            catch(RuntimeException)
-            {
-            }
-        }
+#if defined VERBOSE && VERBOSE>=2
+        rClassifier.TraceResourceIdVector(
+            "requested but not current resources:", rClassifier.GetC1minusC2());
+        rClassifier.TraceResourceIdVector(
+            "current but not requested resources:", rClassifier.GetC2minusC1());
+        rClassifier.TraceResourceIdVector(
+            "requested and current resources:", rClassifier.GetC1andC2());
+#endif
+
+        // Updating of the sub controllers is done in two steps.  In the
+        // first the sub controllers typically shut down resources that are
+        // not requested anymore.  In the second the sub controllers
+        // typically set up resources that have been newly requested.
+        mpResourceManager->DeactivateResources(rClassifier.GetC2minusC1(), mxCurrentConfiguration);
+        mpResourceManager->ActivateResources(rClassifier.GetC1minusC2(), mxCurrentConfiguration);
+
+#if defined VERBOSE && VERBOSE>=2
+        OSL_TRACE("ConfigurationController::UpdateConfiguration)");
+        ConfigurationTracer::TraceConfiguration(
+            mxRequestedConfiguration, "requested configuration");
+        ConfigurationTracer::TraceConfiguration(
+            mxCurrentConfiguration, "current configuration");
+#endif
+
+        // Deactivate pure anchors that have no child.
+        vector<Reference<XResourceId> > aResourcesToDeactivate;
+        CheckPureAnchors(mxCurrentConfiguration, aResourcesToDeactivate);
+        if (aResourcesToDeactivate.size() > 0)
+            mpResourceManager->DeactivateResources(aResourcesToDeactivate, mxCurrentConfiguration);
+    }
+    catch(RuntimeException)
+    {
+        OSL_ASSERT(false);
     }
 }
 
 
 
 
-
-void ConfigurationUpdater::UpdateEnd (
-    const ::std::vector<Reference<XResourceId> >& rResources)
+void ConfigurationUpdater::CheckPureAnchors (
+    const Reference<XConfiguration>& rxConfiguration,
+    vector<Reference<XResourceId> >& rResourcesToDeactivate)
 {
-    // Convert vector into sequence.
-    sal_Int32 nCount (rResources.size());
-    Sequence<Reference<XResourceId> > aResourcesToActivate (nCount);
-    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
-        aResourcesToActivate[nIndex] = rResources[nIndex];
+    if ( ! rxConfiguration.is())
+        return;
 
-    // Call all resource controllers known to the controller manager and
-    // tell them to finish the configuration update.
-    Sequence<Reference<XResourceController> > aResourceControllers(
-        mxControllerManager->getResourceControllers());
-    for (sal_Int32 nIndex=aResourceControllers.getLength()-1; nIndex>=0; --nIndex)
+    // Get a list of all resources in the configuration.
+    Sequence<Reference<XResourceId> > aResources(
+        rxConfiguration->getResources(
+            NULL, OUString(), AnchorBindingMode_INDIRECT));
+    sal_Int32 nCount (aResources.getLength());
+
+    // Prepare the list of pure anchors that have to be deactivated.
+    rResourcesToDeactivate.clear();
+
+    // Iterate over the list in reverse order because when there is a chain
+    // of pure anchors with only the last one having no child then the whole
+    // list has to be deactivated.
+    sal_Int32 nIndex (nCount-1);
+    while (nIndex >= 0)
     {
-        if (aResourceControllers[nIndex].is())
+        const Reference<XResourceId> xResourceId (aResources[nIndex]);
+        const Reference<XResource> xResource (
+            mpResourceManager->GetResource(xResourceId).mxResource);
+        bool bDeactiveCurrentResource (false);
+
+        // Skip all resources that are no pure anchors.
+        if (xResource.is() && xResource->isAnchorOnly())
         {
-            try
+            // When xResource is not an anchor of the the next resource in
+            // the list then it is the anchor of no resource at all.
+            if (nIndex == nCount-1)
             {
-                aResourceControllers[nIndex]->updateEnd(
-                    mxRequestedConfiguration,
-                    mxCurrentConfiguration,
-                    aResourcesToActivate);
+                // No following anchors, deactivate this one, then remove it
+                // from the list.
+                bDeactiveCurrentResource = true;
             }
-            catch(RuntimeException)
+            else
             {
+                const Reference<XResourceId> xPrevResourceId (aResources[nIndex+1]);
+                if ( ! xPrevResourceId.is()
+                    || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode_DIRECT))
+                {
+                    // The previous resource (id) does not exist or is not bound to
+                    // the current anchor.
+                    bDeactiveCurrentResource = true;
+                }
             }
         }
+
+        if (bDeactiveCurrentResource)
+        {
+#if defined VERBOSE && VERBOSE>=2
+            OSL_TRACE("deactiving pure anchor %s because it has no children",
+                OUStringToOString(
+                    FrameworkHelper::ResourceIdToString(xResourceId),
+                    RTL_TEXTENCODING_UTF8).getStr());
+#endif
+            // Erase element from current configuration.
+            for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
+                aResources[nI] = aResources[nI+1];
+            nCount -= 1;
+
+            rResourcesToDeactivate.push_back(xResourceId);
+        }
+        nIndex -= 1;
     }
 }
 
