@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:55:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,9 @@ public:
         @param rManager
             This ViewShellManager is used to activate or deactivate shells.
     */
-    void UpdateShells (ViewShell* pMainViewShell, ViewShellManager& rManager);
+    void UpdateShells (
+        const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
+        const ::boost::shared_ptr<ViewShellManager>& rpManager);
 
 private:
     class ShellDescriptor
@@ -236,7 +238,7 @@ class ToolBarRules
 public:
     ToolBarRules (
         const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager,
-        ::sd::ViewShellManager& rViewShellManager);
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager);
 
     /** This method calls MainViewShellChanged() and SelectionHasChanged()
         for the current main view shell and its view.
@@ -274,7 +276,7 @@ public:
 
 private:
     ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
-    ViewShellManager& mrViewShellManager;
+    ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
 };
 
 } // end of anonymous namespace
@@ -297,8 +299,8 @@ public:
     */
     Implementation (
         ViewShellBase& rBase,
-        sd::tools::EventMultiplexer& rMultiplexer,
-        ViewShellManager& rViewShellManager,
+        const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
         const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager);
     ~Implementation (void);
 
@@ -356,7 +358,7 @@ private:
 
     mutable ::osl::Mutex maMutex;
     ViewShellBase& mrBase;
-    sd::tools::EventMultiplexer& mrEventMultiplexer;
+    ::boost::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
     bool mbIsValid;
     ToolBarList maToolBarList;
     ToolBarShellList maToolBarShellList;
@@ -407,12 +409,12 @@ const ::rtl::OUString ToolBarManager::msTableObjectBar(OUSTRING("tableobjectbar"
 
 ::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
-    sd::tools::EventMultiplexer& rMultiplexer,
-    ViewShellManager& rViewShellManager)
+    const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager)
 {
     ::boost::shared_ptr<ToolBarManager> pManager (new ToolBarManager());
     pManager->mpImpl.reset(
-        new Implementation(rBase,rMultiplexer,rViewShellManager,pManager));
+        new Implementation(rBase,rpMultiplexer,rpViewShellManager,pManager));
     return pManager;
 }
 
@@ -665,12 +667,12 @@ const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix(
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
-    sd::tools::EventMultiplexer& rMultiplexer,
-    ViewShellManager& rViewShellManager,
+    const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
     const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager)
     : maMutex(),
       mrBase(rBase),
-      mrEventMultiplexer(rMultiplexer),
+      mpEventMultiplexer(rpMultiplexer),
       mbIsValid(false),
       maToolBarList(),
       maToolBarShellList(),
@@ -683,15 +685,13 @@ ToolBarManager::Implementation::Implementation (
       mpViewShellManagerLock(),
       mnPendingUpdateCall(0),
       mnPendingSetValidCall(0),
-      maToolBarRules(rpToolBarManager,rViewShellManager)
+      maToolBarRules(rpToolBarManager,rpViewShellManager)
 {
     Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
-    mrEventMultiplexer.AddEventListener(
+    mpEventMultiplexer->AddEventListener(
         aLink,
         tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
         | tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
         | tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
 }
 
@@ -705,7 +705,7 @@ ToolBarManager::Implementation::~Implementation (void)
 {
     // Unregister at broadcasters.
     Link aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
-    mrEventMultiplexer.RemoveEventListener(aLink);
+    mpEventMultiplexer->RemoveEventListener(aLink);
 
     // Abort pending user calls.
     if (mnPendingUpdateCall != 0)
@@ -852,7 +852,7 @@ void ToolBarManager::Implementation::RemoveToolBarShell (
 void ToolBarManager::Implementation::ReleaseAllToolBarShells (void)
 {
     maToolBarShellList.ReleaseAllShells(GetToolBarRules());
-    maToolBarShellList.UpdateShells(mrBase.GetMainViewShell().get(), mrBase.GetViewShellManager());
+    maToolBarShellList.UpdateShells(mrBase.GetMainViewShell(), mrBase.GetViewShellManager());
 }
 
 
@@ -1043,7 +1043,7 @@ void ToolBarManager::Implementation::Update (
                 mpViewShellManagerLock.reset(
                     new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
             maToolBarShellList.UpdateShells(
-                mrBase.GetMainViewShell().get(),
+                mrBase.GetMainViewShell(),
                 mrBase.GetViewShellManager());
 
             // 3) Unlock the ViewShellManager::UpdateLock.  This updates the
@@ -1207,7 +1207,9 @@ using namespace ::sd;
 LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
     : mxLayouter(rxLayouter)
 {
+#ifdef VERBOSE
     OSL_TRACE("LayouterLock %d", mxLayouter.is() ? 1 :0);
+#endif
     if (mxLayouter.is())
         mxLayouter->lock();
 }
@@ -1217,7 +1219,9 @@ LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
 
 LayouterLock::~LayouterLock (void)
 {
+#ifdef VERBOSE
     OSL_TRACE("~LayouterLock %d", mxLayouter.is() ? 1 :0);
+#endif
     if (mxLayouter.is())
         mxLayouter->unlock();
 }
@@ -1228,10 +1232,10 @@ LayouterLock::~LayouterLock (void)
 //===== ToolBarRules ==========================================================
 
 ToolBarRules::ToolBarRules (
-    const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager,
-    ::sd::ViewShellManager& rViewShellManager)
+    const ::boost::shared_ptr<sd::ToolBarManager>& rpToolBarManager,
+    const ::boost::shared_ptr<sd::ViewShellManager>& rpViewShellManager)
     : mpToolBarManager(rpToolBarManager),
-      mrViewShellManager(rViewShellManager)
+      mpViewShellManager(rpViewShellManager)
 {
 }
 
@@ -1257,7 +1261,7 @@ void ToolBarRules::Update (ViewShellBase& rBase)
 void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
 {
     ::sd::ToolBarManager::UpdateLock aToolBarManagerLock (mpToolBarManager);
-    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mrViewShellManager);
+    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mpViewShellManager);
 
     mpToolBarManager->ResetAllToolBars();
 
@@ -1329,7 +1333,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
 void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
 {
     ::sd::ToolBarManager::UpdateLock aToolBarManagerLock (mpToolBarManager);
-    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mrViewShellManager);
+    ::sd::ViewShellManager::UpdateLock aViewShellManagerLock (mpViewShellManager);
 
     MainViewShellChanged(rMainViewShell.GetShellType());
     switch(rMainViewShell.GetShellType())
@@ -1754,10 +1758,10 @@ void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
 
 
 void ToolBarShellList::UpdateShells (
-    ViewShell* pMainViewShell,
-    ViewShellManager& rManager)
+    const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
+    const ::boost::shared_ptr<ViewShellManager>& rpManager)
 {
-    if (pMainViewShell != NULL)
+    if (rpMainViewShell.get() != NULL)
     {
         GroupedShellList aList;
 
@@ -1771,7 +1775,7 @@ void ToolBarShellList::UpdateShells (
 #ifdef VERBOSE
             OSL_TRACE("deactivating tool bar shell %d\n", iShell->mnId);
 #endif
-            rManager.DeactivateSubShell(*pMainViewShell, iShell->mnId);
+            rpManager->DeactivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
         // Activate shells that are in maNewList, but not in
@@ -1785,7 +1789,7 @@ void ToolBarShellList::UpdateShells (
 #ifdef VERBOSE
             OSL_TRACE("activating tool bar shell %d\n", iShell->mnId);
 #endif
-            rManager.ActivateSubShell(*pMainViewShell, iShell->mnId);
+            rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
         // The maNewList now refelects the current state and thus is made
