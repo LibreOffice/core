@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:30:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@
 
 class SdPage;
 
-namespace sd { namespace slidesorter { namespace controller {
-class SlideSorterController;
-} } }
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
 namespace accessibility {
 
@@ -94,15 +94,15 @@ public:
         sorter.
         @param rxParent
             The accessible parent.
-        @param rSlideSorterController
-            The slide sorter controller whose model manages the page.
+        @param rSlideSorter
+            The slide sorter whose model manages the page.
         @param nPageNumber
             The number of the page in the range [0,nPageCount).
     */
     AccessibleSlideSorterObject(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible >& rxParent,
-        ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController,
+        ::sd::slidesorter::SlideSorter& rSlideSorter,
         sal_uInt16 nPageNumber);
     ~AccessibleSlideSorterObject (void);
 
@@ -249,7 +249,7 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> mxParent;
     sal_uInt16 mnPageNumber;
-    ::sd::slidesorter::controller::SlideSorterController& mrSlideSorterController;
+    ::sd::slidesorter::SlideSorter& mrSlideSorter;
     sal_uInt32 mnClientId;
 
     /** Check whether or not the object has been disposed (or is in the
