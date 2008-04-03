@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:02:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,121 +40,57 @@
 #include <algorithm>
 #include "EventMultiplexer.hxx"
 #include "cache/SlsPageCacheManager.hxx"
-#ifndef SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
 #include "app.hrc"
 #include "strings.hrc"
 #include "glob.hrc"
-#ifndef _SD_UNOKYWDS_HXX_
 #include "unokywds.hxx"
-#endif
 #include <svx/svxids.hrc>
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef SD_PANE_CHILD_WINDOWS_HXX
 #include "PaneChildWindows.hxx"
-#endif
-#ifndef SD_NOTES_CHILD_WINDOW_HXX
 #include "NotesChildWindow.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_MANAGER_HXX
 #include "ViewShellManager.hxx"
-#endif
-#ifndef SD_DRAW_CONTROLLER_HXX
 #include "DrawController.hxx"
-#endif
-#ifndef SD_PRINT_MANAGER_HXX
 #include "PrintManager.hxx"
-#endif
 #include "UpdateLockManager.hxx"
 #include "FrameView.hxx"
 #include "ViewTabBar.hxx"
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-#ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_SLIDE_SORTER_VIEW_SHELL_HXX
 #include "SlideSorterViewShell.hxx"
-#endif
-#ifndef SD_PRESENTATION_SORTER_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
-#endif
-#ifndef SD_TOOLPANEL_TASK_PANE_VIEW_SHELL_HXX
 #include "TaskPaneViewShell.hxx"
-#endif
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
 #include "Window.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#endif
 #include "framework/FrameworkHelper.hxx"
 
 #include <rtl/ref.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 
-#ifndef SD_FU_BULLET_HXX
 #include "fubullet.hxx"
-#endif
 
 using namespace sd;
 #define ViewShellBase
@@ -187,8 +123,6 @@ namespace sd {
 class ViewShellBase::Implementation
 {
 public:
-    ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
-
     /** Main controller of the view shell.  During the switching from one
         stacked shell to another this pointer may be NULL.
     */
@@ -202,7 +136,7 @@ public:
     // contains the complete area of the current view relative to the frame window
     Rectangle maClientArea;
 
-    // This is set to true when PrepareClosing() is called.
+    // This is set to true when PrepareClose() is called.
     bool mbIsClosing;
 
     /** The view window is the parent of all UI elements that belong to the
@@ -211,6 +145,21 @@ public:
         It does not include the ViewTabBar.
     */
     ::boost::scoped_ptr< ::Window> mpViewWindow;
+
+    ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
+
+    ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
+
+    ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
+
+    ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
+
+    /// The print manager is responsible for printing documents.
+    ::boost::shared_ptr<PrintManager> mpPrintManager;
+
+    ::boost::shared_ptr<FormShellManager> mpFormShellManager;
+
+    ::boost::shared_ptr<CustomHandleManager> mpCustomHandleManager;
 
     Implementation (ViewShellBase& rBase);
     ~Implementation (void);
@@ -334,17 +283,14 @@ ViewShellBase::ViewShellBase (
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
-      mpViewShellManager (NULL),
       mpDocShell (NULL),
-      mpDocument (NULL),
-      mpPrintManager (new PrintManager(*this)),
-      mpFormShellManager(NULL),
-      mpEventMultiplexer(NULL),
-      mpUpdateLockManager(new UpdateLockManager(*this))
+      mpDocument (NULL)
 {
     mpImpl.reset(new Implementation(*this));
     mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
+    mpImpl->mpUpdateLockManager.reset(new UpdateLockManager(*this));
+    mpImpl->mpPrintManager.reset(new PrintManager(*this));
 
     _pFrame->GetWindow().SetBackground(Wallpaper());
 
@@ -354,7 +300,7 @@ ViewShellBase::ViewShellBase (
             GetViewFrame()->GetObjectShell());
     if (mpDocShell != NULL)
         mpDocument = mpDocShell->GetDoc();
-    mpViewShellManager.reset (new ViewShellManager (*this));
+    mpImpl->mpViewShellManager.reset(new ViewShellManager(*this));
 
     SetWindow(mpImpl->mpViewWindow.get());
 
@@ -385,18 +331,12 @@ ViewShellBase::~ViewShellBase (void)
         pShell->GetActiveWindow()->GetParent()->Hide();
     }
 
-    mpUpdateLockManager->Disable();
+    mpImpl->mpUpdateLockManager->Disable();
     mpImpl->mpToolBarManager->Shutdown();
-    mpViewShellManager->Shutdown();
-
-    mpFormShellManager.reset();
-    mpEventMultiplexer.reset();
+    mpImpl->mpViewShellManager->Shutdown();
 
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
-
-    mpViewShellManager.reset();
-    mpPrintManager.reset();
 
     SetWindow(NULL);
 }
@@ -410,14 +350,14 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
     StartListening(*GetDocShell(),TRUE);
     mpImpl->LateInit();
     InitializeFramework();
-    mpEventMultiplexer.reset (new tools::EventMultiplexer (*this));
+    mpImpl->mpEventMultiplexer.reset(new tools::EventMultiplexer (*this));
 
-    mpFormShellManager = ::std::auto_ptr<FormShellManager>(new FormShellManager(*this));
+    mpImpl->mpFormShellManager.reset(new FormShellManager(*this));
 
     mpImpl->mpToolBarManager = ToolBarManager::Create(
         *this,
-        *mpEventMultiplexer,
-        *mpViewShellManager);
+        mpImpl->mpEventMultiplexer,
+        mpImpl->mpViewShellManager);
 
     try
     {
@@ -433,8 +373,6 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
             pHelper->RequestView(
                 sView,
                 FrameworkHelper::msCenterPaneURL);
-            pHelper->WaitForEvent(
-                FrameworkHelper::msConfigurationUpdateEndEvent);
         }
     }
     catch (RuntimeException&)
@@ -458,9 +396,9 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
 
 
 
-ViewShellManager& ViewShellBase::GetViewShellManager (void) const
+::boost::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager (void) const
 {
-    return *mpViewShellManager.get();
+    return mpImpl->mpViewShellManager;
 }
 
 
@@ -468,8 +406,13 @@ ViewShellManager& ViewShellBase::GetViewShellManager (void) const
 
 ::boost::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell (void) const
 {
-    return framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
-        ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL);
+    ::boost::shared_ptr<ViewShell> pMainViewShell (
+        framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
+            ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL));
+    if (pMainViewShell.get() == NULL)
+        pMainViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
+            ->GetViewShell(framework::FrameworkHelper::msFullScreenPaneURL);
+    return pMainViewShell;
 }
 
 
@@ -653,7 +596,10 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
 
 SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 {
-    return mpPrintManager->GetPrinter (bCreate);
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->GetPrinter(bCreate);
 }
 
 
@@ -661,9 +607,13 @@ SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 
 USHORT ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-    USHORT nDiffFlags, bool bIsAPI )
+    USHORT nDiffFlags,
+    bool bIsAPI)
 {
-    return mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags,bIsAPI);
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags, bIsAPI);
 }
 
 
@@ -671,7 +621,10 @@ USHORT ViewShellBase::SetPrinter (
 
 PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
 {
-    return mpPrintManager->CreatePrintDialog (pParent);
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
 }
 
 
@@ -681,7 +634,10 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
 {
-    return mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
@@ -689,7 +645,10 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
 
 USHORT  ViewShellBase::Print(SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
 {
-    return mpPrintManager->Print (rProgress, bIsAPI, pDlg);
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
 
 
@@ -700,7 +659,10 @@ ErrCode ViewShellBase::DoPrint (
     PrintDialog* pPrintDialog,
     BOOL bSilent, BOOL bIsAPI )
 {
-    return mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
 }
 
 
@@ -711,7 +673,10 @@ USHORT ViewShellBase::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL bShowDialog)
 {
-   return mpPrintManager->SetPrinterOptDlg (
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
+    return mpImpl->mpPrintManager->SetPrinterOptDlg (
        pNewPrinter,
        nDiffFlags,
        bShowDialog);
@@ -722,8 +687,11 @@ USHORT ViewShellBase::SetPrinterOptDlg (
 
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
+
     SfxViewShell::PreparePrint (pPrintDialog);
-    return mpPrintManager->PreparePrint (pPrintDialog);
+    return mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
@@ -760,7 +728,7 @@ void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
 SvBorder ViewShellBase::GetBorder (bool )
 {
     int nTop = 0;
-    if (mpImpl->mpViewTabBar.is() && mpImpl->mpViewTabBar->IsVisible())
+    if (mpImpl->mpViewTabBar.is() && mpImpl->mpViewTabBar->GetTabControl()->IsVisible())
         nTop = mpImpl->mpViewTabBar->GetHeight();
     return SvBorder(0,nTop,0,0);
 }
@@ -845,8 +813,8 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
     // The full screen mode is not supported.  Disable the the slot so that
     // it appears grayed out when somebody uses configures the menu to show
     // an menu item for it.
-    if (rSet.GetItemState(SID_WIN_FULLSCREEN) == SFX_ITEM_AVAILABLE)
-        rSet.DisableItem(SID_WIN_FULLSCREEN);
+    //    if (rSet.GetItemState(SID_WIN_FULLSCREEN) == SFX_ITEM_AVAILABLE)
+    //        rSet.DisableItem(SID_WIN_FULLSCREEN);
 
     mpImpl->GetSlotState(rSet);
 
@@ -1066,7 +1034,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 void ViewShellBase::ShowUIControls (bool bVisible)
 {
     if (mpImpl->mpViewTabBar.is())
-        mpImpl->mpViewTabBar->Show(bVisible);
+        mpImpl->mpViewTabBar->GetTabControl()->Show(bVisible);
 
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL)
@@ -1157,22 +1125,13 @@ void ViewShellBase::StartPresentation()
 
 
 
-/** this methods ends the presentation by
-    executing the slot SID_PRESENTATION_END asynchronous */
-void ViewShellBase::StopPresentation()
+
+::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer (void)
 {
-    if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
-        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION_END, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
-}
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=NULL);
 
-
-
-
-tools::EventMultiplexer& ViewShellBase::GetEventMultiplexer (void)
-{
-    // Maybe we should throw an exception in the unlikely case that
-    // mpEventMultiplexer is NULL.
-    return *mpEventMultiplexer.get();
+    return mpImpl->mpEventMultiplexer;
 }
 
 
@@ -1188,7 +1147,10 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 
 ::boost::shared_ptr<UpdateLockManager> ViewShellBase::GetUpdateLockManager (void) const
 {
-    return mpUpdateLockManager;
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpUpdateLockManager.get()!=NULL);
+
+    return mpImpl->mpUpdateLockManager;
 }
 
 
@@ -1196,15 +1158,21 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 
 ::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager (void) const
 {
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
+
     return mpImpl->mpToolBarManager;
 }
 
 
 
 
-FormShellManager& ViewShellBase::GetFormShellManager (void) const
+::boost::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager (void) const
 {
-    return *mpFormShellManager;
+    OSL_ASSERT(mpImpl.get()!=NULL);
+    OSL_ASSERT(mpImpl->mpFormShellManager.get()!=NULL);
+
+    return mpImpl->mpFormShellManager;
 }
 
 
@@ -1212,6 +1180,8 @@ FormShellManager& ViewShellBase::GetFormShellManager (void) const
 
 DrawController& ViewShellBase::GetDrawController (void) const
 {
+    OSL_ASSERT(mpImpl.get()!=NULL);
+
     return *mpImpl->mpController;
 }
 
@@ -1220,6 +1190,8 @@ DrawController& ViewShellBase::GetDrawController (void) const
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)
 {
+    OSL_ASSERT(mpImpl.get()!=NULL);
+
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
@@ -1228,15 +1200,22 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 
 ::Window* ViewShellBase::GetViewWindow (void)
 {
+    OSL_ASSERT(mpImpl.get()!=NULL);
+
     return mpImpl->mpViewWindow.get();
 }
 
+
+
+
 CustomHandleManager& ViewShellBase::getCustomHandleManager() const
 {
-    if( !mpCustomHandleManager.get() )
-        const_cast< ViewShellBase* >(this)->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
+    OSL_ASSERT(mpImpl.get()!=NULL);
 
-    return *mpCustomHandleManager.get();
+    if( !mpImpl->mpCustomHandleManager.get() )
+        mpImpl->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
+
+    return *mpImpl->mpCustomHandleManager.get();
 }
 
 
@@ -1244,12 +1223,17 @@ CustomHandleManager& ViewShellBase::getCustomHandleManager() const
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
-    : mpToolBarManager(),
-      mpController(),
+    : mpController(),
       mpViewTabBar(),
       maClientArea(),
       mbIsClosing(false),
       mpViewWindow(),
+      mpToolBarManager(),
+      mpViewShellManager(),
+      mpEventMultiplexer(),
+      mpUpdateLockManager(),
+      mpPrintManager(),
+      mpFormShellManager(),
       mrBase(rBase),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())
 {
@@ -1260,11 +1244,10 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
 
 ViewShellBase::Implementation::~Implementation (void)
 {
-    mpToolBarManager.reset();
     mpController = NULL;
     mpViewTabBar = NULL;
     mpViewWindow.reset();
-    mpPageCacheManager.reset();
+    mpToolBarManager.reset();
 }
 
 
@@ -1309,9 +1292,9 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
     if (mpViewTabBar.is()
-        && (mpViewTabBar->IsVisible()==TRUE) != bShow)
+        && (mpViewTabBar->GetTabControl()->IsVisible()==TRUE) != bShow)
     {
-        mpViewTabBar->Show(bShow ? TRUE : FALSE);
+        mpViewTabBar->GetTabControl()->Show(bShow ? TRUE : FALSE);
         mrBase.Rearrange();
     }
 }
@@ -1334,8 +1317,8 @@ void ViewShellBase::Implementation::ResizePixel (
     // Set the ViewTabBar temporarily to full size so that, when asked
     // later, it can return its true height.
     mrBase.SetWindow (mpViewWindow.get());
-    if (mpViewTabBar.is() && mpViewTabBar->IsVisible())
-        mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
+    if (mpViewTabBar.is() && mpViewTabBar->GetTabControl()->IsVisible())
+        mpViewTabBar->GetTabControl()->SetPosSizePixel (rOrigin, rSize);
 
     // Calculate and set the border before the controls are placed.
     SvBorder aBorder;
@@ -1347,10 +1330,11 @@ void ViewShellBase::Implementation::ResizePixel (
 
     // Place the ViewTabBar at the top.  It is part of the border.
     SvBorder aBaseBorder;
-    if (mpViewTabBar.is() && mpViewTabBar->IsVisible())
+    if (mpViewTabBar.is() && mpViewTabBar->GetTabControl()->IsVisible())
     {
         aBaseBorder.Top() = mpViewTabBar->GetHeight();
-        mpViewTabBar->SetPosSizePixel (rOrigin, Size(rSize.Width(),aBaseBorder.Top()));
+        mpViewTabBar->GetTabControl()->SetPosSizePixel(
+            rOrigin, Size(rSize.Width(),aBaseBorder.Top()));
     }
 
     // The view window gets the remaining space.
@@ -1396,7 +1380,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             if ( ! xConfigurationController.is())
                 throw RuntimeException();
             Reference<XConfiguration> xConfiguration (
-                xConfigurationController->getConfiguration());
+                xConfigurationController->getRequestedConfiguration());
             if ( ! xConfiguration.is())
                 throw RuntimeException();
 
@@ -1443,7 +1427,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfigurationController.is())
             throw RuntimeException();
         Reference<XConfiguration> xConfiguration (
-            xConfigurationController->getConfiguration());
+            xConfigurationController->getRequestedConfiguration());
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
@@ -1706,6 +1690,7 @@ FocusForwardingWindow::FocusForwardingWindow (
     : ::Window(&rParentWindow, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
         mrBase(rBase)
 {
+    OSL_TRACE("created FocusForwardingWindow at %x", this);
 }
 
 
@@ -1713,6 +1698,7 @@ FocusForwardingWindow::FocusForwardingWindow (
 
 FocusForwardingWindow::~FocusForwardingWindow (void)
 {
+    OSL_TRACE("destroyed FocusForwardingWindow at %x", this);
 }
 
 
