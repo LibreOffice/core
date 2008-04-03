@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChangeRequestQueueProcessor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 11:15:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,20 @@ public:
     */
     bool IsEmpty (void) const;
 
+    /** Process all events in the queue synchronously.
+
+        <p>This method is typically called when the framework is shut down
+        to establish an empty configuration.</p>
+    */
+    void ProcessUntilEmpty (void);
+
+    /** Remove all events from the queue.
+
+        <p>This method is typically called when the framework is shut down
+        to avoid the processing of still pending activation requests.</p>
+    */
+    void Clear (void);
+
 private:
     mutable ::osl::Mutex maMutex;
 
@@ -123,9 +137,13 @@ private:
     */
     void StartProcessing (void);
 
+    /** Process the first event in queue.
+    */
+    void ProcessOneEvent (void);
+
     /** Callback function for the PostUserEvent() call.
     */
-    DECL_LINK(ProcessOneEvent,void*);
+    DECL_LINK(ProcessEvent,void*);
 };
 
 
