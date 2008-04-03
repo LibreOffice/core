@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:48:54 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:59:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,6 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #define _SVX_TPGRADNT_CXX
-
-
 
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
@@ -190,6 +188,8 @@ SvxGradientTabPage::SvxGradientTabPage
     aBtnSave.SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
 
+    // #i76307# always paint the preview in LTR, because this is what the document does
+    aCtlPreview.EnableRTL( FALSE );
 }
 
 // -----------------------------------------------------------------------
