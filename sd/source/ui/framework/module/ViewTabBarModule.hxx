@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBarModule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:57:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,31 +38,19 @@
 
 #include "MutexOwner.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XTOOLBARCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XToolBarController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
 
+namespace css = ::com::sun::star;
 
 namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <
-    ::com::sun::star::drawing::framework::XConfigurationChangeListener
+    ::css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarModuleInterfaceBase;
 
 } // end of anonymous namespace.
@@ -89,9 +77,9 @@ public:
             new module.
     */
     ViewTabBarModule (
-        const ::com::sun::star::uno::Reference<com::sun::star::frame::XController>& rxController,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxViewTabBarId);
+        const css::uno::Reference<css::frame::XController>& rxController,
+        const css::uno::Reference<
+            css::drawing::framework::XResourceId>& rxViewTabBarId);
     virtual ~ViewTabBarModule (void);
 
     virtual void SAL_CALL disposing (void);
@@ -100,28 +88,26 @@ public:
     // XConfigurationChangeListener
 
     virtual void SAL_CALL notifyConfigurationChange (
-        const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (css::uno::RuntimeException);
 
     // XEventListener
 
     virtual void SAL_CALL disposing (
-        const com::sun::star::lang::EventObject& rEvent)
-        throw (com::sun::star::uno::RuntimeException);
+        const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
 
 private:
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
-        mxConfigurationController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XToolBarController>
-        mxToolBarController;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId> mxViewTabBarId;
+    css::uno::Reference<
+        css::drawing::framework::XConfigurationController> mxConfigurationController;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
 
     /** This is the place where the view tab bar is filled.  Only missing
         buttons are added, so it is safe to call this method multiple
         times.
     */
-    void UpdateViewTabBar (void);
+    void UpdateViewTabBar (
+        const css::uno::Reference<css::drawing::framework::XTabBar>& rxTabBar);
 };
 
 } } // end of namespace sd::framework
