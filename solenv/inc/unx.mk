@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2008-02-27 09:45:38 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:45:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,8 +123,12 @@
 .INCLUDE : unxlngppc64.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUX32REDHAT60"
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUX32REDHAT60S390"
 .INCLUDE : unxlngs3904.mk
+.ENDIF
+
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUX32REDHAT60S390X"
+.INCLUDE : unxlngs390x.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXR2REDHAT60"
