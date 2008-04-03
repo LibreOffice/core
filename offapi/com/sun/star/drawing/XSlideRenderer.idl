@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSlideRenderer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:29:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_XSlideRenderer_idl__
+#define __com_sun_star_drawing_XSlideRenderer_idl__
+
+#ifndef __com_sun_star_awt_XBitmap_idl__
+#include <com/sun/star/awt/XBitmap.idl>
+#endif
+#ifndef __com_sun_star_drawing_XDrawPage_idl__
+#include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+#ifndef __com_sun_star_rendering_XBitmap_idl__
+#include <com/sun/star/rendering/XBitmap.idl>
+#endif
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+#endif
+
+
+module com { module sun { module star { module drawing {
+
+/** Create preview bitmaps for single slides.
+*/
+interface XSlideRenderer
+{
+    /** Create a preview for the given slide that has the same aspect ratio
+        as the page and is as large as possible but not larger than the
+        specified size.
+
+        The reason for not using the given size directly as preview size and
+        thus possibly changing the aspect ratio is that
+        a) a different aspect ratio is not used often, and
+        b) leaving the adaption of the actual preview size (according to the
+        aspect ratio of the slide) to the slide renderer is more convenient
+        to the caller than having to this himself.
+
+        @param xSlide
+            The slide for which a preview will be created.
+        @param aMaximumPreviewPixelSize
+            The maximum size of the preview measured in pixels.  When the
+            aspect ratios of this size and of the given slide differ, then
+            resulting preview will either have the width or the height of
+            this size.
+        @param nSuperSampleFactor
+            When larger than the default 1 then internally a larger preview
+            is created which, before it is returned, is scaled down to the
+            requested size.  The intermediate size is nSuperSampleFactor
+            times the original size.  Values larger than 1 result in higher
+            memory consumption and longer runtime.
+            This value is an attempt to provide some antialiasing and so to
+            provide more readable slide previews.  May become obsolete in
+            the future when true antialiasing suppport will be integrated.
+    */
+    com::sun::star::awt::XBitmap createPreview (
+        [in] XDrawPage xSlide,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
+        [in] short nSuperSampleFactor);
+
+    /** Exactly the same functionality as <member>createPreview()</member>,
+        only a different return type:
+        <type>com::sun::star::rendering::XBitmap</type> instead
+        of <type>com::sun::star::awt::XBitmap</type>.
+        @see createPreview
+        @param xCanvas
+            This canvas is used create a canvas specific bitmap.
+    */
+    com::sun::star::rendering::XBitmap createPreviewForCanvas (
+        [in] XDrawPage xSlide,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
+        [in] short nSuperSampleFactor,
+        [in] com::sun::star::rendering::XCanvas xCanvas);
+
+    /** Return a size that has the given aspect ratio and shares either the
+        width or the height with the given maximum size.
+        @param nSlideAspectRatio
+            The aspect ratio must not be 0.
+        @param aMaximumPreviewPixelSize
+            The maximum size of the returned preview size.
+    */
+    com::sun::star::awt::Size calculatePreviewSize (
+        [in] double nSlideAspectRatio,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize);
+};
+
+}; }; }; }; // ::com::sun::star::drawing
+
+#endif
