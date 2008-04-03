@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:32:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ public:
         view shell.  It works together with the given view shell manager.
     */
     TaskPaneShellManager (
-        ViewShellManager& rViewShellManager,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
         const ViewShell& rViewShell);
     ~TaskPaneShellManager (void);
 
@@ -104,7 +104,7 @@ public:
     DECL_LINK(WindowCallback,VclWindowEvent*);
 
 private:
-    ViewShellManager& mrViewShellManager;
+    ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
 
     /// The view shell whose sub-shells this class manages.
     const ViewShell& mrViewShell;
