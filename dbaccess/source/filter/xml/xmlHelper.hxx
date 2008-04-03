@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:07:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@ namespace dbaxml
     public:
         static UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper();
         static UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper();
+        static UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper();
+        static UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper();
     };
 // -----------------------------------------------------------------------------
 } // dbaxml
