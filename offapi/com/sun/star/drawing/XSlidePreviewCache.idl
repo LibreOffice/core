@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSlidePreviewCache.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:29:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_XSlidePreviewCache_idl__
+#define __com_sun_star_drawing_XSlidePreviewCache_idl__
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
+#include <com/sun/star/geometry/IntegerSize2D.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_rendering_XBitmap_idl__
+#include <com/sun/star/rendering/XBitmap.idl>
+#endif
+#ifndef __com_sun_star_rendering_XCanvas_idl__
+#include <com/sun/star/rendering/XCanvas.idl>
+#endif
+
+
+module com { module sun { module star { module drawing {
+
+/** Listener for asynchronous preview creations.  Called when a slide
+    preview has been created that was previously requested via a call to
+    <method>XSlidePreviewCache::getSlidePreview()</method>.  The
+    implementor may then call <method>getSlidePreview()</method> a second
+    time to get the up-to-date version of the preview.
+*/
+interface XSlidePreviewCacheListener
+{
+    /** Called by a <interface>XSlidePreviewCache</interface> object when a
+        preview has been created for the slide with the given index.
+        @param nSlideIndex
+            The index of the slide for which a new preview has been created.
+    */
+    void notifyPreviewCreation ([in] long nSlideIndex);
+};
+
+
+
+
+/** A cache of preview bitmaps for the slides of one Impress or Draw
+    document in one size.  There may be more than one cache for one
+    document.  These are internally connected and for missing previews one
+    cache may take it from another cache and scale it to the desired size.
+    When a preview is not present then it is created asynchronously.  On
+    creation all registered listeners are notified.
+
+    Slides are referenced via their index in an XIndexAccess container in
+    order to allow multiple references to a single slide (custom
+    presentations).
+*/
+interface XSlidePreviewCache
+{
+    /** Set the set of slides for which the cache will provide the
+        previews.  All slides in the given XIndexAccess are required to come
+        from the given model.
+        @param xSlides
+            The set of slides for which the called cache will provide the
+            previews.  This container defines the indices that are used to
+            look up slides.
+        @param xDocument
+            The model that contains the slides reference by the xSlides argument.
+    */
+    void setDocumentSlides (
+        [in] ::com::sun::star::container::XIndexAccess xSlides,
+        [in] ::com::sun::star::uno::XInterface xDocument);
+
+    /** Define which slides are currently visible on the screen and which
+        are not.  This information is used for give preview creation for
+        visible slides a higher priority than for those slides that are not
+        visible.
+    */
+    void setVisibleRange ([in] long nFirstVisibleSlideIndex, [in] long nLastVisibleSlideIndex);
+
+    /** Define the size of the previews that are managed by the called
+        cache.
+    */
+    void setPreviewSize ([in] ::com::sun::star::geometry::IntegerSize2D aSize);
+
+    /** Return a preview for the given slide index.
+        The returned bitmap may be the requested preview, a preview of the
+        preview, i.e. a scaled up or down version, or an empty reference
+        when the preview is not yet present.
+
+        This call may lead to the asynchronous creation of the requested
+        preview.  In that case all registered listeners are notified when
+        the preview has been created.
+    */
+    ::com::sun::star::rendering::XBitmap getSlidePreview (
+        [in] long nSlideIndex,
+        [in] ::com::sun::star::rendering::XCanvas xCanvas)
+          raises(::com::sun::star::lang::IllegalArgumentException);
+
+    /** Register a listener that is called when a preview has been created
+        asynchronously.
+    */
+    void addPreviewCreationNotifyListener ([in] XSlidePreviewCacheListener xListener);
+
+    /** Remove a previously registered listener for preview creations.
+    */
+    void removePreviewCreationNotifyListener ([in] XSlidePreviewCacheListener xListener);
+
+    /** Stop the asynchronous creation of previews temporarily.
+        Call <method>resume()</method> to restart it.
+    */
+    void pause ();
+
+    /** Resume the asynchronous creation of slide previews.
+    */
+    void resume ();
+};
+
+}; }; }; }; // ::com::sun::star::drawing
+
+#endif
