@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XAnimationListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:27:41 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XAnimationListener_idl__
+#define __com_sun_star_animations_XAnimationListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+#ifndef __com_sun_star_animations_XAnimationNode_idl__
+#include <com/sun/star/animations/XAnimationNode.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** makes it possible to register listeners, which are called whenever
+    an animation event occurs.
+
+    @since #i71351#
+ */
+interface XAnimationListener : ::com::sun::star::lang::XEventListener
+{
+    /** This event is raised when the element local timeline begins to play.
+        <p>It will be raised each time the element begins the active duration (i.e. when it restarts, but not when it repeats).</p>
+        <p>It may be raised both in the course of normal (i.e. scheduled or interactive) timeline play, as well as in the
+        case that the element was begun with an interface method.</p>
+
+        @param Node
+            The node that begins to play.
+    */
+    void beginEvent( [in] XAnimationNode Node );
+
+    /** This event is raised at the active end of the element.
+        <p>Note that this event is not raised at the simple end of each repeat.</p>
+        <p>This event may be raised both in the course of normal (i.e. scheduled or interactive) timeline play, as well as in the
+        case that the element was ended with a DOM method.</p>
+
+        @param Node
+            The node that stops playing.
+    */
+    void endEvent( [in] XAnimationNode Node );
+
+    /** This event is raised when the element local timeline repeats.
+        <p>It will be raised each time the element repeats, after the first iteration.</p>
+        <p>Associated with the repeat event is an integer that indicates which repeat iteration is
+        beginning.
+
+        @param Node
+            The node that repeats.
+
+        @param Repeat
+            The value is a 0-based integer, but the repeat event is not raised for the first iteration and so the observed values will be >= 1.
+    */
+    void repeat( [in] XAnimationNode Node, [in] long Repeat );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
