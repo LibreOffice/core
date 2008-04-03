@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:55:08 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1911,7 +1911,6 @@ void Outliner::Implementation::ProvideOutlinerView (
 
             default:
             case ViewShell::ST_NONE:
-            case ViewShell::ST_SLIDE:
             case ViewShell::ST_PRESENTATION:
                 // Ignored
                 break;
