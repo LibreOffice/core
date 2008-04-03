@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.222 $
+ *  $Revision: 1.223 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 09:12:30 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,13 +313,28 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         }
         Attributes.override_redirect = True;
     }
+    else if( (nSalFrameStyle & SAL_FRAME_STYLE_SYSTEMCHILD ) )
+    {
+        DBG_ASSERT( mpParent, "SAL_FRAME_STYLE_SYSTEMCHILD window without parent" );
+        if( mpParent )
+        {
+            aFrameParent = mpParent->mhWindow;
+            // FIXME: since with SAL_FRAME_STYLE_SYSTEMCHILD
+            // multiple X11SalFrame objects can have the same shell window
+            // dispatching events in saldisp.cxx is unclear (the first frame)
+            // wins. HTH this correctly is unclear yet
+            // for the time being, treat set the shell window to own window
+            // like for a normal frame
+            // mhShellWindow = mpParent->GetShellWindow();
+        }
+    }
     else if( pParentData )
     {
         // plugin parent may be killed unexpectedly by
         // plugging process; ignore XErrors in that case
         GetDisplay()->setHaveSystemChildFrame();
 
-        nStyle_ |= SAL_FRAME_STYLE_CHILD;
+        nStyle_ |= SAL_FRAME_STYLE_PLUG;
         Attributes.override_redirect = True;
         if( pParentData->nSize >= sizeof(SystemParentData) )
             m_bXEmbed = pParentData->bXEmbedSupport;
@@ -474,7 +489,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         X11SalFrame* pFrame = this;
         while( pFrame->mpParent )
             pFrame = pFrame->mpParent;
-        if( (pFrame->nStyle_ & SAL_FRAME_STYLE_CHILD ) )
+        if( (pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG ) )
         {
             // if the top level window is a plugin window,
             // then we should place us in the same window group as
@@ -520,7 +535,11 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
                               rVis.GetVisual(),
                               nAttrMask,
                               &Attributes );
-    mhShellWindow = pParentData ? mhShellWindow : mhWindow;
+    // FIXME: see above: fake shell window for now to own window
+    if( /*! IsSysChildWindow() &&*/ pParentData == NULL )
+    {
+        mhShellWindow = mhWindow;
+    }
 
     // correct window group if necessary
     if( (Hints.flags & WindowGroupHint) == WindowGroupHint )
@@ -533,13 +552,12 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
     maGeometry.nY       = y;
     maGeometry.nWidth   = w;
     maGeometry.nHeight  = h;
+    updateScreenNumber();
 
     XSync( GetXDisplay(), False );
     setXEmbedInfo();
 
-    if( ! pParentData &&
-        ! (nSalFrameStyle & SAL_FRAME_STYLE_CHILD) &&
-        ! Attributes.override_redirect )
+    if( ! pParentData && ! IsChildWindow() && ! Attributes.override_redirect )
     {
         XSetWMHints( GetXDisplay(), mhWindow, &Hints );
         // WM Protocols && internals
@@ -740,8 +758,7 @@ void X11SalFrame::passOnSaveYourSelf()
         while( it != rFrames.end() )
         {
             pFrame = static_cast< const X11SalFrame* >(*it);
-            if( ! ( pFrame->nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) ||
-                    pFrame->mpParent )
+            if( ! ( IsChildWindow() || pFrame->mpParent )
                 && pFrame != s_pSaveYourselfFrame )
                     break;
             ++it;
@@ -787,7 +804,8 @@ X11SalFrame::~X11SalFrame()
     pDisplay_->deregisterFrame( this );
 
     // unselect all events, some may be still in the queue anyway
-    XSelectInput( GetXDisplay(), GetShellWindow(), 0 );
+    if( ! IsSysChildWindow() )
+        XSelectInput( GetXDisplay(), GetShellWindow(), 0 );
     XSelectInput( GetXDisplay(), GetWindow(), 0 );
 
     ShowFullScreen( FALSE, 0 );
@@ -844,7 +862,7 @@ X11SalFrame::~X11SalFrame()
 
 void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
 {
-    if( nStyle != mnExtStyle && !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+    if( nStyle != mnExtStyle && ! IsChildWindow() )
     {
         mnExtStyle = nStyle;
 
@@ -963,7 +981,7 @@ void X11SalFrame::Enable( BOOL /*bEnable*/ )
 
 void X11SalFrame::SetIcon( USHORT nIcon )
 {
-    if ( !( nStyle_ & (SAL_FRAME_STYLE_CHILD|SAL_FRAME_STYLE_FLOAT) ) )
+    if ( ! IsChildWindow() )
     {
         // 0 == default icon -> #1
         if ( nIcon == 0 )
@@ -1088,7 +1106,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
 
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
-    if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+    if( ! IsChildWindow() )
     {
         if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
         {
@@ -1112,7 +1130,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
 void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
-    if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+    if( ! IsChildWindow() )
     {
         if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
         {
@@ -1187,7 +1205,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
          *  withdraw the frame AND delete the WM_TRANSIENT_FOR property.
          *  In case the frame is shown again, the transient hint must be restored here.
          */
-        if( ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        if(    ! IsChildWindow()
             && ! IsOverrideRedirect()
             && ! IsFloatGrabWindow()
             && mpParent
@@ -1229,9 +1247,9 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             askForXEmbedFocus( 0 );
         else
         {
-            if( GetWindow() != GetShellWindow() )
+            if( GetWindow() != GetShellWindow() && ! IsSysChildWindow() )
             {
-                if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+                if( IsChildWindow() )
                     XMapWindow( GetXDisplay(), GetShellWindow() );
                 XSelectInput( GetXDisplay(), GetShellWindow(), CLIENT_EVENTS );
             }
@@ -1287,7 +1305,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
          *  so that the dialogue shows in all cases. Correct it here if the
          *  frame is shown afterwards.
          */
-        if( ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        if( ! IsChildWindow()
             && ! IsOverrideRedirect()
             && ! IsFloatGrabWindow()
             )
@@ -1312,7 +1330,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
          *  and have the focus. So try to set the focus
          *  to the child on Show(TRUE)
          */
-        if( (nStyle_ & SAL_FRAME_STYLE_CHILD) && ! m_bXEmbed )
+        if( (nStyle_ & SAL_FRAME_STYLE_PLUG) && ! m_bXEmbed )
             XSetInputFocus( GetXDisplay(),
                             GetWindow(),
                             RevertToParent,
@@ -1336,7 +1354,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         if( getInputContext() )
             getInputContext()->Unmap( this );
 
-        if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+        if( ! IsChildWindow() )
         {
             /*  FIXME: Is deleting the property really necessary ? It hurts
              *  owner drawn windows at least.
@@ -1369,14 +1387,15 @@ void X11SalFrame::ToTop( USHORT nFlags )
         )
     {
         GetDisplay()->getWMAdaptor()->frameIsMapping( this );
-        if( GetWindow() != GetShellWindow() )
+        if( GetWindow() != GetShellWindow() && ! IsSysChildWindow() )
             XMapWindow( GetXDisplay(), GetShellWindow() );
         XMapWindow( GetXDisplay(), GetWindow() );
     }
 
+    XLIB_Window aToTopWindow = IsSysChildWindow() ? GetWindow() : GetShellWindow();
     if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
     {
-        XRaiseWindow( GetXDisplay(), GetShellWindow() );
+        XRaiseWindow( GetXDisplay(), aToTopWindow );
         if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
             for( std::list< X11SalFrame* >::const_iterator it = maChildren.begin();
                  it != maChildren.end(); ++it )
@@ -1389,7 +1408,7 @@ void X11SalFrame::ToTop( USHORT nFlags )
         if( m_bXEmbed )
             askForXEmbedFocus( 0 );
         else
-            XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+            XSetInputFocus( GetXDisplay(), aToTopWindow, RevertToParent, CurrentTime );
     }
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1415,8 +1434,8 @@ void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
         XGetWindowAttributes( GetXDisplay(), GetWindow(), &aAttrib );
 
-        rWidth  = aAttrib.width;
-        rHeight = aAttrib.height;
+        maGeometry.nWidth = rWidth = aAttrib.width;
+        maGeometry.nHeight = rHeight = aAttrib.height;
     }
 }
 
@@ -1424,17 +1443,20 @@ void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
 void X11SalFrame::SetWindowGravity (int nGravity) const
 {
-    XSizeHints* pHint = XAllocSizeHints();
-    long        nFlag;
+    if( ! IsChildWindow() )
+    {
+        XSizeHints* pHint = XAllocSizeHints();
+        long        nFlag;
 
-    XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
-    pHint->flags       |= PWinGravity;
-    pHint->win_gravity  = nGravity;
+        XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
+        pHint->flags       |= PWinGravity;
+        pHint->win_gravity  = nGravity;
 
-    XSetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint);
-    XSync (GetXDisplay(), False);
+        XSetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint);
+        XSync (GetXDisplay(), False);
 
-    XFree (pHint);
+        XFree (pHint);
+    }
 }
 
 void X11SalFrame::Center( )
@@ -1496,7 +1518,7 @@ void X11SalFrame::Center( )
             pFrame->maGeometry.nHeight  = aRect.GetHeight();
         }
 
-        if( pFrame->nStyle_ & SAL_FRAME_STYLE_CHILD )
+        if( pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG )
         {
             XLIB_Window aRoot;
             unsigned int bw, depth;
@@ -1553,9 +1575,30 @@ void X11SalFrame::Center( )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void X11SalFrame::updateScreenNumber()
+{
+    if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
+    {
+        Point aPoint( maGeometry.nX, maGeometry.nY );
+        const std::vector<Rectangle>& rScreenRects( GetDisplay()->GetXineramaScreens() );
+        size_t nScreens = rScreenRects.size();
+        for( size_t i = 0; i < nScreens; i++ )
+        {
+            if( rScreenRects[i].IsInside( aPoint ) )
+            {
+                maGeometry.nScreenNumber = static_cast<unsigned int>(i);
+                break;
+            }
+        }
+    }
+    else
+        maGeometry.nScreenNumber = static_cast<unsigned int>(m_nScreen);
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
 {
-    if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+    if( nStyle_ & SAL_FRAME_STYLE_PLUG )
         return;
 
     // relative positioning in X11SalFrame::SetPosSize
@@ -1631,7 +1674,8 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
          * if maximized, set restore size and guess maximized size from last time
          * in state change below maximize window
          */
-        if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        if( ! IsChildWindow() &&
+            (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
             (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
             (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) == _FRAMESTATE_MASK_GEOMETRY &&
             (pState->mnMask & _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY) == _FRAMESTATE_MASK_MAXIMIZED_GEOMETRY
@@ -1660,6 +1704,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             maGeometry.nY      = pState->mnMaximizedY;
             maGeometry.nWidth  = pState->mnMaximizedWidth;
             maGeometry.nHeight = pState->mnMaximizedHeight;
+            updateScreenNumber();
         }
         else
         {
@@ -1697,7 +1742,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             {
                 SalFrameGeometry aGeom = maGeometry;
 
-                if( ! (nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) ) &&
+                if( ! (nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_PLUG ) ) &&
                     mpParent &&
                 aGeom.nLeftDecoration == 0 &&
                 aGeom.nTopDecoration == 0 )
@@ -1900,7 +1945,7 @@ void X11SalFrame::SetSize( const Size &rSize )
     if( rSize.Width() > 0 && rSize.Height() > 0 )
     {
          if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
-            && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+            && ! IsChildWindow()
             && ( nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
          {
             XSizeHints* pHints = XAllocSizeHints();
@@ -1920,9 +1965,14 @@ void X11SalFrame::SetSize( const Size &rSize )
                                pHints );
             XFree( pHints );
          }
-        XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
+        XResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), rSize.Width(), rSize.Height() );
         if( GetWindow() != GetShellWindow() )
-            XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
+        {
+            if( (nStyle_ & SAL_FRAME_STYLE_PLUG ) )
+                XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
+            else
+                XResizeWindow( GetXDisplay(), GetWindow(), rSize.Width(), rSize.Height() );
+        }
 
         maGeometry.nWidth  = rSize.Width();
         maGeometry.nHeight = rSize.Height();
@@ -1948,7 +1998,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
     if( !values.width || !values.height )
         return;
 
-     if( mpParent )
+     if( mpParent && ! IsSysChildWindow() )
      {
         // --- RTL --- (mirror window pos)
         if( Application::GetSettings().GetLayoutRTL() )
@@ -1971,7 +2021,7 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
     if( values.width != (int)maGeometry.nWidth || values.height != (int)maGeometry.nHeight )
         bSized = true;
 
-    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
+    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_PLUG | SAL_FRAME_STYLE_FLOAT ) )
         && !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
     {
         values.x    -= maGeometry.nLeftDecoration;
@@ -1980,8 +2030,8 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
 
     // do net set WMNormalHints for ..
     if(
-        // plugged windows
-        ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        // child windows
+        ! IsChildWindow()
         // popups (menu, help window, etc.)
         &&  (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT
         // shown, sizeable windows
@@ -2019,14 +2069,27 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
         XFree( pHints );
     }
 
-    XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
+    XMoveResizeWindow( GetXDisplay(), IsSysChildWindow() ? GetWindow() : GetShellWindow(), values.x, values.y, values.width, values.height );
     if( GetShellWindow() != GetWindow() )
-        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
+    {
+        if( (nStyle_ & SAL_FRAME_STYLE_PLUG ) )
+            XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
+        else
+            XMoveResizeWindow( GetXDisplay(), GetWindow(), values.x, values.y, values.width, values.height );
+    }
 
     maGeometry.nX       = values.x;
     maGeometry.nY       = values.y;
     maGeometry.nWidth   = values.width;
     maGeometry.nHeight  = values.height;
+    if( IsSysChildWindow() && mpParent )
+    {
+        // translate back to root coordinates
+        maGeometry.nX += mpParent->maGeometry.nX;
+        maGeometry.nY += mpParent->maGeometry.nY;
+    }
+
+    updateScreenNumber();
     if( bSized && ! bMoved )
         CallCallback( SALEVENT_RESIZE, NULL );
     else if( bMoved && ! bSized )
@@ -2042,6 +2105,9 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Minimize()
 {
+    if( IsSysChildWindow() )
+        return;
+
     if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
         stderr0( "X11SalFrame::Minimize on withdrawn window\n" );
@@ -2057,6 +2123,9 @@ void X11SalFrame::Minimize()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Maximize()
 {
+    if( IsSysChildWindow() )
+        return;
+
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
         GetDisplay()->getWMAdaptor()->frameIsMapping( this );
@@ -2070,6 +2139,9 @@ void X11SalFrame::Maximize()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::Restore()
 {
+    if( IsSysChildWindow() )
+        return;
+
     if( SHOWSTATE_UNKNOWN == nShowState_ || SHOWSTATE_HIDDEN == nShowState_ )
     {
         stderr0( "X11SalFrame::Restore on withdrawn window\n" );
@@ -2084,6 +2156,42 @@ void X11SalFrame::Restore()
     }
 
     pDisplay_->getWMAdaptor()->maximizeFrame( this, false, false );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
+{
+    if( nNewScreen == maGeometry.nScreenNumber )
+        return;
+
+    if( GetDisplay()->IsXinerama() && GetDisplay()->GetXineramaScreens().size() > 1 )
+    {
+        if( nNewScreen >= GetDisplay()->GetXineramaScreens().size() )
+            return;
+
+        Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.nScreenNumber] );
+        Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
+        bool bVisible = bMapped_;
+        if( bVisible )
+            Show( FALSE );
+        maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
+        maGeometry.nY = aNewScreenRect.Top() + (maGeometry.nY - aOldScreenRect.Top());
+        createNewWindow( None, m_nScreen );
+        if( bVisible )
+            Show( TRUE );
+        maGeometry.nScreenNumber = nNewScreen;
+    }
+    else if( sal_Int32(nNewScreen) < GetDisplay()->GetScreenCount() )
+    {
+        bool bVisible = bMapped_;
+        if( bVisible )
+            Show( FALSE );
+        createNewWindow( None, nNewScreen );
+        if( bVisible )
+            Show( TRUE );
+        maGeometry.nScreenNumber = nNewScreen;
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2460,8 +2568,7 @@ BOOL X11SalFrame::PostEvent( void *pData )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::SetTitle( const XubString& rTitle )
 {
-    if( ! ( (nStyle_ & SAL_FRAME_STYLE_CHILD ) ||
-            (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
+    if( ! ( IsChildWindow() || (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
     {
         m_aTitle = rTitle;
         GetDisplay()->getWMAdaptor()->setWMName( this, rTitle );
@@ -2655,9 +2762,9 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
 
     // now init with new parent again
     if ( aParentData.aWindow != None )
-        Init( nStyle_ | SAL_FRAME_STYLE_CHILD, nScreen, &aParentData );
+        Init( nStyle_ | SAL_FRAME_STYLE_PLUG, nScreen, &aParentData );
     else
-        Init( nStyle_ & ~SAL_FRAME_STYLE_CHILD, nScreen, NULL, true );
+        Init( nStyle_ & ~SAL_FRAME_STYLE_PLUG, nScreen, NULL, true );
 
     // update graphics if necessary
     updateGraphics();
@@ -3375,7 +3482,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
-         ( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
+         ( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
          )
     {
         if( hPresentationWindow != None && hPresentationWindow != GetShellWindow() )
@@ -3534,7 +3641,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     }
 
 
-    if( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
+    if( ( nStyle_ & SAL_FRAME_STYLE_PLUG ) && pEvent->window == GetShellWindow() )
     {
         // just update the children's positions
         RestackChildren();
@@ -3611,6 +3718,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     maGeometry.nY       = pEvent->y;
     maGeometry.nWidth   = pEvent->width;
     maGeometry.nHeight  = pEvent->height;
+    updateScreenNumber();
 
     // update children's position
     RestackChildren();
@@ -3879,7 +3987,7 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
         return 1;
     }
     else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS )
-             && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+             && ! ( nStyle_ & SAL_FRAME_STYLE_PLUG )
              && ! (( nStyle_ & SAL_FRAME_STYLE_FLOAT ) && (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
              )
     {
@@ -4080,7 +4188,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                          *  even if they are withdrawn when the respective
                          *  document is mapped.
                          */
-                        if( ! (nStyle_ & SAL_FRAME_STYLE_CHILD) )
+                        if( ! (nStyle_ & SAL_FRAME_STYLE_PLUG) )
                             XUnmapWindow( GetXDisplay(), GetShellWindow() );
                         break;
                     }
@@ -4131,7 +4239,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                      *  so that the dialogue shows in all cases. Correct it here if the
                      *  frame is shown afterwards.
                      */
-                    if( ! ( nStyle_ & SAL_FRAME_STYLE_CHILD  )
+                    if( ! IsChildWindow()
                         && ! IsOverrideRedirect()
                         && ! IsFloatGrabWindow()
                         )
@@ -4228,7 +4336,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
         {
              case FocusIn:
              case FocusOut:
-                if( ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+                if( ( nStyle_ & SAL_FRAME_STYLE_PLUG )
                     && ( pEvent->xfocus.window == GetShellWindow()
                          || pEvent->xfocus.window == GetForeignParent() )
                     )
