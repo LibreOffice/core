@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: obo $ $Date: 2008-03-25 14:30:28 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:24:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -138,26 +138,23 @@ LIB5FILES=      \
             $(SLB)$/accessibility.lib	\
             $(SLB)$/toolpanel.lib		\
             $(SLB)$/uitools.lib			\
-            $(SLB)$/tpcontrols.lib		\
-            $(SLB)$/slsshell.lib
+            $(SLB)$/tpcontrols.lib
 
 LIB6TARGET=$(SLB)$/sdraw3_3.lib
-LIB6FILES=      \
-            $(SLB)$/func.lib        \
-            $(SLB)$/func_2.lib        \
-            $(SLB)$/slsmodel.lib		\
-            $(SLB)$/slsview.lib			\
-            $(SLB)$/slscontroller.lib	\
-            $(SLB)$/slscache.lib		\
-            $(SLB)$/notes.lib			\
-            $(SLB)$/slideshow.lib		\
-            $(SLB)$/framework_pane.lib			\
-            $(SLB)$/framework_view.lib			\
+LIB6FILES=      								\
+            $(SLB)$/func.lib        			\
+            $(SLB)$/func_2.lib        			\
+            $(SLB)$/slsshell.lib				\
+            $(SLB)$/slsmodel.lib				\
+            $(SLB)$/slsview.lib					\
+            $(SLB)$/slscontroller.lib			\
+            $(SLB)$/slscache.lib				\
+            $(SLB)$/slideshow.lib				\
             $(SLB)$/framework_configuration.lib	\
+            $(SLB)$/framework_factories.lib		\
             $(SLB)$/framework_module.lib		\
-            $(SLB)$/framework_toolbar.lib		\
             $(SLB)$/framework_tools.lib			\
-            $(SLB)$/framework_command.lib
+            $(SLB)$/presenter.lib
 
 # sdd
 SHL2TARGET= sdd$(DLLPOSTFIX)
