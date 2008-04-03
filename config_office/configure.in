@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-04-03 13:19:10 $
+dnl * Date: $Date: 2008-04-03 16:49:30 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.256 $ )
+AC_REVISION( $Revision: 1.257 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2310,6 +2310,35 @@ using namespace std;
       fi
 
       LDFLAGS=$sharedlink_ldflags_save
+   fi
+
+   if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
+      AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
+      cat >visibility.cxx <<_ACEOF
+#pragma GCC visibility push(hidden)
+struct __attribute__ ((visibility ("default"))) TestStruct {
+  static void Init();
+};
+__attribute__ ((visibility ("default"))) void TestFunc() {
+  TestStruct::Init();
+}
+_ACEOF
+      if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
+         gccvisbroken=yes
+      else
+         if $EGREP -q '@PLT|\\$stub' visibility.s; then
+             gccvisbroken=no;
+         else 
+             gccvisbroken=yes; 
+         fi
+      fi
+
+      AC_MSG_RESULT([$gccvisbroken])
+      if test "$gccvisbroken" = "yes"; then
+         AC_MSG_WARN([Your gcc is not -fvisibility=hidden safe. Disabling visibility])
+         echo "Your gcc is not -fvisibility=hidden safe. Disabling visibility" >> warn
+         unset HAVE_GCC_VISIBILITY_FEATURE
+      fi
    fi
 
    AC_LANG_POP([C++])
