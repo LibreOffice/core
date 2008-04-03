@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:17:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,16 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "controller/SlsPageSelector.hxx"
 
+#include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsSelectionManager.hxx"
 #include "model/SlsPageDescriptor.hxx"
-#include "model/SlsPageEnumeration.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "view/SlideSorterView.hxx"
 
@@ -65,11 +66,10 @@ using namespace ::sd::slidesorter::view;
 namespace sd { namespace slidesorter { namespace controller {
 
 
-PageSelector::PageSelector (
-    model::SlideSorterModel& rModel,
-    SlideSorterController& rController)
-    : mrModel(rModel),
-      mrController (rController),
+PageSelector::PageSelector (SlideSorter& rSlideSorter)
+    : mrModel(rSlideSorter.GetModel()),
+      mrSlideSorter(rSlideSorter),
+      mrController(mrSlideSorter.GetController()),
       mnSelectedPageCount(0),
       mnBroadcastDisableLevel(0),
       mbSelectionChangeBroadcastPending(false),
@@ -109,24 +109,28 @@ void PageSelector::DeselectAllPages (void)
 
 void PageSelector::UpdateAllPages (void)
 {
+    bool bSelectionHasChanged (true);
     mnSelectedPageCount = 0;
-    model::SlideSorterModel::Enumeration aAllPages (
-        mrModel.GetAllPagesEnumeration());
+    model::PageEnumeration aAllPages (
+        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
     while (aAllPages.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
         if (pDescriptor->UpdateSelection())
         {
-            mrController.GetView().RequestRepaint(pDescriptor);
-            if (mnBroadcastDisableLevel > 0)
-                mbSelectionChangeBroadcastPending = true;
-            else
-                mrController.SelectionHasChanged();
+            mrSlideSorter.GetView().RequestRepaint(pDescriptor);
+            bSelectionHasChanged = true;
         }
 
         if (pDescriptor->IsSelected())
             mnSelectedPageCount++;
     }
+
+    if (bSelectionHasChanged)
+        if (mnBroadcastDisableLevel > 0)
+            mbSelectionChangeBroadcastPending = true;
+        else
+            mrController.GetSelectionManager()->SelectionHasChanged();
 }
 
 
@@ -158,7 +162,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
     if (rpDescriptor.get()!=NULL && rpDescriptor->Select())
     {
         mnSelectedPageCount ++;
-        mrController.GetView().RequestRepaint(rpDescriptor);
+        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
 
         mpMostRecentlySelectedPage = rpDescriptor;
         if (mpSelectionAnchor == NULL)
@@ -167,7 +171,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
         else
-            mrController.SelectionHasChanged();
+            mrController.GetSelectionManager()->SelectionHasChanged();
     }
 }
 
@@ -200,13 +204,13 @@ void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
     if (rpDescriptor.get()!=NULL && rpDescriptor->Deselect())
     {
         mnSelectedPageCount --;
-        mrController.GetView().RequestRepaint(rpDescriptor);
+        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
         if (mpMostRecentlySelectedPage == rpDescriptor)
             mpMostRecentlySelectedPage.reset();
         if (mnBroadcastDisableLevel > 0)
             mbSelectionChangeBroadcastPending = true;
         else
-            mrController.SelectionHasChanged();
+            mrController.GetSelectionManager()->SelectionHasChanged();
     }
 }
 
@@ -220,73 +224,6 @@ bool PageSelector::IsPageSelected (int nPageIndex)
         return pDescriptor->IsSelected();
     else
         return false;
-}
-
-
-
-
-void PageSelector::SetCurrentPage (const SharedPageDescriptor& rpDescriptor)
-{
-    // Set current page.  At the moment we have to do this in two different
-    // ways.  The UNO way is the preferable one but, alas, it does not work
-    // always correctly (after some kinds of model changes).  Therefore, we
-    // call DrawViewShell::SwitchPage(), too.
-    try
-    {
-        // First the traditional way.
-        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
-            mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get());
-        if (pDrawViewShell != NULL)
-        {
-            USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
-            pDrawViewShell->SwitchPage(nPageNumber);
-            pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
-        }
-
-        // Now the UNO way.
-        do
-        {
-            Reference<beans::XPropertySet> xSet (
-                mrController.GetViewShell().GetViewShellBase().GetController(),
-                UNO_QUERY);
-            if ( ! xSet.is())
-                break;
-
-            Any aPage;
-            aPage <<= rpDescriptor->GetPage()->getUnoPage();
-            xSet->setPropertyValue (
-                String::CreateFromAscii("CurrentPage"),
-                aPage);
-        }
-        while (false);
-    }
-    catch (beans::UnknownPropertyException aException)
-    {
-        // We have not been able to set the current page at the main view.
-        // This is sad but still leaves us in a valid state.  Therefore,
-        // this exception is silently ignored.
-    }
-}
-
-
-
-
-void PageSelector::SetCurrentPage (const SdPage* pPage)
-{
-    int nPageIndex = (pPage->GetPageNum()-1) / 2;
-    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
-        SetCurrentPage(pDescriptor);
-}
-
-
-
-
-void PageSelector::SetCurrentPage (int nPageIndex)
-{
-    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get() != NULL)
-        SetCurrentPage(pDescriptor);
 }
 
 
@@ -343,8 +280,8 @@ SharedPageDescriptor PageSelector::GetSelectionAnchor (void) const
 void PageSelector::CountSelectedPages (void)
 {
     mnSelectedPageCount = 0;
-    model::SlideSorterModel::Enumeration aSelectedPages (
-        mrModel.GetSelectedPagesEnumeration());
+    model::PageEnumeration aSelectedPages (
+        model::PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
     while (aSelectedPages.HasMoreElements())
     {
         mnSelectedPageCount++;
@@ -361,7 +298,7 @@ void PageSelector::EnableBroadcasting (bool bMakeSelectionVisible)
         mnBroadcastDisableLevel --;
     if (mnBroadcastDisableLevel==0 && mbSelectionChangeBroadcastPending)
     {
-        mrController.SelectionHasChanged(bMakeSelectionVisible);
+        mrController.GetSelectionManager()->SelectionHasChanged(bMakeSelectionVisible);
         mbSelectionChangeBroadcastPending = false;
     }
 }
@@ -377,16 +314,17 @@ void PageSelector::DisableBroadcasting (void)
 
 
 
-::std::auto_ptr<PageSelector::PageSelection>
-    PageSelector::GetPageSelection (void)
+::boost::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection (void) const
 {
-    ::std::auto_ptr<PageSelection> pSelection (new PageSelection());
+    ::boost::shared_ptr<PageSelection> pSelection (new PageSelection());
+    pSelection->reserve(GetSelectedPageCount());
 
     int nPageCount = GetPageCount();
     for (int nIndex=0; nIndex<nPageCount; nIndex++)
     {
-        if (IsPageSelected(nIndex))
-            pSelection->insert (nIndex);
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
+        if (pDescriptor.get()!=NULL && pDescriptor->IsSelected())
+            pSelection->push_back(pDescriptor->GetPage());
     }
 
     return pSelection;
@@ -395,11 +333,14 @@ void PageSelector::DisableBroadcasting (void)
 
 
 
-void PageSelector::SetPageSelection (const PageSelection& rSelection)
+void PageSelector::SetPageSelection (const ::boost::shared_ptr<PageSelection>& rpSelection)
 {
-    PageSelection::const_iterator iIndex;
-    for (iIndex=rSelection.begin(); iIndex!=rSelection.end(); ++iIndex)
-        SelectPage (*iIndex);
+    PageSelection::const_iterator iPage;
+    for (iPage=rpSelection->begin(); iPage!=rpSelection->end(); ++iPage)
+        SelectPage(*iPage);
 }
+
+
+
 
 } } } // end of namespace ::sd::slidesorter::controller
