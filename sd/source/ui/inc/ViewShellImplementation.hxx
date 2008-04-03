@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:56:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ public:
         void Release (bool bForce = false);
         DECL_LINK(TimeoutCallback,Timer*);
     private:
-        ::std::auto_ptr<sd::ToolBarManager::UpdateLock> mpLock;
+        ::std::auto_ptr<ToolBarManager::UpdateLock> mpLock;
         /** The timer is used both as a safe guard to unlock the update lock
             when Release() is not called explicitly.  It is also used to
             defer the release of the lock to a time when the UI is not
@@ -107,7 +107,7 @@ public:
             holds another shared_ptr longer than only temporary.
         */
         ::boost::shared_ptr<ToolBarManagerLock> mpSelf;
-        ToolBarManagerLock (const ::boost::shared_ptr<ToolBarManager>& rpManager);
+        ToolBarManagerLock (const ::boost::shared_ptr<sd::ToolBarManager>& rpManager);
         ~ToolBarManagerLock (void);
 
         class Deleter;
