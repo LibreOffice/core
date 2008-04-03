@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgeom.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:06:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,14 @@ typedef struct _SalFrameGeometry {
                         nTopDecoration,
                         nRightDecoration,
                         nBottomDecoration;
+    unsigned int        nScreenNumber;
+
+    _SalFrameGeometry() :
+    nX( 0 ), nY( 0 ), nWidth( 1 ), nHeight( 1 ),
+    nLeftDecoration( 0 ), nTopDecoration( 0 ),
+    nRightDecoration( 0 ), nBottomDecoration( 0 ),
+    nScreenNumber( 0 )
+    {}
 } SalFrameGeometry;
 
 #endif // _SV_SALGEOM_HXX
