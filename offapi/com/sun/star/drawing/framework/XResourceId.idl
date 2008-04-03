@@ -5,9 +5,9 @@
  *
  *  $RCSfile: XResourceId.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:46:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef __com_sun_star_drawing_framework_AnchorBindingMode_idl__
 #include <com/sun/star/drawing/framework/AnchorBindingMode.idl>
 #endif
+#ifndef __com_sun_star_util_URL_idl__
+#include <com/sun/star/util/URL.idl>
+#endif
 
 module com { module sun { module star { module drawing { module framework {
 
@@ -57,13 +60,20 @@ module com { module sun { module star { module drawing { module framework {
     too.  Such an empty resource id does not describe a resource but rather
     the absence of one.  Instead of an empty <type>XResourceId</type> object
     an empty reference can be used in many places.</p>
+    <p>The resource URL may have arguments that are passed to the factory
+    method on its creation.  Arguments are only available through the
+    getFullResourceURL().  The getResourceURL() method strips them away.</p>
 */
 interface XResourceId
-    : ::com::sun::star::uno::XInterface
 {
-    /** Return the URL of the resource.
+    /** Return the URL of the resource.  Arguments supplied on creation are
+        stripped away.  Use getFullResourceURL() to access them.
     */
     string getResourceURL ();
+
+    /** Return an URL object of the resource URL that may contain arguments.
+    */
+    com::sun::star::util::URL getFullResourceURL ();
 
     /** Return whether there is a non-empty anchor URL.  When this method
         returns <FALSE/> then getAnchorURLs() will return an empty list.
@@ -74,7 +84,10 @@ interface XResourceId
     */
     XResourceId getAnchor ();
 
-    /** Return the, possibly empty, list of anchor URLs.
+    /** Return the, possibly empty, list of anchor URLs.  The URLs are
+        ordered so that the one in position 0 is the direct anchor of the
+        resource, while the one in position i+1 is the direct anchor of the
+        one in position i.
     */
     sequence<string> getAnchorURLs ();
 
@@ -85,21 +98,23 @@ interface XResourceId
 
     /** Compare the called <type>XResourceId</type> object with the given
         one.
-        <p>The two resource ids are compared first by the number of their
-        resource URLs and anchor URLs. When these numbers are the same then
-        the URLs are compared like normal strings beginning with the
-        resource URL.</p>
+        <p>The two resource ids A and B are compared so that if A<B (return
+        value is -1) then either A and B are unrelated or A is a direct or
+        indirect anchor of B.</p>
+        <p>The algorithm for this comparison is quite simple. It uses a
+        double lexicographic ordering.  On the lower level individual URLs
+        are compared via the lexicographic order defined on strings.  On the
+        higher level two resource ids are compared via a lexicographic order
+        defined on the URLS.  So when there are two resource ids A1.A2
+        (A1 being the anchor of A2) and B1.B2 then A1.A2<B1.B2 when A1<B1 or
+        A1==B1 and A2<B2.  Resource ids may have different lengths: A1 <
+        B1.B2 when A1<B1 or A1==B1 (anchors first then resources linked to them.</p>
         @param xId
             The resource id to which the called resource id is compared.
         @return
-            Returns <const>0</const> when the called object has the same
-            number of URLs as the given object and all URLs of the called
-            object are equal to their counterparts of the given
-            object. Returns <code>-1</code> when the called object has a
-            smaller number of URLs and <code>+1</code> when it has a larger
-            number of URLs as the given object. When the number of URLs is
-            the same then the result of comparing the first differing URL is
-            returned.
+            Returns <const>0</const> when the called resource id is
+            equivalent to the given resource id. Returns <code>-1</code> or
+            <code>+1</code> when the two compared resource ids differ.
     */
     short compareTo (
         [in] XResourceId xId);
