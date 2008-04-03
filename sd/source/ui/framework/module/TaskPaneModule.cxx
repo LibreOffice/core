@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneModule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:55:41 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,29 +162,6 @@ void TaskPaneModule::Initialize (const Reference<frame::XController>& rxControll
     pResourceManager->AddActiveMainView(FrameworkHelper::msSlideSorterURL);
 
     new LocalReadOnlyModeObserver(rxController, pResourceManager);
-
-    try
-    {
-        // Create the TaskPaneService.
-        Reference<lang::XMultiServiceFactory> xFactory (::comphelper::getProcessServiceFactory());
-        const OUString sServiceName (::rtl::OUString::createFromAscii(
-            "com.sun.star.drawing.framework.TaskPaneService"));
-        Reference<XResourceController> xResourceController (
-            xFactory->createInstance(sServiceName), UNO_QUERY_THROW);
-
-        // Initialize it.
-        Sequence<Any> aInitializationArguments(1);
-        aInitializationArguments[0] = makeAny(rxController);
-        Reference<lang::XInitialization> xInit (xResourceController, UNO_QUERY_THROW);
-        xInit->initialize(aInitializationArguments);
-
-        // Register it at the controller manager.
-        Reference<XControllerManager> xControllerManager(rxController, UNO_QUERY_THROW);
-        xControllerManager->registerResourceController(sServiceName, xResourceController);
-    }
-    catch (RuntimeException)
-    {
-    }
 }
 
 
