@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:52:23 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,43 +39,41 @@
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "ViewShell.hxx"
 
-#ifndef _SFX_SHELL_HXX
+#include <com/sun/star/drawing/XDrawPages.hpp>
+
 #include <sfx2/shell.hxx>
-#endif
-#ifndef _VIEWFAC_HXX
 #include <sfx2/viewfac.hxx>
-#endif
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 #include <memory>
 #include <comphelper/implementationreference.hxx>
 
-class TabBar;
-
-
 namespace sd { namespace slidesorter {
-class SlideSorterViewShell;
+class SlideSorter;
 } }
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
+class HighlightObject;
 } } }
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
 } } }
 
+namespace css = ::com::sun::star;
+
 namespace sd { namespace slidesorter { namespace controller {
 
+class Animator;
 class Clipboard;
+class CurrentSlideManager;
 class FocusManager;
 class Listener;
 class PageSelector;
+class Properties;
 class ScrollBarManager;
+class SelectionManager;
 class SlotManager;
 
 class SlideSorterController
@@ -86,12 +84,7 @@ public:
             The window that contains the controls of the new
             controller.
     */
-    SlideSorterController (
-        SfxViewFrame *pFrame,
-        ::Window* pParentWindow,
-        SlideSorterViewShell& rViewShell,
-        model::SlideSorterModel& rModel,
-        view::SlideSorterView& rView);
+    SlideSorterController (SlideSorter& rSlideSorter);
 
     /** Late initialization.  Call this method once a new new object has been
         created.
@@ -120,9 +113,7 @@ public:
     */
     Rectangle Rearrange (bool bForce = false);
 
-    SlideSorterViewShell& GetViewShell (void) const;
-    model::SlideSorterModel& GetModel (void) const;
-    view::SlideSorterView& GetView (void) const;
+    SlideSorter& GetSlideSorter (void) const;
 
     /** Return the descriptor of the page that is rendered under the
         given position.
@@ -149,22 +140,14 @@ public:
     */
     ScrollBarManager& GetScrollBarManager (void);
 
+    ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager (void) const;
+    ::boost::shared_ptr<SlotManager> GetSlotManager (void) const;
+    ::boost::shared_ptr<SelectionManager> GetSelectionManager (void) const;
+
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
     */
-    void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-
-    /** The name of this method is taken from the ViewShell class.  It
-        returns the page that (hopefully) has currently the attention of the
-        user.
-        @return
-            When the slide sorter is not displayed in the center pane then
-            the current page of the center pane view shell is returned.
-            Other wise the focused page is returned or, if the focus
-            indicator is not currently visible, the first selected page is
-            returned.  If all that fails then NULL is returned.
-    */
-    SdPage* GetActualPage (void);
+    void Paint (const Rectangle& rRect, ::Window* pWin);
 
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);
@@ -218,8 +201,11 @@ public:
     /** Complete a model change.  This includes the recreation of data
         structures that depend on the model and the request for a repaint to
         show the changes.
+        @param bSkipModelResync
+            When the SlideSorterModel::Resync() call is not necessary,
+            because already made, then pass <TRUE/> here.
     */
-    void PostModelChange (void);
+    void PostModelChange (const bool bSkipModelResync = false);
 
     /** Handle a change of the model, that is, handle the removal and
         insertion of whole pages or a change of the edit mode.
@@ -229,52 +215,12 @@ public:
     */
     void HandleModelChange (void);
 
-    void DeleteSelectedPages (void);
-
-    /** Move the maked pages to a position directly after the specified page.
-    */
-    bool MoveSelectedPages (USHORT nTargetPage);
-
-    DECL_LINK(TabBarHandler, TabBar*);
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
     /** Update the display of all pages.  This involves a redraw and
         releasing previews and caches.
     */
     void UpdateAllPages (void);
-
-    /** Call this method after the selection has changed (possible several
-        calls to the PageSelector) to invalidate the relevant slots and send
-        appropriate events.
-    */
-    void SelectionHasChanged (bool bMakeSelectionVisible = true);
-
-    enum SelectionHint { SH_FIRST, SH_LAST, SH_RECENT };
-
-    /** Try to make all currently selected page objects visible, i.e. set
-        the origin so that the page objects lie inside the visible area.
-        When the selection is empty then the visible area is not modified.
-        @param eSelectionHint
-            This is an advice on which selected page object to handle with
-            the highest priority when the whole selection does not fit in to
-            the visible area.
-        @return
-            Returns the vertical translation of the visible area.  It is 0
-            when no update of the visible area was done.
-    */
-    sal_Int32 MakeSelectionVisible (
-        SelectionHint eSelectionHint = SH_RECENT);
-
-    /** Modify the origin of the visible area so that the given rectangle
-        comes into view.  This is done with the smallest change: no
-        scrolling takes place when the given rectangle already lies in the
-        visible area.  Otherwise either the top or the bottom of the given
-        rectangle is aligned with the top or the bottom of the visible area.
-        @return
-            Returns the vertical translation of the visible area.  It is 0
-            when no update of the visible area was done.
-    */
-    sal_Int32 MakeRectangleVisible (const Rectangle& rBox);
 
     /** Set the zoom factor.  The given value is clipped against an upper
         bound.
@@ -287,23 +233,6 @@ public:
     /** This factory method creates a selection function.
     */
     virtual FunctionReference CreateSelectionFunction (SfxRequest& rRequest);
-
-    /** Add a listener that is called when the selection of the slide sorter
-        changes.
-        @param rListener
-            When this method is called multiple times for the same listener
-            the second and all following calls are ignored.  Each listener
-            is added only once.
-    */
-    void AddSelectionChangeListener (const Link& rListener);
-
-    /** Remove a listener that was called when the selection of the slide
-        sorter changes.
-        @param rListener
-            It is save to pass a listener that was not added are has been
-            removed previously.  Such calls are ignored.
-    */
-    void RemoveSelectionChangeListener (const Link& rListener);
 
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when
@@ -341,24 +270,42 @@ public:
     */
     bool IsContextMenuOpen (void) const;
 
+    /** Return a collection of properties that are used througout the slide
+        sorter.
+    */
+    ::boost::shared_ptr<Properties> GetProperties (void) const;
+
+    /** Provide the set of pages to be displayed in the slide sorter.  The
+        GetDocumentSlides() method can be found only in the SlideSorterModel.
+    */
+    void SetDocumentSlides (const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
+
+    /** Return an Animator object.
+    */
+    ::boost::shared_ptr<Animator> GetAnimator (void) const;
+
+    /** The highlight object is used to highlight the current slide (when
+        that is activated in the Properties.)
+    */
+    view::HighlightObject* GetHighlightObject (void) const;
+
 private:
-    SlideSorterViewShell& mrViewShell;
+    SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
     ::std::auto_ptr<PageSelector> mpPageSelector;
     ::std::auto_ptr<FocusManager> mpFocusManager;
-    ::std::auto_ptr<SlotManager> mpSlotManager;
+    ::boost::shared_ptr<SlotManager> mpSlotManager;
     ::std::auto_ptr<controller::Clipboard> mpClipboard;
     ::std::auto_ptr<ScrollBarManager> mpScrollBarManager;
+    mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
+    ::boost::shared_ptr<SelectionManager> mpSelectionManager;
+    ::boost::shared_ptr<Animator> mpAnimator;
 
     // The listener listens to UNO events and thus is a UNO object.
     // For proper life time management and at the same time free access to
     // the implementation object we use the ImplementationReference class.
-    ::comphelper::ImplementationReference
-        <controller::Listener,
-        ::com::sun::star::uno::XInterface,
-         ::com::sun::star::uno::XWeak>
-        mpListener;
+    ::rtl::Reference<controller::Listener> mpListener;
 
     int mnModelChangeLockCount;
 
@@ -388,11 +335,6 @@ private:
     */
     Rectangle maTotalWindowArea;
 
-    /** When this flag is set then on the next call to Paint() the selection
-        is moved into the visible area.
-    */
-    bool mbIsMakeSelectionVisiblePending;
-
     /** This counter is used to avoid processing of reentrant calls to
         Paint().
     */
@@ -401,6 +343,13 @@ private:
     /** Remember whether the context menu is open.
     */
     bool mbIsContextMenuOpen;
+
+    /** Some slide sorter wide properties that are used in different
+        classes.
+    */
+    ::boost::shared_ptr<Properties> mpProperties;
+
+    view::HighlightObject* mpHighlightObject;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
