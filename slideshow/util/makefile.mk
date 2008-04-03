@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 17:03:21 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:45:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,6 @@ LIB1FILES=\
     $(SLB)$/shapes.lib \
     $(SLB)$/slide.lib \
     $(SLB)$/engine.lib
-
-.IF "$(debug)"!="" || "$(DEBUG)"!=""
-LIB1FILES += $(SLB)$/api.lib
-.ENDIF
 
 SHL1TARGET=$(TARGET).uno
 
