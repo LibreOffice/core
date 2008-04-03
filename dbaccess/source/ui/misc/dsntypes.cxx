@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:05:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#include <comphelper/documentconstants.hxx>
 //.........................................................................
 namespace dbaui
 {
@@ -249,6 +250,55 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn) const
     DATASOURCE_TYPE eType = getType(_rDsn);
     String sPrefix = getDatasourcePrefix(eType);
     return _rDsn.Copy(sPrefix.Len());
+}
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getMediaType(DATASOURCE_TYPE _eType) const
+{
+    String sRet;
+    switch (_eType)
+    {
+        case DST_DBASE:
+            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/dbase"));
+            break;
+        case DST_FLAT:
+            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("text/csv"));
+            break;
+        case DST_CALC:
+            sRet = MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET;
+            break;
+        case DST_MSACCESS:
+        case DST_MSACCESS_2007:
+            sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/msaccess"));
+            break;
+        default:
+            break;
+    }
+    return sRet;
+}
+// -----------------------------------------------------------------------------
+String ODsnTypeCollection::getDatasourcePrefixFromMediaType(const String& _sMediaType,const String& _sExtension)
+{
+    ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("sdbc:"));
+    if ( _sMediaType.EqualsIgnoreCaseAscii( "text/csv" ) )
+    {
+        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("flat:"));
+    }
+    else if ( _sMediaType.EqualsIgnoreCaseAscii( "application/dbase" ) )
+    {
+        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbase:"));
+    }
+    else if ( _sMediaType.EqualsIgnoreCaseAscii( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) )
+    {
+        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc:"));
+    }
+    else if ( _sMediaType.EqualsIgnoreCaseAscii( "application/msaccess" ) )
+    {
+        if ( _sExtension.EqualsIgnoreCaseAscii( "mdb" ) )
+            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
+        else
+            sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE="));
+    }
+    return sURL;
 }
 // -----------------------------------------------------------------------------
 void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber) const
@@ -566,7 +616,7 @@ Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( DATASOURCE_TYP
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
 {
-    StringVector::size_type nPos = static_cast<sal_Int16>(_eType-DST_USERDEFINE1);
+    StringVector::size_type nPos = static_cast<sal_uInt16>(_eType-DST_USERDEFINE1);
     return nPos < m_aUserExtensions.size() ? m_aUserExtensions[nPos] : String();
 }
 //-------------------------------------------------------------------------
