@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameworkHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:38:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #include "precompiled_sd.hxx"
 
+#include <osl/time.h>
+
 #include "framework/FrameworkHelper.hxx"
 
 #include "framework/ViewShellWrapper.hxx"
@@ -43,16 +45,11 @@
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShellHint.hxx"
+#include "DrawController.hxx"
 #include "app.hrc"
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-#ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
-#endif
 
 #include <comphelper/stl_types.hxx>
 #include <sfx2/request.hxx>
@@ -114,7 +111,8 @@ public:
     CallbackCaller (
         ::sd::ViewShellBase& rBase,
         const OUString& rsEventType,
-        ::std::auto_ptr<sd::framework::FrameworkHelper::Callback> pCallback);
+        const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
+        const ::sd::framework::FrameworkHelper::Callback& rCallback);
     virtual ~CallbackCaller (void);
 
     virtual void SAL_CALL disposing (void);
@@ -126,7 +124,8 @@ public:
 private:
     OUString msEventType;
     Reference<XConfigurationController> mxConfigurationController;
-    ::std::auto_ptr<sd::framework::FrameworkHelper::Callback> mpCallback;
+    ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter maFilter;
+    ::sd::framework::FrameworkHelper::Callback maCallback;
 };
 
 
@@ -185,9 +184,11 @@ namespace sd { namespace framework {
 // Pane URLS.
 
 const OUString FrameworkHelper::msPaneURLPrefix(
-    OUString::createFromAscii("private:resource/floater/"));
+    OUString::createFromAscii("private:resource/pane/"));
 const OUString FrameworkHelper::msCenterPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("CenterPane"));
+const OUString FrameworkHelper::msFullScreenPaneURL(
+    msPaneURLPrefix + OUString::createFromAscii("FullScreenPane"));
 const OUString FrameworkHelper::msLeftImpressPaneURL(
     msPaneURLPrefix + OUString::createFromAscii("LeftImpressPane"));
 const OUString FrameworkHelper::msLeftDrawPaneURL(
@@ -256,6 +257,11 @@ const OUString FrameworkHelper::msConfigurationUpdateEndEvent(
     OUString::createFromAscii("ConfigurationUpdateEnd"));
 
 
+// Service names of controllers.
+const OUString FrameworkHelper::msModuleControllerService(
+    OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController"));
+const OUString FrameworkHelper::msConfigurationControllerService(
+    OUString::createFromAscii("com.sun.star.drawing.framework.ConfigurationController"));
 
 
 //----- FrameworkHelper::ViewURLMap -------------------------------------------
@@ -314,8 +320,32 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
 
 
+::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (
+    const Reference<frame::XController>& rxController)
+{
+    // Tunnel through the controller to obtain a ViewShellBase.
+    Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
+    if (xTunnel.is())
+    {
+        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
+            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+        if (pController != NULL)
+        {
+            ViewShellBase* pBase = pController->GetViewShellBase();
+            if (pBase != NULL)
+                return Instance(*pBase);
+        }
+    }
+
+    return ::boost::shared_ptr<FrameworkHelper>();
+}
+
+
+
+
 ::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
+
     ::boost::shared_ptr<FrameworkHelper> pHelper;
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
@@ -369,15 +399,13 @@ void FrameworkHelper::ReleaseInstance (ViewShellBase& rBase)
 FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
     : mrBase(rBase),
       mxConfigurationController(),
-      mxViewController(),
       mxDisposeListener()
 
 {
-    Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY);
+    Reference<XControllerManager> xControllerManager (rBase.GetController(), UNO_QUERY);
     if (xControllerManager.is())
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
-        mxViewController = xControllerManager->getViewController();
     }
 
     new LifetimeController(mrBase);
@@ -406,7 +434,6 @@ void FrameworkHelper::Dispose (void)
     if (mxDisposeListener.is())
         mxDisposeListener->dispose();
     mxConfigurationController = NULL;
-    mxViewController = NULL;
 }
 
 
@@ -414,7 +441,7 @@ void FrameworkHelper::Dispose (void)
 
 bool FrameworkHelper::IsValid (void)
 {
-    return mxConfigurationController.is() && mxViewController.is();
+    return mxConfigurationController.is();
 }
 
 
@@ -452,14 +479,33 @@ bool FrameworkHelper::IsValid (void)
 
 
 
-Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxResourceId)
+Reference<XView> FrameworkHelper::GetView (const Reference<XResourceId>& rxPaneOrViewId)
 {
     Reference<XView> xView;
 
+    if ( ! rxPaneOrViewId.is() || ! mxConfigurationController.is())
+        return NULL;
+
     try
     {
-        if (mxViewController.is())
-            xView = mxViewController->getFirstViewForAnchor(rxResourceId);
+        if (rxPaneOrViewId->getResourceURL().match(msViewURLPrefix))
+        {
+            xView = Reference<XView>(
+                mxConfigurationController->getResource(rxPaneOrViewId), UNO_QUERY);
+        }
+        else
+        {
+            Reference<XConfiguration> xConfiguration (
+                mxConfigurationController->getRequestedConfiguration());
+            if (xConfiguration.is())
+            {
+                Sequence<Reference<XResourceId> > aViewIds (xConfiguration->getResources(
+                    rxPaneOrViewId, msViewURLPrefix, AnchorBindingMode_DIRECT));
+                if (aViewIds.getLength() >= 1)
+                    xView = Reference<XView>(
+                        mxConfigurationController->getResource(aViewIds[0]), UNO_QUERY);
+            }
+        }
     }
     catch (lang::DisposedException&)
     {
@@ -578,7 +624,7 @@ void FrameworkHelper::HandleModeChangeSlot (
 {
     BOOL bIsActive = TRUE;
 
-    if ( ! mxViewController.is() || ! mxConfigurationController.is())
+    if ( ! mxConfigurationController.is())
         return;
 
     switch (nSlotId)
@@ -605,10 +651,12 @@ void FrameworkHelper::HandleModeChangeSlot (
 
     try
     {
-        if ( ! mxViewController.is() || ! mxConfigurationController.is())
+        if ( ! mxConfigurationController.is())
             throw RuntimeException();
 
-        Reference<XView> xView (mxViewController->getView(CreateResourceId(msCenterPaneURL)));
+        Reference<XView> xView (
+            mxConfigurationController->getResource(CreateResourceId(msCenterPaneURL)),
+            UNO_QUERY);
 
         ::boost::shared_ptr<ViewShell> pCenterViewShell;
         if (xView.is())
@@ -676,6 +724,41 @@ void FrameworkHelper::HandleModeChangeSlot (
 
 
 
+
+void FrameworkHelper::RunOnConfigurationEvent(
+    const ::rtl::OUString& rsEventType,
+    const Callback& rCallback)
+{
+    RunOnEvent(
+        rsEventType,
+        FrameworkHelperAllPassFilter(),
+        rCallback);
+}
+
+
+
+
+void FrameworkHelper::RunOnResourceActivation(
+    const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+    const Callback& rCallback)
+{
+    if (mxConfigurationController.is()
+        && mxConfigurationController->getResource(rxResourceId).is())
+    {
+        rCallback(false);
+    }
+    else
+    {
+        RunOnEvent(
+            msResourceActivationEvent,
+            FrameworkHelperResourceIdFilter(rxResourceId),
+            rCallback);
+    }
+}
+
+
+
+
 /** A callback that sets a flag to a specified value when the callback is
     called.
 */
@@ -692,13 +775,21 @@ void FrameworkHelper::WaitForEvent (const OUString& rsEventType) const
 {
     bool bConfigurationUpdateSeen (false);
 
-    RunOnEvent(rsEventType,
-        ::std::auto_ptr<Callback>(
-            new CallbackAdapter<FlagUpdater>(FlagUpdater(bConfigurationUpdateSeen))));
+    RunOnEvent(
+        rsEventType,
+        FrameworkHelperAllPassFilter(),
+        FlagUpdater(bConfigurationUpdateSeen));
 
+    sal_uInt32 nStartTime = osl_getGlobalTimer();
     while ( ! bConfigurationUpdateSeen)
     {
         Application::Reschedule();
+
+        if( (osl_getGlobalTimer() - nStartTime) > 60000  )
+        {
+            DBG_ERROR("FrameworkHelper::WaitForEvent(), no event since a minute? giving up!");
+            break;
+        }
     }
 }
 
@@ -715,9 +806,10 @@ void FrameworkHelper::WaitForUpdate (void) const
 
 void FrameworkHelper::RunOnEvent(
     const ::rtl::OUString& rsEventType,
-    ::std::auto_ptr<Callback> pCallback) const
+    const ConfigurationChangeEventFilter& rFilter,
+    const Callback& rCallback) const
 {
-    new CallbackCaller(mrBase,rsEventType,pCallback);
+    new CallbackCaller(mrBase,rsEventType,rFilter,rCallback);
 }
 
 
@@ -725,9 +817,7 @@ void FrameworkHelper::RunOnEvent(
 
 void FrameworkHelper::disposing (const lang::EventObject& rEventObject)
 {
-    if (rEventObject.Source == mxViewController)
-        mxViewController = NULL;
-    else if (rEventObject.Source == mxConfigurationController)
+    if (rEventObject.Source == mxConfigurationController)
         mxConfigurationController = NULL;
 }
 
@@ -845,10 +935,6 @@ FrameworkHelper::DisposeListener::DisposeListener (
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
     if (xComponent.is())
         xComponent->addEventListener(this);
-
-    xComponent = Reference<XComponent>(mpHelper->mxViewController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener(this);
 }
 
 
@@ -864,10 +950,6 @@ FrameworkHelper::DisposeListener::~DisposeListener (void)
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (void)
 {
     Reference<XComponent> xComponent (mpHelper->mxConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->removeEventListener(this);
-
-    xComponent = Reference<XComponent>(mpHelper->mxViewController, UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener(this);
 
@@ -908,6 +990,16 @@ void DispatchCaller::operator() (bool bEventSeen)
 
 
 
+
+//===== FrameworkHelperResourceIdFilter =======================================
+
+FrameworkHelperResourceIdFilter::FrameworkHelperResourceIdFilter (
+    const Reference<XResourceId>& rxResourceId)
+    : mxResourceId(rxResourceId)
+{
+}
+
+
 } } // end of namespace sd::framework
 
 namespace {
@@ -917,11 +1009,13 @@ namespace {
 CallbackCaller::CallbackCaller (
     ::sd::ViewShellBase& rBase,
     const OUString& rsEventType,
-    ::std::auto_ptr<sd::framework::FrameworkHelper::Callback> pCallback)
+    const ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter& rFilter,
+    const ::sd::framework::FrameworkHelper::Callback& rCallback)
     : CallbackCallerInterfaceBase(MutexOwner::maMutex),
       msEventType(rsEventType),
       mxConfigurationController(),
-      mpCallback(pCallback)
+      maFilter(rFilter),
+      maCallback(rCallback)
 {
     try
     {
@@ -940,7 +1034,7 @@ CallbackCaller::CallbackCaller (
                 // Call the callback now and tell him that the event it is
                 // waiting for was not sent.
                 mxConfigurationController = NULL;
-                (*mpCallback)(false);
+                maCallback(false);
             }
         }
     }
@@ -966,10 +1060,9 @@ void CallbackCaller::disposing (void)
     {
         if (mxConfigurationController.is())
         {
-            Reference<XConfigurationController> xConfigurationController(
-                mxConfigurationController);
+            Reference<XConfigurationController> xCC (mxConfigurationController);
             mxConfigurationController = NULL;
-            xConfigurationController->removeConfigurationChangeListener(this);
+            xCC->removeConfigurationChangeListener(this);
         }
     }
     catch (RuntimeException&)
@@ -987,7 +1080,7 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
     if (rEvent.Source == mxConfigurationController)
     {
         mxConfigurationController = NULL;
-        (*mpCallback)(false);
+        maCallback(false);
     }
 }
 
@@ -998,14 +1091,19 @@ void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
     throw (RuntimeException)
 {
-    if (rEvent.Type.equals(msEventType))
+    if (rEvent.Type.equals(msEventType) && maFilter(rEvent))
     {
-        (*mpCallback)(true);
+        maCallback(true);
         if (mxConfigurationController.is())
         {
+            // Reset the reference to the configuration controller so that
+            // dispose() will not try to remove the listener a second time.
+            Reference<XConfigurationController> xCC (mxConfigurationController);
+            mxConfigurationController = NULL;
+
             // Removing this object from the controller may very likely lead
             // to its destruction, so no calls after that.
-            mxConfigurationController->removeConfigurationChangeListener(this);
+            xCC->removeConfigurationChangeListener(this);
         }
     }
 }
