@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameworkHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:45:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,18 +40,9 @@
 
 #include "tools/SdGlobalResourceContainer.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XViewController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEW_HPP_
 #include <com/sun/star/drawing/framework/XView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -68,6 +59,7 @@ namespace rtl {
 class OUString;
 }
 
+namespace css = ::com::sun::star;
 
 namespace sd { namespace framework {
 
@@ -89,6 +81,7 @@ public:
     // URLs of frequently used panes.
     static const ::rtl::OUString msPaneURLPrefix;
     static const ::rtl::OUString msCenterPaneURL;
+    static const ::rtl::OUString msFullScreenPaneURL;
     static const ::rtl::OUString msLeftImpressPaneURL;
     static const ::rtl::OUString msLeftDrawPaneURL;
     static const ::rtl::OUString msRightPaneURL;
@@ -124,11 +117,18 @@ public:
     static const ::rtl::OUString msConfigurationUpdateStartEvent;
     static const ::rtl::OUString msConfigurationUpdateEndEvent;
 
+    // Service names of the common controllers.
+    static const ::rtl::OUString msModuleControllerService;
+    static const ::rtl::OUString msConfigurationControllerService;
+
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is
         created.
     */
     static ::boost::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
+
+    static ::boost::shared_ptr<FrameworkHelper> Instance (
+        const css::uno::Reference<css::frame::XController>& rxController);
 
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
@@ -165,9 +165,18 @@ public:
             reference then an empty pointer is returned.
     */
     static ::boost::shared_ptr<ViewShell> GetViewShell (
-        const ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XView>& rxView);
+        const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
     ~FrameworkHelper (void);
+
+    typedef ::boost::function<bool(const css::drawing::framework::ConfigurationChangeEvent&)>
+        ConfigurationChangeEventFilter;
+    typedef ::boost::function<void(bool bEventSeen)> Callback;
+    typedef ::boost::function<
+        void(
+            const css::uno::Reference<
+                css::drawing::framework::XResourceId>&)
+        > ResourceFunctor;
 
     /** Test whether the called FrameworkHelper object is valid.
         @return
@@ -189,16 +198,20 @@ public:
     /** Return a reference to the view that is displayed in the specified
         pane.  See GetViewShell () for a variant that returns a ViewShell
         pointer instead of a reference to XView.
+        @param rxPaneOrViewId
+            When this ResourceId specifies a view then that view is
+            returned.  When it belongs to a pane then one view in that pane
+            is returned.
         @return
             An empty reference is returned when for example the specified pane
             does not exist or is not visible or does not show a view or one
             of the involved objects does not support XTunnel (where
             necessary).
     */
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XView>
+    css::uno::Reference<css::drawing::framework::XView>
         GetView (
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId>& rxResourceId);
+            const css::uno::Reference<
+                css::drawing::framework::XResourceId>& rxPaneOrViewId);
 
     /** Request the specified view to be displayed in the specified pane.
         When the pane is not visible its creation is also requested.  The
@@ -224,7 +237,6 @@ public:
         ULONG nSlotId,
         SfxRequest& rRequest);
 
-    class Callback { public: virtual void operator() (bool bEventSeen) = 0; };
     /** Run the given callback when the specified event is notified by the
         ConfigurationManager.  When there are no pending requests and
         therefore no events would be notified (in the foreseeable future)
@@ -232,10 +244,23 @@ public:
         The callback is called with a flag that tells the callback whether
         the event it waits for has been sent.
     */
-    template<class C>
     void RunOnConfigurationEvent(
         const ::rtl::OUString& rsEventType,
-        const C& rCallback);
+        const Callback& rCallback);
+
+    /** Run the given callback when the specified resource has been
+        activated.  When the resource is active already when this method is
+        called then rCallback is called before this method returns.
+        @param rxResourceId
+            Wait for the activation of this resource before calling
+            rCallback.
+        @param rCallback
+            The callback to be called when the resource is activated.
+
+    */
+    void RunOnResourceActivation(
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
+        const Callback& rCallback);
 
     /** Block until the specified event is notified by the configuration
         controller.  When the configuration controller is not processing any
@@ -256,30 +281,24 @@ public:
     */
     void UpdateConfiguration (void);
 
-    typedef ::boost::function<
-        void(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::framework::XResourceId>&)
-        > ResourceFunctor;
-
     /** Return a string representation of the given XResourceId object.
     */
     static ::rtl::OUString ResourceIdToString (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceId>& rxResourceId);
+        const css::uno::Reference<
+            css::drawing::framework::XResourceId>& rxResourceId);
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const ::rtl::OUString& rsResourceURL);
 
     /** Create a new XResourceId object for the given resource URL and a
         single anchor URL.
     */
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const ::rtl::OUString& rsResourceURL,
                 const ::rtl::OUString& rsAnchorURL);
@@ -287,8 +306,8 @@ public:
     /** Create a new XResourceId object for the given resource URL and the
         two given anchor URLs.
     */
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const ::rtl::OUString& rsResourceURL,
                 const ::rtl::OUString& rsFirstAnchorURL,
@@ -296,18 +315,21 @@ public:
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const ::rtl::OUString& rsResourceURL,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::drawing::framework::XResourceId>& rxAnchor);
+                const css::uno::Reference<
+                    css::drawing::framework::XResourceId>& rxAnchor);
 
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         GetConfigurationController (void) const;
 
+
 private:
-    typedef ::std::map<ViewShellBase*,::boost::shared_ptr<FrameworkHelper> > InstanceMap;
+    typedef ::std::map<
+        ViewShellBase*,
+        ::boost::shared_ptr<FrameworkHelper> > InstanceMap;
     /** The instance map holds (at least) one FrameworkHelper instance for
         every ViewShellBase object.
     */
@@ -316,14 +338,12 @@ private:
     static ::boost::scoped_ptr<ViewURLMap> mpViewURLMap;
 
     ViewShellBase& mrBase;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XViewController>
-        mxViewController;
 
     class DisposeListener;
     friend class DisposeListener;
-    ::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>
+    css::uno::Reference<css::lang::XComponent>
         mxDisposeListener;
 
     FrameworkHelper (ViewShellBase& rBase);
@@ -337,14 +357,22 @@ private:
     /** Run the given callback when an event of the specified type is
         received from the ConfigurationController or when the
         ConfigurationController has no pending change requests.
+        @param rsEventType
+            Run rCallback only on this event.
+        @param rFilter
+            This filter has to return <TRUE/> in order for rCallback to be
+            called.
+        @param rCallback
+            The callback functor to be called.
     */
     void RunOnEvent(
         const ::rtl::OUString& rsEventType,
-        ::std::auto_ptr<Callback> pCallback) const;
+        const ConfigurationChangeEventFilter& rFilter,
+        const Callback& rCallback) const;
 
     /** This disposing method is forwarded from the inner DisposeListener class.
     */
-    void disposing (const ::com::sun::star::lang::EventObject& rEventObject);
+    void disposing (const css::lang::EventObject& rEventObject);
 };
 
 
@@ -369,35 +397,33 @@ public:
 
 
 
+namespace sd { namespace framework {
+
 namespace {
 
-template<class T>
-    class CallbackAdapter : public sd::framework::FrameworkHelper::Callback
+    class FrameworkHelperAllPassFilter
     {
     public:
-        CallbackAdapter<T> (const CallbackAdapter<T>& rCA) : mT(rCA.mT) {}
-        CallbackAdapter<T> (const T& t) : mT(t) {}
-        virtual ~CallbackAdapter<T> (void) {}
-        virtual void operator() (bool bEventSeen) { mT(bEventSeen); }
-    private:
-        T mT;
+        bool operator() (const css::drawing::framework::ConfigurationChangeEvent&) { return true; }
     };
 
 
+    class FrameworkHelperResourceIdFilter
+    {
+    public:
+        FrameworkHelperResourceIdFilter (
+            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+        bool operator() (const css::drawing::framework::ConfigurationChangeEvent& rEvent)
+        { return mxResourceId.is() && rEvent.ResourceId.is()
+                && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
+    private:
+        css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
+    };
 
 } // end of anonymous namespace
 
 
 
-namespace sd { namespace framework {
-
-template<class C>
-    void FrameworkHelper::RunOnConfigurationEvent(
-        const ::rtl::OUString& rsEventType,
-        const C& rCallback)
-{
-    RunOnEvent(rsEventType, ::std::auto_ptr<Callback>(new CallbackAdapter<C>(rCallback)));
-}
 
 } } // end of namespace sd::framework
 
