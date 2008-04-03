@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:12:57 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include <xmloff/xmltypes.hxx>
 #endif
+#include "xmloff/NamedBoolPropertyHdl.hxx"
 #ifndef _XMLOFF_FORMENUMS_HXX_
 #include "formenums.hxx"
 #endif
@@ -157,6 +158,11 @@ namespace xmloff
                 if (!m_pFontReliefHandler)
                     m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), XML_NONE );
                 pHandler = m_pFontReliefHandler;
+                break;
+            case XML_TYPE_TEXT_LINE_MODE:
+                pHandler = new XMLNamedBoolPropertyHdl(
+                                            ::xmloff::token::XML_SKIP_WHITE_SPACE,
+                                            ::xmloff::token::XML_CONTINUOUS);
                 break;
         }
 
