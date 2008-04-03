@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneShellManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:42:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
 namespace sd { namespace toolpanel {
 
 TaskPaneShellManager::TaskPaneShellManager (
-    ViewShellManager& rViewShellManager,
+    const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
     const ViewShell& rViewShell)
-    : mrViewShellManager(rViewShellManager),
+    : mpViewShellManager(rpViewShellManager),
       mrViewShell(rViewShell),
       maSubShells()
 {
@@ -99,10 +99,10 @@ void TaskPaneShellManager::AddSubShell (
         {
             pWindow->AddEventListener(LINK(this,TaskPaneShellManager,WindowCallback));
             if (pWindow->IsReallyVisible())
-                mrViewShellManager.ActivateSubShell(mrViewShell, nId);
+                mpViewShellManager->ActivateSubShell(mrViewShell, nId);
         }
         else
-            mrViewShellManager.ActivateSubShell(mrViewShell, nId);
+            mpViewShellManager->ActivateSubShell(mrViewShell, nId);
     }
 }
 
@@ -120,7 +120,7 @@ void TaskPaneShellManager::RemoveSubShell (const SfxShell* pShell)
                 if (iShell->second.mpWindow != NULL)
                     iShell->second.mpWindow->RemoveEventListener(
                         LINK(this,TaskPaneShellManager,WindowCallback));
-                mrViewShellManager.DeactivateSubShell(mrViewShell,iShell->first);
+                mpViewShellManager->DeactivateSubShell(mrViewShell,iShell->first);
                 maSubShells.erase(iShell);
                 break;
             }
@@ -136,9 +136,9 @@ void TaskPaneShellManager::MoveToTop (SfxShell* pShell)
     for (iShell=maSubShells.begin(); iShell!=maSubShells.end(); ++iShell)
         if (iShell->second.mpShell == pShell)
         {
-            ViewShellManager::UpdateLock aLocker (mrViewShellManager);
-            mrViewShellManager.MoveSubShellToTop(mrViewShell,iShell->first);
-            mrViewShellManager.MoveToTop(mrViewShell);
+            ViewShellManager::UpdateLock aLocker (mpViewShellManager);
+            mpViewShellManager->MoveSubShellToTop(mrViewShell,iShell->first);
+            mpViewShellManager->MoveToTop(mrViewShell);
             break;
         }
 }
@@ -159,7 +159,7 @@ IMPL_LINK(TaskPaneShellManager, WindowCallback, VclWindowEvent*, pEvent)
             switch (pEvent->GetId())
             {
                 case VCLEVENT_WINDOW_SHOW:
-                    mrViewShellManager.ActivateSubShell(mrViewShell,iShell->first);
+                    mpViewShellManager->ActivateSubShell(mrViewShell,iShell->first);
                     break;
 
                 case VCLEVENT_WINDOW_HIDE:
@@ -167,7 +167,7 @@ IMPL_LINK(TaskPaneShellManager, WindowCallback, VclWindowEvent*, pEvent)
                     // problems with shapes currently being in text edit
                     // mode: Deactivating the shell leads to leaving the
                     // text editing mode.
-                    // mrViewShellManager.DeactivateSubShell(mrViewShell,iShell->first);
+                    // mpViewShellManager->DeactivateSubShell(mrViewShell,iShell->first);
                     break;
             }
     }
