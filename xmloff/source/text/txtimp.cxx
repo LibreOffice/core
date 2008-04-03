@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:09:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1272,8 +1272,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             // --> OD 2007-12-19 #152540#
             const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
             // --> OD 2007-07-25 #i73509#
+            // --> OD 2008-03-19 #i86058# - check explicitly on certain versions
             if ( rImport.IsTextDocInOOoFileFormat() ||
-                 ( bBuildIdFound && nUPD < 680 ) )
+                 ( bBuildIdFound &&
+                   ( nUPD == 645 || nUPD == 641 ) ) )
             {
                 bOutlineStyleCandidate = true;
             }
@@ -1445,7 +1447,10 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
         // --> OD 2007-12-07 #i77708#
         sal_Int32 nUPD( 0 );
         sal_Int32 nBuild( 0 );
-        rImport.getBuildIds( nUPD, nBuild );
+        // --> OD 2008-03-19 #i86058#
+//        rImport.getBuildIds( nUPD, nBuild );
+        const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
+        // <--
         // <--
         // search list style at parent
         Reference<XStyle> xStyle( xPropState, UNO_QUERY );
@@ -1490,10 +1495,15 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                             bRet = sal_False;
                         }
                         // --> OD 2007-12-07 #i77708#
-                        // special handling for text documents from OOo version prior OOo 2.3.1
+                        // special handling for text documents from OOo version prior OOo 2.4
+                        // --> OD 2008-03-19 #i86058#
+                        // check explicitly on certain versions and on import of
+                        // text documents in OpenOffice.org file format
                         else if ( sListStyle.getLength() == 0 &&
-                                  ( ( nUPD < 680 ) ||  // prior OOo 2.0
-                                    ( nUPD == 680 && nBuild <= 9238 ) ) ) // OOo 2.0 - OOo 2.3.1
+                                  ( rImport.IsTextDocInOOoFileFormat() ||
+                                    ( bBuildIdFound &&
+                                      ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
+                                        ( nUPD == 680 && nBuild <= 9238 ) ) ) ) ) // OOo 2.0 - OOo 2.3.1
                         {
                             bRet = sal_False;
                         }
@@ -1534,8 +1544,11 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                 sal_Int32 nBuild( 0 );
                 if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
                 {
-                    bChooseLastOne = nUPD < 680 ||
-                                     ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */;
+                    // --> OD 2008-03-19 #i86058#
+                    // check explicitly on certain versions
+                    bChooseLastOne = ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
+                                     ( nUPD == 680 && nBuild <= 9073 ); // OOo 2.0 - OOo 2.0.4
+                    // <--
                 }
             }
         }
