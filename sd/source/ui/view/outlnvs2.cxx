@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:36:08 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_sd.hxx"
 
 #include "OutlineViewShell.hxx"
+
+#include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include "app.hrc"
 #ifndef _SVX_HLNKITEM_HXX
@@ -138,11 +140,12 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
-#include "PresentationViewShell.hxx"
-#endif
 #include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
+
 namespace sd {
 
 
@@ -298,33 +301,9 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             pOlView->PrepareClose();
 
-            SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : GetDoc()->getPresentationSettings().mbFullScreen;
-
-            if( bFullScreen )
-            {
-                PresentationViewShell::CreateFullScreenShow( this, rReq );
-                Cancel();
-            }
-            else
-            {
-                mpFrameView->SetPresentationViewShellId (SID_VIEWSHELL2);
-                mpFrameView->SetSlotId (SID_PRESENTATION);
-                mpFrameView->SetPageKind (PK_STANDARD);
-                mpFrameView->SetPreviousViewShellType (GetShellType());
-
-                // Switch to an Impress view shell which shows the
-                // presentation in a window.  Switching to a presentation
-                // view shell is an error here, because this would not
-                // return to us (re-create us).
-                framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
-                    framework::FrameworkHelper::msImpressViewURL,
-                    framework::FrameworkHelper::msCenterPaneURL);
-                framework::FrameworkHelper::Instance(GetViewShellBase())->RunOnConfigurationEvent(
-                    framework::FrameworkHelper::msConfigurationUpdateEndEvent,
-                    framework::DispatchCaller(*GetViewFrame()->GetDispatcher(), nSId));
-            }
-
+            Reference< XPresentation2 > xPresentation( GetDoc()->getPresentation() );
+            if( xPresentation.is() )
+                xPresentation->start();
             rReq.Done();
         }
         break;
