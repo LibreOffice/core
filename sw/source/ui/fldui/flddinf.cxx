@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:24:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,14 +222,15 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
         aTypeTLB.Select(pSelEntry);
         nSubType = (USHORT)(ULONG)pSelEntry->GetUserData();
     }
-    else
+    else if ( aTypeTLB.GetEntry(0) )
     {
         pSelEntry = aTypeTLB.GetEntry(0);
         nSubType = (USHORT)(ULONG)pSelEntry->GetUserData();
     }
 
     FillSelectionLB(nSubType);
-    TypeHdl();
+    if ( pSelEntry )
+        TypeHdl();
 
     aTypeTLB.SetUpdateMode(TRUE);
     aTypeTLB.SetSelectHdl(LINK(this, SwFldDokInfPage, TypeHdl));
