@@ -1559,6 +1559,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     BOOL                bRet = TRUE;
 
     // first check any floating window ( eg. drop down listboxes)
+    bool bIsFloat = false;
     Window *pMouseWindow = NULL;
     if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
          !pSVData->maWinData.mpFirstFloat->ImplIsFloatPopupModeWindow( pWindow ) )
@@ -1570,12 +1571,15 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     if( !pMouseWindow )
         pMouseWindow = pWindow->ImplFindWindow( aMousePos );
     else
+    {
         // transform coordinates to float window frame coordinates
         pMouseWindow = pMouseWindow->ImplFindWindow(
                  pMouseWindow->OutputToScreenPixel(
                   pMouseWindow->AbsoluteScreenToOutputPixel(
                    pWindow->OutputToAbsoluteScreenPixel(
                     pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
+        bIsFloat = true;
+    }
 
     if ( pMouseWindow &&
          pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() && ! pMouseWindow->IsInModalMode() )
@@ -1604,6 +1608,20 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
                                       pWindow->OutputToAbsoluteScreenPixel(
                                        pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
                 bRet = ImplCallWheelCommand( pFocusWindow, aRelMousePos, &aWheelData );
+            }
+        }
+    }
+
+    // close floaters
+    if( ! bIsFloat && pSVData->maWinData.mpFirstFloat )
+    {
+        FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+        if( pLastLevelFloat )
+        {
+            ULONG nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
+            if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
+            {
+                pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
             }
         }
     }
