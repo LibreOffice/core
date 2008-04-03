@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:35:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,8 +562,8 @@ void EventMultiplexerImpl::clear()
              aIter!=aEnd;
              ++aIter )
         {
-            (*aIter)->getUnoView()->removeMouseListener(
-                mxListener.get() );
+            if( (*aIter)->getUnoView().is() )
+                (*aIter)->getUnoView()->removeMouseListener( mxListener.get() );
         }
     }
 
@@ -574,8 +574,8 @@ void EventMultiplexerImpl::clear()
              aIter!=aEnd;
              ++aIter )
         {
-            (*aIter)->getUnoView()->removeMouseMotionListener(
-                mxListener.get() );
+            if( (*aIter)->getUnoView().is() )
+                (*aIter)->getUnoView()->removeMouseMotionListener( mxListener.get() );
         }
     }
 
@@ -1225,6 +1225,11 @@ bool EventMultiplexer::notifyHyperlinkClicked(
         boost::bind(&HyperlinkHandler::handleHyperlink,
                     _1,
                     boost::cref(hyperLink)) );
+}
+
+bool EventMultiplexer::notifySlideTransitionStarted()
+{
+    return true;
 }
 
 } // namespace internal
