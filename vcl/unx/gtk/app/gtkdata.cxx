@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:20:56 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
             }
         }
         X11SalObject::Dispatch( pEvent );
+        pDisplay->processRandREvent( pEvent );
     }
 
     return aFilterReturn;
