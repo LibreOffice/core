@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationUpdater.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:46:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,15 @@
 #ifndef SD_FRAMEWORK_CONFIGURATION_UPDATER_HXX
 #define SD_FRAMEWORK_CONFIGURATION_UPDATER_HXX
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
+#include "ConfigurationControllerResourceManager.hxx"
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
 #include <vcl/timer.hxx>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace framework {
 
@@ -59,9 +56,9 @@ class ConfigurationUpdaterLock;
     configuration.  An update is made by activating or deactivating drawing
     framework resources.
 
-    When an update is not successfull, i.e. the current configuration is not
-    equivalent to the requested configuration after the update, then a timer
-    is started to repeat the update after a short time.
+    When an update is not successfull, i.e. after the update the current
+    configuration is not equivalent to the requested configuration, then a
+    timer is started to repeat the update after a short time.
 */
 class ConfigurationUpdater
 {
@@ -69,16 +66,19 @@ public:
     /** Create a new ConfigurationUpdater object that notifies configuration
         changes and the start and end of updates via the given broadcaster.
     */
-    ConfigurationUpdater (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>& rxBroadcaster);
+    ConfigurationUpdater (
+        const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
+        const ::boost::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
+        const css::uno::Reference<
+            css::drawing::framework::XControllerManager>& rxControllerManager);
     ~ConfigurationUpdater (void);
 
     /** This method is typically called once, when the controller manager is
         accessible to the caller.
     */
     void SetControllerManager(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XControllerManager>& rxControllerManager);
+        const css::uno::Reference<
+            css::drawing::framework::XControllerManager>& rxControllerManager);
 
     /** Request an update of the current configuration so that it looks like
         the given requested configuration.  It check whether an update of
@@ -86,11 +86,14 @@ public:
         if that is the case.  Otherwise it schedules a later call to
         UpdateConfiguration().
     */
-    void RequestUpdate (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration>& rxRequestedConfiguration);
+    void RequestUpdate (const css::uno::Reference<
+        css::drawing::framework::XConfiguration>& rxRequestedConfiguration);
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const;
+    css::uno::Reference<
+        css::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const;
+
+    css::uno::Reference<
+        css::drawing::framework::XConfiguration> GetRequestedConfiguration (void) const;
 
     friend class ConfigurationUpdaterLock;
     /** Return a lock of the called ConfigurationUpdater.  While the
@@ -103,18 +106,16 @@ private:
     /** A reference to the XControllerManager is kept so that
         UpdateConfiguration() has access to the other sub controllers.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XControllerManager> mxControllerManager;
+    css::uno::Reference<
+        css::drawing::framework::XControllerManager> mxControllerManager;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationControllerBroadcaster>
-            mxBroadcaster;
+    ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     /** The current configuration holds the resources that are currently
         active.  It is modified during an update.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxCurrentConfiguration;
+    css::uno::Reference<
+        css::drawing::framework::XConfiguration> mxCurrentConfiguration;
 
     /** The requested configuration holds the resources that have been
         requested to activate or to deactivate since the last update.  It is
@@ -122,8 +123,8 @@ private:
         maintained by the ConfigurationController and given to the
         ConfigurationUpdater in the RequestUpdate() method.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
+    css::uno::Reference<
+        css::drawing::framework::XConfiguration> mxRequestedConfiguration;
 
     /** This flag is set to </TRUE> when an update of the current
         configurtion was requested (because the last request in the queue
@@ -159,6 +160,8 @@ private:
     */
     sal_Int32 mnFailedUpdateCount;
 
+    ::boost::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
+
     /** This method does the main work of an update.  It calls the sub
         controllers that are responsible for the various types of resources
         and tells them to update their active resources.  It notifies
@@ -171,19 +174,21 @@ private:
     */
     void UpdateCore (const ConfigurationClassifier& rClassifier);
 
-    /** Call the updateStart() method at all resource controllers.
+    /** Check for all pure anchors if they have at least one child.
+        Childless pure anchors are deactivated.
+        This affects only the current configuration.
     */
-    void UpdateStart (
-        const ::std::vector<com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId> >& rResourcesToDeactivate);
+    void CheckPureAnchors (
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
+        ::std::vector<css::uno::Reference<css::drawing::framework::XResourceId> >&
+            rResourcesToDeactivate);
 
-    /** Call the updateEnd() method at all resource controllers.  The order
-        in which the resource controllers are called is the opposite of that
-        used in UpdateStart().
+    /** Remove from the requested configration all pure anchors that have no
+        child.  Requested but not yet activated anchors can not be removed
+        because without the actual resource the 'pureness' of an anchor can
+        not be determined.
     */
-    void UpdateEnd (
-        const ::std::vector<com::sun::star::uno::Reference<
-            com::sun::star::drawing::framework::XResourceId> >& rResourcesToActivate);
+    void CleanRequestedConfiguration (void);
 
     /** Check the success of a recently executed configuration update.
         When the update failed then start the timer.
