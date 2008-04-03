@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:28:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,11 @@
 #ifndef _PAD_PROGRESS_HXX_
 #define _PAD_PROGRESS_HXX_
 
-#ifndef _SV_DIALOG_HXX
-#include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _PRGSBAR_HXX
-#include <prgsbar.hxx>
-#endif
+#include "vcl/dialog.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/button.hxx"
+
+#include "svtools/prgsbar.hxx"
 
 namespace padmin {
 
@@ -57,7 +50,7 @@ namespace padmin {
         FixedText                       maFilename;
         FixedText                       maProgressTxt;
         CancelButton                    maCancelButton;
-        ::padmin::ProgressBar           maProgressBar;
+        ProgressBar                     maProgressBar;
 
         int mnMax, mnMin;
         BOOL mbCanceled;
