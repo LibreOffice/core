@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewContact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:18:37 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_VIEW_CONTACT_HXX
 #define SD_SLIDESORTER_PAGE_OBJECT_VIEW_CONTACT_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
 #include <svx/sdtakitm.hxx>
 #include <svx/sdr/contact/viewcontactofpageobj.hxx>
 
@@ -45,11 +46,6 @@ namespace sdr {namespace contact {
 class ViewObjectContact;
 class ObjectContact;
 } }
-
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
-
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -65,7 +61,7 @@ class PageObjectViewContact
 public:
     PageObjectViewContact (
         SdrPageObj& rPageObj,
-        model::PageDescriptor& rDescriptor);
+        const model::SharedPageDescriptor& rpDescriptor);
     ~PageObjectViewContact (void);
 
     /** Create a ViewObjectContact object that buffers its output in a
@@ -109,7 +105,7 @@ private:
     */
     bool mbIsValid;
 
-    model::PageDescriptor& mrDescriptor;
+    model::SharedPageDescriptor mpDescriptor;
 };
 
 } } } // end of namespace ::sd::slidesorter::view
