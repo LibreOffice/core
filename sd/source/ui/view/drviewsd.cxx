@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:15:31 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,10 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
         case SID_NAVIGATOR_PAGE:
         case SID_NAVIGATOR_OBJECT:
         {
-            if (mpSlideShow)
+            rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+            if (xSlideshow.is() && xSlideshow->isRunning() )
             {
-                mpSlideShow->receiveRequest( rReq );
+                xSlideshow->receiveRequest( rReq );
             }
             else if (nSId == SID_NAVIGATOR_PAGE)
             {
@@ -225,15 +226,16 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     BOOL   bEndless = FALSE;
     String aPageName;
 
-    if( mpSlideShow )
+    rtl::Reference< SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+    if( xSlideshow.is() && xSlideshow->isRunning() )
     {
         // pen activated?
-        nState |= mpSlideShow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
+        nState |= xSlideshow->isDrawingPossible() ? NAVBTN_PEN_CHECKED : NAVBTN_PEN_UNCHECKED;
 
-        nCurrentPage = (USHORT)mpSlideShow->getCurrentPageNumber();
-        nFirstPage = (USHORT)mpSlideShow->getFirstPageNumber();
-        nLastPage = (USHORT)mpSlideShow->getLastPageNumber();
-        bEndless = mpSlideShow->isEndless();
+        nCurrentPage = (USHORT)xSlideshow->getCurrentPageNumber();
+        nFirstPage = (USHORT)xSlideshow->getFirstPageNumber();
+        nLastPage = (USHORT)xSlideshow->getLastPageNumber();
+        bEndless = xSlideshow->isEndless();
 
         // Get the page for the current page number.
         SdPage* pPage = 0;
