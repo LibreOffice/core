@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:13:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@ public:
     BOOL                    mbFirstClipRect;
     sal_Int32               mnDisplay;              // Display used for Fullscreen, 0 is primary monitor
 
+    void updateScreenNumber();
 public:
     WinSalFrame();
     virtual ~WinSalFrame();
@@ -153,6 +154,7 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
+    virtual void                SetScreenNumber( unsigned int );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( ULONG nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
