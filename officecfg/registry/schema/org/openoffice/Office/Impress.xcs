@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 12:10:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,17 @@
                     <desc>List of URLs of the resources that are created by the factory.</desc>
                 </info>
 			</set>
+		</group>
+		<group oor:name="StartupService">
+			<info>
+				<desc>A service that is instantiated when a framework is initializd for a
+                Draw or Impress document.</desc>
+			</info>
+			<prop oor:name="ServiceName" oor:type="xs:string">
+				<info>
+					<desc>The name of the startup service.</desc>
+				</info>
+			</prop>
 		</group>
 	</templates>
 	<component>
@@ -1367,6 +1378,13 @@
     	        		<label>Multi Pane Framework Resource Factories</label>
                     </info>
                 </set>
+				<set oor:name="StartupServices" oor:node-type="StartupService">
+					<info>
+						<desc>Set of services that are instantiated every time the
+                        framework of a Draw or Impress document is initialized.</desc>
+						<label>Multi Pane Framework Startup Services</label>
+					</info>
+				</set>
             </group>
 			<group oor:name="SlideSorter">
                 <info>
