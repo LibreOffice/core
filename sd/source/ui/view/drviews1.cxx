@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:56:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ void DrawViewShell::SelectionHasChanged (void)
     }
 
     // #96124# Invalidate for every subshell
-    GetViewShellBase().GetViewShellManager().InvalidateAllSubShells(this);
+    GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
     mpDrawView->UpdateSelectionClipboard( FALSE );
 
@@ -1013,6 +1013,9 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             }
             else
             {
+                OSL_ASSERT(mpFrameView!=NULL);
+                mpFrameView->SetSelectedPage(nSelectedPage);
+
                 if (GetDoc()->GetSdPageCount(mePageKind) > nSelectedPage)
                     pNewPage = GetDoc()->GetSdPage(nSelectedPage, mePageKind);
 
@@ -1086,7 +1089,8 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         // nie auf eine Masterpage)
         GetDoc()->SetSelected(mpActualPage, TRUE);
 
-        if( !mpSlideShow || ( mpSlideShow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
+        rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
+        if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
         {
             // VisArea zuziehen, um ggf. Objekte zu deaktivieren
             // !!! only if we are not in presentation mode (#96279) !!!
@@ -1283,7 +1287,7 @@ BOOL DrawViewShell::IsSwitchPageAllowed() const
 {
     bool bOK = true;
 
-    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell!=NULL && !pFormShell->PrepareClose (FALSE))
         bOK = false;
 
@@ -1425,7 +1429,7 @@ sal_Int8 DrawViewShell::AcceptDrop (
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();
 
-    if( mpSlideShow )
+    if( SlideShow::IsRunning( GetViewShellBase() ) )
         return DND_ACTION_NONE;
 
     return mpDrawView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer );
@@ -1447,7 +1451,7 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();
 
-    if( mpSlideShow )
+    if( SlideShow::IsRunning( GetViewShellBase() ) )
         return DND_ACTION_NONE;
 
     Broadcast(ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START));
