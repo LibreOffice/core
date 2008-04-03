@@ -1,7 +1,7 @@
 /*
- * $XFree86: xc/include/extensions/render.h,v 1.3 2000/11/20 07:13:09 keithp Exp $
+ * $XFree86: xc/include/extensions/render.h,v 1.10 2002/11/06 22:47:49 keithp Exp $
  *
- * Copyright © 2000 SuSE, Inc.
+ * Copyright Â© 2000 SuSE, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -26,18 +26,18 @@
 #ifndef _RENDER_H_
 #define _RENDER_H_
 
-typedef unsigned long   Glyph;
-typedef unsigned long   GlyphSet;
-typedef unsigned long   Picture;
-typedef unsigned long   PictFormat;
+typedef XID     Glyph;
+typedef XID     GlyphSet;
+typedef XID     Picture;
+typedef XID     PictFormat;
 
 #define RENDER_NAME "RENDER"
 #define RENDER_MAJOR    0
-#define RENDER_MINOR    1
+#define RENDER_MINOR    10
 
 #define X_RenderQueryVersion            0
 #define X_RenderQueryPictFormats        1
-#define X_RenderQueryPictIndexValues        2
+#define X_RenderQueryPictIndexValues        2   /* 0.7 */
 #define X_RenderQueryDithers            3
 #define X_RenderCreatePicture           4
 #define X_RenderChangePicture           5
@@ -51,7 +51,7 @@ typedef unsigned long   PictFormat;
 #define X_RenderTriFan              13
 #define X_RenderColorTrapezoids         14
 #define X_RenderColorTriangles          15
-#define X_RenderTransform           16
+/* #define X_RenderTransform            16 */
 #define X_RenderCreateGlyphSet          17
 #define X_RenderReferenceGlyphSet       18
 #define X_RenderFreeGlyphSet            19
@@ -62,6 +62,22 @@ typedef unsigned long   PictFormat;
 #define X_RenderCompositeGlyphs16       24
 #define X_RenderCompositeGlyphs32       25
 #define X_RenderFillRectangles          26
+/* 0.5 */
+#define X_RenderCreateCursor            27
+/* 0.6 */
+#define X_RenderSetPictureTransform     28
+#define X_RenderQueryFilters            29
+#define X_RenderSetPictureFilter        30
+/* 0.8 */
+#define X_RenderCreateAnimCursor        31
+/* 0.9 */
+#define X_RenderAddTraps            32
+/* 0.10 */
+#define X_RenderCreateSolidFill             33
+#define X_RenderCreateLinearGradient        34
+#define X_RenderCreateRadialGradient        35
+#define X_RenderCreateConicalGradient       36
+#define RenderNumberRequests            (X_RenderCreateConicalGradient+1)
 
 #define BadPictFormat               0
 #define BadPicture              1
@@ -73,6 +89,7 @@ typedef unsigned long   PictFormat;
 #define PictTypeIndexed             0
 #define PictTypeDirect              1
 
+#define PictOpMinimum               0
 #define PictOpClear             0
 #define PictOpSrc               1
 #define PictOpDst               2
@@ -88,6 +105,39 @@ typedef unsigned long   PictFormat;
 #define PictOpAdd               12
 #define PictOpSaturate              13
 #define PictOpMaximum               13
+
+/*
+ * Operators only available in version 0.2
+ */
+#define PictOpDisjointMinimum               0x10
+#define PictOpDisjointClear             0x10
+#define PictOpDisjointSrc               0x11
+#define PictOpDisjointDst               0x12
+#define PictOpDisjointOver              0x13
+#define PictOpDisjointOverReverse           0x14
+#define PictOpDisjointIn                0x15
+#define PictOpDisjointInReverse             0x16
+#define PictOpDisjointOut               0x17
+#define PictOpDisjointOutReverse            0x18
+#define PictOpDisjointAtop              0x19
+#define PictOpDisjointAtopReverse           0x1a
+#define PictOpDisjointXor               0x1b
+#define PictOpDisjointMaximum               0x1b
+
+#define PictOpConjointMinimum               0x20
+#define PictOpConjointClear             0x20
+#define PictOpConjointSrc               0x21
+#define PictOpConjointDst               0x22
+#define PictOpConjointOver              0x23
+#define PictOpConjointOverReverse           0x24
+#define PictOpConjointIn                0x25
+#define PictOpConjointInReverse             0x26
+#define PictOpConjointOut               0x27
+#define PictOpConjointOutReverse            0x28
+#define PictOpConjointAtop              0x29
+#define PictOpConjointAtopReverse           0x2a
+#define PictOpConjointXor               0x2b
+#define PictOpConjointMaximum               0x2b
 
 #define PolyEdgeSharp               0
 #define PolyEdgeSmooth              1
@@ -108,6 +158,32 @@ typedef unsigned long   PictFormat;
 #define CPPolyMode              (1 << 10)
 #define CPDither                (1 << 11)
 #define CPComponentAlpha            (1 << 12)
-#define CPLastBit               11
+#define CPLastBit               12
+
+/* Filters included in 0.6 */
+#define FilterNearest               "nearest"
+#define FilterBilinear              "bilinear"
+/* Filters included in 0.10 */
+#define FilterConvolution           "convolution"
+
+#define FilterFast              "fast"
+#define FilterGood              "good"
+#define FilterBest              "best"
+
+#define FilterAliasNone             -1
+
+/* Subpixel orders included in 0.6 */
+#define SubPixelUnknown             0
+#define SubPixelHorizontalRGB           1
+#define SubPixelHorizontalBGR           2
+#define SubPixelVerticalRGB         3
+#define SubPixelVerticalBGR         4
+#define SubPixelNone                5
+
+/* Extended repeat attributes included in 0.10 */
+#define RepeatNone                          0
+#define RepeatNormal                        1
+#define RepeatPad                           2
+#define RepeatReflect                       3
 
 #endif  /* _RENDER_H_ */

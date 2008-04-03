@@ -1,7 +1,7 @@
 /*
- * $XFree86: xc/include/extensions/renderproto.h,v 1.5 2000/11/20 07:13:09 keithp Exp $
+ * $XFree86: xc/include/extensions/renderproto.h,v 1.12 2002/09/26 02:56:48 keithp Exp $
  *
- * Copyright © 2000 SuSE, Inc.
+ * Copyright Â© 2000 SuSE, Inc.
  *
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
@@ -26,7 +26,8 @@
 #ifndef _XRENDERP_H_
 #define _XRENDERP_H_
 
-#include "render.h"
+#include <X11/Xmd.h>
+#include <X11/extensions/render.h>
 
 #define Window CARD32
 #define Drawable CARD32
@@ -45,7 +46,6 @@
 #define PictFormat  CARD32
 #define Fixed       INT32
 #define Glyphset    CARD32
-#define Glyph       CARD32
 
 /*
  * data structures
@@ -73,7 +73,7 @@ typedef struct {
     Colormap    colormap;
 } xPictFormInfo;
 
-#define sz_xPictFormInfo    16
+#define sz_xPictFormInfo    28
 
 typedef struct {
     VisualID    visual;
@@ -125,10 +125,26 @@ typedef struct {
 #define sz_xPointFixed  8
 
 typedef struct {
+    xPointFixed p1;
+    xPointFixed p2;
+} xLineFixed;
+
+#define sz_xLineFixed   16
+
+typedef struct {
     xPointFixed p1, p2, p3;
 } xTriangle;
 
 #define sz_xTriangle    24
+
+typedef struct {
+    Fixed   top B32;
+    Fixed   bottom B32;
+    xLineFixed  left;
+    xLineFixed  right;
+} xTrapezoid;
+
+#define sz_xTrapezoid   40
 
 typedef struct {
     CARD16  width B16;
@@ -150,6 +166,18 @@ typedef struct {
 } xGlyphElt;
 
 #define sz_xGlyphElt    8
+
+typedef struct {
+    Fixed   l, r, y;
+} xSpanFix;
+
+#define sz_xSpanFix 12
+
+typedef struct {
+    xSpanFix    top, bot;
+} xTrap;
+
+#define sz_xTrap    24
 
 /*
  * requests and replies
@@ -196,7 +224,7 @@ typedef struct {
     CARD32  numScreens B32;
     CARD32  numDepths B32;
     CARD32  numVisuals B32;
-    CARD32  pad4 B32;
+    CARD32  numSubpixel B32;        /* Version 0.6 */
     CARD32  pad5 B32;
 } xRenderQueryPictFormatsReply;
 
@@ -312,13 +340,65 @@ typedef struct {
     CARD8       reqType;
     CARD8       renderReqType;
     CARD16      length B16;
+    CARD8   op;
+    CARD8   pad1;
+    CARD16  pad2 B16;
     Picture src B32;
     Picture dst B32;
+    PictFormat  maskFormat B32;
+    INT16   xSrc B16;
+    INT16   ySrc B16;
+} xRenderTrapezoidsReq;
+
+#define sz_xRenderTrapezoidsReq             24
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    CARD8   op;
+    CARD8   pad1;
+    CARD16  pad2 B16;
+    Picture src B32;
+    Picture dst B32;
+    PictFormat  maskFormat B32;
     INT16   xSrc B16;
     INT16   ySrc B16;
 } xRenderTrianglesReq;
 
-#define sz_xRenderTrianglesReq              16
+#define sz_xRenderTrianglesReq              24
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    CARD8   op;
+    CARD8   pad1;
+    CARD16  pad2 B16;
+    Picture src B32;
+    Picture dst B32;
+    PictFormat  maskFormat B32;
+    INT16   xSrc B16;
+    INT16   ySrc B16;
+} xRenderTriStripReq;
+
+#define sz_xRenderTriStripReq               24
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    CARD8   op;
+    CARD8   pad1;
+    CARD16  pad2 B16;
+    Picture src B32;
+    Picture dst B32;
+    PictFormat  maskFormat B32;
+    INT16   xSrc B16;
+    INT16   ySrc B16;
+} xRenderTriFanReq;
+
+#define sz_xRenderTriFanReq             24
 
 typedef struct {
     CARD8       reqType;
@@ -403,6 +483,165 @@ typedef struct {
 
 #define sz_xRenderFillRectanglesReq         20
 
+/* 0.5 and higher */
+
+typedef struct {
+    CARD8   reqType;
+    CARD8   renderReqType;
+    CARD16  length B16;
+    Cursor  cid B32;
+    Picture src B32;
+    CARD16  x B16;
+    CARD16  y B16;
+} xRenderCreateCursorReq;
+
+#define sz_xRenderCreateCursorReq           16
+
+/* 0.6 and higher */
+
+/*
+ * This can't use an array because 32-bit values may be in bitfields
+ */
+typedef struct {
+    Fixed   matrix11 B32;
+    Fixed   matrix12 B32;
+    Fixed   matrix13 B32;
+    Fixed   matrix21 B32;
+    Fixed   matrix22 B32;
+    Fixed   matrix23 B32;
+    Fixed   matrix31 B32;
+    Fixed   matrix32 B32;
+    Fixed   matrix33 B32;
+} xRenderTransform;
+
+#define sz_xRenderTransform 36
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    Picture     picture B32;
+    xRenderTransform    transform;
+} xRenderSetPictureTransformReq;
+
+#define sz_xRenderSetPictureTransformReq        44
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    Drawable        drawable B32;
+} xRenderQueryFiltersReq;
+
+#define sz_xRenderQueryFiltersReq           8
+
+typedef struct {
+    BYTE    type;   /* X_Reply */
+    BYTE    pad1;
+    CARD16  sequenceNumber B16;
+    CARD32  length B32;
+    CARD32  numAliases B32; /* LISTofCARD16 */
+    CARD32  numFilters B32; /* LISTofSTRING8 */
+    CARD32  pad2 B32;
+    CARD32  pad3 B32;
+    CARD32  pad4 B32;
+    CARD32  pad5 B32;
+} xRenderQueryFiltersReply;
+
+#define sz_xRenderQueryFiltersReply         32
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    Picture     picture B32;
+    CARD16      nbytes B16; /* number of bytes in name */
+    CARD16      pad B16;
+} xRenderSetPictureFilterReq;
+
+#define sz_xRenderSetPictureFilterReq           12
+
+/* 0.8 and higher */
+
+typedef struct {
+    Cursor      cursor B32;
+    CARD32      delay B32;
+} xAnimCursorElt;
+
+#define sz_xAnimCursorElt               8
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    Cursor      cid B32;
+} xRenderCreateAnimCursorReq;
+
+#define sz_xRenderCreateAnimCursorReq           8
+
+/* 0.9 and higher */
+
+typedef struct {
+    CARD8       reqType;
+    CARD8       renderReqType;
+    CARD16      length B16;
+    Picture     picture;
+    INT16       xOff B16;
+    INT16       yOff B16;
+} xRenderAddTrapsReq;
+
+#define sz_xRenderAddTrapsReq               12
+
+/* 0.10 and higher */
+
+typedef struct {
+    CARD8   reqType;
+    CARD8   renderReqType;
+    CARD16  length B16;
+    Picture pid B32;
+    xRenderColor color;
+} xRenderCreateSolidFillReq;
+
+#define sz_xRenderCreateSolidFillReq                 16
+
+typedef struct {
+    CARD8   reqType;
+    CARD8   renderReqType;
+    CARD16  length B16;
+    Picture pid B32;
+    xPointFixed p1;
+    xPointFixed p2;
+    CARD32      nStops;
+} xRenderCreateLinearGradientReq;
+
+#define sz_xRenderCreateLinearGradientReq                 28
+
+typedef struct {
+    CARD8   reqType;
+    CARD8   renderReqType;
+    CARD16  length B16;
+    Picture pid B32;
+    xPointFixed inner;
+    xPointFixed outer;
+    Fixed       inner_radius;
+    Fixed       outer_radius;
+    CARD32      nStops;
+} xRenderCreateRadialGradientReq;
+
+#define sz_xRenderCreateRadialGradientReq                 36
+
+typedef struct {
+    CARD8   reqType;
+    CARD8   renderReqType;
+    CARD16  length B16;
+    Picture pid B32;
+    xPointFixed center;
+    Fixed       angle; /* in degrees */
+    CARD32      nStops;
+} xRenderCreateConicalGradientReq;
+
+#define sz_xRenderCreateConicalGradientReq                 24
+
 #undef Window
 #undef Drawable
 #undef Font
@@ -420,6 +659,5 @@ typedef struct {
 #undef PictFormat
 #undef Fixed
 #undef Glyphset
-#undef Glyph
 
 #endif /* _XRENDERP_H_ */
