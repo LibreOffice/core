@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:24:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,12 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include "controller/SlsFocusManager.hxx"
 
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
+#include "controller/SlsSelectionManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
@@ -48,12 +49,12 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-FocusManager::FocusManager (SlideSorterController& rController)
-    : mrController (rController),
+FocusManager::FocusManager (SlideSorter& rSlideSorter)
+    : mrSlideSorter(rSlideSorter),
       mnPageIndex (-1),
       mbPageIsFocused (false)
 {
-    if (mrController.GetModel().GetPageCount() > 0)
+    if (mrSlideSorter.GetModel().GetPageCount() > 0)
         mnPageIndex = 0;
 }
 
@@ -73,24 +74,23 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
     {
         HideFocusIndicator (GetFocusedPageDescriptor());
 
-        int nColumnCount
-            = mrController.GetView().GetLayouter().GetColumnCount();
+        int nColumnCount (mrSlideSorter.GetView().GetLayouter().GetColumnCount());
         switch (eDirection)
         {
             case FMD_NONE:
-                if (mnPageIndex >= mrController.GetModel().GetPageCount())
-                    mnPageIndex = mrController.GetModel().GetPageCount() - 1;
+                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
+                    mnPageIndex = mrSlideSorter.GetModel().GetPageCount() - 1;
                 break;
 
             case FMD_LEFT:
                 mnPageIndex -= 1;
                 if (mnPageIndex < 0)
-                    mnPageIndex = mrController.GetModel().GetPageCount() - 1;
+                    mnPageIndex = mrSlideSorter.GetModel().GetPageCount() - 1;
                 break;
 
             case FMD_RIGHT:
                 mnPageIndex += 1;
-                if (mnPageIndex >= mrController.GetModel().GetPageCount())
+                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
                     mnPageIndex = 0;
                 break;
 
@@ -102,7 +102,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 {
                     // Wrap arround to the bottom row or the one above and
                     // go to the correct column.
-                    int nCandidate = mrController.GetModel().GetPageCount()-1;
+                    int nCandidate = mrSlideSorter.GetModel().GetPageCount()-1;
                     int nCandidateColumn = nCandidate % nColumnCount;
                     if (nCandidateColumn > nColumn)
                         mnPageIndex = nCandidate - (nCandidateColumn-nColumn);
@@ -120,7 +120,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
             {
                 int nColumn = mnPageIndex % nColumnCount;
                 mnPageIndex += nColumnCount;
-                if (mnPageIndex >= mrController.GetModel().GetPageCount())
+                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
                 {
                     // Wrap arround to the correct column.
                     mnPageIndex = nColumn;
@@ -171,7 +171,7 @@ bool FocusManager::ToggleFocus (void)
 
 bool FocusManager::HasFocus (void) const
 {
-    return mrController.GetView().GetWindow()->HasFocus();
+    return mrSlideSorter.GetView().GetWindow()->HasFocus();
 }
 
 
@@ -179,7 +179,7 @@ bool FocusManager::HasFocus (void) const
 
 model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor (void) const
 {
-    return mrController.GetModel().GetPageDescriptor(mnPageIndex);
+    return mrSlideSorter.GetModel().GetPageDescriptor(mnPageIndex);
 }
 
 
@@ -240,7 +240,7 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
     if (rpDescriptor.get() != NULL)
     {
         rpDescriptor->RemoveFocus();
-        mrController.GetView().RequestRepaint(rpDescriptor);
+        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
     }
 }
 
@@ -255,14 +255,14 @@ void FocusManager::ShowFocusIndicator (const model::SharedPageDescriptor& rpDesc
 
         // Scroll the focused page object into the visible area and repaint
         // it, so that the focus indicator becomes visible.
-        view::SlideSorterView& rView (mrController.GetView());
-        mrController.MakeRectangleVisible (
+        view::SlideSorterView& rView (mrSlideSorter.GetView());
+        mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
             rView.GetPageBoundingBox (
                 GetFocusedPageDescriptor(),
                 view::SlideSorterView::CS_MODEL,
                 view::SlideSorterView::BBT_INFO));
 
-        mrController.GetView().RequestRepaint (rpDescriptor);
+        mrSlideSorter.GetView().RequestRepaint (rpDescriptor);
         NotifyFocusChangeListeners();
     }
 }
