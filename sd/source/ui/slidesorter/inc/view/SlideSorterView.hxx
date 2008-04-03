@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:48:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:38:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class ObjectContact;
 } }
 
 namespace sd { namespace slidesorter {
-class SlideSorterViewShell;
+class SlideSorter;
 } }
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -84,17 +84,21 @@ class SlideSorterView
     : public View
 {
 public:
+    TYPEINFO();
+
     /** Create a new view for the slide sorter.
         @param rViewShell
             This reference is simply passed to the base class and not used
             by this class.
 
     */
-    SlideSorterView (
-        SlideSorterViewShell& rViewShell,
-        model::SlideSorterModel& rModel);
+    SlideSorterView (SlideSorter& rSlideSorter);
 
     virtual ~SlideSorterView (void);
+
+    enum Orientation { HORIZONTAL, VERTICAL };
+    void SetOrientation (const Orientation eOrientation);
+    Orientation GetOrientation (void) const;
 
     void RequestRepaint (void);
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);
@@ -241,10 +245,16 @@ public:
     */
     SvBorder GetModelBorder (void) const;
 
+    /** Add a shape to the page.  Typically used from inside
+        PostModelChange().
+    */
+    void AddSdrObject (SdrObject& rObject);
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
 private:
+    SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     /// This model is used for the maPage object.
     SdrModel maPageModel;
@@ -271,6 +281,8 @@ private:
     Size maPageNumberAreaModelSize;
     SvBorder maModelBorder;
 
+    Orientation meOrientation;
+
     /** Adapt the coordinates of the given bounding box according to the
         other parameters.
         @param rModelPageObjectBoundingBox
@@ -291,8 +303,6 @@ private:
     /** Determine the visibility of all page objects.
     */
     void DeterminePageObjectVisibilities (void);
-
-    controller::SlideSorterController& GetController (void);
 
     /** Update the page borders used by the layouter by using those returned
         by the first page.  Call this function when the model changes,
