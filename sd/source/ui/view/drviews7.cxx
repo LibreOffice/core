@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:56:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1049,7 +1049,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText aktiv
-    if (GetViewShellBase().GetViewShellManager().GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
+    if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != NULL)
     {
         USHORT nCurrentSId = SID_ATTR_CHAR;
 
@@ -1333,8 +1333,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_MATH );
     }
 
-    if( (mpSlideShow && (mpSlideShow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) ||
-        GetDocSh()->IsPreview() )
+    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+    if( (xSlideshow.is() && xSlideshow->isRunning() && (xSlideshow->getAnimationMode() != ANIMATIONMODE_PREVIEW) ) || GetDocSh()->IsPreview() )
     {
         // Eigene Slots
         rSet.DisableItem( SID_PRESENTATION );
@@ -1356,7 +1356,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
 
-        if( mpSlideShow )
+        if( xSlideshow.is() && xSlideshow->isRunning() )
         {
             rSet.ClearItem(SID_OBJECT_ALIGN);
             rSet.ClearItem(SID_ZOOM_TOOLBOX);
@@ -1676,7 +1676,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
-    if (GetViewFrame()->GetFrame()->IsInPlace() || mpSlideShow)
+    const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase());
+
+    if (GetViewFrame()->GetFrame()->IsInPlace() || bIsRunning)
     {
         if ( !GetViewFrame()->GetFrame()->IsInPlace() )
         {
@@ -1747,7 +1749,7 @@ void DrawViewShell::GetState (SfxItemSet& rSet)
 
 void DrawViewShell::Execute (SfxRequest& rReq)
 {
-    if(GetSlideShow())
+    if(SlideShow::IsRunning(GetViewShellBase()))
     {
         // Do not execute anything during a native slide show.
         return;
