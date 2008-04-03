@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:22:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1902,7 +1902,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
  */
 void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const
 {
-    if( ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_CHILD )
+    if( ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_PLUG )
         && ! pFrame->IsOverrideRedirect()
         && ! pFrame->IsFloatGrabWindow()
         )
