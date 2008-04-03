@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:34:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,10 +234,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             BOOL bWasBasic = FALSE;
 
             // switch page in running slide show
-            if(mpSlideShow && rReq.GetArgs())
+            if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
                 SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                mpSlideShow->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
+                SlideShow::GetSlideShow(GetViewShellBase())->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
             }
             else
             {
@@ -464,7 +464,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 if ( ! xConfigurationController.is())
                     throw RuntimeException();
                 Reference<XConfiguration> xConfiguration (
-                    xConfigurationController->getConfiguration());
+                    xConfigurationController->getRequestedConfiguration());
                 if ( ! xConfiguration.is())
                     throw RuntimeException();
 
@@ -512,9 +512,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 {
                     UniString sBookmark( INetURLObject::decode( pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET ) );
 
-                    if(mpSlideShow)
+                    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+                    if(xSlideshow.is() && xSlideshow->isRunning())
                     {
-                        mpSlideShow->jumpToBookmark(sBookmark);
+                        xSlideshow->jumpToBookmark(sBookmark);
                     }
                     else
                     {
@@ -543,7 +544,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_ATTR_YEAR2000:
         {
-            FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+            FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
             if (pFormShell != NULL)
             {
                 const SfxPoolItem* pItem;
