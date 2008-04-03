@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:29:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #include "view/SlsViewOverlay.hxx"
 
-#include "controller/SlideSorterController.hxx"
+#include "SlideSorter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumeration.hxx"
@@ -46,6 +46,7 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
+#include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "UpdateLockManager.hxx"
 
@@ -73,11 +74,11 @@ namespace sd { namespace slidesorter { namespace view {
 
 //=====  ViewOverlay  =========================================================
 
-ViewOverlay::ViewOverlay (SlideSorterViewShell& rViewShell)
-    : mrViewShell(rViewShell),
+ViewOverlay::ViewOverlay (SlideSorter& rSlideSorter)
+    : mrSlideSorter(rSlideSorter),
       maSelectionRectangleOverlay(*this),
-      maMouseOverIndicatorOverlay(*this, rViewShell),
-      maInsertionIndicatorOverlay(*this, rViewShell),
+      maMouseOverIndicatorOverlay(*this),
+      maInsertionIndicatorOverlay(*this),
       maSubstitutionOverlay(*this)
 {
 }
@@ -124,11 +125,19 @@ SubstitutionOverlay& ViewOverlay::GetSubstitutionOverlay (void)
 
 
 
+SlideSorter& ViewOverlay::GetSlideSorter (void) const
+{
+    return mrSlideSorter;
+}
+
+
+
+
 OverlayManager* ViewOverlay::GetOverlayManager (void) const
 {
     OverlayManager* pOverlayManager = NULL;
 
-    SlideSorterView& rView (mrViewShell.GetSlideSorterController().GetView());
+    SlideSorterView& rView (mrSlideSorter.GetView());
     SdrPageView* pPageView = rView.GetSdrPageView();
     if (pPageView != NULL && pPageView->PageWindowCount()>0)
     {
@@ -243,7 +252,7 @@ SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
       maPosition(0,0),
       maBoundingBox(),
       maShapes()
- {
+{
 }
 
 
@@ -274,8 +283,8 @@ void SubstitutionOverlay::Create (
             aBox.Right(),
             aBox.Bottom());
         maShapes.append(basegfx::tools::createPolygonFromRect(aB2DBox), 4);
-        maBoundingBox = basegfx::tools::getRange(maShapes);
     }
+    maBoundingBox = basegfx::tools::getRange(maShapes);
 
     setVisible(maShapes.count() > 0);
     // The selection indicator may have been visible already so call
@@ -357,13 +366,13 @@ Point SubstitutionOverlay::GetPosition (void) const
 
 //=====  SelectionRectangleOverlay  ===========================================
 
-SelectionRectangleOverlay::SelectionRectangleOverlay (
-    ViewOverlay& rViewOverlay)
+SelectionRectangleOverlay::SelectionRectangleOverlay (ViewOverlay& rViewOverlay)
     : OverlayBase (rViewOverlay),
       maAnchor(0,0),
       maSecondCorner(0,0)
 {
 }
+
 
 
 
@@ -426,11 +435,8 @@ void SelectionRectangleOverlay::createBaseRange (OutputDevice& rOutputDevice)
 
 //=====  InsertionIndicatorOverlay  ===========================================
 
-InsertionIndicatorOverlay::InsertionIndicatorOverlay (
-    ViewOverlay& rViewOverlay,
-    SlideSorterViewShell& rViewShell)
+InsertionIndicatorOverlay::InsertionIndicatorOverlay (ViewOverlay& rViewOverlay)
     : OverlayBase (rViewOverlay),
-      mrViewShell(rViewShell),
       mnInsertionIndex(-1),
       maBoundingBox()
 {
@@ -455,10 +461,9 @@ void InsertionIndicatorOverlay::SetPositionAndSize (const Rectangle& aNewBoundin
 void InsertionIndicatorOverlay::SetPosition (const Point& rPoint)
 {
     static const bool bAllowHorizontalInsertMarker = true;
-    Layouter& rLayouter (
-        mrViewShell.GetSlideSorterController().GetView().GetLayouter());
+    Layouter& rLayouter (mrViewOverlay.GetSlideSorter().GetView().GetLayouter());
     USHORT nPageCount
-        = (USHORT)mrViewShell.GetSlideSorterController().GetModel().GetPageCount();
+        = (USHORT)mrViewOverlay.GetSlideSorter().GetModel().GetPageCount();
 
     sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint,
         bAllowHorizontalInsertMarker);
@@ -559,11 +564,8 @@ void InsertionIndicatorOverlay::createBaseRange (OutputDevice& rOutputDevice)
 
 //=====  MouseOverIndicatorOverlay  ===========================================
 
-MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (
-    ViewOverlay& rViewOverlay,
-    SlideSorterViewShell& rViewShell)
+MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay)
     : OverlayBase (rViewOverlay),
-      mrViewShell(rViewShell),
       mpPageUnderMouse()
 {
 }
@@ -581,7 +583,8 @@ MouseOverIndicatorOverlay::~MouseOverIndicatorOverlay (void)
 void MouseOverIndicatorOverlay::SetSlideUnderMouse (
     const model::SharedPageDescriptor& rpDescriptor)
 {
-    if ( ! mrViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
+    ViewShellBase* pBase = mrViewOverlay.GetSlideSorter().GetViewShellBase();
+    if (pBase==NULL || ! pBase->GetUpdateLockManager()->IsLocked())
     {
         model::SharedPageDescriptor pDescriptor;
         if ( ! mpPageUnderMouse.expired())
