@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:41:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -896,7 +896,8 @@ namespace cairocanvas
                     Operation aOperation,
                     Cairo* pCairo,
                     const uno::Sequence< rendering::Texture >* pTextures,
-                    SpriteCanvas* pDevice )
+                    SpriteCanvas* pDevice,
+                    rendering::FillRule eFillrule )
     {
         if( pTextures )
             CHECK_AND_THROW( pTextures->getLength(),
@@ -909,6 +910,10 @@ namespace cairocanvas
     cairo_get_matrix( pCairo, &aOrigMatrix );
     cairo_matrix_init_identity( &aIdentityMatrix );
     cairo_set_matrix( pCairo, &aIdentityMatrix );
+
+    cairo_set_fill_rule( pCairo,
+                         eFillrule == rendering::FillRule_EVEN_ODD ?
+                         CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING );
 
     for( sal_uInt32 nPolygonIndex = 0; nPolygonIndex < aPolyPolygon.count(); nPolygonIndex++ ) {
         ::basegfx::B2DPolygon aPolygon( aPolyPolygon.getB2DPolygon( nPolygonIndex ) );
@@ -1020,7 +1025,7 @@ namespace cairocanvas
     if( !pCairo )
         pCairo = mpCairo;
 
-    doPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice );
+    doPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice, xPolyPolygon->getFillRule() );
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          /*pCanvas*/,
