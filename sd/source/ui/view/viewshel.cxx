@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:01:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ namespace sd { namespace ui { namespace table {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::presentation;
 
 namespace {
 
@@ -190,8 +191,16 @@ BOOL ViewShell::IsPageFlipMode(void) const
 
 SfxViewFrame* ViewShell::GetViewFrame (void) const
 {
-    OSL_ASSERT (GetViewShell()!=NULL);
-    return GetViewShell()->GetViewFrame();
+    const SfxViewShell* pViewShell = GetViewShell();
+    if (pViewShell != NULL)
+    {
+        return pViewShell->GetViewFrame();
+    }
+    else
+    {
+        OSL_ASSERT (GetViewShell()!=NULL);
+        return NULL;
+    }
 }
 
 
@@ -230,7 +239,7 @@ ViewShell::~ViewShell()
     mpLayerTabBar.reset();
 
     if (mpImpl->mpSubShellFactory.get() != NULL)
-        GetViewShellBase().GetViewShellManager().RemoveSubShellFactory(
+        GetViewShellBase().GetViewShellManager()->RemoveSubShellFactory(
             this,mpImpl->mpSubShellFactory);
 }
 
@@ -247,7 +256,6 @@ void ViewShell::construct(void)
     mpActiveWindow = 0;
     mpView = 0;
     mpFrameView = 0;
-    mpSlideShow = 0;
     mpZoomList = 0;
     mbStartShowWithDialog = FALSE;
     mnPrintedHandoutPageNum = 1;
@@ -316,7 +324,7 @@ void ViewShell::construct(void)
 
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
-    GetViewShellBase().GetViewShellManager().AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+    GetViewShellBase().GetViewShellManager()->AddSubShellFactory(this,mpImpl->mpSubShellFactory);
 
     GetParentWindow()->Show();
 }
@@ -394,9 +402,10 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_3D_STATE, TRUE, FALSE );
 
-        if (mpSlideShow && !mpSlideShow->isTerminated() )
+        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+        if(xSlideShow.is() && xSlideShow->isRunning() )
         {
-            mpSlideShow->activate();
+            xSlideShow->activate(GetViewShellBase());
         }
         if(HasCurrentFunction())
         {
@@ -460,21 +469,15 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
 
     if (bIsMDIActivate)
     {
-        if (mpSlideShow)
+        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+        if(xSlideShow.is() && xSlideShow->isRunning() )
         {
-            mpSlideShow->deactivate();
+            xSlideShow->deactivate(GetViewShellBase());
         }
         if(HasCurrentFunction())
         {
             GetCurrentFunction()->Deactivate();
         }
-
-        //HMH::sd::View* pView = GetView();
-
-        //HMHif (pView)
-        //HMH{
-        //HMH   pView->HideMarkHdl();
-        //HMH}
     }
 
     if (mpHorizontalRuler.get() != NULL)
@@ -522,9 +525,10 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if(!bReturn)
     {
-        if(mpSlideShow)
+        rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+        if(xSlideShow.is() && xSlideShow->isRunning())
         {
-            bReturn = mpSlideShow->keyInput(rKEvt);
+            bReturn = xSlideShow->keyInput(rKEvt);
         }
         else
         {
@@ -601,25 +605,18 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if(mpSlideShow)
-    {
-        mpSlideShow->mouseButtonDown(rMEvt);
-    }
-    else
-    {
-        bool bConsumed = false;
-        if( GetView() )
-            bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
+    bool bConsumed = false;
+    if( GetView() )
+        bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
 
-        if( !bConsumed )
+    if( !bConsumed )
+    {
+        rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+        if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
         {
-            rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
-            if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
+            if(HasCurrentFunction())
             {
-                if (HasCurrentFunction())
-                {
-                    GetCurrentFunction()->MouseButtonDown(rMEvt);
-                }
+                GetCurrentFunction()->MouseButtonDown(rMEvt);
             }
         }
     }
@@ -653,11 +650,7 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if(mpSlideShow)
-    {
-        mpSlideShow->mouseMove(rMEvt);
-    }
-    else
+    if(HasCurrentFunction())
     {
         rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
         if( !xSelectionController.is() || !xSelectionController->onMouseMove( rMEvt, pWin ) )
@@ -685,11 +678,7 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if(mpSlideShow)
-    {
-        mpSlideShow->mouseButtonUp(rMEvt);
-    }
-    else
+    if( HasCurrentFunction())
     {
         rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
         if( !xSelectionController.is() || !xSelectionController->onMouseButtonUp( rMEvt, pWin ) )
@@ -727,10 +716,6 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
         }
-        else if(mpSlideShow)
-        {
-            mpSlideShow->command(rCEvt);
-        }
         else if(HasCurrentFunction())
         {
             GetCurrentFunction()->Command(rCEvt);
@@ -759,6 +744,28 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
     switch( rCEvt.GetCommand() )
     {
         case COMMAND_WHEEL:
+            {
+                Reference< XSlideShowController > xSlideShowController( SlideShow::GetSlideShowController(GetViewShellBase() ) );
+                if( xSlideShowController.is() )
+                {
+                    // We ignore zooming with control+mouse wheel.
+                    const CommandWheelData* pData = rCEvt.GetWheelData();
+                    if( pData && !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) && !pData->IsHorz() )
+                    {
+                        long nDelta = pData->GetDelta();
+                        if( nDelta > 0 )
+                        {
+                            xSlideShowController->gotoPreviousSlide();
+                        }
+                        else if( nDelta < 0 )
+                        {
+                            xSlideShowController->gotoNextEffect();
+                        }
+                    }
+                    break;
+                }
+            }
+            // fall through when not running slideshow
         case COMMAND_STARTAUTOSCROLL:
         case COMMAND_AUTOSCROLL:
         {
@@ -814,7 +821,7 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
 
 void ViewShell::SetupRulers (void)
 {
-    if (mbHasRulers && (mpContentWindow.get() != NULL) && (mpSlideShow==NULL) )
+    if(mbHasRulers && (mpContentWindow.get() != NULL) && !SlideShow::IsRunning(GetViewShellBase()))
     {
         long nHRulerOfs = 0;
 
@@ -1000,14 +1007,12 @@ void ViewShell::ArrangeGUIElements (void)
         }
     }
 
+    rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+
     // The size of the window of the center pane is set differently from
     // that of the windows in the docking windows.
-    bool bSlideShowActive =
-        mpSlideShow != NULL
-        && ! mpSlideShow->isTerminated()
-        && ! mpSlideShow->isFullScreen()
-        && mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
-    if ( ! bSlideShowActive)
+    bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
+    if ( !bSlideShowActive)
     {
         OSL_ASSERT (GetViewShell()!=NULL);
 
@@ -1067,7 +1072,7 @@ USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 {
     USHORT nResult = TRUE;
 
-    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
         nResult = pFormShell->PrepareClose (bUI, bForBrowsing);
 
@@ -1451,26 +1456,11 @@ void ViewShell::DisposeFunctions()
     }
 }
 
-void ViewShell::SetSlideShow(sd::Slideshow* pSlideShow)
-{
-
-    if( mpSlideShow )
-        delete mpSlideShow;
-
-    mpSlideShow = pSlideShow;
-}
-
-
-
-
 bool ViewShell::IsMainViewShell (void) const
 {
     return mpImpl->mbIsMainViewShell;
     //    return GetViewShellBase().GetMainViewShell() == this;
 }
-
-
-
 
 void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
 {
