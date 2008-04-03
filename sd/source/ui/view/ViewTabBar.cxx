@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:29:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XViewController.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -95,6 +92,18 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
         || rButton1.ButtonLabel == rButton2.ButtonLabel);
 }
 
+class TabBarControl : public ::TabControl
+{
+public:
+    TabBarControl (
+        ::Window* pParentWindow,
+        const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
+    virtual void Paint (const Rectangle& rRect);
+    virtual void ActivatePage (void);
+private:
+    ::rtl::Reference<ViewTabBar> mpViewTabBar;
+};
+
 } // end of anonymous namespace
 
 
@@ -118,7 +127,7 @@ ViewTabBar::ViewTabBar (
     const Reference<XResourceId>& rxViewTabBarId,
     const Reference<frame::XController>& rxController)
     : ViewTabBarInterfaceBase(maMutex),
-      ::TabControl(GetAnchorWindow(rxViewTabBarId,rxController)),
+      mpTabControl(new TabBarControl(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       maTabBarButtons(),
       mpTabPage(NULL),
@@ -127,11 +136,11 @@ ViewTabBar::ViewTabBar (
 {
     // Set one new tab page for all tab entries.  We need it only to
     // determine the height of the tab bar.
-    mpTabPage.reset(new TabPage (this));
+    mpTabPage.reset(new TabPage (mpTabControl.get()));
     mpTabPage->Hide();
 
     // add some space before the tabitems
-    SetItemsOffset( Point( 5, 3) );
+    mpTabControl->SetItemsOffset(Point(5, 3));
 
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
@@ -159,7 +168,7 @@ ViewTabBar::ViewTabBar (
         }
     }
 
-    Show();
+    mpTabControl->Show();
 
     if (mpViewShellBase != NULL
         && rxViewTabBarId->isBoundToURL(
@@ -174,6 +183,53 @@ ViewTabBar::ViewTabBar (
 
 ViewTabBar::~ViewTabBar (void)
 {
+}
+
+
+
+
+void ViewTabBar::disposing (void)
+{
+    if (mpViewShellBase != NULL
+        && mxViewTabBarId->isBoundToURL(
+            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+    {
+        mpViewShellBase->SetViewTabBar(NULL);
+    }
+
+    if (mxConfigurationController.is())
+    {
+        // Unregister listener from XConfigurationController.
+        try
+        {
+            mxConfigurationController->removeConfigurationChangeListener(this);
+        }
+        catch (lang::DisposedException e)
+        {
+            // Receiving a disposed exception is the normal case.  Is there
+            // a way to avoid it?
+        }
+        mxConfigurationController = NULL;
+    }
+
+    {
+        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        // Set all references to the one tab page to NULL and delete the page.
+        for (USHORT nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
+            mpTabControl->SetTabPage(nIndex, NULL);
+        mpTabPage.reset();
+        mpTabControl.reset();
+    }
+
+    mxController = NULL;
+}
+
+
+
+
+::boost::shared_ptr< ::TabControl> ViewTabBar::GetTabControl (void) const
+{
+    return mpTabControl;
 }
 
 
@@ -214,9 +270,10 @@ ViewTabBar::~ViewTabBar (void)
         try
         {
             Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY_THROW);
-            Reference<XPaneController> xPaneController (xControllerManager->getPaneController());
-            if (xPaneController.is())
-                xPane = xPaneController->getPane(rxViewTabBarId->getAnchor());
+            Reference<XConfigurationController> xCC (
+                xControllerManager->getConfigurationController());
+            if (xCC.is())
+                xPane = Reference<XPane>(xCC->getResource(rxViewTabBarId->getAnchor()), UNO_QUERY);
         }
         catch (RuntimeException&)
         {}
@@ -235,41 +292,6 @@ ViewTabBar::~ViewTabBar (void)
     }
 
     return pWindow;
-}
-
-
-
-
-void ViewTabBar::disposing (void)
-{
-    if (mpViewShellBase != NULL
-        && mxViewTabBarId->isBoundToURL(
-            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
-    {
-        mpViewShellBase->SetViewTabBar(NULL);
-    }
-
-    if (mxConfigurationController.is())
-    {
-        // Unregister listener from XConfigurationController.
-        try
-        {
-            mxConfigurationController->removeConfigurationChangeListener(this);
-        }
-        catch (lang::DisposedException e)
-        {
-            // Receiving a disposed exception is the normal case.  Is there
-            // a way to avoid it?
-        }
-        mxConfigurationController = NULL;
-    }
-
-    // Set all references to the one tab page to NULL and delete the page.
-    for (USHORT nIndex=0; nIndex<GetPageCount(); ++nIndex)
-        SetTabPage(nIndex, NULL);
-    mpTabPage.reset();
-
-    mxController = NULL;
 }
 
 
@@ -372,6 +394,15 @@ Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId (void)
 
 
 
+sal_Bool SAL_CALL ViewTabBar::isAnchorOnly (void)
+    throw (RuntimeException)
+{
+    return false;
+}
+
+
+
+
 //----- XUnoTunnel ------------------------------------------------------------
 
 const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
@@ -412,24 +443,23 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
 
 //-----------------------------------------------------------------------------
 
-void ViewTabBar::ActivatePage (void)
+bool ViewTabBar::ActivatePage (void)
 {
     try
     {
         Reference<XControllerManager> xControllerManager (mxController,UNO_QUERY_THROW);
-        Reference<XViewController> xViewController (
-            xControllerManager->getViewController());
         Reference<XConfigurationController> xConfigurationController (
             xControllerManager->getConfigurationController());
-        if ( ! xViewController.is() || ! xConfigurationController.is())
+        if ( ! xConfigurationController.is())
             throw RuntimeException();
         Reference<XView> xView;
         try
         {
-            xView = (xViewController->getView(
-            ResourceId::create(
-                comphelper_getProcessComponentContext(),
-                FrameworkHelper::msCenterPaneURL)));
+            xView = Reference<XView>(xConfigurationController->getResource(
+                ResourceId::create(
+                    comphelper_getProcessComponentContext(),
+                    FrameworkHelper::msCenterPaneURL)),
+                UNO_QUERY);
         }
         catch (DeploymentException)
         {
@@ -440,17 +470,15 @@ void ViewTabBar::ActivatePage (void)
             pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
         if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
         {
-
-            // Call the parent so that the correct tab is highlighted.
-            ::TabControl::ActivatePage ();
-
-            USHORT nIndex (GetCurPageId() - 1);
+            USHORT nIndex (mpTabControl->GetCurPageId() - 1);
             if (nIndex < maTabBarButtons.size())
             {
                 xConfigurationController->requestResourceActivation(
                     maTabBarButtons[nIndex].ResourceId,
                     ResourceActivationMode_REPLACE);
             }
+
+            return true;
         }
         else
         {
@@ -464,6 +492,8 @@ void ViewTabBar::ActivatePage (void)
     {
         DBG_ASSERT(false,"ViewTabBar::ActivatePage(): caught exception");
     }
+
+    return false;
 }
 
 
@@ -475,8 +505,9 @@ int ViewTabBar::GetHeight (void)
 
     if (maTabBarButtons.size() > 0)
     {
-        TabPage* pActivePage (GetTabPage(GetCurPageId()));
-        if (pActivePage!=NULL && IsReallyVisible())
+        TabPage* pActivePage (mpTabControl->GetTabPage(
+            mpTabControl->GetCurPageId()));
+        if (pActivePage!=NULL && mpTabControl->IsReallyVisible())
             nHeight = pActivePage->GetPosPixel().Y();
 
         if (nHeight <= 0)
@@ -536,7 +567,7 @@ void ViewTabBar::AddTabBarButton (
     sal_Int32 nPosition)
 {
     if (nPosition>=0
-        && nPosition<=GetPageCount())
+        && nPosition<=mpTabControl->GetPageCount())
     {
         USHORT nIndex ((USHORT)nPosition);
 
@@ -618,8 +649,8 @@ void ViewTabBar::UpdateActiveButton (void)
         {
             if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
             {
-                SetCurPageId(nIndex+1);
-                ::TabControl::ActivatePage();
+                mpTabControl->SetCurPageId(nIndex+1);
+                mpTabControl->::TabControl::ActivatePage();
                 break;
             }
         }
@@ -632,23 +663,23 @@ void ViewTabBar::UpdateActiveButton (void)
 void ViewTabBar::UpdateTabBarButtons (void)
 {
     TabBarButtonList::const_iterator iTab;
-    USHORT nPageCount (GetPageCount());
+    USHORT nPageCount (mpTabControl->GetPageCount());
     USHORT nIndex;
     for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
     {
         // Create a new tab when there are not enough.
         if (nPageCount < nIndex)
-            InsertPage(nIndex, iTab->ButtonLabel);
+            mpTabControl->InsertPage(nIndex, iTab->ButtonLabel);
 
         // Update the tab.
-        SetPageText(nIndex, iTab->ButtonLabel);
-        SetHelpText(nIndex, iTab->HelpText);
-        SetTabPage(nIndex, mpTabPage.get());
+        mpTabControl->SetPageText(nIndex, iTab->ButtonLabel);
+        mpTabControl->SetHelpText(nIndex, iTab->HelpText);
+        mpTabControl->SetTabPage(nIndex, mpTabPage.get());
     }
 
     // Delete tabs that are no longer used.
     for (; nIndex<=nPageCount; ++nIndex)
-        RemovePage(nIndex);
+        mpTabControl->RemovePage(nIndex);
 
     mpTabPage->Hide();
 }
@@ -656,7 +687,20 @@ void ViewTabBar::UpdateTabBarButtons (void)
 
 
 
-void ViewTabBar::Paint (const Rectangle& rRect)
+//===== TabBarControl =========================================================
+
+TabBarControl::TabBarControl (
+    ::Window* pParentWindow,
+    const ::rtl::Reference<ViewTabBar>& rpViewTabBar)
+    : ::TabControl(pParentWindow),
+      mpViewTabBar(rpViewTabBar)
+{
+}
+
+
+
+
+void TabBarControl::Paint (const Rectangle& rRect)
 {
     Color aOriginalFillColor (GetFillColor());
     Color aOriginalLineColor (GetLineColor());
@@ -676,5 +720,14 @@ void ViewTabBar::Paint (const Rectangle& rRect)
 
 
 
+
+void TabBarControl::ActivatePage (void)
+{
+    if (mpViewTabBar->ActivatePage())
+    {
+        // Call the parent so that the correct tab is highlighted.
+        this->::TabControl::ActivatePage();
+    }
+}
 
 } // end of namespace sd
