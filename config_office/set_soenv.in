@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.182 $
-# Date:        $Date: 2008-04-03 17:15:28 $
+# Version:     $Revision: 1.183 $
+# Date:        $Date: 2008-04-03 18:02:42 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1684,6 +1684,14 @@ ToFile( "LIBFORMULA_JAR",    "@LIBFORMULA_JAR@",   "e" );
 ToFile( "LIBREPOSITORY_JAR", "@LIBREPOSITORY_JAR@","e" );
 ToFile( "LIBFONTS_JAR",      "@LIBFONTS_JAR@",     "e" );
 ToFile( "JCOMMON_SERIALIZER_JAR","@JCOMMON_SERIALIZER_JAR@","e" );
+ToFile( "ENABLE_MEDIAWIKI",  "@ENABLE_MEDIAWIKI@", "e" );
+ToFile( "SYSTEM_APACHE_COMMONS","@SYSTEM_APACHE_COMMONS@","e" );
+ToFile( "COMMONS_CODEC_JAR", "@COMMONS_CODEC_JAR@","e" );
+ToFile( "COMMONS_LANG_JAR",  "@COMMONS_LANG_JAR@", "e" );
+ToFile( "COMMONS_HTTPCLIENT_JAR","@COMMONS_HTTPCLIENT_JAR@","e" );
+ToFile( "COMMONS_LOGGING_JAR","@COMMONS_LOGGING_JAR@","e" );
+ToFile( "SYSTEM_SERVLETAPI", "@SYSTEM_SERVLETAPI@", "e" );
+ToFile( "SERVLETAPI_JAR",    "@SERVLETAPI_JAR@",   "e" );
 ToFile( "ENABLE_DBUS",       "@ENABLE_DBUS@",      "e" );
 ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
