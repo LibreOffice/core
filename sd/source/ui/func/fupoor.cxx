@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 17:56:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     aScrollTimer.Stop();
 
     if ( !mpView->IsDragHelpLine() && !mpView->IsSetPageOrg() &&
-         !mpViewShell->GetSlideShow() )
+            !SlideShow::IsRunning( mpViewShell->GetViewShellBase() ) )
     {
 /*      Size aSize = mpWindow->GetSizePixel();
         short dx = 0, dy = 0;
@@ -318,7 +318,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     USHORT          nCode = rKEvt.GetKeyCode().GetCode();
     BOOL            bReturn = FALSE;
-    BOOL            bSlideShow = mpViewShell->GetSlideShow() != 0;
+    BOOL            bSlideShow = SlideShow::IsRunning( mpViewShell->GetViewShellBase() );
 
     switch (nCode)
     {
