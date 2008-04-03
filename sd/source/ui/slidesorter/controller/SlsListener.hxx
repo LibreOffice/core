@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:31:00 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,18 @@
 #include <svtools/lstner.hxx>
 #include <tools/link.hxx>
 
+namespace sd {
+class ViewShellBase;
+}
+
 namespace sd { namespace tools {
 class EventMultiplexerEvent;
 } }
+
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
+
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -92,7 +101,7 @@ class Listener
       public SfxListener
 {
 public:
-    Listener (SlideSorterController& rController);
+    Listener (SlideSorter& rSlideSorter);
     virtual ~Listener (void);
 
     /** Connect to the current controller of the view shell as listener.
@@ -152,7 +161,9 @@ public:
     virtual void SAL_CALL disposing (void);
 
 private:
+    SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
+    ViewShellBase* mpBase;
 
     /// Remember whether we are listening to the document.
     bool mbListeningToDocument;
@@ -162,12 +173,17 @@ private:
     bool mbListeningToController;
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
+    bool mbIsMainViewChangePending;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XController> mxControllerWeak;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame> mxFrameWeak;
 
 
     void ReleaseListeners (void);
+
+    /** Called when the edit mode has changed.  Update model accordingly.
+    */
+    void UpdateEditMode (void);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
