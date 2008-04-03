@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:45:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,71 +33,60 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "model/SlideSorterModel.hxx"
 
+#include "SlideSorter.hxx"
 #include "model/SlsPageDescriptor.hxx"
-#include "model/SlsPageEnumeration.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
+#include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
+#include "controller/SlsProperties.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
+#include "view/SlideSorterView.hxx"
 #include "taskpane/SlideSorterCacheDisplay.hxx"
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 
-#ifndef _DRAWDOC_HXX
+#include "ViewShellBase.hxx"
+#include "DrawViewShell.hxx"
 #include "drawdoc.hxx"
-#endif
-#ifndef _SDPAGE_HXX
 #include "sdpage.hxx"
-#endif
+#include "FrameView.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#ifdef DEBUG
-#define DUMP_MODEL ::DumpSlideSorterModel(*this)
-namespace {
-using namespace ::sd::slidesorter::model;
-void DumpSlideSorterModel (const SlideSorterModel& rModel)
-{
-    OSL_TRACE ("SlideSorterModel has %d pages", rModel.GetPageCount());
-    if (rModel.GetEditMode() == EM_PAGE)
-        OSL_TRACE ("edit mode is EM_PAGE");
-    else if (rModel.GetEditMode() == EM_MASTERPAGE)
-        OSL_TRACE ("    edit mode is EM_MASTERPAGE");
-    else
-        OSL_TRACE ("    edit mode is unknown");
-    for (int i=0; i<rModel.GetPageCount(); i++)
-    {
-        SharedPageDescriptor pDescriptor = rModel.GetRawPageDescriptor(i);
-        OSL_TRACE ("    page %d points to %x", i, pDescriptor.get());
-        if (pDescriptor.get() != NULL)
-            OSL_TRACE ("        focused %d, selected %d, visible %d",
-                pDescriptor->IsFocused()?1:0,
-                pDescriptor->IsSelected()?1:0,
-                pDescriptor->IsVisible()?1:0);
-    }
-}
-}
-#else
-#define DUMP_MODEL
-#endif
-#undef DUMP_MODEL
-#define DUMP_MODEL
-
 namespace sd { namespace slidesorter { namespace model {
 
-SlideSorterModel::SlideSorterModel (
-    SdDrawDocument& rDocument,
-    PageKind ePageKind,
-    EditMode eEditMode)
-    : mrDocument (rDocument),
-      mePageKind (ePageKind),
-      meEditMode (eEditMode),
+namespace {
+    class CompareToXDrawPage
+    {
+    public:
+        CompareToXDrawPage (const Reference<drawing::XDrawPage>& rxSlide) : mxSlide(rxSlide) {}
+        bool operator() (const SharedPageDescriptor& rpDescriptor)
+        { return rpDescriptor.get()!=NULL && rpDescriptor->GetXDrawPage()==mxSlide; }
+    private:
+        Reference<drawing::XDrawPage> mxSlide;
+    };
+}
+
+
+
+
+SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
+    : maMutex(),
+      mrSlideSorter(rSlideSorter),
+      mxSlides(),
+      mePageKind(PK_STANDARD),
+      meEditMode(EM_PAGE),
       maPageDescriptors(0),
       mpPageObjectFactory(NULL)
 {
-    AdaptSize ();
-    DUMP_MODEL;
 }
 
 
@@ -113,7 +102,10 @@ SlideSorterModel::~SlideSorterModel (void)
 
 SdDrawDocument* SlideSorterModel::GetDocument (void)
 {
-    return &mrDocument;
+    if (mrSlideSorter.GetViewShellBase() != NULL)
+        return mrSlideSorter.GetViewShellBase()->GetDocument();
+    else
+         return NULL;
 }
 
 
@@ -122,15 +114,38 @@ SdDrawDocument* SlideSorterModel::GetDocument (void)
 bool SlideSorterModel::SetEditMode (EditMode eEditMode)
 {
     bool bEditModeChanged = false;
-    if (meEditMode!=eEditMode)
+    if (meEditMode != eEditMode)
     {
         meEditMode = eEditMode;
         ClearDescriptorList();
-        AdaptSize();
+        UpdatePageList();
         bEditModeChanged = true;
     }
-    DUMP_MODEL;
     return bEditModeChanged;
+}
+
+
+
+
+bool SlideSorterModel::SetEditModeFromController (void)
+{
+    bool bIsMasterPageMode = false;
+    // Get the edit mode from the controller.
+    try
+    {
+        Reference<beans::XPropertySet> xSet (mrSlideSorter.GetXController(), UNO_QUERY_THROW);
+        Any aValue (xSet->getPropertyValue(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
+        aValue >>= bIsMasterPageMode;
+    }
+    catch (RuntimeException&)
+    {
+        // When the property is not supported then the master
+        // page mode is not supported, too.
+        bIsMasterPageMode = false;
+    }
+
+    return SetEditMode(bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }
 
 
@@ -152,7 +167,7 @@ PageKind SlideSorterModel::GetPageType (void) const
 
 
 
-int SlideSorterModel::GetPageCount (void) const
+sal_Int32 SlideSorterModel::GetPageCount (void) const
 {
     return maPageDescriptors.size();
 }
@@ -160,91 +175,94 @@ int SlideSorterModel::GetPageCount (void) const
 
 
 
-SharedPageDescriptor SlideSorterModel::GetPageDescriptor (int nPageIndex) const
+SharedPageDescriptor SlideSorterModel::GetPageDescriptor (
+    const sal_Int32 nPageIndex,
+    const bool bCreate) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
     SharedPageDescriptor pDescriptor;
+
     if (nPageIndex>=0 && nPageIndex<GetPageCount())
     {
         pDescriptor = maPageDescriptors[nPageIndex];
-        if (pDescriptor == NULL)
+        if (pDescriptor == NULL && bCreate && mxSlides.is())
         {
-            SdPage* pPage;
-            if (meEditMode == EM_PAGE)
-                pPage = mrDocument.GetSdPage ((USHORT)nPageIndex, mePageKind);
-            else
-                pPage = mrDocument.GetMasterSdPage ((USHORT)nPageIndex, mePageKind);
+            SdDrawDocument* pModel = const_cast<SlideSorterModel*>(this)->GetDocument();
+            SdPage* pPage = NULL;
+            if (pModel != NULL)
+            {
+                if (meEditMode == EM_PAGE)
+                    pPage = pModel->GetSdPage ((USHORT)nPageIndex, mePageKind);
+                else
+                    pPage = pModel->GetMasterSdPage ((USHORT)nPageIndex, mePageKind);
+            }
             pDescriptor.reset(new PageDescriptor (
-                *pPage,
+                Reference<drawing::XDrawPage>(mxSlides->getByIndex(nPageIndex),UNO_QUERY),
+                pPage,
+                nPageIndex,
                 GetPageObjectFactory()));
             maPageDescriptors[nPageIndex] = pDescriptor;
         }
     }
+
     return pDescriptor;
 }
 
 
 
 
-SharedPageDescriptor SlideSorterModel::GetRawPageDescriptor (int nPageIndex) const
+sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSlide) const
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    SharedPageDescriptor pDescriptor;
-    if (nPageIndex>=0 && nPageIndex<GetPageCount())
-        pDescriptor = maPageDescriptors[nPageIndex];
-    return pDescriptor;
-}
-
-
-
-
-SharedPageDescriptor SlideSorterModel::FindPageDescriptor (
-        const Reference<drawing::XDrawPage>& rxPage) const
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    SharedPageDescriptor pDescriptor;
-    for (int i=0; i<GetPageCount(); i++)
+    // First try to guess the right index.
+    Reference<beans::XPropertySet> xSet (rxSlide, UNO_QUERY);
+    if (xSet.is())
     {
-        pDescriptor = GetPageDescriptor(i);
-        if (pDescriptor.get() != NULL)
+        try
         {
-            Reference<drawing::XDrawPage> xPage (
-                pDescriptor->GetPage()->getUnoPage(), UNO_QUERY);
-            if (xPage == rxPage)
-                break;
+            const Any aNumber (xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+            sal_Int16 nNumber (-1);
+            aNumber >>= nNumber;
+            nNumber -= 1;
+            SharedPageDescriptor pDescriptor (GetPageDescriptor(nNumber, false));
+            if (pDescriptor.get() != NULL
+                && pDescriptor->GetXDrawPage() == rxSlide)
+            {
+                return nNumber;
+            }
+        }
+        catch (beans::UnknownPropertyException&)
+        {
+            OSL_ASSERT(false);
+        }
+        catch (lang::DisposedException&)
+        {
+            OSL_ASSERT(false);
         }
     }
-    return pDescriptor;
-}
 
+    // Guess was wrong, iterate over all slides and search for the right
+    // one.
+    const sal_Int32 nCount (maPageDescriptors.size());
+    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+        SharedPageDescriptor pDescriptor (maPageDescriptors[nIndex]);
 
+        // Make sure that the descriptor exists.  Without it the given slide
+        // can not be found.
+        if (pDescriptor.get() == NULL)
+        {
+            // Call GetPageDescriptor() to create the missing descriptor.
+            pDescriptor = GetPageDescriptor(nIndex,true);
+        }
 
+        if (pDescriptor->GetXDrawPage() == rxSlide)
+            return nIndex;
+    }
 
-SlideSorterModel::Enumeration
-    SlideSorterModel::GetAllPagesEnumeration (void) const
-{
-    return PageEnumeration::Create(*this, PageEnumeration::PET_ALL);
-}
-
-
-
-
-SlideSorterModel::Enumeration
-    SlideSorterModel::GetSelectedPagesEnumeration (void) const
-{
-    return PageEnumeration::Create(*this, PageEnumeration::PET_SELECTED);
-}
-
-
-
-
-SlideSorterModel::Enumeration
-    SlideSorterModel::GetVisiblePagesEnumeration (void) const
-{
-    return PageEnumeration::Create(*this, PageEnumeration::PET_VISIBLE);
+    return  -1;
 }
 
 
@@ -260,30 +278,10 @@ SlideSorterModel::Enumeration
 void SlideSorterModel::Resync (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    DUMP_MODEL;
     ClearDescriptorList ();
     AdaptSize();
-    DUMP_MODEL;
 }
 
-
-
-
-void SlideSorterModel::AdaptSize ()
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    if (meEditMode == EM_PAGE)
-        maPageDescriptors.resize(mrDocument.GetSdPageCount(mePageKind));
-    else
-        maPageDescriptors.resize(mrDocument.GetMasterSdPageCount(mePageKind));
-
-#ifdef USE_SLIDE_SORTER_PAGE_CACHE
-    toolpanel::SlideSorterCacheDisplay* pDisplay = toolpanel::SlideSorterCacheDisplay::Instance(&mrDocument);
-    if (pDisplay != NULL)
-        pDisplay->SetPageCount(mrDocument.GetSdPageCount(mePageKind));
-#endif
-}
 
 
 
@@ -315,7 +313,7 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    Enumeration aAllPages (GetAllPagesEnumeration());
+    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
@@ -330,7 +328,7 @@ void SlideSorterModel::SynchronizeModelSelection (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    Enumeration aAllPages (GetAllPagesEnumeration());
+    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
@@ -352,7 +350,7 @@ void SlideSorterModel::SetPageObjectFactory(
     mpPageObjectFactory = pPageObjectFactory;
     // When a NULL pointer was given then create a default factory.
     const controller::PageObjectFactory& rFactory (GetPageObjectFactory());
-    Enumeration aAllPages (GetAllPagesEnumeration());
+    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
     while (aAllPages.HasMoreElements())
     {
         SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
@@ -370,14 +368,12 @@ const controller::PageObjectFactory&
 
     if (mpPageObjectFactory.get() == NULL)
     {
-        // We have to creat a new factory.  The pointer is mutable so we are
-        // alowed to do so.  Note that we pass NULL as pointer to the
-        // preview cache because we, as a model, have no access to the
-        // cache.  This makes this object clearly a fallback when the
-        // controller does not provide a factory where the cache is properly
-        // set.
+        // We have to create a new factory.  The pointer is mutable so we
+        // are alowed to do so.
         mpPageObjectFactory = ::std::auto_ptr<controller::PageObjectFactory> (
-            new controller::PageObjectFactory(::boost::shared_ptr<cache::PageCache>()));
+            new controller::PageObjectFactory(
+                mrSlideSorter.GetView().GetPreviewCache(),
+                mrSlideSorter.GetController().GetProperties()));
     }
     return *mpPageObjectFactory.get();
 }
@@ -388,6 +384,114 @@ const controller::PageObjectFactory&
 ::osl::Mutex& SlideSorterModel::GetMutex (void)
 {
     return maMutex;
+}
+
+
+
+
+void SlideSorterModel::SetDocumentSlides (
+    const Reference<container::XIndexAccess>& rxSlides)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    // Reset the current page so to cause everbody to release references to it.
+    mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(-1);
+
+    mxSlides = rxSlides;
+    Resync();
+
+    ViewShell* pViewShell = mrSlideSorter.GetViewShell();
+    if (pViewShell != NULL)
+    {
+        SdPage* pPage = pViewShell->getCurrentPage();
+        if (pPage != NULL)
+            mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
+                GetIndex(Reference<drawing::XDrawPage>(pPage->getUnoPage(), UNO_QUERY)));
+        else
+        {
+            // No current page.  This can only be when the slide sorter is
+            // the main view shell.  Get current slide form frame view.
+            const FrameView* pFrameView = pViewShell->GetFrameView();
+            if (pFrameView != NULL)
+                mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
+                    pFrameView->GetSelectedPage());
+            else
+            {
+                // No frame view.  As a last resort use the first slide as
+                // current slide.
+                mrSlideSorter.GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(0);
+            }
+        }
+    }
+}
+
+
+
+
+Reference<container::XIndexAccess> SlideSorterModel::GetDocumentSlides (void) const
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    return mxSlides;
+}
+
+
+
+
+void SlideSorterModel::UpdatePageList (void)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    Reference<container::XIndexAccess> xPages;
+
+    // Get the list of pages according to the edit mode.
+    Reference<frame::XController> xController (mrSlideSorter.GetXController());
+    if (xController.is())
+    {
+        switch (meEditMode)
+        {
+            case EM_MASTERPAGE:
+            {
+                Reference<drawing::XMasterPagesSupplier> xSupplier (
+                    xController->getModel(), UNO_QUERY);
+                if (xSupplier.is())
+                {
+                    xPages = Reference<container::XIndexAccess>(
+                        xSupplier->getMasterPages(), UNO_QUERY);
+                }
+            }
+            break;
+
+            case EM_PAGE:
+            {
+                Reference<drawing::XDrawPagesSupplier> xSupplier (
+                    xController->getModel(), UNO_QUERY);
+                if (xSupplier.is())
+                {
+                    xPages = Reference<container::XIndexAccess>(
+                        xSupplier->getDrawPages(), UNO_QUERY);
+                }
+            }
+            break;
+
+            default:
+                // We should never get here.
+                OSL_ASSERT(false);
+                break;
+        }
+    }
+
+    mrSlideSorter.GetController().SetDocumentSlides(xPages);
+}
+
+
+
+
+void SlideSorterModel::AdaptSize (void)
+{
+    if (mxSlides.is())
+        maPageDescriptors.resize(mxSlides->getCount());
+    else
+        maPageDescriptors.resize(0);
 }
 
 } } } // end of namespace ::sd::slidesorter::model
