@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:23:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@
 
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_COLORLISTENER_HXX_
-#include <classes/colorlistener.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
@@ -187,7 +183,6 @@ namespace framework
 BackingComp::BackingComp( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR )
     : ThreadHelpBase    (&Application::GetSolarMutex()                  )
     , m_xSMGR           (xSMGR                                          )
-    , m_pAccExec        (0                                              )
 {
 }
 
@@ -195,14 +190,6 @@ BackingComp::BackingComp( const css::uno::Reference< css::lang::XMultiServiceFac
 
 BackingComp::~BackingComp()
 {
-    // Free this member inside dtor only! Not inside dispose().
-    // Otherwhise we cant guarantee right using of it inbetween.
-    if (m_pAccExec)
-    {
-        ::svt::AcceleratorExecute* pAccExec = m_pAccExec;
-        m_pAccExec = 0;
-        delete pAccExec;
-    }
 }
 
 //_______________________________________________
@@ -615,11 +602,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
-    // create a listener for automatic updates of the window background color
-    // It hold itself alive and listen for window disposing() so it can die automaticly
-    // if we release our component window.
-    new ColorListener(m_xWindow);
-
     // sett he right title at the title bar of the parent window
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
     if (xPropSet.is())
@@ -655,11 +637,13 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
             xLayoutManager->unlock();
         }
 
-    // establish listening for key accelerators
-    m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
-
     // set help ID for our canvas
     pWindow->SetHelpId(HID_BACKINGWINDOW);
+
+    // inform BackingWindow about frame
+    BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
+    if( pBack )
+        pBack->setOwningFrame( m_xFrame );
 
     aWriteLock.unlock();
     /* } SAFE */
@@ -975,31 +959,9 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 /**
  */
 
-void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent& aEvent )
+void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    ::svt::AcceleratorExecute* pAccExec = m_pAccExec;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
-    if (!pAccExec)
-    {
-        pAccExec = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        pAccExec->init(m_xSMGR, m_xFrame);
-
-        // SAFE -> ------------------------------
-        WriteGuard aWriteLock(m_aLock);
-        m_pAccExec = pAccExec;
-        aWriteLock.unlock();
-        // <- SAFE ------------------------------
-    }
-
-    // We can call this non ref counted member copy here outside
-    // the synchronized block. Because it lives till we reach our own dtor.
-    // And normaly we can't stand inside a method and reach our dtor ... Normaly .-)
-    pAccExec->execute(aEvent);
 }
 
 //_______________________________________________
