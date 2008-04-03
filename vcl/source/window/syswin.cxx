@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1011,9 +1011,24 @@ void SystemWindow::SetMenuBarMode( USHORT nMode )
 }
 
 // -----------------------------------------------------------------------
+
 BOOL SystemWindow::ImplIsInTaskPaneList( Window* pWin )
 {
     if( mpImplData && mpImplData->mpTaskPaneList )
         return mpImplData->mpTaskPaneList->IsInList( pWin );
     return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+unsigned int SystemWindow::GetScreenNumber() const
+{
+    return mpWindowImpl->mpFrame->maGeometry.nScreenNumber;
+}
+
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetScreenNumber( unsigned int nScreen)
+{
+    mpWindowImpl->mpFrame->SetScreenNumber( nScreen );
 }
