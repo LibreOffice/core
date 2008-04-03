@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPane.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:37:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,20 +87,22 @@ using ::com::sun::star::uno::RuntimeException;
 namespace
 {
 
-
-::std::vector< SdPage * > lcl_getSelectedPages( ::sd::ViewShellBase& rBase )
+typedef ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection>
+    SharedPageSelection;
+SharedPageSelection lcl_getSelectedPages (::sd::ViewShellBase& rBase)
 {
-    ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-        ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(rBase);
+    ::sd::slidesorter::SlideSorterViewShell*pSlideSorterViewShell
+        = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(rBase);
     DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
-    ::std::vector< SdPage * > aSelectedPages;
 
-    if( pSlideSorterViewShell )
+    if (pSlideSorterViewShell != NULL)
     {
-        pSlideSorterViewShell->GetSelectedPages( aSelectedPages );
+        return pSlideSorterViewShell->GetPageSelection();
     }
-
-    return aSelectedPages;
+    else
+    {
+        return SharedPageSelection(new sd::slidesorter::SlideSorterViewShell::PageSelection());
+    }
 }
 
 // void lcl_ApplyToPages( ::std::vector< SdPage * > aPages, const ::sd::impl::TransitionEffect & rEffect )
@@ -142,7 +144,8 @@ AnimationSchemesPane::AnimationSchemesPane(
 
         maSTR_NO_SCHEME( SdResId( STR_NO_SCHEME ) ),
         mbHasSelection( false ),
-        mbUpdatingControls( false )
+        mbUpdatingControls( false ),
+        mbIsMainViewChangePending( false )
 {
     // use no resource ids from here on
     FreeResource();
@@ -278,8 +281,8 @@ void AnimationSchemesPane::updateLayout()
 
 void AnimationSchemesPane::updateControls()
 {
-    ::std::vector< SdPage * > aSelectedPages( lcl_getSelectedPages( mrBase ));
-    if( aSelectedPages.empty())
+    SharedPageSelection aSelectedPages( lcl_getSelectedPages( mrBase ));
+    if( aSelectedPages->empty())
     {
         mbHasSelection = false;
         return;
@@ -291,7 +294,7 @@ void AnimationSchemesPane::updateControls()
 
     // get model data for first page
 #ifdef DBG_UTIL
-    SdPage * pFirstPage = aSelectedPages.front();
+    SdPage * pFirstPage = aSelectedPages->front();
     DBG_ASSERT( pFirstPage, "Invalid Page" );
 #endif
 
@@ -330,8 +333,8 @@ void AnimationSchemesPane::applyToSelectedPages()
 {
     if( ! mbUpdatingControls )
     {
-        ::std::vector< SdPage * > aSelectedPages( lcl_getSelectedPages( mrBase ));
-        if( ! aSelectedPages.empty())
+        SharedPageSelection aSelectedPages( lcl_getSelectedPages( mrBase ));
+        if( ! aSelectedPages->empty())
         {
 //             lcl_ApplyToPages( aSelectedPages, getAnimationSchemeFromControls() );
         }
@@ -351,18 +354,19 @@ void AnimationSchemesPane::playCurrentScheme()
 void AnimationSchemesPane::addListener()
 {
     Link aLink( LINK(this,AnimationSchemesPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().AddEventListener(
+    mrBase.GetEventMultiplexer()->AddEventListener(
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
         | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+        | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
 }
 
 void AnimationSchemesPane::removeListener()
 {
     Link aLink( LINK(this,AnimationSchemesPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer().RemoveEventListener( aLink );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
 IMPL_LINK(AnimationSchemesPane,EventMultiplexerListener,
@@ -385,9 +389,17 @@ IMPL_LINK(AnimationSchemesPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            mxView = Reference<drawing::XDrawView>::query( mxModel->getCurrentController() );
-            onSelectionChanged();
-            onChangeCurrentPage();
+            mbIsMainViewChangePending = true;
+            break;
+
+        case tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+            if (mbIsMainViewChangePending)
+            {
+                mbIsMainViewChangePending = false;
+                mxView = Reference<drawing::XDrawView>::query( mxModel->getCurrentController() );
+                onSelectionChanged();
+                onChangeCurrentPage();
+            }
             break;
     }
     return 0;
