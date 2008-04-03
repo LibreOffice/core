@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:45:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,10 @@ public:
         user data.
     */
     static const EventId EID_SHAPE_REMOVED          = 0x00020000;
+
+    /** A configuration update has been completed.
+    */
+    static const EventId EID_CONFIGURATION_UPDATED  = 0x00040000;
 
     const ViewShellBase& mrBase;
     EventId meEventId;
