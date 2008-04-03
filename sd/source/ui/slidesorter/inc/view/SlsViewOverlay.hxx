@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:28:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,9 @@
 class OutputDevice;
 class Region;
 
+
 namespace sd { namespace slidesorter {
-class SlideSorterViewShell;
+class SlideSorter;
 } }
 
 namespace sd { namespace slidesorter { namespace model {
@@ -185,9 +186,7 @@ class InsertionIndicatorOverlay
     : public OverlayBase
 {
 public:
-    InsertionIndicatorOverlay (
-        ViewOverlay& rViewOverlay,
-        SlideSorterViewShell& mrViewShell);
+    InsertionIndicatorOverlay (ViewOverlay& rViewOverlay);
 
     /** Given a position in model coordinates this method calculates the
         insertion marker both as an index in the document and as a rectangle
@@ -202,7 +201,6 @@ protected:
     virtual void createBaseRange (OutputDevice& rOutputDevice);
 
 private:
-    SlideSorterViewShell& mrViewShell;
     sal_Int32 mnInsertionIndex;
     Rectangle maBoundingBox;
 
@@ -219,9 +217,7 @@ class MouseOverIndicatorOverlay
     : public OverlayBase
 {
 public:
-    MouseOverIndicatorOverlay (
-        ViewOverlay& rViewOverlay,
-        SlideSorterViewShell& mrViewShell);
+    MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay);
     virtual ~MouseOverIndicatorOverlay (void);
 
     /** Set the page object for which to paint a mouse over indicator.
@@ -235,10 +231,6 @@ protected:
     virtual void createBaseRange (OutputDevice& rOutputDevice);
 
 private:
-    class MouseOverIndicator;
-
-    SlideSorterViewShell& mrViewShell;
-
     /** The page under the mouse is stored as weak shared pointer so that
         model changes can be handled without having the SlideSorterModel
         inform this class explicitly.
@@ -265,7 +257,7 @@ private:
 class ViewOverlay
 {
 public:
-    ViewOverlay (SlideSorterViewShell& rViewShell);
+    ViewOverlay (SlideSorter& rSlideSorter);
     ~ViewOverlay (void);
 
     SelectionRectangleOverlay& GetSelectionRectangleOverlay (void);
@@ -273,10 +265,12 @@ public:
     InsertionIndicatorOverlay& GetInsertionIndicatorOverlay (void);
     SubstitutionOverlay& GetSubstitutionOverlay (void);
 
+    SlideSorter& GetSlideSorter (void) const;
+
     sdr::overlay::OverlayManager* GetOverlayManager (void) const;
 
 private:
-    SlideSorterViewShell& mrViewShell;
+    SlideSorter& mrSlideSorter;
     SelectionRectangleOverlay maSelectionRectangleOverlay;
     MouseOverIndicatorOverlay maMouseOverIndicatorOverlay;
     InsertionIndicatorOverlay maInsertionIndicatorOverlay;
