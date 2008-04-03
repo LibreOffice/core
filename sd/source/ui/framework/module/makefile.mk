@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2008-01-29 08:20:23 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:42:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,8 @@ PRJINC=..$/..
 # --- Files --------------------------------------------------------
 
 SLOFILES =      							\
-    $(SLO)$/BasicPaneFactory.obj			\
-    $(SLO)$/BasicToolBarFactory.obj			\
-    $(SLO)$/BasicViewFactory.obj			\
     $(SLO)$/CenterViewFocusModule.obj		\
-    $(SLO)$/ChildWindowPane.obj				\
     $(SLO)$/DrawModule.obj					\
-    $(SLO)$/FrameWindowPane.obj				\
     $(SLO)$/ImpressModule.obj				\
     $(SLO)$/ModuleController.obj			\
     $(SLO)$/PresentationModule.obj			\
@@ -66,8 +61,8 @@ SLOFILES =      							\
     $(SLO)$/ShellStackGuard.obj				\
     $(SLO)$/SlideSorterModule.obj			\
     $(SLO)$/TaskPaneModule.obj				\
-    $(SLO)$/ViewTabBarModule.obj			\
-    $(SLO)$/ViewShellWrapper.obj
+    $(SLO)$/ToolBarModule.obj				\
+    $(SLO)$/ViewTabBarModule.obj
 
 # --- Tagets -------------------------------------------------------
 
