@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 16:28:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
 #define SD_SLIDESORTER_PAGE_OBJECT_VIEW_OBJECT_CONTACT_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
@@ -50,12 +51,12 @@ namespace sdr { namespace contact {
 class DisplayInfo;
 } }
 
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
-
 namespace sd { namespace slidesorter { namespace cache {
 class PageCache;
+} } }
+
+namespace sd { namespace slidesorter { namespace controller {
+class Properties;
 } } }
 
 namespace sd { namespace slidesorter { namespace view {
@@ -86,7 +87,8 @@ public:
     PageObjectViewObjectContact (
         ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact,
-        const ::boost::shared_ptr<cache::PageCache>& rpCache);
+        const ::boost::shared_ptr<cache::PageCache>& rpCache,
+        const ::boost::shared_ptr<controller::Properties>& rpProperties);
     virtual ~PageObjectViewObjectContact (void);
 
     /** This method is primarily for releasing the current preview cache (by
@@ -108,19 +110,17 @@ public:
     /** This fallback method is called when no preview cache is available.
         It creates a preview for the page.
     */
-    BitmapEx CreatePreview (::sdr::contact::DisplayInfo& rDisplayInfo);
+    BitmapEx CreatePreview (OutputDevice& rDevice) const;
 
-    /** This paint method simply calls the more specialized paint methods
-        that paint single aspects of the content.  If you want to add or
-        remove an aspect then overload this method.
+    /** This paint method calls the more specialized paint methods
+        that paint single aspects of the content.
     */
-    virtual void PaintContent (
-        ::sdr::contact::DisplayInfo& rDisplayInfo);
+    virtual void PaintContent (OutputDevice& rDevice);
 
     /** Return the page descriptor of the slide sorter model that is
         associated with the same page object as this contact object is.
     */
-    model::PageDescriptor& GetPageDescriptor (void) const;
+    model::SharedPageDescriptor GetPageDescriptor (void) const;
 
     /** Return the device independent part of the page border.  This border
         is returned in pixel coordinates.  Note that the device dependent
@@ -220,6 +220,24 @@ public:
         const Rectangle& rRectangle,
         const DashType eDashType = Dotted);
 
+
+    enum ColorSpec { CS_SELECTION, CS_BACKGROUND, CS_WINDOW, CS_TEXT };
+    /** Return a color for one of the screen elements in ColorSpec.  For
+        Background the background color is updated when
+        mbIsBackgroundColorUpdatePending is <TRUE/>.
+        @param rDevice
+            Base colors are taken from the device.
+        @param eSpec
+            The type of color to return.
+        @param nOpacity
+            This parameter controls the blending between the background and
+            the actual color.
+    */
+    Color GetColor (
+        const OutputDevice& rDevice,
+        const ColorSpec eSpec,
+        const double nOpacity = 1.0) const;
+
 private:
     /// Gap between border of page object and inside of selection rectangle.
     static const sal_Int32 mnSelectionIndicatorOffset;
@@ -236,19 +254,34 @@ private:
     static const sal_Int32 mnMouseOverEffectOffset;
     static const sal_Int32 mnMouseOverEffectThickness;
 
+    model::SharedPageDescriptor mpPageDescriptor;
+
     /** This flag is set to <FALSE/> when PrepareDelete() is called to
         indicate that further calls made to it must not call outside.
     */
     bool mbIsValid;
 
+    bool mbInPrepareDelete;
+
+    /** Set this flag to <TRUE/> to update the background color on the next
+        call to GetBackgroundColor().
+    */
+    mutable bool mbIsBackgroundColorUpdatePending;
+
     ::boost::shared_ptr<cache::PageCache> mpCache;
 
     ::std::auto_ptr<PageNotificationObjectContact> mpNotifier;
 
-    bool mbInPrepareDelete;
+    ::boost::shared_ptr<controller::Properties> mpProperties;
+
+    /** Do not use this member directly.  Use GetColor(Background) instead.
+        That method determines the background color when
+        mbIsBackgroundColorUpdatePending is <TRUE/>.
+    */
+    mutable Color maBackgroundColor;
 
     BitmapEx GetPreview (
-        ::sdr::contact::DisplayInfo& rDisplayInfo,
+        OutputDevice& rDevice,
         const Rectangle& rNewSizePixel);
 
     virtual void ActionChanged (void);
@@ -256,11 +289,13 @@ private:
     /** Return the bounding box of where the page number is painted (when it
         is painted).
     */
-    Rectangle GetPageNumberArea (OutputDevice* pDevice);
+    Rectangle GetPageNumberArea (OutputDevice& rDevice) const;
+
+    void PaintBackground (OutputDevice& rDevice) const;
 
     /** Paint the preview bitmap.
     */
-    void PaintPreview (::sdr::contact::DisplayInfo& rDisplayInfo);
+    void PaintPreview (OutputDevice& rDevice);
 
     /** Paint a border arround the page preview.
     */
@@ -282,23 +317,18 @@ private:
         @param rDescriptor
             The descriptor of the page for which to paint the fade effect
             indicator.
-        @param bHighlight
-            This flag specifies whether to paint the indicator highlighted
-            (i.e. to indicate a mouse over effect) or the normal way.
     */
-    void PaintFadeEffectIndicator (
-        ::sdr::contact::DisplayInfo& rDisplayInfo,
-        bool bHighlight = false) const;
+    void PaintFadeEffectIndicator (OutputDevice& rDevice) const;
 
     /** Paint the name of the page to the bottom right of the page object.
     */
-    void PaintPageName (
-        ::sdr::contact::DisplayInfo& rDisplayInfo) const;
+    void PaintPageName (OutputDevice& rDevice) const;
 
     /** Paint the number of the page to the upper left of the page object.
     */
-    void PaintPageNumber (
-        ::sdr::contact::DisplayInfo& rDisplayInfo);
+    void PaintPageNumber (OutputDevice& rDevice) const;
+
+    Color GetBackgroundColor (const OutputDevice& rDevice) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::view
