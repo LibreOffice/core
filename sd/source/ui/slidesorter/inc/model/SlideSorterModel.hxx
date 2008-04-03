@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-06 16:23:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,17 +41,19 @@ class SdDrawDocument;
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
 
-#ifndef _PRESENTATION_HXX
 #include "pres.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
 #include <osl/mutex.hxx>
 
 #include <memory>
 #include <vector>
 #include <functional>
+
+namespace css = ::com::sun::star;
+
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
 namespace sd { namespace slidesorter { namespace controller {
 class PageObjectFactory;
@@ -60,16 +62,16 @@ class PageObjectFactory;
 namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
-class PageEnumeration;
 
+/** The model of the slide sorter gives access to the slides that are to be
+    displayed in the slide sorter view.  Via the SetDocumentSlides() method
+    this set of slides can be modified (but do not call it directly, use
+    SlideSorterController::SetDocumentSlides() instead.)
+*/
 class SlideSorterModel
 {
 public:
-    typedef PageEnumeration Enumeration;
-
-    SlideSorterModel (SdDrawDocument& rDocument,
-        PageKind ePageKind = PK_STANDARD,
-        EditMode eEditMode= EM_PAGE);
+    SlideSorterModel (SlideSorter& rSlideSorter);
 
     virtual ~SlideSorterModel (void);
 
@@ -88,43 +90,52 @@ public:
             to reflect that change.  A repaint is necessary.
     */
     bool SetEditMode (EditMode eEditMode);
+
+    /** Set the edit mode to that currently used by the controller.
+    */
+    bool SetEditModeFromController (void);
     EditMode GetEditMode (void) const;
     PageKind GetPageType (void) const;
 
-    int GetPageCount (void) const;
+    /** Return the number of slides in the document regardless of whether
+        they are visible or not or whether they are hidden or not.
+        The number of slides depends on the set of slides available through
+        the XIndexAccess given to SetDocumentSlides().
+    */
+    sal_Int32 GetPageCount (void) const;
 
     /** Return a page descriptor for the page with the specified index.
         Page descriptors are created on demand.  The page descriptor is
         found (or not found) in constant time.
+        @param nPageIndex
+            The index of the requested slide.  The valid values
+            are 0 to GetPageCount()-1.
+        @param bCreate
+            When <TRUE/> and the requested page descriptor is missing then
+            it is created.  When <FALSE/> then an empty reference is
+            returned for missing descriptors.
         @return
             When the given index is not valid, i.e. lower then zero or
-            larger than or equal to the number of pages as returned by
-            GetPageCount() then NULL is returned. Note that the page count
-            may change between subsequent calls to GetPageCount() and
-            GetPageDescriptor().
+            larger than or equal to the number of pages then an empty
+            reference is returned. Note that the page count may change
+            between calls to GetPageCount() and GetPageDescriptor().
     */
-    SharedPageDescriptor GetPageDescriptor (int nPageIndex) const;
+    SharedPageDescriptor GetPageDescriptor (
+        const sal_Int32 nPageIndex,
+        const bool bCreate = true) const;
 
-    /** Return the page descriptor for the page with the specified index.
-        In contrast to GetPageDescriptor() this method does not create a
-        page descriptor when not already present.  This method exists mainly
-        for debugging so use it only when you know what you are doing.
-    */
-    SharedPageDescriptor GetRawPageDescriptor (int nPageIndex) const;
-
-    /** Return the page descriptor whose page has the given object as UNO
-        wrapper.  This method takes linear time (in the number of pages).
+    /** Return a page descriptor for the given XDrawPage.  Page descriptors
+        are created on demand.  The page descriptor is found (or not found)
+        in (at most) linear time.  Note that all page descriptors in front of
+        the one associated with the given XDrawPage are created when not yet
+        present. When the XDrawPage is not found then all descriptors are
+        created.
         @return
-            Returns NULL when no page descriptor is found with the given UNO
-            wrapper.
+            Returns the index to the requested page descriptor or -1 when
+            there is no such page descriptor.
     */
-    SharedPageDescriptor FindPageDescriptor (
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XDrawPage>& rxPage) const;
-
-    Enumeration GetAllPagesEnumeration (void) const;
-    Enumeration GetSelectedPagesEnumeration (void) const;
-    Enumeration GetVisiblePagesEnumeration (void) const;
+    sal_Int32 GetIndex (
+        const ::com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& rxSlide) const;
 
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
@@ -133,11 +144,6 @@ public:
         time to create.
     */
     void Resync (void);
-
-    /** Resize the descriptor container according to current values of
-        page kind and edit mode.
-    */
-    void AdaptSize (void);
 
     /** Delete all descriptors that currently are in the container.  The size
         of the container, however, is not altered.  Use the AdaptSize
@@ -169,14 +175,39 @@ public:
     */
     ::osl::Mutex& GetMutex (void);
 
+    /** Set the XIndexAccess from which the called SlideSorterModel takes
+        its pages.
+        @param rxSlides
+            The set of slides accessible through this XIndexAccess are not
+            necessarily the same as the ones of the XModel of the
+            XController (although it typically is a subset).
+    */
+    void SetDocumentSlides (const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
+
+    /** Return the set of pages that is currently displayed by the slide sorter.
+    */
+    css::uno::Reference<css::container::XIndexAccess> GetDocumentSlides (void) const;
+
+    /** This method is called when the edit mode has changed.  It calls
+        SetDocumentSlides() with the set of slides or master pages obtained
+        from the model of the XController.
+    */
+    void UpdatePageList (void);
+
 private:
     mutable ::osl::Mutex maMutex;
-    typedef ::std::vector<SharedPageDescriptor> DescriptorContainer;
-    SdDrawDocument& mrDocument;
+    SlideSorter& mrSlideSorter;
+    ::com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> mxSlides;
     PageKind mePageKind;
     EditMode meEditMode;
+    typedef ::std::vector<SharedPageDescriptor> DescriptorContainer;
     mutable DescriptorContainer maPageDescriptors;
     mutable ::std::auto_ptr<controller::PageObjectFactory> mpPageObjectFactory;
+
+    /** Resize the descriptor container according to current values of
+        page kind and edit mode.
+    */
+    void AdaptSize (void);
 
 };
 
