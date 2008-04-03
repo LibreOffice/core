@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:06:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:26:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,11 @@
 namespace sd { namespace slidesorter { namespace controller {
 
 
-PageObjectFactory::PageObjectFactory (const ::boost::shared_ptr<cache::PageCache>& rpCache)
-    : mpPageCache(rpCache)
+PageObjectFactory::PageObjectFactory (
+    const ::boost::shared_ptr<cache::PageCache>& rpCache,
+    const ::boost::shared_ptr<controller::Properties>& rpProperties)
+    : mpPageCache(rpCache),
+      mpProperties(rpProperties)
 {
 }
 
@@ -65,12 +68,12 @@ PageObjectFactory::~PageObjectFactory (void)
 
 view::PageObject* PageObjectFactory::CreatePageObject (
     SdPage* pPage,
-    model::PageDescriptor& rDescriptor) const
+    const model::SharedPageDescriptor& rpDescriptor) const
 {
     return new view::PageObject(
         Rectangle (Point(0,0), pPage->GetSize()),
         pPage,
-        rDescriptor);
+        rpDescriptor);
 }
 
 
@@ -79,11 +82,11 @@ view::PageObject* PageObjectFactory::CreatePageObject (
 ::sdr::contact::ViewContact*
     PageObjectFactory::CreateViewContact (
         view::PageObject* pPageObject,
-        model::PageDescriptor& rDescriptor) const
+        const model::SharedPageDescriptor& rpDescriptor) const
 {
     return new view::PageObjectViewContact (
         *pPageObject,
-        rDescriptor);
+        rpDescriptor);
 }
 
 
@@ -97,7 +100,8 @@ view::PageObject* PageObjectFactory::CreatePageObject (
     return new view::PageObjectViewObjectContact (
         rObjectContact,
         rViewContact,
-        mpPageCache);
+        mpPageCache,
+        mpProperties);
 }
 
 
