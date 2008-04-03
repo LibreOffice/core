@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:58:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,23 +283,21 @@ void OutlineViewShell::Construct(DrawDocShell* )
 
 
 
-::std::auto_ptr<DrawSubController> OutlineViewShell::CreateSubController (void)
+Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController (void)
 {
-    ::std::auto_ptr<DrawSubController> pResult;
+    Reference<drawing::XDrawSubController> xSubController;
 
     if (IsMainViewShell())
     {
-        // Create uno controller for the main view shell.  For the ones
-        // displayed in the non-center panes we may later introduce
-        // sub-controllers.
-        ViewShellBase& rBase (GetViewShellBase());
-        pResult.reset(new SdUnoOutlineView (
-            rBase.GetDrawController(),
-            *this,
-            *GetView()));
+        // Create uno sub controller for the main view shell.
+        xSubController = Reference<drawing::XDrawSubController>(
+            new SdUnoOutlineView (
+                GetViewShellBase().GetDrawController(),
+                *this,
+                *GetView()));
     }
 
-    return pResult;
+    return xSubController;
 }
 
 
