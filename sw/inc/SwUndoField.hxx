@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:55:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ protected:
     SwPosition GetPosition();
 
 public:
-    SwUndoField(const SwPosition & rPos);
+    SwUndoField(const SwPosition & rPos, SwUndoId nId = UNDO_FIELD );
     virtual ~SwUndoField();
 };
 
@@ -64,7 +64,8 @@ class SwUndoFieldFromDoc : public SwUndoField
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHnt, BOOL bUpdate);
+                       SwMsgPoolItem * pHnt, BOOL bUpdate,
+                       SwUndoId nId = UNDO_FIELD );
     virtual ~SwUndoFieldFromDoc();
 
     virtual void Undo(SwUndoIter & rIt);
