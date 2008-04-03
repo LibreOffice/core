@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:41:57 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,8 +234,7 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-    if(mpSlideShow &&
-       rReq.GetSlot() != SID_NAVIGATOR)
+    if(SlideShow::IsRunning( GetViewShellBase() ) && (rReq.GetSlot() != SID_NAVIGATOR))
         return;
 
     DBG_ASSERT( mpDrawView, "sd::DrawViewShell::FuTemporary(), no draw view!" );
