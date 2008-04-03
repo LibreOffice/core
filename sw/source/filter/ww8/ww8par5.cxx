@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:42:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1649,7 +1649,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
             rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
 */
             SwDocInfoField aFld( (SwDocInfoFieldType*)
-                rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty );
+                rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
             rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
             return FLD_OK;
