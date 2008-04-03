@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.179 $
-# Date:        $Date: 2008-03-18 16:09:55 $
+# Version:     $Revision: 1.180 $
+# Date:        $Date: 2008-04-03 13:19:37 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1656,6 +1656,8 @@ ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
+ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
+ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
 ToFile( "ENABLE_REPORTDESIGN","@ENABLE_REPORTDESIGN@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
 ToFile( "JCOMMON_JAR",       "@JCOMMON_JAR@",      "e" );
