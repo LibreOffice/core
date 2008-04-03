@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:17:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,12 @@ namespace {
 class CacheDescriptor
 {
 public:
-    SdDrawDocument* mpDocument;
+    ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
 
-    CacheDescriptor(SdDrawDocument* pDocument, const Size& rPreviewSize)
+    CacheDescriptor(
+        ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
+        const Size& rPreviewSize)
         :mpDocument(pDocument),maPreviewSize(rPreviewSize)
     {}
     /// Test for equality with respect to all members.
@@ -65,7 +67,7 @@ public:
     } };
     /// Hash function that takes all members into account.
     class Hash {public: size_t operator() (const CacheDescriptor& rDescriptor) const {
-        return (size_t)rDescriptor.mpDocument + rDescriptor.maPreviewSize.Width();
+        return (size_t)rDescriptor.mpDocument.get() + rDescriptor.maPreviewSize.Width();
     } };
 };
 
@@ -78,12 +80,12 @@ public:
 class RecentlyUsedCacheDescriptor
 {
 public:
-    SdDrawDocument* mpDocument;
+    ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
     ::boost::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache> mpCache;
 
     RecentlyUsedCacheDescriptor(
-        SdDrawDocument* pDocument,
+        ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize,
         const ::boost::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache>& rpCache)
         :mpDocument(pDocument),maPreviewSize(rPreviewSize),mpCache(rpCache)
@@ -161,7 +163,7 @@ public:
 /** The recently used caches are stored in one queue for each document.
 */
 class PageCacheManager::RecentlyUsedPageCaches
-    : public ::std::map<SdDrawDocument*,RecentlyUsedQueue>
+    : public ::std::map<DocumentKey,RecentlyUsedQueue>
 {
 public:
     RecentlyUsedPageCaches (void) {};
@@ -221,7 +223,7 @@ PageCacheManager::~PageCacheManager (void)
 
 
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
-    SdDrawDocument* pDocument,
+    DocumentKey pDocument,
     const Size& rPreviewSize)
 {
     ::boost::shared_ptr<Cache> pResult;
@@ -249,9 +251,6 @@ PageCacheManager::~PageCacheManager (void)
     if (pResult.get() != NULL)
         mpPageCaches->insert(PageCacheContainer::value_type(aKey, pResult));
 
-    OSL_TRACE("returning cache %x for document %x and size %d %d",
-        pResult.get(), pDocument, rPreviewSize.Width(),rPreviewSize.Height());
-
     return pResult;
 }
 
@@ -260,7 +259,7 @@ PageCacheManager::~PageCacheManager (void)
 
 void PageCacheManager::Recycle (
     const ::boost::shared_ptr<Cache>& rpCache,
-    SdDrawDocument* pDocument,
+    DocumentKey pDocument,
     const Size& rPreviewSize)
 {
     BestFittingPageCaches aCaches;
@@ -358,7 +357,7 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 
 
 void PageCacheManager::InvalidatePreviewBitmap (
-    SdDrawDocument* pDocument,
+    DocumentKey pDocument,
     const SdrPage* pKey)
 {
     if (pDocument!=NULL)
@@ -402,7 +401,7 @@ void PageCacheManager::InvalidateAllCaches (void)
 
 
 ::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
-    SdDrawDocument* pDocument,
+    DocumentKey pDocument,
     const Size& rPreviewSize)
 {
     ::boost::shared_ptr<Cache> pCache;
@@ -428,7 +427,7 @@ void PageCacheManager::InvalidateAllCaches (void)
 
 
 void PageCacheManager::PutRecentlyUsedCache(
-    SdDrawDocument* pDocument,
+    DocumentKey pDocument,
     const Size& rPreviewSize,
     const ::boost::shared_ptr<Cache>& rpCache)
 {
