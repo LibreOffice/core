@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:34:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,11 @@ public:
     */
     bool notifyHyperLinkClicked( rtl::OUString const& hyperLink );
 
+    /** Notification from eventmultiplexer that an animation event has occoured.
+        This will be forewarded to all registered XSlideShowListener
+     */
+    bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode );
+
 private:
     // XSlideShow:
     virtual sal_Bool SAL_CALL nextEffect() throw (uno::RuntimeException);
@@ -385,6 +390,7 @@ private:
 struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
                                              public ViewRepaintHandler,
                                              public HyperlinkHandler,
+                                             public AnimationEventHandler,
                                              private boost::noncopyable
 {
     SlideShowImpl& mrShow;
@@ -424,6 +430,12 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     virtual bool handleHyperlink( ::rtl::OUString const& rLink )
     {
         return mrShow.notifyHyperLinkClicked(rLink);
+    }
+
+    // AnimationEventHandler
+    virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+    {
+        return mrShow.handleAnimationEvent(rNode);
     }
 };
 
@@ -490,6 +502,8 @@ SlideShowImpl::SlideShowImpl(
     maEventMultiplexer.addSlideAnimationsEndHandler( mpListener );
     maEventMultiplexer.addViewRepaintHandler( mpListener );
     maEventMultiplexer.addHyperlinkHandler( mpListener, 0.0 );
+    maEventMultiplexer.addAnimationStartHandler( mpListener );
+    maEventMultiplexer.addAnimationEndHandler( mpListener );
 }
 
 // we are about to be disposed (someone call dispose() on us)
@@ -521,6 +535,9 @@ void SlideShowImpl::disposing()
         maEventMultiplexer.removeSlideAnimationsEndHandler(mpListener);
         maEventMultiplexer.removeViewRepaintHandler(mpListener);
         maEventMultiplexer.removeHyperlinkHandler(mpListener);
+        maEventMultiplexer.removeAnimationStartHandler( mpListener );
+        maEventMultiplexer.removeAnimationEndHandler( mpListener );
+
         mpListener.reset();
     }
 
@@ -950,6 +967,10 @@ void SlideShowImpl::displaySlide(
             }
         }
     } // finally
+
+    maEventMultiplexer.notifySlideTransitionStarted();
+    maListenerContainer.forEach<presentation::XSlideShowListener>(
+        boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
 }
 
 sal_Bool SlideShowImpl::nextEffect() throw (uno::RuntimeException)
@@ -1723,6 +1744,9 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             mpPrefetchSlide->getCurrentSlideBitmap( *maViewContainer.begin() );
         }
     } // finally
+
+    maListenerContainer.forEach<presentation::XSlideShowListener>(
+        boost::mem_fn( &presentation::XSlideShowListener::slideAnimationsEnded ) );
 }
 
 void SlideShowImpl::notifySlideEnded()
@@ -1775,6 +1799,38 @@ bool SlideShowImpl::notifyHyperLinkClicked( rtl::OUString const& hyperLink )
         boost::bind( &presentation::XSlideShowListener::hyperLinkClicked,
                      _1,
                      boost::cref(hyperLink) ));
+    return true;
+}
+
+/** Notification from eventmultiplexer that an animation event has occoured.
+    This will be forewarded to all registered XSlideShoeListener
+ */
+bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
+{
+    osl::MutexGuard const guard( m_aMutex );
+
+    uno::Reference<animations::XAnimationNode> xNode( rNode->getXAnimationNode() );
+
+    switch( rNode->getState() )
+    {
+    case AnimationNode::ACTIVE:
+        maListenerContainer.forEach<presentation::XSlideShowListener>(
+            boost::bind( &animations::XAnimationListener::beginEvent,
+                         _1,
+                         boost::cref(xNode) ));
+        break;
+
+    case AnimationNode::FROZEN:
+    case AnimationNode::ENDED:
+        maListenerContainer.forEach<presentation::XSlideShowListener>(
+            boost::bind( &animations::XAnimationListener::endEvent,
+                         _1,
+                         boost::cref(xNode) ));
+        break;
+    default:
+        break;
+    }
+
     return true;
 }
 
