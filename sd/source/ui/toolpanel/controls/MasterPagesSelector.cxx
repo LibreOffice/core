@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:22:40 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,18 +380,19 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         // include pages that do not already have the given master page
         // assigned.
         String sFullLayoutName (pMasterPage->GetLayoutName());
-        ::std::vector<SdPage*> aPageList;
+        ::sd::slidesorter::SharedPageSelection pPageList (
+            new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
         for (USHORT nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         {
             SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
             if (pPage != NULL
                 && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
             {
-                aPageList.push_back (pPage);
+                pPageList->push_back (pPage);
             }
         }
 
-        AssignMasterPageToPageList(pMasterPage, aPageList);
+        AssignMasterPageToPageList(pMasterPage, pPageList);
     }
     while (false);
 }
@@ -419,26 +420,15 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
         if (pSlideSorter == NULL)
             break;
 
-        PageSelector& rSelector (
-            pSlideSorter->GetSlideSorterController().GetPageSelector());
-        auto_ptr<PageSelector::PageSelection> pSelection (
-            rSelector.GetPageSelection());
-        {
-            SlideSorterController::ModelChangeLock aLock (
-                pSlideSorter->GetSlideSorterController());
+        // Get a list of selected pages.
+        ::sd::slidesorter::SharedPageSelection pPageSelection = pSlideSorter->GetPageSelection();
+        if (pPageSelection->empty())
+            break;
 
-            // Get a list of selected pages.
-            vector<SdPage*> aSelectedPages;
-            pSlideSorter->GetSelectedPages(aSelectedPages);
-            if (aSelectedPages.size() == 0)
-                break;
-
-            AssignMasterPageToPageList(pMasterPage, aSelectedPages);
-        }
+        AssignMasterPageToPageList(pMasterPage, pPageSelection);
 
         // Restore the previous selection.
-        rSelector.SetPageSelection(*pSelection.get());
-
+        pSlideSorter->SetPageSelection(pPageSelection);
     }
     while (false);
 }
@@ -448,7 +438,7 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
 
 void MasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
-    const ::std::vector<SdPage*>& rPageList)
+    const ::sd::slidesorter::SharedPageSelection& rPageList)
 {
     DocumentHelper::AssignMasterPageToPageList(mrDocument, pMasterPage, rPageList);
 }
