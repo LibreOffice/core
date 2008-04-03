@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 13:12:51 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:51:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,8 @@ SLOFILES = \
         $(SLO)$/fuconuno.obj 	\
         $(SLO)$/fuconbez.obj 	\
         $(SLO)$/fuediglu.obj 	\
-        $(SLO)$/fuslid.obj		\
-        $(SLO)$/fuslsel.obj		\
         $(SLO)$/fusldlg.obj 	\
         $(SLO)$/fuscale.obj		\
-        $(SLO)$/fuslhide.obj 	\
         $(SLO)$/futransf.obj 	\
         $(SLO)$/futext.obj		\
         $(SLO)$/futext2.obj		\
@@ -140,11 +137,8 @@ LIB1OBJFILES= \
         $(SLO)$/fuconuno.obj 	\
         $(SLO)$/fuconbez.obj 	\
         $(SLO)$/fuediglu.obj 	\
-        $(SLO)$/fuslid.obj		\
-        $(SLO)$/fuslsel.obj		\
         $(SLO)$/fusldlg.obj 	\
         $(SLO)$/fuscale.obj		\
-        $(SLO)$/fuslhide.obj 	\
         $(SLO)$/futransf.obj 	\
         $(SLO)$/futext.obj		\
         $(SLO)$/futext2.obj		\
