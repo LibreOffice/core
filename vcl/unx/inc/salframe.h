@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:12:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     void            passOnSaveYourSelf();
 
     void            createNewWindow( XLIB_Window aParent, int nScreen = -1 );
+    void            updateScreenNumber();
 
     void            setXEmbedInfo();
     void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
@@ -222,6 +223,8 @@ public:
                                       void *pExtTextEvent);
 #endif
     bool                    IsOverrideRedirect() const;
+    bool                    IsChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_PLUG|SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
+    bool                    IsSysChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
     void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
@@ -276,6 +279,8 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
+
+    virtual void                SetScreenNumber( unsigned int );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
