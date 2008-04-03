@@ -1,5 +1,6 @@
-dx	sdext	:	offuh comphelper unotools readlicense_oo NULL
+dx	sdext	:	offuh comphelper unotools readlicense_oo slideshow NULL
 dx	sdext									usr1	-	all	sdext_mkout NULL
 dx	sdext\prj								get		-	all	sdext_prj NULL
 dx	sdext\source\minimizer					nmake	-	all sdext_minimizer NULL
-dx	sdext\util								nmake	-	all	sdext_util sdext_minimizer NULL
+dx	sdext\source\presenter					nmake	-	all sdext_presenter NULL
+dx	sdext\util								nmake	-	all	sdext_util sdext_minimizer sdext_presenter NULL
