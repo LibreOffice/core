@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:48:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1006,6 +1006,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
         if( ( it = m_aPrinters.find( m_aDefaultPrinter ) ) != m_aPrinters.end() )
             it->second.m_bModified = true;
         m_aDefaultPrinter = rPrinterName;
+        writePrinterConfig();
     }
     return bSuccess;
 }
