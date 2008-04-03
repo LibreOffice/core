@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:40:00 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+
+#include "slideshow.hxx"
 
 using namespace ::com::sun::star;
 
@@ -851,8 +853,8 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                        pInfo->meClickAction == presentation::ClickAction_MACRO     ||
                        pInfo->meClickAction == presentation::ClickAction_SOUND))
                                                                     ||
-                      (mpView->ISA(DrawView) &&
-                       static_cast<DrawView*>(mpView)->GetSlideShow()         &&
+                    (mpView->ISA(DrawView) &&
+                        SlideShow::IsRunning( mpViewShell->GetViewShellBase() )   &&
                          (pInfo->meClickAction == presentation::ClickAction_VANISH            ||
                           pInfo->meClickAction == presentation::ClickAction_INVISIBLE         ||
                           pInfo->meClickAction == presentation::ClickAction_STOPPRESENTATION ||
