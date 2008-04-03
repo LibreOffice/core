@@ -6,7 +6,7 @@ ba	dbaccess\source\core\api				nmake	-	all	ba_capi ba_inc NULL
 ba	dbaccess\source\core\dataaccess			nmake	-	all	ba_cdaccess ba_capi ba_inc NULL
 ba	dbaccess\source\core\misc				nmake	-	all	ba_cmisc ba_cdaccess ba_inc NULL
 ba	dbaccess\source\core\resource			nmake	-	all	ba_cres ba_cmisc ba_inc NULL
-ba	dbaccess\source\filter\xml				nmake	-	all	ba_ffilter ba_shared ba_inc NULL
+ba	dbaccess\source\filter\xml				nmake	-	all	ba_ffilter ba_shared ba_util ba_inc NULL
 ba	dbaccess\source\filter\migration		nmake	-	all	ba_fmigration ba_shared ba_inc NULL
 ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres ba_inc NULL
 ba  dbaccess\source\sdbtools\connection     nmake   -   all ba_conntools ba_inc NULL
