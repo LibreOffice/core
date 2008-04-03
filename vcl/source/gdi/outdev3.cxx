@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.238 $
+ *  $Revision: 1.239 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-31 13:24:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3723,10 +3723,10 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 {
-    long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-    Point aBase = rSalLayout.GetDrawPosition();
-    long nX = aBase.X();
-    long nY = aBase.Y();
+    const long nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
+    const Point aBase = rSalLayout.DrawBase();
+    const long nX = aBase.X();
+    const long nY = aBase.Y();
 
     if ( mbLineColor || mbInitLineColor )
     {
