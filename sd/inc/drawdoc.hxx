@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:21:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,10 @@ namespace com
             {
                 class XStream;
             }
+            namespace presentation
+            {
+                class XPresentation2;
+            }
         }
     }
 }
@@ -191,8 +195,7 @@ namespace sd
 // - SdDrawDocument -
 // ------------------
 
-class SdDrawDocument
-    : public FmFormModel
+class SdDrawDocument : public FmFormModel
 {
 private:
     ::sd::Outliner*     mpOutliner;         // local outliner for outline mode
@@ -211,6 +214,9 @@ private:
     ::sd::DrawDocShellRef   mxBookmarkDocShRef;
 
     sd::PresentationSettings maPresentationSettings;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 > mxPresentation;
+
     BOOL                mbNewOrLoadCompleted;
 
     BOOL                mbOnlineSpell;
@@ -393,6 +399,8 @@ public:
 
     const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
 
        void                SetSummationOfParagraphs( BOOL bOn = TRUE ) { mbSummationOfParagraphs = bOn; }
     const BOOL          IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
