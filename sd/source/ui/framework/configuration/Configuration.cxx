@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Configuration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:44:40 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ using ::rtl::OUString;
 #undef VERBOSE
 
 namespace {
+/** Use the XResourceId::compareTo() method to implement a compare operator
+    for STL containers.
+*/
 class XResourceIdLess
     :   public ::std::binary_function <Reference<XResourceId>, Reference<XResourceId>, bool>
 {
@@ -76,6 +79,37 @@ public:
     ResourceContainer (void) {}
 };
 
+
+
+
+//----- Service ---------------------------------------------------------------
+
+Reference<XInterface> SAL_CALL Configuration_createInstance (
+    const Reference<XComponentContext>& rxContext)
+{
+    (void)rxContext;
+    return Reference<XInterface>(static_cast<XWeak*>(new Configuration(NULL,false)));
+}
+
+
+
+
+OUString Configuration_getImplementationName (void) throw(RuntimeException)
+{
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Draw.framework.configuration.Configuration"));
+}
+
+
+
+
+Sequence<rtl::OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
+    throw (RuntimeException)
+{
+    static const OUString sServiceName(OUString::createFromAscii(
+        "com.sun.star.drawing.framework.Configuration"));
+    return Sequence<rtl::OUString>(&sServiceName, 1);
+}
 
 
 
@@ -351,70 +385,44 @@ bool AreConfigurationsEquivalent (
     const Reference<XConfiguration>& rxConfiguration1,
     const Reference<XConfiguration>& rxConfiguration2)
 {
+    if (rxConfiguration1.is() != rxConfiguration2.is())
+        return false;
+    if ( ! rxConfiguration1.is() && ! rxConfiguration2.is())
+        return true;
+
     // Get the lists of resources from the two given configurations.
-    Sequence<Reference<XResourceId> > aResources1;
-    if (rxConfiguration1.is())
-        aResources1 = rxConfiguration1->getResources(
-            NULL, OUString(), AnchorBindingMode_INDIRECT);
-    Sequence<Reference<XResourceId> > aResources2;
-    if (rxConfiguration2.is())
-        aResources2 = rxConfiguration2->getResources(
-            NULL, OUString(), AnchorBindingMode_INDIRECT);
+    const Sequence<Reference<XResourceId> > aResources1(
+        rxConfiguration1->getResources(
+            NULL, OUString(), AnchorBindingMode_INDIRECT));
+    const Sequence<Reference<XResourceId> > aResources2(
+        rxConfiguration2->getResources(
+            NULL, OUString(), AnchorBindingMode_INDIRECT));
 
     // When the number of resources differ then the configurations can not
     // be equivalent.
-    sal_Int32 nCount1 (aResources1.getLength());
-    sal_Int32 nCount2 (aResources2.getLength());
-    if (nCount1 != nCount2)
+    const sal_Int32 nCount (aResources1.getLength());
+    const sal_Int32 nCount2 (aResources2.getLength());
+    if (nCount != nCount2)
         return false;
 
-    // Compare the lists.
-    // This is done by nested iteration over both lists.  The result is an
-    // O(n^2) algorithm.  Sorting the lists first and comparing then would
-    // be something like O(n*log(n)).  But, at the moment, the lists are
-    // expected to be comparatively small (around 10 elements) and the
-    // overhead in sorting the lists and the increased complexity of the
-    // implementation do not support that approach.
-
-    // Make a local copy of the second resource list so that elements can be
-    // removed from that list.  This prevents elements from it to be
-    // compared with elements from the first list even when their match has
-    // already been found.
-    ::std::list<Reference<XResourceId> > aResourceList2;
-    for (sal_Int32 nIndex2=0; nIndex2<nCount2; ++nIndex2)
-        aResourceList2.push_back(aResources2[nIndex2]);
-
-
-    for (sal_Int32 nIndex1=0; nIndex1<nCount1; ++nIndex1)
+    // Comparison of the two lists of resource ids relies on their
+    // ordering.
+    for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
     {
-        Reference<XResourceId> xResource1 (aResources1[nIndex1]);
-        ::std::list<Reference<XResourceId> >::iterator iResource2;
-        bool bFound (false);
-        for (iResource2=aResourceList2.begin(); iResource2!=aResourceList2.end(); ++iResource2)
+        const Reference<XResourceId> xResource1 (aResources1[nIndex]);
+        const Reference<XResourceId> xResource2 (aResources2[nIndex]);
+        if (xResource1.is() && xResource2.is())
         {
-            if (xResource1.is())
-            {
-                if (iResource2->is() && xResource1->compareTo(*iResource2)==0)
-                    bFound = true;
-            }
-            else if ( ! iResource2->is())
-            {
-                bFound = true;
-            }
-
-            // We have found a match between xResource and iResource2.
-            // Remove the later one from aResourceList2 so that it will not
-            // be compared to elements from aResource1 anymore.
-            if (bFound)
-            {
-                aResourceList2.erase(iResource2);
-                break;
-            }
+            if (xResource1->compareTo(xResource2) != 0)
+                return false;
         }
-        if ( ! bFound)
+        else if (xResource1.is() != xResource2.is())
+        {
             return false;
+        }
     }
-    return aResourceList2.empty();
+
+    return true;
 }
 
 } } // end of namespace sd::framework
