@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:54:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SlideSorterModule::SlideSorterModule (
 {
     if (mxConfigurationController.is())
     {
-        UpdateViewTabBar();
+        UpdateViewTabBar(NULL);
 
         AddActiveMainView(FrameworkHelper::msImpressViewURL);
         AddActiveMainView(FrameworkHelper::msOutlineViewURL);
@@ -109,7 +109,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         {
             // Update the view tab bar because the view tab bar has just
             // become active.
-            UpdateViewTabBar();
+            UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
         }
         else if (rEvent.ResourceId->getResourceTypePrefix().equals(
             FrameworkHelper::msViewURLPrefix)
@@ -119,7 +119,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         {
             // Update the view tab bar because the view in the center pane
             // has changed.
-            UpdateViewTabBar();
+            UpdateViewTabBar(NULL);
         }
     }
     else
@@ -131,32 +131,35 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
 
 
 
-void SlideSorterModule::UpdateViewTabBar (void)
+void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 {
-    Reference<XToolBarController> xToolBarController;
-    if (mxControllerManager.is())
-        xToolBarController = mxControllerManager->getToolBarController();
-    if (xToolBarController.is())
+    if ( ! mxControllerManager.is())
+        return;
+
+    Reference<XTabBar> xBar (rxTabBar);
+    if ( ! xBar.is())
     {
-        Reference<XTabBar> xBar (
-            xToolBarController->getToolBar(mxViewTabBarId),
-            UNO_QUERY);
-        if (xBar.is())
-        {
-            TabBarButton aButtonA;
-            aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
-                FrameworkHelper::msSlideSorterURL,
-                FrameworkHelper::msCenterPaneURL);
-            aButtonA.ButtonLabel = String(SdResId(STR_SLIDE_MODE));
+        Reference<XConfigurationController> xCC (
+            mxControllerManager->getConfigurationController());
+        if (xCC.is())
+            xBar = Reference<XTabBar>(xCC->getResource(mxViewTabBarId), UNO_QUERY);
+    }
 
-            TabBarButton aButtonB;
-            aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
-                FrameworkHelper::msHandoutViewURL,
-                FrameworkHelper::msCenterPaneURL);
+    if (xBar.is())
+    {
+        TabBarButton aButtonA;
+        aButtonA.ResourceId = FrameworkHelper::CreateResourceId(
+            FrameworkHelper::msSlideSorterURL,
+            FrameworkHelper::msCenterPaneURL);
+        aButtonA.ButtonLabel = String(SdResId(STR_SLIDE_MODE));
 
-            if ( ! xBar->hasTabBarButton(aButtonA))
-                xBar->addTabBarButtonAfter(aButtonA, aButtonB);
-        }
+        TabBarButton aButtonB;
+        aButtonB.ResourceId = FrameworkHelper::CreateResourceId(
+            FrameworkHelper::msHandoutViewURL,
+            FrameworkHelper::msCenterPaneURL);
+
+        if ( ! xBar->hasTabBarButton(aButtonA))
+            xBar->addTabBarButtonAfter(aButtonA, aButtonB);
     }
 }
 
