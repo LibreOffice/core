@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:20:54 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:24:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,11 @@ UNOUCROUT = $(OUT)$/inc
 
 CPPUMAKERFLAGS += -C -X$(SOLARBINDIR)$/types.rdb
 
-UNOTYPES= \
-    com.sun.star.presentation.XSlideShow \
-    com.sun.star.presentation.XSlideShowView \
-    com.sun.star.presentation.XSlideShowListener \
-    com.sun.star.presentation.XShapeEventListener
+#UNOTYPES= \
+#	com.sun.star.presentation.XSlideShow \
+#	com.sun.star.presentation.XSlideShowView \
+#	com.sun.star.presentation.XSlideShowListener \
+#	com.sun.star.presentation.XShapeEventListener
 
 # --- Targets ------------------------------------------------------
 
