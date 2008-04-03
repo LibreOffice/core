@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoSlideView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:26:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,14 @@
 #ifndef SD_UNO_SLIDE_VIEW_HXX
 #define SD_UNO_SLIDE_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
 #include "DrawSubController.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
+
+namespace css = ::com::sun::star;
 
 namespace sd { namespace slidesorter {
-class SlideSorterViewShell;
+class SlideSorter;
 } }
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -58,20 +57,22 @@ class SlideViewShell;
 class View;
 
 
-/** This class implements the SlideSorterViewShell specific part of the
+/** This class implements the SlideSorter specific part of the
     controller.
  */
 class SdUnoSlideView
-    : public DrawSubController
+    : private cppu::BaseMutex,
+      public DrawSubControllerInterfaceBase
 {
 public:
     SdUnoSlideView (
         DrawController& rController,
-        slidesorter::SlideSorterViewShell& rViewShell,
+        slidesorter::SlideSorter& rSlideSorter,
         View& rView) throw();
     virtual ~SdUnoSlideView (void) throw();
 
     // XSelectionSupplier
+
     virtual sal_Bool SAL_CALL select (const ::com::sun::star::uno::Any& aSelection)
         throw(::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::uno::RuntimeException);
@@ -79,8 +80,17 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection (void)
         throw(::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL addSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
 
     // XDrawView
+
     virtual void SAL_CALL setCurrentPage (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage)
         throw(::com::sun::star::uno::RuntimeException);
@@ -89,11 +99,29 @@ public:
         getCurrentPage (void)
         throw(::com::sun::star::uno::RuntimeException);
 
+
+    // XFastPropertySet
+
+    virtual void SAL_CALL setFastPropertyValue (
+        sal_Int32 nHandle,
+        const css::uno::Any& rValue)
+        throw(css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL getFastPropertyValue (
+        sal_Int32 nHandle)
+        throw(css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
+
 private:
     DrawController& mrController;
-    slidesorter::SlideSorterViewShell& mrSlideSorterViewShell;
+    slidesorter::SlideSorter& mrSlideSorter;
     sd::View& mrView;
-
+    /*
     virtual void FillPropertyTable (
         ::std::vector< ::com::sun::star::beans::Property>& rProperties);
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -109,7 +137,7 @@ private:
     virtual void SAL_CALL getFastPropertyValue(
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
-
+    */
 };
 
 } // end of namespace sd
