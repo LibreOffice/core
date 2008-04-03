@@ -1,0 +1,442 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: PresenterCanvas.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:06:31 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef SD_PRESENTER_PRESENTER_CANVAS_HXX
+#define SD_PRESENTER_PRESENTER_CANVAS_HXX
+
+#include "CanvasUpdateRequester.hxx"
+#include <basegfx/range/b2drectangle.hxx>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase4.hxx>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+
+namespace css = ::com::sun::star;
+
+namespace sd { namespace presenter {
+
+namespace {
+    typedef ::cppu::WeakComponentImplHelper4 <
+        css::rendering::XSpriteCanvas,
+        css::rendering::XBitmap,
+        css::awt::XWindowListener,
+        css::lang::XInitialization
+    > PresenterCanvasInterfaceBase;
+}
+
+/** Wrapper around a shared canvas that forwards most of its methods to the
+    shared canvas.  Most notable differences are:
+    1. The transformation  of the ViewState of forwarded calls is modified by adding
+    an offset.
+    2. The clip polygon of the ViewState of forwarded calls is intersected
+    with a clip rectangle that can be set via SetClip().
+    3. Calls to updateScreen() are collected.  One call to the updateScreen()
+    method of the shared canvas is made asynchronously.
+
+    The canvas can use different canvases for sharing and for sprite
+    construction.  This allows the shared canvas to be a canvas of sprite itself.
+*/
+class PresenterCanvas
+    : private ::boost::noncopyable,
+      private ::cppu::BaseMutex,
+      public PresenterCanvasInterfaceBase
+{
+public:
+    /** This constructor is used when a PresenterCanvas object is created as
+        a service.
+    */
+    PresenterCanvas (void);
+
+    /** This constructor is used when a PresenterCanvas object is created
+        directly, typically by the PresenterCanvasFactory.
+        @param rxUpdateCanvas
+            This canvas is used to call updateScreen() at and to create
+            sprites.  In the typical case this canvas is identical to the
+            rxSharedCanvas argument.
+        @param rxUpdateWindow
+            The window that belongs to the canvas given by the
+            rxUpdateCanvas argument.
+        @param rxSharedCanvas
+            The canvas that is wrapped by the new instance of this class.
+            Typically this is a regular XSpriteCanvas and then is identical
+            to the one given by the rxUpdateCanvas argument.  It may be the
+            canvas of a sprite which does not support the XSpriteCanvas
+            interface.  In that case the canvas that created the sprite can
+            be given as rxUpdateCanvas argument to allow to create further
+            sprites and to have proper calls to updateScreen().
+        @param rxSharedWindow
+            The window that belongs to the canvas given by the
+            rxSharedCanvas argument.
+        @param rxWindow
+            The window that is represented by the new PresenterCanvas
+            object.  It is expected to be a direct decendent of
+            rxSharedWindow.  Its position inside rxSharedWindow defines the
+            offset of the canvas implemented by the new PresenterCanvas
+            object and rxSharedCanvas.
+    */
+    PresenterCanvas (
+        const css::uno::Reference<css::rendering::XSpriteCanvas>& rxUpdateCanvas,
+        const css::uno::Reference<css::awt::XWindow>& rxUpdateWindow,
+        const css::uno::Reference<css::rendering::XCanvas>& rxSharedCanvas,
+        const css::uno::Reference<css::awt::XWindow>& rxSharedWindow,
+        const css::uno::Reference<css::awt::XWindow>& rxWindow);
+    virtual ~PresenterCanvas (void);
+
+    virtual void SAL_CALL disposing (void)
+        throw (css::uno::RuntimeException);
+
+    css::awt::Point GetOffset (const css::uno::Reference<css::awt::XWindow>& rxBaseWindow);
+
+    /** Merge the given view state with the view state that translates the
+        (virtual) child canvas to the shared canvas.
+    */
+    css::rendering::ViewState MergeViewState (
+        const css::rendering::ViewState& rViewState,
+        const css::awt::Point& raOffset);
+
+    css::uno::Reference<css::rendering::XCanvas> GetSharedCanvas (void) const;
+
+    /** This method is typically called by CanvasPane objects to set the
+        repaint rectangle of a windowPaint() call as clip rectangle.  When
+        no or an empty rectangle is given then the window bounds are used
+        instead.
+        @param rClipRectangle
+            A valid rectangle is used to clip the view state clip polygon.
+            When an empty rectangle is given then the view state clip
+            polygons are clipped against the window bounds.
+    */
+    void SetClip (const css::awt::Rectangle& rClipRectangle);
+
+
+    // XInitialization
+
+    virtual void SAL_CALL initialize (
+        const css::uno::Sequence<css::uno::Any>& rArguments)
+        throw(css::uno::Exception, css::uno::RuntimeException);
+
+
+    // XCanvas
+
+    virtual void SAL_CALL clear (void)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL drawPoint (
+        const css::geometry::RealPoint2D& aPoint,
+        const css::rendering::ViewState& aViewState,
+        const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual void SAL_CALL drawLine (
+        const css::geometry::RealPoint2D& aStartPoint,
+        const css::geometry::RealPoint2D& aEndPoint,
+        const css::rendering::ViewState& aViewState,
+        const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual void SAL_CALL drawBezier (
+        const css::geometry::RealBezierSegment2D& aBezierSegment,
+        const css::geometry::RealPoint2D& aEndPoint,
+        const css::rendering::ViewState& aViewState,
+        const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL drawPolyPolygon (
+        const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+        const css::rendering::ViewState& aViewState,
+        const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL strokePolyPolygon (
+        const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+        const css::rendering::ViewState& aViewState,
+        const css::rendering::RenderState& aRenderState,
+        const css::rendering::StrokeAttributes& aStrokeAttributes)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        strokeTexturedPolyPolygon (
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            const css::uno::Sequence< css::rendering::Texture >& aTextures,
+            const css::rendering::StrokeAttributes& aStrokeAttributes)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        strokeTextureMappedPolyPolygon(
+            const css::uno::Reference<css::rendering::XPolyPolygon2D >& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            const css::uno::Sequence<css::rendering::Texture>& aTextures,
+            const css::uno::Reference<css::geometry::XMapping2D>& xMapping,
+            const css::rendering::StrokeAttributes& aStrokeAttributes)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XPolyPolygon2D> SAL_CALL
+        queryStrokeShapes(
+            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            const css::rendering::StrokeAttributes& aStrokeAttributes)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        fillPolyPolygon(
+            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        fillTexturedPolyPolygon(
+            const css::uno::Reference<css::rendering::XPolyPolygon2D>& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            const css::uno::Sequence<css::rendering::Texture>& xTextures)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        fillTextureMappedPolyPolygon(
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            const css::uno::Sequence< css::rendering::Texture >& xTextures,
+            const css::uno::Reference< css::geometry::XMapping2D >& xMapping)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCanvasFont> SAL_CALL
+        createFont(
+            const css::rendering::FontRequest& aFontRequest,
+            const css::uno::Sequence< css::beans::PropertyValue >& aExtraFontProperties,
+            const css::geometry::Matrix2D& aFontMatrix)
+        throw (css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Sequence<css::rendering::FontInfo> SAL_CALL
+        queryAvailableFonts(
+            const css::rendering::FontInfo& aFilter,
+            const css::uno::Sequence< css::beans::PropertyValue >& aFontProperties)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        drawText(
+            const css::rendering::StringContext& aText,
+            const css::uno::Reference< css::rendering::XCanvasFont >& xFont,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState,
+            ::sal_Int8 nTextDirection)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        drawTextLayout(
+            const css::uno::Reference< css::rendering::XTextLayout >& xLayoutetText,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        drawBitmap(
+            const css::uno::Reference< css::rendering::XBitmap >& xBitmap,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XCachedPrimitive> SAL_CALL
+        drawBitmapModulated(
+            const css::uno::Reference< css::rendering::XBitmap>& xBitmap,
+            const css::rendering::ViewState& aViewState,
+            const css::rendering::RenderState& aRenderState)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
+        getDevice (void)
+        throw (css::uno::RuntimeException);
+
+
+    // XBitmapCanvas
+
+    void SAL_CALL copyRect(
+        const css::uno::Reference< css::rendering::XBitmapCanvas >& sourceCanvas,
+        const css::geometry::RealRectangle2D& sourceRect,
+        const css::rendering::ViewState& sourceViewState,
+        const css::rendering::RenderState& sourceRenderState,
+        const css::geometry::RealRectangle2D& destRect,
+        const css::rendering::ViewState& destViewState,
+        const css::rendering::RenderState& destRenderState)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+
+    // XSpriteCanvas
+
+    css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
+        createSpriteFromAnimation (
+            const css::uno::Reference< css::rendering::XAnimation >& animation)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL
+        createSpriteFromBitmaps (
+            const css::uno::Sequence<
+                css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
+            ::sal_Int8 interpolationMode)
+        throw (css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException,
+            css::uno::RuntimeException);
+
+    css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL
+        createCustomSprite (
+            const css::geometry::RealSize2D& spriteSize)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    css::uno::Reference< css::rendering::XSprite > SAL_CALL
+        createClonedSprite (
+            const css::uno::Reference< css::rendering::XSprite >& original)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    ::sal_Bool SAL_CALL updateScreen (::sal_Bool bUpdateAll)
+        throw (css::uno::RuntimeException);
+
+
+    // XEventListener
+
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+
+    // XWindowListener
+
+    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+
+    // XBitmap
+
+    virtual css::geometry::IntegerSize2D SAL_CALL getSize (void)
+        throw (css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasAlpha (void)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XBitmapCanvas> SAL_CALL queryBitmapCanvas (void)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL getScaledBitmap(
+        const css::geometry::RealSize2D& rNewSize,
+        sal_Bool bFast)
+        throw (css::uno::RuntimeException,
+            css::lang::IllegalArgumentException,
+            css::rendering::VolatileContentDestroyedException);
+
+private:
+    css::uno::Reference<css::rendering::XSpriteCanvas> mxUpdateCanvas;
+    css::uno::Reference<css::awt::XWindow> mxUpdateWindow;
+    css::uno::Reference<css::rendering::XCanvas> mxSharedCanvas;
+    css::uno::Reference<css::awt::XWindow> mxSharedWindow;
+
+    /** The window for which a canvas is emulated.
+    */
+    css::uno::Reference<css::awt::XWindow> mxWindow;
+
+    /** Offset of the emulated canvas with respect to the shared canvas.
+    */
+    css::awt::Point maOffset;
+
+    /** The UpdateRequester is used by updateScreen() to schedule
+        updateScreen() calls at the shared canvas.
+    */
+    ::boost::shared_ptr<CanvasUpdateRequester> mpUpdateRequester;
+
+    /** The clip rectangle as given to SetClip().
+    */
+    css::awt::Rectangle maClipRectangle;
+
+    /** When this flag is true (it is set to true after every call to
+        updateScreen()) then the next call to MergeViewState updates the
+        maOffset member.  A possible optimization would set this flag only
+        to true when one of the windows between mxWindow and mxSharedWindow
+        changes its position.
+    */
+    bool mbOffsetUpdatePending;
+
+
+    ::basegfx::B2DRectangle GetClipRectangle (
+        const css::geometry::AffineMatrix2D& rViewTransform,
+        const css::awt::Point& rOffset);
+
+    css::rendering::ViewState MergeViewState (const css::rendering::ViewState& rViewState);
+
+    /** This method throws a DisposedException when the object has already been
+        disposed.
+    */
+    void ThrowIfDisposed (void)
+        throw (css::lang::DisposedException);
+};
+
+
+
+} } // end of namespace ::sd::presenter
+
+#endif
