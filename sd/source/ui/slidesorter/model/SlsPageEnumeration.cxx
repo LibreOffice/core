@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageEnumeration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:37:15 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
 #include "model/SlideSorterModel.hxx"
@@ -43,12 +42,14 @@ using namespace ::sd::slidesorter;
 using namespace ::sd::slidesorter::model;
 
 namespace {
-template <class Predicate>
+
 class PageEnumerationImpl
     : public Enumeration<SharedPageDescriptor>
 {
 public:
-    inline PageEnumerationImpl (const SlideSorterModel& rModel);
+    inline PageEnumerationImpl (
+        const SlideSorterModel& rModel,
+        const PageEnumeration::PagePredicate& rPredicate);
     virtual ~PageEnumerationImpl (void);
     /** Create a copy of the called enumeration object.
     */
@@ -60,13 +61,17 @@ public:
 
 private:
     const SlideSorterModel& mrModel;
+    const PageEnumeration::PagePredicate maPredicate;
     int mnIndex;
 
     /** This constructor sets the internal page index to the given value.
         It does not call AdvanceToNextValidElement() to skip elements that
         do not fullfill Predicate.
     */
-    inline PageEnumerationImpl (const SlideSorterModel& rModel, int nIndex);
+    inline PageEnumerationImpl (
+        const SlideSorterModel& rModel,
+        const PageEnumeration::PagePredicate& rPredicate,
+        int nIndex);
 
     /** Skip all elements that do not fullfill Predicate starting with the
         one pointed to by mnIndex.
@@ -79,34 +84,23 @@ private:
     PageEnumerationImpl& operator= (const PageEnumerationImpl&);
 };
 
-
-class AllPagesPredicate
-{
-public:
-    inline bool operator() (const PageDescriptor& rDescriptor);
-};
-
-
-class SelectedPagesPredicate
-{
-public:
-    inline bool operator() (const PageDescriptor& rDescriptor);
-};
-
-
-class VisiblePagesPredicate
-{
-public:
-    inline bool operator() (const PageDescriptor& rDescriptor);
-};
-
-
 } // end of anonymouse namespace
 
 
 
 
 namespace sd { namespace slidesorter { namespace model {
+
+
+PageEnumeration PageEnumeration::Create (
+    const SlideSorterModel& rModel,
+    const PagePredicate& rPredicate)
+{
+    return PageEnumeration(::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
+        new PageEnumerationImpl(rModel, rPredicate)));
+}
+
+
 
 
 PageEnumeration::PageEnumeration (
@@ -135,49 +129,28 @@ PageEnumeration::PageEnumeration (
 
 
 
+
 PageEnumeration::PageEnumeration (const PageEnumeration& rEnumeration )
 : sd::slidesorter::model::Enumeration<sd::slidesorter::model::SharedPageDescriptor>()
 {
     mpImpl = rEnumeration.mpImpl->Clone();
 }
 
-PageEnumeration::~PageEnumeration()
+
+
+
+PageEnumeration::~PageEnumeration (void)
 {
 }
+
+
+
 
 PageEnumeration& PageEnumeration::operator= (
     const PageEnumeration& rEnumeration)
 {
     mpImpl = rEnumeration.mpImpl->Clone();
     return *this;
-}
-
-
-
-
-PageEnumeration PageEnumeration::Create (
-    const SlideSorterModel& rModel,
-    PageEnumerationType eType)
-{
-    Enumeration<SharedPageDescriptor>* pImpl;
-    switch (eType)
-    {
-        case PET_ALL:
-        default:
-            pImpl = new PageEnumerationImpl<AllPagesPredicate>(rModel);
-            break;
-
-        case PET_SELECTED:
-            pImpl = new PageEnumerationImpl<SelectedPagesPredicate>(rModel);
-            break;
-
-        case PET_VISIBLE:
-            pImpl = new PageEnumerationImpl<VisiblePagesPredicate>(rModel);
-            break;
-    }
-
-    return PageEnumeration (
-        ::std::auto_ptr<Enumeration<SharedPageDescriptor> > (pImpl));
 }
 
 
@@ -212,16 +185,19 @@ void PageEnumeration::Rewind (void)
     return mpImpl->Rewind();
 }
 
-
-
 } } } // end of namespace ::sd::slidesorter::model
+
+
+
 
 namespace {
 
-template <class Predicate>
-PageEnumerationImpl<Predicate>::PageEnumerationImpl (
-    const SlideSorterModel& rModel)
-    : mrModel (rModel)
+PageEnumerationImpl::PageEnumerationImpl (
+    const SlideSorterModel& rModel,
+    const PageEnumeration::PagePredicate& rPredicate)
+    : mrModel(rModel),
+      maPredicate(rPredicate),
+      mnIndex(0)
 {
     Rewind();
 }
@@ -229,37 +205,37 @@ PageEnumerationImpl<Predicate>::PageEnumerationImpl (
 
 
 
-template <class Predicate>
-PageEnumerationImpl<Predicate>::PageEnumerationImpl (
+PageEnumerationImpl::PageEnumerationImpl (
     const SlideSorterModel& rModel,
+    const PageEnumeration::PagePredicate& rPredicate,
     int nIndex)
-    : mrModel (rModel),
-      mnIndex (nIndex)
-{}
-
-
-
-template <class Predicate>
-PageEnumerationImpl<Predicate>::~PageEnumerationImpl (void)
+    : mrModel(rModel),
+      maPredicate(rPredicate),
+      mnIndex(nIndex)
 {
 }
 
 
 
 
-template <class Predicate>
+PageEnumerationImpl::~PageEnumerationImpl (void)
+{
+}
+
+
+
+
 ::std::auto_ptr<Enumeration<SharedPageDescriptor> >
-    PageEnumerationImpl<Predicate>::Clone (void)
+    PageEnumerationImpl::Clone (void)
 {
     return ::std::auto_ptr<Enumeration<SharedPageDescriptor> >(
-        new PageEnumerationImpl<Predicate>(mrModel,mnIndex));
+        new PageEnumerationImpl(mrModel,maPredicate,mnIndex));
 }
 
 
 
 
-template <class Predicate>
-bool PageEnumerationImpl<Predicate>::HasMoreElements (void) const
+bool PageEnumerationImpl::HasMoreElements (void) const
 {
     return (mnIndex < mrModel.GetPageCount());
 }
@@ -267,8 +243,7 @@ bool PageEnumerationImpl<Predicate>::HasMoreElements (void) const
 
 
 
-template <class Predicate>
-SharedPageDescriptor PageEnumerationImpl<Predicate>::GetNextElement (void)
+SharedPageDescriptor PageEnumerationImpl::GetNextElement (void)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
 
@@ -282,8 +257,7 @@ SharedPageDescriptor PageEnumerationImpl<Predicate>::GetNextElement (void)
 
 
 
-template <class Predicate>
-void PageEnumerationImpl<Predicate>::Rewind (void)
+void PageEnumerationImpl::Rewind (void)
 {
     // Go to first valid element.
     mnIndex = 0;
@@ -294,13 +268,14 @@ void PageEnumerationImpl<Predicate>::Rewind (void)
 
 
 
-template <class Predicate>
-void PageEnumerationImpl<Predicate>::AdvanceToNextValidElement (void)
+void PageEnumerationImpl::AdvanceToNextValidElement (void)
 {
     while (mnIndex < mrModel.GetPageCount())
     {
-        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor (mnIndex));
-        if (pDescriptor.get()!=NULL && Predicate()(*pDescriptor))
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(mnIndex));
+
+        // Test for the predicate being fullfilled.
+        if (pDescriptor.get()!=NULL && maPredicate(pDescriptor))
         {
             // This predicate is valid.
             break;
@@ -312,33 +287,6 @@ void PageEnumerationImpl<Predicate>::AdvanceToNextValidElement (void)
         }
     }
 }
-
-
-
-
-// Predicate operators.
-
-bool AllPagesPredicate::operator() (const PageDescriptor& )
-{
-    return true;
-}
-
-
-
-bool SelectedPagesPredicate::operator() (const PageDescriptor& rDescriptor)
-{
-    return rDescriptor.IsSelected();
-}
-
-
-
-
-bool VisiblePagesPredicate::operator() (const PageDescriptor& rDescriptor)
-{
-    return rDescriptor.IsVisible();
-}
-
-
 
 } // end of anonymous namespace
 
