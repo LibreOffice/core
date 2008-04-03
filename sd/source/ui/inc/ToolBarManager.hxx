@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:42:56 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ public:
     */
     static ::boost::shared_ptr<ToolBarManager> Create (
         ViewShellBase& rBase,
-        tools::EventMultiplexer& rMultiplexer,
-        ViewShellManager& rViewShellManager);
+        const ::boost::shared_ptr<tools::EventMultiplexer>& rpMultiplexer,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager);
 
     ~ToolBarManager (void);
 
