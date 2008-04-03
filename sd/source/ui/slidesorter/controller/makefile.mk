@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:14:20 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:31:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
 PRJ=..$/..$/..$/..
 
 PROJECTPCH=sd
@@ -51,13 +52,17 @@ PRJINC=..$/..
 
 SLOFILES =      							\
     $(SLO)$/SlideSorterController.obj		\
+    $(SLO)$/SlsAnimator.obj	    			\
     $(SLO)$/SlsClipboard.obj	    		\
+    $(SLO)$/SlsCurrentSlideManager.obj	    \
     $(SLO)$/SlsFocusManager.obj				\
     $(SLO)$/SlsListener.obj					\
     $(SLO)$/SlsPageObjectFactory.obj		\
     $(SLO)$/SlsPageSelector.obj				\
+    $(SLO)$/SlsProperties.obj				\
     $(SLO)$/SlsScrollBarManager.obj			\
     $(SLO)$/SlsSelectionCommand.obj	    	\
+    $(SLO)$/SlsSelectionManager.obj	    	\
     $(SLO)$/SlsSlotManager.obj				\
     $(SLO)$/SlsTransferable.obj				\
                                             \
