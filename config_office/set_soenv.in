@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.180 $
-# Date:        $Date: 2008-04-03 13:19:37 $
+# Version:     $Revision: 1.181 $
+# Date:        $Date: 2008-04-03 16:49:47 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -402,7 +402,7 @@ elsif ( $platform =~ m/linux/ )
 
       else {      
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
-        $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
+       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
@@ -424,7 +424,6 @@ elsif ( $platform =~ m/linux/ )
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
@@ -437,9 +436,9 @@ elsif ( $platform =~ m/linux/ )
       $CVER           = "C341";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."xawt";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."xawt";
    }
    elsif ($platform =~ m/^sparc/)
  
@@ -494,14 +493,26 @@ elsif ( $platform =~ m/linux/ )
       }
    }
    elsif ($platform =~ m/^s390/)
-   {  print "Setting Linux S/390 specific values... ";
-      $outfile        = "LinuxS390Env.Set";
+   {
+      if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8')) {
+         print "Setting Linux zSeries specific values... ";
+         $outfile        = "LinuxS390XEnv.Set";
+         $CPUNAME        = "S390X";
+	 $ARCH           = "s390x";
+         $OUTPATH        = "unxlngs390x";
+      }
+      else {
+         print "Setting Linux S/390 specific values... ";
+         $outfile        = "LinuxS390Env.Set";
+         $CPUNAME        = "S390";
+	 $ARCH           = "s390";
+         $OUTPATH        = "unxlngs390";
+      }
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH;
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."xawt";
       $CPU            = "3";
-      $CPUNAME        = "S390";
-      $OUTPATH        = "unxlngs390";
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."client";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."s390".$ds."native_threads";
    }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
@@ -903,9 +914,11 @@ $BIN                  = $ds."bin";
 $LIB                  = $ds."lib";
 $LIB64                = $ds."lib";
 $LIB64               .= "64"
-if ($platform =~ m/x86_64-.*-linux-gnu/);
+if ($platform =~ m/x86_64-.*-linux/);
 $LIB64               .= "64" 
-if (($platform =~ m/powerpc64-.*-linux-gnu/) && ('@SIZEOF_LONG@' eq '8'));
+if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
+$LIB64               .= "64" 
+if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
@@ -1645,7 +1658,7 @@ ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
 ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
-if ($platform =~ m/linux-gnu/ && $platform =~ m/powerpc/) {
+if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
 ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
