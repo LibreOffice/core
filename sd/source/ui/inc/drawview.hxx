@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:13:40 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ namespace sd {
 class DrawDocShell;
 class DrawViewShell;
 class FuSlideShow;
-class Slideshow;
+class SlideShow;
 
 #define SDDRAWVIEW_MAGIC  0x456789BA
 
@@ -85,8 +85,6 @@ public:
 
     void    PresPaint(const Region& rRegion);
 
-    Slideshow*  GetSlideShow() { return mpSlideShow; }
-
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
 
     virtual void DeleteMarked(); // from SdrView
@@ -101,7 +99,6 @@ private:
     VirtualDevice*  mpVDev;
 
     USHORT          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
-    Slideshow*      mpSlideShow;
 };
 
 } // end of namespace sd
