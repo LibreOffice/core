@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,6 +800,8 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
 
     aTypeLB.SetSelectHdl( LINK( this, SvxAreaTabPage, SelectDialogTypeHdl_Impl ) );
 
+    // #i76307# always paint the preview in LTR, because this is what the document does
+    aCtlXRectPreview.EnableRTL(FALSE);
 }
 
 // -----------------------------------------------------------------------
