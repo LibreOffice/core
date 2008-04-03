@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTransitionFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:38:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_XTransitionFactory_idl__
+#define __com_sun_star_presentation_XTransitionFactory_idl__
+
+#ifndef __com_sun_star_presentation_XTransition_idl__
+#include <com/sun/star/presentation/XTransition.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealPoint2D_idl__
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#endif
+
+
+module com {  module sun {  module star {
+
+module rendering { interface XBitmap; };
+
+module presentation {
+
+interface XTransition;
+interface XSlideShowView;
+
+/** TransitionFactory interface to request optional custom Transition instances for slideshow transitions.<p>
+
+    This interface provides the necessary methods to query and create optional transition effects for a SlideShow<p>
+
+    @since OOo 2.4
+ */
+interface XTransitionFactory : ::com::sun::star::uno::XInterface
+{
+    /** Checks whether this instance provides an implementation for given transition id.<p>
+     */
+    boolean hasTransition( [in] short transitionType, [in] short transitionSubType );
+
+    /** Actually create a transition for the given transition id
+
+        @param transitionType
+        Main type of transition (@see ::com::sun::star::animation::TransitionType)
+
+        @param transitionSubType
+        Subtype for the transition (@see ::com::sun::star::animation::TransitionSubType)
+
+        @param view
+        Slideshow view to display on
+
+        @param leavingBitmap
+        Bitmap of the slide that's going to leave the screen
+
+        @param enteringBitmap
+        Bitmap of the slide that's going to enter the screen
+
+        @param slideOffset
+        Offset in pixel from the top, left edge of the view, such that the
+        slide displays similar to normal slideshow
+     */
+    XTransition createTransition( [in] short                                 transitionType,
+                                  [in] short                                 transitionSubType,
+                                  [in] XSlideShowView                        view,
+                                  [in] com::sun::star::rendering::XBitmap    leavingBitmap,
+                                  [in] com::sun::star::rendering::XBitmap    enteringBitmap,
+                                  [in] com::sun::star::geometry::RealPoint2D slideOffset );
+};
+
+service TransitionFactory : XTransitionFactory;
+
+}; }; }; };
+
+#endif
+
