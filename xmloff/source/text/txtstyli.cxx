@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:12:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,12 +367,15 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
             {
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
+                // --> OD 2008-03-19 #i86058#
+                // check explicitly on certain versions
                 if ( GetImport().getBuildIds( nUPD, nBuild ) &&
-                     ( nUPD < 680 ||
-                       ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) ) )
+                     ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
+                       ( nUPD == 680 && nBuild <= 9073 ) ) ) // OOo 2.0 - OOo 2.0.4
                 {
                     bApplyListStyle = false;
                 }
+                // <--
             }
             // <--
         }
