@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:49:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "AccessibleSlideSorterObject.hxx"
 
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsFocusManager.hxx"
@@ -76,12 +77,12 @@ namespace accessibility {
 
 AccessibleSlideSorterObject::AccessibleSlideSorterObject(
     const Reference<XAccessible>& rxParent,
-    ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController,
+    ::sd::slidesorter::SlideSorter& rSlideSorter,
     sal_uInt16 nPageNumber)
     : AccessibleSlideSorterObjectBase(::sd::MutexOwner::maMutex),
       mxParent(rxParent),
       mnPageNumber(nPageNumber),
-      mrSlideSorterController(rSlideSorterController),
+      mrSlideSorter(rSlideSorter),
       mnClientId(0)
 {
 }
@@ -276,15 +277,15 @@ Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
 
         // SELECTED
-        if (mrSlideSorterController.GetPageSelector().IsPageSelected(mnPageNumber))
+        if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
             pStateSet->AddState(AccessibleStateType::SELECTED);
 
         // FOCUSABLE
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
 
         // FOCUSED
-        if (mrSlideSorterController.GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
-            if (mrSlideSorterController.GetFocusManager().IsFocusShowing())
+        if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
+            if (mrSlideSorter.GetController().GetFocusManager().IsFocusShowing())
                 pStateSet->AddState(AccessibleStateType::FOCUSED);
 
         pStateSet->AddState(AccessibleStateType::ENABLED);
@@ -404,7 +405,7 @@ awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
 {
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
-    Rectangle aBBox (mrSlideSorterController.GetView().GetPageBoundingBox (
+    Rectangle aBBox (mrSlideSorter.GetView().GetPageBoundingBox (
         mnPageNumber,
         ::sd::slidesorter::view::SlideSorterView::CS_SCREEN,
         ::sd::slidesorter::view::SlideSorterView::BBT_INFO));
@@ -578,7 +579,7 @@ sal_Bool AccessibleSlideSorterObject::IsDisposed (void)
 SdPage* AccessibleSlideSorterObject::GetPage (void) const
 {
     ::sd::slidesorter::model::SharedPageDescriptor pDescriptor(
-        mrSlideSorterController.GetModel().GetPageDescriptor(mnPageNumber));
+        mrSlideSorter.GetModel().GetPageDescriptor(mnPageNumber));
     if (pDescriptor.get() != NULL)
         return pDescriptor->GetPage();
     else
