@@ -904,6 +904,8 @@ CAIRO_LIBS
 ENABLE_CAIRO
 SYSTEM_CAIRO
 ENABLE_OPENGL
+ENABLE_MINIMIZER
+ENABLE_PRESENTER_SCREEN
 ENABLE_REPORTDESIGN
 SYSTEM_JFREEREPORT
 JCOMMON_JAR
@@ -1671,7 +1673,9 @@ Optional Features:
 
   --enable-xrender-link   link with libXrender instead of dynamically open it
 
-  --enable-sdext          enables the build of the Presentation Minimizer extension
+  --enable-minimizer      enables the build of the Presentation Minimizer extension
+
+  --enable-presenter-screen   enables the build of the Presenter screen extension
 
   --enable-ogltrans       enables the build of the OGLTrans extension
 
@@ -2923,9 +2927,14 @@ if test "${with_beanshell_jar+set}" = set; then
 
 fi
 
-# Check whether --enable-sdext was given.
-if test "${enable_sdext+set}" = set; then
-  enableval=$enable_sdext;
+# Check whether --enable-minimizer was given.
+if test "${enable_minimizer+set}" = set; then
+  enableval=$enable_minimizer;
+fi
+
+# Check whether --enable-presenter-screen was given.
+if test "${enable_presenter_screen+set}" = set; then
+  enableval=$enable_presenter_screen;
 fi
 
 # Check whether --enable-ogltrans was given.
@@ -23819,13 +23828,32 @@ fi
 
 { echo "$as_me:$LINENO: checking whether to build the Presentation Minimizer extension" >&5
 echo $ECHO_N "checking whether to build the Presentation Minimizer extension... $ECHO_C" >&6; }
-if test -n "$enable_sdext" -a "$enable_sdext" != "no"; then
+if test -n "$enable_minimizer" -a "$enable_minimizer"!= "no"; then
    { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-   BUILD_TYPE="$BUILD_TYPE SDEXT"
+   ENABLE_MINIMIZER=YES
 else
    { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
+   ENABLE_MINIMIZER=NO
+fi
+
+
+{ echo "$as_me:$LINENO: checking whether to build the Presenter Screen extension" >&5
+echo $ECHO_N "checking whether to build the Presenter Screen extension... $ECHO_C" >&6; }
+if test -n "$enable_presenter_screen" -a "$enable_presenter_screen"!= "no"; then
+   { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+   ENABLE_PRESENTER_SCREEN=YES
+else
+   { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+   ENABLE_PRESENTER_SCREEN=NO
+fi
+
+
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$(ENABLE_MINIMIZER" = "YES"; then
+   BUILD_TYPE="$BUILD_TYPE SDEXT"
 fi
 
 { echo "$as_me:$LINENO: checking whether to build the Report Builder extension" >&5
@@ -26572,9 +26600,11 @@ CAIRO_LIBS!$CAIRO_LIBS$ac_delim
 ENABLE_CAIRO!$ENABLE_CAIRO$ac_delim
 SYSTEM_CAIRO!$SYSTEM_CAIRO$ac_delim
 ENABLE_OPENGL!$ENABLE_OPENGL$ac_delim
+ENABLE_MINIMIZER!$ENABLE_MINIMIZER$ac_delim
+ENABLE_PRESENTER_SCREEN!$ENABLE_PRESENTER_SCREEN$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 99; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
