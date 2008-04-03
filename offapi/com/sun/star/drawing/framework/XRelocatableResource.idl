@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRelocatableResource.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:46:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_drawing_framework_XResource_idl__
-#define __com_sun_star_drawing_framework_XResource_idl__
+#ifndef __com_sun_star_drawing_framework_XRelocatableResource_idl__
+#define __com_sun_star_drawing_framework_XRelocatableResource_idl__
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
@@ -48,7 +48,6 @@ interface XResource;
     relocatable to different anchors.
 */
 interface XRelocatableResource
-    : ::com::sun::star::uno::XInterface
 {
     /** Replace the current anchor of the called resource with the given
         one.

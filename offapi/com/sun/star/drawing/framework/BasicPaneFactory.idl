@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BasicPaneFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:40:57 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,16 @@
 #ifndef __com_sun_star_drawing_framework_BasicPaneFactory_idl__
 #define __com_sun_star_drawing_framework_BasicPaneFactory_idl__
 
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANEFACTORY_IDL_
-#include <com/sun/star/drawing/framework/XPaneFactory.idl>
+#include <com/sun/star/drawing/framework/XResourceFactory.idl>
 #endif
 
 module com { module sun { module star { module drawing { module framework {
 
-/** The <type>BasicPaneFactory</pane> is a pane factory that provides the
+/** The <type>BasicPaneFactory</pane> is a resource factory that provides the
     panes used by the Draw and Impress applications.
     <p>This factory provides the center, left, and right pane.  For the left
     pane there are two URLS, <code>private:resource/floater/LeftImpressPane</code>
@@ -50,9 +53,16 @@ module com { module sun { module star { module drawing { module framework {
     the other for Draw.  The center pane and the right pane have the URLs
     <code>private:resource/floater/CenterPane</code> and
     <code>private:resource/floater/RightPane</code> respectively.</p>
+    <p>This factory is typically created indirectly by registering it in the
+    configuration and have the <type>XModuleController</type> create it on
+    demand.</p>
 */
-service BasicPaneFactory : com::sun::star::drawing::framework::XPaneFactory
+service BasicPaneFactory : XResourceFactory
 {
+    /** Give the controller to new instances so that they have access to the
+        drawing framework controllers.
+    */
+    create ([in] ::com::sun::star::frame::XController xController);
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework

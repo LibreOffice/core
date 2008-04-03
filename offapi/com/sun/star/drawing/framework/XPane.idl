@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPane.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:45:30 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef __com_sun_star_drawing_framework_XPane_idl__
 #define __com_sun_star_drawing_framework_XPane_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
 #ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
 #endif
@@ -48,27 +45,24 @@
 #ifndef __com_sun_star_drawing_framework_XResource_idl__
 #include <com/sun/star/drawing/framework/XResource.idl>
 #endif
+#ifndef __com_sun_star_drawing_framework_XRelocatableResource_idl__
+#include <com/sun/star/drawing/framework/XRelocatableResource.idl>
+#endif
 
 module com { module sun { module star { module drawing { module framework {
 
 /** A pane is an abstraction of a window and is one of the resources managed
     by the drawing framework.
-    <p>Apart from the area that displays the view a pane usually contains other
+    <p>Apart from the area that displays a view a pane may contain other
     parts like title, menu, closer button.</p>
     <p>The URL prefix of panes is <code>private:resource/floater</code></p>
-    <p>Implementations of <type>XPane</type> may implement
-    <type>XTabBar</type> as well.</p>
-    @see XPaneController
-    @see XPaneFactory
-    @see XTabBar
 */
 interface XPane
-    : ::com::sun::star::drawing::framework::XResource
 {
+    interface XResource;
+
     /** Return the <type scope="com::sun::star::awt">XWindow</type> of the
         pane that is used to display a view.
-        <p>This window usually is part of a small hierarchy of windows
-        rooted in the outer window of the pane.</p>
     */
     ::com::sun::star::awt::XWindow getWindow ();
 

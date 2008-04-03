@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConfigurationChangeRequest.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:44:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,23 +49,19 @@ interface XConfiguration;
 
 /** A single explicit request for a configuration change.
 
-    <p>The one explicitly represented change request may lead to other,
-    implicit, configuration changes when executed.  For example, when the
-    deactivation of a pane is requested, then the view displayed in it has
-    also to be deactivated.</p>
     <p>The requested change is committed to a configuration only when the
     <member>execute()</member> method is called.  Configuration change
     requests are executed asynchronously.  This is done to avoid reentrance
     problems with objects that are registered as
     <type>XConfigurationChangeListener</type> and at the same time make
     configuration change requests.  When the requests were executed
-    synchronously then they would be notified of the changes while their
-    request call has not yet returned.</p>
-    @see XConfiguration
-    @see XConfigurationController
+    synchronously then the listeners would be notified of the changes while
+    their request call has not yet returned.</p>
+
+    <p>This interface is typically used internally by the
+    <type>XConfigurationController</type></p> @see XConfigurationController
 */
 interface XConfigurationChangeRequest
-    : ::com::sun::star::uno::XInterface
 {
     /** Commit the configuration change request represented by the called
         object to the given configuration.

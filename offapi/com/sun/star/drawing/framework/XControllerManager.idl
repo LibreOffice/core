@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XControllerManager.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:44:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,68 +42,28 @@
 
 module com { module sun { module star { module drawing { module framework {
 
-interface XCommandController;
 interface XConfigurationController;
 interface XModuleController;
-interface XPaneController;
-interface XResourceController;
-interface XToolBarController;
-interface XViewController;
 
-/** The XControllerManager gives access to the sub controllers that provide
-    the different aspects of the drawing framework.
-    <p><strong>This interface is not yet in its final form and will probably change
-    considerably.</strong></p>
+/** The XControllerManager gives access to the controllers of the drawing
+    framework.
     <p>The <type>XControllerManager</type> interface is typically
     implemented by the same object that implements <type
     scope="com::sun::star::frame">XController</type>.</p>
-    <p>The sub controllers that this interface gives access to come from
-    different sources:
-    <ul><li>The core sub controllers are created by instantiating a service
-    from a predefined set of services.  These are <type>CommandController</type>,
-    <type>ConfigurationController</type>, <type>ModuleController</type>,
-    <type>PaneController</type>, <type>ToolbarController</type>, and
-    <type>ViewController</type>.  There explicit access methods for all of
-    these services.</li>
-    <li>Optional sub controllers that are created by instantiating
-    services can be added and removed with the
-    <member>registerController()</member> and
-    <member>removeController()</member> methods.</li>
-    <li>Optional sub controllers who are added as living objects.  There are
-    not methods for this yet.</li>
-    </ul>
-    One motivation for optional sub controllers that can be added at runtime
-    is to allow the slide sorter register a sub controller that exports its
-    (multi) selection.  This selection is used for example by controls in
-    the task pane.  A sub controller is one way of providing a central
-    access point to the selection of the slide sorter which may be shown
-    either in the center pane or the left pane or not at all.</p>
 */
-interface XControllerManager :
-    ::com::sun::star::uno::XInterface
+interface XControllerManager
 {
-    void registerResourceController (
-        [in] string sServiceName,
-        [in] XResourceController xController);
-
-    void removeResourceController (
-        [in] XResourceController xController);
-
-    sequence<XResourceController> getResourceControllers ();
-
-    /** Return an instance of a sub controller that implements the specified
-        service.
+    /** Return the <type>XConfigurationController</type> object.
+        @return
+            The returned reference is never empty.
     */
-    ::com::sun::star::uno::XInterface getController ( [in] string sServiceName);
-
-    XCommandController getCommandController ();
     XConfigurationController getConfigurationController ();
-    XModuleController getModuleController ();
-    XPaneController getPaneController ();
-    XToolBarController getToolBarController ();
-    XViewController getViewController ();
 
-    void releaseController ( [in] ::com::sun::star::uno::XInterface xController);
+    /** Return the <type>XModuleController</type> object.
+        @return
+            The returned reference is never empty.
+    */
+    XModuleController getModuleController ();
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework

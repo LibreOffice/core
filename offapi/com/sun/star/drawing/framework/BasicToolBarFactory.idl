@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BasicToolBarFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:41:23 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,36 @@
 #ifndef __com_sun_star_drawing_framework_BasicToolBarFactory_idl__
 #define __com_sun_star_drawing_framework_BasicToolBarFactory_idl__
 
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANEFACTORY_IDL_
+#include <com/sun/star/drawing/framework/XResourceFactory.idl>
+#endif
+
 module com { module sun { module star { module drawing { module framework {
 
-interface XToolBarFactory;
-
-/** The <type>BasicToolBarFactory</type> is a factory that provides the
-    tool bars used by the Draw and Impress applications.
+/** The <type>BasicToolBarFactory</type> is a resource factory that provides
+    (some of) the tool bars used by the Draw and Impress applications.
 
     <p>The factory recognizes the following URLs:<ul>
     <li><code>private:resource/toolbar/ViewTabBar</code> for the tab bar
     that allows the switching between views.</li>
-    </ul></p>
+    </ul>
+    This short list marks the implementation of this service clearly as
+    being in transition.
+    </p>
+
+    <p>This factory is typically created indirectly by registering it in the
+    configuration and have the <type>XModuleController</type> create it on
+    demand.</p>
 */
-service BasicToolBarFactory : com::sun::star::drawing::framework::XToolBarFactory
+service BasicToolBarFactory : XResourceFactory
 {
+    /** Give the controller to new instances so that they have access to the
+        drawing framework controllers.
+    */
+    create ([in] ::com::sun::star::frame::XController xController);
 };
 
 }; }; }; }; }; // ::com::sun::star::drawing::framework

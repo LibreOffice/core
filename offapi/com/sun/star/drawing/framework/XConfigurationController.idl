@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConfigurationController.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:44:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
 #define __com_sun_star_drawing_framework_XConfigurationController_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
 #ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
 #include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
 #endif
@@ -48,6 +45,9 @@
 #ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
 #include <com/sun/star/drawing/framework/XConfigurationControllerRequestQueue.idl>
 #endif
+#ifndef __com_sun_star_drawing_framework_XResourceFactoryManager_idl__
+#include <com/sun/star/drawing/framework/XResourceFactoryManager.idl>
+#endif
 #ifndef __com_sun_star_drawing_framework_ResourceActivationMode_idl__
 #include <com/sun/star/drawing/framework/ResourceActivationMode.idl>
 #endif
@@ -56,23 +56,24 @@ module com { module sun { module star { module drawing { module framework {
 
 interface XConfigurationChangeListener;
 interface XConfigurationChangeRequest;
+interface XResourceId;
+interface XResource;
 
-/** The configuration controller is responsible for the synchronization of
-    other controllers for the management of resources like panes, views,
-    tool bars, and command groups.
+/** The configuration controller is responsible for the management of the
+    set of active resources.
 
     <p>There are two configurations of resources:<ul>
-    <li>The current configuration describes the state of resources as
-    it is.</li>
-    <li>The requested configuration describes how it should be.  The
-    requested configuration is changed usually by calling
+    <li>The current configuration contains the set of currently active
+    resources.</li>
+    <li>The requested configuration describes what the current configuration
+    should be.  The requested configuration is changed usually by calling
     <member>requestResourceActivation()</member> and
-    <member>requestResourceDeactivation()</member>.  Other sub controllers
-    may offer other methods for requesting configuration changes.</li>
+    <member>requestResourceDeactivation()</member>.</li>
     </ul></p>
 
-    <p>When the two differ then the current configuration is updated eventually
-    to reflect the requested one
+    <p>When the two configurations differ then the current configuration is
+    updated eventually to reflect the requested configuration.  An update
+    takes place when the following three conditions are fullfilled.
     <ol>
     <li>when the last pending request for configuration changes has been
     processed,</li>
@@ -84,28 +85,36 @@ interface XConfigurationChangeRequest;
     <p>Requests for configuration changes are handled in a two step process:
     <ol>
     <li>First the requested configuration is updated iteratively: Every
-    request that is being made by e.g. calling
+    request that is being made by calling
     <member>requestResourceActivation()</member> or
     <member>requestResourceDeactivation()</member> results in one or more
     function objects, that each implement the
-    <type>XConfigurationChangeRequest</type> interface, being inserted
-    into a queue.  The request objects in the queue are processed one at a
-    time in the order in which they are inserted.  Only when one request
-    object is processed a change to the requested configuration is made.
-    These changes are broadcasted.  Listeners may decide to add more request
-    objects to the queue.  For example when the view in the center pane is
-    replaced by another view, some listeners may want to turn some side
-    panes on or off, or show other views in the side panes.</p>
+    <type>XConfigurationChangeRequest</type> interface.  These are inserted
+    into a queue.  The request objects in the queue are processed
+    asynchronously one at a time in the order in which they are inserted.
+    Only when one request object is processed a change to the requested
+    configuration is made.  These changes are broadcasted to registered
+    <type>XConfigurationChangeListener</type> objects.  Listeners may
+    decide to make requests that then are added to the queue.  For example
+    when the view in the center pane is replaced by another view, some
+    listeners may want to turn some side panes on or off, or show other
+    views in the side panes.</p>
     <p>This process goes on until the queue of request objects becomes
     empty.  Until this point only the requested configuration has been
     modified.  No resources have been activated or deactivated.</p></li>
+
     <li><p>The second update step activates or deactivates resources so that
     the current configuration (the one that comprises the actually active
     resources) reflects the requested configuration.</p>
+    <p>The order in which resources are activated or deactivated depends on
+    the dependency between the resources.  For example a view depends on the
+    pane it is displayed in.  Resources that other resources depend on are
+    activated first and deactivated last.  The order is undefined for
+    unrelated resources.</p>
     <p>Note that the second update step may not be able to activate (or even to
     deactivate) all the requested resources.  Either because they are
     temporarily or permanently unavailable.  For example, during the
-    start-up of a new Impress application frame the side panes are displayed
+    start-up of a new Impress application the side panes are displayed
     with a visible delay because they are not provided sooner by the
     underlying framework.  Such anavailable resources are not forgotten but
     remain in the requested configuration.  Every time the configuration
@@ -117,12 +126,12 @@ interface XConfigurationChangeRequest;
     <li><const>ResourceActivationRequested</const> is sent when the
     activation of a resource has been requested and the resource is not yet
     active in the requested configuration.  The event is sent when the
-    configuration change request is executed that is created when for
-    example <member>requestResourceActivation()</member> is called.</p>
-    <p>The <member>ResourceId</member> member is set to the requested
-    resource.  The <member>ResourceObject</member> member is not not
+    configuration change request is executed, not when the
+    <member>requestResourceActivation()</member> call is made.</p>
+    <p>The <member scope="ConfigurationChangeEvent">ResourceId</member> member is set to the requested
+    resource.  The <member>ResourceObject</member> member is not
     set.</p></li>
-    <li><const>ResourceDeactivationRequest</const> is sent when the
+    <li><const>ResourceDeactivationRequested</const> is sent when the
     deactivation of a resource has been requested and the resource is active
     in the requested configuration.  The event is sent when the
     configuration change request is executed that is created when for
@@ -131,35 +140,28 @@ interface XConfigurationChangeRequest;
     resource.  The <member>ResourceObject</member> member is not
     set.</p></li>
     <li><const>ConfigurationUpdateStart</const> is sent before the update of
-    the current configuration is started.</p>
-    <p>The requested configuration is available in the <type
-    scope="ConfigurationChangeEvent">Configuration</type> member.  The
+    the current configuration starts.</p>
+    <p>The requested configuration is available in the <member
+    scope="ConfigurationChangeEvent">Configuration</member> member.  The
     <member>ResourceId</member> and <member>ResourceObject</member> members
     are not set.</p></li>
-    <li><const>ConfigurationUpdateEnd</const> is sent before the update of
-    the current configuration is started.</p>
+    <li><const>ConfigurationUpdateEnd</const> is sent after the update of
+    the current configuration ends.</p>
     <p>The requested configuration is
-    available in the <type scope="ConfigurationChangeEvent"
-    >Configuration</type> member.  The <member>ResourceId</member> and
+    available in the <member scope="ConfigurationChangeEvent"
+    >Configuration</member> member.  The <member>ResourceId</member> and
     <member>ResourceObject</member> members are not set.</p></li>
-    </ul></p>
-
-    <p>The sub controllers that manage individual resources (like
-    <type>XPaneController</type>, <type>XViewController</type>,
-    <type>XToolbarController</type>, and <type>XCommandController</type>)
-    send the following events:
-    <ul>
     <li><const>ResourceActivation</const> is sent when a resource is
     activated, i.e. when a new object of a resource is created (or taken
     from a cash).</p>
     <p>The <member>ResourceId</member> and <member>ResourceObject</member>
-    members are set to the <type>ResourceId</type> and object reference of
+    members are set to the <type>XResourceId</type> and object reference of
     the activated resource.</p></li>
     <li><const>ResourceDeactivation</const> is sent when a resource is
     deactivated, i.e. when an object that previously was part of the
     configuration is removed from the configuration.</p>
     <p>The <member>ResourceId</member> and <member>ResourceObject</member>
-    members are set to <type>ResourceId</type> and object reference of the
+    members are set to <type>XResourceId</type> and object reference of the
     deactivated resource.</p></li>
     </ul></p>
 */
@@ -167,6 +169,7 @@ interface XConfigurationController
 {
     interface XConfigurationControllerRequestQueue;
     interface XConfigurationControllerBroadcaster;
+    interface XResourceFactoryManager;
 
     /** Request the activation of a resource.
         <p>The request is processed asynchronously.  Notifications about
@@ -198,9 +201,22 @@ interface XConfigurationController
     void requestResourceDeactivation (
         [in] XResourceId xResourceId);
 
+
+    /** Return the active resource specified by the given resource id.
+        @param xResourceId
+            A valid resource id.  This should, but does not have to be, the
+            resource id of an active resource.
+        @return
+            When the given resource id specifies an active resource then
+            that resource is returned.  Otherwise an empty reference is
+            returned.
+    */
+    XResource getResource (
+        [in] XResourceId xResourceId);
+
     /** Lock the processing of configuration change requests.
         <p>This is only necessary when more than one change request is being
-        made.  It prevents an update being made (with all the visible UI
+        made in a row.  It prevents an update being made (with all the visible UI
         changes) before all change requests are being made.</p>
         <p>Recursive <member>lock()</member> calls are recognized: the
         configuration controller is locked while <member>lock()</member> was
@@ -208,7 +224,7 @@ interface XConfigurationController
     */
     void lock ();
 
-    /** Unlock the processing of configuration changes requests.
+    /** Unlock the processing of configuration change requests.
         <p>When <member>unlock()</member> is called as many times as
         <member>lock()</member> and the queue of configuration change
         requests is not empty the configuration controller continues the
@@ -226,25 +242,35 @@ interface XConfigurationController
     void update ();
 
     /** Return a copy of the requested configuration.
-        <p>The returned requested configuration reflects the current
-        configuration (more or less, there may be requested but anavailable
-        resources) after the last <member>update()</member> call and when no further
-        change requests have been made.
+        <p>Modifications to the returned configuration have no effect on the
+        drawing framework.</p>
     */
-    XConfiguration getConfiguration ();
+    XConfiguration getRequestedConfiguration ();
 
-    /** Replace the requested configuraion with the given configuration and
-        update the current configuration accordingly.
-        <p>Together with the <member>getConfiguration()<member> method this
-        allows the saving and restoring of configurations.</p>
-        <p>The given configuration is treated like a bunch of change
-        requests made by calling the
-        <member>requestResourceActivation()</member> and
-        <member>requestResourceDeactivation()</member> methods.
-        Requested configuration changes are notified so that listeners can react.</p>
+    /** Return a copy of the current configuration.
+        <p>Modifications to the returned configuration have no effect on the
+        drawing framework.</p>
+    */
+    XConfiguration getCurrentConfiguration ();
+
+    /** Replace the requested configuration with the given configuration and
+        schedule an update of the current configuration.
+        <p>Together with the <member>getCurrentConfiguration()</member> and
+        <member>getRequestedConfiguration()</member> methods this
+        allows the saving and restoring of configurations.  However, the
+        given configuration can have other origins then these methods.</p>
+        <p>The given configuration is transformed into a list of of change
+        requests so that the resulting reqeusted configuration equals the
+        given configuration.  This has the advantage that not only the
+        resource activations and deactivations but all configuration
+        changes are properly broadcasted.</p>
+        <p>Note that because of the configuration change notifications
+        listeners can make more configuratio change requests, so that the
+        resulting requested configuration can be different from the given
+        configuration.</p>
         @param xConfiguration
             This typically is a configuration that was obtained with an
-            earlier <member>getConfiguration()</member> call.
+            earlier <member>getRequestedConfiguration()</member> call.
     */
     void restoreConfiguration ([in] XConfiguration xConfiguration);
 };
