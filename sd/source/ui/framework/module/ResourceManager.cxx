@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-10 07:01:00 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,8 @@ ResourceManager::ResourceManager (
       mxConfigurationController(),
       mpActiveMainViewContainer(new MainViewContainer()),
       mxResourceId(rxResourceId),
+      mxMainViewAnchorId(FrameworkHelper::Instance(rxController)->CreateResourceId(
+          FrameworkHelper::msCenterPaneURL)),
       msCurrentMainViewURL(),
       mbIsEnabled(true)
 {
@@ -178,7 +180,8 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
                     // resource managed by this ResourceManager accordingly.
                     HandleMainViewSwitch(
                         rEvent.ResourceId->getResourceURL(),
-                        rEvent.Configuration);
+                        rEvent.Configuration,
+                        true);
                 }
             }
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
@@ -191,10 +194,14 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             break;
 
         case ResourceDeactivationRequestEvent:
-            if ( ! rEvent.ResourceId->isBoundToURL(
-                FrameworkHelper::msCenterPaneURL,
-                    AnchorBindingMode_DIRECT)
-                && rEvent.ResourceId->compareTo(mxResourceId) == 0)
+            if (rEvent.ResourceId->compareTo(mxMainViewAnchorId) == 0)
+            {
+                HandleMainViewSwitch(
+                    OUString(),
+                    rEvent.Configuration,
+                    false);
+            }
+            else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
             {
                 // The resource managed by this ResourceManager has been
                 // explicitly been requested to be hidden (maybe by us).
@@ -238,10 +245,14 @@ void ResourceManager::UpdateForMainViewShell (void)
 
 void ResourceManager::HandleMainViewSwitch (
     const OUString& rsViewURL,
-    const Reference<XConfiguration>& rxConfiguration)
+    const Reference<XConfiguration>& rxConfiguration,
+    const bool bIsActivated)
 {
     (void)rxConfiguration;
-    msCurrentMainViewURL = rsViewURL;
+    if (bIsActivated)
+        msCurrentMainViewURL = rsViewURL;
+    else
+        msCurrentMainViewURL = OUString();
     UpdateForMainViewShell();
 }
 
