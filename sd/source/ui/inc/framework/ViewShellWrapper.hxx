@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:13:37 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@ public:
 
     virtual ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId>
         SAL_CALL getResourceId (void)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
 
