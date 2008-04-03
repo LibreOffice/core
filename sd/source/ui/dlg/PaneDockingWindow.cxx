@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:40:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:26:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,9 @@
 #include "ViewShellBase.hxx"
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
 #include <vcl/toolbox.hxx>
-#ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
-#include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XPaneController.hpp>
-#endif
 #include "framework/FrameworkHelper.hxx"
 
 using namespace ::com::sun::star;
