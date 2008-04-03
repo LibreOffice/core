@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PostItMgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:04:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #include <postit.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
+#include <comcore.hrc>
+#include <SwRewriter.hxx>
+#include <undobj.hxx>
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -1092,7 +1095,9 @@ void SwPostItMgr::Delete(String aAuthor)
 {
     mbDeletingSeveral = true;
     mpWrtShell->StartAllAction();
-    mpWrtShell->StartUndo( UNDO_DELETE );
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_NOTE) );
+    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
     for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end(); )
         {
             SwPostItItem* pItem = (*i);
@@ -1129,7 +1134,9 @@ void SwPostItMgr::Delete()
 {
     mbDeletingSeveral = true;
     mpWrtShell->StartAllAction();
-    mpWrtShell->StartUndo( UNDO_DELETE );
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_NOTE) );
+    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
     for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         SwPostItItem* pItem = (*i);
