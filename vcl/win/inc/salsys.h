@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:55:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 
 class WinSalSystem : public SalSystem
 {
+    public:
     struct DisplayMonitor
     {
         rtl::OUString        m_aName;
@@ -66,6 +67,7 @@ class WinSalSystem : public SalSystem
         }
         ~DisplayMonitor() {}
     };
+    private:
     std::vector<DisplayMonitor>             m_aMonitors;
     std::map<rtl::OUString, unsigned int>   m_aDeviceNameToMonitor;
     unsigned int                            m_nPrimary;
@@ -86,6 +88,8 @@ public:
     bool initMonitors();
     // discards monitorinfo; used by WM_DISPLAYCHANGED handler
     void clearMonitors();
+    const std::vector<DisplayMonitor>& getMonitors()
+    { initMonitors(); return m_aMonitors;}
 
     BOOL handleMonitorCallback( sal_IntPtr /*HMONITOR*/,
                                 sal_IntPtr /*HDC*/,
