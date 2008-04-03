@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:15:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:09:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,9 +686,9 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
 {
-//get the security page
+//set the security page status (and its controls as well)
     if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )
-        ( ( ImpPDFTabSecurityPage* )mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )->Enable( !maCbPDFA1b.IsChecked() );
+        ( ( ImpPDFTabSecurityPage* )mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )->ImplPDFASecurityControl( !maCbPDFA1b.IsChecked() );
 
 //PDF/A-1 needs tagged PDF, so  force disable the control, will be forced in pdfexport.
     sal_Bool bPDFA1Sel = maCbPDFA1b.IsChecked();
@@ -1055,6 +1055,8 @@ SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
+// please note that in PDF/A-1a mode even if this are copied back,
+// the security settings are forced disabled in PDFExport::Export
     paParent->mbEncrypt = maCbEncrypt.IsChecked();
 
     if( paParent->mbEncrypt )
@@ -1145,7 +1147,8 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 // set the status of this windows, according to the PDFA selection
 
     if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
-        ( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->ToggleExportPDFAHdl( NULL );
+        ImplPDFASecurityControl(
+            !( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected() );
 }
 
 IMPL_LINK( ImpPDFTabSecurityPage, TogglemaCbEncryptHdl, void*, p )
@@ -1218,6 +1221,23 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, p )
 }
 
 ////////////////////////////////////////////////////////
+// This tab page is under control of the PDF/A-1a checkbox:
+// implement a method to do it.
+// -----------------------------------------------------------------------------
+void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity )
+{
+    if( bEnableSecurity )
+    {
+        Enable();
+//after enable, check the status of control as if the dialog was initialized
+        TogglemaCbEncryptHdl( NULL );
+        TogglemaCbPermissionsHdl( NULL );
+    }
+    else
+        Enable( sal_False );
+}
+
+////////////////////////////////////////////////////////
 // The link preferences tab page (relative and other stuff)
 // -----------------------------------------------------------------------------
 ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
@@ -1264,7 +1284,7 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     sal_Bool bIsPDFASel =  sal_False;
     if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
         bIsPDFASel = ( ( ImpPDFTabGeneralPage* )paParent->
-               GetTabPage( RID_PDF_TAB_GENER ) )->maCbPDFA1b.IsChecked();
+                       GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected();
 // if PDF/A-1 was not selected while exiting dialog...
     if( !bIsPDFASel )
     {
