@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:22:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,9 @@
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_HXX
 #define SD_SLIDESORTER_PAGE_OBJECT_HXX
 
-#include <svx/svdopage.hxx>
+#include "model/SlsSharedPageDescriptor.hxx"
 
-namespace sd { namespace slidesorter { namespace model {
-class PageDescriptor;
-} } }
+#include <svx/svdopage.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -55,14 +53,14 @@ public:
     PageObject (
         const Rectangle& rRect,
         SdrPage* pPage,
-        model::PageDescriptor& rDescriptor);
+        const model::SharedPageDescriptor& rpDescriptor);
 
     virtual ~PageObject (void);
 
-    model::PageDescriptor& GetDescriptor (void) const;
+    model::SharedPageDescriptor GetDescriptor (void) const;
 
 private:
-    model::PageDescriptor& mrDescriptor;
+    model::SharedPageDescriptor mpDescriptor;
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact (void);
 };
