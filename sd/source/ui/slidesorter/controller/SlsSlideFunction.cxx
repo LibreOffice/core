@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlideFunction.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:32:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "controller/SlsSlideFunction.hxx"
 
-#include "SlideSorterViewShell.hxx"
+#include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "view/SlideSorterView.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -50,20 +50,20 @@ TYPEINIT1(SlideFunction, FuPoor);
 
 
 SlideFunction::SlideFunction (
-    SlideSorterController& rController,
+    SlideSorter& rSlideSorter,
     SfxRequest& rRequest)
     : FuPoor (
-        &rController.GetViewShell(),
-        rController.GetView().GetWindow(),
-        & rController.GetView(),
-        rController.GetModel().GetDocument(),
+        rSlideSorter.GetViewShell(),
+        rSlideSorter.GetView().GetWindow(),
+        &rSlideSorter.GetView(),
+        rSlideSorter.GetModel().GetDocument(),
         rRequest)
 {
 }
 
-FunctionReference SlideFunction::Create( SlideSorterController& rController, SfxRequest& rRequest )
+FunctionReference SlideFunction::Create( SlideSorter& rSlideSorter, SfxRequest& rRequest )
 {
-    FunctionReference xFunc( new SlideFunction( rController, rRequest ) );
+    FunctionReference xFunc( new SlideFunction( rSlideSorter, rRequest ) );
     return xFunc;
 }
 
