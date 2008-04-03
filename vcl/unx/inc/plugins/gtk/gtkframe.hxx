@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:12:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ class GtkSalFrame : public SalFrame
     friend struct IMHandler;
 
     int                             m_nScreen;
-    GtkWindow*                      m_pWindow;
+    GtkWidget*                      m_pWindow;
     GdkWindow*                      m_pForeignParent;
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
@@ -259,6 +259,19 @@ class GtkSalFrame : public SalFrame
             !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION); // toolbars are also not
     }
 
+    bool isChild( bool bPlug = true, bool bSysChild = true )
+    {
+        ULONG nMask = 0;
+        if( bPlug )
+            nMask |= SAL_FRAME_STYLE_PLUG;
+        if( bSysChild )
+            nMask |= SAL_FRAME_STYLE_SYSTEMCHILD;
+        return (m_nStyle & nMask) != 0;
+    }
+
+    void resizeWindow( long nWidth, long nHeight );
+    void moveWindow( long nX, long nY );
+
     Size calcDefaultSize();
 
     void setMinMaxSize();
@@ -276,7 +289,7 @@ public:
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();
-    GtkWindow*  getWindow() const { return m_pWindow; }
+    GtkWidget*  getWindow() const { return m_pWindow; }
     GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
     GdkWindow*  getForeignParent() const { return m_pForeignParent; }
     GdkNativeWindow getForeignParentWindow() const { return m_aForeignParentWindow; }
@@ -286,6 +299,7 @@ public:
     { return m_nVisibility; }
     Pixmap getBackgroundPixmap() const { return m_hBackgroundPixmap; }
     int getScreenNumber() const { return m_nScreen; }
+    void updateScreenNumber();
 
     void moveToScreen( int nScreen );
 
@@ -373,6 +387,8 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
     virtual void                SetBackgroundBitmap( SalBitmap* );
+
+    virtual void                SetScreenNumber( unsigned int );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
