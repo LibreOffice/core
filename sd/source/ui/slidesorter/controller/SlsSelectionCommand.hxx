@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionCommand.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:16:15 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,9 @@
 #include "controller/SlsPageSelector.hxx"
 #include "SlsCommand.hxx"
 #include <tools/solar.h>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 namespace sd { namespace slidesorter { namespace model {
@@ -50,6 +51,7 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace controller {
 
+class CurrentSlideManager;
 class PageSelector;
 
 /** The SelectionCommand stores a list of pages that it will select on its
@@ -67,6 +69,7 @@ public:
     */
     SelectionCommand (
         PageSelector& rSelector,
+        const ::boost::shared_ptr<controller::CurrentSlideManager>& rpCurrentSlideManager,
         const model::SlideSorterModel& rModel);
 
     /** Add the pages in the given list of selected pages to those that will
@@ -75,17 +78,17 @@ public:
         The first page will be set as current page when the new current page
         has not been specified previously.
     */
-    void AddPages (::std::auto_ptr<PageSelector::PageSelection> pSelection);
+    void AddSlides (const ::boost::shared_ptr<PageSelector::PageSelection>& rpSelection);
 
     /** Remember the specified page to be selected when this command is
         executed.
     */
-    void AddPage (USHORT nPageIndex);
+    void AddSlide (USHORT nPageIndex);
 
     /** Call this method to explicitly set the page that will be made the
         current page when this command is executed.
     */
-    void SetCurrentPage (USHORT nPageIndex);
+    void SetCurrentSlide (USHORT nPageIndex);
 
     /** Execute the command and select the pages added by previous calls to
         AddPages() and AddPage().
@@ -95,13 +98,17 @@ public:
 private:
     /// The page selector is used to select pages and set the current page.
     PageSelector& mrPageSelector;
+    /// Used for setting the current slide.
+    ::boost::shared_ptr<controller::CurrentSlideManager> mpCurrentSlideManager;
     /// The model is used to translate page indices into page pointers.
     const model::SlideSorterModel& mrModel;
     /// The list of pages to be selected when the command is executed.
-    typedef ::std::vector<SdPage*> PageList;
+    typedef ::std::vector<sal_Int32> PageList;
     PageList maPagesToSelect;
-    /// The page that will be made the current page when the command is executed.
-    SdPage* mpCurrentPage;
+    /** The page that will be made the current page when the command is
+        executed.
+    */
+    sal_Int32 mnCurrentPageIndex;
 };
 
 } } } // end of namespace sd::slidesorter::controller
