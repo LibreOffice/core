@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2008-04-03 16:08:10 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:24:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
+.IF "$(ENABLE_PRESENTER_SCREEN)" != "YES"
 @all:
     @echo "Presenter Screen build disabled."
 .ELSE
-
 DLLPRE=
 common_build_zip=
 
@@ -243,4 +242,4 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $@
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
 
-.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
+.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "YES"
