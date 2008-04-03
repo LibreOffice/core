@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 class Point;
 class Rectangle;
@@ -47,11 +47,16 @@ class ScrollBar;
 class ScrollBarBox;
 class Window;
 
+namespace sd {
+class Window;
+}
+
+namespace sd { namespace slidesorter {
+    class SlideSorter;
+} }
+
 
 namespace sd { namespace slidesorter { namespace controller {
-
-class SlideSorterController;
-
 
 /** Manage the horizontal and vertical scroll bars.  Listen for events, set
     their sizes, place them in the window, determine their visibilities.
@@ -70,41 +75,31 @@ class SlideSorterController;
 class ScrollBarManager
 {
 public:
-    /** Create a new scroll bar manager that manages three controls: the two
-        given scroll bars and a little window it creates and ownes that
-        fills the gap at the bottom right corner that is left between the
-        two scroll bars.  Call LateInitialization() after constructing a new
-        object.
-        @param pParentWindow
-            This window is used to create the little filler window.
-        @param pContentWindow
-            This window holds the content.  Its view area is controlled by
-            the scroll bars.  The content window is used to transform
-            coordinates and, if the vertical scroll bar is not in use, is
-            resized to fully show its content.
-        @param pHorizontalScrollBar
-            The horizontal scroll bar that is controlled by the new
-            manager.  Its ownership remains with the caller.
-        @param pVerticalScrollBar
-            The horizontal scroll bar that is controlled by the new
-            manager.  Its ownership remains with the caller.
-        @param pScrollBarFiller
-            The task of this filler is to paint the little square enclosed
-            by the two scroll bars when they are both visible.
+    /** Create a new scroll bar manager that manages three controls: the
+        horizontal scroll bar, the vertical scroll bar, and the little
+        window that fills the gap at the bottom right corner that is left
+        between the two scroll bars.  Call LateInitialization() after
+        constructing a new object.
     */
-    ScrollBarManager (
-        SlideSorterController& rController,
-        ::Window* pParentWindow,
-        ::Window* pContentWindow,
-        ScrollBar* pHorizontalScrollBar,
-        ScrollBar* pVerticalScrollBar,
-        ScrollBarBox* pScrollBarFiller);
+    ScrollBarManager (SlideSorter& rSlideSorter);
 
     ~ScrollBarManager (void);
 
     /** Call this method after constructing a new object of this class.
     */
     void LateInitialization (void);
+
+    /** Register listeners at the scroll bars.  This method is called after
+        startup of a new slide sorter object or after a reactivation of a
+        slide sorter that for example is taken from a cache.
+    */
+    void Connect (void);
+
+    /** Remove listeners from the scroll bars.  This method is called whent
+        the slide sorter is destroyed or when it is suspended, e.g. put
+        into a cache for later reuse.
+    */
+    void Disconnect (void);
 
     /** Set up the scroll bar, i.e. thumb size and position.  Call this
         method when the content of the browser window changed, i.e. pages
@@ -141,7 +136,12 @@ public:
     /** Update the vertical scroll bar so that the visible area has the
         given top value.
     */
-    void SetTop (long nTop);
+    void SetTop (const sal_Int32 nTop);
+
+    /** Update the horizontal scroll bar so that the visible area has the
+        given left value.
+    */
+    void SetLeft (const sal_Int32 nLeft);
 
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.
@@ -170,24 +170,19 @@ public:
 
     void StopAutoScroll (void);
 
-    /** Register listeners at the scroll bars.
-    */
-    void Connect (void);
-
-    /** Remove listeners from the scroll bars.
-    */
-    void Disconnect (void);
-
 private:
-    SlideSorterController& mrController;
+    SlideSorter& mrSlideSorter;
+
     /** The horizontal scroll bar.  Note that is used but not owned by
         objects of this class.  It is given to the constructor.
     */
-    ScrollBar* mpHorizontalScrollBar;
+    ::boost::shared_ptr<ScrollBar> mpHorizontalScrollBar;
+
     /** The vertical scroll bar.  Note that is used but not owned by
         objects of this class.  It is given to the constructor.
     */
-    ScrollBar* mpVerticalScrollBar;
+    ::boost::shared_ptr<ScrollBar> mpVerticalScrollBar;
+
     /// Relative horizontal position of the visible area in the view.
     double mnHorizontalPosition;
     /// Relative vertical position of the visible area in the view.
@@ -202,7 +197,7 @@ private:
         the bottom right corner left by the two scroll bars (when both are
         visible).
     */
-    ScrollBarBox* mpScrollBarFiller;
+    ::boost::shared_ptr<ScrollBarBox> mpScrollBarFiller;
 
     /** The auto scroll timer is used for keep scrolling the window when the
         mouse reaches its border while dragging a selection.  When the mouse
@@ -214,7 +209,7 @@ private:
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
-    ::Window* mpContentWindow;
+    ::boost::shared_ptr<sd::Window> mpContentWindow;
 
     void SetWindowOrigin (
         double nHorizontalPosition,
