@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:46:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,9 +163,6 @@
 #ifndef SD_PANE_CHILD_WINDOWS_HXX
 #include "PaneChildWindows.hxx"
 #endif
-#ifndef SD_NOTES_CHILD_WINDOW_HXX
-#include "NotesChildWindow.hxx"
-#endif
 
 #include "tmplctrl.hxx"
 
@@ -235,7 +232,6 @@ void SdDLL::RegisterControllers()
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
     ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::notes::NotesChildWindow::RegisterChildWindow(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);
