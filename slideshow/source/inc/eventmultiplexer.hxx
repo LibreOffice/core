@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:06:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,6 +512,10 @@ public:
         this event (and probably, nothing will happen at all)
     */
     bool notifyNextEffect();
+
+    /** Notify that a new slide is about to be displayed
+    */
+    bool notifySlideTransitionStarted();
 
     /** Notify that a new slide has started
 
