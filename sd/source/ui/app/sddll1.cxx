@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:34:31 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,6 @@
 #endif
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_SLIDE_VIEW_SHELL_HXX
-#include "SlideViewShell.hxx"
 #endif
 #ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
@@ -155,7 +152,6 @@ void SdDLL::RegisterInterfaces()
 
     // Impress ViewShells
     ::sd::DrawViewShell::RegisterInterface(pMod);
-    ::sd::SlideViewShell::RegisterInterface(pMod);
     ::sd::OutlineViewShell::RegisterInterface(pMod);
     ::sd::PresentationViewShell::RegisterInterface(pMod);
 
