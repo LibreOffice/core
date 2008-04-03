@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 16:36:37 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include "ConfigurationTracer.hxx"
 #include "GenericConfigurationChangeRequest.hxx"
+#include "ResourceFactoryManager.hxx"
 #include "UpdateRequest.hxx"
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationClassifier.hxx"
@@ -50,12 +51,8 @@
 #include "UpdateLockManager.hxx"
 #include "DrawController.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
 
 #include <comphelper/stl_types.hxx>
 #include <vos/mutex.hxx>
@@ -68,7 +65,7 @@ using rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 #undef VERBOSE
-//#define VERBOSE 2
+//#define VERBOSE 3
 
 
 namespace sd { namespace framework {
@@ -76,7 +73,8 @@ namespace sd { namespace framework {
 Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
     const Reference<XComponentContext>& rxContext)
 {
-    return Reference<XInterface>(ConfigurationController::Create(rxContext), UNO_QUERY);
+    (void)rxContext;
+    return static_cast<XWeak*>(new ConfigurationController());
 }
 
 
@@ -98,6 +96,55 @@ Sequence<rtl::OUString> SAL_CALL ConfigurationController_getSupportedServiceName
         "com.sun.star.drawing.framework.ConfigurationController"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
+
+
+
+
+//----- ConfigurationController::Implementation -------------------------------
+
+class ConfigurationController::Implementation
+{
+public:
+    Implementation (
+        ConfigurationController& rController,
+        const Reference<frame::XController>& rxController);
+    ~Implementation (void);
+
+    void Initialize (const Reference<frame::XController>& rxController);
+
+    Reference<XControllerManager> mxControllerManager;
+
+    /** The Broadcaster class implements storing and calling of listeners.
+    */
+    ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
+
+    /** The requested configuration which is modifed (asynchronously) by
+        calls to requestResourceActivation() and
+        requestResourceDeactivation().  The mpConfigurationUpdater makes the
+        current configuration reflect the content of this one.
+    */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XConfiguration> mxRequestedConfiguration;
+
+    ViewShellBase* mpBase;
+
+    bool mbIsInitialized;
+
+    ::boost::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
+
+    ::boost::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
+
+    ::boost::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
+
+    /** The queue processor ownes the queue of configuration change request
+        objects and processes the objects.
+    */
+    ::boost::scoped_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
+
+    ::boost::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
+
+    sal_Int32 mnLockCount;
+};
 
 
 
@@ -127,42 +174,11 @@ ConfigurationController::Lock::~Lock (void)
 
 //===== ConfigurationController ===============================================
 
-Reference<XConfigurationController> ConfigurationController::Create (
-    const Reference<XComponentContext>& rxContext) // NOTHROW
-{
-    (void)rxContext;
-    ::rtl::Reference<ConfigurationController> pConfigurationController (
-        new ConfigurationController());
-    pConfigurationController->Initialize();
-    return Reference<XConfigurationController>(pConfigurationController.get());
-}
-
-
-
-
 ConfigurationController::ConfigurationController (void) throw()
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex),
-      mpQueueProcessor(),
-      mpBroadcaster(),
-      mxRequestedConfiguration(),
-      mpBase(NULL),
-      mbIsInitialized(false),
-      mpConfigurationUpdater(),
-      mpConfigurationUpdaterLock(),
-      mnLockCount(0)
+      mpImplementation(),
+      mbIsDisposed(false)
 {
-}
-
-
-
-
-void ConfigurationController::Initialize (void)
-{
-    mpBroadcaster.reset(new ConfigurationControllerBroadcaster(this));
-    mpConfigurationUpdater.reset(new ConfigurationUpdater(this));
-    mpQueueProcessor.reset(new ChangeRequestQueueProcessor(this,mpConfigurationUpdater));
-    mxRequestedConfiguration = Reference<XConfiguration>(new Configuration(this, true));
-    mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
 }
 
 
@@ -177,18 +193,38 @@ ConfigurationController::~ConfigurationController (void) throw()
 
 void SAL_CALL ConfigurationController::disposing (void)
 {
+    if (mpImplementation.get() == NULL)
+        return;
+
+#if defined VERBOSE && VERBOSE>=1
+    OSL_TRACE("ConfigurationController::disposing");
+    OSL_TRACE("    requesting empty configuration");
+#endif
+    // To destroy all resources an empty configuration is requested and then,
+    // synchronously, all resulting requests are processed.
+    mpImplementation->mpQueueProcessor->Clear();
+    restoreConfiguration(new Configuration(this,false));
+    mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
+#if defined VERBOSE && VERBOSE>=1
+    OSL_TRACE("    all requests processed");
+#endif
+
+    // Now that all resources have been deactivated, mark the controller as
+    // disposed.
+    mbIsDisposed = true;
+
     // Release the listeners.
     lang::EventObject aEvent;
     aEvent.Source = uno::Reference<uno::XInterface>((cppu::OWeakObject*)this);
 
     {
         const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
-        mpBroadcaster->DisposeAndClear();
+        mpImplementation->mpBroadcaster->DisposeAndClear();
     }
 
-    mpQueueProcessor.reset();
-    mpConfigurationUpdater.reset();
-    mxRequestedConfiguration = NULL;
+    mpImplementation->mpQueueProcessor.reset();
+    mpImplementation->mxRequestedConfiguration = NULL;
+    mpImplementation.reset();
 }
 
 
@@ -205,7 +241,8 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed();
-    mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
+    OSL_ASSERT(mpImplementation.get()!=NULL);
+    mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
 }
 
 
@@ -218,7 +255,7 @@ void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed();
-    mpBroadcaster->RemoveListener(rxListener);
+    mpImplementation->mpBroadcaster->RemoveListener(rxListener);
 }
 
 
@@ -229,7 +266,7 @@ void SAL_CALL ConfigurationController::notifyEvent (
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    mpBroadcaster->NotifyListeners(rEvent);
+    mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
 }
 
 
@@ -241,15 +278,17 @@ void SAL_CALL ConfigurationController::notifyEvent (
 void SAL_CALL ConfigurationController::lock (void)
     throw (RuntimeException)
 {
-    OSL_ASSERT(mpConfigurationUpdater.get()!=NULL);
+    OSL_ASSERT(mpImplementation.get()!=NULL);
+    OSL_ASSERT(mpImplementation->mpConfigurationUpdater.get()!=NULL);
 
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
 
-    ++mnLockCount;
-    if (mpConfigurationUpdaterLock.get()==NULL)
-        mpConfigurationUpdaterLock = mpConfigurationUpdater->GetLock();
+    ++mpImplementation->mnLockCount;
+    if (mpImplementation->mpConfigurationUpdaterLock.get()==NULL)
+        mpImplementation->mpConfigurationUpdaterLock
+            = mpImplementation->mpConfigurationUpdater->GetLock();
 }
 
 
@@ -261,10 +300,10 @@ void SAL_CALL ConfigurationController::unlock (void)
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    OSL_ASSERT(mnLockCount>0);
-    --mnLockCount;
-    if (mnLockCount == 0)
-        mpConfigurationUpdaterLock.reset();
+    OSL_ASSERT(mpImplementation->mnLockCount>0);
+    --mpImplementation->mnLockCount;
+    if (mpImplementation->mnLockCount == 0)
+        mpImplementation->mpConfigurationUpdaterLock.reset();
 }
 
 
@@ -277,6 +316,21 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
 {
     ::osl::MutexGuard aGuard (maMutex);
        ThrowIfDisposed();
+
+    // Check whether we are being disposed.  This is handled differently
+    // then being completely disposed because the first thing disposing()
+    // does is to deactivate all remaining resources.  This is done via
+    // regular methods which must not throw DisposedExceptions.  Therefore
+    // we just return silently during that stage.
+    if (rBHelper.bInDispose)
+    {
+#if defined VERBOSE && VERBOSE>=1
+        OSL_TRACE("ConfigurationController::requestResourceActivation(): ignoring %s",
+            OUStringToOString(
+                FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
+#endif
+        return;
+    }
 
 #if defined VERBOSE && VERBOSE>=2
     OSL_TRACE("ConfigurationController::requestResourceActivation() %s",
@@ -291,18 +345,22 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
             // Get a list of the matching resources and create deactivation
             // requests for them.
             Sequence<Reference<XResourceId> > aResourceList (
-                mxRequestedConfiguration->getResources(
+                mpImplementation->mxRequestedConfiguration->getResources(
                     rxResourceId->getAnchor(),
                     rxResourceId->getResourceTypePrefix(),
                     AnchorBindingMode_DIRECT));
 
             for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
             {
-                Reference<XConfigurationChangeRequest> xRequest(
-                    new GenericConfigurationChangeRequest(
-                        aResourceList[nIndex],
-                        GenericConfigurationChangeRequest::Deactivation));
-                postChangeRequest(xRequest);
+                // Do not request the deactivation of the resource for which
+                // this method was called.  Doing it would not change the
+                // outcome but would result in unnecessary work.
+                if (rxResourceId->compareTo(aResourceList[nIndex]) == 0)
+                    continue;
+
+                // Request the deactivation of a resource and all resources
+                // linked to it.
+                requestResourceDeactivation(aResourceList[nIndex]);
             }
         }
 
@@ -335,10 +393,10 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
         // Request deactivation of all resources linked to the specified one
         // as well.
         const Sequence<Reference<XResourceId> > aLinkedResources (
-            mxRequestedConfiguration->getResources(
+            mpImplementation->mxRequestedConfiguration->getResources(
                 rxResourceId,
                 OUString(),
-                AnchorBindingMode_INDIRECT));
+                AnchorBindingMode_DIRECT));
         const sal_Int32 nCount (aLinkedResources.getLength());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
@@ -360,17 +418,32 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
 
 
 
+Reference<XResource> SAL_CALL ConfigurationController::getResource (
+    const Reference<XResourceId>& rxResourceId)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+
+    ConfigurationControllerResourceManager::ResourceDescriptor aDescriptor (
+        mpImplementation->mpResourceManager->GetResource(rxResourceId));
+    return aDescriptor.mxResource;
+}
+
+
+
+
 void SAL_CALL ConfigurationController::update (void)
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    if (mpQueueProcessor->IsEmpty())
+    if (mpImplementation->mpQueueProcessor->IsEmpty())
     {
         // The queue is empty.  Add another request that does nothing but
         // asynchronously trigger a request for an update.
-        mpQueueProcessor->AddRequest(new UpdateRequest());
+        mpImplementation->mpQueueProcessor->AddRequest(new UpdateRequest());
     }
     else
     {
@@ -388,7 +461,7 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests (void)
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    return ! mpQueueProcessor->IsEmpty();
+    return ! mpImplementation->mpQueueProcessor->IsEmpty();
 }
 
 
@@ -402,20 +475,38 @@ void SAL_CALL ConfigurationController::postChangeRequest (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    mpQueueProcessor->AddRequest(rxRequest);
+    mpImplementation->mpQueueProcessor->AddRequest(rxRequest);
 }
 
 
 
 
-Reference<XConfiguration> SAL_CALL ConfigurationController::getConfiguration (void)
+Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration (void)
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    if (mxRequestedConfiguration.is())
-        return Reference<XConfiguration>(mxRequestedConfiguration->createClone(), UNO_QUERY);
+    if (mpImplementation->mxRequestedConfiguration.is())
+        return Reference<XConfiguration>(
+            mpImplementation->mxRequestedConfiguration->createClone(), UNO_QUERY);
+    else
+        return Reference<XConfiguration>();
+}
+
+
+
+
+Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration (void)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+
+    Reference<XConfiguration> xCurrentConfiguration(
+        mpImplementation->mpConfigurationUpdater->GetCurrentConfiguration());
+    if (xCurrentConfiguration.is())
+        return Reference<XConfiguration>(xCurrentConfiguration->createClone(), UNO_QUERY);
     else
         return Reference<XConfiguration>();
 }
@@ -436,11 +527,11 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     // We will probably be making a couple of activation and deactivation
     // requests so lock the configuration controller and let it later update
     // all changes at once.
-    ::boost::shared_ptr<ConfigurationUpdaterLock> pLock (mpConfigurationUpdater->GetLock());
+    ::boost::shared_ptr<ConfigurationUpdaterLock> pLock (
+        mpImplementation->mpConfigurationUpdater->GetLock());
 
     // Get lists of resources that are to be activated or deactivated.
-    Reference<XConfiguration> xCurrentConfiguration (
-        mpConfigurationUpdater->GetCurrentConfiguration());
+    Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if defined VERBOSE && VERBOSE>=1
     OSL_TRACE("ConfigurationController::restoreConfiguration(");
     ConfigurationTracer::TraceConfiguration(rxNewConfiguration, "requested configuration");
@@ -487,30 +578,72 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 
 
 
+//----- XResourceFactoryManager -----------------------------------------------
+
+void SAL_CALL ConfigurationController::addResourceFactory(
+    const OUString& sResourceURL,
+    const Reference<XResourceFactory>& rxResourceFactory)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+    mpImplementation->mpResourceFactoryContainer->AddFactory(sResourceURL, rxResourceFactory);
+}
+
+
+
+
+void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
+    const OUString& sResourceURL)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+    mpImplementation->mpResourceFactoryContainer->RemoveFactoryForURL(sResourceURL);
+}
+
+
+
+
+void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
+    const Reference<XResourceFactory>& rxResourceFactory)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+    mpImplementation->mpResourceFactoryContainer->RemoveFactoryForReference(rxResourceFactory);
+}
+
+
+
+
+Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
+    const OUString& sResourceURL)
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    ThrowIfDisposed();
+
+    return mpImplementation->mpResourceFactoryContainer->GetFactory(sResourceURL);
+}
+
+
+
+
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    ThrowIfDisposed();
 
-    if (aArguments.getLength() > 0)
+    if (aArguments.getLength() == 1)
     {
         const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
 
-        mpConfigurationUpdater->SetControllerManager(
-            Reference<XControllerManager>(aArguments[0], UNO_QUERY));
-
-        // Tunnel through the controller to obtain a ViewShellBase.
-        Reference<lang::XUnoTunnel> xTunnel (aArguments[0], UNO_QUERY);
-        if (xTunnel.is())
-        {
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != NULL)
-                mpBase = pController->GetViewShellBase();
-        }
+        mpImplementation.reset(new Implementation(
+            *this,
+            Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW)));
     }
 }
 
@@ -522,13 +655,75 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 void ConfigurationController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (mbIsDisposed)
     {
         throw lang::DisposedException (
             OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "ConfigurationController object has already been disposed")),
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
+
+    if (mpImplementation.get() == NULL)
+    {
+        OSL_ASSERT(mpImplementation.get() != NULL);
+        throw RuntimeException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "ConfigurationController not initialized")),
+            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+    }
+}
+
+
+
+
+//===== ConfigurationController::Implementation ===============================
+
+ConfigurationController::Implementation::Implementation (
+    ConfigurationController& rController,
+    const Reference<frame::XController>& rxController)
+    : mxControllerManager(rxController, UNO_QUERY_THROW),
+      mpBroadcaster(new ConfigurationControllerBroadcaster(&rController)),
+      mxRequestedConfiguration(new Configuration(&rController, true)),
+      mpBase(NULL),
+      mbIsInitialized(false),
+      mpResourceFactoryContainer(new ResourceFactoryManager(mxControllerManager)),
+      mpResourceManager(
+          new ConfigurationControllerResourceManager(mpResourceFactoryContainer,mpBroadcaster)),
+      mpConfigurationUpdater(
+          new ConfigurationUpdater(mpBroadcaster, mpResourceManager,mxControllerManager)),
+      mpQueueProcessor(new ChangeRequestQueueProcessor(&rController,mpConfigurationUpdater)),
+      mpConfigurationUpdaterLock(),
+      mnLockCount(0)
+{
+    mpQueueProcessor->SetConfiguration(mxRequestedConfiguration);
+}
+
+
+
+
+void ConfigurationController::Implementation::Initialize (
+    const Reference<frame::XController>& rxController)
+{
+    mxControllerManager = Reference<XControllerManager>(rxController, UNO_QUERY_THROW);
+
+    mpConfigurationUpdater->SetControllerManager(mxControllerManager);
+
+    // Tunnel through the controller to obtain a ViewShellBase.
+    Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
+    if (xTunnel.is())
+    {
+        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
+            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+        if (pController != NULL)
+            mpBase = pController->GetViewShellBase();
+    }
+}
+
+
+
+
+ConfigurationController::Implementation::~Implementation (void)
+{
 }
 
 
