@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:34:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 #define SD_SLIDESORTER_SELECTION_FUNCTION_HXX
 
@@ -49,6 +50,10 @@ class SdSlideView;
 class SdDrawDocument;
 class Sound;
 
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
+
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
@@ -59,7 +64,7 @@ class SelectionFunction
 public:
     TYPEINFO();
 
-    static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
+    static FunctionReference Create( SlideSorter& rSlideSorter, SfxRequest& rRequest );
 
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -93,10 +98,11 @@ public:
     virtual bool cancel();
 
 protected:
+    SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
 
     SelectionFunction (
-        SlideSorterController& rController,
+        SlideSorter& rSlideSorter,
         SfxRequest& rRequest);
 
     virtual ~SelectionFunction();
