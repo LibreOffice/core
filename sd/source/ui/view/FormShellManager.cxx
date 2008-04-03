@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:25:40 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,15 +71,18 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
       mpFormShell(NULL),
       mbFormShellAboveViewShell(false),
-      mpSubShellFactory()
+      mpSubShellFactory(),
+      mbIsMainViewChangePending(false),
+      mpMainViewShellWindow(NULL)
 {
     // Register at the EventMultiplexer to be informed about changes in the
     // center pane.
     Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
-    mrBase.GetEventMultiplexer().AddEventListener(
+    mrBase.GetEventMultiplexer()->AddEventListener(
         aLink,
         sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+        | sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
+        | sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
 
     RegisterAtCenterPane();
 }
@@ -94,13 +97,13 @@ FormShellManager::~FormShellManager (void)
 
     // Unregister from the EventMultiplexer.
     Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
-    mrBase.GetEventMultiplexer().RemoveEventListener(aLink);
+    mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
     if (mpSubShellFactory.get() != NULL)
     {
         ViewShell* pShell = mrBase.GetMainViewShell().get();
         if (pShell != NULL)
-            mrBase.GetViewShellManager().RemoveSubShellFactory(pShell,mpSubShellFactory);
+            mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell,mpSubShellFactory);
     }
 }
 
@@ -142,7 +145,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
         }
 
         // Tell the ViewShellManager where on the stack to place the form shell.
-        mrBase.GetViewShellManager().SetFormShell(
+        mrBase.GetViewShellManager()->SetFormShell(
             mrBase.GetMainViewShell().get(),
             mpFormShell,
             mbFormShellAboveViewShell);
@@ -173,13 +176,13 @@ void FormShellManager::RegisterAtCenterPane (void)
         if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
             break;
 
-        ::Window* pWindow = pShell->GetActiveWindow();
-        if (pWindow == NULL)
+        mpMainViewShellWindow = pShell->GetActiveWindow();
+        if (mpMainViewShellWindow == NULL)
             break;
 
         // Register at the window to get informed when to move the form
         // shell to the bottom of the shell stack.
-        pWindow->AddEventListener(
+        mpMainViewShellWindow->AddEventListener(
             LINK(
                 this,
                 FormShellManager,
@@ -188,8 +191,8 @@ void FormShellManager::RegisterAtCenterPane (void)
         // Create a shell factory and with it activate the form shell.
         OSL_ASSERT(mpSubShellFactory.get()==NULL);
         mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
-        mrBase.GetViewShellManager().AddSubShellFactory(pShell,mpSubShellFactory);
-        mrBase.GetViewShellManager().ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
+        mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
+        mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
     }
     while (false);
 }
@@ -201,27 +204,28 @@ void FormShellManager::UnregisterAtCenterPane (void)
 {
     do
     {
-        ViewShell* pShell = mrBase.GetMainViewShell().get();
-        if (pShell == NULL)
-            break;
-
-        ::Window* pWindow = pShell->GetActiveWindow();
-        if (pWindow == NULL)
-            break;
-
-        // Unregister from the window.
-        pWindow->RemoveEventListener(
-            LINK(
-                this,
-                FormShellManager,
-                WindowEventHandler));
+        if (mpMainViewShellWindow != NULL)
+        {
+            // Unregister from the window.
+            mpMainViewShellWindow->RemoveEventListener(
+                LINK(
+                    this,
+                    FormShellManager,
+                    WindowEventHandler));
+            mpMainViewShellWindow = NULL;
+        }
 
         // Unregister form at the form shell.
         SetFormShell(NULL);
 
         // Deactivate the form shell and destroy the shell factory.
-        mrBase.GetViewShellManager().DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
-        mrBase.GetViewShellManager().RemoveSubShellFactory(pShell, mpSubShellFactory);
+        ViewShell* pShell = mrBase.GetMainViewShell().get();
+        if (pShell != NULL)
+        {
+            mrBase.GetViewShellManager()->DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
+            mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell, mpSubShellFactory);
+        }
+
         mpSubShellFactory.reset();
     }
     while (false);
@@ -241,7 +245,7 @@ IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
         mbFormShellAboveViewShell = true;
 
         ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
-        mrBase.GetViewShellManager().SetFormShell(pShell,mpFormShell,mbFormShellAboveViewShell);
+        mrBase.GetViewShellManager()->SetFormShell(pShell,mpFormShell,mbFormShellAboveViewShell);
     }
 
     return 0;
@@ -259,7 +263,15 @@ IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiple
             break;
 
         case sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            RegisterAtCenterPane();
+            mbIsMainViewChangePending = true;
+            break;
+
+        case sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+            if (mbIsMainViewChangePending)
+            {
+                mbIsMainViewChangePending = false;
+                RegisterAtCenterPane();
+            }
             break;
 
         default:
@@ -288,7 +300,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
                 {
                     mbFormShellAboveViewShell = false;
                     ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
-                    mrBase.GetViewShellManager().SetFormShell(
+                    mrBase.GetViewShellManager()->SetFormShell(
                         pShell,
                         mpFormShell,
                         mbFormShellAboveViewShell);
@@ -302,6 +314,10 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
                 // the window or the form shell.  The later, however, is
                 // notified over the FormControlActivated handler, not this
                 // one.
+                break;
+
+            case VCLEVENT_OBJECT_DYING:
+                mpMainViewShellWindow = NULL;
                 break;
         }
     }
@@ -328,7 +344,7 @@ void FormShellManager::SFX_NOTIFY(
         if (mpFormShell != NULL)
         {
             mpFormShell = NULL;
-            mrBase.GetViewShellManager().SetFormShell(
+            mrBase.GetViewShellManager()->SetFormShell(
                 mrBase.GetMainViewShell().get(),
                 NULL,
                 false);
