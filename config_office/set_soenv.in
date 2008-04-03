@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.181 $
-# Date:        $Date: 2008-04-03 16:49:47 $
+# Version:     $Revision: 1.182 $
+# Date:        $Date: 2008-04-03 17:15:28 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1885,6 +1885,7 @@ ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );
 ToFile( "LFS_CFLAGS",        "@LFS_CFLAGS@",     "e" );
 ToFile( "ENABLE_CRASHDUMP",  "@ENABLE_CRASHDUMP@",  "e" );
 ToFile( "ENABLE_CUPS",       "@ENABLE_CUPS@",       "e" );
+ToFile( "ENABLE_RANDR",      "@ENABLE_RANDR@",      "e" );
 ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
