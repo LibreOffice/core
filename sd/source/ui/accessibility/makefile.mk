@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:31:03 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:24:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ SLOFILES =      									\
     $(SLO)$/AccessibleOutlineEditSource.obj			\
     $(SLO)$/AccessiblePageShape.obj					\
     $(SLO)$/AccessibleScrollPanel.obj				\
-    $(SLO)$/AccessibleSlideView.obj					\
     $(SLO)$/AccessibleSlideSorterView.obj			\
     $(SLO)$/AccessibleSlideSorterObject.obj			\
     $(SLO)$/AccessibleTaskPane.obj					\
