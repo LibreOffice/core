@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:09:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,20 @@
 #ifndef _SD_SLIDESHOW_HXX
 #define _SD_SLIDESHOW_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
-#endif
+#include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
+#include <rtl/ref.hxx>
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
+#include <tools/link.hxx>
 
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
+
+#include <svx/unoipset.hxx>
 
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
 
@@ -80,7 +77,7 @@ class SfxRequest;
 #define PAGE_NO_PAUSE       (PAGE_NO_SOFTEND - 1)
 #define PAGE_NO_FIRSTDEF    PAGE_NO_PAUSE // immer mit anpassen
 
-/* Definition of Slideshow class */
+/* Definition of SlideShow class */
 
 namespace sd
 {
@@ -92,6 +89,9 @@ class View;
 class ViewShell;
 struct PresentationSettings;
 class EffectSequenceHelper;
+class ViewShellBase;
+struct PresentationSettingsEx;
+class FrameView;
 
 enum AnimationMode
 {
@@ -100,35 +100,83 @@ enum AnimationMode
     ANIMATIONMODE_PREVIEW
 };
 
-class Slideshow
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::presentation::XPresentation2, ::com::sun::star::lang::XServiceInfo > SlideshowBase;
+
+class SlideShow : private ::cppu::BaseMutex, public SlideshowBase
 {
 public:
-    Slideshow( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
-        ::Window* pParentWindow );
-    ~Slideshow();
+    /// used by the model to create a slideshow for it
+    static rtl::Reference< SlideShow > Create( SdDrawDocument* pDoc );
 
-    // actions
-    bool startShow( PresentationSettings* pPresSettings = 0 );  // a.k.a. FuSlideShow::StartShow()
+    // static helper api
+    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument* pDocument );
+    static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase& rBase );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > GetSlideShowController(ViewShellBase& rBase );
+
+    static bool StartPreview( ViewShellBase& rBase,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
+        ::Window* pParent = 0 );
+
+    static void Stop( ViewShellBase& rBase );
+
+    /// returns true if there is a running presentation for the given ViewShellBase
+    static bool IsRunning( ViewShellBase& rBase );
+
+    /// returns true if there is a running presentation inside the given ViewShell
+    /// returns false even if there is a running presentation but in another ViewShell
+    static bool IsRunning( ViewShell& rViewShell );
+
+    // helper api
+
     bool startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent = 0 );
 
+    // uno api
 
-    void stopShow();                                        // a.k.a. FuSlideShow::Terminate()
+        virtual void SAL_CALL disposing (void);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XPresentation
+    virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL end(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rehearseTimings(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XPresentation2
+    virtual void SAL_CALL startWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isRunning(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > SAL_CALL getController(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // legacy api
+
+    // actions
     void jumpToPageNumber( sal_Int32 nPage );               // a.k.a. FuSlideShow::JumpToPage()
     void jumpToPageIndex( sal_Int32 nIndex );
-    void jumpToBookmark( const String& sBookmark );         // a.k.a. FuSlideShow::JumpToBookmark()
-    void dispose();                                         // a.k.a. FuSlideShow::Destroy()
+    void jumpToBookmark( const ::rtl::OUString& sBookmark );            // a.k.a. FuSlideShow::JumpToBookmark()
 
     /** sets or clears the pause state of the running slideshow.
         !!!! This should only be called by the SdShowWindow !!!!*/
     bool pause( bool bPause );
 
+
     // settings
-    void setRehearseTimings( bool bRehearseTimings );
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
-    bool isTerminated();                                // a.k.a. FuSlideShow::IsTerminated();
     bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();
     ShowWindow* getShowWindow();                        // a.k.a. FuSlideShow::GetShowWindow()
     int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
@@ -139,31 +187,48 @@ public:
     bool isEndless();
     bool isDrawingPossible();
 
-    // methods
-    void setWindow( sd::Window* pWindow );              // a.k.a. FuSlideShow::SetWindow();
-
     // events
+    void resize( const Size &rSize );
+    void activate(ViewShellBase& rBase);
+    void deactivate(ViewShellBase& rBase);
     void paint( const Rectangle& rRect );
-    void resize( const Size &rSize );                   // a.k.a. FuSlideShow::Resize()
-    void activate();                                    // a.k.a. FuSlideShow::Activate();
-    void deactivate();                                  // a.k.a. FuSlideShow::Deactivate();
 
-    bool requestHelp(const HelpEvent& rHEvt);           // a.k.a. FuSlideShow::requestHelp();
-    bool keyInput(const KeyEvent& rKEvt);               // a.k.a. FuSlideShow::KeyInput();
-    void mouseButtonDown(const MouseEvent& rMEvt);      // a.k.a. FuSlideShow::MouseButtonDown();
-    void mouseMove(const MouseEvent& rMEvt);            // a.k.a. FuSlideShow::MouseMove();
-    void mouseButtonUp(const MouseEvent& rMEvt);        // a.k.a. FuSlideShow::MouseButtonUp();
-
-    void command(const CommandEvent& rCEvt);            // a.k.a. FuSlideShow::Command();
+    bool keyInput(const KeyEvent& rKEvt);
 
     void receiveRequest(SfxRequest& rReq);
 
-private:
-    // default: disabled copy/assignment
-    Slideshow(const Slideshow&);
-    Slideshow& operator=( const Slideshow& );
+    bool dependsOn( ViewShellBase* pViewShellBase );
 
-    sd::SlideshowImpl* mpImpl;
+    static sal_Int32 GetDisplay();
+
+private:
+    SlideShow( SdDrawDocument* pDoc );
+
+    DECL_LINK( StartInPlacePresentationConfigurationHdl, void * );
+    void StartInPlacePresentationConfigurationCallback();
+
+    void StartInPlacePresentation();
+    void StartFullscreenPresentation();
+
+    void ThrowIfDisposed() throw (::com::sun::star::uno::RuntimeException);
+
+    void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::Window* pParentWindow );
+
+    // default: disabled copy/assignment
+    SlideShow(const SlideShow&);
+    SlideShow& operator=( const SlideShow& );
+
+    SvxItemPropertySet  maPropSet;
+
+    rtl::Reference< SlideshowImpl > mxController;
+    SdDrawDocument* mpDoc;
+
+    boost::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
+
+    ViewShellBase* mpCurrentViewShellBase;
+    ViewShellBase* mpFullScreenViewShellBase;
+    FrameView* mpFullScreenFrameView;
+    sal_Int32   mnInPlaceConfigEvent;
 };
 
 }
