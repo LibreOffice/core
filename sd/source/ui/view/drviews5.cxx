@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,9 +100,6 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
-#ifndef SD_SHOW_WINDOW_HXX
-#include "ShowWindow.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #ifndef SD_OUTLINER_HXX
@@ -165,7 +162,10 @@ void DrawViewShell::ModelHasChanged()
 
 void DrawViewShell::Resize (void)
 {
-    if (!mpSlideShow || !mpSlideShow->isFullScreen())
+    rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+    const bool bisRunning = xSlideshow.is() && xSlideshow->isRunning();
+
+    if( !bisRunning || !xSlideshow->isFullScreen())
     {
         ViewShell::Resize();
 
@@ -175,8 +175,8 @@ void DrawViewShell::Resize (void)
         }
     }
 
-    if(mpSlideShow != NULL)
-        mpSlideShow->resize(maViewSize);
+    if(bisRunning)
+        xSlideshow->resize(maViewSize);
 }
 
 
@@ -592,7 +592,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
 
 void DrawViewShell::HidePage()
 {
-    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager().GetFormShell();
+    FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
         pFormShell->PrepareClose (FALSE);
 }
