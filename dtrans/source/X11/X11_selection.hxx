@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:16:37 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:16:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,6 @@ namespace x11 {
         void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtde ) throw();
         void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw();
         void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
-        void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw();
         void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw();
 
         // XInitialization
