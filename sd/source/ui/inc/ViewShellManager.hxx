@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:08:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,10 +241,11 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (ViewShellManager& rManager) : mrManager(rManager) {mrManager.LockUpdate();}
-        ~UpdateLock (void) {mrManager.UnlockUpdate();};
+        UpdateLock (const ::boost::shared_ptr<ViewShellManager>& rpManager)
+            : mpManager(rpManager) {mpManager->LockUpdate();}
+        ~UpdateLock (void) {mpManager->UnlockUpdate();};
     private:
-        ViewShellManager& mrManager;
+        ::boost::shared_ptr<ViewShellManager> mpManager;
     };
     friend class UpdateLock;
 
