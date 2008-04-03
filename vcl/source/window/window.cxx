@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.276 $
+ *  $Revision: 1.277 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:11:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,10 +797,21 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
         nStyle |= WB_3DLOOK;
 
-    // Wenn wir einen Border haben, muessen wir ein BorderWindow anlegen
-    if ( !mpWindowImpl->mbFrame && !mpWindowImpl->mbBorderWin && !mpWindowImpl->mpBorderWindow && (nStyle & WB_BORDER) )
+    // create border window if necessary
+    if ( !mpWindowImpl->mbFrame && !mpWindowImpl->mbBorderWin && !mpWindowImpl->mpBorderWindow
+         && (nStyle & (WB_BORDER | WB_SYSTEMCHILDWINDOW) ) )
     {
-        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL) );
+        USHORT nBorderTypeStyle = 0;
+        if( (nStyle & WB_SYSTEMCHILDWINDOW) )
+        {
+            // handle WB_SYSTEMCHILDWINDOW
+            // these should be analogous to a top level frame; meaning they
+            // should have a border window with style BORDERWINDOW_STYLE_FRAME
+            // which controls their size
+            nBorderTypeStyle |= BORDERWINDOW_STYLE_FRAME;
+            nStyle |= WB_BORDER;
+        }
+        ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, nStyle & (WB_BORDER | WB_DIALOGCONTROL | WB_NODIALOGCONTROL), nBorderTypeStyle );
         ((Window*)pBorderWin)->mpWindowImpl->mpClientWindow = this;
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
@@ -864,6 +875,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         if( nStyle & WB_NOSHADOW )
             nFrameStyle |= SAL_FRAME_STYLE_NOSHADOW;
 
+        if( nStyle & WB_SYSTEMCHILDWINDOW )
+            nFrameStyle |= SAL_FRAME_STYLE_SYSTEMCHILD;
+
         switch (mpWindowImpl->mnType)
         {
             case WINDOW_DIALOG:
@@ -885,7 +899,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
             pParentFrame = pParent->mpWindowImpl->mpFrame;
         SalFrame* pFrame;
         if ( pSystemParentData )
-            pFrame = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_CHILD );
+            pFrame = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
         else
             pFrame = pSVData->mpDefInst->CreateFrame( pParentFrame, nFrameStyle );
         if ( !pFrame )
@@ -7242,6 +7256,11 @@ void Window::SetPosSizePixel( long nX, long nY,
         if( nFlags & WINDOW_POSSIZE_X )
         {
             nSysFlags |= SAL_FRAME_POSSIZE_X;
+            if( pWindow->GetParent() && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            {
+                Window* pParent = pWindow->GetParent();
+                nX += pParent->mnOutOffX;
+            }
             if( GetParent() && GetParent()->ImplHasMirroredGraphics() && !GetParent()->IsRTLEnabled() )
             {
                 // --- RTL --- (re-mirror at parent window)
@@ -7277,7 +7296,14 @@ void Window::SetPosSizePixel( long nX, long nY,
             }
         }
         if( nFlags & WINDOW_POSSIZE_Y )
+        {
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
+            if( pWindow->GetParent() && (pWindow->GetStyle() & WB_SYSTEMCHILDWINDOW) )
+            {
+                Window* pParent = pWindow->GetParent();
+                nY += pParent->mnOutOffY;
+            }
+        }
 
         if( nSysFlags & (SAL_FRAME_POSSIZE_WIDTH|SAL_FRAME_POSSIZE_HEIGHT) )
         {
