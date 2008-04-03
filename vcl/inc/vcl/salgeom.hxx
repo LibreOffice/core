@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgeom.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:47:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 typedef struct _SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
-    int                 nX, nY;
+    long                nX, nY;
     // dimensions of the drawable area in pixel
-    unsigned int        nWidth, nHeight;
+    unsigned long       nWidth, nHeight;
     // thickness of the decoration in pixel
-    unsigned int        nLeftDecoration,
+    unsigned long       nLeftDecoration,
                         nTopDecoration,
                         nRightDecoration,
                         nBottomDecoration;
