@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:48:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ void DocumentHelper::ProvideStyles (
 void DocumentHelper::AssignMasterPageToPageList (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
-    const ::std::vector<SdPage*>& rPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     do
     {
@@ -336,14 +336,14 @@ void DocumentHelper::AssignMasterPageToPageList (
         String sBaseLayoutName (sFullLayoutName);
         sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
 
-        if (rPageList.size() == 0)
+        if (rpPageList->empty())
             break;
 
         // Create a second list that contains only the valid pointers to
         // pages for which an assignment is necessary.
         ::std::vector<SdPage*>::const_iterator iPage;
         ::std::vector<SdPage*> aCleanedList;
-        for (iPage=rPageList.begin(); iPage!=rPageList.end(); ++iPage)
+        for (iPage=rpPageList->begin(); iPage!=rpPageList->end(); ++iPage)
         {
             OSL_ASSERT(*iPage!=NULL && (*iPage)->GetModel() == &rTargetDocument);
             if (*iPage != NULL
@@ -359,7 +359,7 @@ void DocumentHelper::AssignMasterPageToPageList (
         if( pUndoMgr )
             pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
 
-        SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rPageList);
+        SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
         if (pMasterPageInDocument == NULL)
             break;
 
@@ -511,7 +511,7 @@ void DocumentHelper::AssignMasterPageToPage (
 SdPage* DocumentHelper::ProvideMasterPage (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
-    const ::std::vector<SdPage*>& rPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     SdPage* pMasterPageInDocument = NULL;
 
@@ -529,9 +529,9 @@ SdPage* DocumentHelper::ProvideMasterPage (
         // By default they are inserted at the end.  When we assign to a
         // master page then insert after the last of the (selected) pages.
         USHORT nInsertionIndex = rTargetDocument.GetMasterPageCount();
-        if (rPageList.front()->IsMasterPage())
+        if (rpPageList->front()->IsMasterPage())
         {
-            nInsertionIndex = rPageList.back()->GetPageNum();
+            nInsertionIndex = rpPageList->back()->GetPageNum();
         }
 
         if (pMasterPage->GetModel() != &rTargetDocument)
