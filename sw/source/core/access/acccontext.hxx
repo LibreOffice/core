@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:19:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,12 @@ private:
     // Are we currently disposing that object (protected by solar mutex)?
     sal_Bool bDisposing : 1;
 
+    // --> OD 2008-03-10 #i85634#
+    // boolean, indicating if the accessible context is in general registered at
+    // the accessible map.
+    bool bRegisteredAtAccessibleMap;
+    // <--
+
     void InitStates();
 
 protected:
@@ -209,6 +215,14 @@ protected:
     virtual ::com::sun::star::awt::Rectangle SAL_CALL
         getBoundsImpl(sal_Bool bRelative)
         throw (::com::sun::star::uno::RuntimeException);
+
+    // --> OD 2008-03-10 #i85634#
+    inline void NotRegisteredAtAccessibleMap()
+    {
+        bRegisteredAtAccessibleMap = false;
+    }
+    void RemoveFrmFromAccessibleMap();
+    // <--
 
     virtual ~SwAccessibleContext();
 
