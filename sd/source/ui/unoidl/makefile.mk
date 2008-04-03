@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2008-03-12 11:50:02 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:56:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ SLO1FILES =      \
         $(SLO)$/unomodel.obj    \
         $(SLO)$/unopage.obj     \
         $(SLO)$/unolayer.obj    \
-        $(SLO)$/unopres.obj     \
         $(SLO)$/unocpres.obj    \
         $(SLO)$/unoobj.obj		\
         $(SLO)$/unosrch.obj		\
