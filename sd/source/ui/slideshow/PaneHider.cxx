@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneHider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:15:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,24 +41,14 @@
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "slideshow.hxx"
+#include "slideshowimpl.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "framework/ConfigurationController.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XPaneController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -67,50 +57,46 @@ using ::com::sun::star::lang::DisposedException;
 
 namespace sd {
 
-PaneHider::PaneHider (const ViewShell& rViewShell)
+PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
     : mrViewShell(rViewShell),
       mbWindowVisibilitySaved(false),
       mbOriginalLeftPaneWindowVisibility(false),
       mbOriginalRightPaneWindowVisibility(false)
 {
-    // Hide the left and right pane windows when a slideshow exists and is
+     // Hide the left and right pane windows when a slideshow exists and is
     // not full screen.
-    Slideshow* pSlideShow = mrViewShell.GetSlideShow();
-    if (pSlideShow!=NULL && !pSlideShow->isFullScreen())
+    if (pSlideShow!=NULL && !pSlideShow->isFullScreen()) try
     {
-        try
+        Reference<XControllerManager> xControllerManager (
+            mrViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
+        mxConfigurationController = xControllerManager->getConfigurationController();
+        if (mxConfigurationController.is())
         {
-            Reference<XControllerManager> xControllerManager (
-                mrViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
-            mxConfigurationController = xControllerManager->getConfigurationController();
-            if (mxConfigurationController.is())
+            // Get and save the current configuration.
+            mxConfiguration = mxConfigurationController->getRequestedConfiguration();
+            if (mxConfiguration.is())
             {
-                // Get and save the current configuration.
-                mxConfiguration = mxConfigurationController->getConfiguration();
-                if (mxConfiguration.is())
+                // Iterate over the resources and deactivate the panes.
+                Sequence<Reference<XResourceId> > aResources (
+                    mxConfiguration->getResources(
+                        NULL,
+                        framework::FrameworkHelper::msPaneURLPrefix,
+                        AnchorBindingMode_DIRECT));
+                for (sal_Int32 nIndex=0; nIndex<aResources.getLength(); ++nIndex)
                 {
-                    // Iterate over the resources and deactivate the panes.
-                    Sequence<Reference<XResourceId> > aResources (
-                        mxConfiguration->getResources(
-                            NULL,
-                            framework::FrameworkHelper::msPaneURLPrefix,
-                            AnchorBindingMode_DIRECT));
-                    for (sal_Int32 nIndex=0; nIndex<aResources.getLength(); ++nIndex)
+                    Reference<XResourceId> xPaneId (aResources[nIndex]);
+                    if ( ! xPaneId->getResourceURL().equals(FrameworkHelper::msCenterPaneURL))
                     {
-                        Reference<XResourceId> xPaneId (aResources[nIndex]);
-                        if ( ! xPaneId->getResourceURL().equals(FrameworkHelper::msCenterPaneURL))
-                        {
-                            mxConfigurationController->requestResourceDeactivation(xPaneId);
-                        }
+                        mxConfigurationController->requestResourceDeactivation(xPaneId);
                     }
                 }
             }
-            FrameworkHelper::Instance(mrViewShell.GetViewShellBase())->WaitForUpdate();
         }
-        catch (RuntimeException&)
-        {
-            DBG_ASSERT(false, "caught exception in PaneHider constructor");
-        }
+        FrameworkHelper::Instance(mrViewShell.GetViewShellBase())->WaitForUpdate();
+    }
+    catch (RuntimeException&)
+    {
+        DBG_ASSERT(false, "caught exception in PaneHider constructor");
     }
 }
 
