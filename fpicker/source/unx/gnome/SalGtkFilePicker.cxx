@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:13:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,14 +430,6 @@ void SAL_CALL SalGtkFilePicker::controlStateChanged( FilePickerEvent aEvent )
 {
     OSL_TRACE("control state changed");
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
-}
-
-void SAL_CALL SalGtkFilePicker::dialogSizeChanged()
-{
-    OSL_TRACE("dialog size changed");
-    /*
-    if (m_xListener.is()) m_xListener->dialogSizeChanged( aEvent );
-    */
 }
 
 //-----------------------------------------------------------------------------------------
