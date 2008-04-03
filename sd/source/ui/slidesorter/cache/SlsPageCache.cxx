@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageCache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:04:20 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,60 +33,32 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "cache/SlsPageCache.hxx"
-#include "cache/SlsPageCacheManager.hxx"
-#include "SlsBitmapCache.hxx"
 #include "SlsGenericPageCache.hxx"
-#include "SlsGenericRequestQueue.hxx"
 #include "SlsRequestFactory.hxx"
-#include "SlsQueueProcessor.hxx"
-#include "SlsPreviewBitmapFactory.hxx"
+#include "SlsIdleDetector.hxx"
+#include "cache/SlsPageCache.hxx"
+#include "model/SlideSorterModel.hxx"
+#include <boost/bind.hpp>
+#include <boost/bind/protect.hpp>
 
-
-using namespace ::sd::slidesorter::model;
-using namespace ::sd::slidesorter::view;
 using namespace ::com::sun::star;
 
 
 namespace sd { namespace slidesorter { namespace cache {
 
 
-typedef GenericRequestQueue<PageCache::RequestData> Queue;
-typedef QueueProcessor<Queue, PageCache::RequestData, PreviewBitmapFactory> Processor;
-typedef GenericPageCache< PageCache::RequestData, RequestFactory<Queue,false>, Queue, Processor
-    > BaseClass;
-
-
-/** The implementation class simply hides the actual GenericPageCache base
-    class.
-*/
-class PageCache::PageCacheImplementation
-    : public BaseClass
-{
-public:
-    PageCacheImplementation (
-        view::SlideSorterView& rView,
-        model::SlideSorterModel& rModel,
-        const Size& rPreviewSize)
-        : BaseClass (rView,rModel, rPreviewSize)
-    {}
-};
-
-
-
-
 //===== PageCache =============================================================
 
 PageCache::PageCache (
-    view::SlideSorterView& rView,
-    model::SlideSorterModel& rModel,
-    const Size& rPreviewSize)
-    : mpImplementation(NULL)
+    const Size& rPreviewSize,
+    const SharedCacheContext& rpCacheContext)
+   : mpImplementation(
+        new GenericPageCache(
+            rPreviewSize,
+            rpCacheContext))
 {
-    mpImplementation.reset(new PageCacheImplementation(rView,rModel,rPreviewSize));
 }
 
 
@@ -108,36 +80,38 @@ void PageCache::ChangeSize(const Size& rPreviewSize)
 
 
 BitmapEx PageCache::GetPreviewBitmap (
-    RequestData& rRequestData,
+    CacheKey aKey,
     const Size& rSize)
 {
-    return mpImplementation->GetPreviewBitmap (rRequestData, rSize);
+    return mpImplementation->GetPreviewBitmap(aKey, rSize);
 }
 
 
 
 
 void PageCache::RequestPreviewBitmap (
-    RequestData& rRequestData,
+    CacheKey aKey,
     const Size& rSize)
 {
-    return mpImplementation->RequestPreviewBitmap (rRequestData, rSize);
+    return mpImplementation->RequestPreviewBitmap(aKey, rSize);
 }
 
 
 
 
-void PageCache::InvalidatePreviewBitmap (const RequestData& rRequestData)
+void PageCache::InvalidatePreviewBitmap (
+    CacheKey aKey)
 {
-    mpImplementation->InvalidatePreviewBitmap (rRequestData);
+    mpImplementation->InvalidatePreviewBitmap(aKey);
 }
 
 
 
 
-void PageCache::ReleasePreviewBitmap (RequestData& rRequestData)
+void PageCache::ReleasePreviewBitmap (
+    CacheKey aKey)
 {
-    mpImplementation->ReleasePreviewBitmap(rRequestData);
+    mpImplementation->ReleasePreviewBitmap(aKey);
 }
 
 
@@ -151,12 +125,28 @@ void PageCache::InvalidateCache (bool bUpdateCache)
 
 
 
-void PageCache::SetPreciousFlag (RequestData& rRequestData, bool bIsPrecious)
+void PageCache::SetPreciousFlag (
+    CacheKey aKey,
+    bool bIsPrecious)
 {
-    mpImplementation->SetPreciousFlag (rRequestData, bIsPrecious);
+    mpImplementation->SetPreciousFlag(aKey, bIsPrecious);
 }
 
 
+
+
+void PageCache::Pause (void)
+{
+    mpImplementation->Pause();
+}
+
+
+
+
+void PageCache::Resume (void)
+{
+    mpImplementation->Resume();
+}
 
 
 } } } // end of namespace ::sd::slidesorter::cache
