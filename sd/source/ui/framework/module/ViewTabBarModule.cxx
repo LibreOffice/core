@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBarModule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-10 07:00:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,7 @@ ViewTabBarModule::ViewTabBarModule (
     if (xControllerManager.is())
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
-        mxToolBarController = xControllerManager->getToolBarController();
-        if (mxConfigurationController.is() && mxToolBarController.is())
+        if (mxConfigurationController.is())
         {
             mxConfigurationController->addConfigurationChangeListener(
                 this,
@@ -94,7 +93,7 @@ ViewTabBarModule::ViewTabBarModule (
                 FrameworkHelper::msResourceDeactivationRequestEvent,
                 makeAny(ResourceDeactivationRequestEvent));
 
-            UpdateViewTabBar();
+            UpdateViewTabBar(NULL);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceActivationEvent,
@@ -153,7 +152,7 @@ void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
             case ResourceActivationEvent:
                 if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
                 {
-                    UpdateViewTabBar();
+                    UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
                 }
         }
     }
@@ -171,7 +170,6 @@ void SAL_CALL ViewTabBarModule::disposing (
     {
         // Without the configuration controller this class can do nothing.
         mxConfigurationController = NULL;
-        mxToolBarController = NULL;
         disposing();
     }
 }
@@ -179,11 +177,15 @@ void SAL_CALL ViewTabBarModule::disposing (
 
 
 
-void ViewTabBarModule::UpdateViewTabBar (void)
+void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 {
-    if (mxToolBarController.is())
+    if (mxConfigurationController.is())
     {
-        Reference<XTabBar> xBar (mxToolBarController->getToolBar(mxViewTabBarId), UNO_QUERY);
+        Reference<XTabBar> xBar (rxTabBar);
+        if ( ! xBar.is())
+            xBar = Reference<XTabBar>(
+                mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
+
         if (xBar.is())
         {
             TabBarButton aEmptyButton;
