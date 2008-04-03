@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:43:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -837,10 +837,6 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     {
         pView->SetActualWin(pWin);
     }
-    if (mpSlideShow)
-    {
-        mpSlideShow->setWindow(pWin);
-    }
     if(HasCurrentFunction())
     {
         GetCurrentFunction()->SetWindow(pWin);
@@ -861,11 +857,7 @@ BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 
     if (rHEvt.GetMode())
     {
-        if (mpSlideShow)
-        {
-            bReturn = mpSlideShow->requestHelp(rHEvt);
-        }
-        else if(HasCurrentFunction())
+        if(HasCurrentFunction())
         {
             bReturn = GetCurrentFunction()->RequestHelp(rHEvt);
         }
