@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ public:
 // - SystemWindow -
 // ----------------
 
+
 class VCL_DLLPUBLIC SystemWindow : public Window
 {
     friend class WorkWindow;
@@ -179,11 +180,11 @@ private:
     USHORT          mnIcon;
     ImplData*       mpImplData;
 
-//#if 0 // _SOLAR__PRIVATE
+#if _SOLAR__PRIVATE
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE BOOL ImplIsInTaskPaneList( Window* pWin );
-//#endif
+#endif
 
 private:
     // Default construction is forbidden and not implemented.
@@ -248,6 +249,42 @@ public:
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
+
+    /**
+    Returns the screen number the window is on
+
+    The screen number is counted the same way that
+    <code>Application::GetScreenPosSizePixel</code>,
+    <code>Application::GetWorkAreaPosSizePixel</code>,
+    <code>Application::GetScreenName</code>
+    and of course <code>SystemWindow::SetScreenNumber</code>
+    are counted in.
+
+    In case the window is positioned on multiple screens the
+    screen number returned will be of the screen containing the
+    upper left pixel of the frame area (that is of the client
+    area on system decorated windows, or the frame area of
+    undecorated resp. owner decorated windows.
+
+    @returns the screen number
+
+    @see SystemWindow::SetScreenNumber
+    */
+    unsigned int    GetScreenNumber() const;
+    /**
+    Move the Window to a new screen. The same rules for
+    positioning apply as in <code>SystemWindow::GetScreenNumber</code>
+
+    The screen number is counted the same way that
+    <code>Application::GetScreenPosSizePixel</code>,
+    <code>Application::GetWorkAreaPosSizePixel</code>,
+    <code>Application::GetScreenName</code>
+    and of course <code>SystemWindow::GetScreenNumber</code>
+    are counted in.
+
+    @see GetScreenNumber
+    */
+    void            SetScreenNumber( unsigned int nNewScreen );
 };
 
 #endif // _SV_SYSWIN_HXX
