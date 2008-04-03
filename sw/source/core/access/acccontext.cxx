@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:12:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,9 +586,12 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
     pMap( pM ),
-        nClientId(0),
+    nClientId(0),
     nRole( nR ),
-    bDisposing( sal_False )
+    bDisposing( sal_False ),
+    // --> OD 2008-03-10 #i85634#
+    bRegisteredAtAccessibleMap( true )
+    // <--
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -599,8 +602,11 @@ SwAccessibleContext::~SwAccessibleContext()
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     DBG_MSG_CD( "destructed" )
-    if( GetFrm() && GetMap() )
-        GetMap()->RemoveContext( GetFrm() );
+    // --> OD 2008-03-10 #i85634#
+//    if( GetFrm() && GetMap() )
+//        GetMap()->RemoveContext( GetFrm() );
+    RemoveFrmFromAccessibleMap();
+    // <--
 }
 
 uno::Reference< XAccessibleContext > SAL_CALL
@@ -1135,8 +1141,11 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         DBG_MSG_CD( "dispose" )
     }
 
-    if( GetMap() && GetFrm() )
-        GetMap()->RemoveContext( GetFrm() );
+    // --> OD 2008-03-10 #i85634#
+//    if( GetFrm() && GetMap() )
+//        GetMap()->RemoveContext( GetFrm() );
+    RemoveFrmFromAccessibleMap();
+    // <--
     ClearFrm();
     pMap = 0;
 
@@ -1453,6 +1462,13 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
     return OUString( sStr );
 }
 
+// --> OD 2008-03-10 #i85634#
+void SwAccessibleContext::RemoveFrmFromAccessibleMap()
+{
+    if( bRegisteredAtAccessibleMap && GetFrm() && GetMap() )
+        GetMap()->RemoveContext( GetFrm() );
+}
+// <--
 
 #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
