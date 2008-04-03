@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsBitmapCache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:39:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,6 @@ class BitmapReplacement;
 class CacheCompactor;
 class BitmapCompressor;
 
-
-
 /** This low level cache is the actual bitmap container.  It supports a
     precious flag for every preview bitmap and keeps track of total sizes
     for all previews with as well as those without the flag.  The precious
@@ -74,8 +72,13 @@ public:
     typedef ::std::vector<CacheKey> CacheIndex;
 
     /** Create a new cache for bitmap objects.
+        @param nMaximalNormalCacheSize
+            When a size larger then zero is given then that size is used.
+            Otherwise the default value from the configuration is used.
+            When that does not exist either then a internal default value is
+            used.
     */
-    BitmapCache (void);
+    BitmapCache (const sal_Int32 nMaximalNormalCacheSize = 0);
 
     /** The destructor clears the cache and relases all bitmaps still in it.
     */
