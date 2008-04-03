@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:15:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,6 @@ public:
             String              GetCurFilter() const;
             USHORT              GetFilterCount() const;
             const String&       GetFilterName( USHORT nPos ) const;
-            const String&       GetFilterType( USHORT nPos ) const;
 
     virtual void                Resize();
     virtual void                DataChanged( const DataChangedEvent& _rDCEvt );
@@ -282,7 +281,6 @@ public:
 
     inline SvtFileView*         GetView() const;
 
-    void                        SetDefaultButtonText( const XubString& rText, ULONG nHelpId = 0 );
     void                        DisableSaveLastDirectory();
     void                        InitSize();
     void                        UpdateControls( const String& rURL );
