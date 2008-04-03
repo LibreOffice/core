@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 16:48:25 $
+#   last change: $Author: kz $ $Date: 2008-04-03 15:37:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,13 @@ IDLFILES=									\
     BasicPaneFactory.idl					\
     BasicToolBarFactory.idl					\
     BasicViewFactory.idl					\
+    Configuration.idl						\
     ConfigurationChangeEvent.idl			\
     ConfigurationController.idl				\
     ModuleController.idl					\
-    PaneController.idl						\
     ResourceActivationMode.idl				\
     ResourceId.idl							\
     TabBarButton.idl						\
-    ViewController.idl						\
-    XCommandController.idl					\
     XConfiguration.idl						\
     XConfigurationChangeListener.idl		\
     XConfigurationChangeRequest.idl			\
@@ -68,19 +66,15 @@ IDLFILES=									\
     XControllerManager.idl					\
     XModuleController.idl					\
     XPane.idl								\
-    XPaneFactory.idl						\
-    XPaneController.idl						\
+    XPaneBorderPainter.idl					\
     XRelocatableResource.idl				\
     XResource.idl							\
-    XResourceController.idl					\
     XResourceId.idl							\
+    XResourceFactory.idl					\
+    XResourceFactoryManager.idl				\
     XTabBar.idl								\
-    XToolbarController.idl					\
-    XToolBarFactory.idl						\
     XToolBar.idl							\
-    XView.idl								\
-    XViewController.idl						\
-    XViewFactory.idl
+    XView.idl
 
 # ------------------------------------------------------------------
 
