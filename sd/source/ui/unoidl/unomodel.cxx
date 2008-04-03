@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:52:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/presentation/XPresentation2.hpp>
+
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -53,6 +55,7 @@
 #endif
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -168,7 +171,6 @@
 #include <unolayer.hxx>
 #include <unoprnms.hxx>
 #include <unopage.hxx>
-#include <unopres.hxx>
 #include <unocpres.hxx>
 #include <unoobj.hxx>
 #include <stlpool.hxx>
@@ -210,8 +212,9 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
+using ::rtl::OUString;
+
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -919,6 +922,8 @@ uno::Reference< container::XNameContainer > SAL_CALL SdXImpressDocument::getCust
     return xCustomPres;
 }
 
+extern uno::Reference< presentation::XPresentation > createPresentation( SdXImpressDocument& rModel );
+
 // XPresentationSupplier
 uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPresentation()
     throw(uno::RuntimeException)
@@ -928,12 +933,7 @@ uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPr
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< presentation::XPresentation >  aPresentation( mxPresentation );
-
-    if( !aPresentation.is() )
-        mxPresentation = aPresentation = new SdXPresentation(*this);
-
-    return aPresentation;
+    return uno::Reference< presentation::XPresentation >( mpDoc->getPresentation().get() );
 }
 
 // XHandoutMasterSupplier
@@ -2243,14 +2243,23 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             SfxBaseModel::dispose();
             mbDisposed = true;
 
-            uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
-            if( xPresentation.is() )
+            uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
+            if( xStyles.is() )
             {
-                uno::Reference< lang::XComponent > xComp( xPresentation, uno::UNO_QUERY );
+                uno::Reference< lang::XComponent > xComp( xStyles, uno::UNO_QUERY );
                 if( xComp.is() )
                     xComp->dispose();
 
-                xPresentation = 0;
+                xStyles = 0;
+            }
+
+            uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
+            if( xPresentation.is() )
+            {
+                uno::Reference< ::com::sun::star::presentation::XPresentation2 > xPres( mpDoc->getPresentation().get() );
+                uno::Reference< lang::XComponent > xPresComp( xPres, uno::UNO_QUERY );
+                if( xPresComp.is() )
+                    xPresComp->dispose();
             }
 
             uno::Reference< container::XNameAccess > xLinks( mxLinks );
@@ -2977,3 +2986,31 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
+rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument* pDocument )
+{
+    rtl::Reference< SdXImpressDocument > xRet;
+    if( pDocument )
+    {
+        ::sd::DrawDocShell* pDocShell = pDocument->GetDocSh();
+        if( pDocShell )
+        {
+            uno::Reference<frame::XModel> xModel(pDocShell->GetModel());
+
+            xRet.set( dynamic_cast< SdXImpressDocument* >( xModel.get() ) );
+        }
+    }
+
+    return xRet;
+}
+
+void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName )
+{
+    rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
+
+    if( xModel.is() )
+    {
+        uno::Reference< uno::XInterface > xSource( static_cast<uno::XWeak*>( xModel.get() ) );
+        ::com::sun::star::document::EventObject aEvent( xSource, rEventName );
+        xModel->notifyEvent(aEvent );
+    }
+}
