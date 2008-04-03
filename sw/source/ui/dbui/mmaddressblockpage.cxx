@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:02:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ void SwMailMergeAddressBlockPage::ActivatePage()
         sTemp.SearchAndReplaceAscii("%1", String::CreateFromInt32(1));
         m_aDocumentIndexFI.SetText(sTemp);
 
+        m_aSettingsWIN.Clear();
         const uno::Sequence< ::rtl::OUString> aBlocks =
                     m_pWizard->GetConfigItem().GetAddressBlocks();
         for(sal_Int32 nAddress = 0; nAddress < aBlocks.getLength(); ++nAddress)
