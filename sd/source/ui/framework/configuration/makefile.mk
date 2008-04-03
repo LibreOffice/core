@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 15:48:22 $
+#   last change: $Author: kz $ $Date: 2008-04-03 13:31:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,19 @@ PRJINC=..$/..
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =      									\
-    $(SLO)$/ChangeRequestQueue.obj					\
-    $(SLO)$/ChangeRequestQueueProcessor.obj			\
-    $(SLO)$/Configuration.obj						\
-    $(SLO)$/ConfigurationClassifier.obj				\
-    $(SLO)$/ConfigurationController.obj				\
-    $(SLO)$/ConfigurationControllerBroadcaster.obj	\
-    $(SLO)$/ConfigurationTracer.obj					\
-    $(SLO)$/ConfigurationUpdater.obj				\
-    $(SLO)$/GenericConfigurationChangeRequest.obj	\
-    $(SLO)$/ResourceId.obj							\
+SLOFILES =      										\
+    $(SLO)$/ChangeRequestQueue.obj						\
+    $(SLO)$/ChangeRequestQueueProcessor.obj				\
+    $(SLO)$/Configuration.obj							\
+    $(SLO)$/ConfigurationClassifier.obj					\
+    $(SLO)$/ConfigurationController.obj					\
+    $(SLO)$/ConfigurationControllerBroadcaster.obj		\
+    $(SLO)$/ConfigurationControllerResourceManager.obj	\
+    $(SLO)$/ConfigurationTracer.obj						\
+    $(SLO)$/ConfigurationUpdater.obj					\
+    $(SLO)$/GenericConfigurationChangeRequest.obj		\
+    $(SLO)$/ResourceId.obj								\
+    $(SLO)$/ResourceFactoryManager.obj					\
     $(SLO)$/UpdateRequest.obj
 
 # --- Tagets -------------------------------------------------------
