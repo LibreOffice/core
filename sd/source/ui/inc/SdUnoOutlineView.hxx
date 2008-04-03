@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:25:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,14 @@
 #ifndef SD_UNO_OUTLINE_VIEW_HXX
 #define SD_UNO_OUTLINE_VIEW_HXX
 
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
 #include "DrawSubController.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
+#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
+
 
 class SdPage;
+
+namespace css = ::com::sun::star;
 
 namespace sd {
 
@@ -56,7 +55,8 @@ class View;
 /** This class implements the OutlineViewShell specific part of the controller.
 */
 class SdUnoOutlineView
-    : public DrawSubController
+    : private cppu::BaseMutex,
+      public DrawSubControllerInterfaceBase
 {
 public:
     SdUnoOutlineView (
@@ -65,28 +65,54 @@ public:
         View& rView) throw();
     virtual ~SdUnoOutlineView (void) throw();
 
+    virtual void SAL_CALL disposing (void);
+
+
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL select (
+        const css::uno::Any& aSelection)
+        throw(css::lang::IllegalArgumentException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL getSelection (void)
+        throw(css::uno::RuntimeException);
+
+    virtual void SAL_CALL addSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
+    virtual void SAL_CALL removeSelectionChangeListener (
+        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener)
+        throw(css::uno::RuntimeException);
+
 
     // XDrawView
-    virtual void SAL_CALL setCurrentPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getCurrentPage(  ) throw(::com::sun::star::uno::RuntimeException);
 
-protected:
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any & rConvertedValue,
-        ::com::sun::star::uno::Any & rOldValue,
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage >& xPage)
+        throw(css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+        throw(css::uno::RuntimeException);
+
+
+    // XFastPropertySet
+
+    virtual void SAL_CALL setFastPropertyValue (
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-        sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-    virtual void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
-        sal_Int32 nHandle ) const;
+        const css::uno::Any& rValue)
+        throw(css::beans::UnknownPropertyException,
+            css::beans::PropertyVetoException,
+            css::lang::IllegalArgumentException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL getFastPropertyValue (
+        sal_Int32 nHandle)
+        throw(css::beans::UnknownPropertyException,
+            css::lang::WrappedTargetException,
+            css::uno::RuntimeException);
 
     // lang::XEventListener
     virtual void SAL_CALL
