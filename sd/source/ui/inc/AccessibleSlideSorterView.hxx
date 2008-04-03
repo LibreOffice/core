@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:31:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,9 @@
 
 class Window;
 
-namespace sd { namespace slidesorter { namespace controller {
-class SlideSorterController;
-} } }
+namespace sd { namespace slidesorter {
+class SlideSorter;
+} }
 
 namespace accessibility {
 
@@ -103,7 +103,7 @@ class AccessibleSlideSorterView
 {
 public:
     AccessibleSlideSorterView(
-        ::sd::slidesorter::controller::SlideSorterController& rController,
+        ::sd::slidesorter::SlideSorter& rSlideSorter,
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> & rxParent,
         ::Window* pParentWindow);
 
@@ -325,7 +325,7 @@ private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
 
-    ::sd::slidesorter::controller::SlideSorterController& mrSlideSorterController;
+    ::sd::slidesorter::SlideSorter& mrSlideSorter;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> mxParent;
