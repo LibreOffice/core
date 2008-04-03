@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:26:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,10 +167,6 @@ String STR_PRESOBJ_ORGCHART
 String STR_PRESOBJ_TABLE
 {
     Text [ en-US ] = "Double-click to add a spreadsheet" ;
-};
-String STR_SLIDEVIEWSHELL
-{
-    Text [ en-US ] = "Slide Mode" ;
 };
 String STR_OUTLINEVIEWSHELL
 {
