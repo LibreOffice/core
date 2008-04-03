@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:14:30 $
+#   last change: $Author: kz $ $Date: 2008-04-03 14:41:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ PRJINC=..$/..
 SLOFILES =      							\
     $(SLO)$/SlsPageDescriptor.obj			\
     $(SLO)$/SlsPageEnumeration.obj			\
+    $(SLO)$/SlsPageEnumerationProvider.obj	\
     $(SLO)$/SlideSorterModel.obj
 
 EXCEPTIONSFILES= 
