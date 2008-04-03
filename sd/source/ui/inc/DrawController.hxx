@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-15 12:14:15 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 13:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,42 +38,20 @@
 
 #include "ViewShell.hxx"
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XFORMLAYERACCESS_HPP_
 #include <com/sun/star/view/XFormLayerAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
+#include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XPaneController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/drawing/framework/ModuleController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
-#endif
 #include <tools/weakbase.hxx>
 #include <memory>
 #include <vector>
@@ -81,6 +59,8 @@
 
 class SfxViewShell;
 class SdXImpressDocument;
+
+namespace css = ::com::sun::star;
 
 namespace {
 
@@ -129,23 +109,16 @@ class DrawController
       public ::cppu::OPropertySetHelper
 {
 public:
-    enum properties
-    {
-        PROPERTY__BEGIN = 0,
-        PROPERTY_WORKAREA = PROPERTY__BEGIN,
-        PROPERTY_CURRENTPAGE,
-        PROPERTY_MASTERPAGEMODE,
-        PROPERTY_LAYERMODE,
-        PROPERTY_ACTIVE_LAYER,
-        PROPERTY_ZOOMTYPE,
-        PROPERTY_ZOOMVALUE,
-        PROPERTY_VIEWOFFSET,
-        PROPERTY_CONFIGURATION_CONTROLLER,
-        PROPERTY_PANE_CONTROLLER,
-        PROPERTY_VIEW_CONTROLLER,
-        PROPERTY_TOOL_BAR_CONTROLLER,
-        PROPERTY_DISPATCH_CONTROLLER,
-        PROPERTY__END
+    enum PropertyHandle {
+        PROPERTY_WORKAREA = 0,
+        PROPERTY_SUB_CONTROLLER = 1,
+        PROPERTY_CURRENTPAGE = 2,
+        PROPERTY_MASTERPAGEMODE = 3,
+        PROPERTY_LAYERMODE = 4,
+        PROPERTY_ACTIVE_LAYER = 5,
+        PROPERTY_ZOOMTYPE = 6,
+        PROPERTY_ZOOMVALUE = 7,
+        PROPERTY_VIEWOFFSET = 8
     };
 
     /** Create a new DrawController object for the given ViewShellBase.
@@ -164,7 +137,8 @@ public:
             while switching to another one) there is no ViewShell displayed
             in the center pane.
     */
-    void SetSubController (::std::auto_ptr<DrawSubController> pSubController);
+    void SetSubController (
+        const css::uno::Reference<css::drawing::XDrawSubController>& rxSubController);
 
     ::com::sun::star::awt::Rectangle GetVisArea (void) const;
 
@@ -213,6 +187,8 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XController
+    virtual ::sal_Bool SAL_CALL suspend( ::sal_Bool Suspend ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -263,52 +239,12 @@ public:
 
     // XControllerManager
 
-    virtual void SAL_CALL registerResourceController (
-        const ::rtl::OUString& sServiceName,
-        const com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceController>& rxController)
+    virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
+        getConfigurationController (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL removeResourceController (
-        const com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::framework::XResourceController>& rxController)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence<com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceController> > SAL_CALL
-        getResourceControllers (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL
-        getController (const ::rtl::OUString& sServiceName)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XConfigurationController> SAL_CALL
-            getConfigurationController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XModuleController> SAL_CALL
-            getModuleController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XPaneController> SAL_CALL
-            getPaneController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XViewController> SAL_CALL
-            getViewController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XToolBarController> SAL_CALL
-            getToolBarController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XCommandController> SAL_CALL
-            getCommandController (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL releaseController (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xController)
+    virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
+        getModuleController (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 
@@ -392,25 +328,12 @@ private:
 
     /** The current sub controller.  May be NULL.
     */
-    ::std::auto_ptr<DrawSubController> mpSubController;
+    css::uno::Reference<css::drawing::XDrawSubController> mxSubController;
 
-    class ControllerContainer;
-    ::boost::scoped_ptr<ControllerContainer> mpControllerContainer;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
-        mxConfigurationController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XModuleController>
-        mxModuleController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XPaneController>
-        mxPaneController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XViewController>
-        mxViewController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XToolBarController>
-        mxToolBarController;
-    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XCommandController>
-        mxCommandController;
-    ::com::sun::star::uno::Sequence<com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::framework::XResourceController> > maResourceControllerList;
-
+    css::uno::Reference<
+        css::drawing::framework::XConfigurationController> mxConfigurationController;
+    css::uno::Reference<
+        css::drawing::framework::XModuleController> mxModuleController;
 
     /** Send an event to all relevant property listeners that a
         property has changed its value.  The fire() method of the
@@ -422,12 +345,8 @@ private:
         const ::com::sun::star::uno::Any& rNewValue,
         const ::com::sun::star::uno::Any& rOldValue);
 
-    void ProvideSubControllers (void);
-    void DisposeSubControllers (void);
-    void DisposeSubController (
-        const ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxSubController);
-    void RemoveSubController (
-        const ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxSubController);
+    void ProvideFrameworkControllers (void);
+    void DisposeFrameworkControllers (void);
 };
 
 } // end of namespace sd
