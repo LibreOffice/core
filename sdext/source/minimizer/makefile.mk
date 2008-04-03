@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2008-04-03 15:54:03 $
+#   last change: $Author: kz $ $Date: 2008-04-03 16:29:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_MINIMIZER)" == "NO"
+.IF "$(ENABLE_MINIMIZER)" != "YES"
 @all:
     @echo "Presentation Minimizer build disabled."
 .ELSE
