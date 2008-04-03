@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XResourceFactoryManager.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:35:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XResourceFactoryManager_idl__
+#define __com_sun_star_drawing_framework_XResourceFactoryManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XResourceId;
+interface XResourceFactory;
+
+/** The XResourceFactoryManager is part of the configuration controller and
+    manages the set of registered resource factories.
+
+    @see XConfigurationController
+    @see XResourceFactory
+*/
+interface XResourceFactoryManager
+{
+    /** Register a new resource factory for the given URL.
+        <p>When one factory is responsible for more than one type of resource
+        then this method has to be called for each type.  If this method is
+        called multiple times for the same URL then a previously registered
+        factory is removed for the URL.</p>
+        @param sResourceURL
+            The URL of the resource that the factory can create.
+        @param xResourceFactory
+            The resource factory object.
+    */
+    void addResourceFactory (
+        [in] string sResourceURL,
+        [in] XResourceFactory xResourceFactory);
+
+    /** Remove a resource factory for one type of resource.  When the
+        factory has been registered for other URLs as well then it remains
+        registered for them.  Use the
+        <member>removeResourceFactoryForReference()</member> to remove a
+        factory completely.
+        @param sResourceURL
+            The URL for which to remove the resource factory.
+    */
+    void removeResourceFactoryForURL (
+        [in] string sResourceURL);
+
+    /** Remove a resource factory for all resource types it has been registered for.  Use
+        <member>removeResourceFactoryForURL</member> to remove a factory
+        just for one resource type and to leave it registered for others.
+        @param xResourceFactory
+            The resource factory object to remove.
+    */
+    void removeResourceFactoryForReference (
+        [in] XResourceFactory xResourceFactory);
+
+    /** Return the resource factory that was previously registered for the
+        given resource type.  This method is typically called by one of the
+        resource controllers.
+        @param sResourceURL
+            The URL of the resource type for which to return the resource
+            factory.
+        @return
+            When no resource factory was registered for the given resource
+            type then an empty reference is returned.
+    */
+    XResourceFactory getResourceFactory (
+        [in] string sResourceURL);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
