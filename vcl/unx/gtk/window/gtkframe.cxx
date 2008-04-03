@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:50:07 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:06:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -868,6 +868,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         gtk_window_set_gravity( GTK_WINDOW(m_pWindow), GDK_GRAVITY_STATIC );
         if( m_pParent && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_PLUG) )
             gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
+    }
+    else if( (nStyle & SAL_FRAME_STYLE_FLOAT) )
+    {
+        gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_UTILITY );
     }
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
