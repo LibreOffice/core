@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:30:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 16:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3002,6 +3002,7 @@ namespace xmloff { namespace token {
         TOKEN( "character-set",         XML_CHARACTER_SET ),
         TOKEN( "application-connection-settings",         XML_APPLICATION_CONNECTION_SETTINGS ),
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
+        TOKEN( "default-row-style-name", XML_DEFAULT_ROW_STYLE_NAME),
         TOKEN( "angle-offset",          XML_ANGLE_OFFSET ),
         // --> OD 2007-09-14 #i81002#
         TOKEN( "number-no-superior", XML_NUMBER_NO_SUPERIOR ),
