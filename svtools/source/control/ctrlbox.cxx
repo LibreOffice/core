@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:23:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 17:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,13 +825,13 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     {
         nX += IMGTEXTSPACE;
 
-        BOOL bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL);
+        bool bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL);
         // starsymbol is a unicode font, but cannot display its own name
-        if( rInfo.GetName().EqualsIgnoreCaseAscii( "starsymbol" )
-         || rInfo.GetName().EqualsIgnoreCaseAscii( "opensymbol" ) )
-            bSymbolFont = TRUE;
+        const bool bOpenSymbol = rInfo.GetName().EqualsIgnoreCaseAscii( "starsymbol" )
+                              || rInfo.GetName().EqualsIgnoreCaseAscii( "opensymbol" );
+        bSymbolFont |= bOpenSymbol;
 
-        if ( bSymbolFont )
+        if( bSymbolFont )
         {
             String aText( rInfo.GetName() );
             aText.AppendAscii( "  " );
@@ -848,53 +848,62 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         aFont.SetSize( aSize );
         rUDEvt.GetDevice()->SetFont( aFont );
         rUDEvt.GetDevice()->SetTextColor( aTextColor );
-        long nTextHeight = rUDEvt.GetDevice()->GetTextHeight();
-        Point aPos( nX, aTopLeft.Y() + (nH-nTextHeight)/2 );
+
+        FontCharMap aFontCharMap;
+        bool bHasCharMap = rUDEvt.GetDevice()->GetFontCharMap( aFontCharMap );
 
         String aString;
         if( !bSymbolFont )
+        {
+              // preview the font name
             aString = rInfo.GetName();
-        else
+
+            // reset font if the name cannot be display in the preview font
+            if( STRING_LEN != rUDEvt.GetDevice()->HasGlyphs( aFont, aString ) )
+                rUDEvt.GetDevice()->SetFont( aOldFont );
+        }
+        else if( bHasCharMap )
         {
             // use some sample characters available in the font
-            sal_Unicode aText[8], *pText = aText;
+            sal_Unicode aText[8];
 
-            FontCharMap aFontCharMap;
-            if( rUDEvt.GetDevice()->GetFontCharMap( aFontCharMap ) )
+            // start just above the PUA used by most symbol fonts
+            sal_uInt32 cNewChar = 0xFF00;
+#ifdef QUARTZ
+            // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
+            if( !bOpenSymbol )
+                cNewChar = 0x0192;
+#endif
+            const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
+            int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
+            if( nSkip > 10 )
+                nSkip = 10;
+            else if( nSkip <= 0 )
+                nSkip = 1;
+            for( int i = 0; i < nMaxCount; ++i )
             {
-                sal_Unicode cNewChar = 0xFF00;
-                int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
-                int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
-                if( nSkip > 10 )
-                    nSkip = 10;
-                else if( nSkip <= 0 )
-                    nSkip = 1;
-                for( int i = 0; i < nMaxCount; ++i )
-                {
-                    sal_Unicode cOldChar = cNewChar;
-                    for( int j = nSkip; --j >= 0; )
-                        cNewChar = sal::static_int_cast< sal_Unicode >(
-                            aFontCharMap.GetPrevChar( cNewChar ));
-                    if( cOldChar == cNewChar )
-                        break;
-                    aText[ i ] = cNewChar;
-                    aText[ i+1 ] = 0;
-                }
+                sal_uInt32 cOldChar = cNewChar;
+                for( int j = nSkip; --j >= 0; )
+                    cNewChar = aFontCharMap.GetPrevChar( cNewChar );
+                if( cOldChar == cNewChar )
+                    break;
+                aText[ i ] = static_cast<sal_Unicode>(cNewChar); // TODO: support UCS4 samples
+                aText[ i+1 ] = 0;
             }
-            else
-            {
-                pText = aImplSymbolFontText;
 
-                // was it only remapped to starsymbol?
-                String aDisplayName( rUDEvt.GetDevice()->GetFontMetric().GetName() );
-                if( aDisplayName.EqualsIgnoreCaseAscii( "starsymbol" )
-                 || aDisplayName.EqualsIgnoreCaseAscii( "opensymbol" ) )
-                    pText = aImplStarSymbolText;
-            }
+            aString = String( aText );
+        }
+        else
+        {
+            const sal_Unicode* pText = aImplSymbolFontText;
+            if( bOpenSymbol )
+                pText = aImplStarSymbolText;
 
             aString = String( pText );
         }
 
+        long nTextHeight = rUDEvt.GetDevice()->GetTextHeight();
+        Point aPos( nX, aTopLeft.Y() + (nH-nTextHeight)/2 );
         rUDEvt.GetDevice()->DrawText( aPos, aString );
 
         rUDEvt.GetDevice()->SetFont( aOldFont );
