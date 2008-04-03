@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:06:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #define SD_PAGE_CACHE_MANAGER_HXX
 
 #include <sal/types.h>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <boost/shared_ptr.hpp>
 #include <memory>
 #include <vector>
@@ -54,6 +55,8 @@ class SlideSorterModel;
 
 namespace sd { namespace slidesorter { namespace cache {
 
+namespace css = ::com::sun::star;
+
 class BitmapCache;
 
 
@@ -67,6 +70,7 @@ class PageCacheManager
 public:
     typedef BitmapCache Cache;
     typedef ::std::vector< ::std::pair<Size, ::boost::shared_ptr<BitmapCache> > > BestFittingPageCaches;
+    typedef css::uno::Reference<css::uno::XInterface> DocumentKey;
 
     /** Return the one instance of the PageCacheManager class.
     */
@@ -82,7 +86,7 @@ public:
             pointer and the ReleaseCache() method has not been called.
     */
     ::boost::shared_ptr<Cache> GetCache (
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const Size& rPreviewSize);
 
     /** Tell the cache manager to release its own reference to the specified
@@ -106,7 +110,7 @@ public:
         the next time.
     */
     void InvalidatePreviewBitmap (
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const SdrPage* pPage);
 
     /** Invalidate all the caches that are currently in use and destroy
@@ -144,7 +148,7 @@ private:
     friend class Deleter;
 
     ::boost::shared_ptr<Cache> GetRecentlyUsedCache(
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const Size& rSize);
 
     /** Add the given cache to the list of recently used caches for the
@@ -152,7 +156,7 @@ private:
         most mnMaximalRecentlyCacheCount members.
     */
     void PutRecentlyUsedCache(
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const Size& rPreviewSize,
         const ::boost::shared_ptr<Cache>& rpCache);
 
@@ -162,7 +166,7 @@ private:
         caches follow with the largest size first.
     */
     BestFittingPageCaches GetBestFittingCaches (
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const Size& rPreviewSize);
 
     /** This method is used internally to initialize a newly created
@@ -170,7 +174,7 @@ private:
     */
     void Recycle (
         const ::boost::shared_ptr<Cache>& rpCache,
-        SdDrawDocument* pDocument,
+        DocumentKey pDocument,
         const Size& rPreviewSize);
 };
 
