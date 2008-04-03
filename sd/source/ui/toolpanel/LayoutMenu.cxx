@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:38:20 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,21 +88,10 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
-#include <com/sun/star/drawing/framework/XViewController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEW_HPP_
 #include <com/sun/star/drawing/framework/XView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
-#endif
 
 using namespace ::sd::toolpanel;
 #define LayoutMenu
@@ -113,6 +102,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using namespace ::sd::slidesorter;
+using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace toolpanel {
 
@@ -262,7 +252,8 @@ LayoutMenu::LayoutMenu (
       mbUseOwnScrollBar (bUseOwnScrollBar),
       mnPreferredColumnCount(3),
       mxListener(NULL),
-      mbSelectionUpdatePending(true)
+      mbSelectionUpdatePending(true),
+      mbIsMainViewChangePending(false)
 {
     SetStyle (
         GetStyle()
@@ -279,11 +270,12 @@ LayoutMenu::LayoutMenu (
     InvalidateContent();
 
     Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
-    mrBase.GetEventMultiplexer().AddEventListener(aEventListenerLink,
+    mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink,
         ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
         | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
-        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
+        | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
+        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
@@ -313,7 +305,7 @@ LayoutMenu::~LayoutMenu (void)
 
     Clear();
     Link aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
-    mrBase.GetEventMultiplexer().RemoveEventListener (aLink);
+    mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 }
 
 
@@ -646,7 +638,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
         // Get a list of all selected slides and call the SID_MODIFYPAGE
         // slot for all of them.
-        ::std::vector<SdPage*> aSelectedPages;
+        ::sd::slidesorter::SharedPageSelection pPageSelection;
 
         // Get a list of selected pages.
         // First we try to obtain this list from a slide sorter.  This is
@@ -667,26 +659,22 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         if (pSlideSorter != NULL)
         {
             // There is a slide sorter visible so get the list of selected pages from it.
-            PageSelector& rSelector (pSlideSorter->GetSlideSorterController().GetPageSelector());
-            ::std::auto_ptr<PageSelector::PageSelection> pSelection (rSelector.GetPageSelection());
-            {
-                SlideSorterController::ModelChangeLock aLock (pSlideSorter->GetSlideSorterController());
-
-                pSlideSorter->GetSelectedPages(aSelectedPages);
-            }
+            pPageSelection = pSlideSorter->GetPageSelection();
         }
         else
         {
-            // No valid slide sorter available.  Ask the main view shell for its current page.
-            aSelectedPages.push_back(pMainViewShell->GetActualPage());
+            // No valid slide sorter available.  Ask the main view shell for
+            // its current page.
+            pPageSelection.reset(new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
+            pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
 
 
-        if (aSelectedPages.size() == 0)
+        if (pPageSelection->empty())
             break;
 
         ::std::vector<SdPage*>::iterator iPage;
-        for (iPage=aSelectedPages.begin(); iPage!=aSelectedPages.end(); ++iPage)
+        for (iPage=pPageSelection->begin(); iPage!=pPageSelection->end(); ++iPage)
             {
                 if ((*iPage) == NULL)
                     continue;
@@ -697,9 +685,6 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
                 pMainViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
             }
-
-        // Restore the previous selection.
-//        rSelector.SetPageSelection(*pSelection.get());
     }
     while(false);
 }
@@ -756,22 +741,18 @@ void LayoutMenu::Fill (void)
     sal_Bool bRightToLeft = (pDocument!=NULL
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
-    // Get URL of the view in the cente pane.
+    // Get URL of the view in the center pane.
     ::rtl::OUString sCenterPaneViewName;
     try
     {
         Reference<XControllerManager> xControllerManager (
             Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY_THROW);
-        Reference<XViewController> xViewController (xControllerManager->getViewController());
-        if (xViewController.is())
-        {
-            Reference<XResourceId> xPaneId (ResourceId::create(
-                comphelper_getProcessComponentContext(),
-                framework::FrameworkHelper::msCenterPaneURL));
-            Reference<XView> xView (xViewController->getFirstViewForAnchor(xPaneId));
-            if (xView.is())
-                sCenterPaneViewName = xView->getResourceId()->getResourceURL();
-        }
+        Reference<XResourceId> xPaneId (ResourceId::create(
+            comphelper_getProcessComponentContext(),
+            FrameworkHelper::msCenterPaneURL));
+        Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
+        if (xView.is())
+            sCenterPaneViewName = xView->getResourceId()->getResourceURL();
     }
     catch (RuntimeException&)
     {}
@@ -950,11 +931,19 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
             break;
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            InvalidateContent();
+            mbIsMainViewChangePending = true;
             break;
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
             HideFocus();
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED:
+            if (mbIsMainViewChangePending)
+            {
+                mbIsMainViewChangePending = false;
+                InvalidateContent();
+            }
             break;
 
         default:
