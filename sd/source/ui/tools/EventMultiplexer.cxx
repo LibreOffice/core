@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-10 07:00:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,22 +45,12 @@
 #include "SlideSorterViewShell.hxx"
 #include "framework/FrameworkHelper.hxx"
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTIOIN_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
-#endif
 #include <cppuhelper/weak.hxx>
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
@@ -76,6 +66,7 @@ class SdDrawDocument;
 namespace {
 static const sal_Int32 ResourceActivationEvent = 0;
 static const sal_Int32 ResourceDeactivationEvent = 1;
+static const sal_Int32 ConfigurationUpdateEvent = 2;
 }
 
 namespace sd { namespace tools {
@@ -323,6 +314,10 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
                 this,
                 FrameworkHelper::msResourceDeactivationEvent,
                 makeAny(ResourceDeactivationEvent));
+            xConfigurationController->addConfigurationChangeListener(
+                this,
+                FrameworkHelper::msConfigurationUpdateEndEvent,
+                makeAny(ConfigurationUpdateEvent));
         }
     }
 }
@@ -697,6 +692,10 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                                 SlideSorterSelectionChangeListener));
                 }
             }
+            break;
+
+        case ConfigurationUpdateEvent:
+            CallListeners (EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
             break;
     }
 
