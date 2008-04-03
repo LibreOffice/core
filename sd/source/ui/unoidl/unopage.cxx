@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:53:01 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 15:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2113,6 +2113,11 @@ Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::Runti
 
 OUString SdDrawPage::getPageApiName( SdPage* pPage )
 {
+    return ::getPageApiName( pPage );
+}
+
+OUString getPageApiName( SdPage* pPage )
+{
     OUString aPageName;
 
     if(pPage)
@@ -2132,7 +2137,8 @@ OUString SdDrawPage::getPageApiName( SdPage* pPage )
     return aPageName;
 }
 
-OUString getPageApiNameFromUiNameImpl( const String& rUIName )
+
+OUString getPageApiNameFromUiName( const String& rUIName )
 {
     OUString aApiName;
 
@@ -2154,7 +2160,7 @@ OUString getPageApiNameFromUiNameImpl( const String& rUIName )
 
 OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
 {
-    return getPageApiNameFromUiNameImpl( rUIName );
+    return ::getPageApiNameFromUiName( rUIName );
 }
 
 String getUiNameFromPageApiNameImpl( const OUString& rApiName )
