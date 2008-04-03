@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneHider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:15:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-03 14:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 namespace sd {
 
 class ViewShell;
+class SlideshowImpl;
 
 /** Hide the windows of the side panes and restore the original visibility
     later. Used by the in-window slide show in order to use the whole frame
@@ -56,11 +57,9 @@ class PaneHider
 {
 public:
     /** The constructor hides all side panes that belong to the
-        ViewShellBase of the given view shell.  This is done only when there
-        is a) a running slide show and b) that slide show is not running
-        full screen.
+        ViewShellBase of the given view shell.
     */
-    PaneHider (const ViewShell& rViewShell);
+    PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow);
 
     /** Restore the original visibility of the side panes.
     */
