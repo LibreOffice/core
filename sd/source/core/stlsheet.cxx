@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:29:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,15 @@ void SdStyleSheet::SetApiName( const OUString& rApiName )
 {
     msApiName = rApiName;
 }
+
+rtl::OUString SdStyleSheet::GetApiName() const
+{
+    if( msApiName.getLength() )
+        return msApiName;
+    else
+        return GetName();
+}
+
 
 void SdStyleSheet::Load (SvStream& rIn, USHORT nVersion)
 {
@@ -1001,7 +1010,7 @@ OUString SAL_CALL SdStyleSheet::getName() throw(RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
-    return msApiName;
+    return GetApiName();
 }
 
 // --------------------------------------------------------------------
@@ -1072,7 +1081,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
             for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName = rParentName) )
+                if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
                 {
                     if( pStyle != this )
                         SetParent( pStyle->GetName() );
