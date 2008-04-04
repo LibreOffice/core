@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframeview.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 14:53:22 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@
 -(void)deleteBackward: (id)aSender;
 -(void)deleteForward: (id)aSender;
 -(void)cancelOperation: (id)aSender;
+-(void)noop: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
 /*
