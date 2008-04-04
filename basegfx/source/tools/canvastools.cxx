@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:22:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,47 +36,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
 
-#ifndef _COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
 #include <com/sun/star/geometry/RealSize2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
 #include <com/sun/star/geometry/RealPoint2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERSIZE2D_HPP__
+#include <com/sun/star/geometry/Matrix2D.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERPOINT2D_HPP__
 #include <com/sun/star/geometry/IntegerPoint2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERRECTANGLE2D_HPP__
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP__
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP__
 #include <com/sun/star/awt/Point.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP__
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
 
+#include <basegfx/tools/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -325,6 +301,62 @@ namespace basegfx
 
         //---------------------------------------------------------------------------------------
 
+        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
+        {
+            ::basegfx::unotools::UnoPolyPolygon* pPolyImpl =
+                dynamic_cast< ::basegfx::unotools::UnoPolyPolygon* >( xPoly.get() );
+
+            if( pPolyImpl )
+            {
+                return pPolyImpl->getPolyPolygon();
+            }
+            else
+            {
+                // not a known implementation object - try data source
+                // interfaces
+                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
+
+                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
+                    xPoly,
+                    uno::UNO_QUERY );
+
+                if( xBezierPoly.is() )
+                {
+                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
+                        xBezierPoly->getBezierSegments( 0,
+                                                        nPolys,
+                                                        0,
+                                                        -1 ) );
+                }
+                else
+                {
+                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
+                        xPoly,
+                        uno::UNO_QUERY );
+
+                    // no implementation class and no data provider
+                    // found - contract violation.
+                    if( !xLinePoly.is() )
+                    {
+                        throw lang::IllegalArgumentException(
+                            ::rtl::OUString::createFromAscii(
+                                    "basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(): Invalid input"
+                                    "poly-polygon, cannot retrieve vertex data"),
+                            uno::Reference< uno::XInterface >(),
+                            0 );
+                    }
+
+                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
+                        xLinePoly->getPoints( 0,
+                                              nPolys,
+                                              0,
+                                              -1 ));
+                }
+            }
+        }
+
+        //---------------------------------------------------------------------------------------
+
         ::basegfx::B2DHomMatrix& homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&        output,
                                                             const geometry::AffineMatrix2D& input )
         {
@@ -350,6 +382,22 @@ namespace basegfx
             output.m10 = input.get(1,0);
             output.m11 = input.get(1,1);
             output.m12 = input.get(1,2);
+
+            return output;
+        }
+
+        //---------------------------------------------------------------------------------------
+
+        ::basegfx::B2DHomMatrix& homMatrixFromMatrix( ::basegfx::B2DHomMatrix&  output,
+                                                      const geometry::Matrix2D& input )
+        {
+            // ensure last row is [0,0,1] (and optimized away)
+            output.identity();
+
+            output.set(0,0, input.m00);
+            output.set(0,1, input.m01);
+            output.set(1,0, input.m10);
+            output.set(1,1, input.m11);
 
             return output;
         }
