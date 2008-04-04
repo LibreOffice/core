@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:34:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -717,7 +718,9 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 {
                     SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
                 }
-                nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),GetTitle( SFX_TITLE_PICKLIST ));
+                const Reference< XTitle > xTitle(pImp->xModel, UNO_QUERY_THROW);
+                const ::rtl::OUString     sTitle = xTitle->getTitle ();
+                nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);
             }
             /*HACK for plugin::destroy()*/
 
