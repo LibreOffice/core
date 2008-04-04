@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:30:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,50 @@
 extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OQueryController > aAutoRegistration;
+}
+namespace dbaui
+{
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::lang;
+
+    class OViewController : public OQueryController
+    {
+        //------------------------------------------------------------------------------
+        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( RuntimeException )
+        {
+            return getImplementationName_Static();
+        }
+        //-------------------------------------------------------------------------
+        virtual Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException)
+        {
+            return getSupportedServiceNames_Static();
+        }
+    public:
+        OViewController(const Reference< XMultiServiceFactory >& _rM) : OQueryController(_rM){}
+
+        // need by registration
+        static ::rtl::OUString getImplementationName_Static() throw( RuntimeException )
+        {
+            return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OViewDesign");
+        }
+        static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
+        {
+            Sequence< ::rtl::OUString> aSupported(1);
+            aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ViewDesign");
+            return aSupported;
+        }
+        static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
+        {
+            return *(new OViewController(_rM));
+        }
+    };
+}
+extern "C" void SAL_CALL createRegistryInfo_OViewControl()
+{
+    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OViewController > aAutoRegistration;
 }
 
 namespace dbaui
@@ -872,7 +916,7 @@ void OQueryController::onLoadedMenu(const Reference< ::com::sun::star::frame::XL
 }
 
 // -----------------------------------------------------------------------------
-void OQueryController::updateTitle()
+::rtl::OUString OQueryController::getPrivateTitle( ) const
 {
     ::rtl::OUString sName = m_sName;
     if ( !sName.getLength() )
@@ -881,18 +925,12 @@ void OQueryController::updateTitle()
         {
             ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
             ::osl::MutexGuard aGuard(m_aMutex);
-            if ( !sName.getLength() )
-            {
-                String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
-                aDefaultName = aDefaultName.GetToken( 0, ' ' );
-                sName = ::dbtools::createUniqueName( getObjectContainer(),aDefaultName );
-            }
-            String sTitlePrefix = String( ModuleRes( editingView() ? STR_VIEWDESIGN : STR_QUERYDESIGN ) );
-            sName += sTitlePrefix;
+            String aDefaultName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
+            sName = aDefaultName.GetToken(0,' ');
+            sName += ::rtl::OUString::valueOf(getCurrentStartNumber());
         }
-
     }
-    OGenericUnoController::setTitle(sName);
+    return sName;
 }
 // -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()
@@ -1211,21 +1249,11 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
     sal_Bool bNew = _bSaveAs || !_xElements->hasByName( m_sName );
     if(bNew)
     {
-        Reference<XDatabaseMetaData> xMetaData;
-        if(isConnected())
-            xMetaData = getMetaData();
         String aDefaultName;
         if ( ( _bSaveAs && !bNew ) || ( bNew && m_sName.getLength() ) )
             aDefaultName = String( m_sName );
         else
-        {
-            String aName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
-            aName = aName.GetToken(0,' ');
-            if ( editingView() && isConnected() )
-                aDefaultName = ::dbaui::createDefaultName(xMetaData,_xElements,aName);
-            else
-                aDefaultName = String(::dbtools::createUniqueName(_xElements,aName));
-        }
+            aDefaultName = getPrivateTitle( );
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
         OSaveAsDlg aDlg(
@@ -1418,7 +1446,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     showError( aInfo );
 
     // update the title of our window
-    updateTitle();
+    //updateTitle();
 
     // if we successfully saved a view we were creating, then close the designer
     if ( bSuccess && editingView() && !m_xAlterView.is() )
