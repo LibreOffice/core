@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:04:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,10 @@ namespace vcl
 extern Sequence< OUString > SAL_CALL DisplayAccess_getSupportedServiceNames();
 extern OUString SAL_CALL DisplayAccess_getImplementationName();
 extern Reference< XInterface > SAL_CALL DisplayAccess_createInstance( const Reference< XMultiServiceFactory > &  );
+
+extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames();
+extern OUString SAL_CALL FontIdentificator_getImplementationName();
+extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > &  );
 }
 
 extern "C" {
@@ -100,16 +104,23 @@ extern "C" {
             {
                 Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
 
-                OUStringBuffer aImplName = OUString::createFromAscii( "/" );
+                OUStringBuffer aImplName(64);
+                aImplName.appendAscii( "/" );
                 aImplName.append( vcl_session_getImplementationName() );
                 aImplName.appendAscii( "/UNO/SERVICES/" );
                 aImplName.append( vcl_session_getSupportedServiceNames()[0] );
                 xKey->createKey( aImplName.makeStringAndClear() );
 
-                aImplName = OUString::createFromAscii( "/" );
+                aImplName.appendAscii( "/" );
                 aImplName.append( vcl::DisplayAccess_getImplementationName() );
                 aImplName.appendAscii( "/UNO/SERVICES/" );
                 aImplName.append( vcl::DisplayAccess_getSupportedServiceNames()[0] );
+                xKey->createKey( aImplName.makeStringAndClear() );
+
+                aImplName.appendAscii( "/" );
+                aImplName.append( vcl::FontIdentificator_getImplementationName() );
+                aImplName.appendAscii( "/UNO/SERVICES/" );
+                aImplName.append( vcl::FontIdentificator_getSupportedServiceNames()[0] );
                 xKey->createKey( aImplName.makeStringAndClear() );
 
                 return sal_True;
@@ -146,6 +157,12 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::DisplayAccess_getImplementationName(), vcl::DisplayAccess_createInstance,
                     vcl::DisplayAccess_getSupportedServiceNames() );
+            }
+            else if( vcl::FontIdentificator_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, vcl::FontIdentificator_getImplementationName(), vcl::FontIdentificator_createInstance,
+                    vcl::FontIdentificator_getSupportedServiceNames() );
             }
             if( xFactory.is() )
             {
