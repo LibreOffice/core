@@ -1,0 +1,3 @@
+lcairo	libcairo	: soltools NULL
+lcairo	libcairo			    usr1	-	all	lcairo_mkout NULL
+lcairo	libcairo			    nmake	-	all	lcairo_libcairo NULL
