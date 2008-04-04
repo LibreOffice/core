@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-11 09:43:41 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/numberedcollection.hxx>
+#include <framework/titlehelper.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
@@ -190,6 +192,48 @@ ODatabaseDocument::~ODatabaseDocument()
         acquire();
         dispose();
     }
+}
+//------------------------------------------------------------------------------
+Any SAL_CALL ODatabaseDocument::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aReturn = ODatabaseDocument_OfficeDocument::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = ODatabaseDocument_Title::queryInterface(_rType);
+    return aReturn;
+}
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::acquire(  ) throw ()
+{
+    ODatabaseDocument_OfficeDocument::acquire();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::release(  ) throw ()
+{
+    ODatabaseDocument_OfficeDocument::release();
+}
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeException)
+{
+    return ::comphelper::concatSequences(
+        ODatabaseDocument_OfficeDocument::getTypes(),
+        ODatabaseDocument_Title::getTypes()
+    );
+}
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 // -----------------------------------------------------------------------------
@@ -799,14 +843,15 @@ void ODatabaseDocument::impl_setModified_throw( sal_Bool _bModified, ModelMethod
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::addEventListener(const Reference< XEventListener >& _xListener ) throw (RuntimeException)
+// ::com::sun::star::document::XEventBroadcaster
+void SAL_CALL ODatabaseDocument::addEventListener(const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException)
 {
     ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
     m_aDocEventListeners.addInterface(_xListener);
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< XEventListener >& _xListener ) throw (RuntimeException)
+void SAL_CALL ODatabaseDocument::removeEventListener( const uno::Reference< document::XEventListener >& _xListener ) throw (uno::RuntimeException)
 {
     ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
     m_aDocEventListeners.removeInterface(_xListener);
@@ -1171,6 +1216,11 @@ void ODatabaseDocument::disposing()
 
     Reference< XModel > xHoldAlive( this );
     {
+        {
+            ::osl::ClearableMutexGuard aGuard( getMutex() );
+            impl_notifyEvent( "OnUnload", aGuard );
+        }
+
         lang::EventObject aDisposeEvent(static_cast<XWeak*>(this));
         m_aModifyListeners.disposeAndClear( aDisposeEvent );
         m_aCloseListener.disposeAndClear( aDisposeEvent );
@@ -1188,6 +1238,8 @@ void ODatabaseDocument::disposing()
         // expected to listen for our disposal, and disconnect then
         DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         impl_disposeControllerFrames_nothrow();
+        m_xModuleManager.clear();
+        m_xTitleHelper.clear();
     }
 
     m_pImpl.clear();
@@ -1413,6 +1465,144 @@ Reference< XController > SAL_CALL ODatabaseDocument::createViewController( const
     return Reference< XController >();
 }
 // -----------------------------------------------------------------------------
+//=============================================================================
+uno::Reference< frame::XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
+{
+    ModelMethodGuard aGuard( *this );
+
+    if ( ! m_xTitleHelper.is ())
+    {
+        uno::Reference< frame::XUntitledNumbers >    xDesktop(m_pImpl->m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), css::uno::UNO_QUERY_THROW);
+        uno::Reference< frame::XModel >              xThis   (getThis(), uno::UNO_QUERY_THROW);
+
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_xServiceFactory);
+        m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        pHelper->setOwner                   (xThis   );
+        pHelper->connectWithUntitledNumbers (xDesktop);
+    }
+
+    return m_xTitleHelper;
+}
+
+//=============================================================================
+uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHelper_throw(const uno::Reference< uno::XInterface >& _xComponent)
+{
+    ModelMethodGuard aGuard( *this );
+
+    if ( !m_xModuleManager.is() )
+        m_xModuleManager.set( m_pImpl->m_xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ), UNO_QUERY_THROW );
+
+    ::rtl::OUString sModuleId = m_xModuleManager->identify( _xComponent );
+
+    uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
+
+    TNumberedController::iterator aFind = m_aNumberedControllers.find(sModuleId);
+    if ( aFind == m_aNumberedControllers.end() )
+    {
+        uno::Reference< frame::XModel > xThis(static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
+        ::comphelper::NumberedCollection* pHelper = new ::comphelper::NumberedCollection();
+        xNumberedControllers.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+
+        pHelper->setOwner          (xThis);
+        //pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+
+        m_aNumberedControllers.insert(TNumberedController::value_type(sModuleId,xNumberedControllers));
+    }
+    else
+        xNumberedControllers = aFind->second;
+
+    return xNumberedControllers;
+}
+
+//=============================================================================
+// css.frame.XTitle
+::rtl::OUString SAL_CALL ODatabaseDocument::getTitle()
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ModelMethodGuard aGuard( *this );
+
+    return impl_getTitleHelper_throw()->getTitle ();
+}
+
+//=============================================================================
+// css.frame.XTitle
+void SAL_CALL ODatabaseDocument::setTitle( const ::rtl::OUString& sTitle )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ModelMethodGuard aGuard( *this );
+
+    impl_getTitleHelper_throw()->setTitle (sTitle);
+}
+
+//=============================================================================
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL ODatabaseDocument::addTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ModelMethodGuard aGuard( *this );
+
+    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->addTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL ODatabaseDocument::removeTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ModelMethodGuard aGuard( *this );
+
+    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->removeTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+::sal_Int32 SAL_CALL ODatabaseDocument::leaseNumber( const uno::Reference< uno::XInterface >& xComponent )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    ModelMethodGuard aGuard( *this );
+
+    return impl_getUntitledHelper_throw(xComponent)->leaseNumber (xComponent);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+void SAL_CALL ODatabaseDocument::releaseNumber( ::sal_Int32 nNumber )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    ModelMethodGuard aGuard( *this );
+
+    impl_getUntitledHelper_throw()->releaseNumber (nNumber);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference< uno::XInterface >& xComponent )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    ModelMethodGuard aGuard( *this );
+    impl_getUntitledHelper_throw(xComponent)->releaseNumberForComponent (xComponent);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+::rtl::OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeException)
+{
+    return ::rtl::OUString();/*RTL_CONSTASCII_USTRINGPARAM(" : "));*/
+}
 
 //------------------------------------------------------------------
 //........................................................................
