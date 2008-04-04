@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:43 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,6 +1044,10 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     // [FIXME] Dialog Color is the one to modify to complete Aqua Theme on windows
     aStyleSettings.SetDialogColor( aBackgroundColor );
     aStyleSettings.SetLightBorderColor( aBackgroundColor );
+    Color aShadowColor( aStyleSettings.GetShadowColor() );
+    aStyleSettings.SetDarkShadowColor( aShadowColor );
+    aShadowColor.IncreaseLuminance( 32 );
+    aStyleSettings.SetShadowColor( aShadowColor );
 
     // get the system font settings
     Font aAppFont = aStyleSettings.GetAppFont();
