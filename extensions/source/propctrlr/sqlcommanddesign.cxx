@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:22:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#include <com/sun/star/frame/XTitle.hpp>
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
@@ -124,6 +125,7 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::frame::XController;
+    using ::com::sun::star::frame::XTitle;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::lang::DisposedException;
@@ -323,20 +325,12 @@ namespace pcr
             }
 
             // get the frame which we just opened and set it's title
-            Reference< XPropertySet > xFrameProps;
-            Reference< XController > xController( xQueryDesign, UNO_QUERY );
-            if ( xController.is() )
-                xFrameProps = xFrameProps.query( xController->getFrame() );
-
-            if ( xFrameProps.is() )
+            Reference< XTitle> xTitle(xQueryDesign,UNO_QUERY);
+            if ( xTitle.is() )
             {
-                Reference< XPropertySetInfo > xInfo = xFrameProps->getPropertySetInfo();
-                if ( xInfo.is() && xInfo->hasPropertyByName( PROPERTY_TITLE ) )
-                {
-                    ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                    ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
-                    xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sDisplayName ) );
-                }
+                ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
+                ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
+                xTitle->setTitle( sDisplayName );
             }
         }
         catch( const Exception& )
