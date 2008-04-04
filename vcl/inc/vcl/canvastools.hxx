@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:48:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
@@ -197,6 +200,19 @@ namespace vcl
          */
         Color VCL_DLLPUBLIC sequenceToColor( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&,
                                              const ::com::sun::star::uno::Sequence< sal_Int8 >&                                     );
+
+        /// Convert [0,1] double value to [0,255] int
+        inline sal_Int8 toByteColor( double val )
+        {
+            return sal::static_int_cast<sal_Int8>(
+                basegfx::fround(val*255.0));
+        }
+
+        /// Convert [0,255] int value to [0,1] double value
+        inline double toDoubleColor( sal_uInt8 val )
+        {
+            return val / 255.0;
+        }
 
         // Geometry conversions (vcl/tools <-> x)
         // ===================================================================
