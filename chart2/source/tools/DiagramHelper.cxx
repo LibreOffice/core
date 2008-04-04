@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:37:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,9 +287,11 @@ void DiagramHelper::setStackMode(
         if( eStackMode == StackMode_AMBIGUOUS )
             return;
 
-        StackMode eOldStackMode = DiagramHelper::getStackMode( xDiagram );
+        bool bValueFound = false;
+        bool bIsAmbiguous = false;
+        StackMode eOldStackMode = DiagramHelper::getStackMode( xDiagram, bValueFound, bIsAmbiguous );
 
-        if( eStackMode == eOldStackMode )
+        if( eStackMode == eOldStackMode && !bIsAmbiguous )
             return;
 
         StackingDirection eNewDirection = StackingDirection_NO_STACKING;
@@ -367,11 +369,12 @@ void DiagramHelper::setStackMode(
 
 //static
 
-StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram )
+StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, bool& rbFound, bool& rbAmbiguous )
 {
+    rbFound=false;
+    rbAmbiguous=false;
 
     StackMode eGlobalStackMode = StackMode_NONE;
-    bool bFoundSomething = false;
 
     //iterate through all coordinate systems
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
@@ -392,12 +395,14 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram )
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
             StackMode eLocalStackMode = DiagramHelper::getStackModeFromChartType(
-                xChartType, xCooSys );
+                xChartType, rbFound, rbAmbiguous, xCooSys );
 
-            if( bFoundSomething && eLocalStackMode != eGlobalStackMode )
-                return StackMode_AMBIGUOUS;
+            if( rbFound && eLocalStackMode != eGlobalStackMode && nT>0 )
+            {
+                rbAmbiguous = true;
+                return eGlobalStackMode;
+            }
 
-            bFoundSomething = true;
             eGlobalStackMode = eLocalStackMode;
         }
     }
@@ -408,6 +413,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram )
 // static
 StackMode DiagramHelper::getStackModeFromChartType(
     const Reference< XChartType > & xChartType,
+    bool& rbFound, bool& rbAmbiguous,
     const Reference< XCoordinateSystem > & xCorrespondingCoordinateSystem )
 {
     OSL_ASSERT( !xCorrespondingCoordinateSystem.is() ||
@@ -415,9 +421,82 @@ StackMode DiagramHelper::getStackModeFromChartType(
                     xCorrespondingCoordinateSystem,
                     xChartType ));
 
-    Reference< XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY_THROW );
-    Sequence< Reference< chart2::XDataSeries > > aSeries( xDSCnt->getDataSeries());
-    return DataSeriesHelper::getStackModeFromSeries( aSeries, xCorrespondingCoordinateSystem );
+    StackMode eStackMode = StackMode_NONE;
+    rbFound = false;
+    rbAmbiguous = false;
+
+    try
+    {
+        Reference< XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY_THROW );
+        Sequence< Reference< chart2::XDataSeries > > aSeries( xDSCnt->getDataSeries());
+
+        chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
+        bool bDirectionInitialized = false;
+
+        // first series is irrelvant for stacking, start with second, unless
+        // there is only one series
+        const sal_Int32 nSeriesCount = aSeries.getLength();
+        sal_Int32 i = (nSeriesCount == 1) ? 0: 1;
+        for( ; i<nSeriesCount; ++i )
+        {
+            rbFound = true;
+            Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY_THROW );
+            chart2::StackingDirection eCurrentDirection = eCommonDirection;
+            // property is not MAYBEVOID
+            bool bSuccess = ( xProp->getPropertyValue( C2U("StackingDirection") ) >>= eCurrentDirection );
+            OSL_ASSERT( bSuccess );
+            (void)(bSuccess);  // avoid warning in non-debug builds
+            if( ! bDirectionInitialized )
+            {
+                eCommonDirection = eCurrentDirection;
+                bDirectionInitialized = true;
+            }
+            else
+            {
+                if( eCommonDirection != eCurrentDirection )
+                {
+                    rbAmbiguous = true;
+                    break;
+                }
+            }
+        }
+
+        if( rbFound )
+        {
+            if( eCommonDirection == chart2::StackingDirection_Z_STACKING )
+                eStackMode = StackMode_Z_STACKED;
+            else if( eCommonDirection == chart2::StackingDirection_Y_STACKING )
+            {
+                eStackMode = StackMode_Y_STACKED;
+
+                // percent stacking
+                if( xCorrespondingCoordinateSystem.is() )
+                {
+                    if( 1 < xCorrespondingCoordinateSystem->getDimension() )
+                    {
+                        sal_Int32 nAxisIndex = 0;
+                        if( nSeriesCount )
+                            nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(aSeries[0]);
+
+                        Reference< chart2::XAxis > xAxis(
+                            xCorrespondingCoordinateSystem->getAxisByDimension( 1,nAxisIndex ));
+                        if( xAxis.is())
+                        {
+                            chart2::ScaleData aScaleData = xAxis->getScaleData();
+                            if( aScaleData.AxisType==chart2::AxisType::PERCENT )
+                                eStackMode = StackMode_Y_STACKED_PERCENT;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return eStackMode;
 }
 
 // static
