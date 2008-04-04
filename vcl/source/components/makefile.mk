@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 09:58:42 $
+#   last change: $Author: kz $ $Date: 2008-04-04 16:18:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/display.obj		\
+            $(SLO)$/fontident.obj   \
             $(SLO)$/factory.obj
 
 # --- Targets ------------------------------------------------------
