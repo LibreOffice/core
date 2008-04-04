@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:32:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:10:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,14 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
+#include <com/sun/star/frame/XTitle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
@@ -281,6 +289,8 @@ class Frame :   // interfaces
                 public  css::document::XActionLockable              ,
                 public  css::util::XCloseable                       ,   // => XCloseBroadcaster
                 public  css::frame::XComponentLoader                ,
+                public  css::frame::XTitle                          ,
+                public  css::frame::XTitleChangeBroadcaster         ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
                 public  ThreadHelpBase                              ,
@@ -430,10 +440,22 @@ class Frame :   // interfaces
                                                                          css::uno::RuntimeException   );
 
         //---------------------------------------------------------------------------------------------------------
-        //  XCloseable
+        //  XCloseBroadcaster
         //---------------------------------------------------------------------------------------------------------
         virtual void SAL_CALL addCloseListener   ( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
         virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XTitle
+        //---------------------------------------------------------------------------------------------------------
+        virtual ::rtl::OUString SAL_CALL getTitle(                               ) throw (css::uno::RuntimeException);
+        virtual void            SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (css::uno::RuntimeException);
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XTitleChangeBroadcaster
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL addTitleChangeListener   ( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListenr ) throw (css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
         //  PropertySetHelper => XPropertySet, XPropertySetInfo
@@ -560,6 +582,7 @@ class Frame :   // interfaces
         static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
         css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
+        css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper                      ;
 
     protected:
 
