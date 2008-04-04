@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 12:29:38 $
+#   last change: $Author: kz $ $Date: 2008-04-04 16:13:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,74 +46,75 @@ PACKAGE=com$/sun$/star$/rendering
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    PanoseFamilyTypes.idl \
-    PanoseSerifStyle.idl \
-    PanoseWeight.idl \
-    PanoseProportion.idl \
-    PanoseContrast.idl \
-    PanoseStrokeVariation.idl \
-    PanoseArmStyle.idl \
-    PanoseLetterForm.idl \
-    PanoseMidline.idl \
-    PanoseXHeight.idl \
-    Panose.idl \
     AnimationAttributes.idl \
     AnimationRepeat.idl \
-    PathCapType.idl \
-    PathJoinType.idl \
+    BlendMode.idl \
+    CanvasFactory.idl \
     Caret.idl \
-    RenderState.idl \
-    RenderingIntent.idl \
     ColorProfile.idl \
     ColorSpaceType.idl \
-    XColorSpace.idl \
-    RepaintResult.idl \
     CompositeOperation.idl \
-    StringContext.idl \
     EmphasisMark.idl \
-    StrokeAttributes.idl \
     Endianness.idl \
-    TextDirection.idl \
     FillRule.idl \
-    TextHit.idl \
     FloatingPointBitmapFormat.idl \
-    Texture.idl \
     FloatingPointBitmapLayout.idl \
-    TexturingMode.idl \
-    XLinePolyPolygon2D.idl \
     FontInfo.idl \
-    ViewState.idl \
-    XParametricPolyPolygon2D.idl \
-    VolatileContentDestroyedException.idl \
-    XParametricPolyPolygon2DFactory.idl \
     FontMetrics.idl \
-    XAnimatedSprite.idl \
-    XPolyPolygon2D.idl \
     FontRequest.idl \
-    XAnimation.idl \
-    XSprite.idl \
     IntegerBitmapFormat.idl \
-    XBezierPolyPolygon2D.idl \
-    XSpriteCanvas.idl \
     IntegerBitmapLayout.idl \
-    XBitmap.idl \
-    XTextLayout.idl \
-    XBitmapCanvas.idl \
-    XVolatileBitmap.idl \
     InterpolationMode.idl \
+    Panose.idl \
+    PanoseArmStyle.idl \
+    PanoseContrast.idl \
+    PanoseFamilyTypes.idl \
+    PanoseLetterForm.idl \
+    PanoseMidline.idl \
+    PanoseProportion.idl \
+    PanoseSerifStyle.idl \
+    PanoseStrokeVariation.idl \
+    PanoseWeight.idl \
+    PanoseXHeight.idl \
+    PathCapType.idl \
+    PathJoinType.idl \
+    RenderState.idl \
+    RenderingIntent.idl \
+    RepaintResult.idl \
+    StringContext.idl \
+    StrokeAttributes.idl \
+    TextDirection.idl \
+    TextHit.idl \
+    Texture.idl \
+    TexturingMode.idl \
+    ViewState.idl \
+    VolatileContentDestroyedException.idl \
+    XAnimatedSprite.idl \
+    XAnimation.idl \
+    XBezierPolyPolygon2D.idl \
+    XBitmap.idl \
+    XBitmapCanvas.idl \
     XBitmapPalette.idl \
     XBufferController.idl \
     XCachedPrimitive.idl \
-    XGraphicDevice.idl \
     XCanvas.idl \
-    XSimpleCanvas.idl \
-    XCustomSprite.idl \
     XCanvasFont.idl \
+    XColorSpace.idl \
+    XCustomSprite.idl \
+    XGraphicDevice.idl \
     XHalfFloatBitmap.idl \
     XIeeeDoubleBitmap.idl \
     XIeeeFloatBitmap.idl \
     XIntegerBitmap.idl \
-    CanvasFactory.idl
+    XLinePolyPolygon2D.idl \
+    XParametricPolyPolygon2D.idl \
+    XParametricPolyPolygon2DFactory.idl \
+    XPolyPolygon2D.idl \
+    XSimpleCanvas.idl \
+    XSprite.idl \
+    XSpriteCanvas.idl \
+    XTextLayout.idl \
+    XVolatileBitmap.idl
 
 # ------------------------------------------------------------------
 
