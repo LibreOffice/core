@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportController.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:09:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,6 @@ namespace rptui
         */
         void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
 
-    protected:
         DECL_LINK( OnInvalidateClipboard, void* );
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnExecuteReport, void* );
@@ -320,8 +319,6 @@ namespace rptui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void losingConnection( );
-
-        virtual void updateTitle();
 
         virtual ~OReportController();
     public:
@@ -393,6 +390,9 @@ namespace rptui
         virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XTitle
+        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+
         /** returns the current position of the splitter
         *
         * \return
@@ -431,9 +431,10 @@ namespace rptui
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
 
-    protected:
+    private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
         virtual void impl_initialize( );
     };
 }
 #endif // RPTUI_REPORTCONTROLLER_HXX
+
