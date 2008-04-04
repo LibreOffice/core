@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xthrobber.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:03:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,7 @@ namespace toolkit
 {
 //........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::graphic;
+    using namespace ::com::sun::star;
 
     //====================================================================
     //= XThrobber
@@ -103,13 +99,13 @@ namespace toolkit
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( XThrobber, VCLXWindow, XThrobber_Base )
 
     //--------------------------------------------------------------------
-    void SAL_CALL XThrobber::start() throw (RuntimeException)
+    void SAL_CALL XThrobber::start() throw ( uno::RuntimeException )
     {
         mpThrobber->start();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XThrobber::stop() throw (RuntimeException)
+    void SAL_CALL XThrobber::stop() throw ( uno::RuntimeException )
     {
         mpThrobber->stop();
     }
@@ -135,7 +131,8 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XThrobber::setProperty( const ::rtl::OUString& PropertyName, const Any& Value ) throw(RuntimeException)
+    void SAL_CALL XThrobber::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
+        throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
@@ -146,11 +143,12 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+    uno::Any SAL_CALL XThrobber::getProperty( const ::rtl::OUString& PropertyName )
+        throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
-        Any aReturn;
+        uno::Any aReturn;
 
         if ( GetWindow() )
         {
@@ -160,10 +158,11 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XThrobber::InitImageList() throw( RuntimeException)
+    void SAL_CALL XThrobber::InitImageList()
+        throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
-        Sequence< Reference< XGraphic > > aImageList(12);
+        uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
         sal_uInt16 nIconIdStart = RID_TK_ICON_THROBBER_START;
 
         if ( mpThrobber->isHCMode() )
