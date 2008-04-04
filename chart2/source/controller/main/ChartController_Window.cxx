@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:00:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,6 +681,7 @@ void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
+    ControllerLockGuard aCLGuard( m_aModel->getModel());
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
     {
@@ -707,14 +708,13 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             DragMethod_Base* pChartDragMethod = dynamic_cast< DragMethod_Base* >(pDragMethod);
             if( pChartDragMethod )
             {
-                ControllerLockGuard aCLGuard( m_aModel->getModel());
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
                         m_xUndoManager, m_aModel->getModel() );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
-                    aUndoGuard.commitAction();
                     bDraggingDone = true;
+                    aUndoGuard.commitAction();
                 }
             }
 
