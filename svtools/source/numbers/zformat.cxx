@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:39:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3580,9 +3580,44 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                             (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT &&
                              rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_THSEP) ||
                             (rInfo.nTypeArray[j+1] == NF_SYMBOLTYPE_DIGIT));
-                if ( bDoThousands && (k > 0 || nDigitCount < nDigCnt) )
+                if ( bDoThousands )
                 {
-                    sStr.Insert(rInfo.sStrArray[j],k);
+                    if (k > 0)
+                        sStr.Insert(rInfo.sStrArray[j],k);
+                    else if (nDigitCount < nDigCnt)
+                    {
+                        // Leading '#' displays nothing (e.g. no leading
+                        // separator for numbers <1000 with #,##0 format).
+                        // Leading '?' displays blank.
+                        // Everything else, including nothing, displays the
+                        // separator.
+                        sal_Unicode cLeader = 0;
+                        if (j > 0 && rInfo.nTypeArray[j-1] == NF_SYMBOLTYPE_DIGIT)
+                        {
+                            const String& rStr = rInfo.sStrArray[j-1];
+                            xub_StrLen nLen = rStr.Len();
+                            if (nLen)
+                                cLeader = rStr.GetChar(nLen-1);
+                        }
+                        switch (cLeader)
+                        {
+                            case '#':
+                                ;   // nothing
+                                break;
+                            case '?':
+                                // erAck: 2008-04-03T16:24+0200
+                                // Actually this currently isn't executed
+                                // because the format scanner in the context of
+                                // "?," doesn't generate a group separator but
+                                // a literal ',' character instead that is
+                                // inserted unconditionally. Should be changed
+                                // on some occasion.
+                                sStr.Insert(' ',k);
+                                break;
+                            default:
+                                sStr.Insert(rInfo.sStrArray[j],k);
+                        }
+                    }
                     aGrouping.advance();
                 }
             }
