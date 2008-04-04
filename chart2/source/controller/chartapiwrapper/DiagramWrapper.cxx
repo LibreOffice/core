@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 15:38:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1275,17 +1275,9 @@ WrappedStackingProperty::~WrappedStackingProperty()
 bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 {
     bool bHasDetectableInnerValue = false;
-    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-    if( xDiagram.is() )
-    {
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        if(aSeriesList.size())
-        {
-            bHasDetectableInnerValue = true;
-            eStackMode = DiagramHelper::getStackMode( xDiagram );
-        }
-    }
+    bool bIsAmbiguous = false;
+    eStackMode = DiagramHelper::getStackMode( m_spChart2ModelContact->getChart2Diagram()
+        , bHasDetectableInnerValue, bIsAmbiguous );
     return bHasDetectableInnerValue;
 }
 
