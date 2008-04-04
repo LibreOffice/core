@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decoview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:51:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ class OutputDevice;
 #define FRAME_DRAW_DOUBLEOUT                ((USHORT)0x0005)
 #define FRAME_DRAW_MENU                     ((USHORT)0x0010)
 #define FRAME_DRAW_WINDOWBORDER             ((USHORT)0x0020)
+#define FRAME_DRAW_BORDERWINDOWBORDER       ((USHORT)0x0040)
 #define FRAME_DRAW_MONO                     ((USHORT)0x1000)
 #define FRAME_DRAW_NODRAW                   ((USHORT)0x8000)
 #define FRAME_DRAW_STYLE                    ((USHORT)0x000F)
