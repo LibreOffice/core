@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:59:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ public:
 
     static StackMode getStackMode(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDiagram > & xDiagram
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        bool& rbFound, bool& rbAmbiguous
         );
 
     /** @param bOnlyAtFirstChartType
@@ -140,8 +141,8 @@ public:
         bool bOnlyAtFirstChartType = false
         );
 
-    /** Retrieves the stackmode of a ChartType.  If the series inside the
-        ChartType are differing, the StackMode StackMode_AMBIGUOUS is returned.
+    /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
+        modes, rbAmbiguous is set to true. If no series is there rbFound is set to false.
 
         @param xCorrespondingCoordinateSystem
             The coordinate system in which the given chart type xChartType is
@@ -152,6 +153,7 @@ public:
     static StackMode getStackModeFromChartType(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType > & xChartType,
+        bool& rbFound, bool& rbAmbiguous,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem =
                 ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >()
