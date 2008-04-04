@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:28:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,7 +592,11 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
         // append TAB string if available
         aTitle += _getTabString();
 
+        /* AS_TITLE
         pWindow->SetText( aTitle );
+        */
+
+        /* AS_ICON
         if( pWindow->GetType() == WINDOW_WORKWINDOW )
         {
             SvtModuleOptions::EFactory eFactory;
@@ -602,6 +606,7 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
                 pWorkWindow->SetIcon( (sal_uInt16) SvtModuleOptions().GetFactoryIcon( eFactory ) );
             }
         }
+        */
     }
 
     pFrame->SetItemSet_Impl( pSet );
@@ -1160,9 +1165,11 @@ String SfxTopViewFrame::UpdateTitle()
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
+    /* AS_TITLE
     Window* pWindow = GetTopFrame_Impl()->GetTopWindow_Impl();
     if ( pWindow && pWindow->GetText() != aTitle )
         pWindow->SetText( aTitle );
+    */
     return aTitle;
 }
 
