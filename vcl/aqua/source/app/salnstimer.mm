@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnstimer.mm,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:15:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,13 @@
 @implementation TimerCallbackCaller
 -(void)timerElapsed:(NSTimer*)pTimer
 {
-    if( AquaSalTimer::bDispatchTimer && ! AquaSalTimer::bTimerInDispatch )
+    ImplSVData* pSVData = ImplGetSVData();
+    if( AquaSalTimer::bDispatchTimer )
     {
-        ImplSVData* pSVData = ImplGetSVData();
         if( pSVData->mpSalTimer )
         {
             YIELD_GUARD;
-            AquaSalTimer::bTimerInDispatch = true;
             pSVData->mpSalTimer->CallCallback();
-            AquaSalTimer::bTimerInDispatch = false;
             
             // NSTimer does not end nextEventMatchingMask of NSApplication
             // so we need to wakeup a waiting Yield to inform it something happened
