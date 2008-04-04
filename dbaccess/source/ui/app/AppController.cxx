@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-11 08:48:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,15 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+#include <com/sun/star/awt/XTopWindow.hpp>
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -236,6 +245,7 @@ namespace dbaui
 //........................................................................
 using namespace ::dbtools;
 using namespace ::svx;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::view;
@@ -364,7 +374,7 @@ void SAL_CALL OApplicationController::disposing()
 
     ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
     m_aCurrentContainers.clear();
-
+    m_aSpecialSubFrames.clear();
     m_aDocuments.clear();
 
     if ( getView() )
@@ -516,6 +526,13 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
                 ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XComponent> >(),xComp),::std::select1st<TDocuments::value_type>()));
             if ( aFind != m_aDocuments.end() )
                 m_aDocuments.erase(aFind);
+
+            TFrames::iterator aFind2 = ::std::find_if(m_aSpecialSubFrames.begin(),m_aSpecialSubFrames.end(),
+                ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XComponent> >(),xComp),
+                    ::std::compose1(::std::select2nd<TTypeFrame>(),::std::select2nd<TFrames::value_type>())));
+            if ( aFind2 != m_aSpecialSubFrames.end() )
+                m_aSpecialSubFrames.erase(aFind2);
+
         }
         if ( xContainer.is() )
         {
@@ -1135,7 +1152,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             {
                                 xStore->storeAsURL(aURL.GetMainURL( INetURLObject::NO_DECODE ),Sequence<PropertyValue>());
                                 m_sDatabaseName = ::rtl::OUString();
-                                updateTitle();
+                                /*updateTitle();*/
+                                m_bCurrentlyModified = sal_False;
                                 InvalidateFeature(ID_BROWSER_SAVEDOC);
                                 if ( getContainer()->getElementType() == E_NONE )
                                 {
@@ -1273,15 +1291,18 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 InvalidateAll();
                 break;
             case SID_DB_APP_DSRELDESIGN:
+                if ( !impl_activateSubFrame_throw(::rtl::OUString(),SID_DB_APP_DSRELDESIGN,OLinkedDocumentsAccess::OPEN_DESIGN) )
                 {
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        RelationDesigner aDesigner( getORB(), this, getFrame() );
+                        RelationDesigner aDesigner( getORB(), this, m_xCurrentFrame );
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         addDocumentListener( xComponent, NULL );
-                    }
+                        m_aSpecialSubFrames.insert(TFrames::value_type(::rtl::OUString(),
+                            TTypeFrame(TTypeOpenMode(SID_DB_APP_DSRELDESIGN,OLinkedDocumentsAccess::OPEN_DESIGN),xComponent)));
+                    } // if ( xConnection.is() )
                 }
                 break;
             case SID_DB_APP_DSUSERADMIN:
@@ -1770,47 +1791,53 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
     case E_QUERY:
     case E_TABLE:
     {
-        SharedConnection xConnection( ensureConnection() );
-        if ( !xConnection.is() )
-            break;
-
-        ::std::auto_ptr< DatabaseObjectView > pDesigner;
-        Sequence < PropertyValue > aArgs;
-        Any aDataSource;
-        if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
+        if ( !impl_activateSubFrame_throw(_sName,_eType,_eOpenMode) )
         {
-            sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
 
-            if ( _eType == E_TABLE )
+            SharedConnection xConnection( ensureConnection() );
+            if ( !xConnection.is() )
+                break;
+
+            ::std::auto_ptr< DatabaseObjectView > pDesigner;
+            Sequence < PropertyValue > aArgs;
+            Any aDataSource;
+            if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
             {
-                if ( impl_isAlterableView_nothrow( _sName ) )
-                    pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), true, bQuerySQLMode ) );
-                else
-                    pDesigner.reset( new TableDesigner( getORB(), this, getFrame() ) );
+                sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
+
+                if ( _eType == E_TABLE )
+                {
+                    if ( impl_isAlterableView_nothrow( _sName ) )
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, true, bQuerySQLMode ) );
+                    else
+                        pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
+                }
+                else if ( _eType == E_QUERY )
+                {
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, bQuerySQLMode ) );
+                }
+                else if ( _eType == E_REPORT )
+                {
+                    pDesigner.reset( new ReportDesigner( getORB(),this, m_xCurrentFrame ) );
+                }
+                aDataSource <<= m_xDataSource;
             }
-            else if ( _eType == E_QUERY )
+            else
             {
-                pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false, bQuerySQLMode ) );
+                pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
+
+                aArgs.realloc(1);
+                aArgs[0].Name = PROPERTY_SHOWMENU;
+                aArgs[0].Value <<= sal_True;
+
+                aDataSource <<= getDatabaseName();
             }
-            else if ( _eType == E_REPORT )
-            {
-                pDesigner.reset( new ReportDesigner( getORB(),this, getFrame() ) );
-            }
-            aDataSource <<= m_xDataSource;
+
+            Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArgs ), UNO_QUERY );
+            addDocumentListener( xComponent, NULL );
+            m_aSpecialSubFrames.insert(TFrames::value_type(_sName,
+                            TTypeFrame(TTypeOpenMode(_eType,_eOpenMode),xComponent)));
         }
-        else
-        {
-            pDesigner.reset( new ResultSetBrowser( getORB(), this, getFrame(), _eType == E_TABLE ) );
-
-            aArgs.realloc(1);
-            aArgs[0].Name = PROPERTY_SHOWMENU;
-            aArgs[0].Value <<= sal_True;
-
-            aDataSource <<= getDatabaseName();
-        }
-
-        Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArgs ), UNO_QUERY );
-        addDocumentListener( xComponent, NULL );
     }
     break;
 
@@ -2664,7 +2691,6 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
 
     return makeAny(aCurrentSelection);
 }
-
 // -----------------------------------------------------------------------------
 void OApplicationController::impl_migrateScripts_nothrow()
 {
@@ -2692,6 +2718,28 @@ void OApplicationController::impl_migrateScripts_nothrow()
     }
 }
 
+// -----------------------------------------------------------------------------
+bool OApplicationController::impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const OLinkedDocumentsAccess::EOpenMode _eOpenMode) const
+{
+    bool bFound = false;
+    TFrames::const_iterator aFind = m_aSpecialSubFrames.find(_sName);
+    for(;aFind != m_aSpecialSubFrames.end();++aFind)
+    {
+        if ( aFind->second.first.first == _nKind && aFind->second.first.second == _eOpenMode )
+        {
+            const Reference< XFrame> xFrame(aFind->second.second,UNO_QUERY);
+            if ( xFrame.is() )
+            {
+                Reference< awt::XTopWindow> xTopWindow(xFrame->getContainerWindow(),UNO_QUERY);
+                if ( xTopWindow.is() )
+                    xTopWindow->toFront();
+                bFound = true;
+            }
+            break;
+        } // if ( aFind->second.first.first == _nKind && aFind->second.first.second == _eOpenMode )
+    } // while ( aFind != m_aSpecialSubFrames.end() )
+    return bFound;
+}
 //........................................................................
 }   // namespace dbaui
 //........................................................................
