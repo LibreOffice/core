@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PositionAndSizeHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:55:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,11 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     {
         //@todo decide wether x is primary or secondary
         chart2::RelativePosition aRelativePosition;
-        aRelativePosition.Anchor = drawing::Alignment_TOP;
+        aRelativePosition.Anchor = drawing::Alignment_CENTER;
         //the anchor point at the title object is top/middle
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
-        aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
+        aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
     }
     else if( OBJECTTYPE_DATA_CURVE_EQUATION==eObjectType )
