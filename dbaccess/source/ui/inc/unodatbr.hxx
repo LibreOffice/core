@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:27:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,9 +170,8 @@ namespace dbaui
         ::boost::optional< bool >
                                 m_aDocScriptSupport;    // relevant if and only if we are associated with exactly one DBDoc
 
-        /** updateTitle will be called when a new frame is attached
-        */
-        virtual void updateTitle( );
+
+        virtual ::rtl::OUString getPrivateTitle( ) const;
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -464,9 +463,6 @@ namespace dbaui
             const ::rtl::OUString& _rDataSourceName,
             void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
         );
-
-        // sets a frame title
-        void setDefaultTitle();
 
 #ifdef DBG_UTIL
         // checks whether the given tree entry denotes a data source
