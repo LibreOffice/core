@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:19:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ namespace comphelper
         @param i_Sequence
         Reference to a Sequence of SrcType elements
 
-        @return a pointer to the generated container
+        @return the generated container
 
         @attention this function always performs a copy. Furthermore,
         when copying from e.g. a Sequence<double> to a vector<int>, no
@@ -357,6 +357,44 @@ namespace comphelper
         DstType result( i_Sequence.getLength() );
         ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), result.begin() );
         return result;
+    }
+    //-------------------------------------------------------------------------
+    /** Copy from a Sequence into an existing container
+
+        This potentially saves a needless extra copy operation over
+        the whole container, as it passes the target object by
+        reference.
+
+        @tpl SrcType
+        Sequence element type. Must be assignable to SrcType's
+        elements
+
+        @tpl DstType
+        Container type. This type must fulfill the STL container and
+        sequence concepts, in particular, the begin(), end() and
+        resize(int) methods must be available and have the usual
+        semantics.
+
+        @param o_Output
+        Reference to the target container
+
+        @param i_Sequence
+        Reference to a Sequence of SrcType elements
+
+        @return a non-const reference to the given container
+
+        @attention this function always performs a copy. Furthermore,
+        when copying from e.g. a Sequence<double> to a vector<int>, no
+        proper rounding will be performed, but the values will be
+        truncated. There's currently no measure to prevent or detect
+        precision loss, overflow or truncation.
+     */
+    template < typename DstType, typename SrcType >
+    DstType& sequenceToContainer( DstType& o_Output, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
+    {
+        o_Output.resize( i_Sequence.getLength() );
+        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), o_Output.begin() );
+        return o_Output;
     }
 
 //.........................................................................
