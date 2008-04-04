@@ -4,9 +4,9 @@
  *
  *  $RCSfile: procimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:48:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,6 +532,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         case osl_Process_HIDDEN:
             startup_info.wShowWindow = SW_HIDE;
+            flags |= CREATE_NO_WINDOW; // ignored for non-console
+                                       // applications; ignored on
+                                       // Win9x
             break;
 
         case osl_Process_MINIMIZED:
