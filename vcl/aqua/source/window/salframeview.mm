@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframeview.mm,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:01:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,6 +779,10 @@ static const struct ExceptionalKey
 -(void)cancelOperation: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: KEY_ESCAPE character: 0x1b];
+}
+
+-(void)noop: (id)aSender
+{
 }
 
 -(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
