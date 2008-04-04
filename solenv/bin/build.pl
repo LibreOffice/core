@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.163 $
+#   $Revision: 1.164 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 10:40:31 $
+#   last change: $Author: kz $ $Date: 2008-04-04 16:02:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.163 $ ';
+    $id_str = ' $Revision: 1.164 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -176,7 +176,7 @@
     $html_last_updated = 0;
     %jobs_hash = ();
     $html_path = undef;
-    $html_file = CorrectPath($ENV{SOLARSRC} . '/' . $ENV{INPATH}. '.build.html');
+    $html_file = CorrectPath($ENV{SRC_ROOT} . '/' . $ENV{INPATH}. '.build.html');
     $build_finished = 0;
     %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
     $chekoutmissing = 1; # chekout missing modules (links still will be broken anyway)
@@ -1183,7 +1183,7 @@ sub usage {
     print STDERR "        --ignore     - force tool to ignore errors\n";
     print STDERR "        --html       - generate html page with build status\n";
     print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SRC_ROOT}\n";
-    print STDERR "          --html_path     - set html page path\n";
+    print STDERR "          --html_path      - set html page path\n";
     print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
     print STDERR "        --dontchekoutmissingmodules - do not chekout missing modules when running prepare (links still will be broken)\n";
     print STDERR "   Custom jobs:\n";
@@ -2715,7 +2715,11 @@ sub generate_html_file {
     print HTML '    return StatusInnerHtml;' . "\n";
     print HTML '}    ' . "\n";
     print HTML 'function ShowLog(LogFilePath) {' . "\n";
-    print HTML '    top.innerFrame.frames[2].document.location = LogFilePath;' . "\n";
+    if (defined $html_path) {
+        print HTML '    top.innerFrame.frames[2].document.location.replace("file://"+LogFilePath);' . "\n";
+    } else {
+        print HTML '    top.innerFrame.frames[2].document.location.replace(LogFilePath);' . "\n";
+    }
     print HTML '    top.innerFrame.frames[2].document.close();' . "\n";
     print HTML '};' . "\n";
     print HTML 'function FillFrame_1(Module, Message1, Message2) {' . "\n";
