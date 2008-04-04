@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XUntitledNumbers.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-04 13:52:56 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XUntitledNumbers_idl__
+#define __com_sun_star_frame_XUntitledNumbers_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+constants UntitledNumbersConst
+{
+    const long INVALID_NUMBER = 0;
+};
+
+//=============================================================================
+/** knows all currently used and all free numbers for using with untitled
+    but counted objects.
+ */
+interface XUntitledNumbers : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** calli has to lease a number befor he can use it within in its own title.
+
+        Such number must be freed after using e.g. while the object was closed or
+        get's another title (e.g. by saving a document to a real location on disc).
+
+        @param  xComponent
+                the component which has to be registered for the leased number.
+
+        @return the new number for these object or 0 if no further numbers are available.
+
+        @throws [IllegalArgumentException]
+                if an invalid object reference was provided to this method.
+     */
+    long leaseNumber ( [in] com::sun::star::uno::XInterface xComponent )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+    /** has to be used to mark those number as "free for using".
+
+        If the reqistered component does not use such leased number any longer
+        it has to be released so it can be used for new components.
+
+        Note: calling this method with an unknown (but normaly valid number)
+              has to be ignored. No exceptions - no errors.
+
+        @param  nNumber
+                specify number for release.
+
+        @throws [IllegalArgumentException]
+                if the given number is the special value 0.
+     */
+    void releaseNumber ( [in] long nNumber )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+    /** does the same then releaseNumber () but it searches the corresponding
+        number for the specified component and deregister it.
+
+        @param  xComponent
+                the component for deregistration.
+
+        @throws [IllegalArgumentException]
+                if an invalid object reference was provided to this method.
+     */
+    void releaseNumberForComponent ( [in] com::sun::star::uno::XInterface xComponent )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+    /** returns the localized string value to be used for untitles objects in
+        combination with the leased number.
+
+        Note: Such string already contains leading spaces/tabs etcpp. !
+        The only thing which an outside code has todo then ... adding a leased number
+        to the string.
+
+        @return the localized string for untitled components.
+     */
+    string getUntitledPrefix ();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
