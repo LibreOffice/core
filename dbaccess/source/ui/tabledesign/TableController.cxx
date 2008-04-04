@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:30:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,11 +427,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             if (_bSaveAs && !bNew)
                  aDefaultName = String(m_sName);
             else
-            {
-                String aName = String(ModuleRes(STR_TBL_TITLE));
-                aName = aName.GetToken(0,' ');
-                aDefaultName = ::dbaui::createDefaultName(getConnection()->getMetaData(),xTables,aName);
-            }
+                aDefaultName = getPrivateTitle();
 
             DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::TABLE );
             OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), getConnection(), aDefaultName, aNameChecker );
@@ -1533,7 +1529,7 @@ void OTableController::assignTable()
             }
         }
     }
-    updateTitle();
+    //updateTitle();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const
@@ -1620,11 +1616,11 @@ void OTableController::reSyncRows()
     return sName;
 }
 // -----------------------------------------------------------------------------
-void OTableController::updateTitle()
+::rtl::OUString OTableController::getPrivateTitle() const
 {
+    ::rtl::OUString sTitle;
     try
     {
-        ::rtl::OUString sTitle;
         // get the table
         if ( m_sName.getLength() && getConnection().is() )
         {
@@ -1633,21 +1629,18 @@ void OTableController::updateTitle()
             else
                 sTitle = m_sName;
         }
-        ::rtl::OUString sName = String(ModuleRes(STR_TABLEDESIGN_TITLE));
-        if(sTitle.getLength())
-            sName = sTitle + sName;
-        else
+        if ( !sTitle.getLength() )
         {
-            ::rtl::OUString sTemp(getDataSourceName());
-            sName = ::dbaui::getStrippedDatabaseName(getDataSource(),sTemp) + sName;
+            String aName = String(ModuleRes(STR_TBL_TITLE));
+            sTitle = aName.GetToken(0,' ');
+            sTitle += ::rtl::OUString::valueOf(getCurrentStartNumber());
         }
-
-        OGenericUnoController::setTitle(sName);
     }
     catch(Exception)
     {
         OSL_ENSURE(0,"Exception catched while setting the title!");
     }
+    return sTitle;
 }
 // -----------------------------------------------------------------------------
 void OTableController::reload()
