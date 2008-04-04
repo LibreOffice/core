@@ -1,0 +1,2 @@
+Put msvcm80.dll, msvcp80.dll, msvcr80.dll and Microsoft.VC90.CRT.manifest
+in this directory for Windows builds using a VS 2008 / VC 9.0 compiler.
