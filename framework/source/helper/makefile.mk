@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-05 17:22:29 $
+#   last change: $Author: kz $ $Date: 2008-04-04 15:14:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,9 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/vclstatusindicator.obj                  \
                     $(SLO)$/wakeupthread.obj                        \
                     $(SLO)$/configimporter.obj                      \
-                    $(SLO)$/tagwindowasmodified.obj
+                    $(SLO)$/tagwindowasmodified.obj                 \
+                    $(SLO)$/titlebarupdate.obj                      \
+                    $(SLO)$/titlehelper.obj
 
 # --- Targets ------------------------------------------------------
 
