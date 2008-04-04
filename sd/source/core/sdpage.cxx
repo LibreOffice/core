@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:27:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_sd.hxx"
 
 #include <algorithm>
+
+#include <comphelper/classids.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -1429,7 +1431,40 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                     bFound = eSdrObjKind == OBJ_GRAF;
                     break;
                 case PRESOBJ_OBJECT:
-                    bFound = eSdrObjKind == OBJ_OLE2;
+                    if( eSdrObjKind == OBJ_OLE2 )
+                    {
+                        SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( pObj );
+                        if( pOle2 )
+                        {
+                            if( pOle2->IsEmpty() )
+                                bFound = true;
+                            else if( rPage.GetModel() )
+                            {
+                                SdrModel* pSdrModel = rPage.GetModel();
+                                ::comphelper::IEmbeddedHelper *pPersist = pSdrModel->GetPersist();
+                                if( pPersist )
+                                {
+                                    uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
+                                            GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+
+                                    // TODO CL->KA: Why is this not working anymore?
+                                    if( xObject.is() )
+                                    {
+                                        SvGlobalName aClassId( xObject->getClassID() );
+
+                                        const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                        const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                        const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                        if( aPluginClassId != aClassId && aAppletClassId != aClassId && aIFrameClassId != aClassId )
+                                        {
+                                            bFound = true;
+                                        }
+                                    }
+                                }
+                             }
+                         }
+                    }
                     break;
                 case PRESOBJ_CHART:
                 case PRESOBJ_TABLE:
