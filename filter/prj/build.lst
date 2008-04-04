@@ -1,4 +1,4 @@
-fl	filter	:	svtools unotools goodies xmloff cppu tools cppuhelper sal svx javaunohelper jvmaccess XALAN:xalan LIBXSLT:libxslt NULL
+fl	filter	:	svtools unotools goodies xmloff cppu tools cppuhelper sal svx javaunohelper xpdf jvmaccess XALAN:xalan LIBXSLT:libxslt NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL
@@ -6,6 +6,15 @@ fl	filter\source\xmlfilteradaptor			nmake	-	all	fl_xmlfilteradaptor	fl_inc NULL
 fl	filter\source\xmlfilterdetect			nmake	-	all	fl_xmlfilterdetect	fl_inc NULL
 fl	filter\source\msfilter\powerpoint		nmake	-	all	fl_powerpoint		fl_inc NULL
 fl	filter\source\pdf						nmake	-	all	fl_pdf fl_svg		fl_inc NULL
+fl	filter\source\pdfimport\wrapper			nmake	-	all	fl_pdfwrap			fl_inc NULL
+fl	filter\source\pdfimport\misc			nmake	-	all	fl_misc				fl_inc NULL
+fl	filter\source\pdfimport\odf				nmake	-	all	fl_odf				fl_inc NULL
+fl	filter\source\pdfimport\pdfparse		nmake	-	all	fl_pdfparse			fl_inc NULL
+fl	filter\source\pdfimport\sax				nmake	-	all	fl_sax				fl_inc NULL
+fl	filter\source\pdfimport\tree			nmake	-	all	fl_tree				fl_inc NULL
+fl	filter\source\pdfimport					nmake	-	all	fl_pdfi fl_pdfwrap fl_misc fl_odf fl_pdfparse fl_sax fl_tree fl_inc NULL
+fl	filter\source\pdfimport\test			nmake	-	all fl_pdfitest   fl_pdfi fl_inc NULL
+fl	filter\source\pdfimport\test\testdocs	nmake	-	all fl_pdfitestdc fl_pdfitest fl_pdfi fl_inc NULL
 fl	filter\source\svg						nmake	-	all	fl_svg				fl_inc NULL
 fl	filter\source\placeware					nmake	-	all	fl_placeware		fl_inc NULL
 fl	filter\source\flash						nmake	-	all	fl_flash fl_pdf			fl_inc NULL
