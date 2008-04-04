@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:50:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,8 +599,97 @@ USHORT AquaSalBitmap::GetBitCount() const
 
 // ------------------------------------------------------------------
 
+static struct pal_entry
+{
+    BYTE mnRed;
+    BYTE mnGreen;
+    BYTE mnBlue;
+}
+const aImplSalSysPalEntryAry[ 16 ] =
+{
+{    0,    0,    0 },
+{    0,    0, 0x80 },
+{    0, 0x80,    0 },
+{    0, 0x80, 0x80 },
+{ 0x80,    0,    0 },
+{ 0x80,    0, 0x80 },
+{ 0x80, 0x80,    0 },
+{ 0x80, 0x80, 0x80 },
+{ 0xC0, 0xC0, 0xC0 },
+{    0,    0, 0xFF },
+{    0, 0xFF,    0 },
+{    0, 0xFF, 0xFF },
+{ 0xFF,    0,    0 },
+{ 0xFF,    0, 0xFF },
+{ 0xFF, 0xFF,    0 },
+{ 0xFF, 0xFF, 0xFF }
+};
+
 BitmapBuffer* AquaSalBitmap::AcquireBuffer( bool bReadOnly )
 {
+    if( mnBits <= 8 && !maPalette )
+    {
+        // at this point we should provide some kind of default palette
+        // since all other platforms do so, too.
+        static bool bDefPalInit = false;
+        static BitmapPalette aDefPalette256;
+        static BitmapPalette aDefPalette16;
+        static BitmapPalette aDefPalette2;
+        if( ! bDefPalInit )
+        {
+            bDefPalInit = true;
+            aDefPalette256.SetEntryCount( 256 );
+            aDefPalette16.SetEntryCount( 16 );
+            aDefPalette2.SetEntryCount( 2 );
+
+            // Standard colors
+            unsigned int i;
+            for( i = 0; i < 16; i++ )
+            {
+                aDefPalette16[i] =
+                aDefPalette256[i] = BitmapColor( aImplSalSysPalEntryAry[i].mnRed,
+                                                 aImplSalSysPalEntryAry[i].mnGreen,
+                                                 aImplSalSysPalEntryAry[i].mnBlue );
+            }
+            aDefPalette2[0] = BitmapColor( 0, 0, 0 );
+            aDefPalette2[1] = BitmapColor( 0xff, 0xff, 0xff );
+
+            // own palette (6/6/6)
+            const int DITHER_PAL_STEPS = 6;
+            const BYTE DITHER_PAL_DELTA = 51;
+            int nB, nG, nR;
+            BYTE nRed, nGreen, nBlue;
+            for( nB=0, nBlue=0; nB < DITHER_PAL_STEPS; nB++, nBlue += DITHER_PAL_DELTA )
+            {
+                for( nG=0, nGreen=0; nG < DITHER_PAL_STEPS; nG++, nGreen += DITHER_PAL_DELTA )
+                {
+                    for( nR=0, nRed=0; nR < DITHER_PAL_STEPS; nR++, nRed += DITHER_PAL_DELTA )
+                    {
+                        aDefPalette256[ i ] = BitmapColor( nRed, nGreen, nBlue );
+                        i++;
+                    }
+                }
+            }
+        }
+
+        // now fill in appropriate palette
+        switch( mnBits )
+        {
+        case 1:
+            maPalette = aDefPalette2;
+            break;
+        case 4:
+            maPalette = aDefPalette16;
+            break;
+        case 8:
+            maPalette = aDefPalette256;
+            break;
+        default:
+            DBG_ERROR( "unsupported bit depth" );
+            break;
+        }
+    }
+
     BitmapBuffer* pBuffer = new BitmapBuffer;
     pBuffer->mnWidth = mnWidth;
     pBuffer->mnHeight = mnHeight;
