@@ -4,9 +4,9 @@
  *
  *  $RCSfile: throbberimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:04:37 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,9 @@ namespace toolkit
 //........................................................................
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::graphic;
-    using namespace ::com::sun::star::uno;
 
     //--------------------------------------------------------------------
-    Throbber_Impl::Throbber_Impl( Reference< VCLXWindow > xParent,
+    Throbber_Impl::Throbber_Impl( uno::Reference< VCLXWindow > xParent,
                                   sal_Int32 nStepTime,
                                   sal_Bool bRepeat )
         :mrMutex( Application::GetSolarMutex() )
@@ -69,7 +67,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::start() throw (RuntimeException)
+    void Throbber_Impl::start() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
@@ -78,7 +76,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::stop() throw (RuntimeException)
+    void Throbber_Impl::stop() throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
@@ -86,8 +84,8 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void Throbber_Impl::setImageList( const Sequence< Reference< XGraphic > >& rImageList )
-        throw (RuntimeException)
+    void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
+        throw ( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
@@ -104,16 +102,16 @@ namespace toolkit
 
     //--------------------------------------------------------------------
     void Throbber_Impl::initImage()
-        throw (RuntimeException)
+        throw ( uno::RuntimeException )
     {
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
-        if ( pImage )
+        if ( pImage && maImageList.getLength() )
             pImage->SetImage( maImageList[ 0 ] );
     }
 
     //--------------------------------------------------------------------
     sal_Bool Throbber_Impl::isHCMode()
-        throw (RuntimeException)
+        throw ( uno::RuntimeException )
     {
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
         if ( pImage )
@@ -129,10 +127,10 @@ namespace toolkit
 
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
 
-        if ( !pImage )
+        if ( !pImage || !maImageList.getLength() )
             return 0;
 
-        if ( mnCurStep < 11 )
+        if ( mnCurStep < mnStepCount - 1 )
             mnCurStep += 1;
         else
             mnCurStep = 0;
