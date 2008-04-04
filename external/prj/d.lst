@@ -43,6 +43,11 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msvcp80\msvcp80.dll %_DEST%\bin%_EXT%\msvcp80.dll
 ..\msvcp80\msvcr80.dll %_DEST%\bin%_EXT%\msvcr80.dll
 
+..\msvcp90\msvcm90.dll %_DEST%\bin%_EXT%\msvcm90.dll
+..\msvcp90\msvcp90.dll %_DEST%\bin%_EXT%\msvcp90.dll
+..\msvcp90\msvcr90.dll %_DEST%\bin%_EXT%\msvcr90.dll
+..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.CRT.manifest
+
 ..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
 
 ..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
