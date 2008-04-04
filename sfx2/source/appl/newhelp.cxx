@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:57:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
+#include <com/sun/star/frame/XTitle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -1658,10 +1661,13 @@ void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bo
 
     // --> PB 2007-03-12 #134037#
     // If a print job runs do not open a new page
-    Reference< XFrame > xFrame = pTextWin->getFrame();
-    if ( xFrame->getController().is() && !xFrame->getController()->suspend( sal_True ) )
+    Reference< XFrame >      xTextFrame      = pTextWin->getFrame();
+    Reference< XController > xTextController ;
+    if (xTextFrame.is())
+        xTextController = xTextFrame->getController ();
+    if ( xTextController.is() && !xTextController->suspend( sal_True ) )
     {
-        xFrame->getController()->suspend( sal_False );
+        xTextController->suspend( sal_False );
         return;
     }
     // <--
@@ -3246,7 +3252,10 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
     String aNewTitle = sTitle;
     aNewTitle += DEFINE_CONST_UNICODE(" - ");
     aNewTitle += pIndexWin->GetActiveFactoryTitle();
-    GetParent()->SetText( aNewTitle );
+
+    Reference< XTitle > xTitle(xFrame, UNO_QUERY);
+    if (xTitle.is ())
+        xTitle->setTitle (aNewTitle);
 
     if ( pWin )
         ShowStartPage();
@@ -3322,6 +3331,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
+    xFrame              ( rFrame ),
     pIndexWin           ( NULL ),
     pTextWin            ( NULL ),
     pHelpInterceptor    ( new HelpInterceptor_Impl() ),
@@ -3335,7 +3345,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     bGrabFocusToToolBox ( sal_False ),
     aWinPos             ( 0, 0 ),
     sTitle              ( pParent->GetText() )
-
 {
     SetHelpId( HID_HELP_WINDOW );
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
