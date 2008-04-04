@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:21:23 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,11 @@ class TaskCreatorService : public  css::lang::XTypeProvider
          */
         static const ::rtl::OUString ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
 
+        /** [sal_Bool] enable/disable special mode, where the title bar of our
+                       the new created frame will be updated automaticly.
+                       Default = ON !
+         */
+        static const ::rtl::OUString ARGUMENT_ENABLE_TITLEBARUPDATE;
     //___________________________________________
     // member
 
@@ -202,6 +207,7 @@ class TaskCreatorService : public  css::lang::XTypeProvider
                                                                       const ::rtl::OUString&                           sName            );
 
         void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
