@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:52:47 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,10 @@
 
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
+#endif
+
+#ifndef _FRAMEWORK_TITLEHELPER_HXX_
+#include <helper/titlehelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -204,6 +208,9 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -292,7 +299,7 @@ css::uno::WeakReference< css::frame::XFrame > Frame::m_xCloserFrame = css::uno::
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_19                (   Frame                                                                   ,
+DEFINE_XINTERFACE_21                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -312,10 +319,12 @@ DEFINE_XINTERFACE_19                (   Frame                                   
                                         DIRECT_INTERFACE(css::document::XActionLockable                         ),
                                         DIRECT_INTERFACE(css::util::XCloseable                                  ),
                                         DIRECT_INTERFACE(css::util::XCloseBroadcaster                           ),
-                                        DIRECT_INTERFACE(css::frame::XComponentLoader                           )
+                                        DIRECT_INTERFACE(css::frame::XComponentLoader                           ),
+                                        DIRECT_INTERFACE(css::frame::XTitle                                     ),
+                                        DIRECT_INTERFACE(css::frame::XTitleChangeBroadcaster                    )
                                     )
 
-DEFINE_XTYPEPROVIDER_18             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_20             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -333,7 +342,9 @@ DEFINE_XTYPEPROVIDER_18             (   Frame                                   
                                         css::lang::XEventListener                                               ,
                                         css::util::XCloseable                                                   ,
                                         css::util::XCloseBroadcaster                                            ,
-                                        css::frame::XComponentLoader
+                                        css::frame::XComponentLoader                                            ,
+                                        css::frame::XTitle                                                      ,
+                                        css::frame::XTitleChangeBroadcaster
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
@@ -349,6 +360,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                                 to create a new instance of this class by our own supported service factory.
                                                 see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
                                             */
+                                            css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Initialize a new dispatchhelper-object to handle dispatches.
@@ -448,6 +460,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_nExternalLockCount        ( 0                                                 )
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_bIsHidden                 ( sal_True                                          )
+        ,   m_xTitleHelper              (                                                   )
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
@@ -770,7 +783,12 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     impl_enablePropertySet();
 
     // create WindowCommandDispatch; it is supposed to release itself at frame destruction
-    (void)new WindowCommandDispatch(m_xSMGR, this);
+    (void)new WindowCommandDispatch(xSMGR, this);
+
+    // Initialize title functionality
+    TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
+    m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
+    pTitleHelper->setOwner(xThis);
 }
 
 /*-****************************************************************************************************//**
@@ -1876,6 +1894,66 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
 
+//*****************************************************************************************************************
+::rtl::OUString SAL_CALL Frame::getTitle()
+    throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    return xTitle->getTitle();
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::setTitle( const ::rtl::OUString& sTitle )
+    throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XTitle > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    xTitle->setTitle(sTitle);
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+    throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    xTitle->addTitleChangeListener(xListener);
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
+    throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    xTitle->removeTitleChangeListener(xListener);
+}
+
 /*-****************************************************************************************************/
 void Frame::implts_forgetSubFrames()
 {
@@ -2711,27 +2789,9 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
     {
         case FRAME_PROPHANDLE_TITLE :
                 {
-                    ::rtl::OUStringBuffer sCompleteTitle(256);
-
-                    ::rtl::OUString sDocName;
-                    aValue >>= sDocName;
-
-                    rtl::OUString sTabString;
-                    css::uno::Reference< css::beans::XMaterialHolder > xHolder(m_xSMGR->createInstance(SERVICENAME_TABREG), css::uno::UNO_QUERY);
-                    if (xHolder.is())
-                    {
-                        ::comphelper::SequenceAsHashMap lMaterial(xHolder->getMaterial());
-                        sTabString = lMaterial.getUnpackedValueOrDefault(MATERIALPROP_TITLE, ::rtl::OUString());
-                    }
-
-                    sCompleteTitle.append(sDocName);
-                    if (sTabString.getLength())
-                    {
-                        sCompleteTitle.appendAscii(" "       );
-                        sCompleteTitle.append     (sTabString);
-                    }
-
-                    implts_setTitleOnWindow(sCompleteTitle.makeStringAndClear());
+                    ::rtl::OUString sExternalTitle;
+                    aValue >>= sExternalTitle;
+                    setTitle (sExternalTitle);
                 }
                 break;
 
@@ -2789,7 +2849,8 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sPr
     switch (nHandle)
     {
         case FRAME_PROPHANDLE_TITLE :
-                aValue <<= implts_getTitleFromWindow();
+                //aValue <<= implts_getTitleFromWindow();
+                aValue <<= getTitle ();
                 break;
 
         case FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
