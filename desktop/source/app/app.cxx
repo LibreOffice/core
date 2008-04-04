@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.216 $
+ *  $Revision: 1.217 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:47:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1406,13 +1406,20 @@ void impl_setInstanceUIDForSTClientJob(const ::rtl::OUString& sInstUID)
     sGenerator.append      (sInstUID   );
 
     const ::rtl::OUString sInstURN = sGenerator.makeStringAndClear ();
+    css::uno::Reference< css::uno::XInterface > xCfg;
+    css::uno::Reference< css::container::XNameAccess > xRead;
+    try
+    {
+         xCfg = ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
+                                                               CONFIGPATH_STCLIENT_JOBARGS,
+                                                               ::comphelper::ConfigurationHelper::E_STANDARD);
 
-    css::uno::Reference< css::uno::XInterface > xCfg = ::comphelper::ConfigurationHelper::openConfig(
-                                                            ::comphelper::getProcessServiceFactory(),
-                                                            CONFIGPATH_STCLIENT_JOBARGS,
-                                                            ::comphelper::ConfigurationHelper::E_STANDARD);
-
-    css::uno::Reference< css::container::XNameAccess > xRead(xCfg, css::uno::UNO_QUERY_THROW);
+        xRead = css::uno::Reference< css::container::XNameAccess >(xCfg, css::uno::UNO_QUERY_THROW);
+    }
+    catch ( css::uno::Exception& )
+    {
+        return;
+    }
     css::uno::Sequence< ::rtl::OUString > lCmdLine;
     xRead->getByName (CONFIGPROP_STCLIENT_COMMANDLINE) >>= lCmdLine;
 
