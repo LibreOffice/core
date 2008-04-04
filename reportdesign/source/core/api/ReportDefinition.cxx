@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDefinition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:53:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,8 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
+#include <comphelper/numberedcollection.hxx>
+#include <framework/titlehelper.hxx>
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -632,6 +634,8 @@ struct OReportDefinitionImpl
     uno::Reference< ui::XUIConfigurationManager>            m_xUIConfigurationManager;
     uno::Reference< util::XNumberFormatsSupplier>           m_xNumberFormatsSupplier;
     uno::Reference< sdbc::XConnection>                      m_xActiveConnection;
+    uno::Reference< frame::XTitle >                         m_xTitleHelper;
+    uno::Reference< frame::XUntitledNumbers >               m_xNumberedControllers;
 
     ::boost::shared_ptr< ::comphelper::EmbeddedObjectContainer>
                                                             m_pObjectContainer;
@@ -829,6 +833,8 @@ void SAL_CALL OReportDefinition::disposing()
         m_pImpl->m_pReportModel.reset();
         m_pImpl->m_pObjectContainer.reset();
         m_pImpl->m_aArgs.realloc(0);
+        m_pImpl->m_xTitleHelper.clear();
+        m_pImpl->m_xNumberedControllers.clear();
     }
 }
 // -----------------------------------------------------------------------------
@@ -2468,6 +2474,157 @@ bool OReportDefinition::isEnableSetModified() const
 {
     return true;
 }
+uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
+{
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    if ( ! m_pImpl->m_xTitleHelper.is ())
+    {
+        uno::Reference< frame::XUntitledNumbers >    xDesktop(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop")) ,m_aProps->m_xContext),uno::UNO_QUERY_THROW);
+        uno::Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
+
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(uno::Reference< lang::XMultiServiceFactory >(m_aProps->m_xContext->getServiceManager(),uno::UNO_QUERY));
+        m_pImpl->m_xTitleHelper = uno::Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+        pHelper->setOwner                   (xThis   );
+        pHelper->connectWithUntitledNumbers (xDesktop);
+    }
+
+    return m_pImpl->m_xTitleHelper;
+}
+// -----------------------------------------------------------------------------
+uno::Reference< frame::XUntitledNumbers > OReportDefinition::impl_getUntitledHelper_throw()
+{
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    if ( ! m_pImpl->m_xNumberedControllers.is ())
+    {
+        uno::Reference< frame::XModel > xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
+        ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
+
+        m_pImpl->m_xNumberedControllers = uno::Reference< frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
+
+        pHelper->setOwner          (xThis);
+        pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+    }
+
+    return m_pImpl->m_xNumberedControllers;
+}
+// -----------------------------------------------------------------------------
+// css.frame.XTitle
+::rtl::OUString SAL_CALL OReportDefinition::getTitle()
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    return impl_getTitleHelper_throw()->getTitle ();
+}
+// -----------------------------------------------------------------------------
+// css.frame.XTitle
+void SAL_CALL OReportDefinition::setTitle( const ::rtl::OUString& sTitle )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    impl_getTitleHelper_throw()->setTitle (sTitle);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL OReportDefinition::addTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->addTitleChangeListener (xListener);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL OReportDefinition::removeTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->removeTitleChangeListener (xListener);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XUntitledNumbers
+::sal_Int32 SAL_CALL OReportDefinition::leaseNumber( const uno::Reference< uno::XInterface >& xComponent )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    return impl_getUntitledHelper_throw()->leaseNumber (xComponent);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XUntitledNumbers
+void SAL_CALL OReportDefinition::releaseNumber( ::sal_Int32 nNumber )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    impl_getUntitledHelper_throw()->releaseNumber (nNumber);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XUntitledNumbers
+void SAL_CALL OReportDefinition::releaseNumberForComponent( const uno::Reference< uno::XInterface >& xComponent )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException         )
+{
+    // object already disposed?
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    impl_getUntitledHelper_throw()->releaseNumberForComponent (xComponent);
+}
+// -----------------------------------------------------------------------------
+// css.frame.XUntitledNumbers
+::rtl::OUString SAL_CALL OReportDefinition::getUntitledPrefix()
+    throw (uno::RuntimeException)
+{
+    // object already disposed?
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    return impl_getUntitledHelper_throw()->getUntitledPrefix ();
+}
+// -----------------------------------------------------------------------------
+
 // =============================================================================
 }// namespace reportdesign
 // =============================================================================
