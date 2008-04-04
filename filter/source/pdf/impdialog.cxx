@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 17:09:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -559,7 +559,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     Reference< XInterface > xIfc;
     if( xFactory.is() )
     {
-        xIfc = xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.documents.PDFImport" ) ) );
+        xIfc = xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.documents.PDFDetector" ) ) );
     }
     if( xIfc.is() )
     {
