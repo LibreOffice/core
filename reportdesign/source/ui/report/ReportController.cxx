@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:43:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1744,7 +1744,7 @@ void OReportController::impl_initialize( )
     {
         if ( m_xReportDefinition.is() )
         {
-            m_sName = m_xReportDefinition->getName();
+            //m_sName = m_xReportDefinition->getName();
             getView()->initialize();    // show the windows and fill with our informations
             getUndoMgr()->Clear();      // clear all undo redo things
             getSdrModel();
@@ -2143,26 +2143,6 @@ void OReportController::losingConnection( )
     InvalidateAll();
 }
 // -----------------------------------------------------------------------------
-void OReportController::updateTitle()
-{
-    ::rtl::OUString sName;
-    if ( m_xReportDefinition.is() )
-        sName = m_xReportDefinition->getCaption();
-
-    if ( !sName.getLength() )
-        sName = String(ModuleRes(RID_APP_NEW_DOC));
-
-    String sTitle = String(ModuleRes(RID_APP_TITLE));
-    sName = sName + sTitle;
-//#ifndef PRODUCT
-//    ::rtl::OUString aDefault;
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
-//    sName += utl::Bootstrap::getBuildIdData( aDefault );
-//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
-//#endif
-    OGenericUnoController::setTitle(sName);
-}
-// -----------------------------------------------------------------------------
 void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _xLayoutManager)
 {
     if ( _xLayoutManager.is() )
@@ -2286,8 +2266,9 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 if ( !m_pMyOwnView->isAddFieldVisible() )
                     m_pMyOwnView->toggleAddField();
             }
-            else if (   evt.PropertyName.equals( PROPERTY_CAPTION ) )
-                updateTitle();
+            /// TODO: check what we need to notify here TitleHelper
+            /*else if (   evt.PropertyName.equals( PROPERTY_CAPTION ) )
+                updateTitle();*/
         } // if ( evt.Source == m_xReportDefinition )
         else
         {
@@ -2392,7 +2373,7 @@ IMPL_LINK(OReportController, OnInvalidateClipboard, void*, EMPTYARG)
     InvalidateFeature(SID_PASTE);
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
 // -----------------------------------------------------------------------------
@@ -3981,4 +3962,18 @@ void OReportController::checkChartEnabled()
         }
     }
 }
+
+// css.frame.XTitle
+::rtl::OUString SAL_CALL OReportController::getTitle()
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    uno::Reference< frame::XTitle> xTitle(m_xReportDefinition,uno::UNO_QUERY_THROW);
+
+    return xTitle->getTitle ();
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
