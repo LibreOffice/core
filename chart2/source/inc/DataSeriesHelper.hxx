@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:59:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,22 +134,6 @@ void SetRole(
 ::rtl::OUString getLabelForLabeledDataSequence(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence > & xLabeledSeq );
-
-/** Retrieves the stackmode of a DataSeries.  If the series have differing stack
-    modes, the StackMode StackMode_AMBIGUOUS is returned.
-
-    @param xCorrespondingCoordinateSystem
-        The coordinate system in which the given data series are located.  (This
-        is needed for determining percent stacking.  If omitted, the result will
-        just indicate "not stacked", "stacked" or "ambiguous")
- */
-StackMode getStackModeFromSeries(
-    const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > > & aSeries,
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem =
-            ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >()
-    );
 
 void setStackModeAtSeries(
     const ::com::sun::star::uno::Sequence<
