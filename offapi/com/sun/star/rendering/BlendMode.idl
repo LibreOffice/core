@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: BlendMode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:07:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_BlendMode_idl__
+#define __com_sun_star_rendering_BlendMode_idl__
+
+module com { module sun { module star { module rendering {
+
+/** These constants determine some extra ways how the primitive color
+    is combined with the background.<p>
+
+    @see <type>CompositeOperation</type>
+
+    Please refer to the PDF specification for explanations of this
+    constants.<p>
+ */
+constants BlendMode
+{
+    const byte NORMAL      = 0;
+    const byte MULTIPLY    = 1;
+    const byte SCREEN      = 2;
+    const byte OVERLAY     = 3;
+    const byte DARKEN      = 4;
+    const byte LIGHTEN     = 5;
+    const byte COLOR_DODGE = 6;
+    const byte COLOR_BURN  = 7;
+    const byte HARD_LIGHT  = 8;
+    const byte SOFT_LIGHT  = 9;
+    const byte DIFFERENCE  = 10;
+    const byte EXCLUSION   = 11;
+    const byte HUE         = 12;
+    const byte SATURATION  = 13;
+    const byte COLOR       = 14;
+    const byte LUMINOSITY  = 15;
+};
+
+}; }; }; };
+
+#endif
