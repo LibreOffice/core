@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 16:01:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,10 @@ bool ChartTypeHelper::isSupportingAxisSideBySide(
     if( xChartType.is() &&
         nDimensionCount < 3 )
     {
-        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, 0 );
-        if( eStackMode == StackMode_NONE )
+        bool bFound=false;
+        bool bAmbiguous=false;
+        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
+        if( eStackMode == StackMode_NONE && !bAmbiguous )
         {
             rtl::OUString aChartTypeName = xChartType->getChartType();
             bResult = ( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
@@ -232,8 +234,10 @@ sal_Bool ChartTypeHelper::isSupportingBarConnectors(
         if(nDimensionCount==3)
             return sal_False;
 
-        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, 0 );
-        if( eStackMode != StackMode_Y_STACKED )
+        bool bFound=false;
+        bool bAmbiguous=false;
+        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
+        if( eStackMode != StackMode_Y_STACKED || bAmbiguous )
             return sal_False;
 
         rtl::OUString aChartTypeName = xChartType->getChartType();
