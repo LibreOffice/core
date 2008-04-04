@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:10:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 13:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,21 +581,19 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     InvalidateFeature(SID_DB_APP_VIEW_DOC_PREVIEW);
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::updateTitle()
-{
-    ::rtl::OUString sName = getStrippedDatabaseName();
-
-    String sTitle = String(ModuleRes(STR_APP_TITLE));
-    sName = sName + sTitle;
-#ifndef PRODUCT
-    ::rtl::OUString aDefault;
-    sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
-    sName += utl::Bootstrap::getBuildIdData( aDefault );
-    sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
-#endif
-
-    OGenericUnoController::setTitle(sName);
-}
+//void OApplicationController::updateTitle()
+//{
+//  ::rtl::OUString sName = getStrippedDatabaseName();
+//
+//  String sTitle = String(ModuleRes(STR_APP_TITLE));
+//  sName = sName + sTitle;
+//#ifndef PRODUCT
+//    ::rtl::OUString aDefault;
+//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ["));
+//    sName += utl::Bootstrap::getBuildIdData( aDefault );
+//  sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+//#endif
+//}
 // -----------------------------------------------------------------------------
 void OApplicationController::askToReconnect()
 {
