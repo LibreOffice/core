@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:13:06 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,14 +216,14 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProper
         ( C2U( "CharFontCharSetAsian" ),    C2U("CharFontCharSetAsian") )
         ( C2U( "CharFontCharSetComplex" ),  C2U("CharFontCharSetComplex") )
         ( C2U( "CharFontName" ),            C2U("CharFontName") )
+        ( C2U( "CharFontNameAsian" ),       C2U("CharFontNameAsian") )
+        ( C2U( "CharFontNameComplex" ),     C2U("CharFontNameComplex") )
         ( C2U( "CharFontPitch" ),           C2U("CharFontPitch") )
         ( C2U( "CharFontPitchAsian" ),      C2U("CharFontPitchAsian") )
         ( C2U( "CharFontPitchComplex" ),    C2U("CharFontPitchComplex") )
         ( C2U( "CharFontStyleName" ),       C2U("CharFontStyleName") )
-        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontNameComplex") )
-        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
-        ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontNameAsian") )
         ( C2U( "CharFontStyleNameAsian" ),  C2U("CharFontStyleNameAsian") )
+        ( C2U( "CharFontStyleNameComplex" ),C2U("CharFontStyleNameComplex") )
 
         ( C2U( "CharHeight" ),              C2U("CharHeight") )
         ( C2U( "CharHeightAsian" ),         C2U("CharHeightAsian") )
