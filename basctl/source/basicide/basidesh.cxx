@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:12:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,8 +222,13 @@ void BasicIDEShell::Init()
 
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > aTmpRef;
-    GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, new BasicIDEController( this ) );
+    // It's enough to create the controller ...
+    // It will be public by using magic :-)
+    new BasicIDEController( this );
+
+    // Force updating the title ! Because it must be set to the controller
+    // it has to be called directly after creating those controller.
+    SetMDITitle ();
 
     UpdateWindows();
 }
