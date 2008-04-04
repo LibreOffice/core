@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:28:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,14 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
+#include <com/sun/star/frame/XTitle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
@@ -160,6 +168,8 @@
 #define XCONTEXTMENUINTERCEPTOR ::com::sun::star::ui::XContextMenuInterceptor
 #define XUSERINPUTINTERCEPTION  ::com::sun::star::awt::XUserInputInterception
 #define XDISPATCHINFORMATIONPROVIDER ::com::sun::star::frame::XDispatchInformationProvider
+#define XTITLE                  ::com::sun::star::frame::XTitle
+#define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
 
 //________________________________________________________________________________________________________
 //  forwards
@@ -201,6 +211,8 @@ class SFX2_DLLPUBLIC SfxBaseController  :   public XTYPEPROVIDER
                         ,   public XCONTEXTMENUINTERCEPTION
                         ,   public XUSERINPUTINTERCEPTION
                         ,   public XDISPATCHINFORMATIONPROVIDER
+                        ,   public XTITLE
+                        ,   public XTITLECHANGEBROADCASTER
                         ,   public IMPL_SfxBaseController_MutexContainer
                         ,   public OWEAKOBJECT
 {
@@ -551,11 +563,20 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (::com::sun::star::uno::RuntimeException);
 
+    // css::frame::XTitle
+    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+
+    // css::frame::XTitleChangeBroadcaster
+    virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener )     throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxViewShell* GetViewShell_Impl() const;
     SAL_DLLPRIVATE BOOL HandleEvent_Impl( NotifyEvent& rEvent );
     SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
     SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 //#endif
 
 //________________________________________________________________________________________________________
