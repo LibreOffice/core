@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:11:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2120,25 +2120,34 @@ void SAL_CALL SvxCustomShape::setSize( const awt::Size& rSize )
 
 //----------------------------------------------------------------------
 
-bool SvxCustomShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+//----------------------------------------------------------------------
+void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
 {
-    switch( pProperty->nWID )
+    OGuard aGuard( Application::GetSolarMutex() );
+    SdrObject* pObject = mpObj.get();
+
+    sal_Bool bCustomShapeGeometry = pObject && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CustomShapeGeometry" ) );
+
+    sal_Bool bMirroredX = sal_False;
+    sal_Bool bMirroredY = sal_False;
+
+    if ( bCustomShapeGeometry )
     {
-    case SDRATTR_CUSTOMSHAPE_GEOMETRY:
+        bMirroredX = ( ((SdrObjCustomShape*)pObject)->IsMirroredX() );
+        bMirroredY = ( ((SdrObjCustomShape*)pObject)->IsMirroredY() );
+    }
+
+    SvxShape::setPropertyValue( aPropertyName, aValue );
+
+    if ( bCustomShapeGeometry )
     {
-        SdrObjCustomShape* pObject = static_cast< SdrObjCustomShape* >( mpObj.get() );
-
-        sal_Bool bMirroredX = pObject->IsMirroredX();
-        sal_Bool bMirroredY = pObject->IsMirroredY();
-
-        SvxShapeText::setPropertyValueImpl( pProperty, rValue );
-
-        pObject->MergeDefaultAttributes(0);
+        ((SdrObjCustomShape*)pObject)->MergeDefaultAttributes(0);
         Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
-        bool bNeedsMirrorX = pObject->IsMirroredX() != bMirroredX;
-        bool bNeedsMirrorY = pObject->IsMirroredY() != bMirroredY;
+        bool bNeedsMirrorX = ((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX;
+        bool bNeedsMirrorY = ((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY;
 
         boost::scoped_ptr< SdrGluePointList > pListCopy;
         if( bNeedsMirrorX || bNeedsMirrorY )
@@ -2155,7 +2164,7 @@ bool SvxCustomShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             pObject->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            pObject->SetMirroredX( bMirroredX ? sal_False : sal_True );
+            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
         }
         if ( bNeedsMirrorY )
         {
@@ -2164,7 +2173,7 @@ bool SvxCustomShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             pObject->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            pObject->SetMirroredY( bMirroredY ? sal_False : sal_True );
+            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
         }
 
         if( pListCopy )
@@ -2173,10 +2182,6 @@ bool SvxCustomShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             if(pNewList)
                 *pNewList = *pListCopy;
         }
-        return true;
-    }
-    default:
-        return SvxShapeText::setPropertyValueImpl( pProperty, rValue );
     }
 }
 
