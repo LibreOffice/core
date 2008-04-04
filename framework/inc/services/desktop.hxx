@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:25:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,10 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_FRAME_XUNTITLEDNUMBERS_HPP_
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -196,6 +200,8 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
+#include <comphelper/numberedcollection.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -259,6 +265,7 @@ class Desktop   :   // interfaces
                     public  css::frame::XFramesSupplier          ,   // => XFrame => XComponent
                     public  css::frame::XDispatchResultListener  ,   // => XEventListener
                     public  css::task::XInteractionHandler       ,
+                    public  css::frame::XUntitledNumbers         ,
                     // base classes
                     // Order is neccessary for right initialization!
                     private ThreadHelpBase                       ,
@@ -431,6 +438,25 @@ class Desktop   :   // interfaces
         //   XInteractionHandler
         virtual void                                                                SAL_CALL handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) throw( css::uno::RuntimeException          );
 
+        // css.frame.XUntitledNumbers
+        virtual ::sal_Int32 SAL_CALL leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException         );
+
+        // css.frame.XUntitledNumbers
+        virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber )
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException         );
+
+        // css.frame.XUntitledNumbers
+        virtual void SAL_CALL releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException         );
+
+        // css.frame.XUntitledNumbers
+        virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
+            throw (css::uno::RuntimeException);
+
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
@@ -447,7 +473,7 @@ class Desktop   :   // interfaces
         virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw (css::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -601,6 +627,8 @@ class Desktop   :   // interfaces
           * shutdown will be faster then all other code around Desktop.terminate() .-))
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
+
+        css::uno::Reference< css::frame::XUntitledNumbers > m_xTitleNumberGenerator;
 
 };      //  class Desktop
 
