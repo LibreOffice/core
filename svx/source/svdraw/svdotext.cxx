@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:55:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2111,8 +2111,12 @@ void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 
             SetObjectItemSet(aNewSet);
 
-            // set ParaObject orientation accordingly
-            pOutlinerParaObject->SetVertical(bVertical);
+            pOutlinerParaObject = GetOutlinerParaObject();
+            if( pOutlinerParaObject )
+            {
+                // set ParaObject orientation accordingly
+                pOutlinerParaObject->SetVertical(bVertical);
+            }
 
             // restore object size
             SetSnapRect(aObjectRect);
