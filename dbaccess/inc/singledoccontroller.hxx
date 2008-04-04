@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:56:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const;
+
     public:
 
         sal_Bool        isReadOnly()            const;
@@ -180,6 +182,9 @@ namespace dbaui
         // XScriptInvocationContext
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
 
+        // XTitle
+        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         OSingleDocumentController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxORB);
         virtual ~OSingleDocumentController();
@@ -211,6 +216,8 @@ namespace dbaui
 
     private:
         OSingleDocumentController();    // never implemented
+
+        sal_Int32 getCurrentStartNumber() const;
     };
 
 //........................................................................
