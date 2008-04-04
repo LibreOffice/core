@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:24:14 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 
 #ifndef __FRAMEWORK_HELPER_TAGWINDOWASMODIFIED_HXX_
 #include <helper/tagwindowasmodified.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_TITLEBARUPDATE_HXX_
+#include <helper/titlebarupdate.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -135,6 +139,7 @@ const ::rtl::OUString TaskCreatorService::ARGUMENT_CREATETOPWINDOW              
 const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE                       = ::rtl::OUString::createFromAscii("PosSize"                       ); // Rectangle
 const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW               = ::rtl::OUString::createFromAscii("ContainerWindow"               ); // XWindow
 const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE  = ::rtl::OUString::createFromAscii("SupportPersistentWindowState"  ); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE         = ::rtl::OUString::createFromAscii("EnableTitleBarUpdate"          ); // sal_Bool
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_3(TaskCreatorService                                ,
@@ -198,6 +203,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     static sal_Bool            DEFAULTVAL_CREATETOPWINDOW               = sal_True;
     static css::awt::Rectangle DEFAULTVAL_POSSIZE                       = css::awt::Rectangle(0, 0, 0, 0); // only possize=[0,0,0,0] triggers default handling of vcl !
     static sal_Bool            DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE = sal_False;
+    static sal_Bool            DEFAULTVAL_ENABLE_TITLEBARUPDATE         = sal_True;
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
@@ -208,6 +214,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_POSSIZE                      , DEFAULTVAL_POSSIZE                         );
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_CONTAINERWINDOW              , css::uno::Reference< css::awt::XWindow >() );
     sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE , DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE   );
+    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE        , DEFAULTVAL_ENABLE_TITLEBARUPDATE           );
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -267,6 +274,12 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     // is used ...
     if (bTopLevelDocumentWindow)
         implts_establishDocModifyListener (xFrame);
+
+    // special freature:
+    // A special listener will update title bar (text and icon)
+    // if component of frame will be changed.
+    if (bEnableTitleBarUpdate)
+        implts_establishTitleBarUpdate(xFrame);
 
     // Make it visible directly here ...
     // if its required from outside.
@@ -421,6 +434,23 @@ void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Refe
     // It will tag the window as modified if the underlying model was modified ...
     TagWindowAsModified* pTag = new TagWindowAsModified(xSMGR);
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pTag), css::uno::UNO_QUERY_THROW);
+
+    css::uno::Sequence< css::uno::Any > lInitData(1);
+    lInitData[0] <<= xFrame;
+    xInit->initialize(lInitData);
+}
+
+//-----------------------------------------------
+void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    // SAFE  ->
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
+
+    TitleBarUpdate* pHelper = new TitleBarUpdate (xSMGR);
+    css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);
     lInitData[0] <<= xFrame;
