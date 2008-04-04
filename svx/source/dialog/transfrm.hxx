@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:53:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@ private:
     bool                mbPageDisabled;
     bool                mbProtectDisabled;
     bool                mbSizeDisabled;
+    bool                mbAdjustDisabled;
 
     // frome size
     // #i75273#
