@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:45:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
+#include <com/sun/star/frame/XTitle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -1824,8 +1828,8 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     css::uno::Reference< css::frame::XStorable > xDoc(aNew.Document, css::uno::UNO_QUERY_THROW);
     aNew.OrgURL = xDoc->getLocation();
 
-    css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY_THROW);
-    xFrameProps->getPropertyValue(FRAME_PROPNAME_TITLE) >>= aNew.Title;
+    css::uno::Reference< css::frame::XTitle > xTitle(aNew.Document, css::uno::UNO_QUERY_THROW);
+    aNew.Title = xTitle->getTitle ();
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -2043,9 +2047,16 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     ::comphelper::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
     rInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
-    rInfo.Title      = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TITLE()     , ::rtl::OUString());
-    if (!rInfo.Title.getLength())
-        rInfo.Title  = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTTITLE(), ::rtl::OUString());
+
+    css::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, css::uno::UNO_QUERY);
+    if (xDocTitle.is ())
+        rInfo.Title = xDocTitle->getTitle ();
+    else
+    {
+        rInfo.Title      = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TITLE()     , ::rtl::OUString());
+        if (!rInfo.Title.getLength())
+            rInfo.Title  = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTTITLE(), ::rtl::OUString());
+    }
 
     rInfo.UsedForSaving = sal_False;
 
