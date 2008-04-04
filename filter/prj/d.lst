@@ -35,7 +35,10 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool
 ..\source\xslt\import\common\*.xsl %_DEST%\bin%_EXT%\xslt\import\common\*.xsl
 ..\source\xslt\import\spreadsheetml\*.xsl %_DEST%\bin%_EXT%\xslt\import\spreadsheetml\*.xsl
 ..\source\xslt\import\wordml\*.xsl %_DEST%\bin%_EXT%\xslt\import\wordml\*.xsl
+..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt
 ..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
 ..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
+..\%__SRC%\bin\pdf2xml.* %_DEST%\bin%_EXT%\pdf2xml.*
+..\%__SRC%\bin\pdfunzip.* %_DEST%\bin%_EXT%\pdfunzip.*
 ..\%__SRC%\misc\filters\modulepacks\fcfg_*.xcu %_DEST%\xml%_EXT%\registry\spool\fcfg_*.xcu
 ..\%COMMON_OUTDIR%\bin\fcfg_langpack_*.zip %_DEST%\pck%_EXT%\fcfg_langpack_*.zip
