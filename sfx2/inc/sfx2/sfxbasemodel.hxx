@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:45:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,18 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
 #include <com/sun/star/frame/XModule.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
+#include <com/sun/star/frame/XTitle.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XUNTITLEDNUMBERS_HPP_
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
@@ -234,9 +246,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_25)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_25
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 25
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_28)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_28
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 28
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -322,6 +334,9 @@
 #define XUICONFIGURATIONMANAGERSUPPLIER ::com::sun::star::ui::XUIConfigurationManagerSupplier
 #define XUICONFIGURATIONMANAGER ::com::sun::star::ui::XUIConfigurationManager
 #define XMODULE ::com::sun::star::frame::XModule
+#define XTITLE ::com::sun::star::frame::XTitle
+#define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
+#define XUNTITLEDNUMBERS ::com::sun::star::frame::XUntitledNumbers
 
 //________________________________________________________________________________________________________
 //  namespace
@@ -375,7 +390,7 @@ struct IMPL_SfxBaseModel_MutexContainer
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper25  <   XCHILD
+typedef ::comphelper::WeakImplHelper28  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   XEVENTBROADCASTER
@@ -400,6 +415,9 @@ typedef ::comphelper::WeakImplHelper25  <   XCHILD
                                         ,   XVISUALOBJECT
                                         ,   XUNOTUNNEL
                                         ,   XMODULE
+                                        ,   XTITLE
+                                        ,   XTITLECHANGEBROADCASTER
+                                        ,   XUNTITLEDNUMBERS
                                         >   SfxBaseModel_Base;
 
 class SFX2_DLLPUBLIC SfxBaseModel   :   public SfxBaseModel_Base
@@ -1389,7 +1407,44 @@ public:
     // css.frame.XModule
     virtual void SAL_CALL setIdentifier(const ::rtl::OUString& sIdentifier)
         throw (css::uno::RuntimeException);
+
+    // css.frame.XModule
     virtual ::rtl::OUString SAL_CALL getIdentifier()
+        throw (css::uno::RuntimeException);
+
+    // css.frame.XTitle
+    virtual ::rtl::OUString SAL_CALL getTitle()
+        throw (css::uno::RuntimeException);
+
+    // css.frame.XTitle
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle )
+        throw (css::uno::RuntimeException);
+
+    // css.frame.XTitleChangeBroadcaster
+    virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
+        throw (css::uno::RuntimeException);
+
+    // css.frame.XTitleChangeBroadcaster
+    virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
+        throw (css::uno::RuntimeException);
+
+    // css.frame.XUntitledNumbers
+    virtual ::sal_Int32 SAL_CALL leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException         );
+
+    // css.frame.XUntitledNumbers
+    virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException         );
+
+    // css.frame.XUntitledNumbers
+    virtual void SAL_CALL releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
+        throw (css::lang::IllegalArgumentException,
+               css::uno::RuntimeException         );
+
+    // css.frame.XUntitledNumbers
+    virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
         throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
@@ -1512,6 +1567,9 @@ private:
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
     SAL_DLLPRIVATE void NotifyStorageListeners_Impl();
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );
+
+    SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
+    SAL_DLLPRIVATE css::uno::Reference< css::frame::XUntitledNumbers > impl_getUntitledHelper ();
 
 //________________________________________________________________________________________________________
 //  private variables and methods
