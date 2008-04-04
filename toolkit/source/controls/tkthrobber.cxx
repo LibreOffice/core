@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkthrobber.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:44:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,7 @@ namespace toolkit
 {
 //........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::graphic;
+    using namespace ::com::sun::star;
 
     //====================================================================
     //= UnoThrobberControlModel
@@ -75,18 +71,18 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoThrobberControlModel::getServiceName( ) throw (RuntimeException)
+    ::rtl::OUString UnoThrobberControlModel::getServiceName( ) throw ( uno::RuntimeException )
     {
         return ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
     }
 
     //--------------------------------------------------------------------
-    Any UnoThrobberControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+    uno::Any UnoThrobberControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
+            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
         }
@@ -98,29 +94,32 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            uno::Sequence< sal_Int32 > aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySetInfo > UnoThrobberControlModel::getPropertySetInfo(  ) throw(RuntimeException)
+    uno::Reference< beans::XPropertySetInfo > UnoThrobberControlModel::getPropertySetInfo()
+        throw( uno::RuntimeException )
     {
-        static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoThrobberControlModel::getImplementationName(  ) throw(RuntimeException)
+    ::rtl::OUString SAL_CALL UnoThrobberControlModel::getImplementationName()
+        throw( uno::RuntimeException )
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoThrobberControlModel" ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControlModel::getSupportedServiceNames() throw(RuntimeException)
+    uno::Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControlModel::getSupportedServiceNames()
+        throw( uno::RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
+        uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
         aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
         return aServices;
@@ -141,9 +140,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Any UnoThrobberControl::queryAggregation( const Type & rType ) throw(RuntimeException)
+    uno::Any UnoThrobberControl::queryAggregation( const uno::Type & rType ) throw( uno::RuntimeException )
     {
-        Any aRet = UnoControlBase::queryAggregation( rType );
+        uno::Any aRet = UnoControlBase::queryAggregation( rType );
         if ( !aRet.hasValue() )
             aRet = UnoThrobberControl_Base::queryInterface( rType );
         return aRet;
@@ -153,7 +152,7 @@ namespace toolkit
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoThrobberControl, UnoControlBase, UnoThrobberControl_Base )
 
     //--------------------------------------------------------------------
-    void UnoThrobberControl::dispose() throw(RuntimeException)
+    void UnoThrobberControl::dispose() throw( uno::RuntimeException )
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
@@ -161,42 +160,46 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoThrobberControl::getImplementationName(  ) throw(RuntimeException)
+    ::rtl::OUString SAL_CALL UnoThrobberControl::getImplementationName()
+        throw( uno::RuntimeException )
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoThrobberControl" ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControl::getSupportedServiceNames() throw(RuntimeException)
+    uno::Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControl::getSupportedServiceNames()
+        throw( uno::RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
+        uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
         aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl );
         return aServices;
     }
 
     //--------------------------------------------------------------------
-    void UnoThrobberControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
+    void UnoThrobberControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit,
+                                         const uno::Reference< awt::XWindowPeer >  & rParentPeer )
+        throw( uno::RuntimeException )
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoThrobberControl::start() throw (RuntimeException)
+    void SAL_CALL UnoThrobberControl::start() throw ( uno::RuntimeException )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        Reference< XThrobber > xAnimation( getPeer(), UNO_QUERY );
+        uno::Reference< XThrobber > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->start();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoThrobberControl::stop() throw (RuntimeException)
+    void SAL_CALL UnoThrobberControl::stop() throw ( uno::RuntimeException )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        Reference< XThrobber > xAnimation( getPeer(), UNO_QUERY );
+        uno::Reference< XThrobber > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->stop();
     }
