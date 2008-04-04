@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:37:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 
 #define _SOLAR__PRIVATE 1
 
+#include <com/sun/star/frame/XTitle.hpp>
+
 #include <vcl/sound.hxx>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
@@ -64,7 +66,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
+namespace css = ::com::sun::star;
 
 IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 {
@@ -196,6 +198,11 @@ void BasicIDEShell::SetMDITitle()
             pShell->SetTitle( aTitle );
             pShell->SetModified( FALSE );
         }
+
+        css::uno::Reference< css::frame::XController > xController = GetController ();
+        css::uno::Reference< css::frame::XTitle >      xTitle      (xController, css::uno::UNO_QUERY);
+        if (xTitle.is ())
+            xTitle->setTitle (aTitle);
     }
 }
 
