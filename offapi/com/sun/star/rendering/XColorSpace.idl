@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XColorSpace.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:58:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,23 @@ interface XColorSpace
 
 /// Shorthand for the device-dependent color components, and easier to read
 typedef double ColorComponent;
+
+/// ARGB color quad
+struct ARGBColor
+{
+    /** Alpha component.<p>
+
+        Valid range is [0,1.0], with 0.0 denoting fully transparent,
+        and 1.0 fully opaque.
+     */
+    ColorComponent Alpha;
+    /// Red component. Valid range is [0,1.0]
+    ColorComponent Red;
+    /// Green component. Valid range is [0,1.0]
+    ColorComponent Green;
+    /// Blue component. Valid range is [0,1.0]
+    ColorComponent Blue;
+};
 
 }; }; }; };
 
