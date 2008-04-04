@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:07:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,17 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 
 #include <comphelper/InlineContainer.hxx>
+
+// header for struct SvtLinguConfig
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -455,13 +466,23 @@ void CharacterProperties::AddDefaultsToMap(
 {
     const float fDefaultFontHeight = 13.0;
 
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, C2U( "Albany" ));
-    //todo correct font default:
-    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
-    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_FAMILY, awt::FontFamily::SWISS );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_PITCH, awt::FontPitch::VARIABLE );
+    SvtLinguConfig aLinguConfig;
+    lang::Locale aDefaultLocale( C2U( "en" ), C2U( "US" ), OUString() );
+    aLinguConfig.GetProperty(C2U("DefaultLocale")) >>= aDefaultLocale;
+    lang::Locale aDefaultLocale_CJK;
+    aLinguConfig.GetProperty(C2U("DefaultLocale_CJK")) >>= aDefaultLocale_CJK;
+    lang::Locale aDefaultLocale_CTL;
+    aLinguConfig.GetProperty(C2U("DefaultLocale_CTL")) >>= aDefaultLocale_CTL;
+
+    Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
+    Font aFontCJK = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale_CJK ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
+    Font aFontCTL = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_SPREADSHEET, MsLangId::convertLocaleToLanguage( aDefaultLocale_CTL ), DEFAULTFONT_FLAGS_ONLYONE, 0 );
+
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, OUString( aFont.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_STYLE_NAME, OUString(aFont.GetStyleName()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_FAMILY, sal_Int32(aFont.GetFamily()) );//awt::FontFamily::SWISS
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, sal_Int32(aFont.GetCharSet()) );//use awt::CharSet::DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_PITCH, sal_Int32(aFont.GetPitch()) );//awt::FontPitch::VARIABLE
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_COLOR, -1 ); //automatic color (COL_AUTO)
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ESCAPEMENT, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CHAR_HEIGHT, fDefaultFontHeight );
@@ -483,7 +504,7 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WORD_MODE, false );
 //     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FLASH, false );
 
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); // todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_LOCALE, aDefaultLocale );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_SHADOWED, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CONTOURED, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RELIEF, text::FontRelief::NONE );
@@ -499,29 +520,23 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultFontHeight );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_POSTURE, awt::FontSlant_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); //todo correct default
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, C2U( "Andale Sans UI" ));
-
-    //todo correct font default:
-    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
-    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_FAMILY, awt::FontFamily::SWISS ); //todo correct default
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_SET, awt::CharSet::DONTKNOW );    //use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_PITCH, awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_LOCALE, aDefaultLocale_CJK );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, OUString( aFontCJK.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_STYLE_NAME, OUString(aFontCJK.GetStyleName()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_FAMILY, sal_Int32(aFontCJK.GetFamily()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_SET, sal_Int32(aFontCJK.GetCharSet()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_PITCH, sal_Int32(aFontCJK.GetPitch()) );
 
     // Complex Text Layout (com.sun.star.style.CharacterPropertiesComplex)
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultFontHeight );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_POSTURE, awt::FontSlant_NONE );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); //todo correct default
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, C2U( "Tahoma" )); //todo correct default
-
-    //todo correct font default:
-    //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
-    //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, awt::FontFamily::SWISS );//todo correct default
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_LOCALE, aDefaultLocale_CTL );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, OUString( aFontCTL.GetName() ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_STYLE_NAME, OUString(aFontCTL.GetStyleName()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, sal_Int32(aFontCTL.GetFamily()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, sal_Int32(aFontCTL.GetCharSet()) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, sal_Int32(aFontCTL.GetPitch()) );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
