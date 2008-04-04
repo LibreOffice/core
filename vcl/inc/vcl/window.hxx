@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 14:11:16 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,6 +619,8 @@ protected:
             void        CallEventListeners( ULONG nEvent, void* pData = NULL );
 
 
+    // FIXME: this is a hack to workaround missing layout functionality
+    SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
     // Single argument ctors shall be explicit.
     explicit            Window( Window* pParent, WinBits nStyle = 0 );
