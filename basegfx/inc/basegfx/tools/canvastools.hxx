@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:55:50 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 16:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 namespace com { namespace sun { namespace star { namespace geometry
 {
     struct AffineMatrix2D;
+    struct Matrix2D;
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
@@ -123,6 +124,9 @@ namespace basegfx
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& rPoints );
 
+        ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
+            const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::rendering::XPolyPolygon2D >& rPoly );
 
         // Matrix conversions
         // ===================================================================
@@ -135,6 +139,13 @@ namespace basegfx
             homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
                                        const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
 
+        ::com::sun::star::geometry::Matrix2D&
+            matrixFromHomMatrix( ::com::sun::star::geometry::Matrix2D& matrix,
+                                 const ::basegfx::B2DHomMatrix&        transform);
+
+        ::basegfx::B2DHomMatrix&
+            homMatrixFromMatrix( ::basegfx::B2DHomMatrix&                    transform,
+                                 const ::com::sun::star::geometry::Matrix2D& matrix );
 
         // Geometry conversions
         // ===================================================================
