@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:00:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,10 +427,12 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
                 {
                     // match chart type
                     bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType().equals( aChartTypeToMatch );
+                    bool bFound=false;
+                    bool bAmbiguous=false;
                     // match stacking mode
                     bResult = bResult &&
                         ( DiagramHelper::getStackModeFromChartType(
-                            aChartTypeSeq[nCTIdx],
+                            aChartTypeSeq[nCTIdx], bFound, bAmbiguous,
                             aCooSysSeq[nCooSysIdx] )
                           == getStackMode( nCTIdx ) );
                 }
