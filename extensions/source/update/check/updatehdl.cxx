@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:31:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,9 +946,9 @@ bool UpdateHandler::showOverwriteWarning() const
 #define LABEL_OFFSET        ( LABEL_HEIGHT + 4 )
 #define DIALOG_HEIGHT       ( BOX_HEIGHT1 + BOX_HEIGHT2 + LABEL_OFFSET + BUTTON_BAR_HEIGHT + 3 * DIALOG_BORDER )
 #define LABEL_Y_POS         ( 2 * DIALOG_BORDER + BOX_HEIGHT1 )
-#define EDIT2_Y_POS         ( LABEL_Y_POS + LABEL_OFFSET )
+#define EDIT2_Y_POS         ( LABEL_Y_POS + LABEL_HEIGHT )
 #define BUTTON_BAR_Y_POS    ( EDIT2_Y_POS + DIALOG_BORDER + BOX_HEIGHT2 )
-#define BUTTON_Y_POS        ( BUTTON_BAR_Y_POS + 5 )
+#define BUTTON_Y_POS        ( BUTTON_BAR_Y_POS + 8 )
 #define CLOSE_BTN_X         ( DIALOG_WIDTH - DIALOG_BORDER - BUTTON_WIDTH )
 #define INSTALL_BTN_X       ( CLOSE_BTN_X - 2 * BUTTON_X_OFFSET - BUTTON_WIDTH )
 #define DOWNLOAD_BTN_X      ( INSTALL_BTN_X - BUTTON_X_OFFSET - BUTTON_WIDTH )
@@ -1031,7 +1031,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 0, UNISTRING("Label"), uno::Any( msStatusFL ) );
 
         insertControlModel( xControlModel, FIXED_TEXT_MODEL, UNISTRING( "fixedLineStatus" ),
-                            awt::Rectangle( DIALOG_BORDER, DIALOG_BORDER, EDIT_WIDTH, LABEL_HEIGHT ),
+                            awt::Rectangle( DIALOG_BORDER+1, DIALOG_BORDER, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
     {   // box around <status> text
@@ -1125,7 +1125,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 0, UNISTRING("Label"), uno::Any( msDescription ) );
 
         insertControlModel( xControlModel, FIXED_TEXT_MODEL, UNISTRING( "fixedTextDescription" ),
-                            awt::Rectangle( DIALOG_BORDER, LABEL_Y_POS, EDIT_WIDTH, LABEL_HEIGHT ),
+                            awt::Rectangle( DIALOG_BORDER+1, LABEL_Y_POS, EDIT_WIDTH-2, LABEL_HEIGHT ),
                             aProps );
     }
     {   // box around <description> text
@@ -1159,7 +1159,7 @@ void UpdateHandler::createDialog()
         setProperty( aProps, 0, UNISTRING("Orientation"), uno::Any( sal_Int32( 0 ) ) );
 
         insertControlModel( xControlModel, FIXED_LINE_MODEL, UNISTRING("fixedLine"),
-                            awt::Rectangle( DIALOG_BORDER, BUTTON_BAR_Y_POS, EDIT_WIDTH, 5 ),
+                            awt::Rectangle( 0, BUTTON_BAR_Y_POS, DIALOG_WIDTH, 5 ),
                             aProps );
     }
     {   // close button // @see awt/UnoControlButtonModel.idl
