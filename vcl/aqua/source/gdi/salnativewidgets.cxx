@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:00:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1364,32 +1364,29 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
         case CTRL_FRAME:
             {
                 USHORT nStyle = aValue.getNumericVal();
-                if(( nPart == PART_BORDER ) && !( nStyle & FRAME_DRAW_MENU ) && !(nStyle & FRAME_DRAW_WINDOWBORDER) )
+                if(  ( nPart == PART_BORDER ) &&
+                    !( nStyle & (FRAME_DRAW_MENU | FRAME_DRAW_WINDOWBORDER | FRAME_DRAW_BORDERWINDOWBORDER) ) )
                 {
+                    Rectangle aRect = rControlRegion.GetBoundRect();
                     if( nStyle & FRAME_DRAW_DOUBLEIN )
                     {
-                        Rectangle rRect = rControlRegion.GetBoundRect();
-                        rRect.Left()    += 1;
-                        rRect.Top()     += 1;
+                        aRect.Left()    += 1;
+                        aRect.Top()     += 1;
                         //rRect.Right() -= 1;
                         //rRect.Bottom()    -= 1;
-                        rNativeContentRegion = rRect;
-                        rNativeBoundingRegion = rRect;
-
-                        toReturn = TRUE;
                     }
                     else
                     {
-                        Rectangle rRect = rControlRegion.GetBoundRect();
-                        rRect.Left()    += 1;
-                        rRect.Top()     += 1;
-                        rRect.Right()   -= 1;
-                        rRect.Bottom()  -= 1;
-                        rNativeContentRegion = rRect;
-                        rNativeBoundingRegion = rRect;
-
-                        toReturn = TRUE;
+                        aRect.Left()    += 1;
+                        aRect.Top()     += 1;
+                        aRect.Right()   -= 1;
+                        aRect.Bottom()  -= 1;
                     }
+
+                    rNativeContentRegion = aRect;
+                    rNativeBoundingRegion = aRect;
+
+                    toReturn = TRUE;
                 }
             }
             break;
