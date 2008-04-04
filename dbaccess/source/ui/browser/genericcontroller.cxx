@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:14:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:56:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#include <framework/titlehelper.hxx>
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -147,6 +148,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -181,6 +183,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
+    ,m_bExternalTitle(sal_False)
 {
     DBG_CTOR(OGenericUnoController,NULL);
 
@@ -395,20 +398,13 @@ void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) t
 
     stopFrameListening( m_aCurrentFrame.getFrame() );
     Reference< XFrame > xFrame = m_aCurrentFrame.attachFrame( _rxFrame );
-    startFrameListening( xFrame );
+    if( startFrameListening( xFrame ) )
+        m_bFrameUiActive = m_xCurrentFrame->isActive();
 
     loadMenu( xFrame );
 
-    if ( xFrame.is() )
-        updateTitle();
-
     if ( getView() )
         getView()->attachFrame( xFrame );
-}
-
-// -----------------------------------------------------------------------------
-void OGenericUnoController::updateTitle()
-{
 }
 
 // -----------------------------------------------------------------------------
@@ -613,7 +609,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
+void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
     FeaturePair aPair;
     aPair.nId               = _nId;
@@ -843,6 +839,17 @@ void OGenericUnoController::disposing()
         m_aFeaturesToInvalidate.clear();
     }
 
+    try
+    {
+        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
+        if ( xUntitledProvider.is() )
+            xUntitledProvider->releaseNumberForComponent(static_cast<XWeak*>(this));
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
     // check out from all the objects we are listening
     // the frame
     stopFrameListening( m_aCurrentFrame.getFrame() );
@@ -1023,10 +1030,10 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
     ::dbaui::showError(_rInfo,getView(),getORB());
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
+Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Reference< XFrame >& _xFrame) const
 {
     Reference< XPropertySet > xPropSet( _xFrame, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    Reference< XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -1042,7 +1049,7 @@ Reference< ::com::sun::star::frame::XLayoutManager > OGenericUnoController::getL
 // -----------------------------------------------------------------------------
 void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 {
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+    Reference< XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
     if ( xLayoutManager.is() )
     {
         xLayoutManager->lock();
@@ -1056,7 +1063,7 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 }
 
 // -----------------------------------------------------------------------------
-void OGenericUnoController::onLoadedMenu(const Reference< ::com::sun::star::frame::XLayoutManager >& /*_xLayoutManager*/)
+void OGenericUnoController::onLoadedMenu(const Reference< XLayoutManager >& /*_xLayoutManager*/)
 {
     // not interested in
 }
@@ -1119,7 +1126,7 @@ void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Seque
     Execute(_nCommandId, aArgs);
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
+void OGenericUnoController::executeUnChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
@@ -1128,7 +1135,7 @@ void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& 
         Execute( aIter->second.nFeatureId, aArgs );
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
+void OGenericUnoController::executeChecked(const util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
     if ( m_aSupportedFeatures.empty() )
         fillSupportedFeatures();
@@ -1304,7 +1311,7 @@ void OGenericUnoController::openHelpAgent( const URL& _rURL )
     }
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
+Reference< awt::XWindow> OGenericUnoController::getTopMostContainerWindow() const
 {
     Reference< ::com::sun::star::awt::XWindow> xWindow;
 
@@ -1324,20 +1331,66 @@ Reference< ::com::sun::star::awt::XWindow> OGenericUnoController::getTopMostCont
     return xWindow;
 }
 // -----------------------------------------------------------------------------
-void OGenericUnoController::setTitle( const ::rtl::OUString& _sName )
+Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
 {
-    try
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    if ( ! m_xTitleHelper.is ())
     {
-        Reference< XPropertySet > xFrameProps( getFrame(), UNO_QUERY );
-        if ( xFrameProps.is() && xFrameProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_TITLE ) )
-        {
-            xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( _sName ) );
-        }
+        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
+        Reference< XController >      xThis(static_cast< XController* >(this), UNO_QUERY_THROW);
+
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_xServiceFactory);
+        m_xTitleHelper.set( static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
+
+        pHelper->setOwner                   (xThis            );
+        pHelper->connectWithUntitledNumbers (xUntitledProvider);
     }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+
+    return m_xTitleHelper;
+}
+
+//=============================================================================
+// XTitle
+::rtl::OUString SAL_CALL OGenericUnoController::getTitle()
+    throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    if ( m_bExternalTitle )
+        return impl_getTitleHelper_throw()->getTitle ();
+    return getPrivateTitle() + impl_getTitleHelper_throw()->getTitle ();
+}
+
+//=============================================================================
+// XTitle
+void SAL_CALL OGenericUnoController::setTitle(const ::rtl::OUString& sTitle)
+    throw (RuntimeException)
+{
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_bExternalTitle = sal_True;
+    impl_getTitleHelper_throw()->setTitle (sTitle);
+}
+
+//=============================================================================
+// XTitleChangeBroadcaster
+void SAL_CALL OGenericUnoController::addTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
+    throw (RuntimeException)
+{
+    Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->addTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// XTitleChangeBroadcaster
+void SAL_CALL OGenericUnoController::removeTitleChangeListener(const Reference< XTitleChangeListener >& xListener)
+    throw (RuntimeException)
+{
+    Reference< XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper_throw(), UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->removeTitleChangeListener (xListener);
 }
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
@@ -1454,12 +1507,12 @@ Any SAL_CALL OGenericUnoController::getSelection(  ) throw (RuntimeException)
     return Any();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::addSelectionChangeListener( const Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
+void SAL_CALL OGenericUnoController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface(xListener);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::removeSelectionChangeListener( const Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
+void SAL_CALL OGenericUnoController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.removeInterface(xListener);
 }
