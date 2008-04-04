@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:17:45 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,12 @@ namespace dbaui
         virtual bool allowViews() const;
         virtual bool allowQueries() const;
 
-    protected:
+    private:
         // ask the user if the design should be saved when it is modified
         virtual short saveModified();
         virtual void reset();
         virtual void impl_initialize();
-        virtual void updateTitle();
+        virtual ::rtl::OUString getPrivateTitle( ) const;
     };
 }
 #endif // DBAUI_RELATIONCONTROLLER_HXX
