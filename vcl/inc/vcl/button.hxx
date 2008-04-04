@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:02:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,6 +346,7 @@ protected:
 
 public:
     SAL_DLLPRIVATE void     ImplCallClick( BOOL bGrabFocus = FALSE, USHORT nFocusFlags = 0 );
+    SAL_DLLPRIVATE void     ImplSetMinimumNWFSize();
 
 protected:
     virtual void FillLayoutData() const;
@@ -457,6 +458,7 @@ protected:
 
 public:
     SAL_DLLPRIVATE void         ImplCheck();
+    SAL_DLLPRIVATE void         ImplSetMinimumNWFSize();
 
 public:
                     CheckBox( Window* pParent, WinBits nStyle = 0 );
