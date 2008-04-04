@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:46:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,6 +319,11 @@ String STR_CORRUPT_UICFG_GENERAL
     Text [ en-US ] = "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application first or try to reinstall the application." ;
 };
 
+String STR_UNTITLED_DOCUMENT
+{
+    Text [ en-US ] = "Untitled" ;
+};
+
 // for displaying 'Multiple Languages' in the language statusbar control
 String STR_LANGSTATUS_MULTIPLE_LANGUAGES
 {
@@ -350,4 +355,3 @@ String STR_SET_LANGUAGE_FOR_ALL_TEXT
     Text [ en-US ] = "Set Language for all Text" ;
     Text [ x-comment ] = " ";
 };
-
