@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:24:26 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,8 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
+#include <framework/titlehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <hash_map>
 
@@ -189,6 +191,9 @@
 #define XMOUSECLICKHANDLER                      ::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
+
+using namespace ::com::sun::star;
+namespace css = ::com::sun::star;
 
 struct GroupIDToCommandGroup
 {
@@ -277,8 +282,6 @@ sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup )
     else
         return sal_False;
 }
-
-using namespace ::com::sun::star;
 
 sal_uInt32 Get10ThSec()
 {
@@ -531,6 +534,7 @@ struct IMPL_SfxBaseController_DataContainer
         affected by the switching.
     */
     sal_Bool                                m_bIsFrameReleasedWithController;
+    css::uno::Reference< css::frame::XTitle > m_xTitleHelper;
 
     IMPL_SfxBaseController_DataContainer(   MUTEX&              aMutex      ,
                                             SfxViewShell*       pViewShell  ,
@@ -642,6 +646,8 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
                                                static_cast< XDISPATCHPROVIDER*  > ( this ),
+                                               static_cast< XTITLE* > ( this ),
+                                               static_cast< XTITLECHANGEBROADCASTER*    > ( this ),
                                             static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ) ) ;
 
     // If searched interface supported by this class ...
@@ -710,6 +716,8 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XUSERINPUTINTERCEPTION   >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XTITLE   >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XTITLECHANGEBROADCASTER   >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER >*)NULL ) );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -1565,4 +1573,61 @@ BOOL SfxBaseController::HasKeyListeners_Impl()
 BOOL SfxBaseController::HasMouseClickListeners_Impl()
 {
     return m_pData->m_bHasMouseClickListeners;
+}
+
+//=============================================================================
+css::uno::Reference< css::frame::XTitle > SfxBaseController::impl_getTitleHelper ()
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( ! m_pData->m_xTitleHelper.is ())
+    {
+        css::uno::Reference< css::frame::XModel >           xModel           = getModel ();
+        css::uno::Reference< css::frame::XUntitledNumbers > xUntitledProvider(xModel                                       , css::uno::UNO_QUERY      );
+        css::uno::Reference< css::frame::XController >      xThis            (static_cast< css::frame::XController* >(this), css::uno::UNO_QUERY_THROW);
+
+        ::framework::TitleHelper* pHelper                 = new ::framework::TitleHelper(::comphelper::getProcessServiceFactory());
+                                  m_pData->m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
+
+        pHelper->setOwner                   (xThis            );
+        pHelper->connectWithUntitledNumbers (xUntitledProvider);
+    }
+
+    return m_pData->m_xTitleHelper;
+}
+
+//=============================================================================
+// css::frame::XTitle
+::rtl::OUString SAL_CALL SfxBaseController::getTitle()
+    throw (css::uno::RuntimeException)
+{
+    return impl_getTitleHelper()->getTitle ();
+}
+
+//=============================================================================
+// css::frame::XTitle
+void SAL_CALL SfxBaseController::setTitle(const ::rtl::OUString& sTitle)
+    throw (css::uno::RuntimeException)
+{
+    impl_getTitleHelper()->setTitle (sTitle);
+}
+
+//=============================================================================
+// css::frame::XTitleChangeBroadcaster
+void SAL_CALL SfxBaseController::addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper(), css::uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->addTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// css::frame::XTitleChangeBroadcaster
+void SAL_CALL SfxBaseController::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+    throw (css::uno::RuntimeException)
+{
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper(), css::uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->removeTitleChangeListener (xListener);
 }
