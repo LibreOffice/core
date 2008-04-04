@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:54:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,8 +413,10 @@ void XMLStyleExport::exportStyleFamily(
     sal_Bool bUsed, sal_uInt16 nFamily, const OUString* pPrefix)
 {
     DBG_ASSERT( GetExport().GetModel().is(), "There is the model?" );
-    Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(),
-                                                       UNO_QUERY );
+    Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
+    if( !xFamiliesSupp.is() )
+        return; // family not available in current model
+
     Reference< XNameAccess > xStyleCont;
 
     Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
