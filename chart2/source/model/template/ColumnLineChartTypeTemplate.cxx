@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:01:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,8 +342,10 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
             bResult = (xColumnChartCooSys->getDimension() == getDimension());
             if( bResult )
             {
+                bool bFound=false;
+                bool bAmbiguous=false;
                 bResult = ( DiagramHelper::getStackModeFromChartType(
-                                xColumnChartType,
+                                xColumnChartType, bFound, bAmbiguous,
                                 xColumnChartCooSys )
                             == getStackMode( 0 ) );
 
