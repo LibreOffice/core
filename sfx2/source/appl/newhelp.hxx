@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:57:53 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
@@ -531,6 +534,8 @@ friend class SfxHelpIndexWindow_Impl;
                                 xWindow;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
                                 xOpenListener;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
+                                xFrame;
 
     SfxHelpIndexWindow_Impl*    pIndexWin;
     SfxHelpTextWindow_Impl*     pTextWin;
