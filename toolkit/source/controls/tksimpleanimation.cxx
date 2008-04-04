@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tksimpleanimation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:53:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,7 @@ namespace toolkit
 {
 //........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::graphic;
+    using namespace ::com::sun::star;
 
     //====================================================================
     //= UnoSimpleAnimationControlModel
@@ -76,24 +72,25 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoSimpleAnimationControlModel::getServiceName( ) throw (RuntimeException)
+    ::rtl::OUString UnoSimpleAnimationControlModel::getServiceName()
+        throw( uno::RuntimeException )
     {
         return ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
     }
 
     //--------------------------------------------------------------------
-    Any UnoSimpleAnimationControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+    uno::Any UnoSimpleAnimationControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl ) );
+            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl ) );
 
         case BASEPROPERTY_STEP_TIME:
-            return makeAny( (sal_Int32) 100 );
+            return uno::makeAny( (sal_Int32) 100 );
 
         case BASEPROPERTY_REPEAT:
-            return makeAny( (sal_Bool)sal_True );
+            return uno::makeAny( (sal_Bool)sal_True );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -106,29 +103,32 @@ namespace toolkit
         static UnoPropertyArrayHelper* pHelper = NULL;
         if ( !pHelper )
         {
-            Sequence<sal_Int32> aIDs = ImplGetPropertyIds();
+            uno::Sequence< sal_Int32 > aIDs = ImplGetPropertyIds();
             pHelper = new UnoPropertyArrayHelper( aIDs );
         }
         return *pHelper;
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySetInfo > UnoSimpleAnimationControlModel::getPropertySetInfo(  ) throw(RuntimeException)
+    uno::Reference< beans::XPropertySetInfo > UnoSimpleAnimationControlModel::getPropertySetInfo(  )
+        throw( uno::RuntimeException )
     {
-        static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+        static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSimpleAnimationControlModel::getImplementationName(  ) throw(RuntimeException)
+    ::rtl::OUString SAL_CALL UnoSimpleAnimationControlModel::getImplementationName()
+        throw( uno::RuntimeException )
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel" ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControlModel::getSupportedServiceNames() throw(RuntimeException)
+    uno::Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControlModel::getSupportedServiceNames()
+        throw( uno::RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
+        uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
         aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
         return aServices;
@@ -149,9 +149,10 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Any UnoSimpleAnimationControl::queryAggregation( const Type & rType ) throw(RuntimeException)
+    uno::Any UnoSimpleAnimationControl::queryAggregation( const uno::Type & rType )
+        throw( uno::RuntimeException )
     {
-        Any aRet = UnoControlBase::queryAggregation( rType );
+        uno::Any aRet = UnoControlBase::queryAggregation( rType );
         if ( !aRet.hasValue() )
             aRet = UnoSimpleAnimationControl_Base::queryInterface( rType );
         return aRet;
@@ -161,7 +162,7 @@ namespace toolkit
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoSimpleAnimationControl, UnoControlBase, UnoSimpleAnimationControl_Base )
 
     //--------------------------------------------------------------------
-    void UnoSimpleAnimationControl::dispose() throw(RuntimeException)
+    void UnoSimpleAnimationControl::dispose() throw( uno::RuntimeException )
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
@@ -169,53 +170,57 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSimpleAnimationControl::getImplementationName(  ) throw(RuntimeException)
+    ::rtl::OUString SAL_CALL UnoSimpleAnimationControl::getImplementationName()
+        throw( uno::RuntimeException )
     {
         return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.UnoSimpleAnimationControl" ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControl::getSupportedServiceNames() throw(RuntimeException)
+    uno::Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControl::getSupportedServiceNames()
+        throw( uno::RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
+        uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
         aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl );
         return aServices;
     }
 
     //--------------------------------------------------------------------
-    void UnoSimpleAnimationControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
+    void UnoSimpleAnimationControl::createPeer( const uno::Reference< awt::XToolkit > &rxToolkit,
+                                                const uno::Reference< awt::XWindowPeer >  &rParentPeer )
+        throw( uno::RuntimeException )
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoSimpleAnimationControl::start() throw (RuntimeException)
+    void SAL_CALL UnoSimpleAnimationControl::start() throw ( uno::RuntimeException )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        Reference< XSimpleAnimation > xAnimation( getPeer(), UNO_QUERY );
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->start();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoSimpleAnimationControl::stop() throw (RuntimeException)
+    void SAL_CALL UnoSimpleAnimationControl::stop() throw ( uno::RuntimeException )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        Reference< XSimpleAnimation > xAnimation( getPeer(), UNO_QUERY );
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->stop();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL UnoSimpleAnimationControl::setImageList( const Sequence< Reference< XGraphic > >& ImageList )
-        throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL UnoSimpleAnimationControl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& ImageList )
+        throw ( uno::RuntimeException )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        Reference< XSimpleAnimation > xAnimation( getPeer(), UNO_QUERY );
+        uno::Reference< XSimpleAnimation > xAnimation( getPeer(), uno::UNO_QUERY );
         if ( xAnimation.is() )
             xAnimation->setImageList( ImageList );
     }
