@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:56:03 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
@@ -95,6 +97,8 @@
 #include <rtl/logfile.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
+#include <framework/titlehelper.hxx>
+#include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 //________________________________________________________________________________________________________
@@ -126,14 +130,16 @@
 #include "graphhelp.hxx"
 #include <sfx2/msgpool.hxx>
 
-using namespace com::sun::star;
-namespace css = ::com::sun::star;
+//________________________________________________________________________________________________________
+// const
+static const ::rtl::OUString SERVICENAME_DESKTOP = ::rtl::OUString::createFromAscii ("com.sun.star.frame.Desktop");
 
 //________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
 
-using namespace ::com::sun::star;
+namespace css = ::com::sun::star;
+using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 
 //________________________________________________________________________________________________________
@@ -169,7 +175,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
     ::rtl::OUString                                 m_sModuleIdentifier;
-    ::rtl::OUString                                 m_sExternalTitle;
+    css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
+    css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& aMutex, SfxObjectShell* pObjectShell )
             :   m_rMutex                ( aMutex        )
@@ -181,6 +188,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
+            ,   m_xTitleHelper          ()
+            ,   m_xNumberedControllers  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -2399,6 +2408,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             else if ( SFX_EVENT_SAVEASDOCDONE == pNamedHint->GetEventId() )
             {
                 m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
+
                 SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
                 ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
@@ -3429,6 +3439,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     return true;
 }
 
+//=============================================================================
 // css.frame.XModule
  void SAL_CALL SfxBaseModel::setIdentifier(const ::rtl::OUString& Identifier)
     throw (css::uno::RuntimeException)
@@ -3452,6 +3463,166 @@ bool SfxBaseModel::impl_getPrintHelper()
     if (m_pData->m_pObjectShell)
         return m_pData->m_pObjectShell->GetFactory().GetDocumentServiceName();
     return ::rtl::OUString();
+}
+
+//=============================================================================
+css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return css::uno::Reference< css::frame::XTitle >();
+
+    if ( ! m_pData->m_xTitleHelper.is ())
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory ();
+        css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
+
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xSMGR);
+        m_pData->m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
+        pHelper->setOwner                   (xThis   );
+        pHelper->connectWithUntitledNumbers (xDesktop);
+    }
+
+    return m_pData->m_xTitleHelper;
+}
+
+//=============================================================================
+css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return css::uno::Reference< css::frame::XUntitledNumbers >();
+
+    if ( ! m_pData->m_xNumberedControllers.is ())
+    {
+        css::uno::Reference< css::frame::XModel > xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
+        ::comphelper::NumberedCollection*         pHelper = new ::comphelper::NumberedCollection();
+
+        m_pData->m_xNumberedControllers = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
+
+        pHelper->setOwner          (xThis);
+        pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+    }
+
+    return m_pData->m_xNumberedControllers;
+}
+
+//=============================================================================
+// css.frame.XTitle
+::rtl::OUString SAL_CALL SfxBaseModel::getTitle()
+    throw (css::uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return ::rtl::OUString();
+
+    return impl_getTitleHelper()->getTitle ();
+}
+
+//=============================================================================
+// css.frame.XTitle
+void SAL_CALL SfxBaseModel::setTitle( const ::rtl::OUString& sTitle )
+    throw (css::uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return;
+
+    impl_getTitleHelper()->setTitle (sTitle);
+}
+
+//=============================================================================
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL SfxBaseModel::addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
+    throw (css::uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return;
+
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper(), css::uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->addTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// css.frame.XTitleChangeBroadcaster
+void SAL_CALL SfxBaseModel::removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )
+    throw (css::uno::RuntimeException)
+{
+    // SYNCHRONIZED ->
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    if ( impl_isDisposed() )
+        return;
+
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(impl_getTitleHelper(), css::uno::UNO_QUERY);
+    if (xBroadcaster.is ())
+        xBroadcaster->removeTitleChangeListener (xListener);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+::sal_Int32 SAL_CALL SfxBaseModel::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return css::frame::UntitledNumbersConst::INVALID_NUMBER;
+
+    return impl_getUntitledHelper ()->leaseNumber (xComponent);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+void SAL_CALL SfxBaseModel::releaseNumber( ::sal_Int32 nNumber )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+
+    impl_getUntitledHelper ()->releaseNumber (nNumber);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+void SAL_CALL SfxBaseModel::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+
+    impl_getUntitledHelper ()->releaseNumberForComponent (xComponent);
+}
+
+//=============================================================================
+// css.frame.XUntitledNumbers
+::rtl::OUString SAL_CALL SfxBaseModel::getUntitledPrefix()
+    throw (css::uno::RuntimeException)
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return ::rtl::OUString ();
+
+    return impl_getUntitledHelper ()->getUntitledPrefix ();
 }
 
 //=============================================================================
