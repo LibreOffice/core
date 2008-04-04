@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:07:33 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3296,6 +3296,36 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
 
 // -----------------------------------------------------------------------
 
+void RadioButton::ImplSetMinimumNWFSize()
+{
+    Push( PUSH_MAPMODE );
+    SetMapMode( MAP_PIXEL );
+
+    ImplControlValue aControlValue;
+    Size aCurSize( GetSizePixel() );
+    Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), aCurSize ) );
+    Region aBoundingRgn, aContentRgn;
+
+    // get native size of a radiobutton
+    if( GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                aBoundingRgn, aContentRgn ) )
+    {
+        Rectangle aCont(aContentRgn.GetBoundRect());
+        Size aSize = aCont.GetSize();
+
+        if( aSize.Height() > aCurSize.Height() )
+        {
+            aCurSize.Height() = aSize.Height();
+            SetSizePixel( aCurSize );
+        }
+    }
+
+    Pop();
+}
+
+// -----------------------------------------------------------------------
+
 Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 {
     Size aSize;
@@ -4168,6 +4198,36 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
             nId = 1;
     }
     return pSVData->maCtrlData.mpCheckImgList->GetImage( nId );
+}
+
+// -----------------------------------------------------------------------
+
+void CheckBox::ImplSetMinimumNWFSize()
+{
+    Push( PUSH_MAPMODE );
+    SetMapMode( MAP_PIXEL );
+
+    ImplControlValue aControlValue;
+    Size aCurSize( GetSizePixel() );
+    Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), aCurSize ) );
+    Region aBoundingRgn, aContentRgn;
+
+    // get native size of a radiobutton
+    if( GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                aBoundingRgn, aContentRgn ) )
+    {
+        Rectangle aCont(aContentRgn.GetBoundRect());
+        Size aSize = aCont.GetSize();
+
+        if( aSize.Height() > aCurSize.Height() )
+        {
+            aCurSize.Height() = aSize.Height();
+            SetSizePixel( aCurSize );
+        }
+    }
+
+    Pop();
 }
 
 // -----------------------------------------------------------------------
