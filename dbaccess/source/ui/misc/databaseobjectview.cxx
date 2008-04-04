@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:28:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ namespace dbaui
     QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame,
         bool _bCreateView, sal_Bool _bPreferSQLView )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_QUERYDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN ) )
         ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
         ,m_bPreferSQLView( _bPreferSQLView )
     {
