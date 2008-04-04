@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:09:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,10 @@ namespace dbaui
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >      TComponent;
         typedef ::std::map< TComponent, TComponent >                                        TDocuments;
 
+        typedef ::std::pair<sal_Int32,OLinkedDocumentsAccess::EOpenMode>                    TTypeOpenMode;
+        typedef ::std::pair< TTypeOpenMode , TComponent >                                   TTypeFrame;
+        typedef ::std::multimap< ::rtl::OUString, TTypeFrame >                              TFrames;
+
     private:
 
         OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
@@ -127,6 +131,7 @@ namespace dbaui
                                 m_aModelConnector;
         TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
         TDocuments              m_aDocuments;
+        TFrames                 m_aSpecialSubFrames;        // contains the query, table and relation frame
         ODsnTypeCollection      m_aTypeCollection;
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
@@ -143,6 +148,12 @@ namespace dbaui
 
         OApplicationView*       getContainer() const;
 
+
+        /** activates the current table, query or relation design frame when existing
+            @param  _sName  the name of the component
+            @param  _nKind  the kind of the component
+        */
+        bool impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const OLinkedDocumentsAccess::EOpenMode _eOpenMode) const;
         /** returns the database name
             @return
                 the database name
@@ -416,6 +427,13 @@ namespace dbaui
         void    impl_migrateScripts_nothrow();
 
     protected:
+        // ----------------------------------------------------------------
+        // initalizing members
+        /** forces usage of a connection which we do not own
+            <p>To be used from within XInitialization::initialize only.</p>
+        */
+        void                    initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
@@ -429,8 +447,12 @@ namespace dbaui
         virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );
 
         // OGenericUnoController
-        virtual void            updateTitle( );
         virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
+
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const
+        {
+            return m_xModel;
+        }
 
         virtual ~OApplicationController();
 
