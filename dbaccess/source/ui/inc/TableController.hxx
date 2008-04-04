@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:24:41 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,6 @@ namespace dbaui
 
         void reload();
 
-    protected:
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -117,7 +116,7 @@ namespace dbaui
 
         virtual void losingConnection( );
 
-        virtual void updateTitle();
+        virtual ::rtl::OUString getPrivateTitle( ) const;
 
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
