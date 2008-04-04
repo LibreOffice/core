@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:06:28 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,32 +38,15 @@
 
 #define _SV_WINDOW_CXX
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-
-#ifndef _SV_WINDOW_H
-#include <vcl/window.h>
-#endif
-#ifndef _SV_WINDOW_HXX
-#include <vcl/window.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_NATIVEWIDGETS_HXX
-#include <vcl/salnativewidgets.hxx>
-#endif
-#ifndef _SV_SALCTRLHANDLE_HXX
-#include <vcl/salctrlhandle.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+#include "svsys.h"
+#include "vcl/window.h"
+#include "vcl/window.hxx"
+#include "vcl/waitobj.hxx"
+#include "vcl/salgdi.hxx"
+#include "vcl/salnativewidgets.hxx"
+#include "vcl/salctrlhandle.hxx"
+#include "rtl/ustring.hxx"
+#include "vcl/button.hxx"
 
 using namespace rtl;
 
@@ -330,5 +313,31 @@ Size Window::GetOptimalSize(WindowSizeType eType) const
     case WINDOWSIZE_MAXIMUM:
     default:
         return Size( LONG_MAX, LONG_MAX );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplAdjustNWFSizes()
+{
+    switch( GetType() )
+    {
+    case WINDOW_CHECKBOX:
+        ((CheckBox*)this)->ImplSetMinimumNWFSize();
+        break;
+    case WINDOW_RADIOBUTTON:
+        ((RadioButton*)this)->ImplSetMinimumNWFSize();
+        break;
+    default:
+        {
+            // iterate over children
+            Window* pWin = GetWindow( WINDOW_FIRSTCHILD );
+            while( pWin )
+            {
+                pWin->ImplAdjustNWFSizes();
+                pWin = pWin->GetWindow( WINDOW_NEXT );
+            }
+        }
+        break;
     }
 }
