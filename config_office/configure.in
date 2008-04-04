@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-04-03 18:02:26 $
+dnl * Date: $Date: 2008-04-04 10:56:00 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.259 $ )
+AC_REVISION( $Revision: 1.260 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1510,6 +1510,9 @@ dnl ===================================================================
 if test -z "$with_perl_home"; then
    AC_PATH_PROG(PERL, perl)
 else
+   if test "$_os" = "WINNT"; then
+      with_perl_home=`cygpath -u "$with_perl_home"`
+   fi
    _perl_path="$with_perl_home/bin/perl"
    if test -x "$_perl_path"; then
       PERL=$_perl_path
@@ -1557,35 +1560,48 @@ if test "$_os" = "WINNT"; then
 			if test -x "$vctest/bin/cl.exe"; then
 				with_cl_home=$vctest;
 			fi
+		else
+			with_cl_home=`cygpath -u "$with_cl_home"`
 		fi
 		AC_MSG_RESULT([done])
 
 		dnl ===========================================================
-		dnl  Check for mspdb71.dll
+		dnl  Check for mspdb71.dll/mspdb80.dll
 		dnl ===========================================================
-		dnl  .NET 2003 Compiler
-		if test -n "$MSPDB_PATH";then
-			MSPDB_PATH=`dirname "$MSPDB_PATH"`
+		dnl  .NET 2003/5/8 Compiler
+		if test -n "$with_mspdb_path";then
+			with_mspdb_path=`cygpath -u "$with_mspdb_path"`
 		fi
-		if test -e "$with_mspdb_path/mspdb71.dll"; then
+		if test -e "$with_mspdb_path/mspdb71.dll" -o -e "$with_mspdb_path/mspdb80.dll"; then
 			MSPDB_PATH="$with_mspdb_path"
 		fi
-		dnl .NET case
+		dnl .NET 2003 case
 		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb71.dll"; then
 			MSPDB_PATH="$with_cl_home/../Common7/IDE"
 		fi
-		dnl VSE case
+		dnl .NET 2005/2008 case
 		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/../Common7/IDE/mspdb80.dll"; then
 			MSPDB_PATH="$with_cl_home/../Common7/IDE"
 		fi
+		dnl Windows SDK 6.0 case
+		if test -z "$MSPDB_PATH" -a -e "$with_cl_home/bin/mspdb80.dll"; then
+			MSPDB_PATH="$with_cl_home/bin"
+		fi
+
+		if test -z "$MSPDB_PATH";then
+			dnl AC_PATH_PROG only checks if MSPDB_PATH is still empty
+			AC_PATH_PROG(MSPDB_PATH, mspdb80.dll)
+			AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
+			MSPDB_PATH=`dirname "$MSPDB_PATH"`
+		fi
 
 		if test -z "$MSPDB_PATH"; then
-			AC_MSG_ERROR([You need a mspdb71.dll, make sure it's in the path or use --with-mspdb-path])
+			AC_MSG_ERROR([You need a mspdb71.dll/mspdb80.dll, make sure it's in the path or use --with-mspdb-path])
 		fi
 		MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
 		MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
+		dnl The path needs to be added before cl is called
 		PATH="$MSPDB_PATH:$PATH"
-		AC_PATH_PROG(MSPDB_PATH, mspdb71.dll)
 
 		AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
    		if test -x "$with_cl_home/bin/cl.exe"; then
@@ -1613,7 +1629,10 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 							}
 							}"`
 			AC_MSG_RESULT([found Compiler version $CCNUMVER.])
-			if test "$CCNUMVER" -ge "001400000000"; then
+			if test "$CCNUMVER" -ge "001500000000"; then
+				COMEX=12
+				AC_MSG_RESULT([found .NET 2008 / VS 9.0.])
+			elif test "$CCNUMVER" -ge "001400000000"; then
 				COMEX=11
 				AC_MSG_RESULT([found .NET 2005.])
 			elif test "$CCNUMVER" -ge "001300102240"; then
@@ -1646,10 +1665,14 @@ AC_SUBST(USE_MINGW)
 dnl ===================================================================
 dnl  .NET needs special treatment
 dnl ===================================================================
-if test "$COMEX" = "10" -o "$COMEX" = "11"; then
+if test "$COMEX" -ge "10"; then
 	dnl Check midl.exe
+	AC_PATH_PROG(MIDL_PATH, midl.exe)
 	if test -n "$MIDL_PATH";then
 		MIDL_PATH=`dirname "$MIDL_PATH"`
+	fi
+	if test -n "$with_midl_path";then
+		with_midl_path=`cygpath -u "$with_midl_path"`
 	fi
 	if test -x "$with_midl_path/midl.exe"; then
 		MIDL_PATH="$with_midl_path"
@@ -1669,11 +1692,14 @@ if test "$COMEX" = "10" -o "$COMEX" = "11"; then
 	# Convert to posix path with 8.3 filename restrictions ( No spaces )
 	MIDL_PATH=`cygpath -d "$MIDL_PATH"`
 	MIDL_PATH=`cygpath -u "$MIDL_PATH"`
-	AC_PATH_PROG(MIDL_PATH, midl.exe)
 
 	dnl Check csc.exe
+	AC_PATH_PROG(CSC_PATH, csc.exe)
 	if test -n "$CSC_PATH";then
 		CSC_PATH=`dirname "$CSC_PATH"`
+	fi
+	if test -n "$with_csc_path";then
+		with_csc_path=`cygpath -u "$with_csc_path"`
 	fi
 	if test -x "$with_csc_path/csc.exe"; then
 		CSC_PATH="$with_csc_path"
@@ -1689,11 +1715,13 @@ if test "$COMEX" = "10" -o "$COMEX" = "11"; then
 	# Convert to posix path with 8.3 filename restrictions ( No spaces )
 	CSC_PATH=`cygpath -d "$CSC_PATH"`
 	CSC_PATH=`cygpath -u "$CSC_PATH"`
-	AC_PATH_PROG(CSC_PATH, csc.exe)
 
     dnl Check mscoree.lib / .NET Frameworks dir
     dnl For VS2003/2005 $with_frame_home has to point to the directory with lib/mscoree.lib.
        AC_MSG_CHECKING(.NET Framework)
+	    if test -n "$with_frame_home"; then
+		with_frame_home=`cygpath -u "$with_frame_home"`
+	    fi
 	    if test -f "$with_frame_home/lib/mscoree.lib"; then
 		    FRAME_HOME="$with_frame_home"
 	    fi
@@ -2461,11 +2489,15 @@ if test "$_os" = "Linux" && test "$build_cpu" = "powerpc"; then
    export JITC_PROCESSOR_TYPE
 fi
 
-if test -z "$with_jdk_home" && test "$_os" = "WINNT"; then
-    _jdk_home=`./oowintool --jdk-home`
-    if test -d "$_jdk_home"; then
-        with_jdk_home="$_jdk_home"
-    fi
+if test "$_os" = "WINNT"; then
+   if test -z "$with_jdk_home"; then
+      _jdk_home=`./oowintool --jdk-home`
+       if test -d "$_jdk_home"; then
+          with_jdk_home="$_jdk_home"
+       fi
+   else
+      with_jdk_home=`cygpath -u "$with_jdk_home"`
+   fi
 fi
 
 dnl ===================================================================
@@ -4508,13 +4540,13 @@ if test \( "$_os" = "WINNT" \) ; then
         if test -z "$PSDK_HOME"; then
           PSDK_HOME=`cat /proc/registry/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install\ Dir 2> /dev/null | tr '\000' '\n' | head -n 1`
         fi
-        # normalize if found
-        if test -n "$PSDK_HOME"; then
-          PSDK_HOME=`cygpath -d "$PSDK_HOME"`
-          PSDK_HOME=`cygpath -u "$PSDK_HOME"`
-        fi
+            # normalize if found
+            if test -n "$PSDK_HOME"; then
+              PSDK_HOME=`cygpath -d "$PSDK_HOME"`
+              PSDK_HOME=`cygpath -u "$PSDK_HOME"`
+           fi
 	else
-		PSDK_HOME="$with_psdk_home"
+           PSDK_HOME=`cygpath -u "$with_psdk_home"`
 	fi
         # Remove a possible trailing backslash
         PSDK_HOME=`echo $PSDK_HOME | $SED 's/\/$//'`
@@ -4527,7 +4559,8 @@ Edition if the library ($PSDK_HOME/Lib/libcp.lib) is found.
 Remove/rename/backup that file and restart configure. Details about this
 problem can be found in issue 49856.])
     fi
-	if test \( -f "$PSDK_HOME/Include/AdoCtint.h" \) \
+# WIndows SDK has different headers
+	if test \( -f "$PSDK_HOME/Include/adoint.h" \) \
 		 -a \( -f "$PSDK_HOME/Include/SqlUcode.h" \) \
 		 -a \( -f "$PSDK_HOME/Include/usp10.h" \); then
 		HAVE_PSDK_H="yes"
@@ -4549,9 +4582,20 @@ are installed or use --with-psdk-home .])
          -o ! -x "$PSDK_HOME/bin/msitran.exe" ; then
         AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
     fi
-    AC_MSG_RESULT([PSDK files found ($PSDK_HOME)])
+    AC_MSG_RESULT([SDK files found ...)])
+dnl Check if this is the right SDK.
+    if echo $PSDK_HOME | grep "Windows/v6.1" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([Found Windows SDK 6.1 ($PSDK_HOME)])
+        WINDOWS_VISTA_PSDK=TRUE
+    elif echo $PSDK_HOME | grep "Windows/v6.0" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([Found Windows SDK 6.0 ($PSDK_HOME)])
+        WINDOWS_VISTA_PSDK=TRUE
+    else
+        AC_MSG_RESULT([Found Legacy Windows Platform SDK ($PSDK_HOME)])
+    fi
 fi
 AC_SUBST(PSDK_HOME)
+AC_SUBST(WINDOWS_VISTA_PSDK)
 
 dnl =========================================
 dnl Check for the Microsoft DirectX SDK.
@@ -4566,9 +4610,9 @@ if test \( "$_os" = "WINNT" \) ; then
         fi
         # At this point $DIRECTXSDK_HOME might still be undefined. This will lead to
         # the "DirectX SDK files not found" error later
-	else
-		DIRECTXSDK_HOME="$with_directx_home"
-	fi
+    else
+	DIRECTXSDK_HOME=`cygpath -u "$with_directx_home"`
+    fi
     # Remove a possible trailing backslash
     DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
 
@@ -4611,6 +4655,9 @@ if test "$_os" = "WINNT" ; then
     AC_PATH_PROG(NSIS_PATH, nsis.exe)
     if test -n "$NSIS_PATH"; then
         NSIS_PATH=`dirname "$NSIS_PATH"`
+    fi
+    if test -n "$with_nsis_path"; then
+        with_nsis_path=`cygpath -u "$with_nsis_path"`
     fi
     if test -e "$with_nsis_path/nsis.exe"; then
         NSIS_PATH="$with_nsis_path"
@@ -4736,6 +4783,9 @@ dnl testing ml.exe assembler path
 dnl ***************************************
 if test "$_os" = "WINNT"; then
   AC_MSG_CHECKING([ml.exe assembler path])
+  if test -n "$with_asm_home"; then
+    with_asm_home=`cygpath -u "$with_asm_home"`
+  fi
   if test ! -x "$with_asm_home/ml.exe"; then
     AC_PATH_PROG(ML_EXE, ml.exe)
     if test -z "$ML_EXE"; then
@@ -4768,8 +4818,11 @@ dnl ===================================================================
 dnl Zip will be found where you tell me to find it
 dnl ===================================================================
 if test -n "$with_zip_home" ; then
-	 ZIP="$with_zip_home/zip"
-    UNZIP="$with_unzip_home/unzip"
+    if test "$_os" = "WINNT"; then
+        with_zip_home=`cygpath -u "$with_zip_home"`
+    fi
+    ZIP="$with_zip_home/zip"
+    UNZIP="$with_zip_home/unzip"
     ZIP_HOME="$with_zip_home"
 else
     AC_PATH_PROG(ZIP, zip)
@@ -4907,6 +4960,36 @@ As the automatic detection fails please copy the files to external/msvcp80/.])
 fi
 
 dnl ===================================================================
+dnl Windows builds with Visual Studio 2008 needs msvc{m,p,r}90.dll in external/msvcp90
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$COMEX" = "12"; then
+   AC_MSG_CHECKING([for msvcm90.dll/msvcp90.dll/msvcr90.dll/Microsoft.VC90.CRT.manifest])
+   if test -x ../external/msvcp90/msvcm90.dll -a -x ../external/msvcp90/msvcp90.dll -a -x ../external/msvcp90/msvcr90.dll -a -x ../external/msvcp90/Microsoft.VC90.CRT.manifest; then
+      AC_MSG_RESULT([found])
+   else
+      MSVCMPATH=`/bin/find "$COMPATH/../.." -iname msvcm90.dll | head -n 1`
+      MSVCPPATH=`/bin/find "$COMPATH/../.." -iname msvcp90.dll | head -n 1`
+      MSVCRPATH=`/bin/find "$COMPATH/../.." -iname msvcr90.dll | head -n 1`
+      MSVCMANPATH=`/bin/find "$COMPATH/../.." -iname Microsoft.VC90.CRT.manifest | head -n 1`
+      if test -n "$MSVCMPATH" -a -n "$MSVCPPATH" -a -n "$MSVCRPATH" -a -n "$MSVCMANPATH"; then
+         cp "$MSVCMPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcm90.dll && MSVCMCOPY="OK"
+         cp "$MSVCPPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcp90.dll && MSVCPCOPY="OK"
+         cp "$MSVCRPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/msvcr90.dll && MSVCRCOPY="OK"
+         cp "$MSVCMANPATH" ../external/msvcp90/ && chmod +x ../external/msvcp90/Microsoft.VC90.CRT.manifest && MSVCMANCOPY="OK"
+      fi
+      if test -z "$MSVCMCOPY" -o -z "$MSVCPCOPY" -o -z "$MSVCRCOPY" -o -z "$MSVCMANCOPY"; then
+         AC_MSG_ERROR([Any or all of msvcm90.dll, msvcp90.dll, msvcr90.dll and Microsoft.VC90.CRT.manifest are missing in the default location.
+These dlls are part of the VS installation and should be found in a directory
+similar to:
+"C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\redist\\x86\\Microsoft.VC90.CRT\\"
+As the automatic detection fails please copy the files to external/msvcp90/.])
+      else
+         AC_MSG_RESULT([found and copied])
+      fi
+   fi
+fi
+
+dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
@@ -4914,9 +4997,9 @@ if test "$_os" = "WINNT"; then
 fi
 
 dnl ===================================================================
-dnl Windows builds with VS 2003/2005 need instmsia.exe and instmsiw.exe in external/msi
+dnl Windows builds with VS 2003/2005/2008 need instmsia.exe and instmsiw.exe in external/msi
 dnl ===================================================================
-if test "$_os" = "WINNT" -a \( "$COMEX" = "10" -o "$COMEX" = "11" \) ; then
+if test "$_os" = "WINNT" -a \( "$COMEX" -ge "10" \) ; then
    AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
    if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
@@ -5655,6 +5738,9 @@ WITH_ANT_HOME=; export WITH_ANT_HOME
 if test -z "$with_ant_home"; then
    AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
 else
+   if test "$_os" = "WINNT"; then
+      with_ant_home=`cygpath -u "$with_ant_home"`
+   fi
    AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
    WITH_ANT_HOME=$with_ant_home
 fi
