@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:55:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -65,7 +67,8 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbexception.hxx>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <boost/optional.hpp>
@@ -183,9 +186,8 @@ namespace dbaui
         }
     };
 
-    typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
 
-    typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::frame::XDispatch
+    typedef ::cppu::WeakComponentImplHelper10   <   ::com::sun::star::frame::XDispatch
                                                 ,   ::com::sun::star::frame::XDispatchProviderInterceptor
                                                 ,   ::com::sun::star::util::XModifyListener
                                                 ,   ::com::sun::star::view::XSelectionSupplier
@@ -193,13 +195,18 @@ namespace dbaui
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::frame::XDispatchInformationProvider
-                                                ,   ::com::sun::star::frame::XController
-                                                >   OGenericUnoController_Base;
+                                                ,   ::com::sun::star::frame::XTitle
+                                                ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                                                >   OGenericUnoController_COMPBASE;
+
+    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XController
+                                >   OGenericUnoController_CTRBASE;
 
     // ====================================================================
     class DBACCESS_DLLPUBLIC OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
+                                ,public OGenericUnoController_CTRBASE
                                 ,public IController
     {
     private:
@@ -242,12 +249,14 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >      m_xMasterDispatcher;    // dito
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xDatabaseContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
 
         ODataView*              m_pView;                // our (VCL) "main window"
         sal_Bool                m_bPreview;
         sal_Bool                m_bReadOnly;
 
         sal_Bool                m_bCurrentlyModified    : 1;
+        sal_Bool                m_bExternalTitle : 1;
 
 
 
@@ -361,24 +370,21 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> getTopMostContainerWindow() const;
 
-        /** sets the title on the current frame
-            @param  _sName
-                The title of the document
-        */
-        virtual void setTitle(const ::rtl::OUString& _sName);
-
         // XInitialize will be called inside initialize
         virtual void impl_initialize();
 
-        /** updateTitle will be called when a new frame is attached
-        */
-        virtual void updateTitle( );
+        virtual ::rtl::OUString getPrivateTitle() const { return ::rtl::OUString(); }
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper_throw();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const
+        {
+            return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >();
+        }
 
         virtual void    startFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
         virtual void    stopFrameListening( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
         virtual ~OGenericUnoController();
-
     private:
             // invalidate features - implementation
         void InvalidateAll_Impl();
@@ -498,6 +504,13 @@ namespace dbaui
 
     protected:
         OGenericUnoController();    // never implemented
+        // XTitle
+        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTitleChangeBroadcaster
+        virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     };
 }
 
