@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:17:42 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,6 +686,10 @@ BOOL Dialog::ImplStartExecuteModal()
     SetModalInputMode( TRUE );
     mbOldSaveBack = IsSaveBackgroundEnabled();
     EnableSaveBackground();
+
+    // FIXME: no layouting, workaround some clipping issues
+    ImplAdjustNWFSizes();
+
     Show();
 
     pSVData->maAppData.mnModalMode++;
