@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2008-03-10 10:30:25 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 13:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,6 @@
 //= property names
 //============================================================
 
-DECLARE_CONSTASCII_USTRING(PROPERTY_TITLE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_URL);
 DECLARE_CONSTASCII_USTRING(PROPERTY_INFO);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SETTINGS);
