@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:40:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,9 @@ namespace
     static ::comphelper::ItemPropertyMapType aCharacterPropertyMap(
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( EE_CHAR_COLOR, "CharColor", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", 0 )
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", MID_LANG_LOCALE )
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", MID_LANG_LOCALE )
+        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", MID_LANG_LOCALE )
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT, "CharHeight", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_ITALIC, "CharPosture", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_WEIGHT, "CharWeight", 0 )
@@ -86,9 +88,6 @@ namespace
         IPM_MAP_ENTRY( EE_CHAR_RELIEF, "CharRelief", 0 )
         IPM_MAP_ENTRY( EE_CHAR_OUTLINE, "CharContoured", 0 )
         IPM_MAP_ENTRY( EE_CHAR_EMPHASISMARK, "CharEmphasis", 0 )
-
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", 0 )
-        IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", 0 )
 
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )
