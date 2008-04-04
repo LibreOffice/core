@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:13:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,3 +357,4 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 void DBContentLoader::cancel(void) throw()
 {
 }
+
