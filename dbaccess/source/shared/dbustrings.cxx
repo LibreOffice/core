@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:07:59 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 13:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,14 @@ namespace dbaui
     //============================================================
     //= URLs
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN, ".component:DB/QueryDesign");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN, ".component:DB/TableDesign");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_FORMGRIDVIEW, ".component:DB/FormGridView");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER, ".component:DB/DataSourceBrowser");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN, ".component:DB/RelationDesign");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION, ".component:DB/Application");
-    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_REPORTDESIGN, ".component:DB/ReportDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN,         ".component:DB/QueryDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_VIEWDESIGN,          ".component:DB/ViewDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN,         ".component:DB/TableDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_FORMGRIDVIEW,        ".component:DB/FormGridView");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER,   ".component:DB/DataSourceBrowser");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN,      ".component:DB/RelationDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION,         ".component:DB/Application");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_REPORTDESIGN,        ".component:DB/ReportDesign");
 
     //============================================================
     //= service names
