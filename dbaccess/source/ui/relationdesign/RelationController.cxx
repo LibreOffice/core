@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:30:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,14 +340,10 @@ void ORelationController::impl_initialize()
 
 }
 // -----------------------------------------------------------------------------
-void ORelationController::updateTitle()
+::rtl::OUString ORelationController::getPrivateTitle( ) const
 {
-    ::rtl::OUString sName;
-    sName = String(ModuleRes(STR_RELATIONDESIGN));
-    ::rtl::OUString sDataSourceName = getDataSourceName();
-    sDataSourceName = ::dbaui::getStrippedDatabaseName(getDataSource(),sDataSourceName) ;;
-    sDataSourceName += sName;
-    OGenericUnoController::setTitle(sDataSourceName);
+    ::rtl::OUString sName = getDataSourceName();
+    return ::dbaui::getStrippedDatabaseName(getDataSource(),sName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
