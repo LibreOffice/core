@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 17:11:20 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,40 +602,26 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
-    // sett he right title at the title bar of the parent window
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
-    if (xPropSet.is())
+    // create a listener for automatic updates of the window background color
+    // It hold itself alive and listen for window disposing() so it can die automaticly
+    // if we release our component window.
+    new ColorListener(m_xWindow);
+
+    // create the menu bar for the backing component
+    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+    if (xLayoutManager.is())
     {
-        ::rtl::OUString sProductName;
-        ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= sProductName;
-
-        ::rtl::OUStringBuffer sTitle;
-        sTitle.append(sProductName);
-#ifndef PRODUCT
-        sTitle.appendAscii(" ["                                             );
-        sTitle.append     (utl::Bootstrap::getBuildIdData(::rtl::OUString()));
-        sTitle.appendAscii("]"                                              );
-#endif
-        xPropSet->setPropertyValue(
-            FRAME_PROPNAME_TITLE,
-            css::uno::makeAny(sTitle.makeStringAndClear()));
+        xLayoutManager->lock();
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
+        /* #i85963# new backing window comes withoud standard bar and statusbar
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+        xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+        xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+        */
+        xLayoutManager->unlock();
     }
-
-        // create the menu bar for the backing component
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
-        if (xLayoutManager.is())
-        {
-            xLayoutManager->lock();
-            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar"     ));
-            /* #i85963# new backing window comes withoud standard bar and statusbar
-            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-            xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
-            xLayoutManager->showElement  ( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
-            */
-            xLayoutManager->unlock();
-        }
 
     // set help ID for our canvas
     pWindow->SetHelpId(HID_BACKINGWINDOW);
