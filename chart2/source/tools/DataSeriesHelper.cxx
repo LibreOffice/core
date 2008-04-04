@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:05:09 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,82 +383,6 @@ OUString getDataSeriesLabel(
     }
 
     return aResult;
-}
-
-StackMode getStackModeFromSeries(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeries,
-    const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem )
-{
-    StackMode eStackMode = StackMode_NONE;
-
-    try
-    {
-        chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
-        bool bDirectionInitialized = false;
-
-        // first series is irrelvant for stacking, start with second, unless
-        // there is only one series
-        const sal_Int32 nSeriesCount = aSeries.getLength();
-        sal_Int32 i = (nSeriesCount == 1) ? 0: 1;
-        for( ; i<nSeriesCount; ++i )
-        {
-            Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY_THROW );
-            chart2::StackingDirection eCurrentDirection = eCommonDirection;
-            // property is not MAYBEVOID
-            bool bSuccess = ( xProp->getPropertyValue( C2U("StackingDirection") ) >>= eCurrentDirection );
-            OSL_ASSERT( bSuccess );
-            (void)(bSuccess);  // avoid warning in non-debug builds
-            if( ! bDirectionInitialized )
-            {
-                eCommonDirection = eCurrentDirection;
-                bDirectionInitialized = true;
-            }
-            else
-            {
-                if( eCommonDirection != eCurrentDirection )
-                {
-                    eStackMode = StackMode_AMBIGUOUS;
-                    break;
-                }
-            }
-        }
-
-        if( eStackMode != StackMode_AMBIGUOUS )
-        {
-            if( eCommonDirection == chart2::StackingDirection_Z_STACKING )
-                eStackMode = StackMode_Z_STACKED;
-            else if( eCommonDirection == chart2::StackingDirection_Y_STACKING )
-            {
-                eStackMode = StackMode_Y_STACKED;
-
-                // percent stacking
-                if( xCorrespondingCoordinateSystem.is() )
-                {
-                    if( 1 < xCorrespondingCoordinateSystem->getDimension() )
-                    {
-                        sal_Int32 nAxisIndex = 0;
-                        if( nSeriesCount )
-                            nAxisIndex = getAttachedAxisIndex(aSeries[0]);
-
-                        Reference< chart2::XAxis > xAxis(
-                            xCorrespondingCoordinateSystem->getAxisByDimension( 1,nAxisIndex ));
-                        if( xAxis.is())
-                        {
-                            chart2::ScaleData aScaleData = xAxis->getScaleData();
-                            if( aScaleData.AxisType==chart2::AxisType::PERCENT )
-                                eStackMode = StackMode_Y_STACKED_PERCENT;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return eStackMode;
 }
 
 void setStackModeAtSeries(
