@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:05:27 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:02:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,8 @@ namespace dbaui
         ::rtl::OUString m_sUpdateCatalogName;   // catalog for update data
         ::rtl::OUString m_sUpdateSchemaName;    // schema for update data
         ::rtl::OUString m_sUpdateTableName;     // table for update data
-        ::rtl::OUString m_sName;                // name of the query
+        mutable ::rtl::OUString
+                        m_sName;                // name of the query
 
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
@@ -132,6 +133,7 @@ namespace dbaui
         void loadViewSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
+        ::rtl::OUString getDefaultName() const;
 
     protected:
         // all the features which should be handled by this class
@@ -142,7 +144,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void            reconnect( sal_Bool _bUI );
-        virtual void            updateTitle( );
+        virtual ::rtl::OUString getPrivateTitle( ) const;
 
         OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
@@ -220,7 +222,6 @@ namespace dbaui
         // OJoinController overridables
         virtual bool allowViews() const;
         virtual bool allowQueries() const;
-
     private:
         DECL_LINK( OnExecuteAddTable, void* );
     };
