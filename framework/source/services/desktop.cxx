@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:25:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,9 @@
 #ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
 #endif
+
+#include <classes/resource.hrc>
+#include <classes/fwkresid.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -253,7 +256,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_14                    (   Desktop                                                  ,
+DEFINE_XINTERFACE_15                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo               ),
@@ -268,10 +271,11 @@ DEFINE_XINTERFACE_14                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XDispatchResultListener   ),
                                             DIRECT_INTERFACE( css::lang::XEventListener             ),
                                             DIRECT_INTERFACE( css::task::XInteractionHandler        ),
-                                            DIRECT_INTERFACE( css::beans::XPropertySet              )
+                                            DIRECT_INTERFACE( css::beans::XPropertySet              ),
+                                            DIRECT_INTERFACE( css::frame::XUntitledNumbers          )
                                         )
 
-DEFINE_XTYPEPROVIDER_14                 (   Desktop                                                 ,
+DEFINE_XTYPEPROVIDER_15                 (   Desktop                                                 ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::frame::XDesktop                                    ,
@@ -285,7 +289,8 @@ DEFINE_XTYPEPROVIDER_14                 (   Desktop                             
                                             css::frame::XDispatchResultListener                     ,
                                             css::lang::XEventListener                               ,
                                             css::task::XInteractionHandler                          ,
-                                            css::beans::XPropertySet
+                                            css::beans::XPropertySet                                ,
+                                            css::frame::XUntitledNumbers
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   Desktop                                                 ,
@@ -324,6 +329,15 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 // So it's easiear to destroy it.
                                                 InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
                                                 m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+
+                                                ::rtl::OUStringBuffer sUntitledPrefix (256);
+                                                sUntitledPrefix.append      (::rtl::OUString( String( FwkResId( STR_UNTITLED_DOCUMENT ))));
+                                                sUntitledPrefix.appendAscii (" ");
+
+                                                ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
+                                                m_xTitleNumberGenerator = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);
+                                                pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
+                                                pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
 
                                                 // Safe impossible cases
                                                 // We can't work without this helper!
@@ -388,6 +402,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_xQuickLauncher        (                                               )
         ,   m_xSWThreadManager      (                                               )
         ,   m_xSfxTerminator        (                                               )
+        ,   m_xTitleNumberGenerator (                                               )
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
@@ -1568,6 +1583,41 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
         aWriteLock.unlock();
     }
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+}
+
+//-----------------------------------------------------------------------------
+::sal_Int32 SAL_CALL Desktop::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    return m_xTitleNumberGenerator->leaseNumber (xComponent);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    m_xTitleNumberGenerator->releaseNumber (nNumber);
+}
+
+//-----------------------------------------------------------------------------
+void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
+    throw (css::lang::IllegalArgumentException,
+           css::uno::RuntimeException         )
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
+}
+
+//-----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL Desktop::getUntitledPrefix()
+    throw (css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    return m_xTitleNumberGenerator->getUntitledPrefix ();
 }
 
 /*-************************************************************************************************************//**
