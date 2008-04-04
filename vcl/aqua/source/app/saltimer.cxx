@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:16:19 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 
 NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;
-bool AquaSalTimer::bTimerInDispatch = false;
 
 
 void ImplSalStartTimer( ULONG nMS )
