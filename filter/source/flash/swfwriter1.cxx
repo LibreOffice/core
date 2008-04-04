@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:19:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -887,14 +887,16 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
 #ifdef DBG_UTIL
     if(compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
-        DBG_ASSERT( false, "compress2 failed!" );
+    {
+        DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
+    }
 #else
     compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
 #endif
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
     //  to ZLIB compress the alpha channel seperately.
-    uLongf alpha_compressed_size = 0;
+    uLong alpha_compressed_size = 0;
     sal_uInt8 *pAlphaCompressed = NULL;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
     {
@@ -903,7 +905,9 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
 #ifdef DBG_UTIL
         if(compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
-            DBG_ASSERT( false, "compress2 failed!" );
+        {
+            DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
+        }
 #else
         compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION);
 #endif
@@ -1094,7 +1098,9 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 
 #ifdef DBG_UTIL
         if (0xFF != *pJpgSearch)
-            DBG_ERROR( "Expected JPEG marker." );
+        {
+            DBG_ERROR( "Expected JPEG marker." ); ((void)0);
+        }
 #endif
 
         cType = *(pJpgSearch + 1);
