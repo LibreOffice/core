@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:53:04 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -780,7 +780,8 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     mnProtectSizeState( STATE_NOCHECK ),
     mbPageDisabled   ( FALSE ),
     mbProtectDisabled( false ),
-    mbSizeDisabled( false )
+    mbSizeDisabled( false ),
+    mbAdjustDisabled( true )
 {
     FreeResource();
 
@@ -878,6 +879,7 @@ void SvxPositionSizeTabPage::Construct()
 
         if((pObj->GetObjInventor() == SdrInventor) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) && ((SdrTextObj*)pObj)->HasText())
         {
+            mbAdjustDisabled = false;
             maFlAdjust.Enable();
             maTsbAutoGrowWidth.Enable();
             maTsbAutoGrowHeight.Enable();
@@ -1226,6 +1228,10 @@ void SvxPositionSizeTabPage::UpdateControlStates()
     maFtSizeReference.Enable( !mbSizeDisabled && !bSizeProtect );
     maFlProtect.Enable( !mbProtectDisabled );
     maTsbSizeProtect.Enable( !mbProtectDisabled && !bPosProtect );
+
+    maFlAdjust.Enable( !mbSizeDisabled && !bSizeProtect && !mbAdjustDisabled );
+    maTsbAutoGrowWidth.Enable( !mbSizeDisabled && !bSizeProtect && !mbAdjustDisabled );
+    maTsbAutoGrowHeight.Enable( !mbSizeDisabled && !bSizeProtect && !mbAdjustDisabled );
 
     maCtlSize.Invalidate();
     maCtlPos.Invalidate();
