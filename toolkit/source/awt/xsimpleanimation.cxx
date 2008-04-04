@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsimpleanimation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:52:39 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,7 @@ namespace toolkit
 {
 //........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::graphic;
+    using namespace ::com::sun::star;
 
     //====================================================================
     //= XSimpleAnimation
@@ -89,20 +85,20 @@ namespace toolkit
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( XSimpleAnimation, VCLXWindow, XSimpleAnimation_Base )
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSimpleAnimation::start() throw (RuntimeException)
+    void SAL_CALL XSimpleAnimation::start() throw ( uno::RuntimeException )
     {
         mpThrobber->start();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSimpleAnimation::stop() throw (RuntimeException)
+    void SAL_CALL XSimpleAnimation::stop() throw ( uno::RuntimeException )
     {
         mpThrobber->stop();
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSimpleAnimation::setImageList( const Sequence< Reference< XGraphic > >& rImageList )
-        throw (RuntimeException)
+    void SAL_CALL XSimpleAnimation::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
+        throw ( uno::RuntimeException )
     {
         mpThrobber->setImageList( rImageList );
     }
@@ -121,7 +117,8 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSimpleAnimation::setProperty( const ::rtl::OUString& PropertyName, const Any& Value ) throw(RuntimeException)
+    void SAL_CALL XSimpleAnimation::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
+        throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
@@ -156,11 +153,12 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+    uno::Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName )
+        throw( uno::RuntimeException )
     {
         ::vos::OGuard aGuard( GetMutex() );
 
-        Any aReturn;
+        uno::Any aReturn;
 
         if ( GetWindow() )
         {
