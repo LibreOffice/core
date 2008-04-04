@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.119 $
+#   $Revision: 1.120 $
 #
-#   last change: $Author: kz $ $Date: 2008-03-07 16:53:25 $
+#   last change: $Author: kz $ $Date: 2008-04-04 14:12:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,8 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/uiconfigelementwrapperbase.obj          \
                 $(SLO)$/configimporter.obj                      \
                 $(SLO)$/menuextensionsupplier.obj               \
-                $(SLO)$/preventduplicateinteraction.obj
+                $(SLO)$/preventduplicateinteraction.obj         \
+                $(SLO)$/titlehelper.obj
 
 # --- import classes library ---------------------------------------------------
 
@@ -229,6 +230,7 @@ SHL4OBJS=       \
                 $(SLO)$/targetfinder.obj		  	\
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/timerhelper.obj				\
+                $(SLO)$/titlebarupdate.obj			\
                 $(SLO)$/urltransformer.obj			\
                 $(SLO)$/configaccess.obj            \
                 $(SLO)$/job.obj                     \
