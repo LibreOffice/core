@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 17:58:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,19 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/implbase3.hxx>
+
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -99,9 +106,16 @@ typedef ::comphelper::WeakComponentImplHelper14 <   ::com::sun::star::frame::XMo
                                                 ,   ::com::sun::star::script::provider::XScriptProviderSupplier
                                                 >   ODatabaseDocument_OfficeDocument;
 
+typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
+                            ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                            ,   ::com::sun::star::frame::XUntitledNumbers
+                            >   ODatabaseDocument_Title;
+
 class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
                         ,public ODatabaseDocument_OfficeDocument
+                        ,public ODatabaseDocument_Title
 {
+    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >,TNumberedController);
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
 
     ::cppu::OInterfaceContainerHelper                                                           m_aModifyListeners;
@@ -126,8 +140,12 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             ModelMethodGuard& _rGuard
          );
 
-    /** notifies the global event broadcaster
+    /** @short  such module manager is used to classify new opened documents. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >         m_xModuleManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
+    TNumberedController                                                                 m_aNumberedControllers;
 
+    /** notifies the global event broadcaster
         The method must be called without our mutex locked
     */
     void impl_notifyEvent_nolck_nothrow( const ::com::sun::star::document::EventObject& _rEvent );
@@ -179,6 +197,10 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     // ModelDependentComponent overridables
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() const;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >             impl_getTitleHelper_throw();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xComponent = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
+
 private:
     ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
     // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
@@ -214,6 +236,15 @@ public:
     static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
+    // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -309,6 +340,20 @@ public:
 
     // XScriptProviderSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::provider::XScriptProvider > SAL_CALL getScriptProvider(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XTitle
+    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XTitleChangeBroadcaster
+    virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XUntitledNumbers
+    virtual ::sal_Int32 SAL_CALL leaseNumber( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL releaseNumberForComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
 
     /** clears the given object container
 
