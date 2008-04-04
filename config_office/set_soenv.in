@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.183 $
-# Date:        $Date: 2008-04-03 18:02:42 $
+# Version:     $Revision: 1.184 $
+# Date:        $Date: 2008-04-04 10:56:32 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -675,8 +675,14 @@ elsif ( $platform =~ m/cygwin/ )
           $ATL_INCLUDE = $COMPATH.$ds."atlmfc".$ds."include";
           $MFC_LIB     = "";
           $MFC_INCLUDE = "";
-      } elsif ( "@COMEX@" eq "11" ) { # .NET 2005 needs M1400
-          $CVER        = "M1400";
+      } elsif ( "@COMEX@" ge "11" ) { # .NET 2005 needs M1400
+	  if ( "@COMEX@" eq "11" ) {
+	      $CVER        = "M1400";
+	  } elsif ( "@COMEX@" eq "12" ) {
+	      $CVER        = "M1500";
+	  } else {                   # Unsupported
+	      die "Unsupported value for COMEX variable.\n";
+	  }
           if ( "@DISABLE_ACTIVEX@" ) {
               $ATL_LIB     = $PSDK_HOME.$ds."lib"; # Doesn't exist for VSE
               $ATL_INCLUDE = $PSDK_HOME.$ds."include".$ds."atl";
@@ -688,22 +694,18 @@ elsif ( $platform =~ m/cygwin/ )
               $MFC_LIB     = $COMPATH.$ds."atlmfc".$ds."lib";
               $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
           }
-      } else {                   # Unsupported
-          die "Unsupported value for COMEX variable.\n";
       }
-  if ( "@USE_SHELL@" ne "4nt" )
-  {   print "Setting W32 build with bash shell specific values... ";
-      # No speacial treatment for CC an CXX anymore.
-      $FLIPCMD        = "slfl.pl";
-      $PATH_SEPERATOR = ';';
-  }
-  else # "@USE_SHELL@" ne "4nt"
-  {   print "Setting W32 build with 4NT shell specific values... ";
-      # Change path to lower case.
-      $COMPATH        = lc $COMPATH;
-      $PATH_SEPERATOR = ';';
-  }
-
+      if ( "@USE_SHELL@" ne "4nt" ) {
+	  print "Setting W32 build with bash shell specific values... ";
+	  # No speacial treatment for CC an CXX anymore.
+	  $FLIPCMD        = "slfl.pl";
+	  $PATH_SEPERATOR = ';';
+      } else			# "@USE_SHELL@" ne "4nt"
+      {   print "Setting W32 build with 4NT shell specific values... ";
+	  # Change path to lower case.
+	  $COMPATH        = lc $COMPATH;
+	  $PATH_SEPERATOR = ';';
+      }
   }
 }
 elsif ( $platform =~ m/os2/ ) 
@@ -1238,7 +1240,7 @@ elsif ($platform =~ m/cygwin|os2/)
 	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
 		   $PATH .= $ps.$tmppath;
 	   }
-	   if ( ( $COMEX eq "10" ) || ( $COMEX eq "11" ) ) {
+	   if ( ( $COMEX ge "10" ) ) {
 		   # .NET needs midl.exe
                $tmppath = CygFormat($MIDL_PATH);
 		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
@@ -1807,6 +1809,7 @@ ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
+   ToFile( "WINDOWS_VISTA_PSDK","@WINDOWS_VISTA_PSDK@","e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
