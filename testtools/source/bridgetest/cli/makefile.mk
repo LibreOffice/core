@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 18:49:08 $
+#   last change: $Author: obo $ $Date: 2008-04-04 13:09:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ CLI_BASETYPES = $(SOLARBINDIR)$/cli_basetypes.dll
 CLI_CPPUHELPER = $(SOLARBINDIR)$/cli_cppuhelper.dll
 CLI_TYPES_BRIDGETEST = $(BIN)$/cli_types_bridgetest.dll
 
-CSCFLAGS = -warnaserror+ -incremental-
+CSCFLAGS = -warnaserror+ 
 .IF "$(CCNUMVER)" <= "001399999999"
 VBC_FLAGS = -warnaserror+
 .ELSE
