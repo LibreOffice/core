@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:15:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2401,7 +2401,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             String sDataSourceName( getDataSourceAcessor( pConnection ) );
             if ( implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, pConData->xConnection ) )
                 // set the title of the beamer
-                updateTitle();
+                ;/*updateTitle();*/
             else
             {   // clean up
                 criticalFail();
@@ -2837,9 +2837,6 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
     {
         OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
     }
-
-    // set a default title
-    setDefaultTitle();
 }
 
 // -------------------------------------------------------------------------
@@ -3048,11 +3045,6 @@ void SbaTableQueryBrowser::impl_initialize()
         {
             OSL_ENSURE(sal_False, "SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
         }
-    }
-    else
-    {
-        // set a default title
-        setDefaultTitle();
     }
 
     InvalidateAll();
@@ -3439,12 +3431,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     return sal_True;    // handled
 }
 // -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::setDefaultTitle()
-{
-    ::rtl::OUString sTitle = String(ModuleRes(STR_DSBROWSER_TITLE));
-    setTitle(sTitle);
-}
-// -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing )
 {
     _rCommand = ::rtl::OUString();
@@ -3551,25 +3537,28 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
     }
 }
 // -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::updateTitle()
+::rtl::OUString SbaTableQueryBrowser::getPrivateTitle() const
 {
+    ::rtl::OUString sTitle;
     if ( m_pCurrentlyDisplayed )
     {
         SvLBoxEntry* pContainer = m_pTreeModel->GetParent(m_pCurrentlyDisplayed);
         // get the entry for the datasource
         SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pContainer);
         ::rtl::OUString sName = m_pTreeView->getListBox()->GetEntryText(m_pCurrentlyDisplayed);
-        ::rtl::OUString sTitle = GetEntryText( pConnection );
+        sTitle = GetEntryText( pConnection );
         INetURLObject aURL(sTitle);
         if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
-        if(sName.getLength())
+        if ( sName.getLength() )
         {
-            sTitle += ::rtl::OUString::createFromAscii(": ");
-            sTitle += sName;
+            sName += ::rtl::OUString::createFromAscii(" - ");
+            sName += sTitle;
+            sTitle = sName;
         }
-        setTitle(sTitle);
     }
+
+    return sTitle;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::preReloadForm()
@@ -3604,7 +3593,7 @@ void SbaTableQueryBrowser::postReloadForm()
 {
     InitializeGridModel(getFormComponent());
     LoadFinished(sal_True);
-    updateTitle();
+    //updateTitle();
 }
 
 //------------------------------------------------------------------------------
