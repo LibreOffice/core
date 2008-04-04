@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_brw.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:15:10 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,10 @@
 #define STR_CONNECTING_DATASOURCE           RID_STR_BRW_START + 11
 #define STR_LOADING_QUERY                   RID_STR_BRW_START + 12
 #define STR_LOADING_TABLE                   RID_STR_BRW_START + 13
-#define STR_DSBROWSER_TITLE                 RID_STR_BRW_START + 14
-
 
 // please adjust checking before insert new strings
 
-#if STR_DSBROWSER_TITLE > RID_STR_BRW_END
+#if STR_LOADING_TABLE > RID_STR_BRW_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
