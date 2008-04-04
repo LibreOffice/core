@@ -4,9 +4,9 @@
  *
  *  $RCSfile: throbberimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:03:35 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,18 +59,12 @@ namespace toolkit
 //........................................................................
 {
 
-    using namespace ::com::sun::star::graphic;
-    using namespace ::com::sun::star::uno;
-    //using namespace ::com::sun::star::awt;
-    //using namespace ::com::sun::star::lang;
-    //using namespace ::com::sun::star::beans;
-
     class Throbber_Impl
     {
     private:
         NAMESPACE_VOS(IMutex)&  mrMutex;    // Reference to SolarMutex
-        Sequence< Reference< XGraphic > > maImageList;
-        Reference< VCLXWindow > mxParent;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
+        ::com::sun::star::uno::Reference< VCLXWindow > mxParent;
 
         sal_Bool    mbRepeat;
         sal_Int32   mnStepTime;
@@ -83,9 +77,9 @@ namespace toolkit
         NAMESPACE_VOS(IMutex)&  GetMutex() { return mrMutex; }
 
     public:
-             Throbber_Impl( Reference< VCLXWindow > xParent,
-                              sal_Int32 nStepTime,
-                              sal_Bool bRepeat );
+             Throbber_Impl( ::com::sun::star::uno::Reference< VCLXWindow > xParent,
+                            sal_Int32 nStepTime,
+                            sal_Bool bRepeat );
             ~Throbber_Impl();
 
         // Properties
@@ -93,13 +87,13 @@ namespace toolkit
         void setRepeat( sal_Bool bRepeat ) { mbRepeat = bRepeat; }
 
         // XSimpleAnimation
-        void start() throw ( RuntimeException );
-        void stop() throw ( RuntimeException );
-        void setImageList( const Sequence< Reference< XGraphic > >& ImageList )
-                          throw ( RuntimeException );
+        void start() throw ( ::com::sun::star::uno::RuntimeException );
+        void stop() throw ( ::com::sun::star::uno::RuntimeException );
+        void setImageList( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& ImageList )
+                    throw ( ::com::sun::star::uno::RuntimeException );
         // Helpers
-        void initImage() throw ( RuntimeException );
-        sal_Bool isHCMode() throw ( RuntimeException );
+        void initImage() throw ( ::com::sun::star::uno::RuntimeException );
+        sal_Bool isHCMode() throw ( ::com::sun::star::uno::RuntimeException );
     };
 //........................................................................
 } // namespacetoolkit
