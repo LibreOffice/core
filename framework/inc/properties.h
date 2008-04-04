@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:20:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,8 @@
 //_______________________________________________
 // includes
 
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
+#include <general.h>
 
 //_______________________________________________
 //  namespace
@@ -253,8 +252,12 @@ namespace framework{
 /** properties for office module config (Setup.xcu) */
 
 #define OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES   "ooSetupFactoryWindowAttributes"
+#define OFFICEFACTORY_PROPNAME_ASCII_UINAME             "ooSetupFactoryUIName"
+#define OFFICEFACTORY_PROPNAME_ASCII_ICON               "ooSetupFactoryIcon"
 
 #define OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES         ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_WINDOWATTRIBUTES )
+#define OFFICEFACTORY_PROPNAME_UINAME                   ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_UINAME )
+#define OFFICEFACTORY_PROPNAME_ICON                     ::rtl::OUString::createFromAscii( OFFICEFACTORY_PROPNAME_ASCII_ICON )
 
 //_______________________________________________
 /** properties for tab window */
@@ -266,6 +269,18 @@ namespace framework{
 #define TABWINDOW_PROPHANDLE_PARENTWINDOW               0
 #define TABWINDOW_PROPHANDLE_TOPWINDOW                  1
 #define TABWINDOW_PROPCOUNT                             2
+
+//_______________________________________________
+/** properties of tabreg service */
+static const char* TABREG_PROPNAME_ASCII_TITLE          = "title";
+
+static const ::rtl::OUString TABREG_PROPNAME_TITLE      = ::rtl::OUString::createFromAscii(TABREG_PROPNAME_ASCII_TITLE);
+
+//_______________________________________________
+/** properties of controller service */
+static const char* CONTROLLER_PROPNAME_ASCII_ICONID         = "IconId";
+
+static const ::rtl::OUString CONTROLLER_PROPNAME_ICONID     = ::rtl::OUString::createFromAscii(CONTROLLER_PROPNAME_ASCII_ICONID);
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
