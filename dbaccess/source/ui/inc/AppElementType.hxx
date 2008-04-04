@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppElementType.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:49:12 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
