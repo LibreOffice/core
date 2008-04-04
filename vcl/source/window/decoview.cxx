@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:08:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -896,7 +896,10 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
     if ( nStyle & FRAME_DRAW_NODRAW )
     {
-        ImplControlValue aControlValue((bMenuStyle) ? nStyle | FRAME_DRAW_MENU : nStyle);
+        USHORT nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
+        if( pWin->GetType() == WINDOW_BORDERWINDOW )
+            nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
+        ImplControlValue aControlValue( nValueStyle );
         Region aBound, aContent;
         Region aNatRgn( rRect );
         if(pWin && pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
@@ -936,18 +939,23 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     }
     else
     {
-        ImplControlValue aControlValue((bMenuStyle) ? nStyle | FRAME_DRAW_MENU : nStyle);
-        Region aBound, aContent;
-        Region aNatRgn( rRect );
-        if(pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) &&
-            pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
-                aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        if( pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
         {
-            if( pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
-                         aControlValue, rtl::OUString()) )
+            USHORT nValueStyle = bMenuStyle ? nStyle | FRAME_DRAW_MENU : nStyle;
+            if( pWin->GetType() == WINDOW_BORDERWINDOW )
+                nValueStyle |= FRAME_DRAW_BORDERWINDOWBORDER;
+            ImplControlValue aControlValue( nValueStyle );
+            Region aBound, aContent;
+            Region aNatRgn( rRect );
+            if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+                aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
             {
-                rRect = aContent.GetBoundRect();
-                return;
+                if( pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
+                             aControlValue, rtl::OUString()) )
+                {
+                    rRect = aContent.GetBoundRect();
+                    return;
+                }
             }
         }
 
