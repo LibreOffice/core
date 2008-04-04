@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xinterface.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:57:18 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,6 +661,69 @@ ________________________________________________________________________________
                                                                                     INTERFACE18 ,                   \
                                                                                     INTERFACE19 ,                   \
                                                                                     INTERFACE20                     \
+                                                                                )                                   \
+                                        )                                                                           \
+                                    )
+
+//  implementation of XInterface with 21 additional interfaces for queryInterface()
+#define DEFINE_XINTERFACE_21( CLASS, BASECLASS, INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11, INTERFACE12, INTERFACE13, INTERFACE14, INTERFACE15, INTERFACE16, INTERFACE17, INTERFACE18, INTERFACE19, INTERFACE20, INTERFACE21 ) \
+    PRIVATE_DEFINE_XINTERFACE_LARGE (   CLASS,                                                                      \
+                                        BASECLASS,                                                                  \
+                                        ( aType, PRIVATE_DEFINE_INTERFACE_11    (   INTERFACE1  ,                   \
+                                                                                    INTERFACE2  ,                   \
+                                                                                    INTERFACE3  ,                   \
+                                                                                    INTERFACE4  ,                   \
+                                                                                    INTERFACE5  ,                   \
+                                                                                    INTERFACE6  ,                   \
+                                                                                    INTERFACE7  ,                   \
+                                                                                    INTERFACE8  ,                   \
+                                                                                    INTERFACE9  ,                   \
+                                                                                    INTERFACE10 ,                   \
+                                                                                    INTERFACE11                     \
+                                                                                )                                   \
+                                        ),                                                                          \
+                                        ( aType, PRIVATE_DEFINE_INTERFACE_10    (   INTERFACE12 ,                   \
+                                                                                    INTERFACE13 ,                   \
+                                                                                    INTERFACE14 ,                   \
+                                                                                    INTERFACE15 ,                   \
+                                                                                    INTERFACE16 ,                   \
+                                                                                    INTERFACE17 ,                   \
+                                                                                    INTERFACE18 ,                   \
+                                                                                    INTERFACE19 ,                   \
+                                                                                    INTERFACE20 ,                   \
+                                                                                    INTERFACE21                     \
+                                                                                )                                   \
+                                        )                                                                           \
+                                    )
+
+//  implementation of XInterface with 22 additional interfaces for queryInterface()
+#define DEFINE_XINTERFACE_22( CLASS, BASECLASS, INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11, INTERFACE12, INTERFACE13, INTERFACE14, INTERFACE15, INTERFACE16, INTERFACE17, INTERFACE18, INTERFACE19, INTERFACE20, INTERFACE21, INTERFACE22 ) \
+    PRIVATE_DEFINE_XINTERFACE_LARGE (   CLASS,                                                                      \
+                                        BASECLASS,                                                                  \
+                                        ( aType, PRIVATE_DEFINE_INTERFACE_11    (   INTERFACE1  ,                   \
+                                                                                    INTERFACE2  ,                   \
+                                                                                    INTERFACE3  ,                   \
+                                                                                    INTERFACE4  ,                   \
+                                                                                    INTERFACE5  ,                   \
+                                                                                    INTERFACE6  ,                   \
+                                                                                    INTERFACE7  ,                   \
+                                                                                    INTERFACE8  ,                   \
+                                                                                    INTERFACE9  ,                   \
+                                                                                    INTERFACE10 ,                   \
+                                                                                    INTERFACE11                     \
+                                                                                )                                   \
+                                        ),                                                                          \
+                                        ( aType, PRIVATE_DEFINE_INTERFACE_11    (   INTERFACE12 ,                   \
+                                                                                    INTERFACE13 ,                   \
+                                                                                    INTERFACE14 ,                   \
+                                                                                    INTERFACE15 ,                   \
+                                                                                    INTERFACE16 ,                   \
+                                                                                    INTERFACE17 ,                   \
+                                                                                    INTERFACE18 ,                   \
+                                                                                    INTERFACE19 ,                   \
+                                                                                    INTERFACE20 ,                   \
+                                                                                    INTERFACE22 ,                   \
+                                                                                    INTERFACE21                     \
                                                                                 )                                   \
                                         )                                                                           \
                                     )
