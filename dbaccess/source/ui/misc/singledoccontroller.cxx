@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:29:31 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
 #include "singledoccontroller.hxx"
-
 /** === begin UNO includes === **/
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -56,6 +56,11 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
+#include <vcl/msgbox.hxx>
+#include "dbu_misc.hrc"
+#include "dataview.hxx"
+#include "UITools.hxx"
+#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -63,6 +68,7 @@
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 
+#include <rtl/ustrbuf.hxx>
 //........................................................................
 namespace dbaui
 {
@@ -151,12 +157,14 @@ namespace dbaui
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
         Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        sal_Int32                       m_nDocStartNumber;
         sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
         sal_Bool                        m_bEditable;    // is the control readonly or not
         sal_Bool                        m_bModified;    // is the data modified
 
         OSingleDocumentControllerImpl()
             :m_aDocScriptSupport()
+            , m_nDocStartNumber(1)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
             ,m_bModified(sal_False)
@@ -225,6 +233,10 @@ namespace dbaui
                 connectionLostMessage();
             throw IllegalArgumentException();
         }
+        Reference< XUntitledNumbers > xUntitledProvider(getModel(), UNO_QUERY      );
+        m_pImpl->m_nDocStartNumber = 1;
+        if ( xUntitledProvider.is() )
+            m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber(static_cast<XWeak*>(this));
     }
 
     //--------------------------------------------------------------------
@@ -619,6 +631,7 @@ namespace dbaui
     {
         return m_pImpl->m_aDataSource.getDataSourceProps();
     }
+<<<<<<< singledoccontroller.cxx
 
     // -----------------------------------------------------------------------------
     sal_Bool OSingleDocumentController::haveDataSource() const
@@ -648,6 +661,43 @@ namespace dbaui
         return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
     }
 
+    // -----------------------------------------------------------------------------
+    uno::Reference< frame::XModel > OSingleDocumentController::getPrivateModel() const
+    {
+        return uno::Reference< frame::XModel >(dbaui::getDataSourceOrModel(m_pImpl->m_xDataSource),uno::UNO_QUERY);
+    }
+    // -----------------------------------------------------------------------------
+    // XTitle
+    ::rtl::OUString SAL_CALL OSingleDocumentController::getTitle()
+        throw (uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        if ( m_bExternalTitle )
+            return impl_getTitleHelper_throw()->getTitle ();
+
+        ::rtl::OUStringBuffer sTitle;
+        Reference< XTitle > xTitle(getPrivateModel(),uno::UNO_QUERY);
+        if ( xTitle.is() )
+        {
+            sTitle.append( xTitle->getTitle() );
+            sTitle.appendAscii(" : ");
+        }
+        sTitle.append( getPrivateTitle() );
+        // There can be only one view with the same object
+        //const sal_Int32 nCurrentView = getCurrentStartNumber();
+        //if ( nCurrentView > 1 )
+        //{
+        //    sTitle.appendAscii(" : ");
+        //    sTitle.append(nCurrentView);
+        //}
+
+        return sTitle.makeStringAndClear();
+    }
+    // -----------------------------------------------------------------------------
+    sal_Int32 OSingleDocumentController::getCurrentStartNumber() const
+    {
+        return m_pImpl->m_nDocStartNumber;
+    }
 //........................................................................
 }   // namespace dbaui
 //........................................................................
