@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
 
                 pTempSet->Put( XFillStyleItem( XFILL_BITMAP ) );
-                pTempSet->Put( XFillBitmapItem( String(), XOBitmap(aGraphic) ) );
+                pTempSet->Put( XFillBitmapItem( String(RTL_CONSTASCII_USTRINGPARAM("background")), XOBitmap(aGraphic) ) );
                 pTempSet->Put( XFillBmpStretchItem( TRUE ));
                 pTempSet->Put( XFillBmpTileItem( FALSE ));
             }
