@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LogarithmicRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:05:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 11:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
             aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
             aBuf.append( UC_SPACE );
         }
-        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "log(x)" ));
+        aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ln(x)" ));
         bHaveSlope = true;
     }
 
