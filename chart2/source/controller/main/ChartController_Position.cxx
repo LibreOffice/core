@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Position.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:43:23 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 
         //prepare and open dialog
         SdrView* pSdrView = m_pDrawViewWrapper;
-        bool bResizePossible=true;
+        bool bResizePossible = m_aSelection.isResizeableObjectSelected();
 
         ::vos::OGuard aGuard( Application::GetSolarMutex());
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
