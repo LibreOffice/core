@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportDefinition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:17:05 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 15:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
 #include <com/sun/star/report/XReportDefinition.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _CPPUHELPER_COMPBASE10_HXX_
+#include <cppuhelper/compbase10.hxx>
 #endif
 #ifndef _CPPUHELPER_BASEMUTEX_HXX_
 #include <cppuhelper/basemutex.hxx>
@@ -53,6 +53,9 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
+#include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #ifndef INCLUDED_CPPUHELPER_PROPERTYSETMIXIN_HXX
 #include <cppuhelper/propertysetmixin.hxx>
 #endif
@@ -80,12 +83,15 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::cppu::WeakComponentImplHelper7<  com::sun::star::report::XReportDefinition
+    typedef ::cppu::WeakComponentImplHelper10<  com::sun::star::report::XReportDefinition
                                  ,com::sun::star::document::XEventBroadcaster
                                  ,com::sun::star::lang::XServiceInfo
                                  ,com::sun::star::frame::XModule
                                  ,com::sun::star::lang::XUnoTunnel
                                  ,com::sun::star::util::XNumberFormatsSupplier
+                                 ,::com::sun::star::frame::XTitle
+                                 ,::com::sun::star::frame::XTitleChangeBroadcaster
+                                 ,::com::sun::star::frame::XUntitledNumbers
                                  ,SvxUnoDrawMSFactory> ReportDefinitionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportDefinition> ReportDefinitionPropertySet;
 
@@ -155,6 +161,9 @@ namespace reportdesign
         void notifyEvent(const ::rtl::OUString& _sEventName);
         void init();
         void fillArgs(::comphelper::MediaDescriptor& _aDescriptor);
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >             impl_getTitleHelper_throw();
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >   impl_getUntitledHelper_throw();
     protected:
         virtual ~OReportDefinition();
 
@@ -167,6 +176,21 @@ namespace reportdesign
                                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _xFactory
                                   ,::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _xShape);
 
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+            create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext();
+
+        /** return the SdrModel of the real model
+        *
+        * \return
+        */
+        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
+
+        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+    private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // ::com::sun::star::lang::XServiceInfo
@@ -174,10 +198,6 @@ namespace reportdesign
         virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-            create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
         // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -356,6 +376,19 @@ namespace reportdesign
         virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
         virtual bool isEnableSetModified() const;
+        // XTitle
+        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTitleChangeBroadcaster
+        virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XUntitledNumbers
+        virtual ::sal_Int32 SAL_CALL leaseNumber( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL releaseNumberForComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
       };
 // =============================================================================
 } // namespace reportdesign
