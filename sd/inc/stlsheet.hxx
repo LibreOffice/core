@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:22:55 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 12:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ public:
     SdStyleSheet* GetPseudoStyleSheet() const;
 
     void SetApiName( const ::rtl::OUString& rApiName );
-    rtl::OUString GetApiName() const { return msApiName; }
+    rtl::OUString GetApiName() const;
 
     static rtl::OUString GetFamilyString( SfxStyleFamily eFamily );
 
