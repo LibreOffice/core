@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-31 13:23:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 10:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1311,15 +1311,15 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         {
             float fOldFillAlpha = mpFillColor[3]; //  save the old alpha
             // OOo transparency value of 0 corresponds to the Quartz transparency value of 1,
-            // and the OOo transparency value of 255 corresponds to the quartz transparency value of 0
-            mpFillColor[3] =  ((float)255-nTransparency) / 255; //  set the new alpha
+            // and the OOo transparency value of 100 corresponds to the quartz transparency value of 0
+            mpFillColor[3] =  ((float)100-nTransparency) / 100; //  set the new alpha
             CGContextSetFillColor( mrContext, mpFillColor ); // using our color and new alpha
             mpFillColor[3] = fOldFillAlpha; // reset the old value
         }
         if( mpLineColor[3] )
         {
             float fOldLineAlpha = mpLineColor[3];
-            mpLineColor[3] = ((float)255-nTransparency) / 255;
+            mpLineColor[3] = ((float)100-nTransparency) / 100;
             CGContextSetStrokeColor( mrContext, mpLineColor );
             mpLineColor[3] = fOldLineAlpha;
 
