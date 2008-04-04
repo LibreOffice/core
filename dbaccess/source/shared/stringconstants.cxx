@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:08:29 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 13:59:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 //============================================================
 //= property names
 //============================================================
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TITLE, "Title");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_URL, "URL");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_INFO, "Info");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SETTINGS, "Settings");
