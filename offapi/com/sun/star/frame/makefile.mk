@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 13:38:02 $
+#   last change: $Author: kz $ $Date: 2008-04-04 13:53:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ IDLFILES=\
     Task.idl\
     TemplateAccess.idl\
     TerminationVetoException.idl\
+    TitleChangedEvent.idl\
     ToolbarController.idl\
     TransientDocumentsDocumentContentFactory.idl \
     UnknownModuleException.idl\
@@ -155,9 +156,13 @@ IDLFILES=\
     XTasksSupplier.idl\
     XTerminateListener.idl\
     XTerminateListener2.idl\
+    XTitle.idl\
+    XTitleChangeBroadcaster.idl\
+    XTitleChangeListener.idl\
     XToolbarController.idl\
     XTransientDocumentsDocumentContentFactory.idl\
     XUIControllerRegistration.idl\
+    XUntitledNumbers.idl\
     XUrlList.idl\
     XWindowArranger.idl
 
