@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:00:13 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #ifndef _COMPHELPER_CLASSIDS_HXX
 #include <comphelper/classids.hxx>
 #endif
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
@@ -81,6 +82,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#include <com/sun/star/frame/XTitle.hpp>
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
@@ -988,6 +990,8 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
                     xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
                 else if ( !xReportDefinition.is() )
                     xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
+
+                updateDocumentTitle();
             }
 
             bool bIsAliveNewStyleReport = ( !m_bOpenInDesign && xReportDefinition.is() );
@@ -1262,6 +1266,8 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                     aRequest.Name = DBACORE_RESSTRING( RID_STR_REPORT );
                 aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
             }
+            else if ( xName->hasByName(aRequest.Name) )
+                aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
 
             aRequest.Content.set(m_xParentContainer,UNO_QUERY);
             OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
@@ -1430,8 +1436,7 @@ sal_Bool ODocumentDefinition::saveAs()
 namespace
 {
     // .........................................................................
-    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const bool _bSuppressMacros, const bool _bReadOnly,
-        const ::rtl::OUString& _rDocTitle )
+    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const bool _bSuppressMacros, const bool _bReadOnly)
     {
         if ( _bSuppressMacros )
         {
@@ -1448,11 +1453,6 @@ namespace
         }
 
         _io_rArgs.put( "ReadOnly", _bReadOnly );
-
-        if ( _rDocTitle.getLength() )
-        {
-            _io_rArgs.put( "DocumentTitle", _rDocTitle );
-        }
     }
 }
 
@@ -1490,7 +1490,6 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 
     return bAllowDocumentMacros;
 }
-
 // -----------------------------------------------------------------------------
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
         const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
@@ -1682,7 +1681,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
         Sequence<PropertyValue> aArgs = xModel->getArgs();
 
         ::comphelper::NamedValueCollection aMediaDesc( aArgs );
-        lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
+        lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly);
 
         aMediaDesc >>= aArgs;
         xModel->attachResource( xModel->getURL(), aArgs );
@@ -1887,18 +1886,27 @@ void ODocumentDefinition::fillReportData()
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::updateDocumentTitle()
 {
-    if ( m_pImpl->m_aProps.aTitle.getLength() )
+    ::rtl::OUString sName = m_pImpl->m_aProps.aTitle;
+    if ( m_pImpl->m_pDataSource )
     {
-        Reference<XModel> xModel(getComponent(),UNO_QUERY);
-        if ( xModel.is() )
+        if ( !sName.getLength() )
         {
-            Sequence<PropertyValue> aArgs = xModel->getArgs();
-            ::comphelper::MediaDescriptor aHelper(aArgs);
-            aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) )] <<= m_pImpl->m_aProps.aTitle;
-            aHelper >> aArgs;
-            xModel->attachResource(xModel->getURL(),aArgs);
+            if ( m_bForm )
+                sName = DBACORE_RESSTRING( RID_STR_FORM );
+            else
+                sName = DBACORE_RESSTRING( RID_STR_REPORT );
+            Reference< XUntitledNumbers > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate(), UNO_QUERY      );
+            if ( xUntitledProvider.is() )
+                sName += ::rtl::OUString::valueOf( xUntitledProvider->leaseNumber(getComponent()) );
         }
+
+        Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);
+        if ( xDatabaseDocumentModel.is() )
+            sName = xDatabaseDocumentModel->getTitle() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")) + sName;
     }
+    Reference< XTitle> xTitle(getComponent(),UNO_QUERY);
+    if ( xTitle.is() )
+        xTitle->setTitle(sName);
 }
 //........................................................................
 }   // namespace dbaccess
