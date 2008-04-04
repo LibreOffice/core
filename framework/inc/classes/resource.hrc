@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:45:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-04 14:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #define STR_SET_LANGUAGE_FOR_SELECTION          (RID_STR_START+18)
 #define STR_SET_LANGUAGE_FOR_PARAGRAPH          (RID_STR_START+19)
 #define STR_SET_LANGUAGE_FOR_ALL_TEXT           (RID_STR_START+20)
+#define STR_UNTITLED_DOCUMENT                   (RID_STR_START+21)
 
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 
