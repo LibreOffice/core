@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresenterTextView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:08:34 $
+ *  last change: $Author: kz $ $Date: 2008-04-07 13:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,13 +252,13 @@ Any PresenterTextView::SetPropertyValue (
     }
     else if (rsPropertyName == mpImplementation->msBackgroundColorPropertyName)
     {
-        util::Color aColor;
+        util::Color aColor = util::Color();
         if (rValue >>= aColor)
             mpImplementation->SetBackgroundColor(Color(aColor));
     }
     else if (rsPropertyName == mpImplementation->msTextColorPropertyName)
     {
-        util::Color aColor;
+        util::Color aColor = util::Color();
         if (rValue >>= aColor)
             mpImplementation->SetTextColor(Color(aColor));
     }
@@ -270,7 +270,7 @@ Any PresenterTextView::SetPropertyValue (
     }
     else if (rsPropertyName == mpImplementation->msTopPropertyName)
     {
-        sal_Int32 nTop;
+        sal_Int32 nTop = 0;
         if (rValue >>= nTop)
             mpImplementation->SetTop(nTop);
     }
