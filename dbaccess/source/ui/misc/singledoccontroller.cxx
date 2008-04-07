@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:02:02 $
+ *  last change: $Author: kz $ $Date: 2008-04-07 12:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
 #include "singledoccontroller.hxx"
+#include "UITools.hxx"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -57,9 +59,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
-#include "dbu_misc.hrc"
-#include "dataview.hxx"
-#include "UITools.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
@@ -631,7 +630,6 @@ namespace dbaui
     {
         return m_pImpl->m_aDataSource.getDataSourceProps();
     }
-<<<<<<< singledoccontroller.cxx
 
     // -----------------------------------------------------------------------------
     sal_Bool OSingleDocumentController::haveDataSource() const
@@ -664,8 +662,9 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     uno::Reference< frame::XModel > OSingleDocumentController::getPrivateModel() const
     {
-        return uno::Reference< frame::XModel >(dbaui::getDataSourceOrModel(m_pImpl->m_xDataSource),uno::UNO_QUERY);
+        return getDatabaseDocument();
     }
+
     // -----------------------------------------------------------------------------
     // XTitle
     ::rtl::OUString SAL_CALL OSingleDocumentController::getTitle()
