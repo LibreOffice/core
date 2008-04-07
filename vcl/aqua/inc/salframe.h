@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:54:51 $
+ *  last change: $Author: rt $ $Date: 2008-04-07 09:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetExtendedFrameStyle( SalExtStyle );
     virtual void                SetBackgroundBitmap( SalBitmap* );
+    virtual void                SetScreenNumber(unsigned int);
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

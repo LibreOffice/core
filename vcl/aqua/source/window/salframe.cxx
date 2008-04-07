@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 10:59:30 $
+ *  last change: $Author: rt $ $Date: 2008-04-07 09:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,6 +597,12 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
         pState->mnState = SAL_FRAMESTATE_MAXIMIZED;
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalFrame::SetScreenNumber(unsigned int)
+{
 }
 
 // -----------------------------------------------------------------------
