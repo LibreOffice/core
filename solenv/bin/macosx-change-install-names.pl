@@ -2,9 +2,9 @@
 #
 #   $RCSfile: macosx-change-install-names.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 12:56:41 $
+#   last change: $Author: kz $ $Date: 2008-04-07 12:21:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@ sub action($$$)
     return $act;
 }
 
-@ARGV == 3 || @ARGV >= 3 && $ARGV[0] eq "extshl" or
-    die "Usage: app|shl|extshl UREBIN|URELIB|OOO|BRAND|OXT <filepath>+";
+@ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or
+    die "Usage: app|shl|extshl UREBIN|URELIB|OOO|BRAND|OXT <filepath>*";
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "extshl")

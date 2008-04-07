@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: vg $ $Date: 2008-03-18 13:09:10 $
+#   last change: $Author: kz $ $Date: 2008-04-07 12:21:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,9 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(foreach,i,$(OUT2LIB) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(LB)
 .IF "$(OS)"=="MACOSX"
     $(PERL) $(SOLARENV)$/bin$/macosx-change-install-names.pl extshl \
-        $(EXTRPATH) $(shell ls $(foreach,j,$(OUT2LIB) $(LB)$/$(j:f)))
+        $(EXTRPATH) \
+        $(shell ls $(foreach,j,$(OUT2LIB) $(LB)$/$(j:f)) | \
+            (grep -v '\.a$$' || test $$? = 1))
 .ENDIF
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
