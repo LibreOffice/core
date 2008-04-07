@@ -1,5 +1,5 @@
-ac	apache-common	:	solenv TOMCAT:tomcat NULL
-ac	apache-common								usr1	-	all	ac_mkout 							NULL
+ac	apache-commons	:	solenv TOMCAT:tomcat NULL
+ac	apache-commons								usr1	-	all	ac_mkout 							NULL
 ac	apache-commons\java\codec					nmake	-	all	ac_codec								NULL
 ac	apache-commons\java\lang					nmake	-	all	ac_lang									NULL
 ac	apache-commons\java\logging					nmake	-	all	ac_logging								NULL
