@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 17:06:49 $
+ *  last change: $Author: kz $ $Date: 2008-04-07 09:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -871,7 +871,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     }
     else if( (nStyle & SAL_FRAME_STYLE_FLOAT) )
     {
-        gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_UTILITY );
+        gtk_window_set_type_hint( GTK_WINDOW(m_pWindow), GDK_WINDOW_TYPE_HINT_UTILITY );
     }
     if( m_pParent )
         m_pParent->m_aChildren.push_back( this );
