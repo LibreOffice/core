@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:47:43 $
+#   last change: $Author: kz $ $Date: 2008-04-07 12:55:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,12 @@ CDEFS += -DSVX_DLLIMPLEMENTATION
 .IF "$(ENABLE_GTK)" != ""
 CFLAGS+=-DENABLE_GTK
 .ENDIF
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+CFLAGS+=-DENABLE_LAYOUT=1
+.ELSE
+CFLAGS+=-DENABLE_LAYOUT=0
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 # set default symbol visibility / scope to hidden
 .IF "$(COMNAME)" == "gcc3"
