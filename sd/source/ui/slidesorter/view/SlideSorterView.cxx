@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:57:24 $
+ *  last change: $Author: kz $ $Date: 2008-04-07 12:10:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,8 +227,8 @@ void SlideSorterView::ModelHasChanged (void)
 {
     if (mbModelChangedWhileModifyEnabled)
     {
-        controller::SlideSorterController::ModelChangeLock alock( GetController() );
-        GetController().HandleModelChange();
+        controller::SlideSorterController::ModelChangeLock alock( mrSlideSorter.GetController() );
+        mrSlideSorter.GetController().HandleModelChange();
         LocalModelHasChanged();
     }
 }
