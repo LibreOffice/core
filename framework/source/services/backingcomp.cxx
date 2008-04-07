@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:20:44 $
+ *  last change: $Author: kz $ $Date: 2008-04-07 09:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,12 +602,8 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
-    // create a listener for automatic updates of the window background color
-    // It hold itself alive and listen for window disposing() so it can die automaticly
-    // if we release our component window.
-    new ColorListener(m_xWindow);
-
     // create the menu bar for the backing component
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
     if (xLayoutManager.is())
