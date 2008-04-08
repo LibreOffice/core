@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderlineprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-08 05:51:22 $
+ *  last change: $Author: aw $ $Date: 2008-04-08 05:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,9 +186,9 @@ namespace drawinglayer
             mfExtendInnerEnd(fExtendInnerEnd),
             mfExtendOuterStart(fExtendOuterStart),
             mfExtendOuterEnd(fExtendOuterEnd),
+            maRGBColor(rRGBColor),
             mbCreateInside(bCreateInside),
-            mbCreateOutside(bCreateOutside),
-            maRGBColor(rRGBColor)
+            mbCreateOutside(bCreateOutside)
         {
         }
 
