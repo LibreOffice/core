@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:29:58 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stl_types.hxx>
 #include <connectivity/dbexception.hxx>
-#include <cppuhelper/compbase10.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase11.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <boost/optional.hpp>
@@ -186,8 +185,9 @@ namespace dbaui
         }
     };
 
+    typedef ::comphelper::OBaseMutex    OGenericUnoController_MBASE;
 
-    typedef ::cppu::WeakComponentImplHelper10   <   ::com::sun::star::frame::XDispatch
+    typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
                                                 ,   ::com::sun::star::frame::XDispatchProviderInterceptor
                                                 ,   ::com::sun::star::util::XModifyListener
                                                 ,   ::com::sun::star::view::XSelectionSupplier
@@ -195,18 +195,15 @@ namespace dbaui
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::frame::XDispatchInformationProvider
+                                                ,   ::com::sun::star::frame::XController
                                                 ,   ::com::sun::star::frame::XTitle
                                                 ,   ::com::sun::star::frame::XTitleChangeBroadcaster
-                                                >   OGenericUnoController_COMPBASE;
-
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::frame::XController
-                                >   OGenericUnoController_CTRBASE;
+                                                >   OGenericUnoController_Base;
 
     // ====================================================================
     class DBACCESS_DLLPUBLIC OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
-                                ,public OGenericUnoController_CTRBASE
                                 ,public IController
     {
     private:
@@ -502,8 +499,6 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) throw (::com::sun::star::uno::RuntimeException);
 
-    protected:
-        OGenericUnoController();    // never implemented
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
@@ -511,6 +506,9 @@ namespace dbaui
         // XTitleChangeBroadcaster
         virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+        OGenericUnoController();    // never implemented
     };
 }
 

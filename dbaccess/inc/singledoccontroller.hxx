@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:29:15 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@ namespace dbaui
 
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
 
         // XScriptInvocationContext
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
@@ -214,10 +215,11 @@ namespace dbaui
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    protected:
+        sal_Int32 getCurrentStartNumber() const;
+
     private:
         OSingleDocumentController();    // never implemented
-
-        sal_Int32 getCurrentStartNumber() const;
     };
 
 //........................................................................

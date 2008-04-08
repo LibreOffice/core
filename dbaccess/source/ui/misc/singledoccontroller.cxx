@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-07 12:32:46 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,9 @@
 #include "dbustrings.hrc"
 #include "moduledbu.hxx"
 #include "singledoccontroller.hxx"
-#include "UITools.hxx"
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 
 /** === begin UNO includes === **/
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -54,20 +53,19 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/frame/XUntitledNumbers.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <rtl/ustrbuf.hxx>
 //........................................................................
 namespace dbaui
 {
@@ -102,6 +100,7 @@ namespace dbaui
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::frame::XUntitledNumbers;
     /** === end UNO using === **/
 
     class DataSourceHolder
@@ -163,7 +162,7 @@ namespace dbaui
 
         OSingleDocumentControllerImpl()
             :m_aDocScriptSupport()
-            , m_nDocStartNumber(1)
+            ,m_nDocStartNumber(1)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
             ,m_bModified(sal_False)
@@ -232,10 +231,6 @@ namespace dbaui
                 connectionLostMessage();
             throw IllegalArgumentException();
         }
-        Reference< XUntitledNumbers > xUntitledProvider(getModel(), UNO_QUERY      );
-        m_pImpl->m_nDocStartNumber = 1;
-        if ( xUntitledProvider.is() )
-            m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber(static_cast<XWeak*>(this));
     }
 
     //--------------------------------------------------------------------
@@ -476,6 +471,21 @@ namespace dbaui
 
         return sal_True;
     }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool SAL_CALL OSingleDocumentController::attachModel( const Reference< XModel > & _rxModel) throw( RuntimeException )
+    {
+        if ( !OSingleDocumentController_Base::attachModel( _rxModel ) )
+            return sal_False;
+
+        Reference< XUntitledNumbers > xUntitledProvider( _rxModel, UNO_QUERY );
+        m_pImpl->m_nDocStartNumber = 1;
+        if ( xUntitledProvider.is() )
+            m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber( static_cast< XWeak* >( this ) );
+
+        return sal_True;
+    }
+
     // -----------------------------------------------------------------------------
     FeatureState OSingleDocumentController::GetState(sal_uInt16 _nId) const
     {
@@ -650,32 +660,21 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    Reference< XEmbeddedScripts > SAL_CALL OSingleDocumentController::getScriptContainer() throw (RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pImpl->documentHasScriptSupport() )
-            return NULL;
-
-        return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
-    }
-
-    // -----------------------------------------------------------------------------
-    uno::Reference< frame::XModel > OSingleDocumentController::getPrivateModel() const
+    Reference< XModel > OSingleDocumentController::getPrivateModel() const
     {
         return getDatabaseDocument();
     }
-
     // -----------------------------------------------------------------------------
     // XTitle
     ::rtl::OUString SAL_CALL OSingleDocumentController::getTitle()
-        throw (uno::RuntimeException)
+        throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         if ( m_bExternalTitle )
             return impl_getTitleHelper_throw()->getTitle ();
 
         ::rtl::OUStringBuffer sTitle;
-        Reference< XTitle > xTitle(getPrivateModel(),uno::UNO_QUERY);
+        Reference< XTitle > xTitle(getPrivateModel(),UNO_QUERY);
         if ( xTitle.is() )
         {
             sTitle.append( xTitle->getTitle() );
@@ -697,6 +696,17 @@ namespace dbaui
     {
         return m_pImpl->m_nDocStartNumber;
     }
+
+    // -----------------------------------------------------------------------------
+    Reference< XEmbeddedScripts > SAL_CALL OSingleDocumentController::getScriptContainer() throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if ( !m_pImpl->documentHasScriptSupport() )
+            return NULL;
+
+        return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
+    }
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:56:57 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,8 +398,7 @@ void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) t
 
     stopFrameListening( m_aCurrentFrame.getFrame() );
     Reference< XFrame > xFrame = m_aCurrentFrame.attachFrame( _rxFrame );
-    if( startFrameListening( xFrame ) )
-        m_bFrameUiActive = m_xCurrentFrame->isActive();
+    startFrameListening( xFrame );
 
     loadMenu( xFrame );
 

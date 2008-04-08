@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:49:32 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1546,7 +1546,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor
-    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
+    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly );
 
     return aMediaDesc.getPropertyValues();
 }

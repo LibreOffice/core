@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportDefinition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:06:56 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,21 +361,6 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats(  ) throw (::com::sun::star::uno::RuntimeException);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext();
-
-        /** return the SdrModel of the real model
-        *
-        * \return
-        */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
-
-        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
-
-        // comphelper::IEmbeddedHelper
-        virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;
-        virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
-        virtual bool isEnableSetModified() const;
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
@@ -389,6 +374,12 @@ namespace reportdesign
         virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL releaseNumberForComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // comphelper::IEmbeddedHelper
+        virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;
+        virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
+        virtual bool isEnableSetModified() const;
       };
 // =============================================================================
 } // namespace reportdesign

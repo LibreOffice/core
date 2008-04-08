@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:32:17 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,16 @@ ODatabaseDocument::~ODatabaseDocument()
 //------------------------------------------------------------------------------
 Any SAL_CALL ODatabaseDocument::queryInterface(const Type& _rType) throw (RuntimeException)
 {
+    // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
+    // which already contains macros. In this case, the database document itself is not
+    // allowed to contain macros, too.
+    if  (   impl_shouldDisallowScripting_nolck_nothrow()
+        &&  (   _rType.equals( XEmbeddedScripts::static_type() )
+            ||  _rType.equals( XScriptInvocationContext::static_type() )
+            )
+        )
+        return Any();
+
     Any aReturn = ODatabaseDocument_OfficeDocument::queryInterface(_rType);
     if (!aReturn.hasValue())
         aReturn = ODatabaseDocument_Title::queryInterface(_rType);
@@ -215,59 +225,10 @@ void SAL_CALL ODatabaseDocument::release(  ) throw ()
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeException)
 {
-    return ::comphelper::concatSequences(
+    Sequence< Type > aTypes = ::comphelper::concatSequences(
         ODatabaseDocument_OfficeDocument::getTypes(),
         ODatabaseDocument_Title::getTypes()
     );
-}
-//------------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  ) throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-// -----------------------------------------------------------------------------
-bool ODatabaseDocument::impl_shouldDisallowScripting_nolck_nothrow() const
-{
-    ::osl::MutexGuard aGuard( getMutex() );
-    // TODO: revert to the disabled code. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-//    if ( m_pImpl.is() && m_pImpl->hasAnyObjectWithMacros() )
-        return true;
-//    return false;
-}
-
-// -----------------------------------------------------------------------------
-Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (RuntimeException)
-{
-    // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
-    // which already contains macros. In this case, the database document itself is not
-    // allowed to contain macros, too.
-    if  (   impl_shouldDisallowScripting_nolck_nothrow()
-        &&  (   _rType.equals( XEmbeddedScripts::static_type() )
-            ||  _rType.equals( XScriptInvocationContext::static_type() )
-            )
-        )
-        return Any();
-
-    return ODatabaseDocument_OfficeDocument::queryInterface( _rType );
-}
-
-// -----------------------------------------------------------------------------
-Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeException)
-{
-    Sequence< Type > aTypes( ODatabaseDocument_OfficeDocument::getTypes() );
 
     // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
     // which already contains macros. In this case, the database document itself is not
@@ -301,6 +262,33 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
     }
 
     return aTypes;
+}
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+// -----------------------------------------------------------------------------
+bool ODatabaseDocument::impl_shouldDisallowScripting_nolck_nothrow() const
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+    // TODO: revert to the disabled code. The current version is just to be able
+    // to integrate an intermediate version of the CWS, which should behave as
+    // if no macros in DB docs are allowed
+//    if ( m_pImpl.is() && m_pImpl->hasAnyObjectWithMacros() )
+        return true;
+//    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1217,8 +1205,8 @@ void ODatabaseDocument::disposing()
     Reference< XModel > xHoldAlive( this );
     {
         {
-            ::osl::ClearableMutexGuard aGuard( getMutex() );
-            impl_notifyEvent( "OnUnload", aGuard );
+            document::EventObject aEvent( *this, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnLoad" ) ) );
+            impl_notifyEvent_nolck_nothrow( aEvent );
         }
 
         lang::EventObject aDisposeEvent(static_cast<XWeak*>(this));
@@ -1466,16 +1454,18 @@ Reference< XController > SAL_CALL ODatabaseDocument::createViewController( const
 }
 // -----------------------------------------------------------------------------
 //=============================================================================
-uno::Reference< frame::XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
+Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
 {
     ModelMethodGuard aGuard( *this );
 
     if ( ! m_xTitleHelper.is ())
     {
-        uno::Reference< frame::XUntitledNumbers >    xDesktop(m_pImpl->m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), css::uno::UNO_QUERY_THROW);
-        uno::Reference< frame::XModel >              xThis   (getThis(), uno::UNO_QUERY_THROW);
+        Reference< XUntitledNumbers > xDesktop(
+            m_pImpl->m_aContext.createComponent( "com.sun.star.frame.Desktop" ),
+            UNO_QUERY_THROW );
+        uno::Reference< frame::XModel > xThis   (getThis(), uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_xServiceFactory);
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext.getLegacyServiceFactory());
         m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);
@@ -1490,7 +1480,7 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     ModelMethodGuard aGuard( *this );
 
     if ( !m_xModuleManager.is() )
-        m_xModuleManager.set( m_pImpl->m_xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ), UNO_QUERY_THROW );
+        m_xModuleManager.set( m_pImpl->m_aContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
 
     ::rtl::OUString sModuleId = m_xModuleManager->identify( _xComponent );
 

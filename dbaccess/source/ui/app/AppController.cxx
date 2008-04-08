@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:53:36 $
+ *  last change: $Author: kz $ $Date: 2008-04-08 12:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1296,7 +1296,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        RelationDesigner aDesigner( getORB(), this, m_xCurrentFrame );
+                        RelationDesigner aDesigner( getORB(), this, m_aCurrentFrame.getFrame() );
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         addDocumentListener( xComponent, NULL );
@@ -1808,23 +1808,23 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                 if ( _eType == E_TABLE )
                 {
                     if ( impl_isAlterableView_nothrow( _sName ) )
-                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, true, bQuerySQLMode ) );
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true, bQuerySQLMode ) );
                     else
-                        pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
+                        pDesigner.reset( new TableDesigner( getORB(), this, m_aCurrentFrame.getFrame() ) );
                 }
                 else if ( _eType == E_QUERY )
                 {
-                    pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, bQuerySQLMode ) );
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false, bQuerySQLMode ) );
                 }
                 else if ( _eType == E_REPORT )
                 {
-                    pDesigner.reset( new ReportDesigner( getORB(),this, m_xCurrentFrame ) );
+                    pDesigner.reset( new ReportDesigner( getORB(),this, m_aCurrentFrame.getFrame() ) );
                 }
                 aDataSource <<= m_xDataSource;
             }
             else
             {
-                pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
+                pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
                 aArgs.realloc(1);
                 aArgs[0].Name = PROPERTY_SHOWMENU;
