@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderlineprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-04 06:00:23 $
+ *  last change: $Author: aw $ $Date: 2008-04-08 05:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,159 +67,94 @@ namespace drawinglayer
         Primitive2DSequence BorderLinePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence xRetval;
-            const sal_uInt32 nCount(getMultiLineArray().size());
 
-            if(nCount)
+            if(!getStart().equal(getEnd()) && (getCreateInside() || getCreateOutside()))
             {
-                if(!getStart().equal(getEnd()))
+                const bool bInsideUsed(!basegfx::fTools::equalZero(getLeftWidth()));
+
+                if(bInsideUsed)
                 {
-                    if(1 == nCount && basegfx::fTools::equal(1.0, getMultiLineArray()[0]))
+                    // get data and vectors
+                    const bool bOutsideUsed(!basegfx::fTools::equalZero(getRightWidth()));
+                    const double fWidth(getWidth());
+                    basegfx::B2DVector aVector(getEnd() - getStart());
+                    aVector.normalize();
+                    const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
+
+                    if(bOutsideUsed)
                     {
-                        // a single, centered hairline
-                        basegfx::B2DPolygon aLine;
+                        // both used, double line definition. Create left and right offset
+                        xRetval.realloc(getCreateInside() && getCreateOutside() ? 2 : 1);
+                        sal_uInt32 nInsert(0);
 
-                        aLine.append(getStart());
-                        aLine.append(getEnd());
+                        if(getCreateInside())
+                        {
+                            // create geometry for left
+                            const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (getLeftWidth() - fWidth)));
+                            basegfx::B2DPolygon aLeft;
+                            aLeft.append(getStart() + aLeftOff - (getExtendInnerStart() * aVector));
+                            aLeft.append(getEnd() + aLeftOff + (getExtendInnerEnd() * aVector));
 
-                        xRetval.realloc(1);
-                        xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(aLine, getRGBColor()));
+                            if(basegfx::fTools::equal(1.0, getLeftWidth()))
+                            {
+                                xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
+                                    aLeft,
+                                    getRGBColor()));
+                            }
+                            else
+                            {
+                                xRetval[nInsert++] = Primitive2DReference(new PolygonStrokePrimitive2D(
+                                    aLeft,
+                                    attribute::LineAttribute(getRGBColor(), getLeftWidth()),
+                                    attribute::StrokeAttribute()));
+                            }
+                        }
+
+                        if(getCreateOutside())
+                        {
+                            // create geometry for right
+                            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - getRightWidth())));
+                            basegfx::B2DPolygon aRight;
+                            aRight.append(getStart() + aRightOff - (getExtendOuterStart() * aVector));
+                            aRight.append(getEnd() + aRightOff + (getExtendOuterEnd() * aVector));
+
+                            if(basegfx::fTools::equal(1.0, getRightWidth()))
+                            {
+                                xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
+                                    aRight,
+                                    getRGBColor()));
+                            }
+                            else
+                            {
+                                xRetval[nInsert++] = Primitive2DReference(new PolygonStrokePrimitive2D(
+                                    aRight,
+                                    attribute::LineAttribute(getRGBColor(), getRightWidth()),
+                                    attribute::StrokeAttribute()));
+                            }
+                        }
                     }
                     else
                     {
-                        const double fLineWidth(::std::accumulate(getMultiLineArray().begin(), getMultiLineArray().end(), 0.0));
-                        const double fHalfLW(fLineWidth / 2.0);
-                        basegfx::B2DVector aVector(getEnd() - getStart());
-                        aVector.normalize();
-                        const basegfx::B2DVector aPerpendicular(basegfx::getNormalizedPerpendicular(aVector));
-                        sal_uInt32 a(0);
-                        ::std::vector< BasePrimitive2D* > aTargetVector;
-                        double fStart(0.0);
+                        // single line, create geometry
+                        basegfx::B2DPolygon aPolygon;
+                        const double fMaxExtStart(::std::max(getExtendInnerStart(), getExtendOuterStart()));
+                        const double fMaxExtEnd(::std::max(getExtendInnerEnd(), getExtendOuterEnd()));
+                        aPolygon.append(getStart() - (fMaxExtStart * aVector));
+                        aPolygon.append(getEnd() + (fMaxExtEnd * aVector));
+                        xRetval.realloc(1);
 
-                        for(a = 0; a < nCount; a++)
+                        if(basegfx::fTools::equal(1.0, getLeftWidth()))
                         {
-                            const double fDist(getMultiLineArray()[a]);
-
-                            if(!(a % 2))
-                            {
-                                if(basegfx::fTools::equal(1.0, fDist))
-                                {
-                                    // hairline
-                                    const double fOffset(fStart - fHalfLW);
-                                    double fHorOffsetStart(0.0);
-                                    double fHorOffsetEnd(0.0);
-                                    basegfx::B2DPolygon aLine;
-
-                                    if(MULTIEDGESTYLE_NONE != getStartStyle() || MULTIEDGESTYLE_NONE != getEndStyle())
-                                    {
-                                        if(MULTIEDGESTYLE_SHEARIN == getStartStyle())
-                                        {
-                                            fHorOffsetStart = -fOffset;
-                                        }
-                                        else if(MULTIEDGESTYLE_SHEAROUT == getStartStyle())
-                                        {
-                                            fHorOffsetStart = fOffset;
-                                        }
-                                        else if(MULTIEDGESTYLE_TIP == getStartStyle())
-                                        {
-                                            fHorOffsetStart = fabs(fOffset);
-                                        }
-
-                                        if(MULTIEDGESTYLE_SHEARIN == getEndStyle())
-                                        {
-                                            fHorOffsetEnd = -fOffset;
-                                        }
-                                        else if(MULTIEDGESTYLE_SHEAROUT == getEndStyle())
-                                        {
-                                            fHorOffsetEnd = fOffset;
-                                        }
-                                        else if(MULTIEDGESTYLE_TIP == getEndStyle())
-                                        {
-                                            fHorOffsetEnd = -fabs(fOffset);
-                                        }
-                                    }
-
-                                    aLine.append(getStart() + (aPerpendicular * fOffset) + (aVector * fHorOffsetStart));
-                                    aLine.append(getEnd() + (aPerpendicular * fOffset) + (aVector * fHorOffsetEnd));
-
-                                    aTargetVector.push_back(new PolygonHairlinePrimitive2D(aLine, getRGBColor()));
-                                }
-                                else
-                                {
-                                    // fat line
-                                    const double fOffsetA(fStart - fHalfLW);
-                                    const double fOffsetB(fOffsetA + fDist);
-                                    double fHorOffsetStartA(0.0);
-                                    double fHorOffsetStartB(0.0);
-                                    double fHorOffsetEndA(0.0);
-                                    double fHorOffsetEndB(0.0);
-                                    basegfx::B2DPolygon aFill;
-
-                                    if(MULTIEDGESTYLE_NONE != getStartStyle() || MULTIEDGESTYLE_NONE != getEndStyle())
-                                    {
-                                        if(MULTIEDGESTYLE_SHEARIN == getStartStyle())
-                                        {
-                                            fHorOffsetStartA = -fOffsetA;
-                                            fHorOffsetStartB = -fOffsetB;
-                                        }
-                                        else if(MULTIEDGESTYLE_SHEAROUT == getStartStyle())
-                                        {
-                                            fHorOffsetStartA = fOffsetA;
-                                            fHorOffsetStartB = fOffsetB;
-                                        }
-                                        else if(MULTIEDGESTYLE_TIP == getStartStyle())
-                                        {
-                                            fHorOffsetStartA = fabs(fOffsetA);
-                                            fHorOffsetStartB = fabs(fOffsetB);
-                                        }
-
-                                        if(MULTIEDGESTYLE_SHEARIN == getEndStyle())
-                                        {
-                                            fHorOffsetEndA = -fOffsetA;
-                                            fHorOffsetEndB = -fOffsetB;
-                                        }
-                                        else if(MULTIEDGESTYLE_SHEAROUT == getEndStyle())
-                                        {
-                                            fHorOffsetEndA = fOffsetA;
-                                            fHorOffsetEndB = fOffsetB;
-                                        }
-                                        else if(MULTIEDGESTYLE_TIP == getEndStyle())
-                                        {
-                                            fHorOffsetEndA = -fabs(fOffsetA);
-                                            fHorOffsetEndB = -fabs(fOffsetB);
-                                        }
-                                    }
-
-                                    aFill.append(getStart() + (aPerpendicular * fOffsetA) + (aVector * fHorOffsetStartA));
-                                    aFill.append(getEnd() + (aPerpendicular * fOffsetA) + (aVector * fHorOffsetEndA));
-
-                                    if(MULTIEDGESTYLE_TIP == getEndStyle() && fOffsetA < 0.0 && fOffsetB > 0.0)
-                                    {
-                                        // the polygon outer side travels over the center; insert end point as tip point
-                                        aFill.append(getEnd());
-                                    }
-
-                                    aFill.append(getEnd() + (aPerpendicular * fOffsetB) + (aVector * fHorOffsetEndB));
-                                    aFill.append(getStart() + (aPerpendicular * fOffsetB) + (aVector * fHorOffsetStartB));
-
-                                    if(MULTIEDGESTYLE_TIP == getStartStyle() && fOffsetB > 0.0 && fOffsetA < 0.0)
-                                    {
-                                        // the polygon outer side travels over the center; insert start point as tip point
-                                        aFill.append(getStart());
-                                    }
-
-                                    aFill.setClosed(true);
-                                    aTargetVector.push_back(new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aFill), getRGBColor()));
-                                }
-                            }
-
-                            fStart += fDist;
+                            xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
+                                aPolygon,
+                                getRGBColor()));
                         }
-
-                        xRetval.realloc(aTargetVector.size());
-
-                        for(a = 0; a < aTargetVector.size(); a++)
+                        else
                         {
-                            xRetval[a] = Primitive2DReference(aTargetVector[a]);
+                            xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(
+                                aPolygon,
+                                attribute::LineAttribute(getRGBColor(), getLeftWidth()),
+                                attribute::StrokeAttribute()));
                         }
                     }
                 }
@@ -231,16 +166,28 @@ namespace drawinglayer
         BorderLinePrimitive2D::BorderLinePrimitive2D(
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
-            const ::std::vector< double >& rMultiLineArray,
-            MultiEdgeStyle2D aStartStyle,
-            MultiEdgeStyle2D aEndStyle,
+            double fLeftWidth,
+            double fDistance,
+            double fRightWidth,
+            double fExtendInnerStart,
+            double fExtendInnerEnd,
+            double fExtendOuterStart,
+            double fExtendOuterEnd,
+            bool bCreateInside,
+            bool bCreateOutside,
             const basegfx::BColor& rRGBColor)
         :   BasePrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
-            maMultiLineArray(rMultiLineArray),
-            maStartStyle(aStartStyle),
-            maEndStyle(aEndStyle),
+            mfLeftWidth(fLeftWidth),
+            mfDistance(fDistance),
+            mfRightWidth(fRightWidth),
+            mfExtendInnerStart(fExtendInnerStart),
+            mfExtendInnerEnd(fExtendInnerEnd),
+            mfExtendOuterStart(fExtendOuterStart),
+            mfExtendOuterEnd(fExtendOuterEnd),
+            mbCreateInside(bCreateInside),
+            mbCreateOutside(bCreateOutside),
             maRGBColor(rRGBColor)
         {
         }
@@ -253,9 +200,15 @@ namespace drawinglayer
 
                 return (getStart() == rCompare.getStart()
                     && getEnd() == rCompare.getEnd()
-                    && getMultiLineArray() == rCompare.getMultiLineArray()
-                    && getStartStyle() == rCompare.getStartStyle()
-                    && getEndStyle() == rCompare.getEndStyle()
+                    && getLeftWidth() == rCompare.getLeftWidth()
+                    && getDistance() == rCompare.getDistance()
+                    && getRightWidth() == rCompare.getRightWidth()
+                    && getExtendInnerStart() == rCompare.getExtendInnerStart()
+                    && getExtendInnerEnd() == rCompare.getExtendInnerEnd()
+                    && getExtendOuterStart() == rCompare.getExtendOuterStart()
+                    && getExtendOuterEnd() == rCompare.getExtendOuterEnd()
+                    && getCreateInside() == rCompare.getCreateInside()
+                    && getCreateOutside() == rCompare.getCreateOutside()
                     && getRGBColor() == rCompare.getRGBColor());
             }
 

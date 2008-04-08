@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderlineprimitive2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-04 06:00:22 $
+ *  last change: $Author: aw $ $Date: 2008-04-08 05:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,23 +54,26 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        enum MultiEdgeStyle2D
-        {
-            MULTIEDGESTYLE_NONE,
-            MULTIEDGESTYLE_SHEARIN,
-            MULTIEDGESTYLE_SHEAROUT,
-            MULTIEDGESTYLE_TIP
-        };
-
         class BorderLinePrimitive2D : public BasePrimitive2D
         {
         private:
             basegfx::B2DPoint                               maStart;
             basegfx::B2DPoint                               maEnd;
-            ::std::vector< double >                         maMultiLineArray;
-            MultiEdgeStyle2D                                maStartStyle;
-            MultiEdgeStyle2D                                maEndStyle;
+            double                                          mfLeftWidth;
+            double                                          mfDistance;
+            double                                          mfRightWidth;
+            double                                          mfExtendInnerStart;
+            double                                          mfExtendInnerEnd;
+            double                                          mfExtendOuterStart;
+            double                                          mfExtendOuterEnd;
             basegfx::BColor                                 maRGBColor;
+
+            // bitfield
+            unsigned                                        mbCreateInside : 1;
+            unsigned                                        mbCreateOutside : 1;
+
+            // helpers
+            double getWidth() const { return mfLeftWidth + mfDistance + mfRightWidth; }
 
         protected:
             // create local decomposition
@@ -80,17 +83,29 @@ namespace drawinglayer
             BorderLinePrimitive2D(
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
-                const ::std::vector< double >& rMultiLineArray,
-                MultiEdgeStyle2D aStartStyle,
-                MultiEdgeStyle2D aEndStyle,
+                double fLeftWidth,
+                double fDistance,
+                double fRightWidth,
+                double fExtendInnerStart,
+                double fExtendInnerEnd,
+                double fExtendOuterStart,
+                double fExtendOuterEnd,
+                bool bCreateInside,
+                bool bCreateOutside,
                 const basegfx::BColor& rRGBColor);
 
             // get data
             const basegfx::B2DPoint& getStart() const { return maStart; }
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
-            const ::std::vector< double >& getMultiLineArray() const { return maMultiLineArray; }
-            MultiEdgeStyle2D getStartStyle() const { return maStartStyle; }
-            MultiEdgeStyle2D getEndStyle() const { return maEndStyle; }
+            double getLeftWidth() const { return mfLeftWidth; }
+            double getDistance() const { return mfDistance; }
+            double getRightWidth() const { return mfRightWidth; }
+            double getExtendInnerStart() const { return mfExtendInnerStart; }
+            double getExtendInnerEnd() const { return mfExtendInnerEnd; }
+            double getExtendOuterStart() const { return mfExtendOuterStart; }
+            double getExtendOuterEnd() const { return mfExtendOuterEnd; }
+            bool getCreateInside() const { return mbCreateInside; }
+            bool getCreateOutside() const { return mbCreateOutside; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
 
             // compare operator
