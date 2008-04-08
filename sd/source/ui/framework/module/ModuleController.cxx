@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModuleController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:39:17 $
+ *  last change: $Author: vg $ $Date: 2008-04-08 14:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@ using ::sd::tools::ConfigurationAccess;
 
 namespace sd { namespace framework {
 
-static const sal_Int32 snFactoryPropertyCount (2);
-static const sal_Int32 snStartupPropertyCount (1);
+static const sal_uInt32 snFactoryPropertyCount (2);
+static const sal_uInt32 snStartupPropertyCount (1);
 
 
 
