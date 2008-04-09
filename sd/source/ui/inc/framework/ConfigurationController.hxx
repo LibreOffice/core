@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:02:38 $
+ *  last change: $Author: kz $ $Date: 2008-04-09 16:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ public:
     virtual ~ConfigurationController (void) throw();
 
     virtual void SAL_CALL disposing (void);
+
+    void ProcessEvent (void);
 
 
     // XConfigurationController

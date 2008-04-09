@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:06:52 $
+ *  last change: $Author: kz $ $Date: 2008-04-09 16:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
 #include "Window.hxx"
+#include "framework/ConfigurationController.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -350,6 +351,7 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
     StartListening(*GetDocShell(),TRUE);
     mpImpl->LateInit();
     InitializeFramework();
+
     mpImpl->mpEventMultiplexer.reset(new tools::EventMultiplexer (*this));
 
     mpImpl->mpFormShellManager.reset(new FormShellManager(*this));
@@ -369,10 +371,32 @@ void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
             OUString sView (rsDefaultView);
             if (sView.getLength() == 0)
                 sView = GetInitialViewShellType();
+
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*this));
-            pHelper->RequestView(
-                sView,
-                FrameworkHelper::msCenterPaneURL);
+
+            // Create the resource ids for the center pane and view.
+            const Reference<drawing::framework::XResourceId> xCenterPaneId (
+                pHelper->CreateResourceId(FrameworkHelper::msCenterPaneURL));
+            const Reference<drawing::framework::XResourceId> xCenterViewId (
+                pHelper->CreateResourceId(sView, xCenterPaneId));
+
+            // Request center pane and view.
+            xConfigurationController->requestResourceActivation(xCenterPaneId, ResourceActivationMode_ADD);
+            xConfigurationController->requestResourceActivation(xCenterViewId, ResourceActivationMode_REPLACE);
+
+            // Process configuration events synchronously until the center view
+            // has been created.
+            sd::framework::ConfigurationController* pConfigurationController
+                = dynamic_cast<sd::framework::ConfigurationController*>(xConfigurationController.get());
+            if (pConfigurationController != NULL)
+            {
+                while (
+                    ! pConfigurationController->getResource(xCenterViewId).is()
+                        && pConfigurationController->hasPendingRequests())
+                {
+                    pConfigurationController->ProcessEvent();
+                }
+            }
         }
     }
     catch (RuntimeException&)

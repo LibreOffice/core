@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConfigurationController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:28:51 $
+ *  last change: $Author: kz $ $Date: 2008-04-09 16:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,19 @@ void SAL_CALL ConfigurationController::disposing (void)
     mpImplementation->mpQueueProcessor.reset();
     mpImplementation->mxRequestedConfiguration = NULL;
     mpImplementation.reset();
+}
+
+
+
+
+void ConfigurationController::ProcessEvent (void)
+{
+    if (mpImplementation.get() != NULL)
+    {
+        OSL_ASSERT(mpImplementation->mpQueueProcessor.get()!=NULL);
+
+        mpImplementation->mpQueueProcessor->ProcessOneEvent();
+    }
 }
 
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChangeRequestQueueProcessor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:28:21 $
+ *  last change: $Author: kz $ $Date: 2008-04-09 16:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,10 @@ public:
     */
     void ProcessUntilEmpty (void);
 
+    /** Process the first event in queue.
+    */
+    void ProcessOneEvent (void);
+
     /** Remove all events from the queue.
 
         <p>This method is typically called when the framework is shut down
@@ -136,10 +140,6 @@ private:
         processing starts asynchronously.
     */
     void StartProcessing (void);
-
-    /** Process the first event in queue.
-    */
-    void ProcessOneEvent (void);
 
     /** Callback function for the PostUserEvent() call.
     */
