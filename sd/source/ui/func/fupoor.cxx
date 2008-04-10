@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fupoor.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.49 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:48:32 $
+ * $RCSfile: fupoor.cxx,v $
+ * $Revision: 1.50 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,89 +35,46 @@
 #include "fupoor.hxx"
 
 #include <svx/svxids.hrc>
-
-#ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SV_SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XLAYER_HPP_
 #include <com/sun/star/drawing/XLayer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XLAYERMANAGER_HPP_
 #include <com/sun/star/drawing/XLayerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
 
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
 #include "app.hrc"
-#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
-#endif
 #include "sdpage.hxx"
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#ifndef SD_CLIENT_HXX
 #include "Client.hxx"
-#endif
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
 #include "LayerTabBar.hxx"
 
 #include <sfx2/viewfrm.hxx>
 
 // #97016# IV
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
 
 // #98533#
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
