@@ -116,8 +116,9 @@ void freefile(struct filepointer * fp);
 void redirect(char * line, char * makefile );
 
 struct  inclist inclist[ MAXFILES ],
-        *inclistp = inclist,
-        maininclist;
+        *inclistp = inclist;
+
+struct symhash *maininclist = NULL;
 
 char    *filelist[ MAXFILES ];
 char    *includedirs[ MAXDIRS + 1 ];
@@ -171,16 +172,16 @@ int main(argc, argv)
     register struct inclist *ip;
     char    *makefile = NULL;
     struct filepointer  *filecontent;
-    struct symtab *psymp = predefs;
+    struct pair *psymp = predefs;
     char *endmarker = NULL;
     char *defincdir = NULL;
     struct IncludesCollection* incCollection;
 
     ProgramName = argv[0];
 
-    while (psymp->s_name)
+    while (psymp->p_name)
     {
-        define2(psymp->s_name, psymp->s_value, &maininclist);
+        hash_define(psymp->p_name, psymp->p_value, &maininclist);
         psymp++;
     }
     if (argc == 2 && argv[1][0] == '@') {
@@ -450,10 +451,14 @@ int main(argc, argv)
     incCollection = create_IncludesCollection();
 
     for(fp=filelist; *fp; fp++) {
+        struct symhash *includes;
         filecontent = getfile(*fp);
         ip = newinclude(*fp, (char *)NULL);
 
-        find_includes(filecontent, ip, ip, 0, FALSE, incCollection);
+        includes = hash_copy( maininclist );
+        find_includes(filecontent, ip, ip, 0, FALSE, incCollection, includes);
+        hash_free( includes );
+
         freefile(filecontent);
         recursive_pr_include(ip, ip->i_file, base_name(*fp));
         inc_clean();
