@@ -2,9 +2,7 @@
 #define _PREVIEWPAGES_HXX
 
 // classes <Point>, <Size> and <Rectangle>
-#ifndef _GEN_HXX
 #include <tools/gen.hxx>
-#endif
 
 class SwPageFrm;
 
