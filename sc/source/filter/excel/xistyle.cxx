@@ -1,141 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xistyle.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.36 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:28:01 $
+ * $RCSfile: xistyle.cxx,v $
+ * $Revision: 1.37 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-#ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
-#endif
-
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
-#endif
-
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX
 #include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_ITEM_HXX
 #include <svx/cntritem.hxx>
-#endif
-#ifndef _SVX_SHDDITEM_HXX
 #include <svx/shdditem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_ALGITEM_HXX
 #include <svx/algitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_BOLNITEM_HXX
 #include <svx/bolnitem.hxx>
-#endif
-#ifndef _SVX_ROTMODIT_HXX
 #include <svx/rotmodit.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
-#endif
-
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_SCDOCPOL_HXX
 #include "docpool.hxx"
-#endif
-#ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
-#endif
-#ifndef SC_STLPOOL_HXX
 #include "stlpool.hxx"
-#endif
-#ifndef SC_STLSHEET_HXX
 #include "stlsheet.hxx"
-#endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
-
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
-#endif
-#ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
-#endif
 
 #include "root.hxx"
 
