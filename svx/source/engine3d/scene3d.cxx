@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: scene3d.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:05:11 $
+ * $RCSfile: scene3d.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,87 +34,34 @@
 
 #include "svdstr.hrc"
 #include "svdglob.hxx"
-
-#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#endif
 
 #if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
 #endif
-
-#ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _E3D_SCENE3D_HXX
 #include <svx/scene3d.hxx>
-#endif
-
-#ifndef _E3D_UNDO_HXX
 #include <svx/e3dundo.hxx>
-#endif
-
-#ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
-#endif
-
-#ifndef _SVDTRANS_HXX
 #include <svx/svdtrans.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-
-#ifndef _SVXE3DITEM_HXX
 #include <svx/e3ditem.hxx>
-#endif
-
-#ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
-#endif
-
-#ifndef _SVX_XFLTRIT_HXX
 #include <svx/xfltrit.hxx>
-#endif
-
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SVX_XFLFTRIT_HXX
 #include <svx/xflftrit.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
-#endif
 
 // #110094#
-#ifndef _SDR_CONTACT_VIEWCONTACTOFE3DSCENE_HXX
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#endif
-
-#ifndef _SVDDRAG_HXX //autogen
 #include <svx/svddrag.hxx>
-#endif
 
 // for ::std::sort
 #include <algorithm>
