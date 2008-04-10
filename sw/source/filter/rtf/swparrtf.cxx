@@ -1,289 +1,129 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swparrtf.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.78 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:19:05 $
+ * $RCSfile: swparrtf.cxx,v $
+ * $Revision: 1.79 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #include <stack>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
-#endif
-#ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
-#endif
-#ifndef _SWPARRTF_HXX
 #include <swparrtf.hxx>
-#endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
-#endif
-#ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _FLDDAT_HXX
 #include <flddat.hxx>
-#endif
-#ifndef _FLTINI_HXX
 #include <fltini.hxx>
-#endif
-#ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
 #ifndef _SECTIOM_HXX
 #include <section.hxx>
 #endif
-#ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
-#endif
-#ifndef _VIEWSH_HXX     // for the pagedescname from the ShellRes
 #include <viewsh.hxx>
-#endif
-#ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
 #include <shellres.hxx>
-#endif
-#ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
-#endif
-#ifndef _TOX_HXX
 #include <tox.hxx>
-#endif
-#ifndef _SWSWERROR_H
 #include <swerror.h>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _TBLSEL_HXX
 #include <tblsel.hxx>           // SwSelBoxes
-#endif
 
 #include <docsh.hxx>
-
-#ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx> // SwLayoutSplit
-#endif
-
-#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
-#endif
-
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
-
-#ifndef _SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
 
 
-#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SVX_OPAQITEM_HXX
 #include <svx/opaqitem.hxx>
-#endif
-
-#ifndef _SVDOGRAF_HXX
 #include "svx/svdograf.hxx"
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SVX_XLNWTIT_HXX
 #include <svx/xlnwtit.hxx>
-#endif
-
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
 
 #include <tools/stream.hxx>
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
-#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
