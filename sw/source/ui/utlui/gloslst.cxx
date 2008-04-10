@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: gloslst.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:23:24 $
+ * $RCSfile: gloslst.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,56 +37,28 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-#ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
-#endif
-
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>
-#endif
-#ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
-#endif
-#ifndef _GLOSLST_HXX
 #include <gloslst.hxx>
-#endif
-#ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
-#endif
 
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
