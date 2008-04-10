@@ -3,9 +3,7 @@
 #define _RTL_PROCESS_CONST_H_
 
 //------------------------------------------------------------------------
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 using namespace ::rtl;
 
