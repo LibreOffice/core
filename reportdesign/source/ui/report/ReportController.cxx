@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ReportController.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:11:51 $
+ * $RCSfile: ReportController.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
@@ -51,235 +46,99 @@
 #define ITEMID_BRUSH        RPTUI_ID_BRUSH
 
 
-#ifndef RPTUI_REPORTCONTROLLER_HXX
 #include "ReportController.hxx"
-#endif
-#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
 #include "ReportDefinition.hxx"
-#endif
-#ifndef RPTUI_CONDFORMAT_HXX
 #include "CondFormat.hxx"
-#endif
 #ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef RPTUI_DATETIME_HXX
 #include "DateTime.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 #ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
 #endif
 #include "reportformula.hxx"
-#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
 #include <comphelper/documentconstants.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_PAPERFORMAT_HPP_
 #include <com/sun/star/view/PaperFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_REPORT_XImageControl_HPP_
 #include <com/sun/star/report/XImageControl.hpp>
 #endif
 #include <com/sun/star/report/XFixedLine.hpp>
-#ifndef _COM_SUN_STAR_REPORT_FUNCTION_HPP_
 #include <com/sun/star/report/Function.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XSHAPE_HPP_
 #include <com/sun/star/report/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
 #include <com/sun/star/awt/TextAlign.hpp>
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/report/XFormattedField.hpp>
 
 #include "DesignView.hxx"
-#ifndef _RPTUI_MODULE_HELPER_RPT_HXX_
 #include "ModuleHelper.hxx"
-#endif
-#ifndef _REPORT_RPTUIOBJ_HXX
 #include "RptObject.hxx"
-#endif
-#ifndef RPTUI_UNDO_HXX
 #include "Undo.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif
-#ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
-#endif
-#ifndef _REPORT_RPTUIDEF_HXX
 #include "RptDef.hxx"
-#endif
-#ifndef REPORT_REPORTSECTION_HXX
 #include "ReportSection.hxx"
-#endif
-#ifndef _REPORT_SECTIONVIEW_HXX
 #include "SectionView.hxx"
-#endif
-#ifndef RPTUI_UNDOACTIONS_HXX
 #include "UndoActions.hxx"
-#endif
-#ifndef RPTUI_DLGPAGE_HXX
 #include "dlgpage.hxx"
-#endif
 #ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
 #endif
-#ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
-#endif
-#ifndef _SVX_PAGEITEM_HXX
 #include <svx/pageitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef RPTUI_PROPERTYSETFORWARD_HXX
 #include "PropertyForward.hxx"
-#endif
-#ifndef _AEITEM_HXX //CHINA001
 #include <svtools/aeitem.hxx> //CHINA001
-#endif //CHINA001
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_FLAGSDEF_HXX
 #include <svx/flagsdef.hxx> //CHINA001
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-#ifndef RPTUI_GROUPS_SORTING_HXX
 #include "GroupsSorting.hxx"
-#endif
-#ifndef RPTUI_PAGENUMBER_HXX
 #include "PageNumber.hxx"
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include "UndoEnv.hxx"
 #include "InsertFunctions.hxx"
 #include <svx/svdpagv.hxx>
