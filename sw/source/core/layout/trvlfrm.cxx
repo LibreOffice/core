@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: trvlfrm.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.61 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 15:58:33 $
+ * $RCSfile: trvlfrm.cxx,v $
+ * $Revision: 1.62 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,96 +32,36 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-
-#ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX //autogen
 #include <vcl/settings.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-
-#ifndef _PAGEFRM_HXX //autogen
 #include <pagefrm.hxx>
-#endif
-#ifndef _ROOTFRM_HXX //autogen
 #include <rootfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX //autogen
 #include <cntfrm.hxx>
-#endif
-#ifndef _FTNFRM_HXX //autogen
 #include <ftnfrm.hxx>
-#endif
-#ifndef _FLYFRM_HXX //autogen
 #include <flyfrm.hxx>
-#endif
-#ifndef _TABFRM_HXX //autogen
 #include <tabfrm.hxx>
-#endif
-#ifndef _ROWFRM_HXX
 #include <rowfrm.hxx>
-#endif
-#ifndef _CELLFRM_HXX //autogen
 #include <cellfrm.hxx>
-#endif
-#ifndef _TXTFRM_HXX //autogen
 #include <txtfrm.hxx>
-#endif
-#ifndef _VIEWSH_HXX //autogen
 #include <viewsh.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _VISCRS_HXX //autogen
 #include <viscrs.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _SWTABLE_HXX //autogen
 #include <swtable.hxx>
-#endif
-#ifndef _DFLYOBJ_HXX //autogen
 #include <dflyobj.hxx>
-#endif
-#ifndef _CRSTATE_HXX //autogen
 #include <crstate.hxx>
-#endif
-#ifndef _FRMTOOL_HXX //autogen
 #include <frmtool.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 
 // FLT_MAX
 #include <cfloat>
