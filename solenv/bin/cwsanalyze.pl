@@ -3,36 +3,32 @@ eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
 #*************************************************************************
 #
-#   OpenOffice.org - a multi-platform office productivity suite
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#   $RCSfile: cwsanalyze.pl,v $
+# Copyright 2008 by Sun Microsystems, Inc.
 #
-#   $Revision: 1.17 $
+# OpenOffice.org - a multi-platform office productivity suite
 #
-#   last change: $Author: rt $ $Date: 2007-02-01 14:37:31 $
+# $RCSfile: cwsanalyze.pl,v $
 #
-#   The Contents of this file are made available subject to
-#   the terms of GNU Lesser General Public License Version 2.1.
+# $Revision: 1.18 $
 #
+# This file is part of OpenOffice.org.
 #
-#     GNU Lesser General Public License Version 2.1
-#     =============================================
-#     Copyright 2005 by Sun Microsystems, Inc.
-#     901 San Antonio Road, Palo Alto, CA 94303, USA
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
 #
-#     This library is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU Lesser General Public
-#     License version 2.1, as published by the Free Software Foundation.
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
 #
-#     This library is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#     Lesser General Public License for more details.
-#
-#     You should have received a copy of the GNU Lesser General Public
-#     License along with this library; if not, write to the Free Software
-#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#     MA  02111-1307  USA
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 #
@@ -71,7 +67,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.17 $ ';
+my $id_str = ' $Revision: 1.18 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -109,6 +105,7 @@ foreach (@commit_veto_list) {
 #### global #####
 
 my $is_debug              = 0;              # misc traces for debugging purposes
+my $checklicense          = 1;              # grep for LGPL 2.1 license header
 my $mode                  = $script_name;   # operational mode (cwsanalyze|cwsintegrate)
 my $opt_fast              = 0;              # fast mode, disable conflict check
 my $opt_force             = 0;              # force integration
@@ -166,6 +163,12 @@ sub get_and_verify_cws
     if ( !$id ) {
         print_error("Child workspace $childws for master workspace $masterws not found in EIS database.", 2);
     }
+
+    # old code lines must not get checked against current license header
+    if ( lc $masterws eq "srx645" || $masterws =~ /^\w\w\w680$/ ) {
+        $checklicense = 0;
+    }
+
     return $cws;
 }
 
@@ -405,6 +408,26 @@ sub analyze_module
                 # new file
                 print "\tN","\t", $change_ref->[0], "\t", $change_ref->[2], "\n";
                 $nnew++;
+                if ( $checklicense && ! $opt_fast ) {
+                    # check for outdated license header
+                    my $repository = $cvs_module->cvs_repository();
+                    if ( $repository !~ /cvs_so/ ) {
+                        my $archive = $change_ref->[0];
+                        if ( defined($change_ref->[2]) && !-d dirname($archive) ) {
+                            # A new file appeared in a directory which has not yet
+                            # been added to our local CVS tree.
+                            sanitize_cvs_hierarchy($archive);
+                        }
+                        my $cvs_archive = get_cvs_archive($archive);
+                        my $rc = update_file($cvs_archive, $cws_branch_tag, $cws_root_tag);
+                        if ( check_for_lgpl21($archive) ) {
+                            print "\tA", "\t",
+                                  $archive, " file has old license header (LGPL v. 2.1)\n";
+                            plog("A\t$module/$archive: file has LGPL v. 2.1.");
+                            $nalerts++;
+                        }
+                    }
+                }
             }
             else {
                 # modified file
@@ -441,6 +464,17 @@ sub analyze_module
                     }
                     else {
                         print_error("update_file() operation failed.", 6);
+                    }
+
+                    # check for outdated license header
+                    my $repository = $cvs_module->cvs_repository();
+                    if ( $checklicense && $repository !~ /cvs_so/ ) {
+                        if ( check_for_lgpl21($archive) ) {
+                            print "\tA", "\t",
+                                  $archive, " file has old license header (LGPL 2.1)\n";
+                            plog("A\t$module/$archive: file has LGPL 2.1.");
+                            $nalerts++;
+                        }
                     }
                 }
             }
@@ -621,6 +655,17 @@ sub integrate_module
                 print_error("Internal error: update failed for unknown reasons", 0);
             }
 
+            # check for outdated license header
+            my $repository = $cvs_module->cvs_repository();
+            if ( $checklicense && $repository !~ /cvs_so/ ) {
+                if ( check_for_lgpl21($archive) ) {
+                    print "\tA", "\t",
+                          $archive, " file has old license header (LGPL 2.1)\n";
+                    plog("A\t$module/$archive: file has LGPL 2.1.");
+                    $nalerts++;
+                }
+            }
+
             # register new revision with EIS
             if ( ! $cws->add_file($module, $archive, $new_revision,
                            $revision_authors_ref, $revision_taskids_ref) ) {
@@ -797,6 +842,26 @@ sub get_changed_files
     }
     STDOUT->autoflush(0);
     return $changed_files_ref;
+}
+
+sub check_for_lgpl21
+# checks file for old LGPL 2.1 license header
+# note: also detects even older dual license header LGPL2.1 / SISSL
+{
+    my $file = shift;
+    my $old_license = 0;
+    open( FILE, "< $file" ) or return 0;
+    GREP: while (<FILE>) {
+        if ( /^\W*GNU Lesser General Public License version 3/ ) {
+            # correct
+            last GREP;
+        } elsif ( /^\W*GNU Lesser General Public License Version 2\.1/ ) {
+            $old_license ++;
+            last GREP;
+        }
+    }
+    close( FILE );
+    return $old_license;
 }
 
 # For repeated integrations (only to be done in case of crashes):
