@@ -1,48 +1,33 @@
 /*************************************************************************
-#*    $Workfile:$
-#*
-#*    class Klassenname(n)
-#*
-#*    Beschreibung      DOKUNAME.DOC oder
-#*                      Beschreibung des Moduls
-#*
-#*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: vg $ $Date: 2007-04-11 21:38:22 $
-#*    $Revision: 1.2 $
-#*
-#*    $Logfile:$
-#*
-#*    Copyright (c) 1989 - 2000, STAR DIVISION
-#*
-#*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: graphwin.hxx,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/inc/soldep/graphwin.hxx,v 1.2 2007-04-11 21:38:22 vg Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.2.1  2007/02/09 16:15:15  vg
-      #72503# get rid of hedabu procedure: Moving headers to soldep/inc/soldep and correspondent necessary changes
-
-      Revision 1.2  2006/04/24 14:11:25  obo
-      refactored version
-
-      Revision 1.2.30.2  2006/03/14 15:31:51  obo
-      save current state
-
-      Revision 1.2.30.1  2006/01/06 11:14:52  obo
-      tool bar
-
-      Revision 1.2  2001/09/20 16:06:16  nf
-      Support of scrollmouse
-
-      Revision 1.1  2000/03/22 14:00:01  hjs
-      scrollbars and directories in project-view
-
-
-*************************************************************************/
 #ifndef _FMRWRK_GRAPHWIN_HXX
 #define _FMRWRK_GRAPHWIN_HXX
 

@@ -1,58 +1,32 @@
-
 /*************************************************************************
-#*
-#*    $Workfile:$
-#*
-#*    class Klassenname(n)
-#*
-#*    Implementation    SOURCE.CXX (nur bei HXX-Files)
-#*
-#*    Beschreibung      DOKUNAME.DOC oder
-#*                      Beschreibung des Moduls
-#*
-#*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: vg $ $Date: 2007-04-11 21:37:40 $
-#*    $Revision: 1.2 $
-#*
-#*    $Logfile:$
-#*
-#*    Copyright (c) 1989 - 1996, STAR DIVISION
-#*
-#*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/inc/soldep/connctr.hxx,v 1.2 2007-04-11 21:37:40 vg Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.2.1  2007/02/09 16:15:15  vg
-      #72503# get rid of hedabu procedure: Moving headers to soldep/inc/soldep and correspondent necessary changes
-
-      Revision 1.2  2006/04/24 14:11:25  obo
-      refactored version
-
-      Revision 1.5.30.3  2006/03/14 15:31:51  obo
-      save current state
-
-      Revision 1.5.30.2  2006/01/26 15:11:57  obo
-      fix repaint problem in hide mode
-
-      Revision 1.5.30.1  2006/01/06 11:11:51  obo
-      hide mode
-
-      Revision 1.5  2001/09/14 14:59:21  nf
-      Support of layers
-
-      Revision 1.3  2000/11/02 10:31:36  hjs
-      unicode first shot
-
-      Revision 1.2  1999/06/11 17:20:42  hjs
-      now it's alpha
-
-
-*************************************************************************/
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: connctr.hxx,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 
 
 #ifndef _FMRWRK_CONNCTR_HXX
