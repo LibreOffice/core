@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drawdoc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.85 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:25:59 $
+ * $RCSfile: drawdoc.cxx,v $
+ * $Revision: 1.86 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,111 +32,52 @@
 #include "precompiled_sd.hxx"
 
 #include "PageListWatcher.hxx"
-
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#endif
-
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
-#endif
 
 #include <svx/svxids.hrc>
-#ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
-#endif
 #include <svx/eeitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 
 #ifndef _OFA_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
 #endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFX_TOPFRM_HXX //autogen wg. SfxTopViewFrame
 #include <sfx2/topfrm.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/dialogs.hrc>
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
 #include "app.hxx"
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
-#endif
-#ifndef _SVDOATTR_HXX //autogen
 #include <svx/svdoattr.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVX_BULITEM_HXX //autogen
 #include <svx/bulitem.hxx>
-#endif
-#ifndef _SVX_NUMITEM_HXX //autogen
 #include <svx/numitem.hxx>
-#endif
-#ifndef _SVDITER_HXX //autogen
 #include <svx/svditer.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemPool
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <svx/xtable.hxx>
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
 #include <comphelper/extract.hxx>
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
 #include <unotools/charclass.hxx>
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #ifndef _SVTOOLS_PATHOPTIONS_HXX_
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
-#endif
 
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -154,26 +90,15 @@
 #include "sdiocmpt.hxx"
 #include "sdresid.hxx"
 #include "cusshow.hxx"
-
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
 #include "../ui/inc/GraphicDocShell.hxx"
-#endif
 #include "../ui/inc/sdxfer.hxx"
-#ifndef SD_VIEW_SHELL_HXX
 #include "../ui/inc/ViewShell.hxx"
-#endif
 #include "../ui/inc/optsitem.hxx"
-#ifndef SD_FRAME_VIEW_HXX
 #include "../ui/inc/FrameView.hxx"
-#endif
 
 // #90477#
-#ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
-#endif
 
 using ::rtl::OUString;
 using namespace ::sd;
