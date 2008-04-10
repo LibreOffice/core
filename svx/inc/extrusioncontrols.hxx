@@ -1,69 +1,46 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: extrusioncontrols.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:27:43 $
+ * $RCSfile: extrusioncontrols.hxx,v $
+ * $Revision: 1.10 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #define _SVX_EXTRUSION_CONTROLS_HXX
 
-#ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-#ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-
-#ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
-#endif
 
 class SfxBindings;
 class ToolbarMenu;
