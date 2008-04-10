@@ -1,35 +1,30 @@
  /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: view.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.109 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:06:57 $
+ * $RCSfile: view.cxx,v $
+ * $Revision: 1.110 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,92 +35,39 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #include <stdlib.h>
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _VCL_INPUTCTX_HXX //autogen
 #include <vcl/inputctx.hxx>
-#endif
-#ifndef _SBX_SBXOBJECT_HXX //autogen
 #include <basic/sbxobj.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
 #include <svtools/undoopt.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SV_PRINTDLG_HXX_
 #include <svtools/printdlg.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
 #include <sfx2/app.hxx>
-#ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
-#endif
-#ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
-#endif
-#ifndef _UNOTXVW_HXX
 #include <unotxvw.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _SWHINTS_HXX
 #include <swhints.hxx>
 #endif
-#ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
-#endif
-#ifndef SW_INPUTWIN_HXX //autogen
 #include <inputwin.hxx>
-#endif
-#ifndef _CHARTINS_HXX //autogen
 #include <chartins.hxx>
-#endif
-#ifndef _UIVWIMP_HXX
 #include <uivwimp.hxx>
-#endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
@@ -144,9 +86,7 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _FRMSH_HXX
 #include <frmsh.hxx>
-#endif
 #ifndef _OLESH_HXX
 #include <olesh.hxx>
 #endif
@@ -168,48 +108,32 @@
 #ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
 #endif
-#ifndef _SCROLL_HXX
 #include <scroll.hxx>
-#endif
 #ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
 #endif
-#ifndef _NAVIPI_HXX
 #include <navipi.hxx>
-#endif
-#ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
-#endif
-#ifndef _USRPREF_HXX
 #include <usrpref.hxx>
-#endif
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
 #endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
 #endif
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
 #endif
-#ifndef _WORKCTRL_HXX
 #include <workctrl.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _BARCFG_HXX
 #include <barcfg.hxx>
 #endif
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
 #endif
-#ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
-#endif
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
@@ -219,53 +143,25 @@
 #ifndef _FRMUI_HRC
 #include <frmui.hrc>
 #endif
-#ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx>
-#endif
-#ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
-#endif
-#ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
-#endif
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
 //#include <sfx2/app.hxx>
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCANNER_SCANNERCONTEXT_HPP_
 #include <com/sun/star/scanner/ScannerContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
 #include <com/sun/star/scanner/XScannerManager.hpp>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
 
 // #107253#
-#ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
-#endif
-
-#ifndef _SWFORMATCLIPBOARD_HXX
 #include "formatclipboard.hxx"
-#endif
-
-#ifndef _POSTITMGR_HXX
 #include <PostItMgr.hxx>
-#endif
 #include <annotsh.hxx>
 
 #include <unomid.h>
