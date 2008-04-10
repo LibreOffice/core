@@ -4,17 +4,11 @@
 // template class <std::vector>
 #include <vector>
 // datatypes sal_xyz
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 // classes <Point>, <Size> and <Rectangle>
-#ifndef _GEN_HXX
 #include <tools/gen.hxx>
-#endif
 // datatype <SwTwips>
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
 
 class ViewShell;
 class SwRootFrm;
