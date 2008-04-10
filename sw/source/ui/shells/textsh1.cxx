@@ -1,52 +1,41 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textsh1.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.65 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:26:34 $
+ * $RCSfile: textsh1.cxx,v $
+ * $Revision: 1.66 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -60,153 +49,69 @@
 #include <svtools/langtab.hxx>
 #include <svtools/slstitm.hxx>
 #include <string.h>
-
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
-#endif
 #include <IDocumentSettingAccess.hxx>
-
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_SMARTTAGITEM_HXX
 #include <svx/SmartTagItem.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
-#ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
-#ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
-#endif
-#ifndef _OUTLINE_HXX
 #include <outline.hxx>
-#endif
-#ifndef _TABLEMGR_HXX
 #include <tablemgr.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>       // fuer Undo-IDs
-#endif
-#ifndef _REFFLD_HXX
 #include <reffld.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
-#endif
 #ifndef _INPUTWIN_HXX
 #include <inputwin.hxx>
 #endif
 #ifndef _PARDLG_HXX
 #include <pardlg.hxx>
 #endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
-#endif
-#ifndef _CELLATR_HXX
 #include <cellatr.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
 #ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
 #endif
@@ -224,24 +129,13 @@
 #ifndef _WEB_HRC
 #include <web.hrc>
 #endif
-#ifndef _PARATR_HXX
 #include "paratr.hxx"
-#endif
-#ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
-#endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
-
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
 
 #include <SwSmartTagMgr.hxx>
 
