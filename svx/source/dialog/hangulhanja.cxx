@@ -1,99 +1,59 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: hangulhanja.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:42:27 $
+ * $RCSfile: hangulhanja.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
 #include <svx/hangulhanja.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx> //add CHINA001
-#endif
 #include <vcl/button.hxx>
 // header for class SvtLinguConfig
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
-#endif
 
 #include <set>
 #include <map>
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_UNICODESCRIPT_HPP_
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XTEXTCONVERSION_HPP_
 #include <com/sun/star/i18n/XTextConversion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XEXTENDEDTEXTCONVERSION_HPP_
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONTYPE_HPP_
 #include <com/sun/star/i18n/TextConversionType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
-
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-
-#ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
-#endif
 
 #define HHC HangulHanjaConversion
 
