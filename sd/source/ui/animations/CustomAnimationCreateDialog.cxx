@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:43:35 $
+ * $RCSfile: CustomAnimationCreateDialog.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,71 +38,33 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
-#endif
-
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
 
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-
-#ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
-#endif
 
 #include <svx/svdetc.hxx>
 #include <svx/svdstr.hrc>
-
-#ifndef SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
-
-#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
-#ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HXX
 #include "CustomAnimationCreateDialog.hxx"
-#endif
 #ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HRC
 #include "CustomAnimationCreateDialog.hrc"
 #endif
 #ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
 #endif
-#ifndef _SD_CUSTOMANIMATIONPANE_HXX
 #include "CustomAnimationPane.hxx"
-#endif
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
-#ifndef _SDDLL_HXX
 #include "sddll.hxx"
-#endif
 
 #include "helpids.h"
 
