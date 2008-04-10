@@ -1,98 +1,54 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: AccessibleControlShape.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.27 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:36:25 $
+ * $RCSfile: AccessibleControlShape.cxx,v $
+ * $Revision: 1.28 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
 #include <svx/AccessibleControlShape.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
 #include <svx/AccessibleShapeInfo.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
-#endif
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include <svx/SvxShapeTypes.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef COMPHELPER_ACCESSIBLE_WRAPPER_HXX
 #include <comphelper/accessiblewrapper.hxx>
-#endif
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
 #include "svdstr.hrc"
 #include <algorithm>
 
