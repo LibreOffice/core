@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: frmform.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.67 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:04:58 $
+ * $RCSfile: frmform.cxx,v $
+ * $Revision: 1.68 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,99 +32,38 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
-#endif
-
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>      // ChangeFtnRef
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // MakeFrm()
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>     // SwDrawContact
-#endif
-#ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>      // SwVirtFlyDrawObj
-#endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-#ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>       // SwFtnFrm
-#endif
-#ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
-#endif
-#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>      // SwViewOptions
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>       // ViewShell
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
-#endif
-#ifndef _ITRFORM2_HXX
 #include <itrform2.hxx>     // SwTxtFormatter
-#endif
-#ifndef _WIDORP_HXX
 #include <widorp.hxx>       // Widows and Orphans
-#endif
-#ifndef _TXTCACHE_HXX
 #include <txtcache.hxx>
-#endif
-#ifndef _PORRST_HXX
 #include <porrst.hxx>       // SwEmptyPortion
-#endif
-#ifndef _BLINK_HXX
 #include <blink.hxx>        // pBlink
-#endif
-#ifndef _PORFLD_HXX
 #include <porfld.hxx>       // SwFldPortion
-#endif
-#ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>      // SwSectionFrm
-#endif
-#ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
-#endif
 
 #include <rootfrm.hxx>
-
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>       // SwFrmFmt
-#endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 
 class FormatLevel
 {
