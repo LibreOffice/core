@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:11:53 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,18 +41,10 @@
 #ifndef _Addon_HXX
 #define _Addon_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
 
 #define IMPLEMENTATION_NAME "org.openoffice.Office.addon.example"
 
