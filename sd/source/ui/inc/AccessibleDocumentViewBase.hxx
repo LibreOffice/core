@@ -1,79 +1,48 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:40:03 $
+ * $RCSfile: AccessibleDocumentViewBase.hxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #define SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
 #include <svx/AccessibleContextBase.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_COMPONENT_BASE_HXX
 #include <svx/AccessibleComponentBase.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SELECTION_BASE_HXX
 #include <svx/AccessibleSelectionBase.hxx>
-#endif
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
 #include "AccessibleViewForwarder.hxx"
-#endif
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_PAGE_SHAPE_HXX
 #include "AccessiblePageShape.hxx"
-#endif
-#ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_HXX
 #include <svx/ChildrenManager.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
 
 namespace sd {
 class ViewShell;
