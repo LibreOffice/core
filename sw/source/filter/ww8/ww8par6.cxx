@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ww8par6.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.181 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:36:13 $
+ * $RCSfile: ww8par6.cxx,v $
+ * $Revision: 1.182 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,245 +32,94 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
-
-#ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
-#endif
-
-#ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
-#endif
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVX_WRLMITEM_HXX //autogen
 #include <svx/wrlmitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_KERNITEM_HXX //autogen
 #include <svx/kernitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
-#endif
-#ifndef _SVX_SHDDITEM_HXX //autogen
 #include <svx/shdditem.hxx>
-#endif
 #ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
 #endif
-#ifndef _SVX_CRSDITEM_HXX //autogen
 #include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_SPLTITEM_HXX //autogen
 #include <svx/spltitem.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_ORPHITEM_HXX //autogen
 #include <svx/orphitem.hxx>
-#endif
-#ifndef _SVX_WIDWITEM_HXX //autogen
 #include <svx/widwitem.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_AKRNITEM_HXX //autogen
 #include <svx/akrnitem.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
-#ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
-#endif
-#ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
-#endif
 #ifndef _SVX_SCRIPSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
 #endif
-#ifndef _SVX_HNGPNCTITEM_HXX
 #include <svx/hngpnctitem.hxx>
-#endif
-#ifndef _SVX_PBINITEM_HXX
 #include <svx/pbinitem.hxx>
-#endif
-#ifndef _SVX_CHARSCALEITEM_HXX
 #include <svx/charscaleitem.hxx>
-#endif
-#ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
-#endif
-#ifndef _SVX_BLNKITEM_HXX
 #include <svx/blnkitem.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
-#endif
-#ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
-#endif
-
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
 #include <node.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>              // fuer SwPam
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>         // class SwPageDesc
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef SW_LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
-#ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-#ifndef _TXATBASE_HXX
 #include <txatbase.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-
-#ifndef _FLTINI_HXX
 #include <fltini.hxx>   //For CalculateFlySize
-#endif
-
-#ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
-#endif
-#ifndef SW_WRITERWORDGLUE
 #include "writerwordglue.hxx"
-#endif
-
-#ifndef _WW8SCAN_HXX
 #include "ww8scan.hxx"
-#endif
-#ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"          // class WW8RStyle, class WwAnchorPara
-#endif
-#ifndef _WW8GRAF_HXX
 #include "ww8graf.hxx"
-#endif
 
 // OD 2004-05-18 #i27767#
-#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
-#endif
 
 using namespace sw::util;
 using namespace sw::types;
