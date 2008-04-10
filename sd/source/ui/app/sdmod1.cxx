@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdmod1.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.49 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:26:26 $
+ * $RCSfile: sdmod1.cxx,v $
+ * $Revision: 1.50 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,53 +32,24 @@
 #include "precompiled_sd.hxx"
 
 #include <svtools/lckbitem.hxx>
-#ifndef _SFXFRAME_HXX //autogen
 #include <sfx2/frame.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
 #include "framework/FrameworkHelper.hxx"
-#endif
 
 #include <svx/dialogs.hrc>
 
 #include <svx/langitem.hxx>
 #include <svx/editdata.hxx>
-
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
-
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -95,31 +61,21 @@
 #include "sddll.hxx"
 #include "pres.hxx"
 #include "optsitem.hxx"
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "assclass.hxx"
 #include "sdenumdef.hxx"
 #include "sdresid.hxx"
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
 #include "TaskPaneViewShell.hxx"
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
-#endif
 #include "sdabstdlg.hxx"
 #include <memory>
 #include <boost/shared_ptr.hpp>
