@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: txtfly.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.63 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:28:28 $
+ * $RCSfile: txtfly.cxx,v $
+ * $Revision: 1.64 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -65,97 +60,48 @@
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "fmtcnct.hxx"  // SwFmtChain
-
-#ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
-#endif
 #ifdef VERT_DISTANCE
 #include <math.h>
 #endif
-
-#ifndef _E3D_OBJ3D_HXX //autogen
 #include <svx/obj3d.hxx>
-#endif
 
 #ifndef _TXTRANGE_HXX //autogen
 #include <svx/txtrange.hxx>
 #endif
-
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
 // --> OD 2004-06-16 #i28701#
-#ifndef _SVX_LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
-#endif
 // <--
-
-#ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
-#ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
-#endif
 #ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
 #endif
-#ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
 #include <IDocumentLayoutAccess.hxx>
-#endif
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
-
-#ifndef _E3D_OBJ3D_HXX //autogen
 #include <svx/obj3d.hxx>
-#endif
 #ifndef _TXTRANGE_HXX //autogen
 #include <svx/txtrange.hxx>
 #endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVDOEDGE_HXX
 #include <svx/svdoedge.hxx>
-#endif
 
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
-#ifndef _DOC_HXX
 #include "doc.hxx"
-#endif
 
 using namespace ::com::sun::star;
 
