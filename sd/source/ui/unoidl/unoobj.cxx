@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unoobj.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.60 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:59:16 $
+ * $RCSfile: unoobj.cxx,v $
+ * $Revision: 1.61 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,89 +32,36 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
-
-#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
-#ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
-#endif
-#ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
-#endif
-
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
-#endif
 #include <comphelper/extract.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svditer.hxx>
-#ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
-#endif
 #include <svx/unoapi.hxx>
-
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
-
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-
-#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #include "CustomAnimationPreset.hxx"
-#endif
-
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
-
-#ifndef _SDRESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include "anminfo.hxx"
 #include "unohelp.hxx"
@@ -128,9 +70,7 @@
 #include "unomodel.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #include "unokywds.hxx"
 #include "unopage.hxx"
 #ifndef SVX_LIGHT
@@ -143,10 +83,7 @@
 #include "glob.hrc"
 #include "unolayer.hxx"
 #include "imapinfo.hxx"
-
-#ifndef _SD_EFFECT_MIGRATION_HXX
 #include "EffectMigration.hxx"
-#endif
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
