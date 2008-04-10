@@ -1,45 +1,35 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dlgedfunc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 18:14:05 $
+ * $RCSfile: dlgedfunc.cxx,v $
+ * $Revision: 1.8 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
-
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/outlobj.hxx>
 #include <vcl/svapp.hxx>
@@ -49,49 +39,25 @@
 #include <svx/editstat.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svddrgmt.hxx>
-#ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
 
 
-#ifndef _REPORT_RPTUIFUNC_HXX
 #include "dlgedfunc.hxx"
-#endif
-#ifndef REPORT_REPORTSECTION_HXX
 #include "ReportSection.hxx"
-#endif
-#ifndef RPTUI_DESIGNVIEW_HXX
 #include "DesignView.hxx"
-#endif
-#ifndef RPTUI_REPORTCONTROLLER_HXX
 #include "ReportController.hxx"
-#endif
-#ifndef _REPORT_SECTIONVIEW_HXX
 #include "SectionView.hxx"
-#endif
-#ifndef RPTUI_VIEWSWINDOW_HXX
 #include "ViewsWindow.hxx"
-#endif
-#ifndef RPTUI_REPORT_WINDOW_HXX
 #include "ReportWindow.hxx"
-#endif
 #include "RptObject.hxx"
-#ifndef DBAUI_SCROLLHELPER_HXX
 #include "ScrollHelper.hxx"
-#endif
-#ifndef _SV_SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
-#endif
-#ifndef RPTUI_RULER_HXX
 #include "ReportRuler.hxx"
-#endif
 #include "UITools.hxx"
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <uistrings.hrc>
