@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: itratr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.38 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:13:42 $
+ * $RCSfile: itratr.cxx,v $
+ * $Revision: 1.39 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,105 +32,39 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _SVX_CHARSCALEITEM_HXX
 #include <svx/charscaleitem.hxx>
-#endif
-#ifndef _TXTATR_HXX
 #include <txtatr.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
-#endif
-#ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FLDBAS_HXX
 #include <fldbas.hxx>      // SwField
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>         // SwPosition        (lcl_MinMaxNode)
-#endif
-#ifndef _ITRATR_HXX
 #include <itratr.hxx>
-#endif
-#ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _REDLNITR_HXX
 #include <redlnitr.hxx>
-#endif
-#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _ITRTXT_HXX
 #include <itrtxt.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
