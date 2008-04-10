@@ -1,9 +1,7 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #define INCLUDED_SWDLLAPI_H
 
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
 #if defined(SW_DLLIMPLEMENTATION)
 #define SW_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
