@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: layerexport.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.35 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:16:49 $
+ * $RCSfile: layerexport.cxx,v $
+ * $Revision: 1.36 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,91 +32,35 @@
 #include "precompiled_xmloff.hxx"
 
 #include <stdio.h>
-
-#ifndef _XMLOFF_FORMS_LAYEREXPORT_HXX_
 #include "layerexport.hxx"
-#endif
-#ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
-#endif
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include <xmloff/xmlprmap.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
 #include <xmloff/prhdlfac.hxx>
-#endif
-#ifndef _XMLOFF_ELEMENTEXPORT_HXX_
 #include "elementexport.hxx"
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
 #include <xmloff/contextid.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include <xmloff/controlpropertyhdl.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-#ifndef _XMLOFF_FORMS_EVENTEXPORT_HXX_
 #include "eventexport.hxx"
-#endif
-#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include <xmloff/XMLEventExport.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
 #include "formevents.hxx"
-#endif
-#ifndef _XMLOFF_XMLNUMFE_HXX
 #include <xmloff/xmlnumfe.hxx>
-#endif
-#ifndef _XMLOFF_XFORMSEXPORT_HXX
 #include "xformsexport.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <numeric>
