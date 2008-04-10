@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: atrfrm.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.69 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:21:50 $
+ * $RCSfile: atrfrm.cxx,v $
+ * $Revision: 1.70 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,220 +32,83 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
 #include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
 #include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
 #include <com/sun/star/text/DocumentStatistic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
 #include <com/sun/star/text/HoriOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
 #include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
 #include <com/sun/star/text/VertOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
 #include <com/sun/star/text/XTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_INVALIDTEXTCONTENTEXCEPTION_HPP_
 #include <com/sun/star/text/InvalidTextContentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTGRIDMODE_HPP_
 #include <com/sun/star/text/TextGridMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
-#endif
-#ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
-#endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif
-#ifndef _IMAP_HXX //autogen
 #include <svtools/imap.hxx>
-#endif
-#ifndef _GOODIES_IMAPOBJ_HXX //autogen
 #include <svtools/imapobj.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _UNOSETT_HXX
 #include <unosett.hxx>
-#endif
-#ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTFORDR_HXX //autogen
 #include <fmtfordr.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
-#endif
-#ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
-#endif
-#ifndef _FMTFTNTX_HXX //autogen
 #include <fmtftntx.hxx>
-#endif
-#ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
-#endif
-#ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
-#endif
-#ifndef _FMTCNCT_HXX //autogen
 #include <fmtcnct.hxx>
-#endif
-#ifndef _NODE_HXX //autogen
 #include <node.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen
 #include <section.hxx>
-#endif
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
 #endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _GRFATR_HXX
 #include <grfatr.hxx>
-#endif
-#ifndef _NDNOTXT_HXX
 #include <ndnotxt.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NODE2LAY_HXX
 #include <node2lay.hxx>
-#endif
-#ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
-#endif
-#ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
-#endif
-#ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
 /// OD 22.08.2002 #99657#
 ///     include definition of class SvxBrushItem and GraphicObject
 ///     in order to determine, if background is transparent.
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -265,18 +123,11 @@
 #include <svx/svdundo.hxx> // #111827#
 #endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 // --> OD 2006-03-06 #125892#
-#ifndef _HANDLEANCHORNODECHG_HXX
 #include <HandleAnchorNodeChg.hxx>
-#endif
 // <--
-
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
