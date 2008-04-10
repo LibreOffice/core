@@ -95,20 +95,6 @@ cppsetup(line, filep, inc)
     return(value);
 }
 
-struct symtab *lookup(symbol)
-    char    *symbol;
-{
-    static struct symtab    undefined;
-    struct symtab   *sp;
-
-    sp = isdefined(symbol, currentinc, NULL);
-    if (sp == NULL) {
-        sp = &undefined;
-        sp->s_value = NULL;
-    }
-    return (sp);
-}
-
 pperror(tag, x0,x1,x2,x3,x4)
     int tag,x0,x1,x2,x3,x4;
 {
@@ -163,7 +149,7 @@ _my_if_errors (ip, cp, expecting)
 
 #define MAXNAMELEN 256
 
-static struct symtab *
+char *
 _lookup_variable (ip, var, len)
     IfParser *ip;
     const char *var;
@@ -177,7 +163,7 @@ _lookup_variable (ip, var, len)
 
     strncpy (tmpbuf, var, len);
     tmpbuf[len] = '\0';
-    return isdefined (tmpbuf, pd->inc, NULL);
+    return isdefined(tmpbuf);
 }
 
 
@@ -201,13 +187,13 @@ _my_eval_variable (ip, var, len)
     const char *var;
     int len;
 {
-    struct symtab *s;
+    char *s;
 
     s = _lookup_variable (ip, var, len);
     if (!s)
     return 0;
     do {
-    var = s->s_value;
+    var = s;
     if (!isvarfirstletter(*var))
         break;
     s = _lookup_variable (ip, var, strlen(var));
@@ -217,7 +203,7 @@ _my_eval_variable (ip, var, len)
 }
 
 
-cppsetup(line, filep, inc)
+int cppsetup(line, filep, inc)
     register char   *line;
     register struct filepointer *filep;
     register struct inclist     *inc;
