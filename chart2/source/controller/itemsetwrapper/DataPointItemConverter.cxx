@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: DataPointItemConverter.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:51:34 $
+ * $RCSfile: DataPointItemConverter.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -48,50 +43,26 @@
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
-
-#ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
-#endif
 
 // header for class XFillColorItem
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
-#endif
 // header for class SfxStringItem
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
 //SfxIntegerListItem
 #include <svtools/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
-
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
 
 // for SVX_SYMBOLTYPE_...
-#ifndef _SVX_TAB_LINE_HXX
 #include <svx/tabline.hxx>
-#endif
 
 #include <functional>
 #include <algorithm>
