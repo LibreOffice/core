@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2007-12-05 14:16:39 $
+#   last change: $Author: rt $ $Date: 2008-04-10 09:08:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-excepti
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 CONFIGURE_ACTION=
-BUILD_ACTION=ms_make
+BUILD_ACTION= cmd.exe /c ms_make.bat
 .ENDIF
 
 CONVERTFILES=ms_make.bat

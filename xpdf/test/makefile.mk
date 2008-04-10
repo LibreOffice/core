@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2007-12-05 14:16:42 $
+#   last change: $Author: rt $ $Date: 2008-04-10 09:09:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)$/test_0_succeeded $(MISC)$/test_1_succeeded
+#ALLTAR : $(MISC)$/test_0_succeeded $(MISC)$/test_1_succeeded
 
 $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0_out.def testinput.pdf
     $(BIN)$/xpdfimport -f $(MISC)$/binary_0_out testinput.pdf > $(MISC)$/text_0_out
