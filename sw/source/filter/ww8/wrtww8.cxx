@@ -1,48 +1,38 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: wrtww8.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.89 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:20:44 $
+ * $RCSfile: wrtww8.cxx,v $
+ * $Revision: 1.90 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 
@@ -51,158 +41,63 @@
 #endif
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #include <string.h>             // memcpy()
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-
-#ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 #define _SVSTDARR_BOOLS
 #include <svtools/svstdarr.hxx>
 
 #include <svtools/fltrcfg.hxx>
-
-#ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
-#endif
-
-#ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _MSOLEEXP_HXX
 #include <svx/msoleexp.hxx>
-#endif
-#ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _SWRECT_HXX
 #include <swrect.hxx>
-#endif
-#ifndef _TXATBASE_HXX
 #include <txatbase.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
-#endif
-#ifndef _WW8PAR_HXX
 #include <ww8par.hxx>
-#endif
-#ifndef _FLTINI_HXX
 #include <fltini.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
 #ifndef _SWFLTOPT_HXX
 #include <swfltopt.hxx>
 #endif
-#ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _TXTINET_HXX
 #include <txtinet.hxx>
-#endif
-#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
-#endif
-#ifndef _FESH_HXX               // SwFEShell, #i34818
 #include <fesh.hxx>
-#endif
-#ifndef _IMAP_HXX
 #include <svtools/imap.hxx>
-#endif
-#ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
-#endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
-
-#ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-
-#ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
-#endif
-#ifndef SW_WRITERWORDGLUE
 #include "writerwordglue.hxx"
-#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
