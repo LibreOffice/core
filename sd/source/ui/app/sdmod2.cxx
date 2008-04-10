@@ -1,101 +1,61 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdmod2.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.51 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:25:31 $
+ * $RCSfile: sdmod2.cxx,v $
+ * $Revision: 1.52 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _INETHIST_HXX //autogen
 #include <svtools/inethist.hxx>
-#endif
-#ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
-#endif
-#ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
 
 #include <svx/svdfield.hxx>
 #include <svx/editstat.hxx>
 #include <svx/editeng.hxx>
 
 #include <svx/dialogs.hrc>
-
-#ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVDOPAGE_HXX
 #include <svx/svdopage.hxx>
-#endif
 
 #include <sfx2/sfxdlg.hxx>
 
 
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
-#endif
 
 #define _SD_DLL                 // fuer SD_MOD()
 #include "sdmod.hxx"
@@ -104,42 +64,28 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
 #include "sdattr.hxx"
 #include "tpoption.hrc"
 #include "optsitem.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #include "drawdoc.hxx"
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
 #include "sdresid.hxx"
 #include "pres.hxx"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_HXX
 #include "OutlineView.hxx"
-#endif
 #include "ViewShellBase.hxx"
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "sdabstdlg.hxx"
 #include "tpoption.hrc"
 #include "prntopts.hrc"
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
 
 /** retrieves the page that is currently painted. This will only be the master page
     if the current drawn view only shows the master page*/
