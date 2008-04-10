@@ -1,123 +1,72 @@
  /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: filglob.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.24 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:10:37 $
+ * $RCSfile: filglob.cxx,v $
+ * $Revision: 1.25 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 #include <stdio.h>
-#ifndef _FILGLOB_HXX_
 #include "filglob.hxx"
-#endif
 #ifndef _FILERROR_HXX_
 #include "filerror.hxx"
 #endif
-#ifndef _SHELL_HXX_
 #include "shell.hxx"
-#endif
-#ifndef _BC_HXX_
 #include "bc.hxx"
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 #ifndef INCLUDED_STL_VECTOR
 #include <vector>
 #define INCLUDED_STL_VECTOR
 #endif
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
 #include <ucbhelper/cancelcommandexecution.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_UNSUPPORTEDCOMMANDEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_UNSUPPORTEDOPENMODEEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_MISSINGPROPERTIESEXCEPTION_HPP_
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_MISSINGINPUTSTREAMEXCEPTION_HPP_
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/NameClashException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include "com/sun/star/breans/PropertyState.hpp"
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include "com/sun/star/breans/PropertyValue.hpp"
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include "com/sun/star/uno/Any.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include "rtl/ustrbuf.hxx"
-#endif
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
 
 using namespace ucbhelper;
 using namespace osl;
