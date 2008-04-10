@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fdcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:02:34 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -43,10 +43,7 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/factory.hxx>
-
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 
 #include "filterdetect.hxx"
 
