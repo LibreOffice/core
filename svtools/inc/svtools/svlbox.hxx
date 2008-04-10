@@ -1,44 +1,37 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svlbox.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:28:40 $
+ * $RCSfile: svlbox.hxx,v $
+ * $Revision: 1.4 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _SVLBOX_HXX
 #define _SVLBOX_HXX
 
-#ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
-#endif
 
 #ifndef INCLUDED_DEQUE
 #include <deque>
@@ -48,33 +41,19 @@
 #ifndef _CTRL_HXX
 #include <vcl/ctrl.hxx>
 #endif
-#ifndef _SV_SELENG_HXX
 #include <vcl/seleng.hxx>
-#endif
 #ifndef _EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-#ifndef _TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
 #ifndef _ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
-#ifndef VCL_MNEMONICENGINE_HXX
 #include <vcl/mnemonicengine.hxx>
-#endif
-#ifndef _GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SVTREELIST_HXX
 #include <svtools/treelist.hxx>
-#endif
-#ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
 
 class Application;
 class SvLBox;
