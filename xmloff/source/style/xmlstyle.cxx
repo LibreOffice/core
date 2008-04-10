@@ -1,154 +1,80 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmlstyle.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.45 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:58:17 $
+ * $RCSfile: xmlstyle.cxx,v $
+ * $Revision: 1.46 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXEXCEPTION_HPP_
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XLOCATOR_HPP_
 #include <com/sun/star/xml/sax/XLocator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
 #include <com/sun/star/style/XAutoStylesSupplier.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
 #include "PageMasterPropMapper.hxx"
 #endif
-
-#ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
-#endif
-#ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-
-#ifndef _CNTRSRT_HXX
 #include <svtools/cntnrsrt.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 
 #ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLNUMI_HXX
 #include <xmloff/xmlnumi.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
-#endif
-#ifndef _XMLOFF_XMLSTYLE_HXX
 #include <xmloff/xmlstyle.hxx>
-#endif
 #ifndef _XMLOFF_TXTSTYLI_HXX
 #include <xmloff/txtstyli.hxx>
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLNUMFI_HXX
 #include <xmloff/xmlnumfi.hxx>
-#endif
-#ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 #include "XMLChartStyleContext.hxx"
-#endif
-#ifndef _XMLOFF_CHARTPROPERTYSETMAPPER_HXX_
 #include "XMLChartPropertySetMapper.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
 #include <xmloff/XMLShapeStyleContext.hxx>
-#endif
-
-#ifndef _XMLOFF_FILLSTYLECONTEXTS_HXX_
 #include "FillStyleContext.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLFOOTNOTECONFIGURATIONIMPORTCONTEXT_HXX
 #include "XMLFootnoteConfigurationImportContext.hxx"
-#endif
-#ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
 #include "XMLIndexBibliographyConfigurationContext.hxx"
-#endif
-#ifndef _XMLOFF_XMLLINENUMBERINGIMPORTCONTEXT_HXX_
 #include "XMLLineNumberingImportContext.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
 #include "PageMasterImportContext.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTERIMPORTPROPMAPPER_HXX
 #include "PageMasterImportPropMapper.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
