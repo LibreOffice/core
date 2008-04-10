@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: impedit2.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.118 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:52:22 $
+ * $RCSfile: impedit2.cxx,v $
+ * $Revision: 1.119 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -64,52 +59,22 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <fontitem.hxx>
-
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _VCL_CMDEVT_H
 #include <vcl/cmdevt.h>
-#endif
 
 #ifndef SVX_LIGHT
 #ifndef _SFXFRAME_HXX //autogen
 #include <sfx2/frame.hxx>
 #endif
 #endif
-
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
 #include <com/sun/star/text/CharacterCompressionType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#endif
 
 #include <comphelper/processfactory.hxx>
 
