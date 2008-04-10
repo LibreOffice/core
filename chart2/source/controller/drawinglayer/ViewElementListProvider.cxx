@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ViewElementListProvider.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:59:32 $
+ * $RCSfile: ViewElementListProvider.cxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,81 +35,44 @@
 #include "chartview/DataPointSymbolSupplier.hxx"
 #include "macros.hxx"
 #include "DrawViewWrapper.hxx"
-
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-#ifndef _SVX_XPROPERTYTABLE_HXX
 #include <svx/XPropertyTable.hxx>
-#endif
-#ifndef _SVX_UNOFILL_HXX_
 #include <svx/unofill.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
 
 // header for class NameOrIndex
-#ifndef _SVX_XIT_HXX
 #include <svx/xit.hxx>
-#endif
 // header for class XFillBitmapItem
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-#ifndef _SVX_XFLFTRIT_HXX
 #include <svx/xflftrit.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XFLHTIT_HXX
 #include <svx/xflhtit.hxx>
-#endif
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
 // header for class XLineStartItem
-#ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
-#endif
 // header for class XLineEndItem
-#ifndef _SVX_XLNEDIT_HXX
 #include <svx/xlnedit.hxx>
-#endif
 
 //------------
 //oldChartModelWrapper
 
 // header for class SfxItemPool
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
 // header for class FontList
-#ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
-#endif
 // header for class Application
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 //------------
 // header for class SdrObject
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 
 
 //---------------
 //for creation of a symbol Graphic
 // header for class VirtualDevice
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 // header for class SdrView
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
 //---------------
 
 //.............................................................................
