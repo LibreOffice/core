@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: uiregionsw.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.20 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 10:45:46 $
+ * $RCSfile: uiregionsw.cxx,v $
+ * $Revision: 1.21 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,71 +36,35 @@
 
 #include "hintids.hxx"
 #include "regionsw.hxx"
-
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
 #ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
 #endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _LINKMGR_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
-#ifndef _SFX_DOCINSERT_HXX
 #include <sfx2/docinsert.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
 
 #include <svx/sizeitem.hxx>
 #endif
-#ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
-#endif
 
 #include <comphelper/storagehelper.hxx>
-
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>                      // fuers SwSectionFmt-Array
-#endif
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
@@ -115,27 +74,13 @@
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>                   // fuer Undo-Ids
-#endif
-#ifndef _COLUMN_HXX
 #include <column.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -152,24 +97,14 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _SVX_DIALOG_HXX
 #include <svx/svxdlg.hxx>
-#endif
-#ifndef _SVX_FLAGSDEF_HXX
 #include <svx/flagsdef.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
