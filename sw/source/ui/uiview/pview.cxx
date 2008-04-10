@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: pview.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.68 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:04:21 $
+ * $RCSfile: pview.cxx,v $
+ * $Revision: 1.69 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,111 +34,48 @@
 
 
 #include <sfx2/objface.hxx>
-
-#ifndef _SV_TIMER_HXX //autogen
 #include <vcl/timer.hxx>
-#endif
-#ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _VCL_CMDEVT_HXX //autogen
 #include <vcl/cmdevt.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_PRINTDLG_HXX_ //autogen
 #include <svtools/printdlg.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFX_TOPFRM_HXX
 #include <sfx2/topfrm.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_STDDLG_HXX //autogen
 #include <svx/stddlg.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
-#ifndef _SVX_SRCHITEM_HXX //autogen
 #include <svx/srchitem.hxx>
-#endif
-#ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _SVX_ZOOMSLIDERITEM_HXX
 #include <svx/zoomslideritem.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
 
 
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
-#endif
-#ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
-#endif
-#ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
 #endif
@@ -153,21 +85,11 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-#ifndef _SCROLL_HXX
 #include <scroll.hxx>
-#endif
-#ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
-#endif
-#ifndef _USRPREF_HXX
 #include <usrpref.hxx>
-#endif
-#ifndef _VIEWFUNC_HXX
 #include <viewfunc.hxx>
-#endif
 
 
 #ifndef _HELPID_H
@@ -194,16 +116,11 @@
 #include <swslots.hxx>
 #endif
 // OD 12.12.2002 #103492#
-#ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
-#endif
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
