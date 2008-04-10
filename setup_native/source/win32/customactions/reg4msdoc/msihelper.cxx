@@ -1,6 +1,4 @@
-#ifndef INCLUDED_MSIHELPER_HXX
 #include "msihelper.hxx"
-#endif
 
 #include <malloc.h>
 #include <assert.h>
