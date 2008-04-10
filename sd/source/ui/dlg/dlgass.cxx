@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dlgass.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.45 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 13:44:54 $
+ * $RCSfile: dlgass.cxx,v $
+ * $Revision: 1.46 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,170 +34,57 @@
 #ifdef SD_DLLIMPLEMENTATION
 #undef SD_DLLIMPLEMENTATION
 #endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-
-#ifndef _SFXDOCTEMPL_HXX
 #include <sfx2/doctempl.hxx>
-#endif
-#ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
-
-#ifndef _SD_FADEDEF_H
 #include <fadedef.h>
-#endif
-
-#ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
-#endif
-
-#ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
-#endif
-
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-
-#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
 #include <vcl/wintypes.hxx>
-
-#ifndef _SD_DOCPREV_HXX_
 #include "docprev.hxx"
-#endif
-
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
 #include <com/sun/star/ui/XImageManager.hpp>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
-#endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 
 #include "sdpage.hxx"
 #include "helpids.h"
-#ifndef INC_ASSCLASS
 #include "assclass.hxx"
-#endif
 #include "dlgass.hrc"
-#ifndef INC_DLGASS
 #include "dlgass.hxx"
-#endif
-#ifndef SD_DLGCTRLS_HXX
 #include "dlgctrls.hxx"
-#endif
 #ifndef _SD_CFGID_HXX
 #include "strings.hrc"
 #endif
 #ifndef _DATETIMEITEM_HXX
 #include "dlgassim.hxx"
 #endif
-#ifndef _TEMPLATE_SCANNER_HXX
 #include "TemplateScanner.hxx"
-#endif
-#ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 
 #include <comphelper/processfactory.hxx>
 
