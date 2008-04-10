@@ -1,103 +1,56 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unotxvw.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:13:36 $
+ * $RCSfile: unotxvw.hxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _UNOTXVW_HXX
 #define _UNOTXVW_HXX
-#ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSOR_HPP_
 #include <com/sun/star/text/XTextViewCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSORSUPPLIER_HPP_
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XRUBYSELECTION_HPP_
 #include <com/sun/star/text/XRubySelection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XFORMLAYERACCESS_HPP_
 #include <com/sun/star/view/XFormLayerAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSCREENCURSOR_HPP_
 #include <com/sun/star/view/XScreenCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XVIEWSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XLINECURSOR_HPP_
 #include <com/sun/star/view/XLineCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XVIEWCURSOR_HPP_
 #include <com/sun/star/view/XViewCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XPAGECURSOR_HPP_
 #include <com/sun/star/text/XPageCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLESUPPLIER_HPP_
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
 #include <cppuhelper/implbase8.hxx> // helper for implementations
-#endif
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
 #include "calbck.hxx"
-#ifndef _SW_TEXTCURSORHELPER_HXX
 #include "TextCursorHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 
 #include <sfx2/objsh.hxx>
 
