@@ -1,121 +1,66 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: wrtw8esh.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.102 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:29:02 $
+ * $RCSfile: wrtw8esh.cxx,v $
+ * $Revision: 1.103 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
-
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
-#endif
-#ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-#ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
 #ifndef _SVX_FLDITEM_HXX
 //miserable hack to get around #98519#
 
@@ -125,102 +70,42 @@
 #include <comphelper/seqstream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
 
 // #i71538#
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-
-#ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
-#endif
-#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
 // --> OD 2005-01-06 #i30669#
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
-#endif
 // <--
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _SWRECT_HXX
 #include <swrect.hxx>
-#endif
-#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
-#endif
-#ifndef _GRFATR_HXX
 #include <grfatr.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _WW8PAR_HXX
 #include <ww8par.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
-#endif
-#ifndef SW_WRITERWORDGLUE
 #include "writerwordglue.hxx"
-#endif
-#ifndef _WRTWW8_HXX
 #include "wrtww8.hxx"
-#endif
-#ifndef _ESCHER_HXX
 #include "escher.hxx"
-#endif
 // --> OD 2007-07-24 #148096#
 #include <ndtxt.hxx>
 // <--
