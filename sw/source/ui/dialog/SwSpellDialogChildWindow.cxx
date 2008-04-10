@@ -1,118 +1,67 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:02:48 $
+ * $RCSfile: SwSpellDialogChildWindow.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef SW_SPELL_DIALOG_CHILD_WINDOW_HXX
 #include <SwSpellDialogChildWindow.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
-#endif
-#ifndef _SVXACCFG_HXX
 #include <svx/acorrcfg.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _SW_DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
 #ifndef _DIALOG_HXX
 #include <dialog.hrc>
 #endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
 
 
 using namespace ::com::sun::star::uno;
