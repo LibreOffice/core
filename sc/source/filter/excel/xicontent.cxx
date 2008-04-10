@@ -1,150 +1,70 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xicontent.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.30 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:26:57 $
+ * $RCSfile: xicontent.cxx,v $
+ * $Revision: 1.31 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-#ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
-#endif
-
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-#ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
-#endif
-#ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX
 #include <svx/crsditem.hxx>
-#endif
-
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
-#endif
-#ifndef SC_CELL_HXX
 #include "cell.hxx"
-#endif
-#ifndef SC_VALIDAT_HXX
 #include "validat.hxx"
-#endif
-#ifndef SC_SCPATATR_HXX
 #include "patattr.hxx"
-#endif
-#ifndef SC_SCDOCPOL_HXX
 #include "docpool.hxx"
-#endif
-#ifndef SC_RANGENAM_HXX
 #include "rangenam.hxx"
-#endif
-#ifndef SC_AREALINK_HXX
 #include "arealink.hxx"
-#endif
-#ifndef SC_STLSHEET_HXX
 #include "stlsheet.hxx"
-#endif
-#ifndef SC_SCEXTOPT_HXX
 #include "scextopt.hxx"
-#endif
-
-#ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
-#endif
-#ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
-#endif
-#ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
-#endif
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
-#ifndef SC_XINAME_HXX
 #include "xiname.hxx"
-#endif
 
 #include "excform.hxx"
 
