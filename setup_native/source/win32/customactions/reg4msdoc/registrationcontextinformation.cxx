@@ -1,14 +1,8 @@
 //Implementierung der Klasse RegistrationContextInformation.
 
 #include <assert.h>
-
-#ifndef _REGISTRATIONCONTEXTINFORMATION_HXX_
 #include "registrationcontextinformation.hxx"
-#endif
-
-#ifndef INCLUDED_MSIHELPER_HXX
 #include "msihelper.hxx"
-#endif
 
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
