@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: itrform2.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.104 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:27:42 $
+ * $RCSfile: itrform2.cxx,v $
+ * $Revision: 1.105 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,105 +36,41 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-
-#ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
-
-#ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
-#endif
-#ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
-#endif
-#ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
-#endif
-#ifndef _CHARFMT_HXX //autogen
 #include <charfmt.hxx>
-#endif
-#ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _LAYFRM_HXX
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>      // SwViewOptions
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>       // SwFmtDrop
-#endif
-#ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
-#endif
-#ifndef _ITRFORM2_HXX
 #include <itrform2.hxx>
-#endif
-#ifndef _PORRST_HXX
 #include <porrst.hxx>
-#endif
-#ifndef _PORTAB_HXX
 #include <portab.hxx>       // pLastTab->
-#endif
-#ifndef _PORFLY_HXX
 #include <porfly.hxx>       // CalcFlyWidth
-#endif
-#ifndef _PORTOX_HXX
 #include <portox.hxx>       // WhichTxtPortion
-#endif
-#ifndef _PORREF_HXX
 #include <porref.hxx>       // WhichTxtPortion
-#endif
-#ifndef _PORFLD_HXX
 #include <porfld.hxx>       // SwNumberPortion fuer CalcAscent()
-#endif
-#ifndef _PORFTN_HXX
 #include <porftn.hxx>       // SwFtnPortion
-#endif
-#ifndef _PORHYPH_HXX
 #include <porhyph.hxx>
-#endif
-#ifndef _GUESS_HXX
 #include <guess.hxx>
-#endif
-#ifndef _BLINK_HXX
 #include <blink.hxx>        // pBlink
-#endif
-#ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>       // WhichFirstPortion() -> mal Verlagern.
-#endif
-#ifndef _REDLNITR_HXX
 #include <redlnitr.hxx>     // SwRedlineItr
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
-#endif
-#ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
-#endif
 #define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
-#endif
 #endif
 
 using namespace ::com::sun::star;
