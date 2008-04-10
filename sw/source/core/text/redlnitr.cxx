@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: redlnitr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.41 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:19:22 $
+ * $RCSfile: redlnitr.cxx,v $
+ * $Revision: 1.42 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,71 +33,31 @@
 
 
 #include "hintids.hxx"
-
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _REDLINE_HXX
 #include <redline.hxx>      // SwRedline
-#endif
-#ifndef _TXTATR_HXX
 #include <txtatr.hxx>       // SwTxt ...
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>       // SwRedlineTbl
-#endif
-#ifndef _ITRATR_HXX
 #include <itratr.hxx>       // SwAttrIter
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>        // SwTxtNode
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>          // SwDoc
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _SV_KEYCODES_HXX //autogen
 #include <vcl/keycodes.hxx>
-#endif
-#ifndef _VCL_CMDEVT_HXX //autogen
 #include <vcl/cmdevt.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX //autogen
 #include <vcl/settings.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _REDLNITR_HXX
 #include <redlnitr.hxx>
-#endif
-#ifndef _EXTINPUT_HXX
 #include <extinput.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
