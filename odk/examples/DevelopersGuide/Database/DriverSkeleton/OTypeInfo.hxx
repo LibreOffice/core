@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTypeInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:18:33 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,12 +41,8 @@
 #ifndef _CONNECTIVITY_OTYPEINFO_HXX_
 #define _CONNECTIVITY_OTYPEINFO_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 
 namespace connectivity
 {
