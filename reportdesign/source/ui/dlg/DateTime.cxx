@@ -1,51 +1,39 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: DateTime.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:06:58 $
+ * $RCSfile: DateTime.cxx,v $
+ * $Revision: 1.5 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
-
-#ifndef RPTUI_DATETIME_HXX
 #include "DateTime.hxx"
-#endif
 #ifndef RPTUI_DATETIME_HRC
 #include "DateTime.hrc"
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
 #endif
@@ -58,52 +46,30 @@
 #ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
 #endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
 #ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-#ifndef _REPORT_RPTUIDEF_HXX
 #include "RptDef.hxx"
-#endif
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif
-#ifndef RPTUI_REPORTCONTROLLER_HXX
 #include "ReportController.hxx"
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XFORMATTEDFIELD_HPP_
 #include <com/sun/star/report/XFormattedField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATPREVIEWER_HPP_
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
-#endif
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
 #include <algorithm>
 
 namespace rptui
