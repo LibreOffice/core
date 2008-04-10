@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drviews3.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.43 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:12:47 $
+ * $RCSfile: drviews3.cxx,v $
+ * $Revision: 1.44 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,90 +34,36 @@
 #include "DrawViewShell.hxx"
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-
-#ifndef _SVX_RULER_HXX
 #include <svx/ruler.hxx>
-#endif
 #ifndef _SVX_RULERITEM_HXX
 #include <svx/rulritem.hxx>
 #endif
-#ifndef _SVX_ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
-#endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _SB_SBERRORS_HXX //autogen
 #include <basic/sberrors.hxx>
-#endif
-#ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
-#endif
-
-#ifndef _SVX_F3DCHILD_HXX
 #include <svx/f3dchild.hxx>
-#endif
-#ifndef _SVX_FLOAT3D_HXX
 #include <svx/float3d.hxx>
-#endif
-
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -133,23 +74,15 @@
 #include "undopage.hxx"
 #include "glob.hxx"
 #include "app.hxx"
-#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#endif
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
 #endif
 #include "sdpage.hxx"
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "sdresid.hxx"
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "DrawViewShell.hxx"
 #include "Ruler.hxx"
@@ -160,25 +93,14 @@
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
 #include <sfx2/ipclient.hxx>
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_FORM_SHELL_MANAGER_HXX
 #include "FormShellManager.hxx"
-#endif
 #include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx"
 #include "sdpage.hxx"
-
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
