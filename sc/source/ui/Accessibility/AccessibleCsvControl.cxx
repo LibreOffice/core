@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: AccessibleCsvControl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.21 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:52:49 $
+ * $RCSfile: AccessibleCsvControl.cxx,v $
+ * $Revision: 1.22 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,95 +32,40 @@
 #include "precompiled_sc.hxx"
 
 // ============================================================================
-
-#ifndef _SC_ACCESSIBLECSVCONTROL_HXX
 #include "AccessibleCsvControl.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
-#endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-
-#ifndef _SC_CSVCONTROL_HXX
 #include "csvcontrol.hxx"
-#endif
-#ifndef _SC_CSVRULER_HXX
 #include "csvruler.hxx"
-#endif
-#ifndef _SC_CSVGRID_HXX
 #include "csvgrid.hxx"
-#endif
-#ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
-#endif
-#ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
-#endif
-
-#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
-#endif
-
-#ifndef SC_SCRESID_HXX
 #include "scresid.hxx"
-#endif
 #include "sc.hrc"
-#ifndef SC_SCMOD_HXX
 #include "scmod.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
 // ause
 #include "editutil.hxx"
 
