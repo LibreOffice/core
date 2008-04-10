@@ -1,170 +1,84 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: poolfmt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.50 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:55:26 $
+ * $RCSfile: poolfmt.cxx,v $
+ * $Revision: 1.51 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_OPAQITEM_HXX //autogen
 #include <svx/opaqitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
 #endif
-#ifndef _SVX_SRIPTSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef SW_FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-#ifndef _GETMETRICVAL_HXX
 #include <GetMetricVal.hxx>
-#endif
-#ifndef _NUMRULE_HXX
 #include <numrule.hxx>
-#endif
 
 
 using namespace ::com::sun::star;
