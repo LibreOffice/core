@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: rtffld.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:54:07 $
+ * $RCSfile: rtffld.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,10 +33,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <ctype.h>
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -49,87 +41,35 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
-#endif
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
-#endif
-#ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
-#endif
-#ifndef _SWPARRTF_HXX
 #include <swparrtf.hxx>
-#endif
-#ifndef _TXATBASE_HXX
 #include <txatbase.hxx>
-#endif
-#ifndef _DBFLD_HXX
 #include <dbfld.hxx>
-#endif
-#ifndef _USRFLD_HXX
 #include <usrfld.hxx>
-#endif
-#ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _FLDDAT_HXX
 #include <flddat.hxx>
-#endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
 #ifndef _fmtruby_HXX
 #include <fmtruby.hxx>
 #endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _REFFLD_HXX //autogen wg. SwGetRefField
 #include <reffld.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
-#endif
 
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.
