@@ -1,54 +1,32 @@
-
 /*************************************************************************
-#*
-#*    $Workfile:$
-#*
-#*    class Klassenname(n)
-#*
-#*    Beschreibung      DOKUNAME.DOC oder
-#*                      Beschreibung des Moduls
-#*
-#*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: vg $ $Date: 2007-10-22 14:41:55 $
-#*    $Revision: 1.3 $
-#*
-#*    $Logfile:$
-#*
-#*    Copyright (c) 1989 - 2000, STAR DIVISION
-#*
-#*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/bootstrp/hashtbl.cxx,v 1.3 2007-10-22 14:41:55 vg Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2.6.1  2007/10/18 07:45:52  obo
-      #150903# unxmacxi support
-
-      Revision 1.2  2007/06/27 23:37:39  hr
-      INTEGRATION: CWS vgbugs07 (1.1.22); FILE MERGED
-      2007/06/04 13:35:21 vg 1.1.22.1: #i76605# Remove -I .../inc/module hack introduced by hedaburemove01
-
-      Revision 1.1.22.1  2007/06/04 13:35:21  vg
-      #i76605# Remove -I .../inc/module hack introduced by hedaburemove01
-
-      Revision 1.1  2006/04/26 12:25:22  obo
-      initial revision
-
-      Revision 1.3  2001/09/14 13:14:56  nf
-      Handling of invisible objects
-
-      Revision 1.2  2000/11/02 10:31:12  hjs
-      unicode first shot
-
-      Revision 1.1  1999/06/11 17:02:54  hjs
-      aus tools\workben
-
-
-*************************************************************************/
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: hashtbl.cxx,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
