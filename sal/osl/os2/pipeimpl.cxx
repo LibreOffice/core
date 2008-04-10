@@ -1,6 +1,4 @@
-#ifndef _PIPEIMPL_H_
 #   include "pipeimpl.h"
-#endif
 
 #ifndef _INC_MALLOC
 #   include <malloc.h>
