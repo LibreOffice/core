@@ -1,17 +1,9 @@
 #ifndef _CUI_TBXFORM_HXX
 #define _CUI_TBXFORM_HXX
 
-#ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
-#endif
-
-#ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-
-#ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
