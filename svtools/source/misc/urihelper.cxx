@@ -1,54 +1,41 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: urihelper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.21 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:27:11 $
+ * $RCSfile: urihelper.cxx,v $
+ * $Revision: 1.22 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <urihelper.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/ucb/Command.hpp"
-#ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
-#endif
 #include "com/sun/star/ucb/IllegalIdentifierException.hpp"
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
@@ -56,9 +43,7 @@
 #include "com/sun/star/ucb/XContent.hpp"
 #include "com/sun/star/ucb/XContentIdentifierFactory.hpp"
 #include "com/sun/star/ucb/XContentProvider.hpp"
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#endif
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -76,21 +61,11 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_INETMIME_HXX
 #include <tools/inetmime.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include "rtl/instance.hxx"
-#endif
 
 namespace unnamed_svtools_urihelper {}
 using namespace unnamed_svtools_urihelper;
