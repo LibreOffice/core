@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: obj3d.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.46 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:50:54 $
+ * $RCSfile: obj3d.cxx,v $
+ * $Revision: 1.47 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,74 +34,23 @@
 
 #include "svdstr.hrc"
 #include "svdglob.hxx"
-
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-
-#ifndef _SVDATTR_HXX
 #include <svx/svdattr.hxx>
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#endif
-
-#ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _CAMERA3D_HXX
 #include <svx/camera3d.hxx>
-#endif
-
-#ifndef _E3D_SCENE3D_HXX
 #include <svx/scene3d.hxx>
-#endif
-
-#ifndef _E3D_POLYSC3D_HXX
 #include <svx/polysc3d.hxx>
-#endif
-
-#ifndef _E3D_CUBE3D_HXX
 #include <svx/cube3d.hxx>
-#endif
-
-#ifndef _E3D_LATHE3D_HXX
 #include <svx/lathe3d.hxx>
-#endif
-
-#ifndef _E3D_SPHERE3D_HXX
 #include <svx/sphere3d.hxx>
-#endif
-
-#ifndef _E3D_EXTRUD3D_HXX
 #include <svx/extrud3d.hxx>
-#endif
-
-#ifndef _E3D_OBJ3D_HXX
 #include <svx/obj3d.hxx>
-#endif
-
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
-
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
 
 #ifndef _SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -115,142 +59,43 @@
 #ifndef _SETTINGS_HXX
 #include <vcl/settings.hxx>
 #endif
-
-#ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
-#endif
-
-#ifndef _B3D_B3DTEX_HXX
 #include <goodies/b3dtex.hxx>
-#endif
-
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-
-#ifndef _SFXMETRICITEM_HXX
 #include <svtools/metitem.hxx>
-#endif
-
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-
-#ifndef _SVX_FILLITEM_HXX
 #include <svx/xfillit.hxx>
-#endif
-
-#ifndef _SVX_XLNWTIT_HXX
 #include <svx/xlnwtit.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-
-#ifndef _B3D_B3DTRANS_HXX
 #include <goodies/b3dtrans.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-
-#ifndef _SVXE3DITEM_HXX
 #include <svx/e3ditem.hxx>
-#endif
-
-#ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
-#endif
-
-#ifndef _SVX_XFLTRIT_HXX
 #include <svx/xfltrit.hxx>
-#endif
-
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
-
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _SVX_XGRSCIT_HXX
 #include <svx/xgrscit.hxx>
-#endif
-
-#ifndef _SVX_SVDOIMP_HXX
 #include "svdoimp.hxx"
-#endif
-
-#ifndef _SDR_PROPERTIES_E3DPROPERTIES_HXX
 #include <svx/sdr/properties/e3dproperties.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_E3DCOMPOUNDPROPERTIES_HXX
 #include <svx/sdr/properties/e3dcompoundproperties.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POINT_B3DPOINT_HXX
 #include <basegfx/point/b3dpoint.hxx>
-#endif
-
-#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
 #include <basegfx/vector/b3dvector.hxx>
-#endif
-
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolygontools.hxx>
-#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
