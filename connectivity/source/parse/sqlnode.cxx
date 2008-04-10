@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sqlnode.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.53 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:31:27 $
+ * $RCSfile: sqlnode.cxx,v $
+ * $Revision: 1.54 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,115 +32,45 @@
 #include "precompiled_connectivity.hxx"
 
 
-#ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
-#endif
-#ifndef CONNECTIVITY_SQLERROR_HXX
 #include <connectivity/sqlerror.hxx>
-#endif
-#ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
 #include <internalnode.hxx>
-#endif
 #define YYBISON   1
 #ifndef BISON_INCLUDED
 #define BISON_INCLUDED
 #include <sqlbison.hxx>
 #endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_NUMBERFORMATINDEX_HPP_
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_KPARSETYPE_HPP_
 #include <com/sun/star/i18n/KParseType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_KPARSETOKENS_HPP_
 #include <com/sun/star/i18n/KParseTokens.hpp>
-#endif
-
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
-#endif
-#ifndef _CONNECTIVITY_SQLSCAN_HXX
 #include "sqlscan.hxx"
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
-#endif
-#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 #include "connectivity/dbmetadata.hxx"
-#endif
-#ifndef CONNECTIVITY_SQLERROR_HXX
 #include "connectivity/sqlerror.hxx"
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 #include <string.h>
 
 
