@@ -1,108 +1,62 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ReportEngineJFree.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:53:46 $
+ * $RCSfile: ReportEngineJFree.cxx,v $
+ * $Revision: 1.8 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include "ReportEngineJFree.hxx"
-
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
 #include <comphelper/documentconstants.hxx>
-#endif
-#ifndef _COMPHELPER_STORAGEHELPER_HXX
 #include <comphelper/storagehelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
-#endif
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
 #include <com/sun/star/task/XJob.hpp>
-#endif
 #ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
 #include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
 #include <comphelper/mimeconfighelper.hxx>
-#endif
-#ifndef REPORTDESIGN_TOOLS_HXX
 #include "Tools.hxx"
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 // =============================================================================
 namespace reportdesign
 {
