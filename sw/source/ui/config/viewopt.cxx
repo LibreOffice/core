@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewopt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:49:01 $
+ * $RCSfile: viewopt.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,56 +32,32 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
-#endif
 #include <svx/htmlcfg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
-#endif
-#ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
 #ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
 #endif
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-#ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
 #endif
-#ifndef _SWRECT_HXX
 #include <swrect.hxx>
-#endif
-#ifndef _CRSTATE_HXX
 #include <crstate.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
-#endif
 
 #include <svx/acorrcfg.hxx>
 
