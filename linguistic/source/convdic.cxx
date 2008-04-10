@@ -1,130 +1,67 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: convdic.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-03-26 09:04:56 $
+ * $RCSfile: convdic.cxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
-
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
 
 #include <cppuhelper/factory.hxx>   // helper for factories
-
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONDICTIONARY_HPP_
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDICTIONARYTYPE_HPP_
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONPROPERTYTYPE_HPP_
 #include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONPROPERTYTYPE_HPP_
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HPP_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHLISTENER_HPP_
 #include <com/sun/star/util/XFlushListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
-
-#ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
-#endif
 
 
 #include "convdic.hxx"
