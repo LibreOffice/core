@@ -2,9 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _REGISTRYVALUEIMPL_HXX_
 #include "registryvalueimpl.hxx"
-#endif
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */

@@ -2,21 +2,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _USERREGISTRAR_HXX_
 #include "userregistrar.hxx"
-#endif
-
-#ifndef _REGISTRYVALUEIMPL_HXX_
 #include "registryvalueimpl.hxx"
-#endif
-
-#ifndef _WINDOWSREGISTRY_HXX_
 #include "windowsregistry.hxx"
-#endif
-
-#ifndef _REGISTRYEXCEPTION_HXX_
 #include "registryexception.hxx"
-#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4350)
