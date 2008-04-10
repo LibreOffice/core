@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unotbl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.117 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:08:20 $
+ * $RCSfile: unotbl.cxx,v $
+ * $Revision: 1.118 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,179 +38,68 @@
 #include <list>
 
 #include <float.h> // for DBL_MIN
-
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
-#ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
-#endif
-#ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen
 #include <section.hxx>
-#endif
-
-#ifndef _UNOCRSR_HXX //autogen
 #include <unocrsr.hxx>
-#endif
-#ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _SWTBLFMT_HXX //autogen
 #include <swtblfmt.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _SHELLRES_HXX
 #include <shellres.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _NDOLE_HXX //autogen
 #include <ndole.hxx>
-#endif
-
-#ifndef _FRAME_HXX //autogen
 #include <frame.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <fmtfsize.hxx>
-#ifndef _TBLAFMT_HXX //autogen
 #include <tblafmt.hxx>
-#endif
-#ifndef _TABCOL_HXX //autogen
 #include <tabcol.hxx>
-#endif
-#ifndef _CELLATR_HXX
 #include <cellatr.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
-#endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
-#ifndef _VIEWSH_HXX //autogen
 #include <viewsh.hxx>
-#endif
-#ifndef _TABFRM_HXX //autogen
 #include <tabfrm.hxx>
-#endif
-#ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _UNOREDLINE_HXX
 #include <unoredline.hxx>
-#endif
-#ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TABLECOLUMNSEPARATOR_HPP_
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWFORMAT_HPP_
 #include <com/sun/star/table/ShadowFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
 #include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_BREAKTYPE_HPP_
 #include <com/sun/star/style/BreakType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDATACHANGEEVENTLISTENER_HPP_
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATACHANGEEVENT_HPP_
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLCONTENTTYPE_HPP_
 #include <com/sun/star/table/CellContentType.hpp>
-#endif
-#ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
-
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>     // SvNumberFormatter
-#endif
-
-#ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef _UNOCHART_HXX
 #include <unochart.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
