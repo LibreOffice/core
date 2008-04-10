@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmlexp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.136 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:29:35 $
+ * $RCSfile: xmlexp.cxx,v $
+ * $Revision: 1.137 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,183 +34,68 @@
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
 #endif
-#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 #include <rtl/uuid.h>
-#ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXINVALIDCHARACTEREXCEPTION_HPP_
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_URI_URIREFERENCEFACTORY_HPP_
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
-
-#ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
-#endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNUMFE_HXX
 #include <xmloff/xmlnumfe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLMETAE_HXX
 #include <xmloff/xmlmetae.hxx>
-#endif
-
-#ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include <xmloff/XMLEventExport.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
 #include "XMLStarBasicExportHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLSCRIPTEXPORTHANDLER_HXX
 #include "XMLScriptExportHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
 #include <xmloff/SettingsExportHelper.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#endif
-
-#ifndef _XMLOFF_GRADIENTSTYLE_HXX
 #include <GradientStyle.hxx>
-#endif
-#ifndef _XMLOFF_HATCHSTYLE_HXX
 #include <HatchStyle.hxx>
-#endif
-#ifndef _XMLOFF_IMAGESTYLE_HXX
 #include <ImageStyle.hxx>
-#endif
-#ifndef _XMLOFF_TRANSGRADIENTSTYLE_HXX
 #include <TransGradientStyle.hxx>
-#endif
-#ifndef _XMLOFF_MARKERSTYLE_HXX
 #include <MarkerStyle.hxx>
-#endif
-#ifndef _XMLOFF_DASHSTYLE_HXX
 #include <DashStyle.hxx>
-#endif
 #ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 #include <xmloff/XMLFontAutoStylePool>
 #endif
-#ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
 #include "XMLImageMapExport.hxx"
-#endif
 #ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
 #include "XMLBase64Export.hxx"
 #endif
 #ifndef _XMLOFF_XMLERROR_HXX_
 #include "xmlerror.hxx"
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
 #include "XMLFilterServiceNames.h"
-#endif
-#ifndef _XMLOFF_XMLEMBEDDEDOBJECTEXPORTFILTER_HXX
 #include "XMLEmbeddedObjectExportFilter.hxx"
-#endif
-#ifndef _XMLOFF_XMLBASICEXPORTFILTER_HXX
 #include "XMLBasicExportFilter.hxx"
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-
-#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
-#endif
 
 #include "svtools/urihelper.hxx"
-
-#ifndef _XMLOFF_XFORMSEXPORT_HXX
 #include "xformsexport.hxx"
-#endif
 
 #include <unotools/docinfohelper.hxx>
 #include <unotools/bootstrap.hxx>
