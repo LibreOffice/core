@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: writerhelper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.27 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:17:29 $
+ * $RCSfile: writerhelper.cxx,v $
+ * $Revision: 1.28 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,100 +35,46 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
-#ifndef SW_WRITERHELPER
 #   include "writerhelper.hxx"
-#endif
-#ifndef SW_MS_MSFILTER_HXX
 #   include <msfilter.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-
-#ifndef _SFXITEMITER_HXX
 #   include <svtools/itemiter.hxx>  //SfxItemIter
-#endif
-#ifndef _SVDOBJ_HXX
 #   include <svx/svdobj.hxx>        //SdrObject
-#endif
-#ifndef _SVDOOLE2_HXX
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
-#endif
-#ifndef _SVX_FMGLOB_HXX
 #   include <svx/fmglob.hxx>        //FmFormInventor
-#endif
-#ifndef _SVX_BRKITEM_HXX
 #   include <svx/brkitem.hxx>       //SvxFmtBreakItem
-#endif
-#ifndef _SVX_TSPTITEM_HXX
 #   include <svx/tstpitem.hxx>      //SvxTabStopItem
-#endif
-#ifndef _NDTXT_HXX
 #   include <ndtxt.hxx>             //SwTxtNode
-#endif
-#ifndef _NDNOTXT_HXX
 #    include <ndnotxt.hxx>          //SwNoTxtNode
-#endif
-#ifndef _FMTCNTNT_HXX
 #    include <fmtcntnt.hxx>         //SwFmtCntnt
-#endif
-#ifndef _SWTABLE_HXX
 #    include <swtable.hxx>          //SwTable
-#endif
-#ifndef _FRMFMT_HXX
 #    include <frmfmt.hxx>           //SwFrmFmt
-#endif
-#ifndef _FLYPOS_HXX
 #    include <flypos.hxx>           //SwPosFlyFrms
-#endif
-#ifndef _FMTANCHR_HXX
 #    include <fmtanchr.hxx>         //SwFmtAnchor
-#endif
-#ifndef _NDGRF_HXX
 #    include <ndgrf.hxx>            //SwGrfNode
-#endif
-#ifndef _FMTFSIZE_HXX
 #    include <fmtfsize.hxx>         //SwFmtFrmSize
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #   include <SwStyleNameMapper.hxx> //SwStyleNameMapper
-#endif
-#ifndef _DOCARY_HXX
 #   include <docary.hxx>            //SwCharFmts
-#endif
-#ifndef _CHARFMT_HXX
 #   include <charfmt.hxx>           //SwCharFmt
-#endif
-#ifndef _FCHRFMT_HXX
 #   include <fchrfmt.hxx>           //SwFmtCharFmt
-#endif
 #ifndef _UNOTOOLS_STREAMWRAP_HXX
 #   include <unotools/streamwrap.hxx>
 #endif
-#ifndef _NUMRULE_HXX
 #include <numrule.hxx>
-#endif
 
 #ifdef DEBUGDUMP
-#   ifndef _SV_SVAPP_HXX
 #       include <vcl/svapp.hxx>
-#   endif
 #   ifndef _TOOLS_URLOBJ_HXX
 #       include <tools/urlobj.hxx>
 #   endif
 #   ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #       include <unotools/ucbstreamhelper.hxx>
 #   endif
-#   ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #       include <unotools/localfilehelper.hxx>
-#   endif
 #endif
 
 using namespace com::sun::star;
