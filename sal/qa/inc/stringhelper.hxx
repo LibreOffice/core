@@ -1,13 +1,8 @@
 #ifndef STRINGHELPER_HXX
 #define STRINGHELPER_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
-#endif
 
 inline void operator <<= (rtl::OString& _rAsciiString, rtl::OUString const & _rUnicodeString)
 {
