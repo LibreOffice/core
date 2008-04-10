@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: envfmt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:41:38 $
+ * $RCSfile: envfmt.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,28 +38,19 @@
 
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #include <tools/pstm.hxx>
 
 #define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
-
-#ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -75,45 +61,25 @@
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
-#ifndef _DRPCPS_HXX
 #include <drpcps.hxx>
-#endif
-#ifndef _ENVFMT_HXX
 #include <envfmt.hxx>
-#endif
-#ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
-#endif
 #ifndef _PARDLG_HXX
 #include "swuipardlg.hxx"
 #endif
-#ifndef _PATTERN_HXX
 #include <pattern.hxx>
-#endif
-#ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
-#endif
-#ifndef _UIBORDER_HXX
 #include <uiborder.hxx>
-#endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
 
 #ifndef _ENVFMT_HRC
 #include <envfmt.hrc>
