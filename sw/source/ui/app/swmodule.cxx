@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swmodule.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.66 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:02:41 $
+ * $RCSfile: swmodule.cxx,v $
+ * $Revision: 1.67 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,185 +32,76 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #ifndef _SWERROR_H
 #include <swerror.h>
 #endif
-
-#ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SVX_GALBRWS_HXX_
 #include <svx/galbrws.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _SVX_FNTSZCTL_HXX //autogen
 #include <svx/fntszctl.hxx>
-#endif
-#ifndef _SVX_FNTCTL_HXX //autogen
 #include <svx/fntctl.hxx>
-#endif
-#ifndef _SVX_SMARTTAGSCONTROL_HXX
 #include <svx/SmartTagCtl.hxx>
-#endif
-#ifndef _SVX_PSZCTRL_HXX //autogen
 #include <svx/pszctrl.hxx>
-#endif
-#ifndef _SVX_INSCTRL_HXX //autogen
 #include <svx/insctrl.hxx>
-#endif
-#ifndef _SVX_SELCTRL_HXX //autogen
 #include <svx/selctrl.hxx>
-#endif
-#ifndef _SVX_LINECTRL_HXX //autogen
 #include <svx/linectrl.hxx>
-#endif
 #include <svx/tbxctl.hxx>           //z-Zt falscher includeschutz!
-#ifndef _FILLCTRL_HXX //autogen
 #include <svx/fillctrl.hxx>
-#endif
-#ifndef _SVX_TBCONTRL_HXX //autogen
 #include <svx/tbcontrl.hxx>
-#endif
-#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
 #include <svx/verttexttbxctrl.hxx>
-#endif
-#ifndef _SVX_FORMATPAINTBRUSHCTRL_HXX
 #include <svx/formatpaintbrushctrl.hxx>
-#endif
-#ifndef _CONTDLG_HXX_ //autogen
 #include <svx/contdlg.hxx>
-#endif
-#ifndef _SVX_LAYCTRL_HXX //autogen
 #include <svx/layctrl.hxx>
-#endif
-#ifndef _SVX_FONTWORK_HXX //autogen
 #include <svx/fontwork.hxx>
-#endif
-#ifndef SW_SPELL_DIALOG_CHILD_WINDOW_HXX
 #include <SwSpellDialogChildWindow.hxx>
-#endif
-#ifndef _TBXALIGN_HXX //autogen
 #include <svx/tbxalign.hxx>
-#endif
-#ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
-#endif
-#ifndef _SVX_TBXCOLOR_HXX
 #include <svx/tbxcolor.hxx>
-#endif
-#ifndef _SVX_CLIPBOARDCTL_HXX_
 #include <svx/clipboardctl.hxx>
-#endif
-#ifndef _SVX_LBOXCTRL_HXX_
 #include <svx/lboxctrl.hxx>
-#endif
-#ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #include <svx/extrusioncontrols.hxx>
-#endif
-#ifndef _SVX_DLG_HYPERLINK_HXX //autogen
 #include <svx/hyprlink.hxx>
-#endif
-#ifndef _SVX_TBXCUSTOMSHAPES_HXX
 #include <svx/tbxcustomshapes.hxx>
-#endif
-#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
 #include <svx/fontworkgallery.hxx>
-#endif
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
 #include <com/sun/star/scanner/XScannerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
-#ifndef _SWACORR_HXX
 #include <swacorr.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
-#ifndef _DOBJFAC_HXX
 #include <dobjfac.hxx>
-#endif
-#ifndef _INIT_HXX
 #include <init.hxx>
-#endif
-#ifndef _SWPVIEW_HXX //autogen
 #include <pview.hxx>
-#endif
-#ifndef _SWWVIEW_HXX //autogen
 #include <wview.hxx>
-#endif
-#ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
-#endif
-#ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
-#endif
 #ifndef _SRCVIEW_HXX //autogen
 #include <srcview.hxx>
 #endif
-#ifndef _AUTODOC_HXX //autogen
 #include <glshell.hxx>
-#endif
-#ifndef _SWTABSH_HXX //autogen
 #include <tabsh.hxx>
-#endif
-#ifndef _SWLISTSH_HXX //autogen
 #include <listsh.hxx>
-#endif
-#ifndef _SWGRFSH_HXX //autogen
 #include <grfsh.hxx>
-#endif
-#ifndef _SWMEDIASH_HXX //autogen
 #include <mediash.hxx>
-#endif
-#ifndef _SWOLESH_HXX //autogen
 #include <olesh.hxx>
-#endif
-#ifndef _SWDRAWSH_HXX //autogen
 #include <drawsh.hxx>
-#endif
-#ifndef _SWWDRWFORMSH_HXX //autogen
 #include <wformsh.hxx>
-#endif
-#ifndef _SWDRWTXTSH_HXX //autogen
 #include <drwtxtsh.hxx>
-#endif
-#ifndef _SWBEZIERSH_HXX //autogen
 #include <beziersh.hxx>
-#endif
-#ifndef _SWWTEXTSH_HXX //autogen
 #include <wtextsh.hxx>
-#endif
-#ifndef _SWWFRMSH_HXX //autogen
 #include <wfrmsh.hxx>
-#endif
 #ifndef _DRFORMSH_HXX
 #include <drformsh.hxx>
 #endif
@@ -231,91 +117,41 @@
 #ifndef _WTABSH_HXX
 #include <wtabsh.hxx>
 #endif
-#ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
-#endif
-#ifndef _CHARTINS_HXX //autogen
 #include <chartins.hxx>
-#endif
-#ifndef SW_INPUTWIN_HXX //autogen
 #include <inputwin.hxx>
-#endif
-#ifndef _USRPREF_HXX //autogen
 #include <usrpref.hxx>
-#endif
-#ifndef _UINUMS_HXX //autogen
 #include <uinums.hxx>
-#endif
-#ifndef _PRTOPT_HXX //autogen
 #include <prtopt.hxx>
-#endif
-#ifndef _BOOKCTRL_HXX
 #include <bookctrl.hxx>
-#endif
-#ifndef _TMPLCTRL_HXX
 #include <tmplctrl.hxx>
-#endif
-#ifndef _VIEWLAYOUTCTRL_HXX
 #include <viewlayoutctrl.hxx>
-#endif
-#ifndef _ZOOMSLIDER_STBCONTRL_HXX
 #include <svx/zoomsliderctrl.hxx>
-#endif
-#ifndef _TBLCTRL_HXX
 #include <tblctrl.hxx>
-#endif
-#ifndef _ZOOMCTRL_HXX
 #include <zoomctrl.hxx>
-#endif
-#ifndef _WORKCTRL_HXX
 #include <workctrl.hxx>
-#endif
-#ifndef _TBXANCHR_HXX
 #include <tbxanchr.hxx>
-#endif
-#ifndef _FLDWRAP_HXX
 #include <fldwrap.hxx>
-#endif
 #ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
 #endif
 #ifndef _SYNCBTN_HXX
 #include <syncbtn.hxx>
 #endif
-#ifndef _SWMAILMERGECHILDWINDOW_HXX
 #include <mailmergechildwindow.hxx>
-#endif
-#ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
-#endif
-#ifndef _FONTCFG_HXX //autogen
 #include <fontcfg.hxx>
-#endif
-#ifndef _SFX_EVENTCONF_HXX
 #include <sfx2/evntconf.hxx>
-#endif
-#ifndef _SFX_APPUNO_HXX //autogen
 #include <sfx2/appuno.hxx>
-#endif
-#ifndef _SWATRSET_HXX //autogen
 #include <swatrset.hxx>
-#endif
-#ifndef _IDXMRK_HXX
 #include <idxmrk.hxx>
-#endif
-#ifndef _DLELSTNR_HXX_
 #include <dlelstnr.hxx>
-#endif
 #ifndef _BARCFG_HXX
 #include <barcfg.hxx>
 #endif
-#ifndef _SVX_RUBYDLG_HXX_
 #include <svx/rubydialog.hxx>
-#endif
 // OD 14.02.2003 #107424#
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
 
 #include <svx/acorrcfg.hxx>
 #include <svtools/moduleoptions.hxx>
@@ -323,9 +159,7 @@
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
 #endif
-#ifndef _AVMEDIA_MEDIATOOLBOX_HXX
 #include <avmedia/mediatoolbox.hxx>
-#endif
 
 #include <annotsh.hxx>
 
