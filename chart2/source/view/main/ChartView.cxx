@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ChartView.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.43 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-02-18 16:02:59 $
+ * $RCSfile: ChartView.cxx,v $
+ * $Revision: 1.44 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -67,97 +62,41 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
-
-#ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
-#endif
 // header for class LocaleDataWrapper
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
 // header for class SdrPage
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
 // header for class SvxDrawPage
-#ifndef _SVX_UNOWPAGE_HXX
 #include <svx/unopage.hxx>
-#endif
 // header for class SvxShape
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
 // header for class Application
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 #include <time.h>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-
-#ifndef _COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
 #include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_STACKINGDIRECTION_HPP_
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
 #include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_RELATIVESIZE_HPP_
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUP_HPP_
 #include <com/sun/star/drawing/XShapeGroup.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
 
 //.............................................................................
 namespace chart
