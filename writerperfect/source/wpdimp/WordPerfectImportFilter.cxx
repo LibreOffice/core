@@ -28,30 +28,16 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #ifndef _RTL_TENCINFO_H_
 #include <rtl/tencinfo.h>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -63,10 +49,7 @@
 #ifndef _XMLKYWD_HPP
 #include <xmloff/xmlkywd.hxx>
 #endif
-
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
 
 #include "filter/FilterInternal.hxx"
 #include "filter/DocumentHandler.hxx"
