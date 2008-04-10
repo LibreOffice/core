@@ -1,54 +1,39 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmgridcl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.61 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:21:27 $
+ * $RCSfile: fmgridcl.cxx,v $
+ * $Revision: 1.62 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_FMGRIDCL_HXX
 #include <svx/fmgridcl.hxx>
-#endif
-#ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
-#endif
-#ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
-#endif
-
-#ifndef _FMTFIELD_HXX_
 #include <svtools/fmtfield.hxx>
-#endif
 
 #include <math.h>
 #ifndef _SVX_FMPROP_HRC
@@ -57,98 +42,38 @@
 #ifndef _SVX_DBEXCH_HRC
 #include "dbexch.hrc"
 #endif
-
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDDB_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XCONFIRMDELETELISTENER_HPP_
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
 // #100312# ---------------------------
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-
-#ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-
-#ifndef _SV_IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-
-#ifndef _LONGCURR_HXX
 #include <vcl/longcurr.hxx>
-#endif
-
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-
-#ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
-#endif
 
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -157,61 +82,28 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
-
-#ifndef _SVX_GRIDCOLS_HXX
 #include "gridcols.hxx"
-#endif
 
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #endif
-
-#ifndef _NUMUNO_HXX //autogen
 #include <svtools/numuno.hxx>
-#endif
-
-#ifndef _SVX_FMGRIDIF_HXX
 #include "fmgridif.hxx"
-#endif
 
 //CHINA001 #ifndef _SVX_SHOWCOLS_HXX
 //CHINA001 #include "showcols.hxx"
 //CHINA001 #endif
-
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
-
-#ifndef _TRACE_HXX_
 #include "trace.hxx"
-#endif
-
-#ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
-#endif
-#ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
-#endif
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
