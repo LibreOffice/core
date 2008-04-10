@@ -1,75 +1,49 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unopage.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:22:46 $
+ * $RCSfile: unopage.hxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SD_UNOPAGE_HXX
 #define _SD_UNOPAGE_HXX
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGETARGET_HPP_
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
 #include <com/sun/star/presentation/XPresentationPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
 
 #ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>
 #endif
-#ifndef _SVX_FMDPAGE_HXX
 #include <svx/fmdpage.hxx>
-#endif
-#ifndef _SVDPOOL_HXX //autogen
 #include <svx/svdpool.hxx>
-#endif
 
 #include <unotools/servicehelper.hxx>
 
