@@ -1,35 +1,30 @@
-
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: olmenu.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.38 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:22:18 $
+ * $RCSfile: olmenu.cxx,v $
+ * $Revision: 1.39 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,101 +32,55 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
-#endif
 
 #include <i18npool/mslangid.hxx>
-
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
 #ifndef _LINGUISTIC_MISC_HHX_
 #include <linguistic/misc.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
 #include <svx/acorrcfg.hxx>
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>        //CheckSpellChanges
 #endif
-#ifndef _OLMENU_HXX
 #include <olmenu.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
 
 #ifndef _OLMENU_HRC
 #include <olmenu.hrc>
 #endif
-
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -148,30 +97,15 @@
 #include <sfx2/sfxdlg.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
 
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
 #endif
-
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
