@@ -1,96 +1,56 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: Section.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:54:04 $
+ * $RCSfile: Section.cxx,v $
+ * $Revision: 1.6 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include "Section.hxx"
-
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XREPORTCOMPONENT_HPP_
 #include <com/sun/star/report/XReportComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_FORCENEWPAGE_HPP_
 #include <com/sun/star/report/ForceNewPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
 #endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
 #ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
 #endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef REPORTDESIGN_TOOLS_HXX
 #include "Tools.hxx"
-#endif
-#ifndef REPORT_RPTMODEL_HXX
 #include "RptModel.hxx"
-#endif
-#ifndef _REPORT_RPTUIPAGE_HXX
 #include "RptPage.hxx"
-#endif
-#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
 #include "ReportDefinition.hxx"
-#endif
-#ifndef RPT_SHAPE_HXX
 #include "Shape.hxx"
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _REPORT_RPTUIOBJ_HXX
 #include "RptObject.hxx"
-#endif
-#ifndef REPORTDRAWPAGE_HXX_INCLUDED
 #include "ReportDrawPage.hxx"
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
 // =============================================================================
 namespace reportdesign
 {
