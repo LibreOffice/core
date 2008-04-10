@@ -2,21 +2,13 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _REGISTRAR_HXX_
 #include "registrar.hxx"
-#endif
 
 #ifndef _REGISTRYVALUEIMPL_HXX_
 #include "RegistryValueImpl.hxx"
 #endif
-
-#ifndef _WINDOWSREGISTRY_HXX_
 #include "windowsregistry.hxx"
-#endif
-
-#ifndef _REGISTRYEXCEPTION_HXX_
 #include "registryexception.hxx"
-#endif
 
 #include <assert.h>
 #ifdef _MSC_VER
