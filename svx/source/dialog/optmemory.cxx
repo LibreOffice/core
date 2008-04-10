@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: optmemory.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.19 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:35:07 $
+ * $RCSfile: optmemory.cxx,v $
+ * $Revision: 1.20 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,108 +36,41 @@
 #endif
 
 #include <svtools/langtab.hxx>
-
-#ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
-#ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SFXSZITEM_HXX
 #include <svtools/szitem.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
 #include <svtools/undoopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
 #include <svtools/cacheoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
 #include <svtools/options3d.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
 #include <svtools/fontoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_STARTOPTIONS_HXX
 #include <svtools/startoptions.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
 #ifndef INCLUDED_SVTOOLS_MISCPOPT_HXX
 #include <svtools/miscopt.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #include <svtools/syslocaleoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
-#endif
-#ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-
-#ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
-#endif
-
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_CUIOPTGENRL_HXX
 #include "cuioptgenrl.hxx"
-#endif
-#ifndef _SVX_OPTPATH_HXX
 #include "optpath.hxx"
-#endif
-#ifndef _SVX_OPTSAVE_HXX
 #include "optsave.hxx"
-#endif
-#ifndef _SVX_OPTLINGU_HXX
 #include <svx/optlingu.hxx>
-#endif
-#ifndef _XPOOL_HXX
 #include <svx/xpool.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include "dlgutil.hxx"
-#endif
 #ifndef _SVX_TAB_AREA_HXX
 #include "cuitabarea.hxx"
 #endif
