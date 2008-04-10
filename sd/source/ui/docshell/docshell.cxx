@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docshell.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.46 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:57:13 $
+ * $RCSfile: docshell.cxx,v $
+ * $Revision: 1.47 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,13 +32,8 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawDocShell.hxx"
-
-#ifndef _PSTM_HXX
 #include <tools/pstm.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
@@ -51,69 +41,31 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
-#endif
-#ifndef _SVX_SRCHDLG_HXX
 #include <svx/srchdlg.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
 #ifndef _SFX_DOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
-#endif
-#ifndef _SVX_DRAWITEM_HXX //autogen
 #include <svx/drawitem.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
-#endif
-#ifndef _SVX_DRAWITEM_HXX //autogen
 #include <svx/drawitem.hxx>
-#endif
-#ifndef _SVX_SRCHDLG_HXX
 #include <svx/srchdlg.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
-#endif
 #ifndef _SO_CLSIDS_HXX
 #include <sot/clsids.hxx>
 #endif
-#ifndef _SFX_TOPFRM_HXX
 #include <sfx2/topfrm.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
-#ifndef _SFXVISIBILITYITEM_HXX
 #include <svtools/visitem.hxx>
-#endif
 
 #include <svx/svdoutl.hxx>
 
@@ -124,29 +76,19 @@
 #include "strmname.h"
 #include "stlpool.hxx"
 #include "strings.hrc"
-#ifndef SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "glob.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#endif
-#ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #include "sdresid.hxx"
 #ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "slideshow.hxx"
 #endif
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 #ifndef SD_FRAMW_VIEW_HXX
 #include "FrameView.hxx"
 #endif
