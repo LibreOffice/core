@@ -1,156 +1,83 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: GeometryHandler.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:49:52 $
+ * $RCSfile: GeometryHandler.cxx,v $
+ * $Revision: 1.7 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
-
-#ifndef RPT_GEOMETRYHANDLER_HXX
 #include "GeometryHandler.hxx"
-#endif
 #include <com/sun/star/report/Function.hpp>
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif
 #include <unotools/textsearch.hxx>
 #include "reportformula.hxx"
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_STRINGREPRESENTATION_HPP_
 #include "com/sun/star/inspection/StringRepresentation.hpp"
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYLINEELEMENT_HPP_
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XSTRINGLISTCONTROL_HPP_
 #include <com/sun/star/inspection/XStringListControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
 #include <com/sun/star/report/XReportDefinition.hpp>
-#endif
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <vcl/waitobj.hxx>
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XSECTION_HPP_
 #include <com/sun/star/report/XSection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XFORMATTEDFIELD_HPP_
 #include <com/sun/star/report/XFormattedField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XNUMERICCONTROL_HPP_
 #include <com/sun/star/inspection/XNumericControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
 #include <com/sun/star/util/MeasureUnit.hpp>
-#endif
-#ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
-#endif
-#ifndef _RPTUI_MODULE_HELPER_RPT_HXX_
 #include "ModuleHelper.hxx"
-#endif
 #ifndef _RPTUI_DLGRESID_HRC
 #include "RptResId.hrc"
 #endif
-#ifndef _REPORT_RPTUIDEF_HXX
 #include "RptDef.hxx"
-#endif
 #include "UITools.hxx"
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
 #include <com/sun/star/report/XFixedLine.hpp>
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
 #include <boost/bind.hpp>
 #include <tools/string.hxx>
-#ifndef RPTUI_METADATA_HXX_
 #include "metadata.hxx"
-#endif
-
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
@@ -158,39 +85,17 @@
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xoutx.hxx>
-#ifndef _SVX_XLNWTIT_HXX
 #include <svx/xlnwtit.hxx>
-#endif
-#ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
-#endif
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-#ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
-#endif
-#ifndef _SVX_XLNEDIT_HXX
 #include <svx/xlnedit.hxx>
-#endif
-#ifndef _SVX_XLNSTWIT_HXX
 #include <svx/xlnstwit.hxx>
-#endif
-#ifndef _SVX_XLNEDWIT_HXX
 #include <svx/xlnedwit.hxx>
-#endif
-#ifndef _SVX_XLNSTCIT_HXX
 #include <svx/xlnstcit.hxx>
-#endif
-#ifndef _SVX_XLNEDCIT_HXX
 #include <svx/xlnedcit.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XLINEIT0_HXX
 #include <svx/xlineit0.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -199,16 +104,10 @@
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
-#ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
-#endif
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef RPTUI_DLGPAGE_HXX
 #include "dlgpage.hxx"
-#endif
 #ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
 #endif
