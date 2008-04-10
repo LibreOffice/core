@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: navipi.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.45 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:45:57 $
+ * $RCSfile: navipi.cxx,v $
+ * $Revision: 1.46 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,83 +36,36 @@
 #define NAVIPI_CXX
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-
-#ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-#ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-#ifndef _FILELIST_HXX
 #include <sot/filelist.hxx>
-#endif
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-#ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
-#endif
 #include <vcl/toolbox.hxx>
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>  // fuer Pathfinder
-#endif
-#ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _NAVICFG_HXX
 #include <navicfg.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _ACTCTRL_HXX
 #include <actctrl.hxx>
-#endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
-#ifndef _NAVIPI_HXX
 #include <navipi.hxx>
-#endif
-#ifndef _CONTENT_HXX
 #include <content.hxx>
-#endif
-#ifndef _WORKCTRL_HXX
 #include <workctrl.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
 #include <sfx2/app.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
