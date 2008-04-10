@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: optgdlg.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.48 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:53:02 $
+ * $RCSfile: optgdlg.cxx,v $
+ * $Revision: 1.49 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,149 +33,70 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-
-#ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
-#ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SFXSZITEM_HXX
 #include <svtools/szitem.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXIMGMGR_HXX
 #include <sfx2/imgmgr.hxx>
-#endif
-#ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <vcl/configsettings.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
 #include <svtools/cacheoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
 #include <svtools/options3d.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
 #include <svtools/fontoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_STARTOPTIONS_HXX
 #include <svtools/startoptions.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
 #ifndef INCLUDED_SVTOOLS_MISCPOPT_HXX
 #include <svtools/miscopt.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 #include <svtools/printwarningoptions.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #include <svtools/syslocaleoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
-#endif
-#ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
-#endif
 
 #include <svtools/langtab.hxx>
 
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
-
-#ifndef _SVX_CUIOPTGENRL_HXX
 #include "cuioptgenrl.hxx"
-#endif
-#ifndef _SVX_OPTPATH_HXX
 #include "optpath.hxx"
-#endif
-#ifndef _SVX_OPTSAVE_HXX
 #include "optsave.hxx"
-#endif
-#ifndef _SVX_OPTLINGU_HXX
 #include <svx/optlingu.hxx>
-#endif
-#ifndef _XPOOL_HXX
 #include <svx/xpool.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include "dlgutil.hxx"
-#endif
 #ifndef _SVX_TAB_AREA_HXX
 #include "cuitabarea.hxx"
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 
 #include <svx/dialmgr.hxx>
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -189,21 +105,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#ifndef  _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
-#endif
 
 #include <vcl/svapp.hxx>
 
 #include "optgdlg.hrc"
 #include "optgdlg.hxx"
 #include "ofaitem.hxx"
-#ifndef _SVT_APEARCFG_HXX
 #include <svtools/apearcfg.hxx>
-#endif
 
 #define CONFIG_LANGUAGES "OfficeLanguages"
 
