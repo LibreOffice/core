@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: animationimport.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.14 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:31:43 $
+ * $RCSfile: animationimport.cxx,v $
+ * $Revision: 1.15 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,135 +33,55 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-
-#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
 #include <com/sun/star/animations/AnimationTransformType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATEMOTION_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATECOLOR_HPP_
 #include <com/sun/star/animations/XAnimateColor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATETRANSFORM_HPP_
 #include <com/sun/star/animations/XAnimateTransform.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XTRANSITIONFILTER_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
 #include <com/sun/star/animations/XCommand.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
 #include <com/sun/star/animations/XAudio.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
 #include <com/sun/star/animations/ValuePair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCOLORSPACE_HPP_
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
-#endif
 #ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
 #include <com/sun/star/animations/Timing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
 #include <com/sun/star/animations/Event.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <list>
-
-#ifndef _XMLOFF_XMLTYPES_HXX
 #include <xmloff/xmltypes.hxx>
-#endif
-#ifndef _SDPROPLS_HXX
 #include "sdpropls.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_ANIM_HXX
 #include "anim.hxx"
-#endif
 
 #include "animations.hxx"
-
-#ifndef _XMLOFF_ANIMATIONIMPORT_HXX
 #include "animationimport.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
