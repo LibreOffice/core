@@ -1,9 +1,7 @@
 #ifndef _OODOCUMENTHANDLER_HXX_
 #define _OODOCUMENTHANDLER_HXX_
 
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 
 #if defined _MSC_VER
 #pragma warning( push, 1 )
