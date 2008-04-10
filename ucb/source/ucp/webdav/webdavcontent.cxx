@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: webdavcontent.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.60 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 14:58:19 $
+ * $RCSfile: webdavcontent.cxx,v $
+ * $Revision: 1.61 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,154 +36,59 @@
  **************************************************************************
 
  *************************************************************************/
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 
 #include "osl/doublecheckedlocking.h"
-
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
 #include "com/sun/star/task/XPasswordContainer.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
 #include "com/sun/star/task/NoMasterException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGE_HPP_
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKGENBERALEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkGeneralException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKREADEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKRESOLVENAMEEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKWRITEEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkWriteException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/NameClashException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XPERSISTENTPROPERTYSET_HPP_
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_MISSINGINPUTSTREAMEXCEPTION_HPP_
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_MISSINGPROPERTIESEXCEPTION_HPP_
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDCOMMANDEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedCommandException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDOPENMODEEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
-#endif
-
-#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
-#endif
-#ifndef _UCBHELPER_PROPERTYVALUESET_HXX
 #include <ucbhelper/propertyvalueset.hxx>
-#endif
-#ifndef _UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
 #include <ucbhelper/simpleinteractionrequest.hxx>
-#endif
-#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX_
 #include <ucbhelper/cancelcommandexecution.hxx>
-#endif
-
-#ifndef _WEBDAV_UCP_CONTENT_HXX
 #include "webdavcontent.hxx"
-#endif
-#ifndef _WEBDAV_UCP_PROVIDER_HXX
 #include "webdavprovider.hxx"
-#endif
-#ifndef _WEBDAV_UCP_RESULTSET_HXX
 #include "webdavresultset.hxx"
-#endif
-#ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
 #include "ContentProperties.hxx"
-#endif
-#ifndef _NEONURI_HXX_
 #include "NeonUri.hxx"
-#endif
-#ifndef _UCBDEADPROPERTYVALUE_HXX_
 #include "UCBDeadPropertyValue.hxx"
-#endif
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
