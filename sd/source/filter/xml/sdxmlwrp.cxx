@@ -1,112 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdxmlwrp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.67 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:32:48 $
+ * $RCSfile: sdxmlwrp.cxx,v $
+ * $Revision: 1.68 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 #ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HDL_
 #include <com/sun/star/xml/sax/SAXParseException.hdl>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
-#endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
-#endif
-#ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
-#endif
 
 #include "../../ui/inc/DrawDocShell.hxx"
 
 #include "sdxmlwrp.hxx"
 #include "strmname.h"
-
-#ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
 #include <com/sun/star/document/XImporter.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XExporter_HPP_
 #include <com/sun/star/document/XExporter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#endif
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
@@ -115,29 +72,14 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
-
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
 
 // #80365# include necessary for XML progress bar at load time
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
 
 #include "sderror.hxx"
 #include "sdresid.hxx"
