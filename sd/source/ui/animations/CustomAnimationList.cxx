@@ -1,104 +1,58 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: CustomAnimationList.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:44:44 $
+ * $RCSfile: CustomAnimationList.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_SHAPEANIMATIONSUBTYPE_HPP_
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_PARAGRAPHTARGET_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTPRESETCLASS_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
 #include <com/sun/star/presentation/EffectCommands.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-
-#ifndef _SD_CUSTOMANIMATIONLIST_HXX
 #include "CustomAnimationList.hxx"
-#endif
 #ifndef _SD_CUSTOMANIMATIONPANE_HRC
 #include "CustomAnimationPane.hrc"
 #endif
 #ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
 #endif
-#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
 #include "CustomAnimationPreset.hxx"
-#endif
-
-#ifndef _SVTREELIST_HXX
 #include <svtools/treelist.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
 
 #include "res_bmp.hrc"
 #include "glob.hrc"
