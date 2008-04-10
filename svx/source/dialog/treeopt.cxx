@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: treeopt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.55 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-03-25 16:42:29 $
+ * $RCSfile: treeopt.cxx,v $
+ * $Revision: 1.56 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,129 +34,53 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
 #include <com/sun/star/util/XMacroExpander.hpp>
-#endif
-
-#ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>
-#endif
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-
-#ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
-#endif
 
 #include <tools/shl.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOGPROVIDER_HPP_
 #include <com/sun/star/awt/XDialogProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOGPROVIDER2_HPP_
 #include <com/sun/star/awt/XDialogProvider2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTAINERWINDOWPROVIDER_HPP_
 #include <com/sun/star/awt/XContainerWindowProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOGEVENTHANDLER_HPP_
 #include <com/sun/star/awt/XDialogEventHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTAINERWINDOWEVENTHANDLER_HPP_
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
 #ifndef _LINGUISTIC_MISC_HHX_
 #include <linguistic/misc.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_OPTIONSDLG_HXX
 #include <svtools/optionsdlg.hxx>
-#endif
-#ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX //autogen
 #include <vcl/waitobj.hxx>
-#endif
-#ifndef _SFXSLSTITM_HXX //autogen
 #include <svtools/slstitm.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
-#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
-#endif
-#ifndef _SFX_PRINTOPT_HXX
 #include <sfx2/printopt.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
-#endif
 
 #include <svtools/misccfg.hxx>
 #include <sfx2/objsh.hxx>
@@ -170,70 +89,31 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/linguprops.hxx>
 #include <sfx2/app.hxx>
-
-#ifndef _XDEF_HXX //autogen
 #include <svx/xdef.hxx>
-#endif
-#ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _XPOOL_HXX //autogen
 #include <svx/xpool.hxx>
-#endif
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include "cuitabarea.hxx"
 #endif
-#ifndef _OFF_OFAITEM_HXX //autogen
 #include "ofaitem.hxx"
-#endif
-#ifndef _OFA_OPTHTML_HXX //autogen
 #include "opthtml.hxx"
-#endif
-#ifndef _SVX_OPTCOLOR_HXX
 #include "optcolor.hxx"
-#endif
-#ifndef _SVX_OPTCTL_HXX
 #include "optctl.hxx"
-#endif
-#ifndef _SVX_OPTJAVA_HXX
 #include "optjava.hxx"
-#endif
-#ifndef _SVX_OPTSAVE_HXX //autogen
 #include "optsave.hxx"
-#endif
-#ifndef _SVX_OPTPATH_HXX //autogen
 #include "optpath.hxx"
-#endif
-#ifndef _SVX_CUIOPTGENRL_HXX //autogen
 #include "cuioptgenrl.hxx"
-#endif
-#ifndef _SVX_OPTLINGU_HXX //autogen
 #include <svx/optlingu.hxx>
-#endif
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include "cuitabarea.hxx"
 #endif
-#ifndef _SVX_OPTINET_HXX //autogen
 #include "optinet2.hxx"
-#endif
-#ifndef _SVX_OPTASIAN_HXX
 #include "optasian.hxx"
-#endif
-#ifndef _SVX_OPTACCESSIBILITY_HXX
 #include "optaccessibility.hxx"
-#endif
-#ifndef _SVX_OPTJSEARCH_HXX_
 #include "optjsearch.hxx"
-#endif
-#ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
 #include "connpooloptions.hxx"
-#endif
-#ifndef _SVX_OPTUPDT_HXX
 #include "optupdt.hxx"
-#endif
-#ifndef _SVX_OPTCHART_HXX
 #include "optchart.hxx"
-#endif
 
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
@@ -260,14 +140,8 @@
 
 #include <optitems.hxx>
 #endif
-
-#ifndef _SVX_DRAWITEM_HXX
 #include <drawitem.hxx>
-#endif
-
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
