@@ -1,112 +1,60 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: HDriver.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.27 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:53:27 $
+ * $RCSfile: HDriver.cxx,v $
+ * $Revision: 1.28 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-
-#ifndef CONNECTIVITY_HSQLDB_DRIVER_HXX
 #include "hsqldb/HDriver.hxx"
-#endif
 #include "hsqldb/HConnection.hxx"
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
-#endif
 #include "hsqldb/HStorageMap.hxx"
-#ifndef INCLUDED_JVMFWK_FRAMEWORK_H
 #include <jvmfwk/framework.h>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 #include "HTerminateListener.hxx"
-#endif
-#ifndef CONNECTIVITY_HSQLDB_CATALOG_HXX
 #include "hsqldb/HCatalog.hxx"
-#endif
-#ifndef CONNECTIVITY_DIAGNOSE_EX_H
 #include "diagnose_ex.h"
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_FILE_H_
 #include <osl/file.h>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
 
 //........................................................................
 namespace connectivity
