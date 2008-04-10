@@ -1,12 +1,8 @@
 #ifndef INCLUDED_RTL_SOURCE_HASH_H
 #define INCLUDED_RTL_SOURCE_HASH_H
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
-#endif
 
 #if defined __cplusplus
 extern "C" {
