@@ -1,107 +1,63 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: TransformerBase.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.22 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:25:20 $
+ * $RCSfile: TransformerBase.cxx,v $
+ * $Revision: 1.23 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HPP_
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_IGNORETCONTEXT_HXX
 #include "IgnoreTContext.hxx"
-#endif
-#ifndef _XMLOFF_RENAMEELEMTCONTEXT_HXX
 #include "RenameElemTContext.hxx"
-#endif
-#ifndef _XMLOFF_PROCATTRTCONTEXT_HXX
 #include "ProcAttrTContext.hxx"
-#endif
-#ifndef _XMLOFF_PROCADDATTRTCONTEXT_HXX
 #include "ProcAddAttrTContext.hxx"
-#endif
-#ifndef _XMLOFF_MERGEELEMTCONTEXT_HXX
 #include "MergeElemTContext.hxx"
-#endif
-#ifndef _XMLOFF_CREATEELEMTCONTEXT_HXX
 #include "CreateElemTContext.hxx"
-#endif
-#ifndef _XMLOFF_MUTABLEATTRLIST_HXX
 #include "MutableAttrList.hxx"
-#endif
-#ifndef _XMLOFF_TRANSFORMERACTIONS_HXX
 #include "TransformerActions.hxx"
-#endif
-#ifndef _XMLOFF_ELEMTRANSFORMERACTION_HXX
 #include "ElemTransformerAction.hxx"
-#endif
 // --> OD 2005-06-29 #i50322#
-#ifndef _XMLOFF_PROPERTYACTIONSOOO_HXX
 #include "PropertyActionsOOo.hxx"
-#endif
 // <--
 #ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
 #endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
 
 #ifndef _XMLOFF_TRANSFORMERBASE_HXX
 #include "TransformerBase.hxx"
 #endif
-#ifndef _XMLOFF_TCONTEXTVECTOR_HXX
 #include "TContextVector.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
