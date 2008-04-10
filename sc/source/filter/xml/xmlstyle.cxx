@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmlstyle.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.67 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:06:16 $
+ * $RCSfile: xmlstyle.cxx,v $
+ * $Revision: 1.68 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,78 +32,37 @@
 #include "precompiled_sc.hxx"
 
 
-#ifndef _SC_XMLSTYLE_HXX
 #include "xmlstyle.hxx"
-#endif
 #include "xmlexprt.hxx"
 #include "xmlimprt.hxx"
 
 /*#ifndef _PROPIMP0_HXX
 #include "propimp0.hxx"
 #endif*/
-#ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
-#endif
-#ifndef SC_RANGEUTL_HXX
 #include "rangeutl.hxx"
-#endif
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
-#ifndef _XMLOFF_XMLNUMFE_HXX
 #include <xmloff/xmlnumfe.hxx>
-#endif
-#ifndef _XMLOFF_XMLNUMFI_HXX
 #include <xmloff/xmlnumfi.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
-#endif
-#ifndef _XMLOFF_CONTEXTID_HXX_
 #include <xmloff/contextid.hxx>
-#endif
-#ifndef _XMLOFF_TEXTPRMAP_HXX_
 #include <xmloff/txtprmap.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_CELLPROTECTION_HPP_
 #include <com/sun/star/util/CellProtection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLORIENTATION_HPP_
 #include <com/sun/star/table/CellOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLVERTJUSTIFY_HPP_
 #include <com/sun/star/table/CellVertJustify.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLHORIJUSTIFY_HPP_
 #include <com/sun/star/table/CellHoriJustify.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
 #include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITIONALENTRIES_HPP_
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITIONALENTRY_HPP_
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
 
 #include <rtl/ustrbuf.hxx>
 
