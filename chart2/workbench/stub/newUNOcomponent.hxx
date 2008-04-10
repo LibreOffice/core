@@ -2,30 +2,20 @@
 #ifndef _CHART2_XXXX_HXX
 #define _CHART2_XXXX_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 /*
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
 */
 
 //----
 #include "ServiceMacros.hxx"
 
 //---- chart2
-#ifndef _COM_SUN_STAR_CHART2_YYYY_HPP_
 #include <com/sun/star/chart2/YYYY.hpp>
-#endif
 
 //----
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 //.............................................................................
 namespace chart
