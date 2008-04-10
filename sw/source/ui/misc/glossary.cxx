@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: glossary.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.48 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:53:05 $
+ * $RCSfile: glossary.cxx,v $
+ * $Revision: 1.49 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,10 +38,7 @@
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
@@ -60,98 +52,45 @@
 #ifndef _SVSTDARR_HXX
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _UNOCRSR_HXX //autogen wg. SwUnoCrsr
 #include <unocrsr.hxx>
-#endif
-#ifndef _UNOTOOLS_HXX
 #include <unotools.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
-#ifndef _GLOSSARY_HXX
 #include <glossary.hxx>
-#endif
-#ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
-#endif
-#ifndef _GLOSBIB_HXX
 #include <glosbib.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>                   // fuer ::GetGlossaries()
-#endif
-#ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
-#endif
-#ifndef _MACASSGN_HXX
 #include <macassgn.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -171,17 +110,11 @@
 #ifndef _GLOSSARY_HRC
 #include <glossary.hrc>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 
 // #107253#
-#ifndef _SWLINGUCONFIG_HXX
 #include <swlinguconfig.hxx>
-#endif
 
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
