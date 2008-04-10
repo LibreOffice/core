@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: read.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.69 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:25:03 $
+ * $RCSfile: read.cxx,v $
+ * $Revision: 1.70 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,47 +39,19 @@
 #include <stdio.h>
 
 #include "document.hxx"
-#ifndef _SCERRORS_HXX
 #include "scerrors.hxx"
-#endif
-
-#ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
-#endif
-#ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
-#endif
-#ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
-#endif
-#ifndef SC_XIVIEW_HXX
 #include "xiview.hxx"
-#endif
-#ifndef SC_XILINK_HXX
 #include "xilink.hxx"
-#endif
-#ifndef SC_XINAME_HXX
 #include "xiname.hxx"
-#endif
-#ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
-#endif
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
-#ifndef SC_XIPIVOT_HXX
 #include "xipivot.hxx"
-#endif
-
-#ifndef SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
-#endif
 
 #include "root.hxx"
 #include "biffdump.hxx"
