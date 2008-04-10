@@ -1,144 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: prhdlfac.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.28 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:54:30 $
+ * $RCSfile: prhdlfac.cxx,v $
+ * $Revision: 1.29 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
 #include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
 #include <com/sun/star/text/WritingMode2.hpp>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
 #include <xmloff/prhdlfac.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLTYPES_HXX
 #include <xmloff/xmltypes.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 #include "xmlbahdl.hxx"
-#endif
-
-#ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
-#endif
-
-#ifndef _XMLOFF_PROPERTYHANDLER_CROSSEDOUTTYPES_HXX
 #include "cdouthdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_CASEMAPTYPES_HXX
 #include "csmaphdl.hxx"
-#endif
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
 #endif
-#ifndef _XMLOFF_PROPERTYHANDLER_KERNINGTYPES_HXX
 #include "kernihdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_POSTURETYPES_HXX
 #include <postuhdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_SHADOWTYPES_HXX
 #include "shadwhdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_SHADOWEDTYPES_HXX
 #include "shdwdhdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_UNDERLINETYPES_HXX
 #include "undlihdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTWEIGHTTYPES_HXX
 #include "weighhdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_BREAKTYPES_HXX
 #include "breakhdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_ADJUSTTYPES_HXX
 #include <adjushdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_ESCAPETYPES_HXX
 #include <escphdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_CHARHEIGHTTYPES_HXX
 #include <chrhghdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_CHARLOCALETYPES_HXX
 #include <chrlohdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_LINESPACETYPES_HXX
 #include <lspachdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_BORDERTYPES_HXX
 #include <bordrhdl.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_TABSTOPTYPES_HXX
 #include <tabsthdl.hxx>
-#endif
-#ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <xmloff/EnumPropertyHdl.hxx>
-#endif
-#ifndef _XMLOFF_ATTRIBUTECONTAINERHANDLER_HXX
 #include "AttributeContainerHandler.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_DURATIONS_HXX
 #include "durationhdl.hxx"
-#endif
-#ifndef _XMLOFF_XMLRECTANGLEMEMBERSHANDLER_HXX
 #include "XMLRectangleMembersHandler.hxx"
-#endif
-#ifndef _XMLOFF_DRAWASPECTHDL_HXX
 #include "DrawAspectHdl.hxx"
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
