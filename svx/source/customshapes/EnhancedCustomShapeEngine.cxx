@@ -1,111 +1,62 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:52:11 $
+ * $RCSfile: EnhancedCustomShapeEngine.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _ENHANCED_CUSTOMSHAPE_ENGINE_HXX
 #include "EnhancedCustomShapeEngine.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "EnhancedCustomShape2d.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPE3D_HXX
 #include "EnhancedCustomShape3d.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPEFONTWORK_HXX
 #include "EnhancedCustomShapeFontWork.hxx"
-#endif
-#ifndef _ENHANCED_CUSTOMSHAPE_HANDLE_HXX
 #include "EnhancedCustomShapeHandle.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "EnhancedCustomShapeGeometry.hxx"
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
 #ifndef _SVX_UNOPAGE_HXX
 #include "svx/unopage.hxx"
 #endif
-#ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-#ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#endif
-#ifndef _SVX_UNOPOLYHELPER_HXX
 #include "unopolyhelper.hxx"
-#endif
 #include <uno/mapping.hxx>
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
 
 // ---------------------------
 // - EnhancedCustomShapeEngine -
