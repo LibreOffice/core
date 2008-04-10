@@ -1,52 +1,39 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ww8par4.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.61 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:05:45 $
+ * $RCSfile: ww8par4.cxx,v $
+ * $Revision: 1.62 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#endif
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
@@ -54,91 +41,38 @@
 #ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
 #endif
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
 #include <sot/storage.hxx>
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
-#endif
-#ifndef _SVX_IMPGRF_HXX
 #include <svx/impgrf.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
-#endif
 
 #include <sot/exchange.hxx>
-
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>            // fuer Ole-Node
 #endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // Progress
-#endif
-#ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
-#endif
-#ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
 
 
-#ifndef _WW8SCAN_HXX
 #include "ww8scan.hxx"
-#endif
-#ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
-#endif
-#ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"          // WWFlyPara::BoxUpWidth()
-#endif
 
 struct OLE_MFP
 {
