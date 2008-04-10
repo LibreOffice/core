@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: DrawModelWrapper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:04:05 $
+ * $RCSfile: DrawModelWrapper.cxx,v $
+ * $Revision: 1.4 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,73 +36,39 @@
 #include "ShapeFactory.hxx"
 #include "ChartItemPool.hxx"
 #include "ObjectIdentifier.hxx"
-
-#ifndef SVX_UNOMODEL_HXX
 #include <svx/unomodel.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
 // header for class SfxBoolItem
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
 // header for define EE_PARA_HYPHENATE
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
 // header for class Svx3DPercentDiagonalItem
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
 // header for class SvtPathOptions
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
 // header E3dObjFactory
-#ifndef _OBJFAC3D_HXX
 #include <svx/objfac3d.hxx>
-#endif
 // header for class SdrObjList
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
 // header for SvxUnoXDashTable_createInstance
-#ifndef _SVX_XPROPERTYTABLE_HXX
 #include <svx/XPropertyTable.hxx>
-#endif
 // header for class XDashList
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
 // header for class SdrOutliner
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
 // header for class LinguMgr
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
 // header for class Application
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 // header for class VirtualDevice
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <sfx2/objsh.hxx>
-
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#endif
 
 using namespace ::com::sun::star;
 
