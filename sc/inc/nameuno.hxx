@@ -1,102 +1,55 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: nameuno.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:17:24 $
+ * $RCSfile: nameuno.hxx,v $
+ * $Revision: 1.7 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef SC_NAMEUNO_HXX
 #define SC_NAMEUNO_HXX
 
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef SC_ADDRESS_HXX
 #include "address.hxx"
-#endif
-
-#ifndef SC_GRAMMAR_HXX
 #include "grammar.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
 #include <com/sun/star/sheet/XLabelRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
 #include <com/sun/star/sheet/XLabelRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XFORMULATOKENS_HPP_
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
-#endif
 
 class ScDocShell;
 class ScRangeData;
