@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swfont.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.57 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:27:11 $
+ * $RCSfile: swfont.cxx,v $
+ * $Revision: 1.58 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,9 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -47,112 +40,45 @@
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_WRLMITEM_HXX //autogen
 #include <svx/wrlmitem.hxx>
-#endif
-#ifndef _SVX_BLNKITEM_HXX //autogen
 #include <svx/blnkitem.hxx>
-#endif
-#ifndef _SVX_NHYPITEM_HXX //autogen
 #include <svx/nhypitem.hxx>
-#endif
-#ifndef _SVX_KERNITEM_HXX //autogen
 #include <svx/kernitem.hxx>
-#endif
-#ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_AKRNITEM_HXX //autogen
 #include <svx/akrnitem.hxx>
-#endif
-#ifndef _SVX_SHDDITEM_HXX //autogen
 #include <svx/shdditem.hxx>
-#endif
-#ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
-#endif
 #ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
 #endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_CSCOITEM_HXX //autogen
 #include <svx/cscoitem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX //autogen
 #include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
-#ifndef _SVX_CHARSCALEITEM_HXX
 #include <svx/charscaleitem.hxx>
-#endif
-#ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
-#endif
-#ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
-#endif
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
-#ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-
-#ifndef _CHARATR_HXX
 #include <charatr.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>       // Bildschirmabgleich
-#endif
-#ifndef _SWFONT_HXX
 #include <swfont.hxx>
-#endif
-#ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>     // FontCache
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
-#endif
-#ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
-#endif
 
 #if defined(WIN) || defined(WNT) || defined(PM2)
 #define FNT_LEADING_HACK
