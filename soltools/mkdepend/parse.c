@@ -27,35 +27,35 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #include "def.h"
-void define( char *def, struct inclist *file );
-void define2(char * name, char * val, struct inclist * file);
-void undefine( char *symbol, register struct inclist *file );
+char *hash_lookup( char *symbol, struct symhash *symbols );
+void hash_undefine( char *symbol, struct symhash *symbols );
 
 extern char *directives[];
-extern struct inclist   maininclist;
+extern struct symhash *maininclist;
 
-int find_includes(filep, file, file_red, recursion, failOK, incCollection)
+int find_includes(filep, file, file_red, recursion, failOK, incCollection, symbols)
     struct filepointer  *filep;
     struct inclist      *file, *file_red;
     int         recursion;
     boolean         failOK;
     struct IncludesCollection* incCollection;
+    struct symhash      *symbols;
 {
     register char   *line;
     register int    type;
     boolean recfailOK;
 
     while ((line = getline(filep))) {
-        switch(type = deftype(line, filep, file_red, file, TRUE)) {
+        switch(type = deftype(line, filep, file_red, file, TRUE, symbols)) {
         case IF:
         doif:
             type = find_includes(filep, file,
-                file_red, recursion+1, failOK, incCollection);
+                file_red, recursion+1, failOK, incCollection, symbols);
             while ((type == ELIF) || (type == ELIFFALSE) ||
                    (type == ELIFGUESSFALSE))
-                type = gobble(filep, file, file_red);
+                type = gobble(filep, file, file_red, symbols);
             if (type == ELSE)
-                gobble(filep, file, file_red);
+                gobble(filep, file, file_red, symbols);
             break;
         case IFFALSE:
         case IFGUESSFALSE:
@@ -64,10 +64,10 @@ int find_includes(filep, file, file_red, recursion, failOK, incCollection)
                 recfailOK = TRUE;
             else
                 recfailOK = failOK;
-            type = gobble(filep, file, file_red);
+            type = gobble(filep, file, file_red, symbols);
             if (type == ELSE)
                 find_includes(filep, file,
-                      file_red, recursion+1, recfailOK, incCollection);
+                      file_red, recursion+1, recfailOK, incCollection, symbols);
             else
             if (type == ELIF)
                 goto doif;
@@ -77,28 +77,28 @@ int find_includes(filep, file, file_red, recursion, failOK, incCollection)
             break;
         case IFDEF:
         case IFNDEF:
-            if ((type == IFDEF && isdefined(line, file_red, NULL))
-             || (type == IFNDEF && !isdefined(line, file_red, NULL))) {
+            if ((type == IFDEF && hash_lookup(line, symbols))
+             || (type == IFNDEF && !hash_lookup(line, symbols))) {
                 debug(1,(type == IFNDEF ?
                     "line %d: %s !def'd in %s via %s%s\n" : "",
                     filep->f_line, line,
                     file->i_file, file_red->i_file, ": doit"));
                 type = find_includes(filep, file,
-                    file_red, recursion+1, failOK, incCollection);
+                    file_red, recursion+1, failOK, incCollection, symbols);
                 while (type == ELIF || type == ELIFFALSE || type == ELIFGUESSFALSE)
-                    type = gobble(filep, file, file_red);
+                    type = gobble(filep, file, file_red, symbols);
                 if (type == ELSE)
-                    gobble(filep, file, file_red);
+                    gobble(filep, file, file_red, symbols);
             }
             else {
                 debug(1,(type == IFDEF ?
                     "line %d: %s !def'd in %s via %s%s\n" : "",
                     filep->f_line, line,
                     file->i_file, file_red->i_file, ": gobble"));
-                type = gobble(filep, file, file_red);
+                type = gobble(filep, file, file_red, symbols);
                 if (type == ELSE)
                     find_includes(filep, file,
-                        file_red, recursion + 1, failOK, incCollection);
+                        file_red, recursion + 1, failOK, incCollection, symbols);
                 else if (type == ELIF)
                         goto doif;
                 else if (type == ELIFFALSE || type == ELIFGUESSFALSE)
@@ -110,12 +110,12 @@ int find_includes(filep, file, file_red, recursion, failOK, incCollection)
         case ELIFGUESSFALSE:
         case ELIF:
             if (!recursion)
-                gobble(filep, file, file_red);
+                gobble(filep, file, file_red, symbols);
         case ENDIF:
             if (recursion)
                 return(type);
         case DEFINE:
-            define(line, file);
+            define(line, &symbols);
             break;
         case UNDEF:
             if (!*line) {
@@ -123,13 +123,13 @@ int find_includes(filep, file, file_red, recursion, failOK, incCollection)
                 file_red->i_file, filep->f_line, line);
                 break;
             }
-            undefine(line, file_red);
+            hash_undefine(line, symbols);
             break;
         case INCLUDE:
-            add_include(filep, file, file_red, line, FALSE, failOK, incCollection);
+            add_include(filep, file, file_red, line, FALSE, failOK, incCollection, symbols);
             break;
         case INCLUDEDOT:
-            add_include(filep, file, file_red, line, TRUE, failOK, incCollection);
+            add_include(filep, file, file_red, line, TRUE, failOK, incCollection, symbols);
             break;
         case ERROR:
                 warning("%s: %d: %s\n", file_red->i_file,
@@ -160,26 +160,27 @@ int find_includes(filep, file, file_red, recursion, failOK, incCollection)
     return(-1);
 }
 
-int gobble(filep, file, file_red)
+int gobble(filep, file, file_red, symbols)
     register struct filepointer *filep;
     struct inclist      *file, *file_red;
+    struct symhash      *symbols;
 {
     register char   *line;
     register int    type;
 
     while ((line = getline(filep))) {
-        switch(type = deftype(line, filep, file_red, file, FALSE)) {
+        switch(type = deftype(line, filep, file_red, file, FALSE, symbols)) {
         case IF:
         case IFFALSE:
         case IFGUESSFALSE:
         case IFDEF:
         case IFNDEF:
-            type = gobble(filep, file, file_red);
+            type = gobble(filep, file, file_red, symbols);
             while ((type == ELIF) || (type == ELIFFALSE) ||
                    (type == ELIFGUESSFALSE))
-                type = gobble(filep, file, file_red);
+                type = gobble(filep, file, file_red, symbols);
             if (type == ELSE)
-                    (void)gobble(filep, file, file_red);
+                    (void)gobble(filep, file, file_red, symbols);
             break;
         case ELSE:
         case ENDIF:
@@ -213,11 +214,12 @@ int gobble(filep, file, file_red)
 /*
  * Decide what type of # directive this line is.
  */
-int deftype (line, filep, file_red, file, parse_it)
+int deftype (line, filep, file_red, file, parse_it, symbols)
     register char   *line;
     register struct filepointer *filep;
     register struct inclist *file_red, *file;
     int parse_it;
+    struct symhash  *symbols;
 {
     register char   *p;
     char    *directive, savechar;
@@ -253,7 +255,7 @@ int deftype (line, filep, file_red, file, parse_it)
          */
         debug(0,("%s, line %d: #elif %s ",
            file->i_file, filep->f_line, p));
-        ret = zero_value(p, filep, file_red);
+        ret = zero_value(p, filep, file_red, symbols);
         if (ret != IF)
         {
         debug(0,("false...\n"));
@@ -282,7 +284,7 @@ int deftype (line, filep, file_red, file, parse_it)
         /*
          * parse an expression.
          */
-        ret = zero_value(p, filep, file_red);
+        ret = zero_value(p, filep, file_red, symbols);
         debug(0,("%s, line %d: %s #if %s\n",
              file->i_file, filep->f_line, ret?"false":"true", p));
         break;
@@ -304,16 +306,16 @@ int deftype (line, filep, file_red, file, parse_it)
 
         /* Support ANSI macro substitution */
         {
-            struct symtab *sym = isdefined(p, file_red, NULL);
-            while (sym) {
-            p = sym->s_value;
-            debug(3,("%s : #includes SYMBOL %s = %s\n",
-                   file->i_incstring,
-                   sym -> s_name,
-                   sym -> s_value));
-            /* mark file as having included a 'soft include' */
-            file->i_included_sym = TRUE;
-            sym = isdefined(p, file_red, NULL);
+            char *sym = hash_lookup(p, symbols);
+            while (sym)
+            {
+                p = sym;
+                debug(3,("%s : #includes SYMBOL %s\n",
+                            file->i_incstring,
+                            sym));
+                /* mark file as having included a 'soft include' */
+                file->i_included_sym = TRUE;
+                sym = hash_lookup(p, symbols);
             }
         }
 
@@ -357,76 +359,37 @@ int deftype (line, filep, file_red, file, parse_it)
     return(ret);
 }
 
-struct symtab *isdefined(symbol, file, srcfile)
-    register char   *symbol;
-    struct inclist  *file;
-    struct inclist  **srcfile;
+/*
+ * HACK! - so that we do not have to introduce 'symbols' in each cppsetup.c
+ * function...  It's safe, functions from cppsetup.c don't return here.
+ */
+struct symhash *global_symbols = NULL;
+
+char * isdefined( symbol )
+    register char *symbol;
 {
-    register struct symtab  *val;
-
-    val = slookup(symbol, &maininclist);
-    if (val) {
-        debug(1,("%s defined on command line\n", symbol));
-        if (srcfile != NULL) *srcfile = &maininclist;
-        return(val);
-    }
-    val = fdefined(symbol, file, srcfile);
-    if (val)
-        return(val);
-    debug(1,("%s not defined in %s\n", symbol, file->i_file));
-    return(NULL);
-}
-
-struct symtab *fdefined(symbol, file, srcfile)
-    register char   *symbol;
-    struct inclist  *file;
-    struct inclist  **srcfile;
-{
-    register struct inclist **ip;
-    register struct symtab  *val;
-    register int    i;
-    static int  recurse_lvl = 0;
-
-    if (file->i_defchecked)
-        return(NULL);
-    file->i_defchecked = TRUE;
-    val = slookup(symbol, file);
-    if (val)
-        debug(1,("%s defined in %s as %s\n", symbol, file->i_file, val->s_value));
-    if (val == NULL && file->i_list)
-        {
-        for (ip = file->i_list, i=0; i < file->i_listlen; i++, ip++)
-          {
-            val = fdefined(symbol, *ip, srcfile);
-            if (val) {
-                break;
-            }
-          }
-        }
-    else if (val != NULL && srcfile != NULL) *srcfile = file;
-    recurse_lvl--;
-    file->i_defchecked = FALSE;
-
-    return(val);
+    return hash_lookup( symbol, global_symbols );
 }
 
 /*
  * Return type based on if the #if expression evaluates to 0
  */
-int zero_value(exp, filep, file_red)
+int zero_value(exp, filep, file_red, symbols)
     register char   *exp;
     register struct filepointer *filep;
     register struct inclist *file_red;
+    register struct symhash *symbols;
 {
+    global_symbols = symbols; /* HACK! see above */
     if (cppsetup(exp, filep, file_red))
         return(IFFALSE);
     else
         return(IF);
 }
 
-void define(def, file)
-    char    *def;
-    struct inclist  *file;
+void define( def, symbols )
+    char            *def;
+    struct symhash **symbols;
 {
     char *val;
 
@@ -441,137 +404,205 @@ void define(def, file)
 
     if (!*val)
     val = "1";
-    define2(def, val, file);
+    hash_define( def, val, symbols );
 }
 
-void define2(name, val, file)
-    char    *name, *val;
-    struct inclist  *file;
+static int hash( str )
+    register char *str;
 {
-    int first, last, below;
-    register struct symtab *sp = NULL, *dest;
+    /* Hash (Kernighan and Ritchie) */
+    register unsigned int hashval = 0;
+    register unsigned int i       = 0;
+    char *s = str;
 
-    /* Make space if it's needed */
-    if (file->i_defs == NULL)
+    for ( ; *str; str++ )
     {
-    file->i_defs = (struct symtab *)
-            malloc(sizeof (struct symtab) * SYMTABINC);
-    file->i_deflen = SYMTABINC;
-    file->i_ndefs = 0;
-    }
-    else if (file->i_ndefs == file->i_deflen)
-    file->i_defs = (struct symtab *)
-            realloc(file->i_defs,
-                sizeof(struct symtab)*(file->i_deflen+=SYMTABINC));
-
-    if (file->i_defs == NULL)
-    fatalerr("malloc()/realloc() failure in insert_defn()\n");
-
-    below = first = 0;
-    last = file->i_ndefs - 1;
-    while (last >= first)
-    {
-    /* Fast inline binary search */
-    register char *s1;
-    register char *s2;
-    register int middle = (first + last) / 2;
-
-    /* Fast inline strchr() */
-    s1 = name;
-    s2 = file->i_defs[middle].s_name;
-    while (*s1++ == *s2++)
-        if (s2[-1] == '\0') break;
-
-    /* If exact match, set sp and break */
-    if (*--s1 == *--s2)
-    {
-        sp = file->i_defs + middle;
-        break;
+        hashval = ( hashval * SYMHASHSEED ) + ( *str );
     }
 
-    /* If name > i_defs[middle] ... */
-    if (*s1 > *s2)
-    {
-        below = first;
-        first = middle + 1;
-    }
-    /* else ... */
-    else
-    {
-        below = last = middle - 1;
-    }
-    }
-
-    /* Search is done.  If we found an exact match to the symbol name,
-       just replace its s_value */
-    if (sp != NULL)
-    {
-    free(sp->s_value);
-    sp->s_value = copy(val);
-    return;
-    }
-
-    sp = file->i_defs + file->i_ndefs++;
-    dest = file->i_defs + below + 1;
-    while (sp > dest)
-    {
-    *sp = sp[-1];
-    sp--;
-    }
-    sp->s_name = copy(name);
-    sp->s_value = copy(val);
+    //fprintf( stderr, "hash: %s, %d\n", s, hashval & ( SYMHASHMEMBERS - 1 ) );
+    return hashval & ( SYMHASHMEMBERS - 1 );
 }
 
-struct symtab *slookup(symbol, file)
-    register char   *symbol;
-    register struct inclist *file;
+struct symhash *hash_copy( symbols )
+    struct symhash *symbols;
 {
-    register int first = 0;
-    register int last = file->i_ndefs - 1;
+    int i;
+    struct symhash *newsym;
+    if ( !symbols )
+        return NULL;
 
-    if (file) while (last >= first)
+    newsym = (struct symhash *) malloc( sizeof( struct symhash ) );
+
+    for ( i = 0; i < SYMHASHMEMBERS; ++i )
     {
-        /* Fast inline binary search */
-        register char *s1;
-        register char *s2;
-        register int middle = (first + last) / 2;
-
-        /* Fast inline strchr() */
-        s1 = symbol;
-        s2 = file->i_defs[middle].s_name;
-        while (*s1++ == *s2++)
-            if (s2[-1] == '\0') break;
-
-        /* If exact match, we're done */
-        if (*--s1 == *--s2)
-        {
-            return file->i_defs + middle;
-        }
-
-        /* If symbol > i_defs[middle] ... */
-        if (*s1 > *s2)
-        {
-            first = middle + 1;
-        }
-        /* else ... */
+        if ( !symbols->s_pairs[ i ] )
+            newsym->s_pairs[ i ] = NULL;
         else
         {
-            last = middle - 1;
+            struct pair *it = symbols->s_pairs[ i ];
+            struct pair *nw = newsym->s_pairs[ i ] = (struct pair*) malloc( sizeof( struct pair ) );
+            nw->p_name = it->p_name;
+            nw->p_value = it->p_value;
+            nw->p_next = NULL;
+
+            while ( it->p_next )
+            {
+                nw->p_next = (struct pair*) malloc( sizeof( struct pair ) );
+                it = it->p_next;
+                nw = nw->p_next;
+                nw->p_name = it->p_name;
+                nw->p_value = it->p_value;
+                nw->p_next = NULL;
+            }
         }
     }
-    return(NULL);
+    return newsym;
 }
 
-void undefine(symbol, file)
-    char    *symbol;
-    register struct inclist *file;
+void hash_free( symbols )
+    struct symhash *symbols;
 {
-    register struct symtab *ptr;
-    struct inclist *srcfile;
-    while ((ptr = isdefined(symbol, file, &srcfile)) != NULL)
+    int i;
+
+    if ( !symbols )
+        return;
+
+    for ( i = 0; i < SYMHASHMEMBERS; ++i )
     {
-        srcfile->i_ndefs--;
-        for (; ptr < srcfile->i_defs + srcfile->i_ndefs; ptr++)
-        *ptr = ptr[1];
+        struct pair *it = symbols->s_pairs[ i ];
+        struct pair *next;
+        while ( it )
+        {
+            next = it->p_next;
+            free( it );
+            it = next;
+        }
+    }
+    free( symbols->s_pairs );
+}
+
+void hash_define( name, val, symbols )
+    char            *name, *val;
+    struct symhash **symbols;
+{
+    int hashval;
+    struct pair *it;
+
+    if ( !symbols )
+        return;
+
+    /* Make space if it's needed */
+    if ( *symbols == NULL )
+    {
+        int i;
+
+        *symbols = (struct symhash *) malloc( sizeof( struct symhash ) );
+        if ( *symbols == NULL )
+            fatalerr( "malloc()/realloc() failure in insert_defn()\n" );
+
+        for ( i = 0; i < SYMHASHMEMBERS; ++i )
+            (*symbols)->s_pairs[i] = NULL;
+    }
+
+    hashval = hash( name );
+    it = (*symbols)->s_pairs[ hashval ];
+
+    /* Replace/insert the symbol */
+    if ( it == NULL )
+    {
+        it = (*symbols)->s_pairs[ hashval ] = (struct pair*) malloc( sizeof( struct pair ) );
+        it->p_name = copy( name );
+        it->p_value = copy( val );
+        it->p_next = NULL;
+    }
+    else if ( strcmp( it->p_name, name ) == 0 )
+    {
+        it->p_value = copy( val );
+    }
+    else
+    {
+        while ( it->p_next && ( strcmp( it->p_next->p_name, name ) != 0 ) )
+        {
+            it = it->p_next;
+        }
+        if ( it->p_next )
+            it->p_next->p_name = copy( name );
+        else
+        {
+            it->p_next = (struct pair*) malloc( sizeof( struct pair ) );
+            it->p_next->p_name = copy( name );
+            it->p_next->p_value = copy( val );
+            it->p_next->p_next = NULL;
+        }
+    }
+}
+
+char *hash_lookup( symbol, symbols )
+    char           *symbol;
+    struct symhash *symbols;
+{
+    struct pair *it;
+
+    if ( !symbols )
+        return NULL;
+
+    it = symbols->s_pairs[ hash( symbol ) ];
+
+    while ( it && ( strcmp( it->p_name, symbol ) != 0 ) )
+    {
+        it = it->p_next;
+    }
+    if ( it )
+        return it->p_value;
+
+    return NULL;
+}
+
+void hash_undefine( symbol, symbols )
+    char           *symbol;
+    struct symhash *symbols;
+{
+    int hashval;
+    struct pair *it;
+
+    if ( !symbols )
+        return;
+
+    hashval = hash( symbol );
+    it = symbols->s_pairs[ hashval ];
+
+    /* Replace/insert the symbol */
+    if ( it == NULL )
+        return;
+    else if ( strcmp( it->p_name, symbol ) == 0 )
+    {
+        if ( it->p_next )
+        {
+            struct pair *tmp;
+            it->p_name = it->p_next->p_name;
+            it->p_value = it->p_next->p_value;
+            tmp = it->p_next->p_next;
+            free( it->p_next );
+            it->p_next = tmp;
+        }
+        else
+        {
+            free( it );
+            symbols->s_pairs[ hashval ] = NULL;
+        }
+    }
+    else
+    {
+        while ( it->p_next && ( strcmp( it->p_next->p_name, symbol ) != 0 ) )
+        {
+            it = it->p_next;
+        }
+        if ( it->p_next )
+        {
+            struct pair *tmp = it->p_next;
+            it->p_next = it->p_next->p_next;
+            free( tmp );
+        }
     }
 }

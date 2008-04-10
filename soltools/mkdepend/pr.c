@@ -39,12 +39,13 @@ extern boolean  printed;
 extern boolean  verbose;
 extern boolean  show_where_not;
 
-void add_include(filep, file, file_red, include, dot, failOK, incCollection)
+void add_include(filep, file, file_red, include, dot, failOK, incCollection, symbols)
     struct filepointer  *filep;
     struct inclist  *file, *file_red;
     char    *include;
     boolean dot;
     struct IncludesCollection* incCollection;
+    struct symhash  *symbols;
 {
     register struct inclist *newfile;
     register struct filepointer *content;
@@ -77,7 +78,7 @@ void add_include(filep, file, file_red, include, dot, failOK, incCollection)
         if (!newfile->i_searched) {
             newfile->i_searched = TRUE;
             content = getfile(newfile->i_file);
-            find_includes(content, newfile, file_red, 0, failOK, incCollection);
+            find_includes(content, newfile, file_red, 0, failOK, incCollection, symbols);
             freefile(content);
         }
     }
