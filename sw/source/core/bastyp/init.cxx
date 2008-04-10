@@ -1,355 +1,154 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: init.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.64 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:17:00 $
+ * $RCSfile: init.cxx,v $
+ * $Revision: 1.65 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
-#ifndef _SV_MAPMOD_HXX
 #include <vcl/mapmod.hxx>
-#endif
-
-#ifndef _SVX_XMLCNITM_HXX
 #include <svx/xmlcnitm.hxx>
-#endif
-
-#ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
-#endif
-#ifndef _SVX_PBINITEM_HXX
 #include <svx/pbinitem.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_NLBKITEM_HXX
 #include <svx/nlbkitem.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_PRSZITEM_HXX
 #include <svx/prszitem.hxx>
-#endif
-#ifndef _SVX_OPAQITEM_HXX
 #include <svx/opaqitem.hxx>
-#endif
-#ifndef _SVX_SHADITEM_HXX
 #include <svx/shaditem.hxx>
-#endif
-#ifndef _SVX_PRNTITEM_HXX
 #include <svx/prntitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX
 #include <svx/brkitem.hxx>
-#endif
 #ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_WRLMITEM_HXX
 #include <svx/wrlmitem.hxx>
-#endif
-#ifndef _SVX_KERNITEM_HXX
 #include <svx/kernitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_CSCOITEM_HXX
 #include <svx/cscoitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ORPHITEM_HXX
 #include <svx/orphitem.hxx>
-#endif
-#ifndef _SVX_WIDWITEM_HXX
 #include <svx/widwitem.hxx>
-#endif
-#ifndef _SVX_NHYPITEM_HXX
 #include <svx/nhypitem.hxx>
-#endif
-#ifndef _SVX_SPLTITEM_HXX
 #include <svx/spltitem.hxx>
-#endif
-#ifndef _SVX_LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVX_BLNKITEM_HXX
 #include <svx/blnkitem.hxx>
-#endif
-#ifndef _SVX_AKRNITEM_HXX
 #include <svx/akrnitem.hxx>
-#endif
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
 #endif
-#ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
-#endif
 #ifndef _SVX_SCRIPSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
 #endif
-#ifndef _SVX_HNGPNCTITEM_HXX
 #include <svx/hngpnctitem.hxx>
-#endif
-#ifndef _SVX_CMAPITEM_HXX
 #include <svx/cmapitem.hxx>
-#endif
-#ifndef _SVX_CHARSCALEITEM_HXX
 #include <svx/charscaleitem.hxx>
-#endif
-#ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _SVXSWAFOPT_HXX
 #include <svx/swafopt.hxx>
-#endif
-#ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
-#endif
-#ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
-#endif
-#ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
-#ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#endif
-#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
-#endif
 #include <svx/acorrcfg.hxx>
 #include <vcl/svapp.hxx>
-
-#ifndef _FMTHBSH_HXX
 #include <fmthbsh.hxx>
-#endif
-#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
-#endif
-#ifndef _FMTRFMRK_HXX
 #include <fmtrfmrk.hxx>
-#endif
-#ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx>
-#endif
-#ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
-#endif
-#ifndef _FMTEIRO_HXX
 #include <fmteiro.hxx>
-#endif
-#ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTHDFT_HXX
 #include <fmthdft.hxx>
-#endif
-#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
-#endif
-#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
-#endif
-#ifndef _FMTAUTOFMT_HXX
 #include <fmtautofmt.hxx>
-#endif
-#ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
-#endif
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
 #endif
-#ifndef _FMTFTNTX_HXX
 #include <fmtftntx.hxx>
-#endif
-#ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
-#endif
 #include <fmtautofmt.hxx>
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _SW_HF_EAT_SPACINGITEM_HXX
 #include <hfspacingitem.hxx>
-#endif
-#ifndef _EDITSH_HXX
 #include <editsh.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _INIT_HXX
 #include <init.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _GRFATR_HXX
 #include <grfatr.hxx>
-#endif
-#ifndef _TOX_HXX
 #include <tox.hxx>
-#endif
-#ifndef _CELLATR_HXX
 #include <cellatr.hxx>
-#endif
-#ifndef _TBLAFMT_HXX
 #include <tblafmt.hxx>
-#endif
-#ifndef _VISCRS_HXX
 #include <viscrs.hxx>
-#endif
-#ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
-#endif
-#ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _CHECKIT_HXX
 #include <checkit.hxx>
-#endif
-
-#ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
 
 // OD 09.10.2003 #i18732#
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
-#endif
 // OD 2004-05-05 #i28701#
-#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
