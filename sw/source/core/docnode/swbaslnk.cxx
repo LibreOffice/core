@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swbaslnk.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.15 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:42:39 $
+ * $RCSfile: swbaslnk.cxx,v $
+ * $Revision: 1.16 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,102 +33,42 @@
 
 
 #include <hintids.hxx>
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 
 #ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
 #endif
-#ifndef _SALHELPER_CONDITION_HXX_
 #include <salhelper/condition.hxx>
-#endif
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
-#endif
-#ifndef _LINKMGR_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
 #endif
-#ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _SOERR_HXX
 #include <svtools/soerr.hxx>
-#endif
-
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _EDITSH_HXX
 #include <editsh.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
-#ifndef _SWBASLNK_HXX
 #include <swbaslnk.hxx>
-#endif
-#ifndef _SWSERV_HXX
 #include <swserv.hxx>
-#endif
-#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
-#endif
 
 using namespace com::sun::star;
 
