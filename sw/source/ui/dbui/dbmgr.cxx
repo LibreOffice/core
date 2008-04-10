@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dbmgr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.129 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-10 13:48:39 $
+ * $RCSfile: dbmgr.cxx,v $
+ * $Revision: 1.130 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,162 +38,78 @@
 
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_MAILMERGEEVENT_
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _DBCONFIG_HXX
 #include <dbconfig.hxx>
-#endif
-#ifndef _SWDBTOOLSCLIENT_HXX
 #include <swdbtoolsclient.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
-#endif
 #include <cmdid.h>
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _FLDDAT_HXX
 #include <flddat.hxx>
-#endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
 #endif
-#ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _DBUI_HXX
 #include <dbui.hxx>
-#endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
-#endif
 #ifndef _DBUI_HRC
 #include <dbui.hrc>
 #endif
@@ -208,98 +119,39 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
-#ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MAIL_MAILATTACHMENT_HPP_
 #include <com/sun/star/mail/MailAttachment.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
 #include <comphelper/property.hxx>
-#ifndef _MAILMERGEHELPER_HXX
 #include <mailmergehelper.hxx>
-#endif
-#ifndef INCLUDED_MAILDISPATCHER_HXX
 #include <maildispatcher.hxx>
-#endif
-#ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
-#endif
 
 #include <unomailmerge.hxx>
-
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
-#endif
-#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _SWCRSR_HXX
 #include <swcrsr.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
 #include <osl/file.hxx>
 #include <swabstdlg.hxx>
 #include <fmthdft.hxx>
