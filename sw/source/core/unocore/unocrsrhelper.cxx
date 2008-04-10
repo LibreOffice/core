@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unocrsrhelper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:27:55 $
+ * $RCSfile: unocrsrhelper.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,129 +33,49 @@
 
 
 #include <cmdid.h>
-#ifndef _UNOCRSRHELPER_HXX
 #include <unocrsrhelper.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
-#ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
-#endif
-#ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
-#endif
-#ifndef _UNOFIELD_HXX
 #include <unofield.hxx>
-#endif
-#ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
-#endif
-#ifndef _UNOSETT_HXX
 #include <unosett.hxx>
-#endif
-#ifndef _UNOFRAME_HXX
 #include <unoframe.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _CHARFMT_HXX //autogen
 #include <charfmt.hxx>
-#endif
-#ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
-#endif
-#ifndef _DOCSTYLE_HXX //autogen
 #include <docstyle.hxx>
-#endif
-#ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
-#endif
-#ifndef _TXTRFMRK_HXX //autogen
 #include <txtrfmrk.hxx>
-#endif
-#ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
-#endif
-#ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen
 #include <section.hxx>
-#endif
-#ifndef _SHELLIO_HXX //autogen
 #include <shellio.hxx>
-#endif
-#ifndef _EDIMP_HXX //autogen
 #include <edimp.hxx>
-#endif
-#ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
-#endif
-#ifndef _CNTFRM_HXX //autogen
 #include <cntfrm.hxx>
-#endif
-#ifndef _PAGEFRM_HXX //autogen
 #include <pagefrm.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _TOX_HXX
 #include <tox.hxx>
-#endif
-#ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
-#endif
-#ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
-#endif
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _NUMRULE_HXX
 #include <numrule.hxx>
-#endif
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
