@@ -63,7 +63,8 @@ in this Software without prior written authorization from the X Consortium.
 #define MAXFILES    2048  /* Increased from 512. -mcafee */
                           /* Increased from 1024. -mh */
 #define MAXDIRS     64
-#define SYMTABINC   10  /* must be > 1 for define() to work right */
+#define SYMHASHSEED     131  /* 131 1313 13131 ... */
+#define SYMHASHMEMBERS  64  /* must be 2^x to work right */
 #define TRUE        1
 #define FALSE       0
 
@@ -110,9 +111,14 @@ extern int  _debugmask;
 
 typedef unsigned char boolean;
 
-struct symtab {
-    char    *s_name;
-    char    *s_value;
+struct pair {
+    char        *p_name;
+    char        *p_value;
+    struct pair *p_next;
+};
+
+struct symhash {
+    struct pair *s_pairs[SYMHASHMEMBERS];
 };
 
 struct  inclist {
@@ -120,9 +126,6 @@ struct  inclist {
     char        *i_file;    /* path name of the include file */
     struct inclist  **i_list;   /* list of files it itself includes */
     int     i_listlen;  /* length of i_list */
-    struct symtab   *i_defs;    /* symbol table for this file */
-    int     i_ndefs;    /* current # defines */
-    int     i_deflen;   /* amount of space in table */
     boolean     i_defchecked;   /* whether defines have been checked */
     boolean     i_notified; /* whether we have revealed includes */
     boolean     i_marked;   /* whether it's in the makefile */
@@ -152,12 +155,15 @@ char            *realloc();
 char            *copy();
 char            *base_name();
 char            *getline();
-struct symtab       *slookup();
-struct symtab       *isdefined();
-struct symtab       *fdefined();
+char            *isdefined();
 struct filepointer  *getfile();
 struct inclist      *newinclude();
 struct inclist      *inc_path();
+
+void define( char *def, struct symhash **symbols );
+void hash_define(char *name, char * val, struct symhash **symbols);
+struct symhash *hash_copy( struct symhash *symbols );
+void hash_free( struct symhash *symbols );
 
 #if NeedVarargsPrototypes
 extern fatalerr(char *, ...);
