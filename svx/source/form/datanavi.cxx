@@ -1,35 +1,30 @@
  /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: datanavi.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:18:24 $
+ * $RCSfile: datanavi.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,109 +34,37 @@
 #include "datanavi.hxx"
 #include "fmservs.hxx"
 
-#ifndef _SVX_DATANAVI_HRC
 #include "datanavi.hrc"
-#endif
-#ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
-#endif
-#ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
-#endif
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _RCID_H
 #include <tools/rcid.h>
-#endif
-
-#ifndef _SVX_XMLEXCHG_HXX_
 #include "xmlexchg.hxx"
-#endif
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <svtools/miscopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
-#endif
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _SFX_OBJITEM_HXX
 #include <sfx2/objitem.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFX_DISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
-#include <com/sun/star/container/XENumeration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
-#include <com/sun/star/container/XENumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#ifndef _COM_SUN_STAR_XFORMS_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_DOM_XDOCUMENT_HPP_
 #include <com/sun/star/xml/dom/XDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_DOM_DOMEXCEPTION_HPP_
 #include <com/sun/star/xml/dom/DOMException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_DOM_DOMEXCEPTIONTYPE_HPP_
-#include <com/sun/star/xml/dom/DOMExceptiontype.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
