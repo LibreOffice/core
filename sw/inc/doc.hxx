@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: doc.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.151 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:39:48 $
+ * $RCSfile: doc.hxx,v $
+ * $Revision: 1.152 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _DOC_HXX
@@ -40,28 +35,17 @@
 #ifndef IINTERFACE_HXX_INCLUDED
 #include <IInterface.hxx>
 #endif
-
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#ifndef IDOCUMENTBOOKMARKACCESS_HXX_INCLUDED
 #include <IDocumentBookmarkAccess.hxx>
-#endif
 #ifndef IREDLINEACCESS_HXX_INCLUDED
 #include <IDocumentRedlineAccess.hxx>
 #endif
-#ifndef IDOCUMENTUNDOREDO_HXX_INCLUDED
 #include <IDocumentUndoRedo.hxx>
-#endif
-#ifndef IDOCUMENTLINKSADMINISTRATION_HXX_INCLUDED
 #include <IDocumentLinksAdministration.hxx>
-#endif
-#ifndef IDOCUMENTFIELDSACCESS_HXX_INCLUDED
 #include <IDocumentFieldsAccess.hxx>
-#endif
 #ifndef IDOCUMENTCONTENTOPERATIONS_HXX_INCLUDED
 #include <IDocumentContentOperations.hxx>
 #endif
@@ -80,9 +64,7 @@
 #ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
 #endif
-#ifndef IDOCUMENTLAYOUTACCESS_HXX_INCLUDED
 #include <IDocumentLayoutAccess.hxx>
-#endif
 #ifndef IDOCUMENTTIMERACCESS_HXX_INCLUDED
 #include <IDocumentTimerAccess.hxx>
 #endif
@@ -96,71 +78,30 @@
 // <--
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
-
-#ifndef _TIMER_HXX //autogen
 #include <vcl/timer.hxx>
-#endif
-
-#ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _NDARR_HXX
 #include <ndarr.hxx>
-#endif
-#ifndef _SWATRSET_HXX
 #include <swatrset.hxx>
-#endif
-#ifndef _TOXE_HXX
 #include <toxe.hxx>             // enums
-#endif
-#ifndef _FLYENUM_HXX
 #include <flyenum.hxx>
-#endif
-#ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
-#endif
 #ifndef _SWDBDATA_HXXnLinkCt
 #include <swdbdata.hxx>
 #endif
-#ifndef _CHCMPRSE_HXX
 #include <chcmprse.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATEDWORD_HPP_
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#endif
 #ifndef _VOS_REF_HXX
 #include <vos/ref.hxx>
 #endif
-#ifndef _SVDTYPES_HXX
 #include <svx/svdtypes.hxx>
-#endif
-#ifndef _SFXSTYLE_HXX //autogen // #116530#
 #include <svtools/style.hxx>
-#endif
-#ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
-#endif
-
-#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
 #include "comphelper/implementationreference.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#endif
 
 #include <hash_map>
 #include <stringhash.hxx>
