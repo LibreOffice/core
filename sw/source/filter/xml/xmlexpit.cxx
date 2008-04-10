@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmlexpit.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.24 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:39:01 $
+ * $RCSfile: xmlexpit.cxx,v $
+ * $Revision: 1.25 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,41 +33,15 @@
 #include "xmlexpit.hxx"
 
 #include <xmloff/xmluconv.hxx>
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
-#endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _SVX_XMLCNITM_HXX
 #include <svx/xmlcnitm.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
@@ -80,66 +49,24 @@
 #endif
 
 
-
-#ifndef _HINTIDS_HXX
 #include "hintids.hxx"
-#endif
-
-#ifndef SW_UNOMID_HXX
 #include "unomid.h"
-#endif
-
-#ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
-#endif
-
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-
-#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-
-#ifndef _SVX_SHADITEM_HXX
 #include <svx/shaditem.hxx>
-#endif
-
-#ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
-#endif
-
-#ifndef _SVX_BRKITEM_HXX
 #include <svx/brkitem.hxx>
-#endif
-
-#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
-#endif
-
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-
-#ifndef _FMTPDSC_HXX
 #include "fmtpdsc.hxx"
-#endif
-
-#ifndef _FMTORNT_HXX
 #include "fmtornt.hxx"
-#endif
-
-#ifndef _FMTFSIZE_HXX
 #include "fmtfsize.hxx"
-#endif
 
 #ifndef _FMTLSPLT_HXX
 #include "fmtlsplt.hxx"
 #endif
-
-#ifndef _SW_XMLITHLP_HXX
 #include "xmlithlp.hxx"
-#endif
 
 #include "fmtrowsplt.hxx"
 
