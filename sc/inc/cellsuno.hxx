@@ -1,235 +1,100 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: cellsuno.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 15:14:37 $
+ * $RCSfile: cellsuno.hxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef SC_CELLSUNO_HXX
 #define SC_CELLSUNO_HXX
 
-#ifndef SC_SCGLOB_HXX
 #include "global.hxx"           // ScRange, ScAddress
-#endif
-
-#ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"         // ScRangeList
-#endif
 
 #include "grammar.hxx"
-
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SVT_LISTENER_HXX
 #include <svtools/listener.hxx>
-#endif
-
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TABLE_XTABLECHARTSSUPPLIER_HPP_
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
 #include <com/sun/star/chart/XChartDataArray.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGE_HPP_
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XFORMULAQUERY_HPP_
 #include <com/sun/star/sheet/XFormulaQuery.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETOPERATION_HPP_
 #include <com/sun/star/sheet/XSheetOperation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGECONTAINER_HPP_
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLFORMATRANGESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XCellFormatRangesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XUNIQUECELLFORMATRANGESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETFILTERABLEEX_HPP_
 #include <com/sun/star/sheet/XSheetFilterableEx.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETPAGEBREAK_HPP_
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEMOVEMENT_HPP_
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XPRINTAREAS_HPP_
 #include <com/sun/star/sheet/XPrintAreas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSUBTOTALCALCULATABLE_HPP_
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULARANGE_HPP_
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEDATA_HPP_
 #include <com/sun/star/sheet/XCellRangeData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEFORMULA_HPP_
 #include <com/sun/star/sheet/XCellRangeFormula.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLSERIES_HPP_
 #include <com/sun/star/sheet/XCellSeries.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XMULTIPLEOPERATION_HPP_
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XFORMULATOKENS_HPP_
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULATOKENS_HPP_
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREPLACEABLE_HPP_
 #include <com/sun/star/util/XReplaceable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XINDENT_HPP_
 #include <com/sun/star/util/XIndent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
 #include <com/sun/star/util/XMergeable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XAUTOFORMATTABLE_HPP_
 #include <com/sun/star/table/XAutoFormattable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XSORTABLE_HPP_
 #include <com/sun/star/util/XSortable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XIMPORTABLE_HPP_
 #include <com/sun/star/util/XImportable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
 #include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XDATAPILOTTABLESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONANCHOR_HPP_
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSCENARIOSSUPPLIER_HPP_
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONSSUPPLIER_HPP_
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETAUDITING_HPP_
 #include <com/sun/star/sheet/XSheetAuditing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETOUTLINE_HPP_
 #include <com/sun/star/sheet/XSheetOutline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
 #include <com/sun/star/util/XProtectable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSCENARIO_HPP_
 #include <com/sun/star/sheet/XScenario.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSCENARIOENHANCED_HPP_
 #include <com/sun/star/sheet/XScenarioEnhanced.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XEXTERNALSHEETNAME_HPP_
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
