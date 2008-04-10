@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drviews9.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.21 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:34:42 $
+ * $RCSfile: drviews9.cxx,v $
+ * $Revision: 1.22 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,105 +32,48 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SVX__XGRADIENT_HXX //autogen
 #include <svx/xgrad.hxx>
-#endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVX_XLNWTIT_HXX //autogen
 #include <svx/xlnwtit.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX //autogen
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XFLHTIT_HXX //autogen
 #include <svx/xflhtit.hxx>
-#endif
-#ifndef _SVX_XFLGRIT_HXX //autogen
 #include <svx/xflgrit.hxx>
-#endif
-#ifndef _SVX_XLNCLIT_HXX //autogen
 #include <svx/xlnclit.hxx>
-#endif
-#ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _SVX_XLNWTIT_HXX //autogen
 #include <svx/xlnwtit.hxx>
-#endif
-
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 
 #ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-#ifndef _GALLERY_HXX_ //autogen
 #include <svx/gallery.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
 
 #include <sfx2/viewfrm.hxx>
 
 
 #include "app.hrc"
 #include "strings.hrc"
-
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "drawdoc.hxx"
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 #include "DrawDocShell.hxx"
 #include "sdresid.hxx"
-#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#endif
 
 namespace sd {
 
