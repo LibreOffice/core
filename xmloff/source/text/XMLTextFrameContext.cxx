@@ -1,133 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: XMLTextFrameContext.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.73 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:01:59 $
+ * $RCSfile: XMLTextFrameContext.cxx,v $
+ * $Revision: 1.74 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
 #include <com/sun/star/text/XTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
-#endif
-#ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #include "XMLEmbeddedObjectImportContext.hxx"
-#endif
-#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
 #include <xmloff/XMLBase64ImportContext.hxx>
-#endif
-#ifndef _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
 #include "XMLReplacementImageContext.hxx"
-#endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
 #include <xmloff/prstylei.hxx>
-#endif
-#ifndef _XMLOFF_I18NMAP_HXX
 #include "i18nmap.hxx"
-#endif
-#ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
-#endif
-#ifndef _XMLOFF_SHAPEIMPORT_HXX_
 #include <xmloff/shapeimport.hxx>
-#endif
-#ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #include <xmloff/XMLEventsImportContext.hxx>
-#endif
-#ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
 #include "XMLImageMapContext.hxx"
-#endif
-
-#ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
-#endif
 
 #ifndef _XMLOFF_XMLTEXTLISTBLOCKCONTEXT_HXX
 #include "XMLTextListBlockContext.hxx"
@@ -136,13 +72,8 @@
 #ifndef _XMLOFF_XMLTEXTLISTITEMCONTEXT_HXX
 #include "XMLTextListItemContext.hxx"
 #endif
-#ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
-#endif
-
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
 
 #ifndef __SGI_STL_MAP
 #include <map>
