@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: mmoutputpage.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.22 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:06:41 $
+ * $RCSfile: mmoutputpage.cxx,v $
+ * $Revision: 1.23 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,102 +33,49 @@
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
-#ifndef _MAILMERGEOUTPUTPAGE_HXX
 #include <mmoutputpage.hxx>
-#endif
-#ifndef _MAILMERGEWIZARD_HXX
 #include <mailmergewizard.hxx>
-#endif
-#ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
-#endif
-#ifndef _SWMAILMERGECHILDWINDOW_HXX
 #include <mailmergechildwindow.hxx>
-#endif
-#ifndef _MAILCONFIGPAGE_HXX
 #include <mailconfigpage.hxx>
-#endif
 #include <cmdid.h>
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFX_DINFDLG_HXX
 #include <sfx2/dinfdlg.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
 //#ifndef _SFX_DOCFILT_HACK_HXX
 //#include <sfx2/docfilt.hxx>
 //#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
 #ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <osl/file.hxx>
-#ifndef _MAILMERGEGREETINGSPAGE_HXX
 #include <mmgreetingspage.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
-#endif
 //#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 //#include <com/sun/star/beans/PropertyValue.hpp>
 //#endif
@@ -143,24 +85,12 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
-#endif
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
 #include <mmoutputpage.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
