@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewshel.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.69 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:23:47 $
+ * $RCSfile: viewshel.cxx,v $
+ * $Revision: 1.70 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,80 +37,46 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATE_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
-
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
 #include "ShellFactory.hxx"
 #include "DrawController.hxx"
 #include "LayerTabBar.hxx"
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
-#endif
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-#ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
-#endif
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
 #ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
 #endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
-#endif
-#ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
-#endif
-#ifndef _SD_SDXFER_HXX
 #include <sdxfer.hxx>
-#endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
-#endif
-#ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
-#endif
 
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#ifndef SD_OUTLINE_VIEW_HXX
 #include "OutlineView.hxx"
-#endif
-#ifndef SD_CLIENT_HXX
 #include "Client.hxx"
-#endif
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "zoomlist.hxx"
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "optsitem.hxx"
 #include "BezierObjectBar.hxx"
 #include "TextObjectBar.hxx"
@@ -130,12 +91,8 @@
 #include <svx/svdoutl.hxx>
 
 // #96090#
-#ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
 #include "SpellDialogChildWindow.hxx"
 
 #include "Window.hxx"
