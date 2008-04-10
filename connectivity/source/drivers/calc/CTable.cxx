@@ -1,131 +1,67 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: CTable.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:28:01 $
+ * $RCSfile: CTable.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-
-#ifndef _CONNECTIVITY_CALC_TABLE_HXX_
 #include "calc/CTable.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 //#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 //#include <com/sun/star/ucb/XContentAccess.hpp>
 //#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGES_HPP_
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XDATABASERANGE_HPP_
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XUSEDAREACURSOR_HPP_
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_CELLFLAGS_HPP_
 #include <com/sun/star/sheet/CellFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _SV_CONVERTER_HXX_
 #include <svtools/converter.hxx>
-#endif
-#ifndef _CONNECTIVITY_CALC_CONNECTION_HXX_
 #include "calc/CConnection.hxx"
-#endif
-#ifndef _CONNECTIVITY_CALC_COLUMNS_HXX_
 #include "calc/CColumns.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
 #include <comphelper/types.hxx>
 
 using namespace connectivity;
