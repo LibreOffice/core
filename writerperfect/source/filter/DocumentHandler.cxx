@@ -23,14 +23,8 @@
 #include "FilterInternal.hxx"
 
 #include <string.h>
-
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
 
 #ifndef _ATTRLIST_HPP_
 #include <xmloff/attrlist.hxx>
