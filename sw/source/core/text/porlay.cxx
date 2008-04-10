@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: porlay.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.65 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:45:33 $
+ * $RCSfile: porlay.cxx,v $
+ * $Revision: 1.66 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -47,60 +42,29 @@
 #include "blink.hxx"    // pBlink
 #include "redlnitr.hxx" // SwRedlineItr
 #include "porfly.hxx"   // SwFlyCntPortion
-#ifndef _PORRST_HXX
 #include <porrst.hxx>       // SwHangingPortion
-#endif
-#ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
-#ifndef _SVX_CHARHIDDENITEM_HXX
 #include <svx/charhiddenitem.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
-
-#ifndef _SVX_BLNKITEM_HXX
 #include <svx/blnkitem.hxx>
-#endif
-#ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
-#endif
-#ifndef _CHARFMT_HXX //autogen
 #include <charfmt.hxx>
-#endif
-#ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>       // SwRedlineTbl
-#endif
-#ifndef _REDLINE_HXX
 #include <redline.hxx>      // SwRedline
-#endif
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
 // <--
 
 #include <IDocumentRedlineAccess.hxx>
