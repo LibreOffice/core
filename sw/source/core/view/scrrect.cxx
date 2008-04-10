@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: scrrect.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.22 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:42:06 $
+ * $RCSfile: scrrect.cxx,v $
+ * $Revision: 1.23 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,37 +32,21 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-#ifndef _SCRRECT_HXX
 #include <scrrect.hxx>      // SwScrollRect, SwScrollRects
-#endif
 // OD 18.02.2003 #107562# - <SwAlignRect> for <ViewShell::Scroll()>
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
 #ifndef _CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
 #endif
-#ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
 #include "crsrsh.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -134,14 +113,8 @@ void ViewShell::AddScrollRect( const SwFrm *pFrm, const SwRect &rRect,
 |*  transfers the critical lines by calling SwViewImp::MoveScrollArea(..).
 |*
 ******************************************************************************/
-
-#ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#endif
 
 void ViewShell::Scroll()
 {
