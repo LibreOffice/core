@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: optpage.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.59 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:32:58 $
+ * $RCSfile: optpage.cxx,v $
+ * $Revision: 1.60 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,9 +35,7 @@
 #endif
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -51,48 +44,20 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _XTABLE_HXX //autogen
 #include <svx/xtable.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
-#endif
-#ifndef _CHARATR_HXX
 #include <charatr.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -102,45 +67,23 @@
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx> //Items fuer Sw-Seiten
-#endif
-#ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
-#endif
-#ifndef _UIITEMS_HXX
 #include <uiitems.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>
-#endif
-#ifndef _OPTPAGE_HXX
 #include <optpage.hxx>
-#endif
-#ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
-#endif
 #ifndef _MODCFG_HXX
 #include <modcfg.hxx>
 #endif
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
 #endif
-#ifndef _CRSTATE_HXX
 #include <crstate.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -153,19 +96,11 @@
 #ifndef _OPTDLG_HRC
 #include <optdlg.hrc>
 #endif
-#ifndef _SVX_STRARRAY_HXX
 #include <svx/strarray.hxx>
-#endif
-#ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
 #include <swwrtshitem.hxx>
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
-#endif
 
 #include <unomid.h>
 
