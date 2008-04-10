@@ -1,112 +1,64 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: bc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.37 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:54:40 $
+ * $RCSfile: bc.cxx,v $
+ * $Revision: 1.38 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 #include "osl/diagnose.h"
-
-#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSETINFOCHANGE_HPP_
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_CONTENTACTION_HPP_
 #include <com/sun/star/ucb/ContentAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#endif
-#ifndef _FILGLOB_HXX_
 #include "filglob.hxx"
-#endif
-#ifndef _FILID_HXX_
 #include "filid.hxx"
-#endif
-#ifndef _FILROW_HXX_
 #include "filrow.hxx"
-#endif
-#ifndef _BC_HXX_
 #include "bc.hxx"
-#endif
-#ifndef _PROV_HXX_
 #include "prov.hxx"
-#endif
 #ifndef _FILERROR_HXX_
 #include "filerror.hxx"
 #endif
-#ifndef _FILINSREQ_HXX_
 #include "filinsreq.hxx"
-#endif
 
 
 using namespace fileaccess;
