@@ -5,9 +5,7 @@
 #ifndef _USERREGISTRAR_HXX_
 #define _USERREGISTRAR_HXX_
 
-#ifndef _REGISTRAR_HXX_
 #include "registrar.hxx"
-#endif
 
 class UserRegistrar : public Registrar
 {
