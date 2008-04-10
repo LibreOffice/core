@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docedt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.43 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:17:44 $
+ * $RCSfile: docedt.cxx,v $
+ * $Revision: 1.44 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,118 +32,47 @@
 #include "precompiled_sw.hxx"
 
 #include <string.h>         // fuer strchr()
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _SVX_CSCOITEM_HXX //autogen
 #include <svx/cscoitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
 #endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
-#endif
-#ifndef _ACORRECT_HXX
 #include <acorrect.hxx>     // Autokorrektur
-#endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>      // fuer SwBookmark
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>           // fuers Spell
-#endif
-#ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _DOCTXM_HXX
 #include <doctxm.hxx>       // beim Move: Verzeichnisse korrigieren
-#endif
-#ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
-#endif
-#ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
-#endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Statusanzeige
-#endif
-#ifndef _MVSAVE_HXX
 #include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>          // fuers UpdateFtn
-#endif
-#ifndef _SPLARGS_HXX
 #include <splargs.hxx>      // fuer Spell
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>       // fuer die UndoIds
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _HHCWRP_HXX
 #include <hhcwrp.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include "comcore.hrc"
 #include "editsh.hxx"
 
