@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmltexti.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.53 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:43:42 $
+ * $RCSfile: xmltexti.cxx,v $
+ * $Revision: 1.54 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,117 +34,47 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectCreator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XLINKCREATOR_HPP_
 #include <com/sun/star/embed/XLinkCreator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <sot/clsids.hxx>
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _XMLOFF_PRSTYLEI_HXX_
 #include <xmloff/prstylei.hxx>
-#endif
-#ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
 #include <xmloff/maptype.hxx>
-#endif
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include <xmloff/xmlprmap.hxx>
-#endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
 #endif
-#ifndef _XMLOFF_I18NMAP_HXX
 #include <xmloff/i18nmap.hxx>
-#endif
-
-#ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
-#endif
-#ifndef _UNOOBJ_HXX
 #include "unoobj.hxx"
-#endif
-#ifndef _UNOFRAME_HXX
 #include "unoframe.hxx"
-#endif
-#ifndef _DOC_HXX
 #include "doc.hxx"
-#endif
-#ifndef _UNOCOLL_HXX
 #include "unocoll.hxx"
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-
-#ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
-#endif
-#ifndef _XMLTBLI_HXX
 #include "xmltbli.hxx"
-#endif
-#ifndef _XMLTEXTI_HXX
 #include "xmltexti.hxx"
-#endif
-#ifndef _XMLREDLINEIMPORTHELPER_HXX
 #include "XMLRedlineImportHelper.hxx"
-#endif
-#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
 #include <xmloff/XMLFilterServiceNames.h>
-#endif
-
-#ifndef _SW_APPLET_IMPL_HXX
 #include <SwAppletImpl.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
 
 // for locking SolarMutex: svapp + mutex
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
