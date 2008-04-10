@@ -1,54 +1,42 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: DragMethod_Base.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.2 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:07:26 $
+ * $RCSfile: DragMethod_Base.hxx,v $
+ * $Revision: 1.3 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef CHART2_DRAGMETHOD_BASE_HXX
 #define CHART2_DRAGMETHOD_BASE_HXX
 
 #include "DrawViewWrapper.hxx"
-
-#ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #include <svx/ActionDescriptionProvider.hxx>
-#endif
 // header for class SdrDragMethod
-#ifndef _SVDDRGMT_HXX
 #include <svx/svddrgmt.hxx>
-#endif
 
 // header for class WeakReference
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
 
 namespace chart
 {
