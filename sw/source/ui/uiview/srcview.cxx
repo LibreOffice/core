@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: srcview.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.57 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:56:45 $
+ * $RCSfile: srcview.cxx,v $
+ * $Revision: 1.58 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,118 +32,46 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SV_PRINT_HXX //autogen
 #include <vcl/print.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
-#endif
-#ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
 
 #include <svx/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_PRNMON_HXX //autogen
 #include <sfx2/prnmon.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_SRCHDLG_HXX //autogen
 #include <svx/srchdlg.hxx>
-#endif
-#ifndef _SVX_SRCHITEM_HXX //autogen
 #include <svx/srchitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include "svx/unolingu.hxx"
-#endif
-#ifndef _SFXHTML_HXX
 #include <sfx2/sfxhtml.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -158,18 +81,12 @@
 #ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
 #endif
-#ifndef _VIEWFUNC_HXX
 #include <viewfunc.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
 #ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
 #endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>          // FN_       ...
@@ -192,15 +109,9 @@
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
 #define SwSrcView
 #define SearchSettings
 #define _ExecSearch Execute
