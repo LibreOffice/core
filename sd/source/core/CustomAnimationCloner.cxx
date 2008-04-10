@@ -1,56 +1,44 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: CustomAnimationCloner.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.5 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:28:31 $
+ * $RCSfile: CustomAnimationCloner.cxx,v $
+ * $Revision: 1.6 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
 #include <com/sun/star/animations/XAnimationNode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
 #include <com/sun/star/animations/Event.hpp>
-#endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateColor_HPP_
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
 #include <com/sun/star/animations/XCommand.hpp>
-#endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #endif
@@ -60,48 +48,25 @@
 #ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
 #include <com/sun/star/animations/XAudio.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
 #include <com/sun/star/animations/ValuePair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_PARAGRAPHTARGET_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
 
 #include <map>
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
-
-#ifndef INCLUDED_ANIMATIONS_ANIMATIONNODEHELPER_HXX
 #include <animations/animationnodehelper.hxx>
-#endif
 
 // header for class SdrObjListIter
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
 
 #include "sdpage.hxx"
 
