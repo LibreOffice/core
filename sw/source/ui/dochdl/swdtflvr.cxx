@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swdtflvr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.118 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 16:58:11 $
+ * $RCSfile: swdtflvr.cxx,v $
+ * $Revision: 1.119 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,21 +35,11 @@
 #endif
 
 
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
 
 #include <svtools/embedtransfer.hxx>
 #include <svtools/insdlg.hxx>
@@ -65,154 +50,63 @@
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-#ifndef _LINKMGR_HXX
 #include <sfx2/linkmgr.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #ifndef _WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
 #ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _IMAP_HXX
 #include <svtools/imap.hxx>
-#endif
 #include <sot/storage.hxx>
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
-#endif
-#ifndef _SVX_XMLEXCHG_HXX_
 #include <svx/xmlexchg.hxx>
-#endif
-#ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
-#endif
-#ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
-#endif
-#ifndef _MIECLIP_HXX
 #include <sfx2/mieclip.hxx>
-#endif
-#ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
-#endif
-#ifndef _XOUTBMP_HXX
 #include <svx/xoutbmp.hxx>
-#endif
-#ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _HTMLOUT_HXX
 #include <svtools/htmlout.hxx>
-#endif
-#ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
-#endif
-#ifndef _INETIMG_HXX
 #include <svtools/inetimg.hxx>
-#endif
-#ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
-#endif
-#ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-#ifndef _SVX_IMPGRF_HXX
 #include <svx/impgrf.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
-#endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
-#endif
 
 #include <svx/unomodel.hxx>
-#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
-#endif
-#ifndef _FMTINFMT_HXX
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _DDEFLD_HXX
 #include <ddefld.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
-#ifndef _NAVICONT_HXX
 #include <navicont.hxx>
-#endif
-#ifndef _SWCONT_HXX
 #include <swcont.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -222,34 +116,15 @@
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
 #endif
-#ifndef _FLDBAS_HXX
 #include <fldbas.hxx>       //DDE
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>       // fuer Undo-Ids
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
-#endif
-#ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
-#endif
-
-#ifndef _SWSWERROR_H
 #include <swerror.h>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -262,51 +137,27 @@
 #include <sot/stg.hxx>
 
 // #108584#
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
 
 // #108584#
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
 
 // #108584#
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
 
 // #108584#
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _AVMEDIA_MEDIAWINDOW_HXX
 #include <avmedia/mediawindow.hxx>
-#endif
 
 // #109590#
-#ifndef _SWCRSR_HXX
 #include <swcrsr.hxx>
-#endif
-
-#ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
-#endif
-#ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 extern BOOL bFrmDrag;
 extern BOOL bDDINetAttr;
