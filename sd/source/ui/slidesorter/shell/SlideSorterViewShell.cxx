@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:43:11 $
+ *  last change: $Author: kz $ $Date: 2008-04-10 11:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,12 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
+
+    // When the view is not set then the initialization is not yet complete
+    // and we can not yet provide an accessibility object.
+    if (mpView == NULL)
+        return NULL;
+
     return new ::accessibility::AccessibleSlideSorterView (
         *mpSlideSorter.get(),
         pWindow->GetAccessibleParentWindow()->GetAccessible(),
