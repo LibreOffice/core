@@ -1,208 +1,80 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdpropls.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.97 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:34:00 $
+ * $RCSfile: sdpropls.cxx,v $
+ * $Revision: 1.98 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONTYPE_HPP_
 #include <com/sun/star/animations/TransitionType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
 #include <com/sun/star/drawing/LineJoint.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
 #include <com/sun/star/drawing/ConnectorType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_RECTANGLEPOINT_HPP_
 #include <com/sun/star/drawing/RectanglePoint.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_BitmapMode_HPP_
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
-#endif
-
-#ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <xmloff/EnumPropertyHdl.hxx>
-#endif
-
-#ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include <xmloff/NamedBoolPropertyHdl.hxx>
-#endif
-
-#ifndef _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
 #include "numithdl.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLBITMAPREPEATOFFSETPROPERTYHANDLER_HXX
 #include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLFILLBITMAPSIZEPROPERTYHANDLER_HXX
 #include "XMLFillBitmapSizePropertyHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLBITMAPLOGICALSIZEPROPERTYHANDLER_HXX
 #include "XMLBitmapLogicalSizePropertyHandler.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTANIMATIONKIND_HPP_
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTANIMATIONDIRECTION_HPP_
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTHORZPOS_HPP_
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTVERTPOS_HPP_
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
-#endif
-
-#ifndef _XMLOFF_CONTROLBORDERHDL_HXX_
 #include <xmloff/ControlBorderHandler.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _SDPROPLS_HXX
 #include "sdpropls.hxx"
-#endif
-
-#ifndef _PROPIMP0_HXX
 #include "propimp0.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmlnmspe.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_NORMALSKIND_HPP_
 #include <com/sun/star/drawing/NormalsKind.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREPROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREKIND_HPP_
 #include <com/sun/star/drawing/TextureKind.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREMODE_HPP_
 #include <com/sun/star/drawing/TextureMode.hpp>
-#endif
-
-#ifndef _XMLOFF_TEXTPRMAP_HXX_
 #include <xmloff/txtprmap.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLCLIPPROPERTYHANDLER_HXX
 #include "XMLClipPropertyHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLISPERCENTAGEPROPERTYHANDLER_HXX
 #include "XMLIsPercentagePropertyHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
 #include "XMLPercentOrMeasurePropertyHandler.hxx"
-#endif
-
-#ifndef _XMLOFF_ANIMATIONS_HXX
 #include "animations.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
 
 #include "sdxmlexp_impl.hxx"
 
