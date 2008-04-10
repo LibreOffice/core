@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:59:10 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,39 +38,17 @@
  *
  *************************************************************************/
 
-#ifndef _Addon_HXX
 #include <addon.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
 #include <com/sun/star/awt/XToolkit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMESSAGEBOX_HPP_
 #include <com/sun/star/awt/XMessageBox.hpp>
-#endif
 
 using rtl::OUString;
 using namespace com::sun::star::uno;

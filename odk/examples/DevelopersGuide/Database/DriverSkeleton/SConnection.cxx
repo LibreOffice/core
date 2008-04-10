@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:00:33 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,25 +41,13 @@
 #include "SConnection.hxx"
 
 #include "SDatabaseMetaData.hxx"
-
-#ifndef CONNECTIVITY_SDRIVER_HXX
 #include "SDriver.hxx"
-#endif
 #include "SStatement.hxx"
 #include "SPreparedStatement.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 
 using namespace connectivity::skeleton;
 
