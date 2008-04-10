@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: frmpaint.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.55 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 09:45:55 $
+ * $RCSfile: frmpaint.cxx,v $
+ * $Revision: 1.56 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,34 +32,14 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx> // SW_MOD
-#endif
-
-#ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
 
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
@@ -72,59 +47,25 @@
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>  // SwViewImp
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOption
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>  // DrawGraphic
-#endif
-#ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
-#endif
-#ifndef _ITRPAINT_HXX
 #include <itrpaint.hxx>     // SwTxtPainter
-#endif
-#ifndef _TXTPAINT_HXX
 #include <txtpaint.hxx>     // SwSaveClip
-#endif
-#ifndef _TXTCACHE_HXX
 #include <txtcache.hxx> // SwTxtLineAccess
-#endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>   // SwFlyFrm
-#endif
-#ifndef _REDLNITR_HXX
 #include <redlnitr.hxx> // SwRedlineItr
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx> // SW_MOD
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
-#endif
-#ifndef _SCRRECT_HXX
 #include <scrrect.hxx>
-#endif
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
-#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
 #include <EnhancedPDFExportHelper.hxx>
-#endif
 // <--
 
 #include <IDocumentStylePoolAccess.hxx>
