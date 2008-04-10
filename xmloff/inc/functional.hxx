@@ -1,9 +1,7 @@
 #ifndef _XMLOFF_FUNCTIONAL_HXX
 #define _XMLOFF_FUNCTIONAL_HXX
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 /* THIS HEADER IS DEPRECATED. USE comphelper/stl_types.hxx INSTEAD!!! */
 
