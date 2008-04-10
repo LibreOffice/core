@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: AccessibleDocument.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.74 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:10:08 $
+ * $RCSfile: AccessibleDocument.cxx,v $
+ * $Revision: 1.75 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,113 +32,50 @@
 #include "precompiled_sc.hxx"
 
 
-#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
-#endif
-#ifndef _SC_ACCESSIBLESPREADSHEET_HXX
 #include "AccessibleSpreadsheet.hxx"
-#endif
-#ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
-#endif
-#ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
-#endif
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
-#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
-#endif
-#ifndef SC_SHAPEUNO_HXX
 #include "shapeuno.hxx"
-#endif
-#ifndef _SC_DRAWMODELBROADCASTER_HXX
 #include "DrawModelBroadcaster.hxx"
-#endif
-#ifndef SC_DRAWVIEW_HXX
 #include "drawview.hxx"
-#endif
-#ifndef SC_GRIDWIN_HXX
 #include "gridwin.hxx"
-#endif
-#ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
 #include "AccessibleEditObject.hxx"
-#endif
-#ifndef SC_SCRESID_HXX
 #include "scresid.hxx"
-#endif
 #ifndef SC_SC_HRC
 #include "sc.hrc"
 #endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include <svx/AccessibleShape.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
 #include <svx/AccessibleShapeTreeInfo.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
 #include <svx/AccessibleShapeInfo.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SVX_UNOSHGRP_HXX
 #include <svx/unoshcol.hxx>
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
 
 #include <list>
 #include <algorithm>
