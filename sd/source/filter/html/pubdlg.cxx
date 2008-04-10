@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: pubdlg.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-02 09:43:01 $
+ * $RCSfile: pubdlg.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,80 +34,33 @@
 #ifdef SD_DLLIMPLEMENTATION
 #undef SD_DLLIMPLEMENTATION
 #endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _FILTER_CONFIG_ITEM_HXX_
 #include <svtools/FilterConfigItem.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _AEITEM_HXX
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
 #include <svx/impgrf.hxx>
-#ifndef _SV_COLRDLG_HXX
 #include <svtools/colrdlg.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-#ifndef _SD_SDIOCMPT_HXX
 #include <sdiocmpt.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _PRESENTATION_HXX
 #include <pres.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
 #include <svtools/pathoptions.hxx>
 
 #include "sdresid.hxx"
