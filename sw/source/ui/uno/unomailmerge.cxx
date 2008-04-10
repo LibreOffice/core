@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unomailmerge.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.24 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-02-19 13:59:54 $
+ * $RCSfile: unomailmerge.cxx,v $
+ * $Revision: 1.25 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,149 +32,58 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>    // GetAppData
-#endif
-#ifndef _TOOLS_TEMPFILE_HXX
 #include <tools/tempfile.hxx>
-#endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_MAILMERGETYPE_HPP_
 #include <com/sun/star/text/MailMergeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_MAILMERGEEVENT_HPP_
 #include <com/sun/star/text/MailMergeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XMAILMERGELISTENER_HPP_
 #include <com/sun/star/text/XMailMergeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XMAILMERGEBROADCASTER_HPP_
 #include <com/sun/star/text/XMailMergeBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MAIL_XSMTPSERVICE_HPP_
 #include "com/sun/star/mail/XSmtpService.hpp"
-#endif
 #include <sfx2/viewfrm.hxx>
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-#ifndef _SWEVENT_HXX
 #include <swevent.hxx>
-#endif
-#ifndef _UNOMAILMERGE_HXX_
 #include <unomailmerge.hxx>
-#endif
-#ifndef SW_SWDLL_HXX
 #include <swdll.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _UNOMAP_HXX
 #include <unomap.hxx>
-#endif
-#ifndef _SWUNOHELPER_HXX
 #include <swunohelper.hxx>
-#endif
-#ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
-#endif
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#ifndef _SWVIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _SWDBMGR_HXX
 #include <dbmgr.hxx>
-#endif
-#ifndef _UNOTXDOC_HXX
 #include <unotxdoc.hxx>
-#endif
-#ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
-#endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _MMCONFIGITEM_HXX
 #include <mmconfigitem.hxx>
-#endif
-#ifndef _MAILMERGEHELPER_HXX
 #include <mailmergehelper.hxx>
-#endif
 #include <memory>
 
 #include <unomid.h>
