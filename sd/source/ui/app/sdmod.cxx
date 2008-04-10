@@ -1,93 +1,54 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdmod.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.34 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:25:05 $
+ * $RCSfile: sdmod.cxx,v $
+ * $Revision: 1.35 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SV_STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXMSG_HXX //autogen
 #include <sfx2/msg.hxx>
-#endif
-#ifndef _SFXOBJFACE_HXX //autogen
 #include <sfx2/objface.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SVX_PSZCTRL_HXX //autogen
 #include <svx/pszctrl.hxx>
-#endif
-#ifndef _SVX_ZOOMCTRL_HXX //autogen
 #include <svx/zoomctrl.hxx>
-#endif
-#ifndef _SVX_MODCTRL_HXX //autogen
 #include <svx/modctrl.hxx>
-#endif
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
 
 #include <svx/svxids.hrc>
 #include <sfx2/srchitem.hxx>
@@ -102,9 +63,7 @@
 #include "sddll.hxx"
 #include "sdresid.hxx"
 #include "optsitem.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "glob.hrc"
