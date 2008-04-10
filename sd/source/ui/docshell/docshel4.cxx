@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docshel4.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.79 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:28:15 $
+ * $RCSfile: docshel4.cxx,v $
+ * $Revision: 1.80 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,67 +32,33 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawDocShell.hxx"
-
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
-#endif
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
-#endif
 #ifndef _DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
-#endif
 #ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
 #endif
 #include <sot/clsids.hxx>
-#ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
 #ifdef TF_STARONE
 #include "unomodel.hxx"
 #endif
@@ -105,19 +66,10 @@
 #include <svtools/fltrcfg.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
-#endif
 #include <comphelper/processfactory.hxx>
 
 #include "app.hrc"
@@ -128,33 +80,19 @@
 #include "FrameView.hxx"
 #endif
 #include "optsitem.hxx"
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #include "app.hxx"
-#ifndef SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "sdmod.hxx"
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
 #include "sdxmlwrp.hxx"
 #include "sdpptwrp.hxx"
 #include "sdcgmfilter.hxx"
@@ -956,9 +894,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
 |* SaveAsOwnFormat: wenn es eine Dokumentvorlage werden soll,
 |*
 \************************************************************************/
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 BOOL DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
