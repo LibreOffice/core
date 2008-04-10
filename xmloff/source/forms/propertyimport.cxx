@@ -1,86 +1,50 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: propertyimport.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:18:22 $
+ * $RCSfile: propertyimport.cxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
-#ifndef _XMLOFF_FORMS_PROPERTYIMPORT_HXX_
 #include "propertyimport.hxx"
-#endif
-#ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
 #include <unotools/datetime.hxx>
-#endif
 
 #if OSL_DEBUG_LEVEL > 0
     #ifndef _OSL_THREAD_H_
