@@ -1,84 +1,51 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ZipFile.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.47 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:48:49 $
+ * $RCSfile: ZipFile.cxx,v $
+ * $Revision: 1.48 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_package.hxx"
-#ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
-#endif
-#ifndef _ZIP_ENUMERATION_HXX
 #include <ZipEnumeration.hxx>
-#endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
-#endif
-#ifndef _RTL_CIPHER_H_
 #include <rtl/cipher.h>
-#endif
-#ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
-#endif
 /*
-#ifndef _XMEMORY_STREAM_HXX
 #include <XMemoryStream.hxx>
-#endif
-#ifndef _XFILE_STREAM_HXX
 #include <XFileStream.hxx>
-#endif
 */
-#ifndef _XUNBUFFERED_STREAM_HXX
 #include <XUnbufferedStream.hxx>
-#endif
-#ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
-#endif
-#ifndef _ENCRYPTED_DATA_HEADER_HXX_
 #include <EncryptedDataHeader.hxx>
-#endif
-#ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
-#endif
-#ifndef _MEMORY_BYTE_GRABBER_HXX_
 #include <MemoryByteGrabber.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#endif
 
 #ifndef _CRC32_HXX_
 #include <CRC32.hxx>
