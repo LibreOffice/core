@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: document.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.93 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 18:45:08 $
+ * $RCSfile: document.cxx,v $
+ * $Revision: 1.94 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,180 +32,71 @@
 #include "precompiled_starmath.hxx"
 
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
-#endif
-#ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
-#endif
-#ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
 #ifndef _SO_CLSIDS_HXX //autogen
 #include <sot/clsids.hxx>
 #endif
-#ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
-
-#ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
 #include <comphelper/accessibletexthelper.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
-#endif
-#ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef _SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
 #ifndef STARMATH_HRC
 #include <starmath.hrc>
 #endif
-#ifndef DOCUMENT_HXX
 #include <document.hxx>
-#endif
-#ifndef UNOMODEL_HXX
 #include <unomodel.hxx>
-#endif
-#ifndef CONFIG_HXX
 #include <config.hxx>
-#endif
-#ifndef SYMBOL_HXX
 #include <symbol.hxx>
-#endif
-#ifndef TOOLBOX_HXX
 #include <toolbox.hxx>
-#endif
-#ifndef DIALOG_HXX
 #include <dialog.hxx>
-#endif
-#ifndef ACTION_HXX
 #include <action.hxx>
-#endif
-#ifndef VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef UTILITY_HXX
 #include <utility.hxx>
-#endif
-#ifndef FORMAT_HXX
 #include <format.hxx>
-#endif
-#ifndef MATHTYPE_HXX
 #include <mathtype.hxx>
-#endif
-#ifndef MATHML_HXX
 #include <mathml.hxx>
-#endif
 
 #include <smdll.hxx>
 
