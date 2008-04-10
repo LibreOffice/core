@@ -1,148 +1,77 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svxbmpnumvalueset.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.14 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:44:58 $
+ * $RCSfile: svxbmpnumvalueset.cxx,v $
+ * $Revision: 1.15 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
 #endif
-#ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _GALLERY_HXX_ //autogen
 #include <gallery.hxx>
-#endif
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_CHARMAP_HXX //autogen
 #include <svx/charmap.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX
 #include <flstitem.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include <dlgutil.hxx>
-#endif
 #ifndef _XTABLE_HXX //autogen
 
 #include <svx/xtable.hxx>
 #endif
-#ifndef _SVX_DRAWITEM_HXX //autogen
 #include <drawitem.hxx>
-#endif
-#ifndef _SVX_NUMVSET_HXX
 #include <numvset.hxx>
-#endif
-#ifndef _SVX_HTMLMODE_HXX //autogen
 #include <htmlmode.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGFORMATTER_HPP_
 #include <com/sun/star/text/XNumberingFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#endif
 
 #include <algorithm>
 #include "opengrf.hxx"
