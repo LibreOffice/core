@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:56:40 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,33 +42,13 @@
 #define _FILTERDETECT_HXX
 
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
 #include <com/sun/star/document/XImporter.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase3.hxx>
