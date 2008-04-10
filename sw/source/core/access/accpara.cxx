@@ -1,189 +1,92 @@
  /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: accpara.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.75 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 16:51:05 $
+ * $RCSfile: accpara.cxx,v $
+ * $Revision: 1.76 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
-#ifndef _CRSTATE_HXX
 #include <crstate.hxx>
-#endif
-#ifndef _ACCMAP_HXX
 #include <accmap.hxx>
-#endif
-#ifndef _FESH_HXX
 #include "fesh.hxx"
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#endif
-
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-
-#ifndef _ACCPARA_HXX
 #include "accpara.hxx"
-#endif
 #ifndef _ACCESS_HRC
 #include "access.hrc"
 #endif
-#ifndef _ACCPORTIONS_HXX
 #include "accportions.hxx"
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>      // for ExecuteAtViewShell(...)
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>    // for ExecuteAtViewShell(...)
-#endif
-
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>   // for GetWordBoundary
-#endif
 // for get/setCharacterAttribute(...)
-#ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
-#endif
-#ifndef _UNOOBJ_HXX
 #include "unoobj.hxx"
-#endif
-#ifndef _UNOPORT_HXX
 #include "unoport.hxx"
-#endif
-#ifndef _DOC_HXX
 #include "doc.hxx"
-#endif
-#ifndef _CRSSKIP_HXX
 #include "crsskip.hxx"
-#endif
-#ifndef _TXTATR_HXX
 #include <txtatr.hxx>
-#endif
-#ifndef _ACCHYPERLINK_HXX
 #include <acchyperlink.hxx>
-#endif
-#ifndef _ACCHYPERTEXTDATA_HXX
 #include <acchypertextdata.hxx>
-#endif
 // --> OD 2005-12-02 #i27138#
-#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
 // <--
 #include <comphelper/accessibletexthelper.hxx>
 // --> OD 2006-07-12 #i63870#
-#ifndef _UNOMAP_HXX
 #include <unomap.hxx>
-#endif
 // <--
 // --> OD 2007-01-15 #i72800#
-#ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
 // <--
 // --> OD 2007-01-15 #i73371#
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
 #include <com/sun/star/text/WritingMode2.hpp>
-#endif
 // <--
 // --> OD 2007-01-17 #i71385#
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
 // <--
 // --> OD 2007-11-12 #i82637#
 #include <boost/scoped_ptr.hpp>
