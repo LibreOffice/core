@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SPreparedStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:01:12 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,24 +39,13 @@
  *************************************************************************/
 
 #include <stdio.h>
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #include "SPreparedStatement.hxx"
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
 #include "SResultSetMetaData.hxx"
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
-#endif
 
 using namespace connectivity::skeleton;
 using namespace com::sun::star::uno;

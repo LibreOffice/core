@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:00:46 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,21 +38,11 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SDATABASEMETADATA_HXX
 #include "SDatabaseMetaData.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_TRANSACTIONISOLATION_HPP_
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
-#endif
 
 using namespace connectivity::skeleton;
 using namespace com::sun::star::uno;
