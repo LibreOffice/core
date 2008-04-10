@@ -1,117 +1,62 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xestyle.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:26:14 $
+ * $RCSfile: xestyle.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-#ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
-#endif
 
 #include <algorithm>
-
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
-#endif
-
-#ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
-#endif
-#ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
-#ifndef _SVX_ALGITEM_HXX
 #include <svx/algitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_BOLNITEM_HXX
 #include <svx/bolnitem.hxx>
-#endif
-#ifndef _SVX_ROTMODIT_HXX
 #include <svx/rotmodit.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX
 #include <svx/escpitem.hxx>
-#endif
-
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_STLPOOL_HXX
 #include "stlpool.hxx"
-#endif
-#ifndef SC_STLSHEET_HXX
 #include "stlsheet.hxx"
-#endif
-#ifndef SC_SCPATATR_HXX
 #include "patattr.hxx"
-#endif
-#ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
-#endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
-
-#ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
-#endif
 
 // PALETTE record - color information =========================================
 
