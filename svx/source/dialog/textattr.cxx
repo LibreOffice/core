@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textattr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.27 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:46:51 $
+ * $RCSfile: textattr.cxx,v $
+ * $Revision: 1.28 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,50 +36,21 @@
 #endif
 
 // include ---------------------------------------------------------------
-
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
-#endif
-
-#ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
-#endif
 
 #include <svx/dialogs.hrc>
-
-#ifndef _SVDDEF_HXX //autogen
 #include <svx/svddef.hxx>
-#endif
-#ifndef SDTMITM_HXX //autogen
 #include <svx/sdtditm.hxx>
-#endif
-#ifndef _SDTAGITM_HXX //autogen
 #include <svx/sdtagitm.hxx>
-#endif
-#ifndef _SDTAITM_HXX //autogen
 #include <svx/sdtaitm.hxx>
-#endif
-#ifndef _SDTFSITM_HXX //autogen
 #include <svx/sdtfsitm.hxx>
-#endif
-#ifndef _SDTCFITM_HXX //autogen
 #include <svx/sdtcfitm.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDMARK_HXX //autogen
 #include <svx/svdmark.hxx>
-#endif
-#ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
-#endif
 
 
 #ifndef _SVX_TEXTATTR_CXX
@@ -97,9 +63,7 @@
 #include <sfx2/request.hxx> //add CHINA001
 #include <ofaitem.hxx> //add CHINA001
 #include <svx/svxids.hrc> //add CHINA001
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
 
 static USHORT pRanges[] =
 {
