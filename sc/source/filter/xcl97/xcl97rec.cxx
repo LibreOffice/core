@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xcl97rec.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.86 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:52:00 $
+ * $RCSfile: xcl97rec.cxx,v $
+ * $Revision: 1.87 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,80 +32,36 @@
 #include "precompiled_sc.hxx"
 
 
-
-#ifndef _SVDPOOL_HXX //autogen wg. SdrItemPool
 #include <svx/svdpool.hxx>
-#endif
-#ifndef _SDTAITM_HXX //autogen wg. SdrTextHorzAdjustItem, SdrTextVertAdjustItem
 #include <svx/sdtaitm.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen wg. SdrTextObj
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _EDITOBJ_HXX //autogen wg. EditTextObject
 #include <svx/editobj.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen wg. SdrOle2Obj
 #include <svx/svdoole2.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _ZFORMAT_HXX            // SvNumberformat
 #include <svtools/zformat.hxx>
-#endif
-#ifndef SC_CELL_HXX             // ScFormulaCell
 #include "cell.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
 
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
-
-#ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
-#endif
-#ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
-#endif
-#ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
-#endif
-#ifndef SC_XELINK_HXX
 #include "xelink.hxx"
-#endif
 
 #include "scitems.hxx"
 
 #include <svtools/fltrcfg.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 #ifndef _SVX_ADJITEM_HX
 #include <svx/adjitem.hxx>
 #endif
@@ -120,9 +71,7 @@
 #include <svx/msoleexp.hxx>
 
 #include <svtools/useroptions.hxx>
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
 
 #include <stdio.h>
 
