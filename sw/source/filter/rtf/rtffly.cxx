@@ -1,141 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: rtffly.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.33 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:02:07 $
+ * $RCSfile: rtffly.cxx,v $
+ * $Revision: 1.34 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
-#endif
-#ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
-#endif
-#ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
-#endif
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SVX_PRNTITEM_HXX //autogen
 #include <svx/prntitem.hxx>
-#endif
-#ifndef _SVX_OPAQITEM_HXX //autogen
 #include <svx/opaqitem.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen wg. SvxBoxItem
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _SWPARRTF_HXX
 #include <swparrtf.hxx>
-#endif
-#ifndef _GRFATR_HXX
 #include <grfatr.hxx>
-#endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _RTF_HXX
 #include <rtf.hxx>
-#endif
-#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _TXTFLCNT_HXX
 #include <txtflcnt.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _FLTINI_HXX
 #include <fltini.hxx>
-#endif
 #ifndef __SGI_STL_DEQUE
 #include <deque>
 #endif
@@ -146,20 +74,12 @@
 #include <utility>
 #endif
 // --> OD 2004-06-30 #i27767#
-#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
-#endif
 // <--
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
-#endif
 // --> OD, FLR 2006-02-16 #131205#
-#ifndef _DCONTACT_HXX
 #include "dcontact.hxx"
-#endif
 // <--
 
 using namespace ::com::sun::star;
