@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewsh.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.82 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:00:41 $
+ * $RCSfile: viewsh.cxx,v $
+ * $Revision: 1.83 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,109 +38,44 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
-#endif
-#ifndef _SVX_SRCHDLG_HXX //autogen
 #include <svx/srchdlg.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
 #ifndef _SHL_HXX
 //#include <tools/shl.hxx>
 #endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _FESH_HXX
 #include <fesh.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DVIEW_HXX
 #include <dview.hxx>
-#endif
-#ifndef _SWREGION_HXX
 #include <swregion.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _LAYACT_HXX
 #include <layact.hxx>
-#endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
-#endif
-#ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>
-#endif
-#ifndef _PTQUEUE_HXX
 #include <ptqueue.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _ACCMAP_HXX
 #include <accmap.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
-#endif
-#ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
-#endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
@@ -153,31 +83,20 @@
 #include <comcore.hrc>
 #endif
 // OD 14.01.2003 #103492#
-#ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
-#endif
 // --> OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
-#ifndef _ANCHOREDOBJECT_HXX
 #include <anchoredobject.hxx>
-#endif
 // <--
 
 #include "../../ui/inc/view.hxx"
 #include <PostItMgr.hxx>
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
 #include <vcl/svapp.hxx>
 
 // #i74769#
-#ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
-#endif
 
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
