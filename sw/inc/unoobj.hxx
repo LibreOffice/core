@@ -1,195 +1,89 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unoobj.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.45 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:16:11 $
+ * $RCSfile: unoobj.hxx,v $
+ * $Revision: 1.46 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _UNOOBJ_HXX
 #define _UNOOBJ_HXX
-#ifndef _UNOEVTLSTNR_HXX
 #include <unoevtlstnr.hxx>
-#endif
-#ifndef _UNOBASECLASS_HXX
 #include <unobaseclass.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-#ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _FLYENUM_HXX //autogen
 #include <flyenum.hxx>
-#endif
-#ifndef _FLDBAS_HXX //autogen
 #include <fldbas.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _PAM_HXX //autogen
 #include <pam.hxx>
-#endif
-#ifndef _TOXE_HXX
 #include <toxe.hxx>
-#endif
-#ifndef _SORTOPT_HXX //autogen
 #include <sortopt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINSERTABLE_HPP_
 #include <com/sun/star/document/XDocumentInsertable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XWORDCURSOR_HPP_
 #include <com/sun/star/text/XWordCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XPARAGRAPHCURSOR_HPP_
 #include <com/sun/star/text/XParagraphCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XSENTENCECURSOR_HPP_
 #include <com/sun/star/text/XSentenceCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTE_HPP_
 #include <com/sun/star/text/XFootnote.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
 #include <com/sun/star/text/XTextSection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
 #include <com/sun/star/text/XTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
 #include <com/sun/star/text/XTextContent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XSORTABLE_HPP_
 #include <com/sun/star/util/XSortable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
 //#ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
 //#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 //#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTINSERT_HPP_
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTREMOVE_HPP_
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTAPPENDANDCONVERT_HPP_
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>   // helper for factories
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // helper for implementations
-#endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx> // helper for implementations
-#endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx> // helper for implementations
-#endif
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
 #include <cppuhelper/implbase10.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE11_HXX_
 #include <cppuhelper/implbase11.hxx>    // helper for implementations
-#endif
-#ifndef _SW_TEXTCURSORHELPER_HXX
 #include "TextCursorHelper.hxx"
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
 
 #include <unomid.h>
-
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
 
 class SwUnoCrsr;
 class SwCursor;
