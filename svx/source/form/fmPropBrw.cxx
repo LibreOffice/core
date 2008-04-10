@@ -1,162 +1,87 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmPropBrw.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:20:28 $
+ * $RCSfile: fmPropBrw.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef SVX_FMPROPBRW_HXX
 #include "fmPropBrw.hxx"
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
-#endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
 #ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
 #endif
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_OBJECTINSPECTOR_HPP_
 #include <com/sun/star/inspection/ObjectInspector.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_OBJECTINSPECTORMODEL_HPP_
 #include <com/sun/star/inspection/ObjectInspectorModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_INSPECTION_DEFAULTFORMCOMPONENTINSPECTORMODEL_HPP_
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORUI_HPP_
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_DEFAULTHELPPROVIDER_HPP_
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
-#endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
-#endif
-#ifndef _SFX_OBJITEM_HXX
 #include <sfx2/objitem.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-
-#ifndef _SDRPAGEWINDOW_HXX
 #include <svx/sdrpagewindow.hxx>
-#endif
 
 #include <algorithm>
 
