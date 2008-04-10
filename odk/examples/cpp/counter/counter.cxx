@@ -2,9 +2,9 @@
  *
  *  $RCSfile: counter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:06:58 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -50,34 +50,15 @@
  *************************************************************************/
 
 #include <stdio.h>
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx> // helper for queryInterface() impl
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx> // helper for component factory
-#endif
 // generated c++ interfaces
-
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _FOO_XCOUNTABLE_HPP_
 #include <foo/XCountable.hpp>
-#endif
 
 #define SERVICENAME "foo.Counter"
 #define IMPLNAME    "com.sun.star.comp.example.cpp.Counter"
