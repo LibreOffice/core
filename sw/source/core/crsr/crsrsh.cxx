@@ -1,149 +1,76 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: crsrsh.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.71 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:51:12 $
+ * $RCSfile: crsrsh.cxx,v $
+ * $Revision: 1.72 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 
 #include <SwSmartTagMgr.hxx>
-
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
 #include <swselectionlist.hxx>
 #include <IBlockCursor.hxx>
 #include "BlockCursor.hxx"
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-#ifndef _DVIEW_HXX
 #include <dview.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _CALLNK_HXX
 #include <callnk.hxx>
-#endif
-#ifndef _VISCRS_HXX
 #include <viscrs.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
-#endif
-#ifndef _SWGLOBDOCSH_HXX //autogen
 #include <globdoc.hxx>
-#endif
-#ifndef _PAMTYP_HXX
 #include <pamtyp.hxx>
-#endif
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
-#endif
-#ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
-#endif
 #include <wrong.hxx> // SMARTTAGS
 #include <unoobj.hxx> // SMARTTAGS
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _NUMRULE_HXX
 #include <numrule.hxx>
-#endif
 
 #include <globals.hrc>
 
