@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:01:26 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,25 +40,12 @@
 
 #include "SResultSet.hxx"
 #include "SResultSetMetaData.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
-#endif
 
 using namespace connectivity::skeleton;
 using namespace cppu;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:02:07 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,35 +39,17 @@
  *************************************************************************/
 
 #include <stdio.h>
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 #include "SStatement.hxx"
 #include "SConnection.hxx"
 #include "SResultSet.hxx"
-#ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
-#endif
-
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
 #include <com/sun/star/sdbc/FetchDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
-#endif
 
 using namespace connectivity::skeleton;
 //------------------------------------------------------------------------------
