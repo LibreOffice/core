@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docrecovery.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.21 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 12:44:42 $
+ * $RCSfile: docrecovery.cxx,v $
+ * $Revision: 1.22 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
 
 #include <svx/dialogs.hrc>
 #include "docrecovery.hxx"
@@ -46,20 +38,14 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 #include <svtools/imagemgr.hxx>
-#ifndef _XTEXTEDT_HXX
 #include <svtools/xtextedt.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -76,26 +62,11 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-
-#ifndef _OSL_SECURITY_HXX_
 #include <osl/security.hxx>
-#endif
-
-#ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
 
 #define RET_BACK    100
 
