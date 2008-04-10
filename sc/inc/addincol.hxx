@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: addincol.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.11 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:07:16 $
+ * $RCSfile: addincol.hxx,v $
+ * $Revision: 1.12 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,46 +32,16 @@
 #define SC_ADDINCOL_HXX
 
 #include "global.hxx"
-
-#ifndef _COM_SUN_STAR_SHEET_XVOLATILERESULT_HPP_
 #include <com/sun/star/sheet/XVolatileResult.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_XADDIN_HPP_
 #include <com/sun/star/sheet/XAddIn.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_XRESULTLISTENER_HPP_
 #include <com/sun/star/sheet/XResultListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_RESULTEVENT_HPP_
 #include <com/sun/star/sheet/ResultEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLMETHOD_HPP_
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SHEET_LOCALIZEDNAME_HPP_
 #include <com/sun/star/sheet/LocalizedName.hpp>
-#endif
-
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
-#endif
 
 #ifndef SC_SCMATRIX_HXX
 #include "scmatrix.hxx"
