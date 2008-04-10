@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drviewsa.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.48 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:16:56 $
+ * $RCSfile: drviewsa.cxx,v $
+ * $Revision: 1.49 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,108 +32,55 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #ifndef _SVX_SIZEITEM
 #include <svx/sizeitem.hxx>
 #endif
-#ifndef _SVDLAYER_HXX
 #include <svx/svdlayer.hxx>
-#endif
 #ifndef _SVX_ZOOMITEM
 #include <svx/zoomitem.hxx>
 #endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdopath.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
-#endif
-#ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
-#endif
-#ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
-#endif
 
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _SVX_FMSHELL_HXX            // XXX nur temp (dg)
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
-#endif
-#ifndef _SVX_FLOAT3D_HXX
 #include <svx/float3d.hxx>
-#endif
 
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdpage.hxx"
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
-#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#endif
-#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 #include "SdUnoDrawView.hxx"
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
 #include "SdUnoDrawView.hxx"
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
 #include "ToolBarManager.hxx"
 
 using namespace ::rtl;
