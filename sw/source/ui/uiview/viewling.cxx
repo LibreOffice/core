@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewling.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.35 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:38:03 $
+ * $RCSfile: viewling.cxx,v $
+ * $Revision: 1.36 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,116 +32,52 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#endif
-
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #include <toolkit/helper/vclunohelper.hxx>
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVXERR_HXX
 #include <svx/svxerr.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SVX_THESDLG_HXX //autogen
 #include <svx/thesdlg.hxx>
-#endif
-#ifndef SVX_SPELL_PORTIONS_HXX
 #include <svx/SpellPortions.hxx>
-#endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _SWWAIT_HXX
 #include <swwait.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>               // fuer SpellPointer
-#endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>                // CheckSpellChanges
 #endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>              // Viewoptions
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>               // fuer Undo-Ids
-#endif
-#ifndef _HYP_HXX
 #include <hyp.hxx>                  // Trennung
-#endif
-#ifndef _OLMENU_HXX
 #include <olmenu.hxx>               // PopupMenu fuer OnlineSpelling
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>                  // Spelling: Multiselektion
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
-#ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -160,20 +91,13 @@
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
-#ifndef _HHCWRP_HXX
 #include <hhcwrp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/bootstrap.hxx>
-
-#ifndef _STMENU_HXX
 #include "stmenu.hxx"              // PopupMenu for smarttags
-#endif
 #include <svx/dialogs.hrc>
 
 #include <unomid.h>
