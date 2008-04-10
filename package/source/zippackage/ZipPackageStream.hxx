@@ -1,67 +1,47 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ZipPackageStream.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.22 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:52:48 $
+ * $RCSfile: ZipPackageStream.hxx,v $
+ * $Revision: 1.23 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #define _ZIP_PACKAGE_STREAM_HXX
 
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_PACKAGES_XDATASINKENCRSUPPORT_HPP_
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
-#endif
-
-#ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
-#endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
-#ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
-#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX
 #include <cppuhelper/implbase2.hxx>
 #endif
-
-#ifndef __MUTEXHOLDER_HXX_
 #include <mutexholder.hxx>
-#endif
 
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1
