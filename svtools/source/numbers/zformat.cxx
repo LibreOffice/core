@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: zformat.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.77 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 10:57:18 $
+ * $RCSfile: zformat.cxx,v $
+ * $Revision: 1.78 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,40 +36,17 @@
 #include <math.h>
 #include <errno.h>
 #include <stdlib.h>
-
-#ifndef _DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
-#endif
-#ifndef _UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 #include <unotools/nativenumberwrapper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYCODE_HPP_
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_AMPMVALUE_HPP_
 #include <com/sun/star/i18n/AmPmValue.hpp>
-#endif
 
 #define _ZFORMAT_CXX
 #include <svtools/zformat.hxx>
@@ -84,10 +56,7 @@
 #include <svtools/zforlist.hxx>
 #include "numhead.hxx"
 #include <unotools/digitgroupingiterator.hxx>
-
-#ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
 #include "nfsymbol.hxx"
-#endif
 using namespace svt;
 
 namespace {
