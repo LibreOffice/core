@@ -1,66 +1,44 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docnew.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.85 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:53:36 $
+ * $RCSfile: docnew.cxx,v $
+ * $Revision: 1.86 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
-
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFXFRAME_HXX
 #include <sfx2/frame.hxx>
-#endif
 
 #ifndef _SFXMACITEM_HXX //autogen
     #include <svtools/macitem.hxx>
@@ -69,139 +47,56 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
-#endif
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COMPATIBILITY_HXX
 #include <svtools/compatibility.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
-#ifndef _FCHRFMT_HXX
 #include <fchrfmt.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
-#endif
-#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
-#endif
-#ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> //Damit die PageDescs zerstoert werden koennen.
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SW_PRINTDATA_HXX
 #include <printdata.hxx>
-#endif
-#ifndef _DOCFLD_HXX
 #include <docfld.hxx>
-#endif
-#ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
-#endif
-#ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
-#endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
-#endif
-#ifndef _ROLBCK_HXX
 #include <rolbck.hxx>           // Undo-Attr, SwHistory
-#endif
-#ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>          // fuer die Pool-Vorlage
-#endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _ACORRECT_HXX
 #include <acorrect.hxx>         // fuer die autom. Aufnahme von Ausnahmen
-#endif
-#ifndef _VISITURL_HXX
 #include <visiturl.hxx>         // fuer die URL-Change Benachrichtigung
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
-#ifndef _DRAWDOC_HXX
 #include <drawdoc.hxx>
-#endif
-#ifndef _LINKENUM_HXX
 #include <linkenum.hxx>
-#endif
-#ifndef _FLDUPDE_HXX
 #include <fldupde.hxx>
-#endif
-#ifndef _EXTINPUT_HXX
 #include <extinput.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _DOCTXM_HXX
 #include <doctxm.hxx>
-#endif
-#ifndef _SHELLRES_HXX
 #include <shellres.hxx>
-#endif
-#ifndef _UNOCLBCK_HXX
 #include <unoclbck.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
-#endif
-#ifndef _MVSAVE_HXX
 #include <mvsave.hxx>
-#endif
-#ifndef _ISTYLEACCESS_HXX
 #include <istyleaccess.hxx>
-#endif
 #include <swstylemanager.hxx>
 
 #include <unochart.hxx>
@@ -212,27 +107,17 @@
 
 
 // --> OD 2006-04-19 #b6375613#
-#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 
 using namespace ::com::sun::star;
 // <--
 
 // --> OD 2007-03-16 #i73788#
-#ifndef _PAUSETHREADSTARTING_HXX
 #include <pausethreadstarting.hxx>
-#endif
 // <--
-#ifndef _NUMRULE_HXX
 #include <numrule.hxx>
-#endif
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
