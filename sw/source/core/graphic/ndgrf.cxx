@@ -1,141 +1,72 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ndgrf.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.44 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 14:11:11 $
+ * $RCSfile: ndgrf.cxx,v $
+ * $Revision: 1.45 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>             // FRound
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
-#endif
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
-#ifndef _IMAP_HXX //autogen
 #include <svtools/imap.hxx>
-#endif
-#ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_IMPGRF_HXX //autogen
 #include <svx/impgrf.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTURL_HXX
 #include <fmturl.hxx>
-#endif
-#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _GRFATR_HXX
 #include <grfatr.hxx>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
-#endif
-#ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-#ifndef _SWBASLNK_HXX
 #include <swbaslnk.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _EDITSH_HXX
 #include <editsh.hxx>
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
 
 #include <unotools/ucbstreamhelper.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
 // --> OD 2007-03-28 #i73788#
-#ifndef _RETRIEVEINPUTSTREAMCONSUMER_HXX
 #include <retrieveinputstreamconsumer.hxx>
-#endif
 // <--
 
 using namespace com::sun::star;
