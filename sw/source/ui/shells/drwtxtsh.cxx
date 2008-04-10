@@ -1,153 +1,76 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drwtxtsh.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.41 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:26:48 $
+ * $RCSfile: drwtxtsh.cxx,v $
+ * $Revision: 1.42 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-#ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
-#endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVX_CHARMAP_HXX
 #include <svx/charmap.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXOBJFACE_HXX
 #include <sfx2/objface.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVX_XFTSFIT_HXX //autogen
 #include <svx/xftsfit.hxx>
-#endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-#ifndef _MyEDITVIEW_HXX
 #include <svx/editview.hxx>
-#endif
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SVX_FONTWORK_HXX //autogen
 #include <svx/fontwork.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-#ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-#ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>               // fuer SpellPointer
-#endif
 #ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
 #endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
 
 #ifndef _CMDID_H
 #include <cmdid.h>
@@ -172,15 +95,11 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
 
 #include <svx/xtable.hxx>
 #include <svx/svxdlg.hxx>
