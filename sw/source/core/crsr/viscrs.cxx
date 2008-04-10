@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viscrs.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.29 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:51:53 $
+ * $RCSfile: viscrs.cxx,v $
+ * $Revision: 1.30 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -51,53 +46,21 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-
-#ifndef _VIEWOPT_HXX //autogen
 #include <viewopt.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _VISCRS_HXX
 #include <viscrs.hxx>
-#endif
-#ifndef _CRSRSH_HXX
 #include <crsrsh.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _DVIEW_HXX
 #include <dview.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>   // SwTxtFrm
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _EXTINPUT_HXX
 #include <extinput.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SCRIPTINFO_HXX
 #include <scriptinfo.hxx>
-#endif
-
-#ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // GetSearchDialog
-#endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
@@ -122,10 +85,7 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 //#define SHOW_REDLINES
 
 #ifdef SHOW_BOOKMARKS
-
-#ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
-#endif
 
 class SwBookmarkRects : public SwSelPaintRects
 {
@@ -222,10 +182,7 @@ void ShowBookmarks( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0
 #endif
 
 #ifdef SHOW_REDLINES
-
-#ifndef _REDLINE_HXX
 #include <redline.hxx>
-#endif
 
 class SwRedlineRects : public SwSelPaintRects
 {
@@ -571,33 +528,13 @@ void SwVisCrsr::_SetPosAndShow()
 // ------ Ab hier Klassen / Methoden fuer die Selectionen -------
 
 // #i75172#
-#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#endif
-
-#ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _SV_HATCH_HXX
 #include <vcl/hatch.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // #i75172#
