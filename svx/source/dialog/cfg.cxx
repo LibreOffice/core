@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: cfg.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.46 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:23:37 $
+ * $RCSfile: cfg.cxx,v $
+ * $Revision: 1.47 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,15 +40,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 
 //added for issue73355
 //#ifndef _SV_SVDATA_HXX
@@ -90,77 +79,34 @@
 #include <svx/svxdlg.hxx>
 
 #include <comphelper/documentinfo.hxx>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <com/sun/star/ui/ItemType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
 #include <com/sun/star/ui/ItemStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
 #include <com/sun/star/ui/XUIConfiguration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONLISTENER_HPP_
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
 #include <com/sun/star/ui/XUIElement.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_UIElementType_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <com/sun/star/ui/ImageType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#endif
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
 #include <com/sun/star/frame/XFrames.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
 
 #define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
 
