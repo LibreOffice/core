@@ -1,171 +1,93 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unopage.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.94 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:00:55 $
+ * $RCSfile: unopage.cxx,v $
+ * $Revision: 1.95 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_PRESENTATIONRANGE_HPP_
 #include <com/sun/star/presentation/PresentationRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
 #include <com/sun/star/view/PaperOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
 #ifndef _TOOLKIT_UNOIFACE_HXX
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
-#ifndef _UNOMODEL_HXX
 #include <unomodel.hxx>
-#endif
-#ifndef _SD_UNOPAGE_HXX
 #include <unopage.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SDRESID_HXX
 #include <sdresid.hxx>
-#endif
 #include <glob.hrc>
 #ifndef _SD_PAGE_HXX //autogen
 #include <sdpage.hxx>
 #endif
-#ifndef _SD_UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _SDATTR_HXX
 #include <sdattr.hxx>
-#endif
-#ifndef _DRAWDOC_HXX
 #include <drawdoc.hxx>
-#endif
-#ifndef _SVX_UNOSHAPE_HXX //autogen
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 #include <comphelper/extract.hxx>
 #include <list>
-
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
-#ifndef _WMF_HXX
 #include <svtools/wmf.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
 
 #include <svx/svdview.hxx>
 #include "misc.hxx"
-#ifndef SD_VIEW_HXX
 #include "View.hxx"
-#endif
 #ifndef SVX_LIGHT
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
 #endif
 #endif
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
 #include "unoobj.hxx"
 #include "res_bmp.hrc"
 #include "unokywds.hxx"
