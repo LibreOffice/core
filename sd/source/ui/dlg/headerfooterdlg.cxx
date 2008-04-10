@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: headerfooterdlg.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:25:39 $
+ * $RCSfile: headerfooterdlg.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,21 +38,10 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-
-#ifndef _SVX_LANGBOX_HXX
 #include <svx/langbox.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <svx/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -82,34 +66,17 @@
 ///////////////////////////////////////////////////////////////////////
 // preview control for presentation layout
 ///////////////////////////////////////////////////////////////////////
-
-#ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
 #ifndef _SV_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XLINEIT0_HXX
 #include <svx/xlineit0.hxx>
-#endif
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-#ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
-#endif
 
 #include "undoheaderfooter.hxx"
 #include "sdundogr.hxx"
