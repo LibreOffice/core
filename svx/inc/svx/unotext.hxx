@@ -1,162 +1,75 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unotext.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:06:20 $
+ * $RCSfile: unotext.hxx,v $
+ * $Revision: 1.4 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _SVX_UNOTEXT_HXX
 #define _SVX_UNOTEXT_HXX
 
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
 #ifndef _SMART_COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGEMOVER_HPP_
 #include <com/sun/star/text/XTextRangeMover.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTAPPEND_HPP_
 #include <com/sun/star/text/XTextAppend.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
-#endif
-
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-
-#ifndef _MyEDITDATA_HXX // ESelection
 #include <svx/editdata.hxx>
-#endif
-
-#ifndef _SVX_UNOEDSRC_HXX
 #include <svx/unoedsrc.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX //autog
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SFXITEMPOOL_HXX //auto
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SVX_SVXENUM_HXX //autogen
 #include <svx/svxenum.hxx>
-#endif
-
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-
-#ifndef _SVX_UNOFOROU_HXX //autogen
 #include <svx/unoforou.hxx>
-#endif
 
 #include <svx/unoprnms.hxx>
-
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
 #include <com/sun/star/text/XTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_LINESPACING_HPP_
 #include <com/sun/star/style/LineSpacing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
 #include <com/sun/star/style/TabStop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
-#endif
 
 #include <unotools/servicehelper.hxx>
 
@@ -584,10 +497,7 @@ public:
 };
 
 // ====================================================================
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
 #include <com/sun/star/text/XTextContent.hpp>
-#endif
 
 class SvUShorts;
 class SvxUnoTextContent : public SvxUnoTextRangeBase,
