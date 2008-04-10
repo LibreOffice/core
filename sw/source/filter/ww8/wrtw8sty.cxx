@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: wrtw8sty.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.45 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-02-12 14:23:43 $
+ * $RCSfile: wrtw8sty.cxx,v $
+ * $Revision: 1.46 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -49,121 +44,43 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
-#endif
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen wg. SdrObject
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen wg. SdrTextObj
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
-#endif
-#ifndef _DOCARY_HXX //autogen
 #include <docary.hxx>
-#endif
-#ifndef _POOLFMT_HXX //autogen
 #include <poolfmt.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _PAGEDESC_HXX //autogen
 #include <pagedesc.hxx>
-#endif
-#ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
-#endif
-#ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen
 #include <section.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
-#endif
-#ifndef _NDINDEX_HXX //autogen
 #include <ndindex.hxx>
-#endif
-#ifndef _TXTFTN_HXX
 #include <txtftn.hxx>
-#endif
-#ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
-#endif
-#ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FMTCNCT_HXX
 #include <fmtcnct.hxx>
-#endif
-#ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
-#endif
-#ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
-#endif
-#ifndef SW_LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
-
-#ifndef SW_MS_MSFILTER_HXX
 #include <msfilter.hxx>
-#endif
-#ifndef SW_WRITERHELPER
 #   include "writerhelper.hxx"
-#endif
-#ifndef SW_WRITERWORDGLUE
 #   include "writerwordglue.hxx"
-#endif
-#ifndef WW_WWSTYLES_HXX
 #   include "../inc/wwstyles.hxx"
-#endif
-
-#ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
-#endif
 
 using namespace sw::util;
 using namespace nsHdFtFlags;
