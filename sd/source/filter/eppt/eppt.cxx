@@ -1,124 +1,63 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: eppt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.61 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-03 11:06:15 $
+ * $RCSfile: eppt.cxx,v $
+ * $Revision: 1.62 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-
-#ifndef _EPPT_HXX_
 #include <eppt.hxx>
-#endif
-#ifndef _EPPT_DEF_HXX
 #include "epptdef.hxx"
-#endif
-#ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
-#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
-#endif
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _FLTCALL_HXX
 #include <svtools/fltcall.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
 #include <com/sun/star/view/PaperOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_PAPERFORMAT_HPP_
 #include <com/sun/star/view/PaperFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#endif
-#ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
-#endif
-#ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
-#endif
-#ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
-#endif
-#ifndef _MSOLEEXP_HXX
 #include <svx/msoleexp.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 #include <svtools/wmf.hxx>
-
-#ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
-#endif
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
 #include <sfx2/docinf.hxx>
 
 #define PPT_TRANSITION_TYPE_NONE            0
