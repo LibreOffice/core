@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: inftxt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.116 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:05:19 $
+ * $RCSfile: inftxt.cxx,v $
+ * $Revision: 1.117 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,42 +33,17 @@
 
 
 #include <com/sun/star/uno/Sequence.h>
-
-#ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
-#endif
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
-#endif
-#ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_HNGPNCTITEM_HXX
 #include <svx/hngpnctitem.hxx>
-#endif
-#ifndef _SVX_SRIPTSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
-#endif
-#ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
 // --> OD 2008-01-17 #newlistlevelattrs#
 #ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
@@ -81,82 +51,35 @@
 // <--
 
 #include <SwSmartTagMgr.hxx>
-
-#ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
-#endif
-#ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
-#endif
-#ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
-#endif
-#ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>  // DrawGraphic
-#endif
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
 #ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
 #endif
-#ifndef _PARATR_HXX
 #include <paratr.hxx>   // SwFmtDrop
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>  // SwRootFrm
-#endif
-#ifndef _INFTXT_HXX
 #include <inftxt.hxx>   // SwTxtInfo
-#endif
-#ifndef _BLINK_HXX
 #include <blink.hxx>    // SwBlink
-#endif
-#ifndef _NOTEURL_HXX
 #include <noteurl.hxx>  // SwNoteURL
-#endif
-#ifndef _PORFTN_HXX
 #include <porftn.hxx>   // SwFtnPortion
-#endif
-#ifndef _PORRST_HXX
 #include <porrst.hxx>       // SwHangingPortion
-#endif
-#ifndef _ITRATR_HXX
 #include <itratr.hxx>
-#endif
-#ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
-#endif
 #include <wrong.hxx>
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
-#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
 #include <EnhancedPDFExportHelper.hxx>
-#endif
 // <--
 
 #include <unomid.h>
