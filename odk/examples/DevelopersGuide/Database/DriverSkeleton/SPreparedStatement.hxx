@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SPreparedStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:20:20 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,22 +41,11 @@
 #ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 #define CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 #include "SStatement.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 namespace connectivity
 {

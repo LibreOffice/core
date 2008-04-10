@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:21:43 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,37 +41,18 @@
 #ifndef CONNECTIVITY_SSTATEMENT_HXX
 #define CONNECTIVITY_SSTATEMENT_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XMULTIPLERESULTS_HPP_
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XBatchExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
 #include <com/sun/star/sdbc/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
-#endif
 #include "SConnection.hxx"
 #include <list>
 #include "OSubComponent.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 
 namespace connectivity
 {

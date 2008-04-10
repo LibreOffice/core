@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:19:16 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,13 +42,8 @@
 #define CONNECTIVITY_SDATABASEMETADATA_HXX
 
 #include "SConnection.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 namespace connectivity
 {

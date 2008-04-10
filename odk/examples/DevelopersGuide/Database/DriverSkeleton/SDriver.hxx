@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:19:49 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,15 +41,9 @@
 #ifndef CONNECTIVITY_SDRIVER_HXX
 #define CONNECTIVITY_SDRIVER_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
 #include <com/sun/star/sdbc/XDriver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
 #include "SConnection.hxx"
 
 namespace connectivity

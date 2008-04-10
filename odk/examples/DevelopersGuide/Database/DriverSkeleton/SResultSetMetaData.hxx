@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:21:09 $
+ *  last change: $Author: rt $ $Date: 2008-04-10 16:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,12 +41,8 @@
 #ifndef CONNECTIVITY_SRESULSETMETADATA_HXX
 #define CONNECTIVITY_SRESULSETMETADATA_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 #include "SConnection.hxx"
 
 namespace connectivity
