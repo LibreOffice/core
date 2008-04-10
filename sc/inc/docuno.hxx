@@ -1,137 +1,66 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docuno.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:29:55 $
+ * $RCSfile: docuno.hxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef SC_DOCUNO_HXX
 #define SC_DOCUNO_HXX
 
-#ifndef SC_ADDRESS_HXX
 #include "address.hxx"
-#endif
-
-#ifndef _SFX_SFXBASEMODEL_HXX_
 #include <sfx2/sfxbasemodel.hxx>
-#endif
-
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SVX_FMDMOD_HXX //autogen
 #include <svx/fmdmod.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XGOALSEEK_HPP_
 #include <com/sun/star/sheet/XGoalSeek.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCALCULATABLE_HPP_
 #include <com/sun/star/sheet/XCalculatable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSCENARIOS_HPP_
 #include <com/sun/star/sheet/XScenarios.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCONSOLIDATABLE_HPP_
 #include <com/sun/star/sheet/XConsolidatable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XDOCUMENTAUDITING_HPP_
 #include <com/sun/star/sheet/XDocumentAuditing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
 #include <com/sun/star/util/XProtectable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XTABLECOLUMNS_HPP_
 #include <com/sun/star/table/XTableColumns.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XTABLEROWS_HPP_
 #include <com/sun/star/table/XTableRows.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETANNOTATIONS_HPP_
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESACCESS_HPP_
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
-#endif
-
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
 
 class ScDocShell;
 class ScAnnotationObj;
