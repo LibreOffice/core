@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: itrcrsr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.78 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:06:00 $
+ * $RCSfile: itrcrsr.cxx,v $
+ * $Revision: 1.79 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,34 +40,15 @@
 #include "pam.hxx"
 #include "swselectionlist.hxx"
 #include <sortedobjs.hxx>
-
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
 
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
@@ -83,10 +59,7 @@
 #include "porfly.hxx"       // GetFlyCrsrOfst()
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
-
-#ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
-#endif
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
