@@ -1,156 +1,82 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: gridcell.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.63 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:58:34 $
+ * $RCSfile: gridcell.cxx,v $
+ * $Revision: 1.64 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
-#endif
-
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-#ifndef _SVX_GRIDCOLS_HXX
 #include "gridcols.hxx"
-#endif
-#ifndef SVX_FORM_SDBDATACOLUMN_HXX
 #include "sdbdatacolumn.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
 #include <com/sun/star/form/XBoundComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SCRTIP_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
-
-#ifndef _FMTFIELD_HXX_
 #include <svtools/fmtfield.hxx>
-#endif
-#ifndef _NUMUNO_HXX //autogen
 #include <svtools/numuno.hxx>
-#endif
-#ifndef _CALENDAR_HXX //autogen wg. CalendarField
 #include <svtools/calendar.hxx>
-#endif
-#ifndef _LONGCURR_HXX //autogen
 #include <vcl/longcurr.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
 #include <connectivity/formattedcolumnvalue.hxx>
 
 #include <math.h>
-
-#ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
 
 using namespace ::connectivity;
 using namespace ::connectivity::simple;
