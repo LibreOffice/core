@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: animationexport.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:31:27 $
+ * $RCSfile: animationexport.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,15 +37,9 @@
 #ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateSet_HPP_
 #include <com/sun/star/animations/XAnimateSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
 #include <com/sun/star/animations/XCommand.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
 #include <com/sun/star/animations/Timing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
 #include <com/sun/star/animations/Event.hpp>
-#endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_XAnimateMotion_HPP_
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #endif
@@ -60,75 +49,33 @@
 #ifndef _COM_SUN_STAR_ANIMATIONS_XTransitionFilter_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
 #include <com/sun/star/animations/XAudio.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCOLORSPACE_HPP_
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONRESTART_HPP_
 #include <com/sun/star/animations/AnimationRestart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_EVENTTRIGGER_HPP_
 #include <com/sun/star/animations/EventTrigger.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONFILL_HPP_
 #include <com/sun/star/animations/AnimationFill.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONENDSYNC_HPP_
 #include <com/sun/star/animations/AnimationEndSync.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCALCMODE_HPP_
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONADDITIVEMODE_HPP_
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
 #include <com/sun/star/animations/AnimationTransformType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONTYPE_HPP_
 #include <com/sun/star/animations/TransitionType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_TRANSITIONSUBTYPE_HPP_
 #include <com/sun/star/animations/TransitionSubType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
 #include <com/sun/star/animations/ValuePair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
 #ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PRESENTATION_TEXTANIMATIONTYPE_HPP_
 #include <com/sun/star/presentation/TextAnimationType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_SHAPEANIMATIONSUBTYPE_HPP_
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
 #include <com/sun/star/presentation/EffectCommands.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XShape_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
@@ -136,46 +83,16 @@
 
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
-
-#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
-#endif
-
-#ifndef _SDXMLEXP_IMPL_HXX
 #include "sdxmlexp_impl.hxx"
-#endif
-
-#ifndef _SDPROPLS_HXX
 #include "sdpropls.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLEMENT_HXX
 #include <xmloff/xmlement.hxx>
-#endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-
-#ifndef _XMLOFF_SHAPEEXPORT_HXX_
 #include <xmloff/shapeexport.hxx>
-#endif
 
 #include "animations.hxx"
 #include "animationexport.hxx"
