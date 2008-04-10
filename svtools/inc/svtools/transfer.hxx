@@ -1,97 +1,56 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: transfer.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.2 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:40:46 $
+ * $RCSfile: transfer.hxx,v $
+ * $Revision: 1.3 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _TRANSFER_HXX
 #define _TRANSFER_HXX
 
-#ifndef INCLUDED_SVTDLLAPI_H
 #include "svtools/svtdllapi.h"
-#endif
-
-#ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
-#endif
-#ifndef _GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDOWNER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGEVENT_HPP_
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDROPEVENT_HPP_
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 // ------------------------
 // - Forward declarations -
