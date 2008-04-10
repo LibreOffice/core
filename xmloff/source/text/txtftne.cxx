@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: txtftne.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.23 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 11:09:28 $
+ * $RCSfile: txtftne.cxx,v $
+ * $Revision: 1.24 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,87 +40,29 @@
  * - footnote configuration elements
  * - endnote configuration elements
  */
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
 #include <com/sun/star/text/XTextContent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTE_HPP_
 #include <com/sun/star/text/XFootnote.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSUPPLIER_HPP_
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XENDNOTESSUPPLIER_HPP_
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_FOOTNOTENUMBERING_HPP_
 #include <com/sun/star/text/FootnoteNumbering.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
-
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_XMLNUMFE_HXX
 #include <xmloff/xmlnumfe.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
-#endif
-#ifndef _XMLOFF_XMLNUME_HXX
 #include <xmloff/xmlnume.hxx>
-#endif
-#ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
 #include "XMLTextCharStyleNamesElementExport.hxx"
-#endif
-#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include <xmloff/XMLEventExport.hxx>
-#endif
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
 #endif
