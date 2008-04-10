@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: undraw.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.20 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:31:17 $
+ * $RCSfile: undraw.cxx,v $
+ * $Revision: 1.21 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,72 +36,30 @@
 #ifndef _RTL_MEMORY_H
 #include <rtl/memory.h>
 #endif
-
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 
 #ifndef _RTL_STRING_H
 #include <rtl/string.h>
 #endif
-#ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDUNDO_HXX //autogen
 #include <svx/svdundo.hxx>
-#endif
-#ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDMARK_HXX //autogen wg. SdrMarkList
 #include <svx/svdmark.hxx>
-#endif
-
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FRAME_HXX
 #include <frame.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>           // fuer die UndoIds
-#endif
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _DVIEW_HXX
 #include <dview.hxx>
-#endif
-#ifndef _ROOTFRM_HXX //autogen wg. SwRootFrm
 #include <rootfrm.hxx>
-#endif
-#ifndef _VIEWSH_HXX //autogen wg. ViewShell
 #include <viewsh.hxx>
-#endif
 
 struct SwUndoGroupObjImpl
 {
