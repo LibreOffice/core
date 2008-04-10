@@ -5,36 +5,32 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 #*************************************************************************
 #
-#   OpenOffice.org - a multi-platform office productivity suite
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#   $RCSfile: localize.pl,v $
+# Copyright 2008 by Sun Microsystems, Inc.
 #
-#   $Revision: 1.16 $
+# OpenOffice.org - a multi-platform office productivity suite
 #
-#   last change: $Author: rt $ $Date: 2007-04-24 16:08:18 $
+# $RCSfile: localize.pl,v $
 #
-#   The Contents of this file are made available subject to
-#   the terms of GNU Lesser General Public License Version 2.1.
+# $Revision: 1.17 $
 #
+# This file is part of OpenOffice.org.
 #
-#     GNU Lesser General Public License Version 2.1
-#     =============================================
-#     Copyright 2005 by Sun Microsystems, Inc.
-#     901 San Antonio Road, Palo Alto, CA 94303, USA
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
 #
-#     This library is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU Lesser General Public
-#     License version 2.1, as published by the Free Software Foundation.
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
 #
-#     This library is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#     Lesser General Public License for more details.
-#
-#     You should have received a copy of the GNU Lesser General Public
-#     License along with this library; if not, write to the Free Software
-#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#     MA  02111-1307  USA
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
@@ -330,36 +326,32 @@ sub get_license_header{
 "#\n".
 "#*************************************************************************\n".
 "#\n".
-"#   OpenOffice.org - a multi-platform office productivity suite\n".
+"# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n".
+"# \n".
+"# Copyright 2008 by Sun Microsystems, Inc.\n".
 "#\n".
-"#   \$RCSf"."ile: localize.sdf,v \$\n".
+"# OpenOffice.org - a multi-platform office productivity suite\n".
 "#\n".
-"#   \$Revi"."sion: 0.0 \$\n".
+"# \$RCSfile: localize.pl,v $\n".
 "#\n".
-"#   last change: \$Aut"."hor: ihi \$ \$Da"."te: 2000/11/22 02:32:00 \$\n".
+"# \$Revision: 1.17 $\n".
 "#\n".
-"#   The Contents of this file are made available subject to\n".
-"#   the terms of GNU Lesser General Public License Version 2.1.\n".
+"# This file is part of OpenOffice.org.\n".
 "#\n".
+"# OpenOffice.org is free software: you can redistribute it and/or modify\n".
+"# it under the terms of the GNU Lesser General Public License version 3\n".
+"# only, as published by the Free Software Foundation.\n".
 "#\n".
-"#     GNU Lesser General Public License Version 2.1\n".
-"#     =============================================\n".
-"#     Copyright 2005 by Sun Microsystems, Inc.\n".
-"#     901 San Antonio Road, Palo Alto, CA 94303, USA\n".
+"# OpenOffice.org is distributed in the hope that it will be useful,\n".
+"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n".
+"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n".
+"# GNU Lesser General Public License version 3 for more details\n".
+"# (a copy is included in the LICENSE file that accompanied this code).\n".
 "#\n".
-"#     This library is free software; you can redistribute it and/or\n".
-"#     modify it under the terms of the GNU Lesser General Public\n".
-"#     License version 2.1, as published by the Free Software Foundation.\n".
-"#\n".
-"#     This library is distributed in the hope that it will be useful,\n".
-"#     but WITHOUT ANY WARRANTY; without even the implied warranty of\n".
-"#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n".
-"#     Lesser General Public License for more details.\n".
-"#\n".
-"#     You should have received a copy of the GNU Lesser General Public\n".
-"#     License along with this library; if not, write to the Free Software\n".
-"#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n".
-"#     MA  02111-1307  USA\n".
+"# You should have received a copy of the GNU Lesser General Public License\n".
+"# version 3 along with OpenOffice.org.  If not, see\n".
+"# <http://www.openoffice.org/license.html>\n".
+"# for a copy of the LGPLv3 License.\n".
 "#\n".
 "#*************************************************************************\n";
 }
