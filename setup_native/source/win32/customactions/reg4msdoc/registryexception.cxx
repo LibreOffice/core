@@ -2,9 +2,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#ifndef _REGISTRYEXCEPTION_HXX_
 #include "registryexception.hxx"
-#endif
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
