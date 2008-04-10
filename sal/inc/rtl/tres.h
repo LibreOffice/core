@@ -1,13 +1,8 @@
 #ifndef _RTL_TRES_H_
 #define _RTL_TRES_H_
 
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-
-#ifndef _RTL_STRING_H_
 #include <rtl/string.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
