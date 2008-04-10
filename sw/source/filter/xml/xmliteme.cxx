@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xmliteme.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 12:40:50 $
+ * $RCSfile: xmliteme.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,69 +33,27 @@
 
 
 #include <hintids.hxx>
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SHL_HXX //autogen wg. SHL_WRITER
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLITMPR_HXX
 #include "xmlexpit.hxx"
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLTABE_HXX
 #include <xmloff/xmltabe.hxx>
-#endif
-#ifndef _XMLBRSHE_HXX
 #include "xmlbrshe.hxx"
-#endif
-
-#ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
-#endif
-
-#ifndef _SWMODULE_HXX //autogen wg. SW_MOD
 #include <swmodule.hxx>
-#endif
-#ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
-#endif
-#ifndef _FMTORNT_HXX
 #include "fmtornt.hxx"
-#endif
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
-#ifndef _FRMFMT_HXX
 #include "frmfmt.hxx"
-#endif
-#ifndef _FMTFSIZE_HXX
 #include "fmtfsize.hxx"
-#endif
-#ifndef _SWRECT_HXX
 #include "swrect.hxx"
-#endif
-
-#ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
