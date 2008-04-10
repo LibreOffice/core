@@ -1,97 +1,59 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdmodel.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:29:09 $
+ * $RCSfile: svdmodel.hxx,v $
+ * $Revision: 1.7 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _SVDMODEL_HXX
 #define _SVDMODEL_HXX
 
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
-#ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
-#endif
-#ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
-#endif
-#ifndef _CONTNR_HXX //autogen
 #include <tools/contnr.hxx>
-#endif
-#ifndef _TOOLS_WEAKBASE_HXX_
 #include <tools/weakbase.hxx>
-#endif
 #ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
 #endif
-#ifndef _SFXBRDCST_HXX //autogen
 #include <svtools/brdcst.hxx>
-#endif
-#ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
-#endif
-#ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
-#endif
-#ifndef _SFXHINT_HXX //autogen
 #include <svtools/hint.hxx>
-#endif
 
 #include <svtools/style.hxx>
-
-#ifndef _SVX_PAGEITEM_HXX
 #include <svx/pageitem.hxx>
-#endif
-
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 
 #include <boost/shared_ptr.hpp>
 
 class OutputDevice;
-
-#ifndef _SVDTYPES_HXX
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts
-#endif
-
-#ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
-
-#ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
-#endif
 
 #include <vos/ref.hxx>
 
