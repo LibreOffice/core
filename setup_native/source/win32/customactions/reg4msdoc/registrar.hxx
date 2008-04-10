@@ -5,13 +5,8 @@
 #ifndef _REGISTRAR_HXX_
 #define _REGISTRAR_HXX_
 
-#ifndef _REGISTRY_HXX_
 #include "registry.hxx"
-#endif
-
-#ifndef _REGISTRATIONCONTEXTINFORMATION_HXX_
 #include "registrationcontextinformation.hxx"
-#endif
 
 #ifndef _CONSTANTS_HXX_
 #include "constants.hxx"
