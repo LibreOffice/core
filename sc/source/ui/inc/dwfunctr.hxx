@@ -1,55 +1,39 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dwfunctr.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 11:20:45 $
+ * $RCSfile: dwfunctr.hxx,v $
+ * $Revision: 1.7 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SC_DWFUNCTR_HXX
 #define _SC_DWFUNCTR_HXX
 
-#ifndef _SFX_CHILDWIN_HXX //autogen
 #include <sfx2/childwin.hxx>
-#endif
-
-#ifndef _SFXDOCKWIN_HXX //autogen
 #include <sfx2/dockwin.hxx>
-#endif
-
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
-#endif
 
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -62,22 +46,10 @@
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
-
-#ifndef SC_ANYREFDG_HXX
 #include "anyrefdg.hxx"
-#endif
-
-#ifndef SC_FUNCUTL_HXX
 #include "funcutl.hxx"
-#endif
-
-#ifndef SC_SCGLOB_HXX
 #include "global.hxx"       // ScAddress
-#endif
-
-#ifndef SC_PRIVSPLT_HXX
 #include "privsplt.hxx"
-#endif
 #include "funcdesc.hxx"
 
 #ifndef LRU_MAX
