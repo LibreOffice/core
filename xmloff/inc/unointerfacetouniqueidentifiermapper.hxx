@@ -2,14 +2,8 @@
 #define __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 
 #include <map>
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
-#endif
 
 namespace comphelper
 {
