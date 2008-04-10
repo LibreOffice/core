@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: wsfrm.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.83 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:58:39 $
+ * $RCSfile: wsfrm.cxx,v $
+ * $Revision: 1.84 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,138 +32,54 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-#ifndef _HINTS_HXX
 #include <hints.hxx>
-#endif
-
-#ifndef _PSTM_HXX
 #include <tools/pstm.hxx>
-#endif
 #ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_KEEPITEM_HXX
 #include <svx/keepitem.hxx>
-#endif
-#ifndef _SVX_BRKITEM_HXX
 #include <svx/brkitem.hxx>
-#endif
-
-#ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _FESH_HXX
 #include <fesh.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _FTNINFO_HXX
 #include <ftninfo.hxx>
-#endif
-#ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
-#ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
-#endif
-#ifndef _FMTFORDR_HXX
 #include <fmtfordr.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
-#endif
-#ifndef _FMTFTN_HXX
 #include <fmtftn.hxx>
-#endif
-#ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
-#ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
-#endif
-#ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
-#endif
-#ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
-#endif
-#ifndef _FMTCLDS_HXX
 #include <fmtclds.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _BODYFRM_HXX
 #include <bodyfrm.hxx>
-#endif
-#ifndef _CELLFRM_HXX //autogen
 #include <cellfrm.hxx>
-#endif
-#ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
