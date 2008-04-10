@@ -1,100 +1,58 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xcl97esc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.25 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:01:06 $
+ * $RCSfile: xcl97esc.cxx,v $
+ * $Revision: 1.26 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-#ifndef _XCL97ESC_HXX
 #include "xcl97esc.hxx"
-#endif
-
-#ifndef _OUTLOBJ_HXX //autogen wg. OutlinerParaObject
 #include <svx/outlobj.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX //autogen wg. SdrTextObj
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen wg. SdrObject
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen wg. SdrOle2Obj
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX //autogen wg. OutputDevice
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ERRORFILE
 #include <tools/debug.hxx>
-#endif
-#ifndef _SDASITM_HXX
 #include <svx/sdasitm.hxx>
-#endif
 
 #include <sot/exchange.hxx>
-
-#ifndef SC_XEESCHER_HXX
 #include "xeescher.hxx"
-#endif
 
 #include "global.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "xcl97rec.hxx"
-
-#ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
-#endif
-#ifndef SC_XECHART_HXX
 #include "xechart.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#endif
 
 using namespace com::sun::star;
 
