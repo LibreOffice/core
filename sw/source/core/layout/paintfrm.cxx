@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: paintfrm.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.114 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:27:19 $
+ * $RCSfile: paintfrm.cxx,v $
+ * $Revision: 1.115 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,186 +39,85 @@
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
 #define _SVSTDARR_LONGS
 #include <svtools/svstdarr.hxx>
-
-#ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
-#endif
-#ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_OPAQITEM_HXX //autogen
 #include <svx/opaqitem.hxx>
-#endif
-#ifndef _SVX_PRNTITEM_HXX //autogen
 #include <svx/prntitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
-#endif
 // --> collapsing borders FME 2005-05-27 #i29550#
-#ifndef SVX_FRAMELINK_HXX
 #include <svx/framelink.hxx>
-#endif
 // <--
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 
 
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _CNTFRM_HXX
 #include <cntfrm.hxx>
-#endif
-#ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
-#endif
-#ifndef _SECTION_HXX
 #include <section.hxx>
-#endif
-#ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
-#ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
-#endif
-#ifndef _DVIEW_HXX
 #include <dview.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
-#ifndef _ROWFRM_HXX
 #include <rowfrm.hxx>
-#endif
-#ifndef _CELLFRM_HXX
 #include <cellfrm.hxx>
-#endif
-#ifndef _NOTXTFRM_HXX
 #include <notxtfrm.hxx>
-#endif
-#ifndef _SWREGION_HXX
 #include <swregion.hxx>
-#endif
-#ifndef _LAYACT_HXX
 #include <layact.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _PTQUEUE_HXX
 #include <ptqueue.hxx>
-#endif
-#ifndef _NOTEURL_HXX
 #include <noteurl.hxx>
-#endif
-#ifndef _VIRTOUTP_HXX
 #include <virtoutp.hxx>
-#endif
 #ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
 #endif
-#ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
-#endif
-#ifndef _ACCESSIBILITYOPTIONS_HXX
 #include <accessibilityoptions.hxx>
-#endif
 // OD 20.12.2002 #94627#
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
 // OD 28.02.2003 #b4779636#, #107692#
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
 // OD 02.07.2003 #108784#
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
-#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
 #include <EnhancedPDFExportHelper.hxx>
-#endif
 // <--
 
 #include <PostItMgr.hxx>
-
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(240,240,240)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(192,192,192)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
