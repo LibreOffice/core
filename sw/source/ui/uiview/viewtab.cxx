@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewtab.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.41 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 15:08:36 $
+ * $RCSfile: viewtab.cxx,v $
+ * $Revision: 1.42 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,73 +32,30 @@
 #include "precompiled_sw.hxx"
 
 
-
-#ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
-#endif
 
 #include <hintids.hxx>
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
-
-#ifndef _SVX_RULRITEM_HXX //autogen
 #include <svx/rulritem.hxx>
-#endif
-#ifndef _SVX_TSPTITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SVX_RULER_HXX //autogen
 #include <svx/ruler.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
 #include <fmthdft.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
-#endif
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
