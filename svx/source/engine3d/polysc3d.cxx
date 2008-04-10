@@ -1,120 +1,58 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: polysc3d.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:04:57 $
+ * $RCSfile: polysc3d.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef INCLUDED_SVTOOLS_OPTIONS3D_HXX
 #include <svtools/options3d.hxx>
-#endif
-
-#ifndef _SVX_FILLITEM_HXX
 #include <svx/xfillit.hxx>
-#endif
-
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdopath.hxx>
-#endif
-
-#ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
-#endif
-
-#ifndef _SVDITER_HXX //autogen
 #include "svditer.hxx"
-#endif
-
-#ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
-#endif
 
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SVDPOOL_HXX
 #include <svx/svdpool.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _E3D_GLOBL3D_HXX
 #include "globl3d.hxx"
-#endif
-
-#ifndef _E3D_POLYSC3D_HXX
 #include <svx/polysc3d.hxx>
-#endif
-
-#ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
-#endif
-
-#ifndef _B3D_B3DTEX_HXX
 #include <goodies/b3dtex.hxx>
-#endif
-
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-
-#ifndef _SFXMETRICITEM_HXX
 #include <svtools/metitem.hxx>
-#endif
-
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-
-#ifndef _SVX_XLNWTIT_HXX
 #include <svx/xlnwtit.hxx>
-#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
