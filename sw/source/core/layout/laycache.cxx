@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: laycache.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.30 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:03:52 $
+ * $RCSfile: laycache.cxx,v $
+ * $Revision: 1.31 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,101 +33,41 @@
 
 
 #include <hintids.hxx>
-#ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
-#endif
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-#ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
-#endif
-#ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
-#endif
-#ifndef _LAYHELP_HXX
 #include <layhelp.hxx>
-#endif
-#ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
-#endif
-#ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
-#endif
-#ifndef _SWTABLE_HXX
 #include <swtable.hxx>
-#endif
-#ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
-#endif
-#ifndef _ROWFRM_HXX
 #include <rowfrm.hxx>
-#endif
-#ifndef _COLFRM_HXX
 #include <colfrm.hxx>
-#endif
-#ifndef _BODYFRM_HXX
 #include <bodyfrm.hxx>
-#endif
-#ifndef _NDINDEX_HXX
 #include <ndindex.hxx>
-#endif
-#ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
-#endif
-#ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-#ifndef _DFLYOBJ_HXX //autogen
 #include <dflyobj.hxx>
-#endif
-#ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
-#endif
-#ifndef _FLYFRM_HXX //autogen
 #include <flyfrm.hxx>
-#endif
 // OD 2004-05-24 #i28701#
-#ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
-#endif
 // --> OD 2006-03-22 #b6375613#
-#ifndef _PAM_HXX
 #include <pam.hxx>
-#endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
 using namespace ::com::sun::star;
 // <--
