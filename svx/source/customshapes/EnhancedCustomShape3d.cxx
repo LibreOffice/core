@@ -1,145 +1,75 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: EnhancedCustomShape3d.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.17 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:27:06 $
+ * $RCSfile: EnhancedCustomShape3d.cxx,v $
+ * $Revision: 1.18 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _ENHANCEDCUSTOMSHAPE3D_HXX
 #include "EnhancedCustomShape3d.hxx"
-#endif
-#ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
 #ifndef _SV_POLY_HXX
 #include <tools/poly.hxx>
 #endif
-#ifndef _SVDITER_HXX
 #include <svditer.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
-#ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef SVX_XFILLIT0_HXX
 #include <svx/xfillit0.hxx>
-#endif
 #ifndef SVX_XSFLCLIT_HXX
 #include <svx/xsflclit.hxx>
 #endif
-#ifndef _SVX_XIT_HXX
 #include <svx/xit.hxx>
-#endif
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _E3D_POLYSC3D_HXX
 #include <svx/polysc3d.hxx>
-#endif
-#ifndef _SVDDEF_HXX
 #include <svx/svddef.hxx>
-#endif
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
-#ifndef _E3D_EXTRUD3D_HXX
 #include <svx/extrud3d.hxx>
-#endif
-#ifndef _SVX_XFLBMTIT_HXX
 #include <svx/xflbmtit.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-#ifndef _SDASITM_HXX
 #include <svx/sdasitm.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-#ifndef _SDR_PROPERTIES_PROPERTIES_HXX
 #include <svx/sdr/properties/properties.hxx>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 using namespace com::sun::star;
