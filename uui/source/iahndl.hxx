@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: iahndl.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.20 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:25:55 $
+ * $RCSfile: iahndl.hxx,v $
+ * $Revision: 1.21 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,45 +35,18 @@
 #include <vector>
 #define INCLUDED_VECTOR
 #endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include "osl/mutex.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_OPTIONAL_HPP_
 #include "com/sun/star/beans/Optional.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include "com/sun/star/uno/Reference.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
-#endif
-#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
 #include "com/sun/star/task/InteractionClassification.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP_
 #include "com/sun/star/task/PasswordRequestMode.hpp"
-#endif
-#ifndef _COM_SUN_STAR_TASK_DOCUMENTMACROCONFIRMATIONREQUEST_HPP_
 #include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
-#endif
-#ifndef _SOLAR_H
 #include "tools/solar.h"
-#endif
-#ifndef _ERRCODE_HXX
 #include "tools/errcode.hxx"
-#endif
-#ifndef _SV_WINTYPES_HXX
 #include "vcl/wintypes.hxx"
-#endif
-
-#ifndef UUI_FLTDLG_HXX
 #include "fltdlg.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
 #include <com/sun/star/security/XCertificate.hpp>
-#endif
 #ifndef _COM_SUN_STAR_XML_CRYPTO_XXSECURITYENVIRONMENT_HPP_
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #endif
