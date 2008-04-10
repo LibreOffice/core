@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docfly.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:34:56 $
+ * $RCSfile: docfly.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,110 +32,41 @@
 #include "precompiled_sw.hxx"
 
 
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDMODEL_HXX //autogen
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDCAPT_HXX //autogen
 #include <svx/svdocapt.hxx>
-#endif
-#ifndef _SVDMARK_HXX //autogen
 #include <svx/svdmark.hxx>
-#endif
-
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
-#endif
-#ifndef _DCONTACT_HXX //autogen
 #include <dcontact.hxx>
-#endif
 
 #include <ndgrf.hxx>
-#ifndef _DOC_HXX //autogen
 #include <doc.hxx>
-#endif
-#ifndef _NDINDEX_HXX //autogen
 #include <ndindex.hxx>
-#endif
-#ifndef _DOCARY_HXX
 #include <docary.hxx>
-#endif
-#ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _TXTFLCNT_HXX //autogen
 #include <txtflcnt.hxx>
-#endif
-#ifndef _FMTFLCNT_HXX //autogen
 #include <fmtflcnt.hxx>
-#endif
-#ifndef _TXTFRM_HXX //autogen
 #include <txtfrm.hxx>
-#endif
-#ifndef _PAGEFRM_HXX //autogen
 #include <pagefrm.hxx>
-#endif
-#ifndef _ROOTFRM_HXX //autogen
 #include <rootfrm.hxx>
-#endif
-#ifndef _FLYFRMS_HXX //autogen
 #include <flyfrms.hxx>
-#endif
-#ifndef _FRMTOOL_HXX //autogen
 #include <frmtool.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
-#endif
-#ifndef _PAM_HXX //autogen
 #include <pam.hxx>
-#endif
-#ifndef _TBLSEL_HXX //autogen
 #include <tblsel.hxx>
-#endif
-#ifndef _SWUNDO_HXX //autogen
 #include <swundo.hxx>
-#endif
-#ifndef _SWTABLE_HXX //autogen
 #include <swtable.hxx>
-#endif
-#ifndef _CRSTATE_HXX
 #include <crstate.hxx>
-#endif
-#ifndef _UNDOBJ_HXX //autogen
 #include <undobj.hxx>
-#endif
-#ifndef _FMTCNCT_HXX //autogen
 #include <fmtcnct.hxx>
-#endif
-
-#ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
-#endif
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
