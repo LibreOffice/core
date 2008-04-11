@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: desktop.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.63 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:12:05 $
+ * $RCSfile: desktop.cxx,v $
+ * $Revision: 1.64 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,10 +34,7 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
 #include <loadenv/loadenv.hxx>
-#endif
 
 #ifndef __FRAMEWORK_LOADENV_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
@@ -51,50 +43,20 @@
 #ifndef __FRAMEWORK_DESKTOP_HXX_
 #include <services/desktop.hxx>
 #endif
-
-#ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 #include <helper/ocomponentaccess.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #include <dispatch/dispatchprovider.hxx>
-#endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
 #endif
-
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
-#endif
 
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
@@ -102,138 +64,45 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
 #include <com/sun/star/awt/XToolkit.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWDESCRIPTOR_HPP_
 #include <com/sun/star/awt/WindowDescriptor.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionApprove.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER2_HPP_
 #include <com/sun/star/frame/XTerminateListener2.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX
 #include <cppuhelper/proptypehlp.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #ifndef __RSC
 #include <tools/errinf.hxx>
 #endif
-
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
