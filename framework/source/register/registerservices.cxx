@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: registerservices.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.41 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:52:48 $
+ * $RCSfile: registerservices.cxx,v $
+ * $Revision: 1.42 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,10 +33,7 @@
 //_________________________________________________________________________________________________________________
 //  includes of my own project
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
 #include <macros/registration.hxx>
-#endif
 
 /*=================================================================================================================
     Add new include and new register info to for new services.
@@ -67,207 +59,64 @@
                                 IFFACTORIE( Service2 )
                              )
 =================================================================================================================*/
-
-#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
 #include <services/urltransformer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
 #include <services/desktop.hxx>
-#endif
 
 
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
 #include <services/modulemanager.hxx>
-#endif
-
-#ifndef __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
 #include <jobs/jobexecutor.hxx>
-#endif
-
-#ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDERSUPPLIER_HXX_
 #include <recording/dispatchrecordersupplier.hxx>
-#endif
-
-#ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
 #include <recording/dispatchrecorder.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_MAILTODISPATCHER_HXX_
 #include <dispatch/mailtodispatcher.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
 #include <dispatch/servicehandler.hxx>
-#endif
-
-#ifndef __FRAMEWORK_JOBS_JOBDISPATCH_HXX_
 #include <jobs/jobdispatch.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
 #include <services/backingcomp.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_DISPATCHHELPER_HXX_
 #include <services/dispatchhelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_LICENSE_HXX_
 #include <services/license.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_UIELEMENTFACTORYMANAGER_HXX_
 #include <uifactory/uielementfactorymanager.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_POPUPMENUCONTROLLERFACTORY_HXX_
 #include <uifactory/popupmenucontrollerfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_FONTMENUCONTROLLER_HXX_
 #include <uielement/fontmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_FONTSIZEMENUCONTROLLER_HXX_
 #include <uielement/fontsizemenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_OBJECTMENUCONTROLLER_HXX_
 #include <uielement/objectmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_HEADERMENUCONTROLLER_HXX_
 #include <uielement/headermenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_FOOTERMENUCONTROLLER_HXX_
 #include <uielement/footermenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_CONTROLMENUCONTROLLER_HXX_
 #include <uielement/controlmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_MACROSMENUCONTROLLER_HXX_
 #include <uielement/macrosmenucontroller.hxx>
-#endif
 
 #ifndef __FRAMEWORK_UIELEMENT_UICOMMANDDESCRIPTION_HXX_
 #include <uielement/uicommanddescription.hxx>
 #endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_UICONFIGMANAGER_HXX_
 #include <uiconfiguration/uiconfigurationmanager.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICFGSUPPLIER_HXX_
 #include <uiconfiguration/moduleuicfgsupplier.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_MODULEUICONFIGMANAGER_HXX_
 #include <uiconfiguration/moduleuiconfigurationmanager.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_MENUBARFACTORY_HXX_
 #include <uifactory/menubarfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_ACCELERATORS_GLOBALACCELERATORCONFIGURATION_HXX_
 #include <accelerators/globalacceleratorconfiguration.hxx>
-#endif
-
-#ifndef __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
 #include <accelerators/moduleacceleratorconfiguration.hxx>
-#endif
-
-#ifndef __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
 #include <accelerators/documentacceleratorconfiguration.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_TOOLBOXFACTORY_HXX_
 #include <uifactory/toolboxfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_ADDONSTOOLBOXFACTORY_HXX_
 #include <uifactory/addonstoolboxfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_WINDOWSTATECONFIGURATION_HXX_
 #include "uiconfiguration/windowstateconfiguration.hxx"
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 #include <uielement/toolbarsmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_TOOLBARCONTROLLERFACTORY_HXX_
 #include "uifactory/toolbarcontrollerfactory.hxx"
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_STATUSBARCONTROLLERFACTORY_HXX_
 #include "uifactory/statusbarcontrollerfactory.hxx"
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 #include <uielement/toolbarsmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
 #include <services/autorecovery.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_RECENTFILESMENUCONTROLLER_HXX_
 #include <uielement/recentfilesmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIFACTORY_STATUSBARFACTORY_HXX_
 #include <uifactory/statusbarfactory.hxx>
-#endif
 
 #ifndef __FRAMEWORK_UIELEMENT_UICATEGORYDESCRPTION_HXX_
 #include <uiconfiguration/uicategorydescription.hxx>
 #endif
-
-#ifndef __FRAMEWORK_SERVICES_SESSIONLISTENER_HXX_
 #include <services/sessionlistener.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_LOGOIMAGESTATUSBARCONTROLLER_HXX_
 #include <uielement/logoimagestatusbarcontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_LOGOTEXTSTATUSBARCONTROLLER_HXX_
 #include <uielement/logotextstatusbarcontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_NEWMENUCONTROLLER_HXX_
 #include <uielement/newmenucontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_TASKCREATORSRV_HXX_
 #include <services/taskcreatorsrv.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UIELEMENT_SIMPLETEXTSTATUSBARCONTROLLER_HXX_
 #include <uielement/simpletextstatusbarcontroller.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_URIABBREVIATION_HXX_
 #include <services/uriabbreviation.hxx>
-#endif
 
 #include <dispatch/popupmenudispatcher.hxx>
 
