@@ -1,240 +1,116 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ReportDefinition.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:08:28 $
+ * $RCSfile: ReportDefinition.cxx,v $
+ * $Revision: 1.8 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
 #include "ReportDefinition.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_GROUPKEEPTOGETHER_HPP_
 #include <com/sun/star/report/GroupKeepTogether.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_REPORTPRINTOPTION_HPP_
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XFUNCTION_HPP_
 #include <com/sun/star/report/XFunction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWFORMAT_HPP_
 #include <com/sun/star/table/ShadowFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_ATTRIBUTEDATA_HPP_
 #include <com/sun/star/xml/AttributeData.hpp>
-#endif
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
 #include <comphelper/propertystatecontainer.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_EVENTOBJECT_HPP_
 #include <com/sun/star/document/EventObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _COMPHELPER_DOCUMENTCONSTANTS_HXX
 #include <comphelper/documentconstants.hxx>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
-#endif
 #include <com/sun/star/embed/EntryInitModes.hpp>
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
 #include <com/sun/star/document/XImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_ERRORCODEIOEXCEPTION_HPP_
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
 #endif
-#ifndef REPORTDESIGN_API_GROUPS_HXX
 #include "Groups.hxx"
-#endif
-#ifndef REPORTDESIGN_API_SECTION_HXX
 #include "Section.hxx"
-#endif
 #include "FixedLine.hxx"
 #ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
 #endif
-#ifndef REPORTDESIGN_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef REPORTDESIGN_TOOLS_HXX
 #include "Tools.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
-#endif
 #include <comphelper/numberedcollection.hxx>
 #include <framework/titlehelper.hxx>
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
-#endif
-#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
 #include <comphelper/genericpropertyset.hxx>
-#endif
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
-#ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-#ifndef REPORTDESIGN_API_FUNCTIONS_HXX
 #include "Functions.hxx"
-#endif
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
-#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
-#endif
-#ifndef REPORT_RPTMODEL_HXX
 #include "RptModel.hxx"
-#endif
-#ifndef RPT_FORMATTEDFIELD_HXX
 #include "FormattedField.hxx"
-#endif
-#ifndef RPT_FIXEDTEXT_HXX
 #include "FixedText.hxx"
-#endif
-#ifndef RPT_IMAGECONTROL_HXX
 #include "ImageControl.hxx"
-#endif
-#ifndef RPT_SHAPE_HXX
 #include "Shape.hxx"
-#endif
 #include "ReportHelperImpl.hxx"
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
 
 
 #include <svx/svdlayer.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef RPT_REPORTCOMPONENT_HXX
 #include "ReportComponent.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
 #include <com/sun/star/style/NumberingType.hpp>
-#endif
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 #define MAP_CHAR_LEN(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
