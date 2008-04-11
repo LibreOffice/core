@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnumgr.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,6 +168,8 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
     }
 }
 
+
+
 //--------------------------------------------------------------------
 
 void SfxMenuManager::UseDefault()
@@ -277,6 +279,10 @@ SfxPopupMenuManager::SfxPopupMenuManager(const ResId& rResId, SfxBindings &rBind
     , pSVMenu( NULL )
 {
     DBG_MEMTEST();
+}
+
+SfxPopupMenuManager::~SfxPopupMenuManager()
+{
 }
 
 //-------------------------------------------------------------------------
@@ -405,6 +411,51 @@ SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenuArg, SfxBindings& rBin
 {
 }
 
+SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow )
+{
+    PopupMenu *pSVMenu = new PopupMenu( rResId );
+    USHORT n, nCount = pSVMenu->GetItemCount();
+    for ( n=0; n<nCount; n++ )
+    {
+        USHORT nId = pSVMenu->GetItemId( n );
+        if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
+            break;
+    }
+
+    if ( n == nCount )
+    {
+        PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
+        nCount = aPop.GetItemCount();
+        pSVMenu->InsertSeparator();
+        for ( n=0; n<nCount; n++ )
+        {
+            USHORT nId = aPop.GetItemId( n );
+            pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
+            pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
+        }
+    }
+
+    InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
+    Menu* pMenu = NULL;
+    ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+    aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
+    aEvent.ExecutePosition.X = rPoint.X();
+    aEvent.ExecutePosition.Y = rPoint.Y();
+    if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, pMenu, aEvent ) )
+    {
+        if ( pMenu )
+        {
+            delete pSVMenu;
+            pSVMenu = (PopupMenu*) pMenu;
+        }
+
+        SfxPopupMenuManager* aMgr = new SfxPopupMenuManager( pSVMenu, pFrame->GetBindings());
+        aMgr->RemoveDisabledEntries();
+        return aMgr;
+    }
+    return 0;
+}
+
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
@@ -447,4 +498,9 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         aPop.RemoveDisabledEntries();
         aPop.Execute( rPoint, pWindow );
     }
+}
+
+Menu* SfxPopupMenuManager::GetSVMenu()
+{
+    return (Menu*) GetMenu()->GetSVMenu();
 }
