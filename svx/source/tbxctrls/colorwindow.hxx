@@ -4,20 +4,10 @@
 #ifndef __SVX_COLORWINDOW_HXX_
 #define __SVX_COLORWINDOW_HXX_
 
-#ifndef _SFXTBXCTRL_HXX
 #include <sfx2/tbxctrl.hxx>
-#endif
-#ifndef _VALUESET_HXX
-#include <vcl/valueset.hxx>
-#endif
-#ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
-#endif
 #include <rtl/ustring.hxx>
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
 
 //========================================================================
 // class SvxColorWindow_Impl --------------------------------------------------
