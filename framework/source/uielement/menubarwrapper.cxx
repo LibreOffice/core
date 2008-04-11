@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: menubarwrapper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:12:46 $
+ * $RCSfile: menubarwrapper.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,58 +34,29 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 #include <uielement/menubarwrapper.hxx>
-#endif
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-#ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 #include <helper/actiontriggerhelper.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HXX_
 #include <uielement/constitemcontainer.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_ROOTITEMCONTAINER_HXX_
 #include <uielement/rootitemcontainer.hxx>
-#endif
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMENUBAR_HPP_
 #include <com/sun/star/awt/XMenuBar.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
 #include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>
 #include <rtl/logfile.hxx>
