@@ -1,37 +1,17 @@
 #ifndef _WinInetLayer_HXX_
 #define _WinInetLayer_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_PROPERTYINFO_HPP_
 #include <com/sun/star/configuration/backend/PropertyInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
 #include <com/sun/star/util/XTimeStamped.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
