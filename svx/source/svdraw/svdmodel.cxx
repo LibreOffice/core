@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdmodel.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.78 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:52:49 $
+ * $RCSfile: svdmodel.cxx,v $
+ * $Revision: 1.79 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,52 +34,24 @@
 #include <svx/svdmodel.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 #include <math.h>
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 
 #ifndef _STRING_H
 #include <tools/string.hxx>
 #endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SVX_XIT_HXX
 #include <svx/xit.hxx>
-#endif
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XLNEDIT_HXX //autogen
 #include <svx/xlnedit.hxx>
-#endif
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
-#ifndef _SVX_XFLFTRIT_HXX
 #include <svx/xflftrit.hxx>
-#endif
-#ifndef _SVX_XFLHTIT_HXX //autogen
 #include <svx/xflhtit.hxx>
-#endif
-#ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
-#endif
 
 #include "svditext.hxx"
 #include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
@@ -108,71 +75,26 @@
 #include "svdoutlinercache.hxx"
 
 
-#ifndef _SVX_ASIANCFG_HXX
 #include "asiancfg.hxx"
-#endif
-
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
-#endif
-
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
-#endif
-
-#ifndef _SVX_NUMITEM_HXX //autogen
 #include <svx/numitem.hxx>
-#endif
-
-#ifndef _SVX_BULITEM_HXX //autogen
 #include <bulitem.hxx>
-#endif
-
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include "forbiddencharacterstable.hxx"
-#endif
-
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 // #90477#
-#ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
 
 // #95114#
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_PROPERTIES_HXX
 #include <svx/sdr/properties/properties.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
