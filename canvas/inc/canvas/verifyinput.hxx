@@ -1,56 +1,41 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: verifyinput.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:13:49 $
+ * $RCSfile: verifyinput.hxx,v $
+ * $Revision: 1.4 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef INCLUDED_CANVAS_VERIFYINPUT_HXX
 #define INCLUDED_CANVAS_VERIFYINPUT_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#endif
 
 #include <algorithm>
 #include <boost/bind.hpp>
