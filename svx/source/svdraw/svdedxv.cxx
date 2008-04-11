@@ -1,43 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdedxv.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.59 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:49:51 $
+ * $RCSfile: svdedxv.cxx,v $
+ * $Revision: 1.60 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
-#endif
 
 #include <svx/svdedxv.hxx>
 #include <svtools/solar.hrc>
@@ -45,42 +38,15 @@
 #ifndef _STRING_H
 #include <tools/string.h>
 #endif
-
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SV_HATCH_HXX //autogen
 #include <vcl/hatch.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _EDITSTAT_HXX //autogen
 #include <editstat.hxx>
-#endif
-
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-
-#ifndef _SV_CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
-#endif
-
-#ifndef _SVX_UNOTEXT_HXX
 #include <svx/unotext.hxx>
-#endif
 
 #include <svx/editobj.hxx>
 #include <svx/outlobj.hxx>
@@ -106,27 +72,13 @@
 #include <svx/svddrgv.hxx>  // fuer SetSolidDragging()
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
 
 // #98988#
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx> //add CHINA001
-#endif
-
-#ifndef _SDRPAINTWINDOW_HXX
 #include <sdrpaintwindow.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
