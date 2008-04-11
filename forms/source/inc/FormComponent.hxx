@@ -1,178 +1,87 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: FormComponent.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:56:56 $
+ * $RCSfile: FormComponent.hxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _FORMS_FORMCOMPONENT_HXX_
 #define _FORMS_FORMCOMPONENT_HXX_
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XAGGREGATION_HPP_
 #include <com/sun/star/uno/XAggregation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XBOUNDCONTROL_HPP_
 #include <com/sun/star/form/XBoundControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
 #include <com/sun/star/form/XBoundComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
 #include <com/sun/star/form/XLoadListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDITYCONSTRAINTLISTENER_HPP_
 #include <com/sun/star/form/validation/XValidityConstraintListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDATABLEFORMCOMPONENT_HPP_
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
 
 #include <comphelper/propagg.hxx>
 #include <comphelper/propertybag.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/componentcontext.hxx>
-
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
 #ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
 #endif
-#ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
-#endif
-#ifndef FORMS_COMPONENT_CLONEABLE_HXX
 #include "cloneable.hxx"
-#endif
-#ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
-#endif
-#ifndef FORMS_WINDOWSTATEGUARD_HXX
 #include "windowstateguard.hxx"
-#endif
-#ifndef FORMS_PROPERTYBAGHELPER_HXX
 #include "propertybaghelper.hxx"
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
-#endif
 
 #include <memory>
 
