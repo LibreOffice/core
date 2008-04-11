@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svapp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.82 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:07:07 $
+ * $RCSfile: svapp.cxx,v $
+ * $Revision: 1.83 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,82 +34,41 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALFRAME_HXX
 #include <vcl/salframe.hxx>
-#endif
-#ifndef _SV_SALSYS_HXX
 #include <vcl/salsys.hxx>
-#endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
-
-#ifndef _TOOLS_H
 #include <tools/tools.h>
-#endif
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
 #ifndef _ACCMGR_HXX
 #include <vcl/accmgr.hxx>
 #endif
 #ifndef _SV_KEYCOD_HXX
 #include <vcl/keycod.hxx>
 #endif
-#ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_WINDATA_HXX
 #include <vcl/windata.hxx>
-#endif
-#ifndef _SV_WINDOW_H
 #include <vcl/window.h>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_IDLEMGR_HXX
 #include <vcl/idlemgr.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _VCL_UNOWRAP_HXX
 #include <vcl/unowrap.hxx>
-#endif
-#ifndef _VCL_XCONNECTION_HXX
 #include <vcl/xconnection.hxx>
-#endif
 #ifndef _SV_SVIDS_HRC
 #include <vcl/svids.hrc>
 #endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
 
 #include <vcl/unohelp.hxx>
 
@@ -122,24 +76,15 @@
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <osl/module.h>
 #include <osl/file.hxx>
 
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
-
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
-
-#ifndef _SV_SALIMESTATUS_HXX
 #include <vcl/salimestatus.hxx>
-#endif
 
 #include <utility>
 #include <vcl/lazydelete.hxx>
