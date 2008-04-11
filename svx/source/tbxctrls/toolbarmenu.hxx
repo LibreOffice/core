@@ -1,6 +1,4 @@
-#ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
-#endif
 
 #include <vector>
 
