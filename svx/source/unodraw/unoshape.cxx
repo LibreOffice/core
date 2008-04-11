@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unoshape.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.170 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-19 07:45:11 $
+ * $RCSfile: unoshape.cxx,v $
+ * $Revision: 1.171 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,46 +32,19 @@
 #include "precompiled_svx.hxx"
 
 #define _SVX_USE_UNOGLOBALS_
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
-#endif
-#ifndef _FLTCALL_HXX
 #include <svtools/fltcall.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SVX_UNOTEXT_HXX
 #include <svx/unotext.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 #include <comphelper/extract.hxx>
 
 #include <toolkit/unohlp.hxx>
@@ -85,34 +53,15 @@
 #include <rtl/memory.h>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
-
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SVDOPAGE_HXX
 #include "svx/svdopage.hxx"
-#endif
-#ifndef _SVX_XFLBSTIT_HXX
 #include "svx/xflbstit.hxx"
-#endif
-#ifndef _SVX_XFLBMTIT_HXX
 #include "svx/xflbmtit.hxx"
-#endif
-#ifndef _SVX_XLNSTIT_HXX
 #include "svx/xlnstit.hxx"
-#endif
-#ifndef _SVX_XLNEDIT_HXX
 #include "svx/xlnedit.hxx"
-#endif
-#ifndef _SVDOGRP_HXX
 #include "svx/svdogrp.hxx"
-#endif
-#ifndef _E3D_SCENE3D_HXX
 #include "svx/scene3d.hxx"
-#endif
 #include "svx/svdmodel.hxx"
 #include "globl3d.hxx"
 #include "svx/fmglob.hxx"
@@ -132,70 +81,27 @@
 #include <tools/shl.hxx>    //
 #include "svx/dialmgr.hxx"      // not nice, we need our own resources some day
 #include "svx/dialogs.hrc"      //
-
-#ifndef _SVDCAPT_HXX
 #include "svx/svdocapt.hxx"
-#endif
-
-#ifndef _E3D_OBJ3D_HXX
 #include <svx/obj3d.hxx>
-#endif
-
-#ifndef _SVX_XFLFTRIT_HXX
 #include "svx/xflftrit.hxx"
-#endif
-
-#ifndef _XTABLE_HXX
 #include "svx/xtable.hxx"
-#endif
-
-#ifndef _SVX_XBTMPIT_HXX
 #include "svx/xbtmpit.hxx"
-#endif
-
-#ifndef _SVX_XFLGRIT_HXX
 #include "svx/xflgrit.hxx"
-#endif
-
-#ifndef _SVX_XFLHTIT_HXX
 #include "svx/xflhtit.hxx"
-#endif
-
-#ifndef _SVX_XLNEDIT_HXX
 #include "svx/xlnedit.hxx"
-#endif
-
-#ifndef _SVX_XLNSTIT_HXX
 #include "svx/xlnstit.hxx"
-#endif
-
-#ifndef _SVX_XLNDSIT_HXX
 #include "svx/xlndsit.hxx"
-#endif
-
-#ifndef _SVDGLOB_HXX
 #include "svdglob.hxx"
-#endif
 #include "svdstr.hrc"
 #include "unomaster.hxx"
-
-#ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
 
 #include <vector>
 
 // #i68523#
-#ifndef _E3D_LATHE3D_HXX
 #include "svx/lathe3d.hxx"
-#endif
-#ifndef _E3D_EXTRUD3D_HXX
 #include "svx/extrud3d.hxx"
-#endif
 
 #include <comphelper/scopeguard.hxx>
 #include <boost/bind.hpp>
