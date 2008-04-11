@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.sdi,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,96 +33,6 @@ interface Annotation : _Annotation
     uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
 ]
 {
-    SID_FONTWORK  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_STYLE // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_ADJUST  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_DISTANCE // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_START  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_MIRROR // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_HIDEFORM   // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_OUTLINE // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_SHADOW  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_SHDWCOLOR // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_SHDWXVAL  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_SHDWYVAL  // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_FORMTEXT_STDFORM // api:
-    [
-        ExecMethod = Exec;
-        StateMethod = GetState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
 
     FN_THESAURUS_DLG // api:
     [
@@ -145,13 +55,6 @@ interface Annotation : _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_DRAWTEXT_ATTR_DLG
-    [
-        ExecMethod = Exec ;
-        StateMethod = NoState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
     SID_STYLE_CATALOG  // ole(no) api(play/rec)
     [
         StateMethod = StateDisableItems ;
@@ -160,18 +63,13 @@ interface Annotation : _Annotation
     SID_AUTOSPELL_CHECK
     [
         ExecMethod = Exec;
-        StateMethod = GetState
+        StateMethod = GetState;
     ]
 
     SID_AUTOSPELL_MARKOFF
     [
         ExecMethod = Exec;
         StateMethod = GetState ;
-    ]
-
-    SID_SEARCH_DLG
-    [
-        StateMethod = StateDisableItems
     ]
 
     SID_HYPERLINK_SETLINK  // status()
@@ -362,6 +260,72 @@ interface Annotation : _Annotation
         ExecMethod = Exec ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    SID_SEARCH_DLG
+    [
+        StateMethod = StateDisableItems
+    ]
+
+    SID_STYLE_FAMILY1
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY2
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY3
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY4
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY5
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_WATERCAN // status()
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_UPDATE_BY_EXAMPLE // status()
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_NEW_BY_EXAMPLE // status(fina|play)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_APPLY // status(fina|play)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_NEW // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_EDIT // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_DELETE // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
 }
 
 shell SwAnnotationShell
