@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewport.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -815,10 +815,8 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
 
 void SwView::CalcVisArea( const Size &rOutPixel )
 {
-    Size hi = rOutPixel;
-
     Point aTopLeft;
-    Rectangle aRect( aTopLeft, hi );
+    Rectangle aRect( aTopLeft, rOutPixel );
     aTopLeft = GetEditWin().PixelToLogic( aTopLeft );
     Point aBottomRight( GetEditWin().PixelToLogic( aRect.BottomRight() ) );
 
@@ -1260,8 +1258,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     if ( mpPostItMgr )
     {
-        if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-            mpPostItMgr->CalcRects();
+        mpPostItMgr->CalcRects();
         mpPostItMgr->LayoutPostIts();
     }
 }
