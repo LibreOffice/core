@@ -1,35 +1,31 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: desktop.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.24 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:10:08 $
+ * $RCSfile: desktop.hxx,v $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $Revision: 1.25 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,165 +36,54 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
 #include <helper/oframes.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
 #include <macros/xserviceinfo.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_FRAME_XUNTITLEDNUMBERS_HPP_
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_WINDOWARRANGE_HPP_
 #include <com/sun/star/frame/WindowArrange.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_TERMINATIONVETOEXCEPTION_HPP_
 #include <com/sun/star/frame/TerminationVetoException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XWINDOWARRANGER_HPP_
 #include <com/sun/star/frame/XWindowArranger.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
 #include <com/sun/star/frame/XTask.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
 #include <com/sun/star/frame/XFrames.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
 #include <svtools/cmdoptions.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
 
 #include <comphelper/numberedcollection.hxx>
 
