@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: tbcontrl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.83 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:09:00 $
+ * $RCSfile: tbcontrl.cxx,v $
+ * $Revision: 1.84 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,79 +35,30 @@
 
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-#ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX //autogen wg. ToolBox
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _CTRLBOX_HXX //autogen
 #include <svtools/ctrlbox.hxx>
-#endif
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-#ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SFX_TPLPITEM_HXX
 #include <sfx2/tplpitem.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX //autogen
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_OBJFAC_HXX
 #include <sfx2/docfac.hxx>
-#endif
-#ifndef _SFX_TEMPLDLG_HXX
 #include <sfx2/templdlg.hxx>
-#endif
-#ifndef _SFXISETHINT_HXX
 #include <svtools/isethint.hxx>
-#endif
-#ifndef _SFXQUERYSTATUS_HXX
 #include <sfx2/querystatus.hxx>
-#endif
-#ifndef _SFXSTATUSLISTENER_HXX
 #include <sfx2/sfxstatuslistener.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_FONTOPTIONS_HXX
 #include <svtools/fontoptions.hxx>
-#endif
 #ifndef _VCL_MNEMONIC_HXX_
 #include <vcl/mnemonic.hxx>
 #endif
@@ -121,26 +67,12 @@
 #include <svtools/smplhint.hxx>
 
 #define _SVX_TBCONTRL_CXX
-
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
 #include <com/sun/star/frame/status/FontHeight.hpp>
-#endif
 
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
