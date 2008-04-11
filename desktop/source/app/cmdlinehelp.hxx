@@ -1,9 +1,5 @@
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
