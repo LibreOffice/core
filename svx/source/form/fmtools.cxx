@@ -1,74 +1,46 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmtools.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.39 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:05 $
+ * $RCSfile: fmtools.cxx,v $
+ * $Revision: 1.40 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
-#ifndef SVX_DBTOOLSCLIENT_HXX
 #include "dbtoolsclient.hxx"
-#endif
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -76,178 +48,64 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <wchar.h>
-
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_LANGUAGE_HPP_
 #include <com/sun/star/util/Language.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLCLASS_HPP_
 #include <com/sun/star/reflection/XIdlClass.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLMETHOD_HPP_
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XGRIDCOLUMNFACTORY_HPP_
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#endif
 
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-
-#ifndef _SBXVAR_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
-
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-
-#ifndef _SFX_BINDINGS_HXX //autogen wg. SfxBindings
 #include <sfx2/bindings.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX //autogen wg. SfxBoolItem
 #include <svtools/eitem.hxx>
-#endif
-
-#ifndef _SFXSTRITEM_HXX //autogen wg. SfxStringItem
 #include <svtools/stritem.hxx>
-#endif
-
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _FM_STATIC_HXX_
 #include "fmstatic.hxx"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
 #include <algorithm>
 
 namespace svxform
