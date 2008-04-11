@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: statusbarmanager.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 14:32:37 $
+ * $RCSfile: statusbarmanager.cxx,v $
+ * $Revision: 1.10 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,66 +36,28 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 #include <classes/sfxhelperfunctions.hxx>
-#endif
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
-#endif
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
-#endif
-#ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
-#endif
-#ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
-#endif
-#ifndef __FRAMEWORK_GENERAL_H_
 #include "general.h"
-#endif
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include "properties.h"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
 #include <com/sun/star/util/XUpdatable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
 #include <com/sun/star/ui/ItemStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <com/sun/star/ui/ItemType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_COMMAND_HPP_
 #include <com/sun/star/awt/Command.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -109,9 +66,7 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
 #include <svtools/statusbarcontroller.hxx>
-#endif
 
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
