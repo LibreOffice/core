@@ -1,226 +1,101 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmvwimp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.66 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:10:11 $
+ * $RCSfile: fmvwimp.cxx,v $
+ * $Revision: 1.67 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVX_FMCTRLER_HXX
 #include <fmctrler.hxx>
-#endif
-
-#ifndef _SVX_FMVWIMP_HXX
 #include "fmvwimp.hxx"
-#endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#ifndef _SVX_FMOBJ_HXX
 #include "fmobj.hxx"
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#endif
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 #include "fmcontrollayout.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_SUBMISSION_XSUBMISSIONSUPPLIER_HPP_
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLER_HPP_
 #include <com/sun/star/awt/XTabController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _SVX_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
-
-#ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
-#endif
-
-#ifndef _SVX_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
-#ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
-#endif
-#ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
-#endif
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVX_XMLEXCHG_HXX_
 #include "xmlexchg.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _SDRPAGEWINDOW_HXX
 #include <svx/sdrpagewindow.hxx>
-#endif
-#ifndef _SDRPAINTWINDOW_HXX
 #include "sdrpaintwindow.hxx"
-#endif
 
 #include <algorithm>
 
