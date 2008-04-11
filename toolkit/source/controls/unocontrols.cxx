@@ -1,157 +1,77 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unocontrols.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.86 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:06:27 $
+ * $RCSfile: unocontrols.cxx,v $
+ * $Revision: 1.87 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-
-#ifndef _COM_SUN_STAR_AWT_XTEXTAREA_HPP_
 #include <com/sun/star/awt/XTextArea.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
 
 
-#ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
-#endif
-#ifndef TOOLKIT_ROADMAP_CONTROL_HXX
 #include <toolkit/controls/roadmapcontrol.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
-#endif
-#ifndef _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
 #include <toolkit/controls/geometrycontrolmodel.hxx>
-#endif
-#ifndef _TOOLKIT_CONTROLS_STDTABCONTROLLER_HXX_
 #include <toolkit/controls/stdtabcontroller.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_UNOMEMORYSTREAM_HXX_
 #include <toolkit/helper/unomemorystream.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
-#endif
-#ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
 #include <toolkit/helper/imagealign.hxx>
-#endif
 
 // for introspection
 #include <toolkit/awt/vclxwindows.hxx>
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_GROUP_HXX
 #include <vcl/group.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
 
 #include <algorithm>
 
