@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: iodlg.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 16:44:37 $
+ * $RCSfile: iodlg.hxx,v $
+ * $Revision: 1.8 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _IODLGIMPL_HXX
@@ -41,58 +36,22 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
 #include <com/sun/star/beans/StringPair.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XDIALOGCLOSEDLISTENER_HPP_
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
-#endif
-
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-
-#ifndef _INETTYPE_HXX
 #include "svtools/inettype.hxx"
-#endif
-#ifndef SVTOOLS_URL_FILTER_HXX
 #include "svtools/urlfilter.hxx"
-#endif
-#ifndef SVTOOLS_RESTRICTEDPATHS_HXX
 #include <svtools/restrictedpaths.hxx>
-#endif
-
-#ifndef SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 #include "asyncfilepicker.hxx"
-#endif
-#ifndef SVTOOLS_CONTROLACCESS_HXX
 #include "OfficeControlAccess.hxx"
-#endif
-#ifndef SVTOOLS_SOURCE_FILEPICKER_FPSMARTCONTENT_HXX
 #include "fpsmartcontent.hxx"
-#endif
 
 #include <set>
 
