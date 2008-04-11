@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dlgprov.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.14 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 16:20:02 $
+ * $RCSfile: dlgprov.cxx,v $
+ * $Revision: 1.15 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,66 +34,29 @@
 #ifndef SCRIPTING_DLGPROV_HXX
 #include "dlgprov.hxx"
 #endif
-
-#ifndef SCRIPTING_DLGEVTATT_HXX
 #include "dlgevtatt.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCESUPPLIER_HPP_
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEMANAGER_HPP_
 #include <com/sun/star/resource/XStringResourceManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEWITHLOCATION_HPP_
 #include "com/sun/star/resource/XStringResourceWithLocation.hpp"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-#endif
-
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
-#endif
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
