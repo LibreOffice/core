@@ -1,81 +1,52 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: apitreeimplobj.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 14:04:44 $
+ * $RCSfile: apitreeimplobj.hxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #define CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 
-#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
-#endif
-#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
-#endif
-#ifndef CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
 #include "configdefaultprovider.hxx"
-#endif
-#ifndef CONFIGMGR_API_EVENTS_HXX_
 #include "confevents.hxx"
-#endif
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
-#endif
-#ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
-#endif
-
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }
