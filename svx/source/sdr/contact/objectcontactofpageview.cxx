@@ -1,87 +1,47 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: objectcontactofpageview.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:44:27 $
+ * $RCSfile: objectcontactofpageview.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#endif
-#ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 #include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
-#endif
-
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#endif
-
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
-#endif
-
-#ifndef _SDR_ANIMATION_OBJECTANIMATOR_HXX
 #include <svx/sdr/animation/objectanimator.hxx>
-#endif
-
-#ifndef _SDR_EVENT_EVENTHANDLER_HXX
 #include <svx/sdr/event/eventhandler.hxx>
-#endif
-
-#ifndef _SDRPAGEWINDOW_HXX
 #include <svx/sdrpagewindow.hxx>
-#endif
-
-#ifndef _SDRPAINTWINDOW_HXX
 #include <sdrpaintwindow.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
