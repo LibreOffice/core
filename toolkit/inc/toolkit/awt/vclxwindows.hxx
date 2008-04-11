@@ -1,212 +1,96 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclxwindows.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.39 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:03:47 $
+ * $RCSfile: vclxwindows.hxx,v $
+ * $Revision: 1.40 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #define _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 
-#ifndef TOOLKIT_DLLAPI_H
 #include <toolkit/dllapi.h>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATECHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFILEDIALOG_HPP_
 #include <com/sun/star/awt/XFileDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
 #include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPROGRESSMONITOR_HPP_
 #include <com/sun/star/awt/XProgressMonitor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSCROLLBAR_HPP_
 #include <com/sun/star/awt/XScrollBar.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLCONTAINERPEER_HPP_
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMESSAGEBOX_HPP_
 #include <com/sun/star/awt/XMessageBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTEDITFIELD_HPP_
 #include <com/sun/star/awt/XTextEditField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_STYLE_HPP_
 #include <com/sun/star/awt/Style.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTIMEFIELD_HPP_
 #include <com/sun/star/awt/XTimeField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
 #include <com/sun/star/awt/XControlModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSPINFIELD_HPP_
 #include <com/sun/star/awt/XSpinField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XUNOCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XNUMERICFIELD_HPP_
 #include <com/sun/star/awt/XNumericField.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XMetricFIELD_HPP_
 #include <com/sun/star/awt/XMetricField.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XBUTTON_HPP_
 #include <com/sun/star/awt/XButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOGGLEBUTTON_HPP_
 #include <com/sun/star/awt/XToggleButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPOINTER_HPP_
 #include <com/sun/star/awt/XPointer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTAREA_HPP_
 #include <com/sun/star/awt/XTextArea.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XIMAGEBUTTON_HPP_
 #include <com/sun/star/awt/XImageButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFIXEDHYPERLINK_HPP_
 #include <com/sun/star/awt/XFixedHyperlink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFIXEDTEXT_HPP_
 #include <com/sun/star/awt/XFixedText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XRADIOBUTTON_HPP_
 #include <com/sun/star/awt/XRadioButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCURRENCYFIELD_HPP_
 #include <com/sun/star/awt/XCurrencyField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPATTERNFIELD_HPP_
 #include <com/sun/star/awt/XPatternField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDATEFIELD_HPP_
 #include <com/sun/star/awt/XDateField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCOMBOBOX_HPP_
 #include <com/sun/star/awt/XComboBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
 #include <com/sun/star/awt/XCheckBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
 #include <com/sun/star/awt/XImageConsumer.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <vcl/pointr.hxx>
 #include <vcl/imgcons.hxx>
