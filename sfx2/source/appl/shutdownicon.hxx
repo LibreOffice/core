@@ -2,57 +2,27 @@
 #ifndef __SHUTDOWNICON_HXX__
 #define __SHUTDOWNICON_HXX__
 
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
 #endif
 #ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>
-#endif
-#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
-#endif
-#ifndef INCLUDED_SFX2_DLLAPI_H
 #include <sfx2/dllapi.h>
-#endif
 
 class ResMgr;
 namespace sfx2
