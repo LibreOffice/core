@@ -1,92 +1,60 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sta_list.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.28 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:17:59 $
+ * $RCSfile: sta_list.cxx,v $
+ * $Revision: 1.29 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
-
-#ifndef _TIME_HXX //autogen
 #include <tools/time.hxx>
-#endif
-#ifndef _SV_SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX //handmade
 #include <vcl/wrkwin.hxx>
-#endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
-
-#ifndef _STATEMNT_HXX
 #include "statemnt.hxx"
-#endif
 
 #ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
 #endif
-
-#ifndef _RCONTROL_HXX
 #include "rcontrol.hxx"
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
-#ifndef _EDITWIN_HXX
 #include "editwin.hxx"
-#endif
 #endif
 
 #include "profiler.hxx"
-
-#ifndef _SV_FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
-#endif
-
-#ifndef _SV_TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
 
 // only needed for dynamic_cast in wintree
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SVTOOLS_ROADMAP_HXX
 #include <svtools/roadmap.hxx>
-#endif
 
 #define WINDOW_ANYTYPE WINDOW_BASE
 
