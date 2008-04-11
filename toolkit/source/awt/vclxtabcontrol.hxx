@@ -1,21 +1,11 @@
 #ifndef LAYOUT_AWT_VCLXTABCONTROLLER_HXX
 #define LAYOUT_AWT_VCLXTABCONTROLLER_HXX
 
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 #include <toolkit/helper/listenermultiplexer.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSIMPLETABCONTROLLER_HPP_
 #include <com/sun/star/awt/XSimpleTabController.hpp>
-#endif
 #include "../layout/container.hxx"
 
 #include <com/sun/star/awt/MaxChildrenException.hpp>
