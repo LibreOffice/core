@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh.hxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -412,6 +412,8 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL GotoBookmark( const String& rName );
     BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
     BOOL GoPrevBookmark();
+
+    BOOL GotoField( const SwFmtFld& rFld );
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
