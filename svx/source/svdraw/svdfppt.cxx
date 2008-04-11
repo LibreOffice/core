@@ -1,66 +1,46 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdfppt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.158 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:50:31 $
+ * $RCSfile: svdfppt.cxx,v $
+ * $Revision: 1.159 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
 #include <math.h>
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
-#endif
-#ifndef _STG_HXX
 #include <sot/stg.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
 
 #include <unotools/streamwrap.hxx>
 
@@ -87,9 +67,7 @@
 #include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/svdoashp.hxx>
-#ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/unoprnms.hxx>
 
 #if defined(JOEENV) && defined(JOEDEBUG)
@@ -97,162 +75,64 @@
 #endif
 
 #if defined(DBG_EXTRACTOLEOBJECTS) || defined(DBG_EXTRACTFONTMETRICS)
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
-#ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX //autogen
 #include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_SHDDITEM_HXX //autogen
 #include <svx/shdditem.hxx>
-#endif
-#ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
 #include <fontitem.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
 #ifndef _EDITENG_HXX
 #include <svx/editeng.hxx>
 #endif
-#ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
-#ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX //autogen
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include <svditer.hxx>
-#endif
-#ifndef _SVDOEDGE_HXX
 #include <svx/svdoedge.hxx>
-#endif
-#ifndef _SXEKITM_HXX
 #include <svx/sxekitm.hxx>
-#endif
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
-#ifndef _SYCHCONV_HXX
 #include <svtools/sychconv.hxx>
-#endif
-#ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
-#endif
-#ifndef _SVXMSBAS_HXX
 #include <svxmsbas.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <unoapi.hxx>
-#endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
-#ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
-#endif
-#ifndef _SVX_SVXFONT_HXX
 #include <svx/svxfont.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SDTFCHIM_HXX
 #include <svx/sdtfchim.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
 #include "com/sun/star/awt/Gradient.hpp"
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
