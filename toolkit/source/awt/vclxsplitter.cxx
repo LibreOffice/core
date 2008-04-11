@@ -1,16 +1,8 @@
 #include "vclxsplitter.hxx"
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include "toolkit/helper/property.hxx"
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <vcl/split.hxx>
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 
 #include <com/sun/star/awt/PosSize.hpp>
 
