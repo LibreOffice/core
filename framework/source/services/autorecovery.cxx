@@ -1,230 +1,97 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: autorecovery.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:11:44 $
+ * $RCSfile: autorecovery.cxx,v $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $Revision: 1.27 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-#ifndef __FRAMEWORK_SERVICES_AUTORECOVERY_HXX_
 #include "services/autorecovery.hxx"
-#endif
 
 //_______________________________________________
 // own includes
-
-#ifndef __FRAMEWORK_LOADENV_LOADDISPATCHLISTENER_HXX_
 #include <loadenv/loaddispatchlistener.hxx>
-#endif
-
-#ifndef __FRAMEWORK_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_PATTERN_FRAME_HXX_
 #include <pattern/frame.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
 
 #include <classes/resource.hrc>
 #include <classes/fwkresid.hxx>
-
-#ifndef __FRAMEWORK_PROTOCOLS_H_
 #include <protocols.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
 //_______________________________________________
 // interface includes
-
-#ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
 #include <com/sun/star/frame/XTitle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
 #include <com/sun/star/container/XContainerQuery.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
 
 //_______________________________________________
 // other includes
-
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
-
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-
-#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-#endif
 
 #include <osl/time.h>
 #include <vcl/msgbox.hxx>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 //_______________________________________________
 // namespaces
