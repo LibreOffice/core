@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: statusindicatorfactory.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.25 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:20:36 $
+ * $RCSfile: statusindicatorfactory.cxx,v $
+ * $Revision: 1.26 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,77 +35,29 @@
 // my own includes
 
 #include <algorithm>
-
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
 #include <helper/statusindicator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_VCLSTATUSINDICATOR_HXX_
 #include <helper/vclstatusindicator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
-#endif
 
 //-----------------------------------------------
 // interface includes
-
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_AWT_XCONTROLS_HPP_
 #include <com/sun/star/awt/XControl.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_DEVICEINFO_HPP_
 #include <com/sun/star/awt/DeviceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -118,22 +65,10 @@
 
 //-----------------------------------------------
 // includes of other projects
-
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 //-----------------------------------------------
 // namespace
