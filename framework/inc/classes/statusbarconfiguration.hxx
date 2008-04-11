@@ -1,23 +1,13 @@
 #ifndef __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 #define __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 
-#ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _SV_STATUS_HXX
 #include <vcl/status.hxx>
-#endif
 
 // #110897#
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 namespace framework
 {
