@@ -1,9 +1,7 @@
 
 #ifdef ENABLE_QUICKSTART_APPLET
 
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
 
 #include <svtools/dynamicmenuoptions.hxx>
 
@@ -11,16 +9,9 @@
 #include <glib.h>
 #include <eggtray/eggtrayicon.h>
 #include <vos/mutex.hxx>
-
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
 #ifndef _SFX_APP_HRC
 #include "app.hrc"
 #endif
