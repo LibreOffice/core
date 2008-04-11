@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/mnumgr.hxx>
+
 #include <vcl/salbtype.hxx> // FRound
 
 
@@ -97,12 +99,10 @@
 #include <vcl/edit.hxx>
 #include <svtools/svmedit.hxx>
 
-//TODO
 #include <txtfld.hxx>
 #include <SwUndoField.hxx>
-#include "../../core/inc/docfld.hxx"   // fuer Expression-Felder
+#include "../../core/inc/docfld.hxx"   // for expression fields
 #include <editsh.hxx>
-//
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #define ANKORLINE_WIDTH         1
@@ -111,6 +111,7 @@
 #define METABUTTON_AREA_WIDTH   30
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
+
 
 Color ColorFromAlphaColor(UINT8 aTransparency, Color &aFront, Color &aBack )
 {
@@ -134,64 +135,21 @@ PostItTxt::~PostItTxt()
 void PostItTxt::GetFocus()
 {
     if(mpPostIt)
-    {
-        mpPostIt->Mgr()->SetActivePostIt(mpPostIt);
-
-        /*
-        // enable visible spell checking
-        ULONG nCntrl = mpPostIt->Engine()->GetControlWord();
-        const SwViewOption* pVOpt = mpPostIt->DocView()->GetWrtShell().GetViewOptions();
-
-        if( pVOpt->IsOnlineSpell() )
-        {
-            nCntrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
-            nCntrl &= ~EE_CNTRL_NOREDLINES;
-            if( pVOpt->IsHideSpell() )
-                nCntrl |= EE_CNTRL_NOREDLINES;
-        }
-        else
-        {
-            nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-            nCntrl |= EE_CNTRL_NOREDLINES;
-        }
-        mpPostIt->Engine()->SetControlWord(nCntrl);
-        */
-
-        // update ankor as well as turn on visible selection
-        mpPostIt->View()->GetEditView().SetSelectionMode(EE_SELMODE_STD);
-        if (mpPostIt->Ankor())
-            mpPostIt->Ankor()->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH* 15));
-        mpPostIt->View()->ShowCursor();
-        if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            mpPostIt->View()->SetBackgroundColor(mColorDark);
-        // we need this, otherwise no layout after note is left
-        mpPostIt->Mgr()->SetLayout();
-    }
+         mpPostIt->Mgr()->SetActivePostIt(mpPostIt);
     Window::GetFocus();
     Invalidate();
 }
 
 void PostItTxt::LoseFocus()
 {
-    if(mpPostIt)
+    // write the visible text back into the SwField
+    if ( mpPostIt )
     {
-        // disable visible spell checking
-        /*
-        ULONG nCntrl = mpPostIt->Engine()->GetControlWord();
-        nCntrl |= EE_CNTRL_NOREDLINES;
-        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
-        mpPostIt->Engine()->SetControlWord(nCntrl);
-        */
-
-        mpPostIt->View()->GetEditView().SetSelectionMode(EE_SELMODE_HIDDEN);
-        if (mpPostIt->Ankor())
-            mpPostIt->Ankor()->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
-
-        // write the visible text back into the SwField
         mpPostIt->UpdateData();
-        if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            mpPostIt->View()->SetBackgroundColor(COL_TRANSPARENT);
+        mpPostIt->Engine()->ClearModifyFlag();
+        mpPostIt->Engine()->GetUndoManager().Clear();
     }
+
     Window::LoseFocus();
     Invalidate();
 }
@@ -204,7 +162,7 @@ void PostItTxt::Paint( const Rectangle& rRect)
             DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),Gradient(GRADIENT_LINEAR,mColorDark,mColorDark));
         else
             DrawGradient(Rectangle(Point(0,0),PixelToLogic(GetSizePixel())),Gradient(GRADIENT_LINEAR,mColorLight,mColorDark));
-    }
+     }
     mpOutlinerView->Paint( rRect );
 }
 
@@ -216,23 +174,17 @@ void PostItTxt::SetColor(Color &aColorDark,Color &aColorLight)
 
 void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
 {
-    //TODO: Alt - F4
     const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     USHORT nKey = rKeyCode.GetCode();
+    SwView* pView = mpPostIt->DocView();
 
-    if (nKey==KEY_CONTEXTMENU)
-    {
-        Size aSize = GetSizePixel();
-        Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
-        mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this,&aPos);
-    }
-    else
     if ( (nKey== KEY_N) && rKeyCode.IsMod1() && rKeyCode.IsMod2())
     {
+        if ( mpPostIt->Mgr()->GetActivePostIt() == mpPostIt )
+            mpPostIt->Mgr()->SetActivePostIt(0);
         mpPostIt->SwitchToFieldPos();
     }
     else
-    //if ( (rKeyCode.GetFullCode() == (KEY_PAGEUP | KEY_MOD1 |KEY_SHIFT)) ||
     if  (((nKey == KEY_PAGEUP) && rKeyCode.IsMod1() && rKeyCode.IsMod2()) ||
          ((nKey == KEY_PAGEDOWN) && rKeyCode.IsMod1() && rKeyCode.IsMod2() ))
     {
@@ -241,13 +193,18 @@ void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
     else
     if ((nKey == KEY_ESCAPE))
     {
-        if (mpPostIt->Engine()->GetEditEngine().GetText()==String(::rtl::OUString::createFromAscii("")))
-            mpPostIt->Delete(FN_DELETE_NOTE);
+        if ( mpPostIt->Mgr()->GetActivePostIt() == mpPostIt )
+            mpPostIt->Mgr()->SetActivePostIt(0);
+        if (!mpPostIt->IsReadOnly() && mpPostIt->Engine()->GetEditEngine().GetText()==String(::rtl::OUString::createFromAscii("")))
+            mpPostIt->Delete();
         else
             mpPostIt->SwitchToFieldPos();
     }
     else
     {
+        //let's make sure we see our note
+        mpPostIt->Mgr()->MakeVisible(mpPostIt);
+
         // we need EnableOutput, otherwise text might jump up and down
         // e.g ENTER->text jumps up, if we then resize based on the new hight, it jumps back down
         //EnableOutput(FALSE);
@@ -259,42 +216,16 @@ void PostItTxt::KeyInput( const KeyEvent& rKeyEvt )
             bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
         if (bDone)
         {
-            long aNewHeight = mpPostIt->GetPostItTextHeight();
-            //TODO: after resizing to one line, this should still continue to resize
-            if ( (aOldHeight != aNewHeight) && (aNewHeight > mpPostIt->GetMinimumSizeWithoutMeta()) )
-            {
-                //check for lower border or next note and resize if space left
-                long aBorder = mpPostIt->Mgr()->GetNextBorder();
-                if (aBorder == -1)
-                {
-                    // we have notes scrollbar on this page, do not set new size
-                    // TODO: seperate scrollbar pos stuff from real resizing
-                    mpPostIt->DoResize();
-                }
-                else
-                {
-                    if (mpPostIt->GetPosPixel().Y() + aNewHeight + mpPostIt->GetMetaHeight() < aBorder)
-                    {
-                        mpPostIt->SetSizePixel(Size(mpPostIt->GetSizePixel().Width(),aNewHeight+mpPostIt->GetMetaHeight()));
-                        mpPostIt->DoResize();
-                        mpPostIt->Invalidate();
-                    }
-                    else
-                    {
-                        mpPostIt->DoResize();
-                    }
-                }
-            }
-            else
-            {
-                // TODO: seperate scrollbar pos stuff from real resizing
-                mpPostIt->DoResize();
-            }
+            mpPostIt->ResizeIfNeccessary(aOldHeight,mpPostIt->GetPostItTextHeight());
         }
         else
-            mpPostIt->DocView()->KeyInput(rKeyEvt);
+        {
+            if (!pView->KeyInput(rKeyEvt))
+                Window::KeyInput(rKeyEvt);
+        }
     }
-    mpPostIt->DocView()->GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+
+    pView->GetViewFrame()->GetBindings().InvalidateAll(FALSE);
 }
 
 void PostItTxt::MouseMove( const MouseEvent& rMEvt )
@@ -351,7 +282,28 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
         if (mpOutlinerView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),TRUE ))
             mpOutlinerView->ExecuteSpellPopup(rCEvt.GetMousePosPixel());
         else
-            mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this,&rCEvt.GetMousePosPixel());
+        {
+            SfxPopupMenuManager* aMgr = mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
+            XubString aText = ((PopupMenu*)aMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
+            aText += mpPostIt->GetAuthor();
+            ((PopupMenu*)aMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+
+            XubString aText2 = ((PopupMenu*)aMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
+
+            if (rCEvt.IsMouseEvent())
+            {
+                //mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this,&rCEvt.GetMousePosPixel());
+                ((PopupMenu*)aMgr->GetSVMenu())->Execute(this,rCEvt.GetMousePosPixel());
+            }
+            else
+            {
+                const Size aSize = GetSizePixel();
+                const Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+                //mpPostIt->DocView()->GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this,&aPos);
+                ((PopupMenu*)aMgr->GetSVMenu())->Execute(this,aPos);
+            }
+            delete aMgr;
+        }
     }
     else
     if (rCEvt.GetCommand() == COMMAND_WHEEL)
@@ -365,6 +317,9 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
             }
             else
             {
+                HandleScrollCommand( rCEvt, 0 , mpPostIt->Scrollbar());
+
+                /*
                 long nLines = pData->GetNotchDelta() * (long)pData->GetScrollLines();
                 if ( ((mpPostIt->Scrollbar()->GetRange().Min() == mpPostIt->Scrollbar()->GetThumbPos()) && (nLines > 0)) ||
                     ( (mpPostIt->Scrollbar()->GetRange().Max() == mpPostIt->Scrollbar()->GetThumbPos()+mpPostIt->Scrollbar()->GetVisibleSize()) &&  (nLines < 0)) )
@@ -375,6 +330,7 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
                 {
                     HandleScrollCommand( rCEvt, 0 , mpPostIt->Scrollbar());
                 }
+                */
             }
         }
         else
@@ -428,7 +384,7 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
 
 
 /******* SwPostIt **************************************/
-SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr* aMgr,bool bMarginSide) : Window(pParent, nBits),
+SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr* aMgr) : Window(pParent, nBits),
     mpOutlinerView(0),
     mpOutliner(0),
     mpPostItTxt(0),
@@ -439,8 +395,7 @@ SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr
     mpAnkor(0),
     mpMgr(aMgr),
     mbMeta(true),
-    mpButtonPopup(new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON))),
-    mbMarginSide(bMarginSide)
+    mpButtonPopup(new PopupMenu(SW_RES(MN_ANNOTATION_BUTTON)))
 {
     SwEditWin* aWin = static_cast<SwEditWin*>(GetParent());
     mpView = &aWin->GetView();
@@ -458,6 +413,7 @@ SwPostIt::SwPostIt( Window* pParent, WinBits nBits, SwFmtFld* aField,SwPostItMgr
 void SwPostIt::SetPostItText()
 {
     // get text from SwPostItField and insert into our textview
+    mpOutliner->SetModifyHdl( Link() );
     mpOutliner->EnableUndo( FALSE );
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
     if( mpFld->GetTextObject() )
@@ -472,7 +428,9 @@ void SwPostIt::SetPostItText()
     }
 
     mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
     mpOutliner->EnableUndo( TRUE );
+    mpOutliner->SetModifyHdl( LINK( this, SwPostIt, ModifyHdl ) );
     Invalidate();
 }
 
@@ -545,7 +503,7 @@ void SwPostIt::Paint( const Rectangle& rRect)
             //draw button
             Gradient aGradient(GRADIENT_LINEAR,ColorFromAlphaColor(15,mColorAnkor,mColorDark),ColorFromAlphaColor(80,mColorAnkor,mColorDark));
             DrawGradient(mRectMetaButton,aGradient);
-            //draw rect around button
+            //draw €rect around button
             SetFillColor();
             SetLineColor(ColorFromAlphaColor(90,mColorAnkor,mColorDark));
         }
@@ -561,59 +519,39 @@ void SwPostIt::Paint( const Rectangle& rRect)
     }
 }
 
-void SwPostIt::SetPosSizePixelRect(long nX, long nY,long nWidth, long nHeight,const SwRect &aRect, const long aPageBorder, USHORT nFlags)
+void SwPostIt::SetPosSizePixelRect(long nX, long nY,long nWidth, long nHeight,const SwRect &aRect, const long aPageBorder)
 {
-    Window::SetPosSizePixel(nX,nY,nWidth,nHeight,nFlags);
-
-    Point   aLineStart;
-    Point   aLineEnd;
-    long    X = aRect.Left();
-    long    Y = aRect.Bottom();
-
-    if (mbMarginSide)
-    {
-        aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
-        aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
-    }
-    else
-    {
-        aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
-        aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
-    }
-
-    if (mpAnkor)
-    {
-        mpAnkor->SetAllPosition(basegfx::B2DPoint( X , Y - 5* 15),
-                                basegfx::B2DPoint( X-5*15 , Y+5*15),
-                                basegfx::B2DPoint( X+5*15 , Y+5*15),
-                                basegfx::B2DPoint( X, Y+2*15),
-                                basegfx::B2DPoint( aPageBorder ,Y+2*15),
-                                basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
-        mpAnkor->SetHeight(aRect.Height());
-    }
-    else
-    {
-        mpAnkor = new SwPostItAnkor(basegfx::B2DPoint( X , Y-5*15),
-                                    basegfx::B2DPoint( X-5*15 , Y+5*15),
-                                    basegfx::B2DPoint( X    +5*15 , Y+5*15),
-                                    basegfx::B2DPoint( X, Y+2*15),
-                                    basegfx::B2DPoint( aPageBorder ,Y+2*15),
-                                    basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                    basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_DASH,ANKORLINE_WIDTH*15), false);
-        mpAnkor->SetHeight(aRect.Height());
-        mpAnkor->setVisible(false);
-        pOverlayManager->add(*mpAnkor);
-    }
-
     mbMeta = true;
-    Resize();
+    mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
+    mAnkorRect = aRect;
+    mPageBorder = aPageBorder;
 }
 
-void SwPostIt::SetSizePixel( const Size& rNewSize )
+void SwPostIt::SetSize( const Size& rNewSize )
 {
-    Window::SetSizePixel(rNewSize);
-    Resize();
+    mPosSize.SetSize(rNewSize);
+}
+
+void SwPostIt::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
+{
+    mPosSize = Rectangle(aPoint,aSize);
+}
+
+void SwPostIt::TranslateTopPosition(const long aAmount)
+{
+    mPosSize.Move(0,aAmount);
+}
+
+void SwPostIt::ShowAnkorOnly(const Point &aPoint)
+{
+    HideNote();
+    SetPosAndSize();
+    if (mpAnkor)
+    {
+        mpAnkor->SetSixthPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
+        mpAnkor->SetSeventhPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
+        mpAnkor->setVisible(true);
+    }
 }
 
 void SwPostIt::InitControls()
@@ -621,6 +559,7 @@ void SwPostIt::InitControls()
     // actual window which holds the user text
     mpPostItTxt = new PostItTxt(this, 0);
     mpPostItTxt->SetPointer(Pointer(POINTER_TEXT));
+
 
     // window control for author and date
     mpMeta = new MultiLineEdit(this,0);
@@ -631,25 +570,7 @@ void SwPostIt::InitControls()
     mpMeta->AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
     AddEventListener( LINK( mpPostItTxt, PostItTxt, WindowEventListener ) );
 
-    /*
-    String sDateTime;
-    SvNumberFormatter* pNumFormatter = mpView->GetDocShell()->GetDoc()->GetNumberFormatter();
-    const ULONG nFormatDate = pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME , Application::GetSettings().GetLanguage());
-    const DateTime aDateTime( mpFld->GetDate(), mpFld->GetTime());
-    pNumFormatter->GetOutputString( aDateTime - DateTime( *pNumFormatter->GetNullDate()), nFormatDate, sDateTime, &pColor );
-    */
-    String sMeta;
-    const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
-    sMeta = mpFld->GetPar1();
-    if (mpFld->GetDate()==Date())
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_TODAY));
-    else
-    if (mpFld->GetDate()==Date(Date()-1))
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_YESTERDAY));
-    else
-        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + rLocalData.getDate( mpFld->GetDate() );
-    sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( mpFld->GetTime(),false );
-    mpMeta->SetText(sMeta);
+    CheckMetaText();
 
     SwDocShell* aShell = mpView->GetDocShell();
     mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
@@ -675,6 +596,7 @@ void SwPostIt::InitControls()
 
     //create Scrollbars
     mpVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+    mpVScrollbar->EnableNativeWidget(false);
     mpVScrollbar->EnableRTL( false );
     mpVScrollbar->SetScrollHdl(LINK(this, SwPostIt, ScrollHdl));
     mpVScrollbar->EnableDrag();
@@ -683,7 +605,6 @@ void SwPostIt::InitControls()
     mpButtonPopup->SetMenuFlags(MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES);
 
     const SwViewOption* pVOpt = mpView->GetWrtShellPtr()->GetViewOptions();
-
     ULONG nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE | EE_CNTRL_ONLINESPELLING;; // | EE_CNTRL_AUTOCOMPLETE;
@@ -691,11 +612,38 @@ void SwPostIt::InitControls()
         nCntrl |= EE_CNTRL_NOREDLINES;
     mpOutliner->SetControlWord(nCntrl);
 
+    XubString aText = mpButtonPopup->GetItemText( FN_DELETE_NOTE_AUTHOR );
+    aText += GetAuthor();
+    mpButtonPopup->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+
     mpOutlinerView->StartSpeller();
 
     mpMeta->Show();
     mpVScrollbar->Show();
     mpPostItTxt->Show();
+}
+
+void SwPostIt::CheckMetaText()
+{
+    /*
+    String sDateTime;
+    SvNumberFormatter* pNumFormatter = mpView->GetDocShell()->GetDoc()->GetNumberFormatter();
+    const ULONG nFormatDate = pNumFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME , Application::GetSettings().GetLanguage());
+    const DateTime aDateTime( mpFld->GetDate(), mpFld->GetTime());
+    pNumFormatter->GetOutputString( aDateTime - DateTime( *pNumFormatter->GetNullDate()), nFormatDate, sDateTime, &pColor );
+    */
+    const LocaleDataWrapper& rLocalData = SvtSysLocale().GetLocaleData();
+    String sMeta = mpFld->GetPar1();
+    if (mpFld->GetDate()==Date())
+        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_TODAY));
+    else
+    if (mpFld->GetDate()==Date(Date()-1))
+        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + String(SW_RES(STR_POSTIT_YESTERDAY));
+    else
+        sMeta = sMeta + rtl::OUString::createFromAscii("\n") + rLocalData.getDate( mpFld->GetDate() );
+    sMeta = sMeta + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( mpFld->GetTime(),false );
+    if (mpMeta->GetText() != sMeta)
+        mpMeta->SetText(sMeta);
 }
 
 void SwPostIt::Rescale()
@@ -720,10 +668,73 @@ void SwPostIt::Rescale()
 void SwPostIt::MetaInfo(const bool bMeta )
 {
     mbMeta = bMeta;
-    Resize();
+    DoResize();
 }
 
-void SwPostIt::Resize()
+void SwPostIt::SetPosAndSize()
+{
+    if (GetSizePixel() != mPosSize.GetSize())
+    {
+        SetSizePixel(mPosSize.GetSize());
+        DoResize();
+    }
+
+    if (GetPosPixel().X() != mPosSize.TopLeft().X() || (abs(GetPosPixel().Y() - mPosSize.TopLeft().Y()) > 5) )
+    {
+        SetPosPixel(mPosSize.TopLeft());
+
+        Point aLineStart;
+        Point aLineEnd ;
+        if (mbMarginSide)
+        {
+            aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+            aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+        }
+        else
+        {
+            aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+            aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+        }
+
+        if (mpAnkor)
+        {
+            mpAnkor->SetAllPosition(basegfx::B2DPoint( mAnkorRect.Left() , mAnkorRect.Bottom() - 5* 15),
+                                    basegfx::B2DPoint( mAnkorRect.Left()-5*15 , mAnkorRect.Bottom()+5*15),
+                                    basegfx::B2DPoint( mAnkorRect.Left()+5*15 , mAnkorRect.Bottom()+5*15),
+                                    basegfx::B2DPoint( mAnkorRect.Left(), mAnkorRect.Bottom()+2*15),
+                                    basegfx::B2DPoint( mPageBorder ,mAnkorRect.Bottom()+2*15),
+                                    basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
+                                    basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
+            mpAnkor->SetHeight(mAnkorRect.Height());
+        }
+        else
+        {
+            mpAnkor = new SwPostItAnkor(basegfx::B2DPoint( mAnkorRect.Left() , mAnkorRect.Bottom()-5*15),
+                                        basegfx::B2DPoint( mAnkorRect.Left()-5*15 , mAnkorRect.Bottom()+5*15),
+                                        basegfx::B2DPoint( mAnkorRect.Left()+5*15 , mAnkorRect.Bottom()+5*15),
+                                        basegfx::B2DPoint( mAnkorRect.Left(), mAnkorRect.Bottom()+2*15),
+                                        basegfx::B2DPoint( mPageBorder ,mAnkorRect.Bottom()+2*15),
+                                        basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
+                                        basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()) , mColorAnkor,LineInfo(LINE_DASH,ANKORLINE_WIDTH*15), false);
+            mpAnkor->SetHeight(mAnkorRect.Height());
+            mpAnkor->setVisible(false);
+            pOverlayManager->add(*mpAnkor);
+            if (HasChildPathFocus())
+                mpAnkor->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+        }
+    }
+    else
+    {
+        if ( mpAnkor->getBasePosition() != basegfx::B2DPoint( mAnkorRect.Left() , mAnkorRect.Bottom()-5*15))
+            mpAnkor->SetTriPosition(basegfx::B2DPoint( mAnkorRect.Left() , mAnkorRect.Bottom() - 5* 15),
+                                    basegfx::B2DPoint( mAnkorRect.Left()-5*15 , mAnkorRect.Bottom()+5*15),
+                                    basegfx::B2DPoint( mAnkorRect.Left()+5*15 , mAnkorRect.Bottom()+5*15),
+                                    basegfx::B2DPoint( mAnkorRect.Left(), mAnkorRect.Bottom()+2*15),
+                                    basegfx::B2DPoint( mPageBorder ,mAnkorRect.Bottom()+2*15));
+    }
+}
+
+void SwPostIt::DoResize()
 {
     long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
     unsigned long aWidth    =   GetSizePixel().Width();
@@ -759,7 +770,7 @@ void SwPostIt::Resize()
     {   // if we do not have a scrollbar anymore, we want to see the complete text
         mpOutlinerView->SetVisArea( PixelToLogic( Rectangle(0,0,aWidth,aHeight) ) );
     }
-    mpVScrollbar->SetPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight);
+    mpVScrollbar->SetPosSizePixel( aWidth, 0, GetScrollbarWidth(), aHeight      );
     mpVScrollbar->SetVisibleSize( PixelToLogic(Size(0,aHeight)).Height() );
     mpVScrollbar->SetPageSize( PixelToLogic(Size(0,aHeight)).Height() * 8 / 10 );
     mpVScrollbar->SetLineSize( mpOutliner->GetTextHeight() / 10 );
@@ -791,6 +802,48 @@ void SwPostIt::Resize()
                 Size( METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(), METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
 }
 
+void SwPostIt::ResizeIfNeccessary(long aOldHeight, long aNewHeight)
+{
+    if (aOldHeight != aNewHeight)
+    {
+        if (aNewHeight > GetMinimumSizeWithoutMeta())
+        {
+            //check for lower border or next note and resize if space left
+            long aBorder = mpMgr->GetNextBorder();
+            if (aBorder == -1)
+            {
+                // we have notes scrollbar on this page, do not set new size
+                // TODO: seperate scrollbar pos stuff from real resizing
+                DoResize();
+            }
+            else
+            {
+                long aNewLowerValue = GetPosPixel().Y() + aNewHeight + GetMetaHeight();
+                if (aNewLowerValue < aBorder)
+                    SetSizePixel(Size(GetSizePixel().Width(),aNewHeight+GetMetaHeight()));
+                else
+                    SetSizePixel(Size(GetSizePixel().Width(),aBorder - GetPosPixel().Y()));
+                DoResize();
+                Invalidate();
+            }
+        }
+        else
+        {
+            if (GetSizePixel().Height() != GetMinimumSizeWithoutMeta() + GetMetaHeight())
+            {
+                SetSizePixel(Size(GetSizePixel().Width(),GetMinimumSizeWithoutMeta() + GetMetaHeight()));
+                DoResize();
+                Invalidate();
+            }
+        }
+    }
+    else
+    {
+        // TODO: seperate scrollbar pos stuff from real resizing
+        DoResize();
+    }
+}
+
 void SwPostIt::SetColor(Color &aColorDark,Color &aColorLight, Color &aColorAnkor)
 {
     mColorDark =  aColorDark;
@@ -801,13 +854,32 @@ void SwPostIt::SetColor(Color &aColorDark,Color &aColorLight, Color &aColorAnkor
 
     if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
+        //Wallpaper aWall(Gradient(GRADIENT_LINEAR,mColorLight,mColorDark));
+        //mpPostItTxt->SetBackground(aWall);
+
         mpMeta->SetControlBackground(mColorDark);
         AllSettings aSettings = mpMeta->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.SetFieldTextColor(aColorAnkor);
         aSettings.SetStyleSettings(aStyleSettings);
         mpMeta->SetSettings(aSettings);
+
+        AllSettings aSettings2 = mpVScrollbar->GetSettings();
+        StyleSettings aStyleSettings2 = aSettings2.GetStyleSettings();
+        aStyleSettings2.SetButtonTextColor(Color(0,0,0));
+        //aStyleSettings2.SetLightColor(mColorAnkor);
+        aStyleSettings2.SetCheckedColor(mColorLight); //hintergund
+        //aStyleSettings2.SetLightBorderColor(mColorAnkor);
+        aStyleSettings2.SetShadowColor(mColorAnkor);
+        aStyleSettings2.SetFaceColor(mColorDark);
+        aSettings2.SetStyleSettings(aStyleSettings2);
+        mpVScrollbar->SetSettings(aSettings2);
     }
+}
+
+void SwPostIt::SetMarginSide(bool aMarginSide)
+{
+    mbMarginSide = aMarginSide;
 }
 
 void SwPostIt::SetReadonly(BOOL bSet)
@@ -833,6 +905,7 @@ void SwPostIt::LoseFocus()
 
 void SwPostIt::ShowNote()
 {
+    SetPosAndSize();
     if (!IsVisible())
         Window::Show();
     if (mpAnkor)
@@ -847,70 +920,91 @@ void SwPostIt::HideNote()
         mpAnkor->setVisible(false);
 }
 
+void SwPostIt::ActivatePostIt()
+{
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
+
+    /*
+    // enable visible spell checking
+    ULONG nCntrl = Engine()->GetControlWord();
+    const SwViewOption* pVOpt = DocView()->GetWrtShell().GetViewOptions();
+
+    if( pVOpt->IsOnlineSpell() )
+    {
+        nCntrl |= EE_CNTRL_ONLINESPELLING|EE_CNTRL_ALLOWBIGOBJS;
+        nCntrl &= ~EE_CNTRL_NOREDLINES;
+        if( pVOpt->IsHideSpell() )
+            nCntrl |= EE_CNTRL_NOREDLINES;
+    }
+    else
+    {
+        nCntrl &= ~EE_CNTRL_ONLINESPELLING;
+        nCntrl |= EE_CNTRL_NOREDLINES;
+    }
+    Engine()->SetControlWord(nCntrl);
+    */
+
+    CheckMetaText();
+    if ( Ankor() )
+        Ankor()->SetLineInfo(LineInfo(LINE_SOLID,ANKORLINE_WIDTH*15));
+    View()->ShowCursor();
+
+    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        View()->SetBackgroundColor(mColorDark);
+    //  mpPostItTxt->SetBackground(Wallpaper(mColorDark));
+}
+
+void SwPostIt::DeactivatePostIt()
+{
+    // remove selection, #i87073#
+    if (View()->GetEditView().HasSelection())
+    {
+        ESelection aSelection = View()->GetEditView().GetSelection();
+        aSelection.nEndPara = aSelection.nStartPara;
+        aSelection.nEndPos = aSelection.nStartPos;
+        View()->GetEditView().SetSelection(aSelection);
+    }
+
+    if ( Ankor() )
+        Ankor()->SetLineInfo(LineInfo(LINE_DASH,ANKORLINE_WIDTH*15));
+    // write the visible text back into the SwField
+    UpdateData();
+    mpOutliner->ClearModifyFlag();
+    mpOutliner->GetUndoManager().Clear();
+
+    if ( !Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+        View()->SetBackgroundColor(COL_TRANSPARENT);
+    //mpPostItTxt->SetBackground(Gradient(GRADIENT_LINEAR,mColorLight,mColorDark));
+}
+
 void SwPostIt::UpdateData()
 {
     if ( mpOutliner->IsModified() )
     {
         SwPosition * pPos = mpFmtFld->GetTxtFld()->GetPosition();
-        SwField* pOldField = mpFld->Copy();
-          mpFld->SetPar2(mpOutliner->GetEditEngine().GetText());
-        mpFld->SetTextObject(mpOutliner->CreateParaObject());
-        mpView->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
-        delete pOldField;
-        delete pPos;
-        mpView->GetDocShell()->SetModified();
-    }
-}
-
-void SwPostIt::Delete(USHORT nSlot)
-{
-    switch (nSlot)
-    {
-        case FN_DELETE_NOTE:
+        if ( pPos )
         {
-            if ( Mgr()->GetActivePostIt() == this)
-                Mgr()->SetActivePostIt(0);
-            // we delete the field directly, the Mgr cleans up the PostIt by listening
-            mpView->GetWrtShellPtr()->GotoFld(*mpFmtFld);
-            mpView->GetWrtShellPtr()->DelRight();
-            break;
-        }
-        case FN_DELETE_NOTE_AUTHOR:
-        {
-            mpMgr->Delete(mpFld->GetPar1());
-            break;
-        }
-        case FN_DELETE_ALL_NOTES:
-        {
-            Mgr()->SetActivePostIt(0);
-            mpMgr->Delete();
-            break;
+            SwField* pOldField = mpFld->Copy();
+              mpFld->SetPar2(mpOutliner->GetEditEngine().GetText());
+            mpFld->SetTextObject(mpOutliner->CreateParaObject());
+            mpView->GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(*pPos, *pOldField, *mpFld, 0, true));
+            delete pOldField;
+            delete pPos;
+            // so we get a new layout of notes (ankor position is still the same and we would otherwise not get one)
+            mpMgr->SetLayout();
+            mpView->GetDocShell()->SetModified();
         }
     }
 }
 
-void SwPostIt::Hide(USHORT nSlot)
+void SwPostIt::Delete()
 {
-    switch (nSlot)
-    {
-        case FN_HIDE_NOTE:
-        {
-            mpMgr->Hide(mpFld);
-            break;
-        }
-        case FN_HIDE_NOTE_AUTHOR:
-        {
-            mpMgr->Hide(mpFld,true);
-            break;
-        }
-        case FN_HIDE_ALL_NOTES:
-        {
-            mpMgr->Hide();
-            break;
-        }
-    }
-    // put the cursor back into the document
-    SwitchToFieldPos();
+    if ( Mgr()->GetActivePostIt() == this)
+        Mgr()->SetActivePostIt(0);
+    // we delete the field directly, the Mgr cleans up the PostIt by listening
+    mpView->GetWrtShellPtr()->GotoField(*mpFmtFld);
+    mpView->GetWrtShellPtr()->DelRight();
 }
 
 Color SwPostIt::ColorDark()
@@ -933,66 +1027,34 @@ SwEditWin*  SwPostIt::EditWin()
     return &mpView->GetEditWin();
 }
 
+String SwPostIt::GetAuthor() const
+{
+    return mpFld->GetPar1();
+}
+
 long SwPostIt::GetPostItTextHeight()
 {
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-void SwPostIt::TranslateTopPosition(const long aAmount)
+void SwPostIt::SwitchToPostIt(bool aDirection)
 {
-    SetPosPixel( Point(GetPosPixel().X() , GetPosPixel().Y() + aAmount) );
-
-    if (mpAnkor)
-    {
-        Point aLineStart;
-        Point aLineEnd ;
-        if (mbMarginSide)
-        {
-            aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-2) );
-            aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-2) );
-        }
-        else
-        {
-            aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-2) );
-            aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-2) );
-        }
-
-        mpAnkor->SetSixthPosition(basegfx::B2DPoint(aLineStart.X(),aLineStart.Y()));
-        mpAnkor->SetSeventhPosition(basegfx::B2DPoint(aLineEnd.X(),aLineEnd.Y()));
-    }
-}
-
-void SwPostIt::ShowAnkorOnly(const Point &aPoint)
-{
-    if (mpAnkor)
-    {
-        mpAnkor->SetSixthPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
-        mpAnkor->SetSeventhPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
-        mpAnkor->setVisible(true);
-    }
+    if (aDirection)
+        SwitchToPostIt(KEY_PAGEDOWN);
+    else
+        SwitchToPostIt(KEY_PAGEUP);
 }
 
 void SwPostIt::SwitchToPostIt(USHORT aDirection)
 {
     if (mpMgr)
     {
-        SwPostIt* aPostIt = mpMgr->GetNextPostIt(aDirection, this);
-        if (aPostIt)
+        SwPostIt* pPostIt = mpMgr->GetNextPostIt(aDirection, this);
+        if (pPostIt)
         {
-            // the note we switch to should be viisble and receive the focus
-
-            /*
-            This would be a lot cleaner and not so hacky, but there are several issues with this,
-            seems like AutoScroll has to be adapted heavily
-            aPostIt->GrabFocus();
-            Rectangle aNoteRect (aPostIt->GetPosPixel(),aPostIt->GetSizePixel());
-            mpView->GetWrtShellPtr()->MakeVisible(SwRect(EditWin()->PixelToLogic(aNoteRect)));
-            mpMgr->AutoScroll(aPostIt);
-            */
-
-            // hacky but easy: we do a new layout, and the note is automatically visible and has focus
-            aPostIt->SwitchToFieldPos(false);
-            mpView->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT, SFX_CALLMODE_ASYNCHRON);
+            // the note we switch to should receive focus and be visible
+            pPostIt->GrabFocus();
+            mpMgr->MakeVisible(pPostIt);
         }
     }
 }
@@ -1013,39 +1075,50 @@ void SwPostIt::MouseButtonDown( const MouseEvent& rMEvt )
             mpButtonPopup->EnableItem(FN_DELETE_NOTE_AUTHOR,true);
             mpButtonPopup->EnableItem(FN_DELETE_ALL_NOTES,true);
         }
-        ExecuteCommand(mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE));
+
+        ExecuteCommand( mpButtonPopup->Execute( this,Rectangle(LogicToPixel(mRectMetaButton.BottomLeft()),LogicToPixel(mRectMetaButton.BottomLeft())),POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE) );
     }
 }
 
-void SwPostIt::ExecuteCommand(USHORT aSlot)
+void SwPostIt::ExecuteCommand(USHORT nSlot)
 {
-    switch (aSlot)
+    switch (nSlot)
     {
         case FN_DELETE_NOTE:
-        case FN_DELETE_NOTE_AUTHOR:
-        case FN_DELETE_ALL_NOTES:
-            {
-                Delete(aSlot);
-                break;
-            }
+            Delete();
+            break;
         case FN_HIDE_NOTE:
-        case FN_HIDE_NOTE_AUTHOR:
-        case FN_HIDE_ALL_NOTES:
+            if ( mpMgr->GetActivePostIt() == this )
             {
-                Hide(aSlot);
-                break;
+                mpMgr->SetActivePostIt(0);
+                // put the cursor back into the document
+                SwitchToFieldPos();
             }
+            mpMgr->Hide(mpFld);
+            break;
+        case FN_DELETE_ALL_NOTES:
+        case FN_HIDE_ALL_NOTES:
+            // not possible as slot as this would require that "this" is the active postit
+            mpView->GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SFX_CALLMODE_ASYNCHRON );
+            break;
+        case FN_DELETE_NOTE_AUTHOR:
+        case FN_HIDE_NOTE_AUTHOR:
+        {
+            // not possible as slot as this would require that "this" is the active postit
+            SfxStringItem aItem( nSlot, mpFld->GetPar1() );
+            const SfxPoolItem* aItems[2];
+            aItems[0] = &aItem;
+            aItems[1] = 0;
+            mpView->GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
+        }
     }
 }
 
 void SwPostIt::SwitchToFieldPos(bool bAfter)
 {
-    mpView->GetDocShell()->GetWrtShell()->GotoFld(*mpMgr->GetFmtFld(this));
+    mpView->GetDocShell()->GetWrtShell()->GotoField(*mpMgr->GetFmtFld(this));
     if (bAfter)
         mpView->GetDocShell()->GetWrtShell()->SwCrsrShell::Right(1, 0, FALSE);
-
-    mpMgr->SetActivePostIt(0);
-
     GrabFocusToDocument();
 }
 
@@ -1053,6 +1126,14 @@ IMPL_LINK(SwPostIt, ScrollHdl, ScrollBar*, pScroll)
 {
     long nDiff = View()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     View()->Scroll( 0, nDiff );
+    return 0;
+}
+
+IMPL_LINK(SwPostIt, ModifyHdl, void*, pVoid)
+{
+    // no warnings, please
+    pVoid=0;
+    mpView->GetDocShell()->SetModified(sal_True);
     return 0;
 }
 
@@ -1237,10 +1318,14 @@ SwPostItAnkor::SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
         mLineInfo.SetDashLen(  5 * 15);
         mLineInfo.SetDashCount(100);
     }
-    mbAllowsAnimation = sal_True;
+    mbAllowsAnimation = sal_False;
 }
 
 SwPostItAnkor::~SwPostItAnkor()
+{
+}
+
+void SwPostItAnkor::Trigger(sal_uInt32 /*nTime*/)
 {
 }
 
@@ -1389,6 +1474,19 @@ void SwPostItAnkor::SetSeventhPosition(const basegfx::B2DPoint& rNew)
     }
 }
 
+void SwPostItAnkor::SetTriPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2,const basegfx::B2DPoint& rPoint3,
+                                    const basegfx::B2DPoint& rPoint4,const basegfx::B2DPoint& rPoint5)
+{
+    maBasePosition = rPoint1;
+    maSecondPosition = rPoint2;
+    maThirdPosition = rPoint3;
+    maFourthPosition = rPoint4;
+    maFifthPosition = rPoint5;
+
+    implResetGeometry();
+    objectChange();
+}
+
 void SwPostItAnkor::transform(const basegfx::B2DHomMatrix& rMatrix)
 {
     if(!rMatrix.isIdentity())
@@ -1421,10 +1519,13 @@ void SwPostItAnkor::SetLineInfo(const LineInfo &aLineInfo)
         }
         //remove and add overlayobject, so it is the last one inside the manager to draw
         //therefore this line is on top
-        sdr::overlay::OverlayManager* pOverlayManager =  getOverlayManager();
-        pOverlayManager->remove(*this);
-        pOverlayManager->add(*this);
-        objectChange();
+        sdr::overlay::OverlayManager* pMgr = getOverlayManager();
+        if (pMgr)
+        {
+            pMgr->remove(*this);
+            pMgr->add(*this);
+            objectChange();
+        }
     }
 }
 
