@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: frmitems.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.50 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:45:53 $
+ * $RCSfile: frmitems.cxx,v $
+ * $Revision: 1.51 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,32 +32,20 @@
 #include "precompiled_svx.hxx"
 
 // include ---------------------------------------------------------------
-
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
-#endif
 
 #include <limits.h>
 #include <comphelper/processfactory.hxx>
 
 
-#ifndef _GRFMGR_HXX //autogen
 #include <goodies/grfmgr.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
 #ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
 #endif // !SVX_LIGHT
 #include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
@@ -70,13 +53,8 @@
 #define _SVX_FRMITEMS_CXX
 
 #include <svtools/memberid.hrc>
-
-#ifndef _WALLITEM_HXX
 #include <svtools/wallitem.hxx>
-#endif
-#ifndef _CNTWALL_HXX
 #include <svtools/cntwall.hxx>
-#endif
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -105,79 +83,31 @@
 #include <svx/itemtype.hxx>
 #include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
-#ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLVERTJUSTIFY_HPP_
 #include <com/sun/star/table/CellVertJustify.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWLOCATION_HPP_
 #include <com/sun/star/table/ShadowLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
 #include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWFORMAT_HPP_
 #include <com/sun/star/table/ShadowFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLCONTENTTYPE_HPP_
 #include <com/sun/star/table/CellContentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEORIENTATION_HPP_
 #include <com/sun/star/table/TableOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLHORIJUSTIFY_HPP_
 #include <com/sun/star/table/CellHoriJustify.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SORTFIELD_HPP_
 #include <com/sun/star/util/SortField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SORTFIELDTYPE_HPP_
 #include <com/sun/star/util/SortFieldType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLORIENTATION_HPP_
 #include <com/sun/star/table/CellOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_BREAKTYPE_HPP_
 #include <com/sun/star/style/BreakType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SELECTION_HPP_
 #include <com/sun/star/awt/Selection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
 #include <com/sun/star/text/WritingMode2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_STATUS_UPPERLOWERMARGINSCALE_HPP_
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
-#endif
 
 #include <comphelper/types.hxx>
-
-#ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
