@@ -1,57 +1,40 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: salframe.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.153 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:53:12 $
+ * $RCSfile: salframe.cxx,v $
+ * $Revision: 1.154 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <string.h>
 #include <limits.h>
@@ -64,91 +47,42 @@
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
-
-#ifndef _RTL_STRING_H_
 #include <rtl/string.h>
-#endif
-#ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
-#endif
 
 #include <osl/module.h>
-
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 // Warning in SDK header
 #if defined(_MSC_VER) && (_MSC_VER > 1400)
 #pragma warning( disable: 4242 4244 )
 #endif
-
-#ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
-#endif
 #ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
 #endif
-#ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
-#endif
-#ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
-#endif
-#ifndef _SV_SALINST_H
 #include <salinst.h>
-#endif
-#ifndef _SV_SALBMP_H
 #include <salbmp.h>
-#endif
-#ifndef _SV_SALGDI_H
 #include <salgdi.h>
-#endif
-#ifndef _SV_SALSYS_H
 #include <salsys.h>
-#endif
-#ifndef _SV_SALFRAME_H
 #include <salframe.h>
-#endif
-#ifndef _SV_SALVD_H
 #include <salvd.h>
-#endif
-#ifndef _SV_SALMENU_H
 #include <salmenu.h>
-#endif
-#ifndef _SV_SALOBJ_H
 #include <salobj.h>
-#endif
-#ifndef _SV_IMPBMP_HXX
 #include <vcl/impbmp.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-#ifndef _SV_SALTIMER_H
 #include <saltimer.h>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
 #ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
 #endif
-#ifndef _SV_WINDOW_H
 #include <vcl/window.h>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 #ifndef _VCL_IMPDEL_HXX
 #include <impdel.hxx>
 #endif
