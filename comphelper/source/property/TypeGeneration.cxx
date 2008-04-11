@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: TypeGeneration.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.14 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:08:25 $
+ * $RCSfile: TypeGeneration.cxx,v $
+ * $Revision: 1.15 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,298 +33,108 @@
 #ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_LINESPACINGMODE_HPP_
 #include <com/sun/star/style/LineSpacingMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_DROPCAPFORMAT_HPP_
 #include <com/sun/star/style/DropCapFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_LINESPACING_HPP_
 #include <com/sun/star/style/LineSpacing.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
 #include <com/sun/star/style/TabStop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABALIGN_HPP_
 #include <com/sun/star/style/TabAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_BREAKTYPE_HPP_
 #include <com/sun/star/style/BreakType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XMODULE_HPP_
 #include <com/sun/star/text/XModule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGEMOVER_HPP_
 #include <com/sun/star/text/XTextRangeMover.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTE_HPP_
 #include <com/sun/star/text/XFootnote.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XFOOTNOTESSUPPLIER_HPP_
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XENDNOTESSUPPLIER_HPP_
 #include <com/sun/star/text/XEndnotesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XENDNOTESSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/text/XEndnotesSettingsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FOOTNOTENUMBERING_HPP_
 #include <com/sun/star/text/FootnoteNumbering.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTIONSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTSECTION_HPP_
 #include <com/sun/star/text/XTextSection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SECTIONFILELINK_HPP_
 #include <com/sun/star/text/SectionFileLink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
 #include <com/sun/star/text/RelOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIZONTALADJUST_HPP_
 #include <com/sun/star/text/HorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_DOCUMENTSTATISTIC_HPP_
 #include <com/sun/star/text/DocumentStatistic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_HORIORIENTATIONFORMAT_HPP_
 #include <com/sun/star/text/HoriOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_NOTEPRINTMODE_HPP_
 #include <com/sun/star/text/NotePrintMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATIONFORMAT_HPP_
 #include <com/sun/star/text/VertOrientationFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
-#endif
 //undef to prevent error (from sfx2/docfile.cxx)
 #undef SEQUENCE
-#ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
 #include <com/sun/star/text/SetVariableType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELDSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_USERDATAPART_HPP_
 #include <com/sun/star/text/UserDataPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_CHAPTERFORMAT_HPP_
 #include <com/sun/star/text/ChapterFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
 #include <com/sun/star/text/XTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_PLACEHOLDERTYPE_HPP_
 #include <com/sun/star/text/PlaceholderType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEMPLATEDISPLAYFORMAT_HPP_
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_USERFIELDFORMAT_HPP_
 #include <com/sun/star/text/UserFieldFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
 #include <com/sun/star/text/PageNumberType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELDPART_HPP_
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_FILENAMEDISPLAYFORMAT_HPP_
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDEPENDENTTEXTFIELD_HPP_
 #include <com/sun/star/text/XDependentTextField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLECURSOR_HPP_
 #include <com/sun/star/text/XTextTableCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLESSUPPLIER_HPP_
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TABLECOLUMNSEPARATOR_HPP_
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
 #include <com/sun/star/text/XTextTable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEXMARK_HPP_
 #include <com/sun/star/text/XDocumentIndexMark.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEXESSUPPLIER_HPP_
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEX_HPP_
 #include <com/sun/star/text/XDocumentIndex.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTCOLUMNS_HPP_
 #include <com/sun/star/text/XTextColumns.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCOLUMNSEQUENCE_HPP_
 #include <com/sun/star/text/TextColumnSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAMESSUPPLIER_HPP_
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFRAME_HPP_
 #include <com/sun/star/text/XTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATECHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATECHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_GRAPHICLOCATION_HPP_
 #include <com/sun/star/style/GraphicLocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_SHADOWFORMAT_HPP_
 #include <com/sun/star/table/ShadowFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_TABLEBORDER_HPP_
 #include <com/sun/star/table/TableBorder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
 // --> OD 2004-08-09 #i28749#
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#endif
 // <--
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
