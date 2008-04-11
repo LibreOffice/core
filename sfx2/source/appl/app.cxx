@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: app.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.111 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:48:00 $
+ * $RCSfile: app.cxx,v $
+ * $Revision: 1.112 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,44 +40,22 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
-
-#ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
-#endif
-#ifndef _TOOLS_SIMPLERESMGR_HXX_
 #include <tools/simplerm.hxx>
-#endif
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-#ifndef _BASRDLL_HXX
 #include <basic/basrdll.hxx>
-#endif
-
-#ifndef SVTOOLS_ASYNCLINK_HXX
 #include <svtools/asynclink.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
 
 #include <svtools/svdde.hxx>
 #include <tools/urlobj.hxx>
@@ -97,49 +70,22 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTIONEVENT_HPP_
 #include <com/sun/star/frame/FrameActionEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
 #include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-#endif
 
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -210,9 +156,7 @@
 #include <svtools/syslocaleoptions.hxx>
 #include <svtools/syslocale.hxx>
 #include <framework/addonsoptions.hxx>
-#ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
-#endif
 #include <svtools/extendedsecurityoptions.hxx>
 
 using namespace ::com::sun::star;
