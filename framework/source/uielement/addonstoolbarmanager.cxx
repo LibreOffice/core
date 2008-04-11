@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: addonstoolbarmanager.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:33:33 $
+ * $RCSfile: addonstoolbarmanager.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-#ifndef __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
 #include <uielement/addonstoolbarmanager.hxx>
-#endif
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -52,27 +44,15 @@
 #ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include <uielement/generictoolbarcontroller.hxx>
 #endif
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-#ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
-#endif
-#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 #include <helper/imageproducer.hxx>
-#endif
-#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 #include <classes/sfxhelperfunctions.hxx>
-#endif
-#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
 #include <classes/fwkresid.hxx>
-#endif
 #ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-#ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <classes/addonsoptions.hxx>
-#endif
 #ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #include <uielement/comboboxtoolbarcontroller.hxx>
 #endif
@@ -82,59 +62,33 @@
 #ifndef __FRAMEWORK_UIELEMENT_TOGGLEBUTTONTOOLBARCONTROLLER_HXX
 #include <uielement/togglebuttontoolbarcontroller.hxx>
 #endif
-#ifndef __FRAMEWORK_UIELEMENT_BUTTONTOOLBARCONTROLLER_HXX_
 #include <uielement/buttontoolbarcontroller.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_SPINFIELDTOOLBARCONTROLLER_HXX_
 #include <uielement/spinfieldtoolbarcontroller.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_EDITTOOLBARCONTROLLER_HXX_
 #include <uielement/edittoolbarcontroller.hxx>
-#endif
-#ifndef __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
-#endif
 #include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <com/sun/star/ui/ItemType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XToolbarController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
-#endif
-#ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
 #include <svtools/toolboxcontroller.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
