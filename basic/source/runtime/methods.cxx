@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: methods.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.78 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:00:46 $
+ * $RCSfile: methods.cxx,v $
+ * $Revision: 1.79 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,60 +32,36 @@
 #include "precompiled_basic.hxx"
 
 
-#ifndef _DATE_HXX //autogen
 #include <tools/date.hxx>
-#endif
-#ifndef _SBXVAR_HXX
 #include <basic/sbxvar.hxx>
-#endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
-#ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
-#ifndef _SV_WINTYPES_HXX //autogen
 #include <vcl/wintypes.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
-#ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
-#endif
 #include <rtl/math.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/wldcrd.hxx>
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
 
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef _OLD_FILE_IMPL
-#ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
-#endif
 #else
 #include <osl/file.hxx>
 #endif
 
 #ifdef _USE_UNO
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -120,12 +91,8 @@ using namespace com::sun::star::io;
 #include "basrid.hxx"
 #include "image.hxx"
 #include "sb.hrc"
-#ifndef _SBIOSYS_HXX
 #include "iosys.hxx"
-#endif
-#ifndef _DDECTRL_HXX
 #include "ddectrl.hxx"
-#endif
 #include <sbintern.hxx>
 
 #include <list>
