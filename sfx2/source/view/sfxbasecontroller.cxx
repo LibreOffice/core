@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sfxbasecontroller.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.74 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:22:36 $
+ * $RCSfile: sfxbasecontroller.cxx,v $
+ * $Revision: 1.75 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,118 +36,40 @@
 //________________________________________________________________________________________________________
 
 #include <time.h>
-
-#ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfx2/sfxbasecontroller.hxx>
-#endif
 
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
 #include <com/sun/star/awt/MouseEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
 #include <com/sun/star/awt/MouseButton.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTIONEVENT_HPP_
 #include <com/sun/star/frame/FrameActionEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
 #include <com/sun/star/frame/CommandGroup.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XBORDERRESIZELISTENER_HPP_
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-
-#ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
-#endif
-
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-
-#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
-#endif
-
-#ifndef _SFXMSGPOOL_HXX
 #include <sfx2/msgpool.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
 
 #include <viewimp.hxx>
 #include <sfx2/unoctitm.hxx>
