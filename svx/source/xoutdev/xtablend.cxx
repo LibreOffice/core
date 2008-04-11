@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: xtablend.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:36:44 $
+ * $RCSfile: xtablend.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,40 +35,22 @@
 
 #ifndef SVX_LIGHT
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _SVX_XPROPERTYTABLE_HXX
 #include "XPropertyTable.hxx"
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
 
 #endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
 #ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -81,50 +58,17 @@
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xoutx.hxx>
-
-#ifndef SVX_XFILLIT0_HXX //autogen
 #include <svx/xfillit0.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SVX_XLNSTWIT_HXX //autogen
 #include <svx/xlnstwit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDWIT_HXX //autogen
 #include <svx/xlnedwit.hxx>
-#endif
-
-#ifndef _SVX_XLNCLIT_HXX //autogen
 #include <svx/xlnclit.hxx>
-#endif
-
-#ifndef _SVX_XLINEIT0_HXX //autogen
 #include <svx/xlineit0.hxx>
-#endif
-
-#ifndef _SVX_XLNSTIT_HXX //autogen
 #include <svx/xlnstit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDIT_HXX //autogen
 #include <svx/xlnedit.hxx>
-#endif
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
 
 #define GLOBALOVERFLOW
 
