@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: viewshe3.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.57 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:23:31 $
+ * $RCSfile: viewshe3.cxx,v $
+ * $Revision: 1.58 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,10 +37,7 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
 
 #include <utility>
 #include <vector>
@@ -57,106 +49,41 @@
 #include "sdabstdlg.hxx"
 
 #include "fupoor.hxx"
-
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
-#endif
-
-#ifndef _SVDOPAGE_HXX //autogen
 #include <svx/svdopage.hxx>
-#endif
-
-#ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
-#endif
-
-#ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
-#endif
-
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-
-#ifndef _SFX_MISCCFG_HXX
 #include <svtools/misccfg.hxx>
-#endif
-
-#ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-
-#ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
-#endif
-
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
-#endif
 #ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
 #endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
 #include "TaskPaneViewShell.hxx"
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "DrawDocShell.hxx"
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
@@ -164,10 +91,7 @@
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
-#endif
 #include <sfx2/request.hxx>
 #include <svtools/aeitem.hxx>
 #include <basic/sbstar.hxx>
