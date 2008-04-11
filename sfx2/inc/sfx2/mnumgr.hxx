@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnumgr.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,7 +99,7 @@ public:
 
 //--------------------------------------------------------------------
 
-class SfxPopupMenuManager : public SfxMenuManager
+class SAL_DLLPUBLIC_EXPORT SfxPopupMenuManager : public SfxMenuManager
 {
 private:
     DECL_LINK( SelectHdl, void * );
@@ -108,7 +108,9 @@ private:
 public:
                         SfxPopupMenuManager( const ResId&, SfxBindings& );
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );
+                        ~SfxPopupMenuManager();
     static void         ExecutePopup( const ResId&, SfxViewFrame* pViewFrame, const Point& rPoint, Window* pWindow );
+    static SfxPopupMenuManager* Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow );
 
     USHORT              Execute( const Point& rPos, Window *pWindow );
     USHORT              Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 );
@@ -123,6 +125,7 @@ public:
     void                InsertSeparator( USHORT nPos = MENU_APPEND );
     void                RemoveDisabledEntries();
     void                AddClipboardFunctions();
+    Menu*                   GetSVMenu();
 };
 
 #endif // #ifndef _SFXMNUMGR_HXX
