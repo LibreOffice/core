@@ -4,9 +4,9 @@
  *
  *  $RCSfile: create_sRGB_profile.cpp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2008-01-10 19:41:56 $
+ *  last change: $Author: rt $ $Date: 2008-04-11 07:31:14 $
 
   Derived by beppec56@openoffice.org from various examples
   in SampleICC library, the original copyright retained.
@@ -94,7 +94,7 @@ const char * const this_file_name_and_location =" * icc/source/create_sRGB_profi
 const char* const description = "sRGB IEC61966-2.1";
 //const char* const devicemanufact = "IEC http://www.iec.ch"; not used, device manufactured by OOo seems funny...
 const char* const devicemodel = "IEC 61966-2.1 Default RGB colour space - sRGB";
-const char* const copyright = "The Contents of this file are made available subject to the terms of GNU Lesser General Public License Version 2.1";
+const char* const copyright = "The Contents of this file are made available subject to the terms of GNU Lesser General Public License version 3";
 
 // the creation date is fixed, corresponds to the last time this file has been changed
 // NOTE: change this date values whenever the data inside the profile are changed.
@@ -120,28 +120,22 @@ const char * const TheHeader1[] =
 const char * const TheHeader2[] =
 {
     " *",
-    " *  The Contents of this file are made available subject to",
-    " *  the terms of GNU Lesser General Public License Version 2.1.",
+    " * This file is part of OpenOffice.org.",
     " *",
+    " * OpenOffice.org is free software: you can redistribute it and/or modify",
+    " * it under the terms of the GNU Lesser General Public License version 3",
+    " * only, as published by the Free Software Foundation.",
     " *",
-    " *    GNU Lesser General Public License Version 2.1",
-    " *    =============================================",
-    " *    Copyright 2005 by Sun Microsystems, Inc.",
-    " *    901 San Antonio Road, Palo Alto, CA 94303, USA",
+    " * OpenOffice.org is distributed in the hope that it will be useful,",
+    " * but WITHOUT ANY WARRANTY; without even the implied warranty of",
+    " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the",
+    " * GNU Lesser General Public License version 3 for more details",
+    " * (a copy is included in the LICENSE file that accompanied this code).",
     " *",
-    " *    This library is free software; you can redistribute it and/or",
-    " *    modify it under the terms of the GNU Lesser General Public",
-    " *    License version 2.1, as published by the Free Software Foundation.",
-    " *",
-    " *    This library is distributed in the hope that it will be useful,",
-    " *    but WITHOUT ANY WARRANTY; without even the implied warranty of",
-    " *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU",
-    " *    Lesser General Public License for more details.",
-    " *",
-    " *    You should have received a copy of the GNU Lesser General Public",
-    " *    License along with this library; if not, write to the Free Software",
-    " *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,",
-    " *    MA  02111-1307  USA",
+    " * You should have received a copy of the GNU Lesser General Public License",
+    " * version 3 along with OpenOffice.org.  If not, see",
+    " * <http://www.openoffice.org/license.html>",
+    " * for a copy of the LGPLv3 License.",
     " *",
     " ************************************************************************/",
     "",
