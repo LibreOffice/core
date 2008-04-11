@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@
 #include <numrule.hxx>
 
 #include <swtable.hxx>
+#include <docsh.hxx>
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
@@ -2018,6 +2019,9 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
                     ( !pOtherDoc && !bUndoNodes && RES_TXTATR_REFMARK
                         == nWhich ) )
                 {
+                    // do not delete note and later add it -> sidebar flickering
+                    if ( GetDoc()->GetDocShell() )
+                        GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
                     // Attribut verschieben
                     pSwpHints->Delete( pHt );
                     // die Start/End Indicies neu setzen
@@ -2029,6 +2033,8 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
                                             ? nLen
                                             : *pEndIdx - nTxtStartIdx );
                     pDest->Insert( pHt, nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_DONTREPLACE );
+                    if ( GetDoc()->GetDocShell() )
+                        GetDoc()->GetDocShell()->Broadcast( SfxSimpleHint(SFX_HINT_USER04));
                     continue;           // while-Schleife weiter, ohne ++ !
                 }
                     // das Ende liegt dahinter
