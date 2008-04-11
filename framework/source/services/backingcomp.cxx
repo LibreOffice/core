@@ -1,35 +1,31 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: backingcomp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.25 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-07 09:26:21 $
+ * $RCSfile: backingcomp.cxx,v $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $Revision: 1.26 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,34 +38,13 @@
 
 //_______________________________________________
 // own includes
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
 #include <classes/droptargetlistener.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_ACCELERATORINFO_HXX_
 #include <helper/acceleratorinfo.hxx>
-#endif
-
-#ifndef __FRAMEWORK_TARGETS_H_
 #include <targets.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
 #ifndef _FRAMEWORK_HELPID_HRC
 #include <helpid.hrc>
@@ -77,97 +52,34 @@
 
 //_______________________________________________
 // interface includes
-
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
 #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
 
 //_______________________________________________
 // other includes
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-
-#ifndef _SV_KEYCODE_HXX
 #include <vcl/keycod.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
 #endif
-
-#ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-
-#ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
 
 #ifndef _UTL_BOOTSTRAP_HXX_
 #include <unotools/bootstrap.hxx>
