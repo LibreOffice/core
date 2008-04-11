@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _textsh.sdi,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -896,6 +896,36 @@ interface BaseText
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     FN_POSTIT // status(final|play)
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_DELETE_NOTE
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_DELETE_NOTE_AUTHOR
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_DELETE_ALL_NOTES
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_HIDE_NOTE
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_HIDE_NOTE_AUTHOR
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
+    FN_HIDE_ALL_NOTES
     [
         ExecMethod = ExecField ;
         StateMethod = StateField;
