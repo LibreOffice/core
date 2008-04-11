@@ -1,137 +1,67 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unocontrol.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.53 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-27 10:26:15 $
+ * $RCSfile: unocontrol.cxx,v $
+ * $Revision: 1.54 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-
-#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LAN_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
-#endif
-
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
-#endif
-#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
-#endif
-#ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
-#endif
-#ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
-#endif
 
 #include <algorithm>
 #include <set>
