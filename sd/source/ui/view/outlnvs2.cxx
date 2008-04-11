@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: outlnvs2.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.29 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:19:57 $
+ * $RCSfile: outlnvs2.cxx,v $
+ * $Revision: 1.30 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,105 +36,43 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include "app.hrc"
-#ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
-#endif
-
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
 #ifndef _ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
-#ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
-#endif
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
-#endif
 
 #include <sfx2/viewfrm.hxx>
-
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_FU_BULLET_HXX
 #include "fubullet.hxx"
-#endif
-#ifndef SD_FU_OUTLINE_BULLET_HXX
 #include "fuolbull.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
-#ifndef SD_FU_ZOOM_HXX
 #include "fuzoom.hxx"
-#endif
-#ifndef SD_FU_SCALE_HXX
 #include "fuscale.hxx"
-#endif
-#ifndef SD_FU_CHAR_HXX
 #include "fuchar.hxx"
-#endif
-#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
-#endif
-#ifndef SD_FU_PRESENTATION_OBJECTS_HXX
 #include "fuprobjs.hxx"
-#endif
-#ifndef SD_FU_THESAURUS_HXX
 #include "futhes.hxx"
-#endif
-#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
-#endif
-#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "fusldlg.hxx"
-#endif
 #include "zoomlist.hxx"
-#ifndef SD_FU_EXPAND_PAGE_HXX
 #include "fuexpand.hxx"
-#endif
-#ifndef SD_FU_SUMMARY_PAGE_HXX
 #include "fusumry.hxx"
-#endif
-#ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
 #include "fucushow.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
 #include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
 
