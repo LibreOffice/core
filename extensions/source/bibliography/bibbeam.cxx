@@ -1,91 +1,55 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: bibbeam.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:37:17 $
+ * $RCSfile: bibbeam.cxx,v $
+ * $Revision: 1.17 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
 
 #ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
 #endif
-
-#ifndef _SV_LSTBOX_HXX //autogen wg. form::component::ListBox
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _SV_EDIT_HXX //autogen wg. Edit
 #include <vcl/edit.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
-#endif
-
-#ifndef ADRBEAM_HXX
 #include "bibbeam.hxx"
-#endif
 #include "toolbar.hrc"
-#ifndef ADRRESID_HXX
 #include "bibresid.hxx"
-#endif
-#ifndef _BIB_DATMAN_HXX
 #include "datman.hxx"
-#endif
 #ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
 #endif
