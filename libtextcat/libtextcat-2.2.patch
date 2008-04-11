@@ -1,2276 +1,1587 @@
-*** misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
---- misc/build/libtextcat-2.2/configure	Tue Nov 27 13:51:14 2007
-***************
-*** 5391,5397 ****
-  allow_undefined_flag=
-  no_undefined_flag=
-  need_lib_prefix=unknown
-! need_version=unknown
-  # when you set need_version to no, make sure it does not cause -set_version
-  # flags to be left without arguments
-  archive_cmds=
---- 5391,5398 ----
-  allow_undefined_flag=
-  no_undefined_flag=
-  need_lib_prefix=unknown
-! #need_version=unknown
-! need_version=no
-  # when you set need_version to no, make sure it does not cause -set_version
-  # flags to be left without arguments
-  archive_cmds=
-***************
-*** 5785,5791 ****
-      #        cross-compilation, but unfortunately the echo tests do not
-      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
-      #	     `"' quotes if we put them in here... so don't!
-!     archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$linker_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
-      # We need to add '_' to the symbols in $export_symbols first
-      #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
-      hardcode_direct=yes
---- 5786,5792 ----
-      #        cross-compilation, but unfortunately the echo tests do not
-      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
-      #	     `"' quotes if we put them in here... so don't!
-!     archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$compiler_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
-      # We need to add '_' to the symbols in $export_symbols first
-      #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
-      hardcode_direct=yes
-***************
-*** 6280,6286 ****
-    ;;
-  
-  freebsd*)
-!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
-    version_type=freebsd-$objformat
-    case $version_type in
-      freebsd-elf*)
---- 6281,6287 ----
-    ;;
-  
-  freebsd*)
-!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
-    version_type=freebsd-$objformat
-    case $version_type in
-      freebsd-elf*)
-*** misc/libtextcat-2.2/src/Makefile.in	Thu May 22 13:39:52 2003
---- misc/build/libtextcat-2.2/src/Makefile.in	Tue Nov 27 13:49:17 2007
-***************
-*** 124,143 ****
-  target_vendor = @target_vendor@
-  AUTOMAKE_OPTIONS = 1.4 foreign
-  
-! WARNS = -W -Wall -Wshadow -Wpointer-arith 
-! IFLAGS = 
-! FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
-  VERBOSE = -DVERBOSE
-  AM_CFLAGS = $(IFLAGS) $(VERBOSE) $(WARNS) $(FLAGS)
-  AM_LDFLAGS = -g
-  
-  noinst_HEADERS = \
-! 	common.h constants.h fingerprint.h textcat.h wg_mempool.h
-  
-  
-  lib_LTLIBRARIES = libtextcat.la
-  libtextcat_la_SOURCES = \
-! 	common.c fingerprint.c textcat.c wg_mempool.c
-  
-  
-  bin_PROGRAMS = createfp
---- 124,143 ----
-  target_vendor = @target_vendor@
-  AUTOMAKE_OPTIONS = 1.4 foreign
-  
-! #WARNS = -W -Wall -Wshadow -Wpointer-arith
-! IFLAGS =
-! #FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
-  VERBOSE = -DVERBOSE
-  AM_CFLAGS = $(IFLAGS) $(VERBOSE) $(WARNS) $(FLAGS)
-  AM_LDFLAGS = -g
-  
-  noinst_HEADERS = \
-!         common.h constants.h fingerprint.h textcat.h wg_mempool.h utf8misc.h
-  
-  
-  lib_LTLIBRARIES = libtextcat.la
-  libtextcat_la_SOURCES = \
-!         common.c fingerprint.c textcat.c wg_mempool.c utf8misc.c
-  
-  
-  bin_PROGRAMS = createfp
-***************
-*** 156,162 ****
-  libtextcat_la_LDFLAGS =
-  libtextcat_la_LIBADD =
-  am_libtextcat_la_OBJECTS = common.lo fingerprint.lo textcat.lo \
-! 	wg_mempool.lo
-  libtextcat_la_OBJECTS = $(am_libtextcat_la_OBJECTS)
-  bin_PROGRAMS = createfp$(EXEEXT)
-  noinst_PROGRAMS = testtextcat$(EXEEXT)
---- 156,162 ----
-  libtextcat_la_LDFLAGS =
-  libtextcat_la_LIBADD =
-  am_libtextcat_la_OBJECTS = common.lo fingerprint.lo textcat.lo \
-!         wg_mempool.lo utf8misc.lo
-  libtextcat_la_OBJECTS = $(am_libtextcat_la_OBJECTS)
-  bin_PROGRAMS = createfp$(EXEEXT)
-  noinst_PROGRAMS = testtextcat$(EXEEXT)
-***************
-*** 177,183 ****
-  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/common.Plo ./$(DEPDIR)/createfp.Po \
-  @AMDEP_TRUE@	./$(DEPDIR)/fingerprint.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/testtextcat.Po ./$(DEPDIR)/textcat.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/wg_mempool.Plo
-  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
---- 177,184 ----
-  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/common.Plo ./$(DEPDIR)/createfp.Po \
-  @AMDEP_TRUE@	./$(DEPDIR)/fingerprint.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/testtextcat.Po ./$(DEPDIR)/textcat.Plo \
-! @AMDEP_TRUE@    ./$(DEPDIR)/wg_mempool.Plo \
-! @AMDEP_TRUE@    ./$(DEPDIR)/utf8misc.Plo
-  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
-***************
-*** 213,219 ****
-  	@rm -f stamp-h1
-  	cd $(top_builddir) && $(SHELL) ./config.status src/config.h
-  
-! $(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-  	cd $(top_srcdir) && $(AUTOHEADER)
-  	touch $(srcdir)/config.h.in
-  
---- 214,220 ----
-  	@rm -f stamp-h1
-  	cd $(top_builddir) && $(SHELL) ./config.status src/config.h
-  
-! $(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
-  	cd $(top_srcdir) && $(AUTOHEADER)
-  	touch $(srcdir)/config.h.in
-  
-***************
-*** 247,254 ****
-  	  echo "rm -f \"$${dir}/so_locations\""; \
-  	  rm -f "$${dir}/so_locations"; \
-  	done
-! libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES) 
-! 	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
-  binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-  install-binPROGRAMS: $(bin_PROGRAMS)
-  	@$(NORMAL_INSTALL)
---- 248,255 ----
-  	  echo "rm -f \"$${dir}/so_locations\""; \
-  	  rm -f "$${dir}/so_locations"; \
-  	done
-! libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES)
-! 	$(LINK) -avoid-version -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
-  binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-  install-binPROGRAMS: $(bin_PROGRAMS)
-  	@$(NORMAL_INSTALL)
-***************
-*** 285,294 ****
-  	  echo " rm -f $$p $$f"; \
-  	  rm -f $$p $$f ; \
-  	done
-! createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES) 
-  	@rm -f createfp$(EXEEXT)
-  	$(LINK) $(createfp_LDFLAGS) $(createfp_OBJECTS) $(createfp_LDADD) $(LIBS)
-! testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES) 
-  	@rm -f testtextcat$(EXEEXT)
-  	$(LINK) $(testtextcat_LDFLAGS) $(testtextcat_OBJECTS) $(testtextcat_LDADD) $(LIBS)
-  
---- 286,295 ----
-  	  echo " rm -f $$p $$f"; \
-  	  rm -f $$p $$f ; \
-  	done
-! createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES)
-  	@rm -f createfp$(EXEEXT)
-  	$(LINK) $(createfp_LDFLAGS) $(createfp_OBJECTS) $(createfp_LDADD) $(LIBS)
-! testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES)
-  	@rm -f testtextcat$(EXEEXT)
-  	$(LINK) $(testtextcat_LDFLAGS) $(testtextcat_OBJECTS) $(testtextcat_LDADD) $(LIBS)
-  
-***************
-*** 304,309 ****
---- 305,311 ----
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testtextcat.Po@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textcat.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wg_mempool.Plo@am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utf8misc.Plo@am__quote@
-  
-  distclean-depend:
-  	-rm -rf ./$(DEPDIR)
-*** misc/libtextcat-2.2/src/common.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/common.c	Tue Nov 27 13:49:17 2007
-***************
-*** 3,25 ****
-   *
-   * Copyright (c) 2003, WiseGuys Internet B.V.
-   * All rights reserved.
-!  * 
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  * 
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  * 
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  * 
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  * 
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
---- 3,25 ----
-   *
-   * Copyright (c) 2003, WiseGuys Internet B.V.
-   * All rights reserved.
-!  *
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  *
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  *
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  *
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  *
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-***************
-*** 114,124 ****
-  		wgmem_error( "Error while strduping %u bytes.\n", strlen(s) );
-  	}
-  
-! 	return( result ); 
-  }
-  
-! extern void* wg_realloc( void *ptr, size_t size ) 
-! { 
-  	void *result;
-  
-  	if (!size) {
---- 114,124 ----
-  		wgmem_error( "Error while strduping %u bytes.\n", strlen(s) );
-  	}
-  
-! 	return( result );
-  }
-  
-! extern void* wg_realloc( void *ptr, size_t size )
-! {
-  	void *result;
-  
-  	if (!size) {
-***************
-*** 131,137 ****
-  		wgmem_error( "Error while reallocing %u bytes.\n", size );
-  	}
-  
-! 	return( result ); 
-  }
-  
-  extern void wg_free( void *mem )
---- 131,137 ----
-  		wgmem_error( "Error while reallocing %u bytes.\n", size );
-  	}
-  
-! 	return( result );
-  }
-  
-  extern void wg_free( void *mem )
-***************
-*** 148,159 ****
-          if ( fgets(line, size, fp) == NULL ) {
-  		return NULL;
-  	}
-!         
-          /** kill term null **/
-          if ( (p = strpbrk( line, "\n\r" )) ) {
-                  *p = '\0';
-!         }           
-!   
-          return line;
-  }
-  
---- 148,159 ----
-          if ( fgets(line, size, fp) == NULL ) {
-  		return NULL;
-  	}
-! 
-          /** kill term null **/
-          if ( (p = strpbrk( line, "\n\r" )) ) {
-                  *p = '\0';
-!         }
-! 
-          return line;
-  }
-  
-***************
-*** 164,202 ****
-   *
-   * ARGUMENTS:
-   * - result:
-!  * 
-   *  After the split, this array contains pointers to the start of each
-   *  detected segment. Must be preallocated and at least as large as
-   *  maxsegments. The pointers point into the dest buffer.
-!  * 
-!  * - dest: 
-!  * 
-   *  String into which result points as an index. Must be preallocated, and
-   *  at least as big as src. You can use src as dest, but in that case src
-   *  is overwritten!
-!  * 
-!  * - src:  
-!  * 
-   *  The string to split. Sequences of whitespace are treated as separators, unless
-   *  escaped. There are two ways to escape: by using single quotes (anything
-   *  between single quotes is treated as one segment), or by using a backslash
-   *  to escape the next character. The backslash escape works inside quotation
-   *  as well.
-!  * 
-   *  Example:
-!  *  
-   *  "It\'s   very\ easy   'to  use WiseGuys\' wg_split()' function" is split into:
-!  *  
-   *  "It's"
-   *  "very easy"
-   *  "to  use WiseGuys' wg_split()"
-   *  "function"
-!  *  
-!  * - maxsegments: 
-!  * 
-   *  The maximum number of segments. If the splitter runs out of segments,
-   *  the remainder of the string is stored in the last segment.
-!  *  
-   * RETURN VALUE:
-   * The number of segments found.
-   */
---- 164,202 ----
-   *
-   * ARGUMENTS:
-   * - result:
-!  *
-   *  After the split, this array contains pointers to the start of each
-   *  detected segment. Must be preallocated and at least as large as
-   *  maxsegments. The pointers point into the dest buffer.
-!  *
-!  * - dest:
-!  *
-   *  String into which result points as an index. Must be preallocated, and
-   *  at least as big as src. You can use src as dest, but in that case src
-   *  is overwritten!
-!  *
-!  * - src:
-!  *
-   *  The string to split. Sequences of whitespace are treated as separators, unless
-   *  escaped. There are two ways to escape: by using single quotes (anything
-   *  between single quotes is treated as one segment), or by using a backslash
-   *  to escape the next character. The backslash escape works inside quotation
-   *  as well.
-!  *
-   *  Example:
-!  *
-   *  "It\'s   very\ easy   'to  use WiseGuys\' wg_split()' function" is split into:
-!  *
-   *  "It's"
-   *  "very easy"
-   *  "to  use WiseGuys' wg_split()"
-   *  "function"
-!  *
-!  * - maxsegments:
-!  *
-   *  The maximum number of segments. If the splitter runs out of segments,
-   *  the remainder of the string is stored in the last segment.
-!  *
-   * RETURN VALUE:
-   * The number of segments found.
-   */
-***************
-*** 218,229 ****
-  		switch (state) {
-  		case 0:
-  			/*** Skip spaces ***/
-! 			while ( isspace((int) *p) ) {
-  				p++;
-  			}
-  			state = 1;
-  
-! 		case 1: 
-  			/*** Start segment ***/
-  			result[cnt] = w;
-  			cnt++;
---- 218,229 ----
-  		switch (state) {
-  		case 0:
-  			/*** Skip spaces ***/
-! 			while ( isspace((unsigned char) *p) ) {
-  				p++;
-  			}
-  			state = 1;
-  
-! 		case 1:
-  			/*** Start segment ***/
-  			result[cnt] = w;
-  			cnt++;
-***************
-*** 232,243 ****
-  		case 2:
-  			/*** Unquoted segment ***/
-  			while (*p) {
-! 				if ( isspace((int) *p) ) {
-  					*w++ = '\0';
-  					p++;
-  					state = 0;
-  					break;
-! 				}				
-  				else if ( *p == '\'' ) {
-  					/*** Start quotation ***/
-  					p++;
---- 232,243 ----
-  		case 2:
-  			/*** Unquoted segment ***/
-  			while (*p) {
-! 				if ( isspace((unsigned char) *p) ) {
-  					*w++ = '\0';
-  					p++;
-  					state = 0;
-  					break;
-! 				}
-  				else if ( *p == '\'' ) {
-  					/*** Start quotation ***/
-  					p++;
-***************
-*** 292,308 ****
-  }
-  
-  
-  extern void wg_timerstart(wgtimer_t *t)
-  {
-- #ifdef HAVE_GETTIMEOFDAY
-          gettimeofday( &(t->start), NULL );
-- #endif
-  }
-  
-  
-  extern uint4 wg_timerstop(wgtimer_t *t)
-  {
-- #ifdef HAVE_GETTIMEOFDAY
-  	uint4 result;
-          gettimeofday( &(t->stop), NULL );
-          result = (t->stop.tv_sec - t->start.tv_sec) * 1000000 +
---- 292,308 ----
-  }
-  
-  
-+ #ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
-  extern void wg_timerstart(wgtimer_t *t)
-  {
-          gettimeofday( &(t->start), NULL );
-  }
-+ #endif  /* TL : no struct timeval under Win32 */
-  
-  
-+ #ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
-  extern uint4 wg_timerstop(wgtimer_t *t)
-  {
-  	uint4 result;
-          gettimeofday( &(t->stop), NULL );
-          result = (t->stop.tv_sec - t->start.tv_sec) * 1000000 +
-***************
-*** 312,336 ****
-  	t->start.tv_usec = t->stop.tv_usec;
-  
-  	return result;
-- #else
-- 	return 0;
-- #endif
-  }
-  
-  
-  /**
-   * wg_strgmov -- a guarded strcpy() variation
-!  * 
-   * copies src to dest (including terminating zero), and returns
-   * pointer to position of terminating zero in dest. The function is
-   * guaranteed not to write past destlimit. If the copy couldn't be
-!  * finished, the function returns NULL after restoring the first 
-!  * character in dest for your convenience (since this is usually a zero).  
-   */
-  char *wg_strgmov( char *dest, const char *src, const char *destlimit )
-  {
-  	char tmp, *w;
-! 	
-  	if ( !dest || dest >= destlimit ) {
-  		return NULL;
-  	}
---- 312,334 ----
-  	t->start.tv_usec = t->stop.tv_usec;
-  
-  	return result;
-  }
-+ #endif  /* TL : no struct timeval under Win32 */
-  
-  
-  /**
-   * wg_strgmov -- a guarded strcpy() variation
-!  *
-   * copies src to dest (including terminating zero), and returns
-   * pointer to position of terminating zero in dest. The function is
-   * guaranteed not to write past destlimit. If the copy couldn't be
-!  * finished, the function returns NULL after restoring the first
-!  * character in dest for your convenience (since this is usually a zero).
-   */
-  char *wg_strgmov( char *dest, const char *src, const char *destlimit )
-  {
-  	char tmp, *w;
-! 
-  	if ( !dest || dest >= destlimit ) {
-  		return NULL;
-  	}
-***************
-*** 355,361 ****
-  }
-  
-  /*
-!  * wg_trim() -- remove whitespace surrounding a string. 
-   *
-   * Example: "   bla   bla   bla   " becomes "bla   bla   bla" after trimming.
-   *
---- 353,359 ----
-  }
-  
-  /*
-!  * wg_trim() -- remove whitespace surrounding a string.
-   *
-   * Example: "   bla   bla   bla   " becomes "bla   bla   bla" after trimming.
-   *
-***************
-*** 373,384 ****
-  	char *lastnonspace = &dest[-1];
-  	const char *p = src;
-  	char *w = dest;
-! 	
-! 	while ( isspace((int)*p) ) {
-  		p++;
-  	}
-  	while (*p) {
-! 		if ( !isspace((int)*p) ) {
-  			lastnonspace = w;
-  		}
-  		*w++ = *p++;
---- 371,382 ----
-  	char *lastnonspace = &dest[-1];
-  	const char *p = src;
-  	char *w = dest;
-! 
-! 	while ( isspace((unsigned char)*p) ) {
-  		p++;
-  	}
-  	while (*p) {
-! 		if ( !isspace((unsigned char)*p) ) {
-  			lastnonspace = w;
-  		}
-  		*w++ = *p++;
-*** misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
---- misc/build/libtextcat-2.2/src/common.h	Tue Nov 27 13:49:17 2007
-***************
-*** 1,28 ****
-  #ifndef _COMMON_H_
-  #define _COMMON_H_
-  /**
-!  * common.h -- a mixed bag of helper functions 
-   *
-   * Copyright (C) 2003 WiseGuys Internet B.V.
-   *
-   * THE BSD LICENSE
-!  * 
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  * 
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  * 
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  * 
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  * 
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
---- 1,28 ----
-  #ifndef _COMMON_H_
-  #define _COMMON_H_
-  /**
-!  * common.h -- a mixed bag of helper functions
-   *
-   * Copyright (C) 2003 WiseGuys Internet B.V.
-   *
-   * THE BSD LICENSE
-!  *
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  *
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  *
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  *
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  *
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-***************
-*** 86,95 ****
---- 86,97 ----
-  typedef char		boole;
-  #endif
-  
-+ #ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
-  typedef struct wgtimer_s {
-          struct timeval start;
-          struct timeval stop;
-  } wgtimer_t;
-+ #endif  /* TL : no struct timeval under Win32 */
-  
-  
-  extern void *wg_malloc( size_t size );
-***************
-*** 101,113 ****
-  
-  extern char *wg_getline( char *line, int size, FILE *fp );
-  
-  extern void wg_timerstart(wgtimer_t *t);
-  extern uint4 wg_timerstop(wgtimer_t *t);
-  
-  extern unsigned int wg_split( char **result, char *dest, char *src, int maxsegments );
-  extern char *wg_strgmov( char *dest, const char *src, const char *destlimit );
-  extern char *wg_trim( char *dest, const char *src );
-  
-!       
-  #endif
-  
---- 103,117 ----
-  
-  extern char *wg_getline( char *line, int size, FILE *fp );
-  
-+ #ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
-  extern void wg_timerstart(wgtimer_t *t);
-  extern uint4 wg_timerstop(wgtimer_t *t);
-+ #endif  /* TL : no struct timeval under Win32 */
-  
-  extern unsigned int wg_split( char **result, char *dest, char *src, int maxsegments );
-  extern char *wg_strgmov( char *dest, const char *src, const char *destlimit );
-  extern char *wg_trim( char *dest, const char *src );
-  
-! 
-  #endif
-  
-*** misc/libtextcat-2.2/src/constants.h	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/constants.h	Tue Nov 27 13:49:17 2007
-***************
-*** 39,44 ****
---- 39,46 ----
-   */
-  #include <limits.h>
-  
-+ #define _UTF8_
-+ 
-  #define DESCRIPTION "out of place"
-  
-  /* Reported matches are those fingerprints with a score less than best
-***************
-*** 59,72 ****
-  /* Maximum number of n-grams in a fingerprint */
-  #define MAXNGRAMS  400
-  
-! /* Maximum size of an n-gram? */
-! #define MAXNGRAMSIZE 5
-  
-  /* Which characters are not acceptable in n-grams? */
-! #define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
-  
-  /* Minimum size (in characters) for accepting a document */
-! #define MINDOCSIZE  25
-  
-  /* Maximum penalty for missing an n-gram in fingerprint */
-  #define MAXOUTOFPLACE 400
---- 61,81 ----
-  /* Maximum number of n-grams in a fingerprint */
-  #define MAXNGRAMS  400
-  
-! /* Maximum number of character of an n-gram? */
-! #define MAXNGRAMSYMBOL 5
-  
-+ /* Maximum size of the string representing an n-gram (must be greater than number of symbol) */
-+ #ifdef _UTF8_
-+ #define MAXNGRAMSIZE 20
-+ #else
-+ #define MAXNGRAMSIZE MAXNGRAMSYMBOL
-+ #endif
-+ 
-  /* Which characters are not acceptable in n-grams? */
-! #define INVALID(c) (isspace((unsigned char)c) || isdigit((unsigned char)c)) 
-  
-  /* Minimum size (in characters) for accepting a document */
-! #define MINDOCSIZE  6
-  
-  /* Maximum penalty for missing an n-gram in fingerprint */
-  #define MAXOUTOFPLACE 400
-***************
-*** 76,79 ****
---- 85,91 ----
-  
-  #define MAXSCORE  INT_MAX
-  
-+ /* where the fingerprints files are stored */
-+ #define DEFAULT_FINGERPRINTS_PATH ""
-+ 
-  #endif
-*** misc/libtextcat-2.2/src/fingerprint.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/fingerprint.c	Tue Nov 27 13:49:18 2007
-***************
-*** 6,28 ****
-   * All rights reserved.
-   *
-   * THE BSD LICENSE
-!  * 
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  * 
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  * 
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  * 
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  * 
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
---- 6,28 ----
-   * All rights reserved.
-   *
-   * THE BSD LICENSE
-!  *
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  *
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  *
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  *
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  *
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-***************
-*** 51,57 ****
-   * The reason why we go through the trouble of doing a partial
-   * (heap)sort is that a full quicksort behaves horribly on the data:
-   * most n-grams have a very low count, resulting in a data set in
-!  * nearly-sorted order. This causes quicksort to behave very badly. 
-   * Heapsort, on the other hand, behaves handsomely: worst case is
-   * Mlog(N) for M n-grams filtered through a N-sized heap.
-   *
---- 51,57 ----
-   * The reason why we go through the trouble of doing a partial
-   * (heap)sort is that a full quicksort behaves horribly on the data:
-   * most n-grams have a very low count, resulting in a data set in
-!  * nearly-sorted order. This causes quicksort to behave very badly.
-   * Heapsort, on the other hand, behaves handsomely: worst case is
-   * Mlog(N) for M n-grams filtered through a N-sized heap.
-   *
-***************
-*** 63,68 ****
---- 63,72 ----
-   * - put table/heap datastructure in a separate file.
-   */
-  
-+ #ifndef _UTF8_
-+ #define _UTF8_
-+ #endif
-+ 
-  #include "config.h"
-  #include <stdio.h>
-  #ifdef HAVE_STDLIB_H
-***************
-*** 80,89 ****
---- 84,95 ----
-  #include "wg_mempool.h"
-  #include "constants.h"
-  
-+ #include "utf8misc.h"
-  
-  #define TABLESIZE  (1<<TABLEPOW)
-  #define TABLEMASK  ((TABLESIZE)-1)
-  
-+ 
-  typedef struct {
-  
-  	sint2 rank;
-***************
-*** 96,102 ****
-  	const char *name;
-  	ngram_t *fprint;
-  	uint4 size;
-! 	
-  } fp_t;
-  
-  typedef struct entry_s {
---- 102,108 ----
-  	const char *name;
-  	ngram_t *fprint;
-  	uint4 size;
-! 
-  } fp_t;
-  
-  typedef struct entry_s {
-***************
-*** 105,117 ****
-  	struct entry_s *next;
-  } entry_t;
-  
-! typedef struct table_s {	
-  	void *pool;
-  	entry_t **table;
-  	entry_t *heap;
-  
-  	struct table_s *next;
-! 	
-  	uint4 heapsize;
-  	uint4 size;
-  } table_t;
---- 111,123 ----
-  	struct entry_s *next;
-  } entry_t;
-  
-! typedef struct table_s {
-  	void *pool;
-  	entry_t **table;
-  	entry_t *heap;
-  
-  	struct table_s *next;
-! 
-  	uint4 heapsize;
-  	uint4 size;
-  } table_t;
-***************
-*** 122,128 ****
-   * fast and furious little hash function
-   *
-   * (Note that we could use some kind of rolling checksum, and update it
-!  * during n-gram construction) 
-   */
-  static uint4 simplehash( const char *p, int len )
-  {
---- 128,134 ----
-   * fast and furious little hash function
-   *
-   * (Note that we could use some kind of rolling checksum, and update it
-!  * during n-gram construction)
-   */
-  static uint4 simplehash( const char *p, int len )
-  {
-***************
-*** 134,162 ****
-  }
-  
-  
-- /* checks if n-gram lex is a prefix of key and of length len */
-- inline int issame( char *lex, char *key, int len )
-- {
-- 	int i;
-- 	for (i=0; i<len; i++) {
-- 		if ( key[i] != lex[i] ) {
-- 			return 0;
-- 		}
-- 	}
-- 	if ( lex[i] != 0 ) {
-- 		return 0;
-- 	}
-- 	return 1;
-- }
-  
-- 
-  /* increases frequency of ngram(p,len) */
-! static inline int increasefreq( table_t *t, char *p, int len ) 
-! {	
-! 	uint4 hash = simplehash( p, len ) & TABLEMASK;				
-  	entry_t *entry = t->table[ hash ];
-! 	
-! 	while ( entry ) {				
-  		if ( issame( entry->str, p, len ) ) {
-  			/*** Found it! ***/
-  			entry->cnt++;
---- 140,153 ----
-  }
-  
-  
-  
-  /* increases frequency of ngram(p,len) */
-! static int increasefreq( table_t *t, char *p, int len )
-! {
-! 	uint4 hash = simplehash( p, len ) & TABLEMASK;
-  	entry_t *entry = t->table[ hash ];
-! 
-! 	while ( entry ) {
-  		if ( issame( entry->str, p, len ) ) {
-  			/*** Found it! ***/
-  			entry->cnt++;
-***************
-*** 168,174 ****
-  	}
-  
-  	/*** Not found, so create ***/
-! 	entry = wgmempool_alloc( t->pool, sizeof(entry_t) );
-  	strcpy( entry->str, p );
-  	entry->cnt = 1;
-  
---- 159,165 ----
-  	}
-  
-  	/*** Not found, so create ***/
-!         entry = (entry_t*)(wgmempool_alloc( t->pool, sizeof(entry_t) ));
-  	strcpy( entry->str, p );
-  	entry->cnt = 1;
-  
-***************
-*** 181,192 ****
-  #if 0
-  
-  /* looks up ngram(p,len) */
-! static entry_t *findfreq( table_t *t, char *p, int len ) 
-! {	
-! 	uint4 hash = simplehash( p, len ) & TABLEMASK;				
-  	entry_t *entry = t->table[ hash ];
-! 	
-! 	while ( entry ) {				
-  		if ( issame( entry->str, p, len ) ) {
-  			return entry;
-  		}
---- 172,183 ----
-  #if 0
-  
-  /* looks up ngram(p,len) */
-! static entry_t *findfreq( table_t *t, char *p, int len )
-! {
-! 	uint4 hash = simplehash( p, len ) & TABLEMASK;
-  	entry_t *entry = t->table[ hash ];
-! 
-! 	while ( entry ) {
-  		if ( issame( entry->str, p, len ) ) {
-  			return entry;
-  		}
-***************
-*** 219,225 ****
-  #define GREATER(x,y) ((x).cnt > (y).cnt)
-  #define LESS(x,y)    ((x).cnt < (y).cnt)
-  
-! inline static void siftup( table_t *t, unsigned int child )
-  {
-  	entry_t *heap = t->heap;
-  	unsigned int parent = (child-1) >> 1;
---- 210,216 ----
-  #define GREATER(x,y) ((x).cnt > (y).cnt)
-  #define LESS(x,y)    ((x).cnt < (y).cnt)
-  
-! static void siftup( table_t *t, unsigned int child )
-  {
-  	entry_t *heap = t->heap;
-  	unsigned int parent = (child-1) >> 1;
-***************
-*** 241,247 ****
-  }
-  
-  
-! inline static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
-  {
-  	entry_t *heap = t->heap;
-  	unsigned int child = parent*2 + 1;
---- 232,238 ----
-  }
-  
-  
-! static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
-  {
-  	entry_t *heap = t->heap;
-  	unsigned int child = parent*2 + 1;
-***************
-*** 273,279 ****
-  	if (t->size < t->heapsize) {
-  		memcpy( &(heap[t->size]), item, sizeof(entry_t));
-  		siftup( t, t->size );
-! 		t->size++;		
-  		return 0;
-  	}
-  
---- 264,270 ----
-  	if (t->size < t->heapsize) {
-  		memcpy( &(heap[t->size]), item, sizeof(entry_t));
-  		siftup( t, t->size );
-! 		t->size++;
-  		return 0;
-  	}
-  
-***************
-*** 316,333 ****
-  
-  	/*** Fill result heap ***/
-  	for (i=0; i<TABLESIZE; i++) {
-! 		entry_t *p = t->table[i];	       
-  		while (p) {
-  			heapinsert(t, p);
-  			p = p->next;
-  		}
-! 	}     
-  	return 1;
-  }
-  
-  
-  static table_t *inittable(uint4 maxngrams)
-! {	
-  	table_t *result = (table_t *)wg_zalloc( sizeof(table_t) );
-  	result->table = (entry_t **)wg_zalloc( sizeof(entry_t*) * TABLESIZE );
-  	result->pool = wgmempool_Init( 10000, 10 );
---- 307,324 ----
-  
-  	/*** Fill result heap ***/
-  	for (i=0; i<TABLESIZE; i++) {
-! 		entry_t *p = t->table[i];
-  		while (p) {
-  			heapinsert(t, p);
-  			p = p->next;
-  		}
-! 	}
-  	return 1;
-  }
-  
-  
-  static table_t *inittable(uint4 maxngrams)
-! {
-  	table_t *result = (table_t *)wg_zalloc( sizeof(table_t) );
-  	result->table = (entry_t **)wg_zalloc( sizeof(entry_t*) * TABLESIZE );
-  	result->pool = wgmempool_Init( 10000, 10 );
-***************
-*** 347,353 ****
-  	wgmempool_Done(t->pool);
-  	wg_free(t->table);
-  	wg_free(t->heap);
-! 	wg_free(t);	
-  }
-  
-  
---- 338,344 ----
-  	wgmempool_Done(t->pool);
-  	wg_free(t->table);
-  	wg_free(t->heap);
-! 	wg_free(t);
-  }
-  
-  
-***************
-*** 354,360 ****
-  extern void *fp_Init(const char *name)
-  {
-  	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
-! 	
-  	if ( name ) {
-  		h->name = wg_strdup(name);
-  	}
---- 345,351 ----
-  extern void *fp_Init(const char *name)
-  {
-  	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
-! 
-  	if ( name ) {
-  		h->name = wg_strdup(name);
-  	}
-***************
-*** 458,478 ****
-  	return dest;
-  }
-  
-! 
-  static void createngramtable( table_t *t, const char *buf )
-  {
-  	char n[MAXNGRAMSIZE+1];
-  	const char *p = buf;
-  	int i;
-  
-  	/*** Get all n-grams where 1<=n<=MAXNGRAMSIZE. Allow underscores only at borders. ***/
-! 	for (;;p++) {
-  
-! 		const char *q = p;
-  		char *m = n;
-  
-  		/*** First char may be an underscore ***/
-! 		*m++ = *q++;
-  		*m = '\0';
-  
-  		increasefreq( t, n, 1 );
---- 449,475 ----
-  	return dest;
-  }
-  
-! /**
-! * this function extract all n-gram from past buffer and put them into the table "t"
-! * [modified] by Jocelyn Merand to accept utf-8 multi-character symbols to be used in OpenOffice
-! */
-  static void createngramtable( table_t *t, const char *buf )
-  {
-  	char n[MAXNGRAMSIZE+1];
-  	const char *p = buf;
-  	int i;
-+         int pointer = 0;
-  
-  	/*** Get all n-grams where 1<=n<=MAXNGRAMSIZE. Allow underscores only at borders. ***/
-! 	while(1) {
-  
-!      const char *q = &p[pointer];   /*[modified] previously p++ above (for(;;p++)) now, it's pointer wich is increased so we have to get the new pointer on the buffer*/
-  		char *m = n;
-  
-  		/*** First char may be an underscore ***/
-!                 int decay = charcopy(q, m); /*[modified] previously *q++ = *m++*/
-!                 q = &(p[pointer+decay]);    /*[modified] the old copying method do not manage multi-character symbols*/
-!                 m += decay; /*[modified]*/
-  		*m = '\0';
-  
-  		increasefreq( t, n, 1 );
-***************
-*** 482,500 ****
-  		}
-  
-  		/*** Let the compiler unroll this ***/
-! 		for ( i=2; i<=MAXNGRAMSIZE; i++) {
-  
-! 			*m++ = *q;
-  			*m = '\0';
-  
-  			increasefreq( t, n, i );
-  
-  			if ( *q == '_' ) break;
-! 			q++;
-  			if ( *q == '\0' ) {
-  				return;
-  			}
-  		}
-  	}
-  	return;
-  }
---- 479,500 ----
-  		}
-  
-  		/*** Let the compiler unroll this ***/
-! 		for ( i=2; i<=MAXNGRAMSYMBOL; i++) {
-  
-!                         decay = charcopy(q, m); /*[modified] like above*/
-!                         m += decay;
-  			*m = '\0';
-  
-  			increasefreq( t, n, i );
-  
-  			if ( *q == '_' ) break;
-!                         q += decay;
-  			if ( *q == '\0' ) {
-  				return;
-  			}
-  		}
-+ 
-+   pointer = nextcharstart(p,pointer);   /*[modified] p[pointer] must point on the next start of symbol, but whith utf next start is not surely next char*/
-  	}
-  	return;
-  }
-***************
-*** 514,520 ****
-  {
-  	ngram_t *x = (ngram_t *)a;
-  	ngram_t *y = (ngram_t *)b;
-! 	
-  	return mystrcmp( x->str, y->str );
-  }
-  
---- 514,520 ----
-  {
-  	ngram_t *x = (ngram_t *)a;
-  	ngram_t *y = (ngram_t *)b;
-! 
-  	return mystrcmp( x->str, y->str );
-  }
-  
-***************
-*** 522,533 ****
-  {
-  	ngram_t *x = (ngram_t *)a;
-  	ngram_t *y = (ngram_t *)b;
-! 	
-  	return x->rank - y->rank;
-  }
-  
-  /**
-!  * Create a fingerprint: 
-   * - record the frequency of each unique n-gram in a hash table
-   * - take the most frequent n-grams
-   * - sort them alphabetically, recording their relative rank
---- 522,533 ----
-  {
-  	ngram_t *x = (ngram_t *)a;
-  	ngram_t *y = (ngram_t *)b;
-! 
-  	return x->rank - y->rank;
-  }
-  
-  /**
-!  * Create a fingerprint:
-   * - record the frequency of each unique n-gram in a hash table
-   * - take the most frequent n-grams
-   * - sort them alphabetically, recording their relative rank
-***************
-*** 544,563 ****
-  	}
-  
-  	/*** Throw out all invalid chars ***/
-! 	tmp = prepbuffer( buffer, bufsize ); 	
-  	if ( tmp == NULL ) {
-  		return 0;
-  	}
-- 
-  	h = (fp_t*)handle;
-  	t = inittable(maxngrams);
-  
-  	/*** Create a hash table containing n-gram counts ***/
-  	createngramtable(t, tmp);
-! 
-  	/*** Take the top N n-grams and add them to the profile ***/
-! 	table2heap(t);	
-! 	maxngrams = WGMIN( maxngrams, t->size );       
-  
-  	h->fprint = (ngram_t *)wg_malloc( sizeof(ngram_t) * maxngrams );
-  	h->size = maxngrams;
---- 544,564 ----
-  	}
-  
-  	/*** Throw out all invalid chars ***/
-! 	tmp = prepbuffer( buffer, bufsize );
-!     /*printf("Cleaned buffer : %s\n",tmp);*/
-  	if ( tmp == NULL ) {
-  		return 0;
-  	}
-  	h = (fp_t*)handle;
-  	t = inittable(maxngrams);
-+     /*printf("Table initialized\n");*/
-  
-  	/*** Create a hash table containing n-gram counts ***/
-  	createngramtable(t, tmp);
-!     /*printf("Table created\n");*/
-  	/*** Take the top N n-grams and add them to the profile ***/
-! 	table2heap(t);
-! 	maxngrams = WGMIN( maxngrams, t->size );
-  
-  	h->fprint = (ngram_t *)wg_malloc( sizeof(ngram_t) * maxngrams );
-  	h->size = maxngrams;
-***************
-*** 568,574 ****
-  		entry_t tmp2;
-  
-  		heapextract(t, &tmp2);
-! 		
-  		/*** the string and its rank is all we need ***/
-  		strcpy( h->fprint[i].str, tmp2.str );
-  		h->fprint[i].rank = i;
---- 569,575 ----
-  		entry_t tmp2;
-  
-  		heapextract(t, &tmp2);
-! 
-  		/*** the string and its rank is all we need ***/
-  		strcpy( h->fprint[i].str, tmp2.str );
-  		h->fprint[i].rank = i;
-***************
-*** 578,584 ****
-  	wg_free(tmp);
-  
-  	/*** Sort n-grams alphabetically, for easy comparison ***/
-! 	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
-  	return 1;
-  }
-  
---- 579,585 ----
-  	wg_free(tmp);
-  
-  	/*** Sort n-grams alphabetically, for easy comparison ***/
-! 	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
-  	return 1;
-  }
-  
-***************
-*** 608,614 ****
-  #endif
-  		return 0;
-  	}
-! 	
-  	h->fprint = (ngram_t *)wg_malloc(maxngrams * sizeof(ngram_t));
-  
-  	while (cnt < maxngrams && wg_getline(line,1024,fp)) {
---- 609,615 ----
-  #endif
-  		return 0;
-  	}
-! 
-  	h->fprint = (ngram_t *)wg_malloc(maxngrams * sizeof(ngram_t));
-  
-  	while (cnt < maxngrams && wg_getline(line,1024,fp)) {
-***************
-*** 635,641 ****
-  	h->size = cnt;
-  
-  	/*** Sort n-grams, for easy comparison later on ***/
-! 	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
-  
-  	fclose(fp);
-  
---- 636,642 ----
-  	h->size = cnt;
-  
-  	/*** Sort n-grams, for easy comparison later on ***/
-! 	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
-  
-  	fclose(fp);
-  
-***************
-*** 648,661 ****
-  {
-  	uint4 i;
-  	fp_t *h = (fp_t *)handle;
-! 	ngram_t *tmp = wg_malloc( sizeof(ngram_t) * h->size );
-! 	
-  	/*** Make a temporary and sort it on rank ***/
-  	memcpy( tmp, h->fprint, h->size * sizeof(ngram_t) );
-! 	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank ); 
-  
-  	for (i=0; i<h->size; i++) {
-! 		fprintf( fp, "%s\n", tmp[i].str );
-  	}
-  	wg_free( tmp );
-  }
---- 649,663 ----
-  {
-  	uint4 i;
-  	fp_t *h = (fp_t *)handle;
-!         ngram_t *tmp = (ngram_t*)wg_malloc( sizeof(ngram_t) * h->size );
-! 
-  	/*** Make a temporary and sort it on rank ***/
-  	memcpy( tmp, h->fprint, h->size * sizeof(ngram_t) );
-! 	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank );
-  
-  	for (i=0; i<h->size; i++) {
-!         /*fprintf( fp, "%s\t%i\n", tmp[i].str, tmp[i].rank );*/
-!                 fprintf( fp, "%s\n", tmp[i].str);
-  	}
-  	wg_free( tmp );
-  }
-***************
-*** 669,675 ****
-  	uint4 i = 0;
-  	uint4 j = 0;
-  	sint4 sum = 0;
-! 	
-  	/*** Compare the profiles in mergesort fashion ***/
-  	while ( i < c->size && j < u->size ) {
-  
---- 671,677 ----
-  	uint4 i = 0;
-  	uint4 j = 0;
-  	sint4 sum = 0;
-! 
-  	/*** Compare the profiles in mergesort fashion ***/
-  	while ( i < c->size && j < u->size ) {
-  
-***************
-*** 705,711 ****
-  	}
-  
-  	return sum;
-! 	       	
-  }
-  
-  
---- 707,713 ----
-  	}
-  
-  	return sum;
-! 
-  }
-  
-  
-*** misc/libtextcat-2.2/src/fingerprint.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/fingerprint.h	Tue Nov 27 13:49:18 2007
-***************
-*** 41,47 ****
---- 41,53 ----
-  extern int fp_Read( void *handle, const char *fname, int maxngrams );
-  extern sint4 fp_Compare( void *cat, void *unknown, int cutoff );
-  extern void fp_Show( void *handle );
-+ #ifdef __cplusplus
-+ extern "C" {
-+ #endif
-  extern const char *fp_Name( void *handle );
-+ #ifdef __cplusplus
-+ }
-+ #endif
-  extern void fp_Print( void *handle, FILE *fp );
-  
-  #endif
-*** misc/libtextcat-2.2/src/libtextcat.map	Tue Nov 27 13:51:28 2007
---- misc/build/libtextcat-2.2/src/libtextcat.map	Tue Nov 27 13:49:18 2007
-***************
-*** 1 ****
-! dummy
---- 1,40 ----
-! {
-! 	global: 
-! 		charcopy
-! 		issame
-! 		nextcharstart
-! 		utfstrlen
-! 		wgmempool_Done
-! 		wgmempool_Init
-! 		wgmempool_Reset
-! 		wgmempool_alloc
-! 		wgmempool_getline
-! 		wgmempool_strdup
-! 		special_textcat_Init
-! 		textcat_Classify
-! 		textcat_Done
-! 		textcat_Init
-! 		textcat_Version
-! 		fp_Compare
-! 		fp_Create
-! 		fp_Debug
-! 		fp_Done
-! 		fp_Init
-! 		fp_Name
-! 		fp_Print
-! 		fp_Read
-! 		heapextract
-! 		wg_calloc
-! 		wg_free
-! 		wg_getline
-! 		wg_malloc
-! 		wg_split
-! 		wg_strdup
-! 		wg_strgmov
-! 		wg_trim
-! 		wg_zalloc
-! 		wgmem_error
-! 		
-! 	local:
-! 		*;
-! }
-*** misc/libtextcat-2.2/src/makefile.mk	Tue Nov 27 13:51:28 2007
---- misc/build/libtextcat-2.2/src/makefile.mk	Tue Nov 27 13:49:18 2007
-***************
-*** 1 ****
-! dummy
---- 1,92 ----
-! #*************************************************************************
-! #
-! #   $RCSfile: libtextcat-2.2.patch,v $
-! #
-! #   $Revision: 1.7 $
-! #
-! #   last change: $Author: obo $ $Date: 2008-01-04 15:02:30 $
-! #
-! #*  The Contents of this file are made available subject to
-! #*  the terms of GNU Lesser General Public License Version 2.1.
-! #*
-! #*
-! #*    GNU Lesser General Public License Version 2.1
-! #*    =============================================
-! #*    Copyright 2005 by Sun Microsystems, Inc.
-! #*    901 San Antonio Road, Palo Alto, CA 94303, USA
-! #*
-! #*    This library is free software; you can redistribute it and/or
-! #*    modify it under the terms of the GNU Lesser General Public
-! #*    License version 2.1, as published by the Free Software Foundation.
-! #*
-! #*    This library is distributed in the hope that it will be useful,
-! #*    but WITHOUT ANY WARRANTY; without even the implied warranty of
-! #*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-! #*    Lesser General Public License for more details.
-! #*
-! #*    You should have received a copy of the GNU Lesser General Public
-! #*    License along with this library; if not, write to the Free Software
-! #*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-! #*    MA  02111-1307  USA
-! #*
-! #*************************************************************************
-! 
-! PRJ = ..$/..$/..$/..$/..
-! 
-! PRJNAME = libtextcat
-! TARGET  = libtextcat
-! CFLAGSCALL=gsd
-! 
-! USE_DEFFILE=TRUE
-! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
-! 
-! .INCLUDE : settings.mk
-! 
-! # --- Files --------------------------------------------------------
-! 
-! # !! not to be compiled because those belong to a stand alone programs: !!
-! #        $(SLO)$/createfp.obj\
-! #        $(SLO)$/testtextcat.obj
-! 
-! SLOFILES=   \
-!         $(SLO)$/common.obj\
-!         $(SLO)$/fingerprint.obj\
-!         $(SLO)$/textcat.obj\
-!         $(SLO)$/wg_mempool.obj\
-!         $(SLO)$/utf8misc.obj
-! 
-! #SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-! SHL1TARGET= $(TARGET)
-! 
-! SHL1STDLIBS=
-! 
-! # build DLL
-! SHL1LIBS=       $(SLB)$/$(TARGET).lib
-! SHL1IMPLIB=     i$(TARGET)
-! SHL1DEPN=       $(SHL1LIBS)
-! SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-! 
-! # build DEF file
-! DEF1NAME=       $(SHL1TARGET)
-! DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
-! 
-! SHL1VERSIONMAP= libtextcat.map
-! 
-! # --- Targets ------------------------------------------------------
-! 
-! .INCLUDE : target.mk
-! 
-! # copy hand supplied configuration file for Win32 builds to the file
-! # which is included in the source code
-! $(SLOFILES) : config.h
-! config.h :
-!     $(GNUCOPY) $(OUT)$/misc$/build$/libtextcat-2.2$/src$/win32_config.h   $(OUT)$/misc$/build$/libtextcat-2.2$/src$/config.h
-! 
-! 
-! $(MISC)$/$(SHL1TARGET).flt:  makefile.mk
-!     @echo ------------------------------
-!     @echo Making: $@
-!     @echo Imp>$@
-!     @echo __CT>>$@
-!     @echo _real>>$@
-!     @echo unnamed>>$@
-*** misc/libtextcat-2.2/src/textcat.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/textcat.c	Tue Nov 27 13:49:18 2007
-***************
-*** 4,26 ****
-   * Copyright (C) 2003 WiseGuys Internet B.V.
-   *
-   * THE BSD LICENSE
-!  * 
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  * 
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  * 
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  * 
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  * 
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
---- 4,26 ----
-   * Copyright (C) 2003 WiseGuys Internet B.V.
-   *
-   * THE BSD LICENSE
-!  *
-   * Redistribution and use in source and binary forms, with or without
-   * modification, are permitted provided that the following conditions
-   * are met:
-!  *
-   * - Redistributions of source code must retain the above copyright
-   * notice, this list of conditions and the following disclaimer.
-!  *
-   * - Redistributions in binary form must reproduce the above copyright
-   * notice, this list of conditions and the following disclaimer in the
-   * documentation and/or other materials provided with the
-   * distribution.
-!  *
-   * - Neither the name of the WiseGuys Internet B.V. nor the names of
-   * its contributors may be used to endorse or promote products derived
-   * from this software without specific prior written permission.
-!  *
-   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-   * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-   * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-***************
-*** 74,79 ****
---- 74,80 ----
-  typedef struct {
-  
-  	void **fprint;
-+         char *fprint_disable;
-  	uint4 size;
-  	uint4 maxsize;
-  
-***************
-*** 112,122 ****
-  		fp_Done( h->fprint[i] );
-  	}
-  	wg_free( h->fprint );
-  	wg_free( h );
-  
-  }
-  
-! extern void *textcat_Init( const char *conffile )
-  {
-  	textcat_t *h;
-  	char line[1024];
---- 113,133 ----
-  		fp_Done( h->fprint[i] );
-  	}
-  	wg_free( h->fprint );
-+         wg_free( h->fprint_disable );
-  	wg_free( h );
-  
-  }
-  
-! /** Replaces older function */
-! extern void *textcat_Init( const char *conffile ){
-!     return special_textcat_Init( conffile, DEFAULT_FINGERPRINTS_PATH );
-! }
-! 
-! /**
-!  * Originaly this function had only one parameter (conffile) it has been modified since OOo use
-!  * Basicaly prefix is the directory path where fingerprints are stored
-!  */
-! extern void *special_textcat_Init( const char *conffile, const char *prefix )
-  {
-  	textcat_t *h;
-  	char line[1024];
-***************
-*** 134,144 ****
-  	h->size = 0;
-  	h->maxsize = 16;
-  	h->fprint = (void **)wg_malloc( sizeof(void*) * h->maxsize );
-  
-  	while ( wg_getline( line, 1024, fp ) ) {
-  		char *p;
-  		char *segment[4];
-! 		int res;
-  
-  		/*** Skip comments ***/
-  #ifdef HAVE_STRCHR
---- 145,157 ----
-  	h->size = 0;
-  	h->maxsize = 16;
-  	h->fprint = (void **)wg_malloc( sizeof(void*) * h->maxsize );
-+  h->fprint_disable = (char *)wg_malloc( sizeof(char*) * h->maxsize );   /*added to store the state of languages*/
-  
-  	while ( wg_getline( line, 1024, fp ) ) {
-  		char *p;
-  		char *segment[4];
-!                 char finger_print_file_name[512];
-!                 int res;
-  
-  		/*** Skip comments ***/
-  #ifdef HAVE_STRCHR
-***************
-*** 156,162 ****
-  		/*** Ensure enough space ***/
-  		if ( h->size == h->maxsize ) {
-  			h->maxsize *= 2;
-! 			h->fprint = (void *)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
-  		}
-  
-  		/*** Load data ***/
---- 169,176 ----
-  		/*** Ensure enough space ***/
-  		if ( h->size == h->maxsize ) {
-  			h->maxsize *= 2;
-! 			h->fprint = (void **)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
-!                         h->fprint_disable = (char *)wg_realloc( h->fprint_disable, sizeof(char*) * h->maxsize );
-  		}
-  
-  		/*** Load data ***/
-***************
-*** 163,172 ****
-  		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
-  			goto ERROR;
-  		}
-! 		if ( fp_Read( h->fprint[h->size], segment[0], 400 ) == 0 ) {
-  			textcat_Done(h);
-  			goto ERROR;
-! 		}		
-  		h->size++;
-  	}
-  
---- 177,191 ----
-  		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
-  			goto ERROR;
-  		}
-!                 finger_print_file_name[0] = '\0';
-!                 strcat(finger_print_file_name, prefix);
-!                 strcat(finger_print_file_name, segment[0]);
-! 
-!                 if ( fp_Read( h->fprint[h->size], finger_print_file_name, 400 ) == 0 ) {
-  			textcat_Done(h);
-  			goto ERROR;
-! 		}
-!                 h->fprint_disable[h->size] = 0xF0;  /*0xF0 is the code for enabled languages, 0x0F is for disabled*/
-  		h->size++;
-  	}
-  
-***************
-*** 203,213 ****
-  		result = _TEXTCAT_RESULT_SHORT;
-  		goto READY;
-  	}
-! 	
-  	/*** Calculate the score for each category. ***/
-  	for (i=0; i<h->size; i++) {
-! 		int score = fp_Compare( h->fprint[i], unknown, threshold );
-! 		candidates[i].score = score;
-  		candidates[i].name = fp_Name( h->fprint[i] );
-  		if ( score < minscore ) {
-  			minscore = score;
---- 222,239 ----
-  		result = _TEXTCAT_RESULT_SHORT;
-  		goto READY;
-  	}
-! 
-  	/*** Calculate the score for each category. ***/
-  	for (i=0; i<h->size; i++) {
-!                 int score;
-!                 if(h->fprint_disable[i] & 0x0F){    /*if this language is disabled*/
-!                     score = MAXSCORE;
-!                 }
-!                 else{
-!                     score = fp_Compare( h->fprint[i], unknown, threshold );
-!                     /*printf("Score for %s : %i\n", fp_Name(h->fprint[i]), score);*/
-!                 }
-!                 candidates[i].score = score;
-  		candidates[i].name = fp_Name( h->fprint[i] );
-  		if ( score < minscore ) {
-  			minscore = score;
-***************
-*** 218,224 ****
-  	/*** Find the best performers ***/
-  	for (i=0; i<h->size; i++) {
-  		if ( candidates[i].score < threshold ) {
-- 
-  			if ( ++cnt == MAXCANDIDATES+1 ) {
-  				break;
-  			}
---- 244,249 ----
-***************
-*** 235,241 ****
-  	else {
-  		char *p = result;
-  		char *plimit = result+MAXOUTPUTSIZE;
-! 		
-  		qsort( candidates, cnt, sizeof(candidate_t), cmpcandidates );
-  
-  		*p = '\0';
---- 260,266 ----
-  	else {
-  		char *p = result;
-  		char *plimit = result+MAXOUTPUTSIZE;
-! 
-  		qsort( candidates, cnt, sizeof(candidate_t), cmpcandidates );
-  
-  		*p = '\0';
-***************
-*** 247,253 ****
-  	}
-   READY:
-  	fp_Done(unknown);
-! #ifdef SHOULD_FREE 
-  	free(candidates);
-  #undef SHOULD_FREE
-  #endif
---- 272,278 ----
-  	}
-   READY:
-  	fp_Done(unknown);
-! #ifdef SHOULD_FREE
-  	free(candidates);
-  #undef SHOULD_FREE
-  #endif
-*** misc/libtextcat-2.2/src/textcat.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/textcat.h	Tue Nov 27 13:49:18 2007
-***************
-*** 40,45 ****
---- 40,48 ----
-  #define _TEXTCAT_RESULT_UNKOWN        "UNKNOWN"
-  #define _TEXTCAT_RESULT_SHORT         "SHORT"
-  
-+ #ifdef __cplusplus
-+ extern "C" {
-+ #endif
-  
-  /**
-   * textcat_Init() - Initialize the text classifier. The textfile
-***************
-*** 51,60 ****
---- 54,72 ----
-   * Returns: handle on success, NULL on error. (At the moment, the
-   * only way errors can occur, is when the library cannot read the
-   * conffile, or one of the fingerprint files listed in it.)
-+  *
-+  * Replace older function (and has exacly the same behaviour)
-+  * see below
-   */
-  extern void *textcat_Init( const char *conffile );
-  
-  /**
-+  * Originaly this function had only one parameter (conffile) it has been modified since OOo must be able to load alternativ DB
-+  * Basicaly prefix is the directory path where fingerprints are stored
-+  */
-+ extern void *special_textcat_Init( const char *conffile, const char *prefix );
-+ 
-+ /**
-   * textcat_Done() - Free up resources for handle
-   */
-  extern void textcat_Done( void *handle );
-***************
-*** 77,80 ****
---- 89,96 ----
-   * textcat_Version() - Returns a string describing the version of this classifier.
-   */
-  extern char *textcat_Version();
-+ 
-+ #ifdef __cplusplus
-+ }
-+ #endif
-  #endif
-*** misc/libtextcat-2.2/src/utf8misc.c	Tue Nov 27 13:51:28 2007
---- misc/build/libtextcat-2.2/src/utf8misc.c	Tue Nov 27 13:49:18 2007
-***************
-*** 1 ****
-! dummy
---- 1,132 ----
-! /***************************************************************************
-!  *   Copyright (C) 2006 by Jocelyn Merand                                  *
-!  *   joc.mer@gmail.com                                                     *
-!  *                                                                         *
-!  * THE BSD LICENSE
-!  *
-!  * Redistribution and use in source and binary forms, with or without
-!  * modification, are permitted provided that the following conditions
-!  * are met:
-!  *
-!  * - Redistributions of source code must retain the above copyright
-!  * notice, this list of conditions and the following disclaimer.
-!  *
-!  * - Redistributions in binary form must reproduce the above copyright
-!  * notice, this list of conditions and the following disclaimer in the
-!  * documentation and/or other materials provided with the
-!  * distribution.
-!  *
-!  * - Neither the name of the WiseGuys Internet B.V. nor the names of
-!  * its contributors may be used to endorse or promote products derived
-!  * from this software without specific prior written permission.
-!  *
-!  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-!  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-!  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-!  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-!  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-!  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-!  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-!  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-!  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-!  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-!  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-!  ***************************************************************************/
-! 
-! #ifndef _UTF8_MISC_H_
-! #include "utf8misc.h"
-! #endif
-! 
-! 
-! int nextcharstart(const char *str, int position){
-!     int pointer = position;
-! 
-!     if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
-! 
-!         /*then str[pointer] is an escape character*/
-! 
-!     char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count (by bit translation) following characters (only the weightest part)*/
-! 
-!     while(escape_char & ESCAPE_MASK && str[pointer]){/*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
-!         escape_char = escape_char <<1;
-!         ++pointer;
-!     }
-!     }
-!     if(str[pointer]){   /*finaly, if we are not on the \0 character, we jump to the next character*/
-!         ++pointer;
-!     }
-!     return pointer;
-! }
-! 
-! 
-! int charcopy(const char *str, char *dest){
-! 
-!     int pointer = 0;
-!     if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
-! 
-!         /*then str[pointer] is an escape character*/
-! 
-!         char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count following characters (only the weightest part)*/
-! 
-!         while(escape_char & ESCAPE_MASK && str[pointer]){   /*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
-!             dest[pointer] = str[pointer];
-!             escape_char = escape_char <<1;
-!             ++pointer;
-!         }
-!     }
-!     if(str[pointer]){
-!         dest[pointer] = str[pointer];
-!         ++pointer;
-!     }
-! 
-!     return pointer;
-! }
-! 
-! 
-! int issame( char *lex, char *key, int len )
-! {
-!     /*printf("[%s] prefix of [%s] with length %i", lex, key, len);*/
-!     int char_counter = 0;
-!     int pointer = 0;
-!     while(char_counter < len) {
-! 
-!         if(key[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
-! 
-!             /*then key[pointer] is an escap character*/
-! 
-!             char escape_char = ((key[pointer] & WEIGHT_MASK) << 1);     /*and we use it to count (only the weightest part)*/
-! 
-!             while(escape_char & ESCAPE_MASK && key[pointer] == lex[pointer] ){
-!                 escape_char = escape_char <<1;
-!                 ++pointer;
-!             }
-!         }
-!         ++char_counter; /*and we are on a new utf8 character*/
-!         if ( key[pointer] != lex[pointer] ) {
-!             return 0;
-!             /*printf(" NO\n", lex, key, len);*/
-!         }
-!         ++pointer;
-!     }
-!     if ( lex[pointer] != '\0' ) {
-!         return 0;
-!         /*printf(" NO\n");*/
-!     }
-! 
-!     /*printf(" YES\n");*/
-! 
-!     return 1;
-! }
-! 
-! 
-! extern int utfstrlen(const char* str){
-!     int char_counter = 0;
-!     int pointer = 0;
-!     while(str[pointer]) {
-!         pointer = nextcharstart(str, pointer);
-! 
-!         ++char_counter; /*and we are on a new utf8 character*/
-!     }
-!     return char_counter;
-! }
-! 
-*** misc/libtextcat-2.2/src/utf8misc.h	Tue Nov 27 13:51:28 2007
---- misc/build/libtextcat-2.2/src/utf8misc.h	Tue Nov 27 13:49:18 2007
-***************
-*** 1 ****
-! dummy
---- 1,88 ----
-! /***************************************************************************
-!  *   Copyright (C) 2006 by Jocelyn Merand                                  *
-!  *   joc.mer@gmail.com                                                     *
-!  *                                                                         *
-!  * THE BSD LICENSE
-!  *
-!  * Redistribution and use in source and binary forms, with or without
-!  * modification, are permitted provided that the following conditions
-!  * are met:
-!  *
-!  * - Redistributions of source code must retain the above copyright
-!  * notice, this list of conditions and the following disclaimer.
-!  *
-!  * - Redistributions in binary form must reproduce the above copyright
-!  * notice, this list of conditions and the following disclaimer in the
-!  * documentation and/or other materials provided with the
-!  * distribution.
-!  *
-!  * - Neither the name of the WiseGuys Internet B.V. nor the names of
-!  * its contributors may be used to endorse or promote products derived
-!  * from this software without specific prior written permission.
-!  *
-!  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-!  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-!  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-!  * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-!  * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-!  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-!  * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-!  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-!  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-!  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-!  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-!  ***************************************************************************/
-! 
-! #ifndef _UTF8_MISC_H_
-! #define _UTF8_MISC_H_
-! 
-! /**
-!  * These variables are used in character processing functions
-!  * These have been added to manage utf-8 symbols, particularly escape chars
-!  */
-! #ifdef _UTF8_
-! #define ESCAPE_MASK 0x80
-! #define WEIGHT_MASK 0xF0
-! #else
-! #define ESCAPE_MASK 0xFF
-! #define WEIGHT_MASK 0x00
-! #endif
-! 
-! 
-! /*
-!  * Is used to jump to the next start of char
-!  * of course it's only usefull when encoding is utf-8
-!  * This function have been added by Jocelyn Merand to use libtextcat in OOo
-!  */
-! int nextcharstart(const char *str, int position);
-! 
-! 
-! /*Copy the char in str to dest
-!  * of course it's only usefull when encoding is utf8 and the symbol is encoded with more than 1 char
-!  * return the number of char jumped
-!  * This function have been added by Jocelyn Merand to use libtextcat in OOo
-!  */
-! int charcopy(const char *str, char *dest);
-! 
-! 
-! /* checks if n-gram lex is a prefix of key and of length len
-! * if _UTF8_ is defined, it uses escap characters and len is not realy the length of lex
-! * in this case, len is the number of utf-8 char strlen("€") == 3 but len == 1
-! */
-! int issame( char *lex, char *key, int len );
-! 
-! 
-! /* Counts the number of characters
-! * if _UTF8_ is defined, it uses escap characters and the result is not realy the length of str
-! * in this case, the result is the number of utf-8 char strlen("€") == 3 but utfstrlen("€") == 1
-! */
-! #ifdef __cplusplus
-! extern "C" {
-! #endif
-! extern int utfstrlen(const char* str);
-! #ifdef __cplusplus
-! }
-! #endif
-! 
-! #endif
-! 
-*** misc/libtextcat-2.2/src/win32_config.h	Tue Nov 27 13:51:28 2007
---- misc/build/libtextcat-2.2/src/win32_config.h	Tue Nov 27 13:49:18 2007
-***************
-*** 1 ****
-! dummy
---- 1,136 ----
-! /* src/config.h.  Generated by configure.  */
-! /* src/config.h.in.  Generated from configure.ac by autoheader.  */
-! 
-! /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
-!    systems. This function is required for `alloca.c' support on those systems.
-!    */
-! /* #undef CRAY_STACKSEG_END */
-! 
-! /* Define to 1 if using `alloca.c'. */
-! /* #undef C_ALLOCA */
-! 
-! /* Define to 1 if you have `alloca', as a function or macro. */
-! /* #undef HAVE_ALLOCA */
-! 
-! /* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
-!    */
-! /* #undef HAVE_ALLOCA_H */
-! 
-! /* Define to 1 if you have the <dlfcn.h> header file. */
-! #define HAVE_DLFCN_H 1
-! 
-! /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-! /* #undef HAVE_DOPRNT */
-! 
-! /* Define to 1 if you have the `gettimeofday' function. */
-! /* #undef  HAVE_GETTIMEOFDAY */
-! 
-! /* Define to 1 if you have the <inttypes.h> header file. */
-! /* #undef  HAVE_INTTYPES_H */
-! 
-! /* Define to 1 if you have the <limits.h> header file. */
-! #define HAVE_LIMITS_H 1
-! 
-! /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
-!    to 0 otherwise. */
-! #define HAVE_MALLOC 1
-! 
-! /* Define to 1 if you have the <memory.h> header file. */
-! #define HAVE_MEMORY_H 1
-! 
-! /* Define to 1 if you have the `memset' function. */
-! #define HAVE_MEMSET 1
-! 
-! /* Define to 1 if your system has a GNU libc compatible `realloc' function,
-!    and to 0 otherwise. */
-! #define HAVE_REALLOC 1
-! 
-! /* Define to 1 if you have the <stdint.h> header file. */
-! /* #undef  HAVE_STDINT_H */
-! 
-! /* Define to 1 if you have the <stdlib.h> header file. */
-! #define HAVE_STDLIB_H 1
-! 
-! /* Define to 1 if you have the `strchr' function. */
-! #define HAVE_STRCHR 1
-! 
-! /* Define to 1 if you have the `strdup' function. */
-! #define HAVE_STRDUP 1
-! 
-! /* Define to 1 if you have the <strings.h> header file. */
-! /* #undef HAVE_STRINGS_H */
-! 
-! /* Define to 1 if you have the <string.h> header file. */
-! #define HAVE_STRING_H 1
-! 
-! /* Define to 1 if you have the `strpbrk' function. */
-! #define HAVE_STRPBRK 1
-! 
-! /* Define to 1 if you have the <sys/stat.h> header file. */
-! #define HAVE_SYS_STAT_H 1
-! 
-! /* Define to 1 if you have the <sys/time.h> header file. */
-! /* #undef  HAVE_SYS_TIME_H */
-! 
-! /* Define to 1 if you have the <sys/types.h> header file. */
-! #define HAVE_SYS_TYPES_H 1
-! 
-! /* Define to 1 if you have the <unistd.h> header file. */
-! #define HAVE_UNISTD_H 1
-! 
-! /* Define to 1 if you have the `vprintf' function. */
-! #define HAVE_VPRINTF 1
-! 
-! /* Name of package */
-! #define PACKAGE "libtextcat"
-! 
-! /* Define to the address where bug reports for this package should be sent. */
-! #define PACKAGE_BUGREPORT ""
-! 
-! /* Define to the full name of this package. */
-! #define PACKAGE_NAME "libtextcat"
-! 
-! /* Define to the full name and version of this package. */
-! #define PACKAGE_STRING "libtextcat 2.2"
-! 
-! /* Define to the one symbol short name of this package. */
-! #define PACKAGE_TARNAME "libtextcat"
-! 
-! /* Define to the version of this package. */
-! #define PACKAGE_VERSION "2.2"
-! 
-! /* If using the C implementation of alloca, define if you know the
-!    direction of stack growth for your system; otherwise it will be
-!    automatically deduced at run-time.
-!         STACK_DIRECTION > 0 => grows toward higher addresses
-!         STACK_DIRECTION < 0 => grows toward lower addresses
-!         STACK_DIRECTION = 0 => direction of growth unknown */
-! /* #undef STACK_DIRECTION */
-! 
-! /* Define to 1 if you have the ANSI C header files. */
-! #define STDC_HEADERS 1
-! 
-! /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-! #define TIME_WITH_SYS_TIME 1
-! 
-! /* Define to 1 if your <sys/time.h> declares `struct tm'. */
-! /* #undef TM_IN_SYS_TIME */
-! 
-! /* Version number of package */
-! #define VERSION "2.2"
-! 
-! /* Define to empty if `const' does not conform to ANSI C. */
-! /* #undef const */
-! 
-! /* Define as `__inline' if that's what the C compiler calls it, or to nothing
-!    if it is not supported. */
-! /* #undef inline */
-! 
-! /* Define to rpl_malloc if the replacement function should be used. */
-! /* #undef malloc */
-! 
-! /* Define to rpl_realloc if the replacement function should be used. */
-! /* #undef realloc */
-! 
-! /* Define to `unsigned' if <sys/types.h> does not define. */
-! /* #undef size_t */
+--- misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
++++ misc/build/libtextcat-2.2/configure	Mon Mar 31 11:29:14 2008
+@@ -5391,7 +5391,8 @@
+ allow_undefined_flag=
+ no_undefined_flag=
+ need_lib_prefix=unknown
+-need_version=unknown
++#need_version=unknown
++need_version=no
+ # when you set need_version to no, make sure it does not cause -set_version
+ # flags to be left without arguments
+ archive_cmds=
+@@ -5785,7 +5786,7 @@
+     #        cross-compilation, but unfortunately the echo tests do not
+     #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+     #	     `"' quotes if we put them in here... so don't!
+-    archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$linker_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
++    archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$compiler_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
+     # We need to add '_' to the symbols in $export_symbols first
+     #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
+     hardcode_direct=yes
+@@ -6280,7 +6281,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+--- misc/libtextcat-2.2/src/Makefile.in	Thu May 22 13:39:52 2003
++++ misc/build/libtextcat-2.2/src/Makefile.in	Mon Mar 31 11:29:14 2008
+@@ -124,20 +124,20 @@
+ target_vendor = @target_vendor@
+ AUTOMAKE_OPTIONS = 1.4 foreign
+ 
+-WARNS = -W -Wall -Wshadow -Wpointer-arith 
+-IFLAGS = 
+-FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
++#WARNS = -W -Wall -Wshadow -Wpointer-arith
++IFLAGS =
++#FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
+ VERBOSE = -DVERBOSE
+ AM_CFLAGS = $(IFLAGS) $(VERBOSE) $(WARNS) $(FLAGS)
+ AM_LDFLAGS = -g
+ 
+ noinst_HEADERS = \
+-	common.h constants.h fingerprint.h textcat.h wg_mempool.h
++        common.h constants.h fingerprint.h textcat.h wg_mempool.h utf8misc.h
+ 
+ 
+ lib_LTLIBRARIES = libtextcat.la
+ libtextcat_la_SOURCES = \
+-	common.c fingerprint.c textcat.c wg_mempool.c
++        common.c fingerprint.c textcat.c wg_mempool.c utf8misc.c
+ 
+ 
+ bin_PROGRAMS = createfp
+@@ -156,7 +156,7 @@
+ libtextcat_la_LDFLAGS =
+ libtextcat_la_LIBADD =
+ am_libtextcat_la_OBJECTS = common.lo fingerprint.lo textcat.lo \
+-	wg_mempool.lo
++        wg_mempool.lo utf8misc.lo
+ libtextcat_la_OBJECTS = $(am_libtextcat_la_OBJECTS)
+ bin_PROGRAMS = createfp$(EXEEXT)
+ noinst_PROGRAMS = testtextcat$(EXEEXT)
+@@ -177,7 +177,8 @@
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/common.Plo ./$(DEPDIR)/createfp.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/fingerprint.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/testtextcat.Po ./$(DEPDIR)/textcat.Plo \
+-@AMDEP_TRUE@	./$(DEPDIR)/wg_mempool.Plo
++@AMDEP_TRUE@    ./$(DEPDIR)/wg_mempool.Plo \
++@AMDEP_TRUE@    ./$(DEPDIR)/utf8misc.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+@@ -213,7 +214,7 @@
+ 	@rm -f stamp-h1
+ 	cd $(top_builddir) && $(SHELL) ./config.status src/config.h
+ 
+-$(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
++$(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+ 	cd $(top_srcdir) && $(AUTOHEADER)
+ 	touch $(srcdir)/config.h.in
+ 
+@@ -247,8 +248,8 @@
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES) 
+-	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
++libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES)
++	$(LINK) -avoid-version -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
+ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+ install-binPROGRAMS: $(bin_PROGRAMS)
+ 	@$(NORMAL_INSTALL)
+@@ -285,10 +286,10 @@
+ 	  echo " rm -f $$p $$f"; \
+ 	  rm -f $$p $$f ; \
+ 	done
+-createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES) 
++createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES)
+ 	@rm -f createfp$(EXEEXT)
+ 	$(LINK) $(createfp_LDFLAGS) $(createfp_OBJECTS) $(createfp_LDADD) $(LIBS)
+-testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES) 
++testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES)
+ 	@rm -f testtextcat$(EXEEXT)
+ 	$(LINK) $(testtextcat_LDFLAGS) $(testtextcat_OBJECTS) $(testtextcat_LDADD) $(LIBS)
+ 
+@@ -304,6 +305,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testtextcat.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textcat.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wg_mempool.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utf8misc.Plo@am__quote@
+ 
+ distclean-depend:
+ 	-rm -rf ./$(DEPDIR)
+--- misc/libtextcat-2.2/src/common.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/common.c	Mon Mar 31 11:29:14 2008
+@@ -3,23 +3,23 @@
+  *
+  * Copyright (c) 2003, WiseGuys Internet B.V.
+  * All rights reserved.
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -114,11 +114,11 @@
+ 		wgmem_error( "Error while strduping %u bytes.\n", strlen(s) );
+ 	}
+ 
+-	return( result ); 
++	return( result );
+ }
+ 
+-extern void* wg_realloc( void *ptr, size_t size ) 
+-{ 
++extern void* wg_realloc( void *ptr, size_t size )
++{
+ 	void *result;
+ 
+ 	if (!size) {
+@@ -131,7 +131,7 @@
+ 		wgmem_error( "Error while reallocing %u bytes.\n", size );
+ 	}
+ 
+-	return( result ); 
++	return( result );
+ }
+ 
+ extern void wg_free( void *mem )
+@@ -148,12 +148,12 @@
+         if ( fgets(line, size, fp) == NULL ) {
+ 		return NULL;
+ 	}
+-        
++
+         /** kill term null **/
+         if ( (p = strpbrk( line, "\n\r" )) ) {
+                 *p = '\0';
+-        }           
+-  
++        }
++
+         return line;
+ }
+ 
+@@ -164,39 +164,39 @@
+  *
+  * ARGUMENTS:
+  * - result:
+- * 
++ *
+  *  After the split, this array contains pointers to the start of each
+  *  detected segment. Must be preallocated and at least as large as
+  *  maxsegments. The pointers point into the dest buffer.
+- * 
+- * - dest: 
+- * 
++ *
++ * - dest:
++ *
+  *  String into which result points as an index. Must be preallocated, and
+  *  at least as big as src. You can use src as dest, but in that case src
+  *  is overwritten!
+- * 
+- * - src:  
+- * 
++ *
++ * - src:
++ *
+  *  The string to split. Sequences of whitespace are treated as separators, unless
+  *  escaped. There are two ways to escape: by using single quotes (anything
+  *  between single quotes is treated as one segment), or by using a backslash
+  *  to escape the next character. The backslash escape works inside quotation
+  *  as well.
+- * 
++ *
+  *  Example:
+- *  
++ *
+  *  "It\'s   very\ easy   'to  use WiseGuys\' wg_split()' function" is split into:
+- *  
++ *
+  *  "It's"
+  *  "very easy"
+  *  "to  use WiseGuys' wg_split()"
+  *  "function"
+- *  
+- * - maxsegments: 
+- * 
++ *
++ * - maxsegments:
++ *
+  *  The maximum number of segments. If the splitter runs out of segments,
+  *  the remainder of the string is stored in the last segment.
+- *  
++ *
+  * RETURN VALUE:
+  * The number of segments found.
+  */
+@@ -218,12 +218,12 @@
+ 		switch (state) {
+ 		case 0:
+ 			/*** Skip spaces ***/
+-			while ( isspace((int) *p) ) {
++			while ( isspace((unsigned char) *p) ) {
+ 				p++;
+ 			}
+ 			state = 1;
+ 
+-		case 1: 
++		case 1:
+ 			/*** Start segment ***/
+ 			result[cnt] = w;
+ 			cnt++;
+@@ -232,12 +232,12 @@
+ 		case 2:
+ 			/*** Unquoted segment ***/
+ 			while (*p) {
+-				if ( isspace((int) *p) ) {
++				if ( isspace((unsigned char) *p) ) {
+ 					*w++ = '\0';
+ 					p++;
+ 					state = 0;
+ 					break;
+-				}				
++				}
+ 				else if ( *p == '\'' ) {
+ 					/*** Start quotation ***/
+ 					p++;
+@@ -292,17 +292,17 @@
+ }
+ 
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern void wg_timerstart(wgtimer_t *t)
+ {
+-#ifdef HAVE_GETTIMEOFDAY
+         gettimeofday( &(t->start), NULL );
+-#endif
+ }
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern uint4 wg_timerstop(wgtimer_t *t)
+ {
+-#ifdef HAVE_GETTIMEOFDAY
+ 	uint4 result;
+         gettimeofday( &(t->stop), NULL );
+         result = (t->stop.tv_sec - t->start.tv_sec) * 1000000 +
+@@ -312,25 +312,23 @@
+ 	t->start.tv_usec = t->stop.tv_usec;
+ 
+ 	return result;
+-#else
+-	return 0;
+-#endif
+ }
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
+ /**
+  * wg_strgmov -- a guarded strcpy() variation
+- * 
++ *
+  * copies src to dest (including terminating zero), and returns
+  * pointer to position of terminating zero in dest. The function is
+  * guaranteed not to write past destlimit. If the copy couldn't be
+- * finished, the function returns NULL after restoring the first 
+- * character in dest for your convenience (since this is usually a zero).  
++ * finished, the function returns NULL after restoring the first
++ * character in dest for your convenience (since this is usually a zero).
+  */
+ char *wg_strgmov( char *dest, const char *src, const char *destlimit )
+ {
+ 	char tmp, *w;
+-	
++
+ 	if ( !dest || dest >= destlimit ) {
+ 		return NULL;
+ 	}
+@@ -355,7 +353,7 @@
+ }
+ 
+ /*
+- * wg_trim() -- remove whitespace surrounding a string. 
++ * wg_trim() -- remove whitespace surrounding a string.
+  *
+  * Example: "   bla   bla   bla   " becomes "bla   bla   bla" after trimming.
+  *
+@@ -373,12 +371,12 @@
+ 	char *lastnonspace = &dest[-1];
+ 	const char *p = src;
+ 	char *w = dest;
+-	
+-	while ( isspace((int)*p) ) {
++
++	while ( isspace((unsigned char)*p) ) {
+ 		p++;
+ 	}
+ 	while (*p) {
+-		if ( !isspace((int)*p) ) {
++		if ( !isspace((unsigned char)*p) ) {
+ 			lastnonspace = w;
+ 		}
+ 		*w++ = *p++;
+--- misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
++++ misc/build/libtextcat-2.2/src/common.h	Mon Mar 31 11:29:14 2008
+@@ -1,28 +1,28 @@
+ #ifndef _COMMON_H_
+ #define _COMMON_H_
+ /**
+- * common.h -- a mixed bag of helper functions 
++ * common.h -- a mixed bag of helper functions
+  *
+  * Copyright (C) 2003 WiseGuys Internet B.V.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -86,10 +86,12 @@
+ typedef char		boole;
+ #endif
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ typedef struct wgtimer_s {
+         struct timeval start;
+         struct timeval stop;
+ } wgtimer_t;
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
+ extern void *wg_malloc( size_t size );
+@@ -101,13 +103,15 @@
+ 
+ extern char *wg_getline( char *line, int size, FILE *fp );
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern void wg_timerstart(wgtimer_t *t);
+ extern uint4 wg_timerstop(wgtimer_t *t);
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ extern unsigned int wg_split( char **result, char *dest, char *src, int maxsegments );
+ extern char *wg_strgmov( char *dest, const char *src, const char *destlimit );
+ extern char *wg_trim( char *dest, const char *src );
+ 
+-      
++
+ #endif
+ 
+--- misc/libtextcat-2.2/src/constants.h	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/constants.h	Mon Mar 31 11:29:14 2008
+@@ -39,6 +39,8 @@
+  */
+ #include <limits.h>
+ 
++#define _UTF8_
++
+ #define DESCRIPTION "out of place"
+ 
+ /* Reported matches are those fingerprints with a score less than best
+@@ -59,14 +61,21 @@
+ /* Maximum number of n-grams in a fingerprint */
+ #define MAXNGRAMS  400
+ 
+-/* Maximum size of an n-gram? */
+-#define MAXNGRAMSIZE 5
++/* Maximum number of character of an n-gram? */
++#define MAXNGRAMSYMBOL 5
++
++/* Maximum size of the string representing an n-gram (must be greater than number of symbol) */
++#ifdef _UTF8_
++#define MAXNGRAMSIZE 20
++#else
++#define MAXNGRAMSIZE MAXNGRAMSYMBOL
++#endif
+ 
+ /* Which characters are not acceptable in n-grams? */
+-#define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
++#define INVALID(c) (isspace((unsigned char)c) || isdigit((unsigned char)c)) 
+ 
+ /* Minimum size (in characters) for accepting a document */
+-#define MINDOCSIZE  25
++#define MINDOCSIZE  6
+ 
+ /* Maximum penalty for missing an n-gram in fingerprint */
+ #define MAXOUTOFPLACE 400
+@@ -75,5 +84,8 @@
+ #define TABLEPOW  13
+ 
+ #define MAXSCORE  INT_MAX
++
++/* where the fingerprints files are stored */
++#define DEFAULT_FINGERPRINTS_PATH ""
+ 
+ #endif
+--- misc/libtextcat-2.2/src/fingerprint.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/fingerprint.c	Mon Mar 31 11:29:14 2008
+@@ -6,23 +6,23 @@
+  * All rights reserved.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -51,7 +51,7 @@
+  * The reason why we go through the trouble of doing a partial
+  * (heap)sort is that a full quicksort behaves horribly on the data:
+  * most n-grams have a very low count, resulting in a data set in
+- * nearly-sorted order. This causes quicksort to behave very badly. 
++ * nearly-sorted order. This causes quicksort to behave very badly.
+  * Heapsort, on the other hand, behaves handsomely: worst case is
+  * Mlog(N) for M n-grams filtered through a N-sized heap.
+  *
+@@ -63,6 +63,10 @@
+  * - put table/heap datastructure in a separate file.
+  */
+ 
++#ifndef _UTF8_
++#define _UTF8_
++#endif
++
+ #include "config.h"
+ #include <stdio.h>
+ #ifdef HAVE_STDLIB_H
+@@ -80,10 +84,12 @@
+ #include "wg_mempool.h"
+ #include "constants.h"
+ 
++#include "utf8misc.h"
+ 
+ #define TABLESIZE  (1<<TABLEPOW)
+ #define TABLEMASK  ((TABLESIZE)-1)
+ 
++
+ typedef struct {
+ 
+ 	sint2 rank;
+@@ -96,7 +102,7 @@
+ 	const char *name;
+ 	ngram_t *fprint;
+ 	uint4 size;
+-	
++
+ } fp_t;
+ 
+ typedef struct entry_s {
+@@ -105,13 +111,13 @@
+ 	struct entry_s *next;
+ } entry_t;
+ 
+-typedef struct table_s {	
++typedef struct table_s {
+ 	void *pool;
+ 	entry_t **table;
+ 	entry_t *heap;
+ 
+ 	struct table_s *next;
+-	
++
+ 	uint4 heapsize;
+ 	uint4 size;
+ } table_t;
+@@ -122,7 +128,7 @@
+  * fast and furious little hash function
+  *
+  * (Note that we could use some kind of rolling checksum, and update it
+- * during n-gram construction) 
++ * during n-gram construction)
+  */
+ static uint4 simplehash( const char *p, int len )
+ {
+@@ -134,29 +140,14 @@
+ }
+ 
+ 
+-/* checks if n-gram lex is a prefix of key and of length len */
+-inline int issame( char *lex, char *key, int len )
+-{
+-	int i;
+-	for (i=0; i<len; i++) {
+-		if ( key[i] != lex[i] ) {
+-			return 0;
+-		}
+-	}
+-	if ( lex[i] != 0 ) {
+-		return 0;
+-	}
+-	return 1;
+-}
+-
+ 
+ /* increases frequency of ngram(p,len) */
+-static inline int increasefreq( table_t *t, char *p, int len ) 
+-{	
+-	uint4 hash = simplehash( p, len ) & TABLEMASK;				
++static int increasefreq( table_t *t, char *p, int len )
++{
++	uint4 hash = simplehash( p, len ) & TABLEMASK;
+ 	entry_t *entry = t->table[ hash ];
+-	
+-	while ( entry ) {				
++
++	while ( entry ) {
+ 		if ( issame( entry->str, p, len ) ) {
+ 			/*** Found it! ***/
+ 			entry->cnt++;
+@@ -168,7 +159,7 @@
+ 	}
+ 
+ 	/*** Not found, so create ***/
+-	entry = wgmempool_alloc( t->pool, sizeof(entry_t) );
++        entry = (entry_t*)(wgmempool_alloc( t->pool, sizeof(entry_t) ));
+ 	strcpy( entry->str, p );
+ 	entry->cnt = 1;
+ 
+@@ -181,12 +172,12 @@
+ #if 0
+ 
+ /* looks up ngram(p,len) */
+-static entry_t *findfreq( table_t *t, char *p, int len ) 
+-{	
+-	uint4 hash = simplehash( p, len ) & TABLEMASK;				
++static entry_t *findfreq( table_t *t, char *p, int len )
++{
++	uint4 hash = simplehash( p, len ) & TABLEMASK;
+ 	entry_t *entry = t->table[ hash ];
+-	
+-	while ( entry ) {				
++
++	while ( entry ) {
+ 		if ( issame( entry->str, p, len ) ) {
+ 			return entry;
+ 		}
+@@ -219,7 +210,7 @@
+ #define GREATER(x,y) ((x).cnt > (y).cnt)
+ #define LESS(x,y)    ((x).cnt < (y).cnt)
+ 
+-inline static void siftup( table_t *t, unsigned int child )
++static void siftup( table_t *t, unsigned int child )
+ {
+ 	entry_t *heap = t->heap;
+ 	unsigned int parent = (child-1) >> 1;
+@@ -241,7 +232,7 @@
+ }
+ 
+ 
+-inline static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
++static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
+ {
+ 	entry_t *heap = t->heap;
+ 	unsigned int child = parent*2 + 1;
+@@ -273,7 +264,7 @@
+ 	if (t->size < t->heapsize) {
+ 		memcpy( &(heap[t->size]), item, sizeof(entry_t));
+ 		siftup( t, t->size );
+-		t->size++;		
++		t->size++;
+ 		return 0;
+ 	}
+ 
+@@ -316,18 +307,18 @@
+ 
+ 	/*** Fill result heap ***/
+ 	for (i=0; i<TABLESIZE; i++) {
+-		entry_t *p = t->table[i];	       
++		entry_t *p = t->table[i];
+ 		while (p) {
+ 			heapinsert(t, p);
+ 			p = p->next;
+ 		}
+-	}     
++	}
+ 	return 1;
+ }
+ 
+ 
+ static table_t *inittable(uint4 maxngrams)
+-{	
++{
+ 	table_t *result = (table_t *)wg_zalloc( sizeof(table_t) );
+ 	result->table = (entry_t **)wg_zalloc( sizeof(entry_t*) * TABLESIZE );
+ 	result->pool = wgmempool_Init( 10000, 10 );
+@@ -347,14 +338,14 @@
+ 	wgmempool_Done(t->pool);
+ 	wg_free(t->table);
+ 	wg_free(t->heap);
+-	wg_free(t);	
++	wg_free(t);
+ }
+ 
+ 
+ extern void *fp_Init(const char *name)
+ {
+ 	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
+-	
++
+ 	if ( name ) {
+ 		h->name = wg_strdup(name);
+ 	}
+@@ -458,21 +449,27 @@
+ 	return dest;
+ }
+ 
+-
++/**
++* this function extract all n-gram from past buffer and put them into the table "t"
++* [modified] by Jocelyn Merand to accept utf-8 multi-character symbols to be used in OpenOffice
++*/
+ static void createngramtable( table_t *t, const char *buf )
+ {
+ 	char n[MAXNGRAMSIZE+1];
+ 	const char *p = buf;
+ 	int i;
++        int pointer = 0;
+ 
+ 	/*** Get all n-grams where 1<=n<=MAXNGRAMSIZE. Allow underscores only at borders. ***/
+-	for (;;p++) {
++	while(1) {
+ 
+-		const char *q = p;
++     const char *q = &p[pointer];   /*[modified] previously p++ above (for(;;p++)) now, it's pointer wich is increased so we have to get the new pointer on the buffer*/
+ 		char *m = n;
+ 
+ 		/*** First char may be an underscore ***/
+-		*m++ = *q++;
++                int decay = charcopy(q, m); /*[modified] previously *q++ = *m++*/
++                q = &(p[pointer+decay]);    /*[modified] the old copying method do not manage multi-character symbols*/
++                m += decay; /*[modified]*/
+ 		*m = '\0';
+ 
+ 		increasefreq( t, n, 1 );
+@@ -482,19 +479,22 @@
+ 		}
+ 
+ 		/*** Let the compiler unroll this ***/
+-		for ( i=2; i<=MAXNGRAMSIZE; i++) {
++		for ( i=2; i<=MAXNGRAMSYMBOL; i++) {
+ 
+-			*m++ = *q;
++                        decay = charcopy(q, m); /*[modified] like above*/
++                        m += decay;
+ 			*m = '\0';
+ 
+ 			increasefreq( t, n, i );
+ 
+ 			if ( *q == '_' ) break;
+-			q++;
++                        q += decay;
+ 			if ( *q == '\0' ) {
+ 				return;
+ 			}
+ 		}
++
++  pointer = nextcharstart(p,pointer);   /*[modified] p[pointer] must point on the next start of symbol, but whith utf next start is not surely next char*/
+ 	}
+ 	return;
+ }
+@@ -514,7 +514,7 @@
+ {
+ 	ngram_t *x = (ngram_t *)a;
+ 	ngram_t *y = (ngram_t *)b;
+-	
++
+ 	return mystrcmp( x->str, y->str );
+ }
+ 
+@@ -522,12 +522,12 @@
+ {
+ 	ngram_t *x = (ngram_t *)a;
+ 	ngram_t *y = (ngram_t *)b;
+-	
++
+ 	return x->rank - y->rank;
+ }
+ 
+ /**
+- * Create a fingerprint: 
++ * Create a fingerprint:
+  * - record the frequency of each unique n-gram in a hash table
+  * - take the most frequent n-grams
+  * - sort them alphabetically, recording their relative rank
+@@ -544,20 +544,21 @@
+ 	}
+ 
+ 	/*** Throw out all invalid chars ***/
+-	tmp = prepbuffer( buffer, bufsize ); 	
++	tmp = prepbuffer( buffer, bufsize );
++    /*printf("Cleaned buffer : %s\n",tmp);*/
+ 	if ( tmp == NULL ) {
+ 		return 0;
+ 	}
+-
+ 	h = (fp_t*)handle;
+ 	t = inittable(maxngrams);
++    /*printf("Table initialized\n");*/
+ 
+ 	/*** Create a hash table containing n-gram counts ***/
+ 	createngramtable(t, tmp);
+-
++    /*printf("Table created\n");*/
+ 	/*** Take the top N n-grams and add them to the profile ***/
+-	table2heap(t);	
+-	maxngrams = WGMIN( maxngrams, t->size );       
++	table2heap(t);
++	maxngrams = WGMIN( maxngrams, t->size );
+ 
+ 	h->fprint = (ngram_t *)wg_malloc( sizeof(ngram_t) * maxngrams );
+ 	h->size = maxngrams;
+@@ -568,7 +569,7 @@
+ 		entry_t tmp2;
+ 
+ 		heapextract(t, &tmp2);
+-		
++
+ 		/*** the string and its rank is all we need ***/
+ 		strcpy( h->fprint[i].str, tmp2.str );
+ 		h->fprint[i].rank = i;
+@@ -578,7 +579,7 @@
+ 	wg_free(tmp);
+ 
+ 	/*** Sort n-grams alphabetically, for easy comparison ***/
+-	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
++	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
+ 	return 1;
+ }
+ 
+@@ -608,7 +609,7 @@
+ #endif
+ 		return 0;
+ 	}
+-	
++
+ 	h->fprint = (ngram_t *)wg_malloc(maxngrams * sizeof(ngram_t));
+ 
+ 	while (cnt < maxngrams && wg_getline(line,1024,fp)) {
+@@ -635,7 +636,7 @@
+ 	h->size = cnt;
+ 
+ 	/*** Sort n-grams, for easy comparison later on ***/
+-	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
++	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
+ 
+ 	fclose(fp);
+ 
+@@ -648,14 +649,15 @@
+ {
+ 	uint4 i;
+ 	fp_t *h = (fp_t *)handle;
+-	ngram_t *tmp = wg_malloc( sizeof(ngram_t) * h->size );
+-	
++        ngram_t *tmp = (ngram_t*)wg_malloc( sizeof(ngram_t) * h->size );
++
+ 	/*** Make a temporary and sort it on rank ***/
+ 	memcpy( tmp, h->fprint, h->size * sizeof(ngram_t) );
+-	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank ); 
++	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank );
+ 
+ 	for (i=0; i<h->size; i++) {
+-		fprintf( fp, "%s\n", tmp[i].str );
++        /*fprintf( fp, "%s\t%i\n", tmp[i].str, tmp[i].rank );*/
++                fprintf( fp, "%s\n", tmp[i].str);
+ 	}
+ 	wg_free( tmp );
+ }
+@@ -669,7 +671,7 @@
+ 	uint4 i = 0;
+ 	uint4 j = 0;
+ 	sint4 sum = 0;
+-	
++
+ 	/*** Compare the profiles in mergesort fashion ***/
+ 	while ( i < c->size && j < u->size ) {
+ 
+@@ -705,7 +707,7 @@
+ 	}
+ 
+ 	return sum;
+-	       	
++
+ }
+ 
+ 
+--- misc/libtextcat-2.2/src/fingerprint.h	Mon May 19 14:16:31 2003
++++ misc/build/libtextcat-2.2/src/fingerprint.h	Mon Mar 31 11:29:14 2008
+@@ -41,7 +41,13 @@
+ extern int fp_Read( void *handle, const char *fname, int maxngrams );
+ extern sint4 fp_Compare( void *cat, void *unknown, int cutoff );
+ extern void fp_Show( void *handle );
++#ifdef __cplusplus
++extern "C" {
++#endif
+ extern const char *fp_Name( void *handle );
++#ifdef __cplusplus
++}
++#endif
+ extern void fp_Print( void *handle, FILE *fp );
+ 
+ #endif
+--- misc/libtextcat-2.2/src/libtextcat.map	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/libtextcat.map	Mon Mar 31 11:29:14 2008
+@@ -1 +1,40 @@
+-dummy
++{
++	global: 
++		charcopy
++		issame
++		nextcharstart
++		utfstrlen
++		wgmempool_Done
++		wgmempool_Init
++		wgmempool_Reset
++		wgmempool_alloc
++		wgmempool_getline
++		wgmempool_strdup
++		special_textcat_Init
++		textcat_Classify
++		textcat_Done
++		textcat_Init
++		textcat_Version
++		fp_Compare
++		fp_Create
++		fp_Debug
++		fp_Done
++		fp_Init
++		fp_Name
++		fp_Print
++		fp_Read
++		heapextract
++		wg_calloc
++		wg_free
++		wg_getline
++		wg_malloc
++		wg_split
++		wg_strdup
++		wg_strgmov
++		wg_trim
++		wg_zalloc
++		wgmem_error
++		
++	local:
++		*;
++}
+--- misc/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:29:42 2008
+@@ -1 +1,90 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2008 by Sun Microsystems, Inc.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# $RCSfile: libtextcat-2.2.patch,v $
++#
++# $Revision: 1.8 $
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ = ..$/..$/..$/..$/..
++
++PRJNAME = libtextcat
++TARGET  = libtextcat
++CFLAGSCALL=gsd
++
++USE_DEFFILE=TRUE
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++
++.INCLUDE : settings.mk
++
++# --- Files --------------------------------------------------------
++
++# !! not to be compiled because those belong to a stand alone programs: !!
++#        $(SLO)$/createfp.obj\
++#        $(SLO)$/testtextcat.obj
++
++SLOFILES=   \
++        $(SLO)$/common.obj\
++        $(SLO)$/fingerprint.obj\
++        $(SLO)$/textcat.obj\
++        $(SLO)$/wg_mempool.obj\
++        $(SLO)$/utf8misc.obj
++
++#SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
++SHL1TARGET= $(TARGET)
++
++SHL1STDLIBS=
++
++# build DLL
++SHL1LIBS=       $(SLB)$/$(TARGET).lib
++SHL1IMPLIB=     i$(TARGET)
++SHL1DEPN=       $(SHL1LIBS)
++SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
++
++# build DEF file
++DEF1NAME=       $(SHL1TARGET)
++DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
++
++SHL1VERSIONMAP= libtextcat.map
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE : target.mk
++
++# copy hand supplied configuration file for Win32 builds to the file
++# which is included in the source code
++$(SLOFILES) : config.h
++config.h :
++    $(GNUCOPY) $(OUT)$/misc$/build$/libtextcat-2.2$/src$/win32_config.h   $(OUT)$/misc$/build$/libtextcat-2.2$/src$/config.h
++
++
++$(MISC)$/$(SHL1TARGET).flt:  makefile.mk
++    @echo ------------------------------
++    @echo Making: $@
++    @echo Imp>$@
++    @echo __CT>>$@
++    @echo _real>>$@
++    @echo unnamed>>$@
+--- misc/libtextcat-2.2/src/textcat.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/textcat.c	Mon Mar 31 11:29:14 2008
+@@ -4,23 +4,23 @@
+  * Copyright (C) 2003 WiseGuys Internet B.V.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -74,6 +74,7 @@
+ typedef struct {
+ 
+ 	void **fprint;
++        char *fprint_disable;
+ 	uint4 size;
+ 	uint4 maxsize;
+ 
+@@ -112,11 +113,21 @@
+ 		fp_Done( h->fprint[i] );
+ 	}
+ 	wg_free( h->fprint );
++        wg_free( h->fprint_disable );
+ 	wg_free( h );
+ 
+ }
+ 
+-extern void *textcat_Init( const char *conffile )
++/** Replaces older function */
++extern void *textcat_Init( const char *conffile ){
++    return special_textcat_Init( conffile, DEFAULT_FINGERPRINTS_PATH );
++}
++
++/**
++ * Originaly this function had only one parameter (conffile) it has been modified since OOo use
++ * Basicaly prefix is the directory path where fingerprints are stored
++ */
++extern void *special_textcat_Init( const char *conffile, const char *prefix )
+ {
+ 	textcat_t *h;
+ 	char line[1024];
+@@ -134,11 +145,13 @@
+ 	h->size = 0;
+ 	h->maxsize = 16;
+ 	h->fprint = (void **)wg_malloc( sizeof(void*) * h->maxsize );
++ h->fprint_disable = (char *)wg_malloc( sizeof(char*) * h->maxsize );   /*added to store the state of languages*/
+ 
+ 	while ( wg_getline( line, 1024, fp ) ) {
+ 		char *p;
+ 		char *segment[4];
+-		int res;
++                char finger_print_file_name[512];
++                int res;
+ 
+ 		/*** Skip comments ***/
+ #ifdef HAVE_STRCHR
+@@ -156,17 +169,23 @@
+ 		/*** Ensure enough space ***/
+ 		if ( h->size == h->maxsize ) {
+ 			h->maxsize *= 2;
+-			h->fprint = (void *)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
++			h->fprint = (void **)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
++                        h->fprint_disable = (char *)wg_realloc( h->fprint_disable, sizeof(char*) * h->maxsize );
+ 		}
+ 
+ 		/*** Load data ***/
+ 		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
+ 			goto ERROR;
+ 		}
+-		if ( fp_Read( h->fprint[h->size], segment[0], 400 ) == 0 ) {
++                finger_print_file_name[0] = '\0';
++                strcat(finger_print_file_name, prefix);
++                strcat(finger_print_file_name, segment[0]);
++
++                if ( fp_Read( h->fprint[h->size], finger_print_file_name, 400 ) == 0 ) {
+ 			textcat_Done(h);
+ 			goto ERROR;
+-		}		
++		}
++                h->fprint_disable[h->size] = 0xF0;  /*0xF0 is the code for enabled languages, 0x0F is for disabled*/
+ 		h->size++;
+ 	}
+ 
+@@ -203,11 +222,18 @@
+ 		result = _TEXTCAT_RESULT_SHORT;
+ 		goto READY;
+ 	}
+-	
++
+ 	/*** Calculate the score for each category. ***/
+ 	for (i=0; i<h->size; i++) {
+-		int score = fp_Compare( h->fprint[i], unknown, threshold );
+-		candidates[i].score = score;
++                int score;
++                if(h->fprint_disable[i] & 0x0F){    /*if this language is disabled*/
++                    score = MAXSCORE;
++                }
++                else{
++                    score = fp_Compare( h->fprint[i], unknown, threshold );
++                    /*printf("Score for %s : %i\n", fp_Name(h->fprint[i]), score);*/
++                }
++                candidates[i].score = score;
+ 		candidates[i].name = fp_Name( h->fprint[i] );
+ 		if ( score < minscore ) {
+ 			minscore = score;
+@@ -218,7 +244,6 @@
+ 	/*** Find the best performers ***/
+ 	for (i=0; i<h->size; i++) {
+ 		if ( candidates[i].score < threshold ) {
+-
+ 			if ( ++cnt == MAXCANDIDATES+1 ) {
+ 				break;
+ 			}
+@@ -235,7 +260,7 @@
+ 	else {
+ 		char *p = result;
+ 		char *plimit = result+MAXOUTPUTSIZE;
+-		
++
+ 		qsort( candidates, cnt, sizeof(candidate_t), cmpcandidates );
+ 
+ 		*p = '\0';
+@@ -247,7 +272,7 @@
+ 	}
+  READY:
+ 	fp_Done(unknown);
+-#ifdef SHOULD_FREE 
++#ifdef SHOULD_FREE
+ 	free(candidates);
+ #undef SHOULD_FREE
+ #endif
+--- misc/libtextcat-2.2/src/textcat.h	Mon May 19 14:16:31 2003
++++ misc/build/libtextcat-2.2/src/textcat.h	Mon Mar 31 11:29:14 2008
+@@ -40,6 +40,9 @@
+ #define _TEXTCAT_RESULT_UNKOWN        "UNKNOWN"
+ #define _TEXTCAT_RESULT_SHORT         "SHORT"
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
+ 
+ /**
+  * textcat_Init() - Initialize the text classifier. The textfile
+@@ -51,10 +54,19 @@
+  * Returns: handle on success, NULL on error. (At the moment, the
+  * only way errors can occur, is when the library cannot read the
+  * conffile, or one of the fingerprint files listed in it.)
++ *
++ * Replace older function (and has exacly the same behaviour)
++ * see below
+  */
+ extern void *textcat_Init( const char *conffile );
+ 
+ /**
++ * Originaly this function had only one parameter (conffile) it has been modified since OOo must be able to load alternativ DB
++ * Basicaly prefix is the directory path where fingerprints are stored
++ */
++extern void *special_textcat_Init( const char *conffile, const char *prefix );
++
++/**
+  * textcat_Done() - Free up resources for handle
+  */
+ extern void textcat_Done( void *handle );
+@@ -77,4 +89,8 @@
+  * textcat_Version() - Returns a string describing the version of this classifier.
+  */
+ extern char *textcat_Version();
++
++#ifdef __cplusplus
++}
++#endif
+ #endif
+--- misc/libtextcat-2.2/src/utf8misc.c	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/utf8misc.c	Mon Mar 31 11:29:14 2008
+@@ -1 +1,132 @@
+-dummy
++/***************************************************************************
++ *   Copyright (C) 2006 by Jocelyn Merand                                  *
++ *   joc.mer@gmail.com                                                     *
++ *                                                                         *
++ * THE BSD LICENSE
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * - Redistributions of source code must retain the above copyright
++ * notice, this list of conditions and the following disclaimer.
++ *
++ * - Redistributions in binary form must reproduce the above copyright
++ * notice, this list of conditions and the following disclaimer in the
++ * documentation and/or other materials provided with the
++ * distribution.
++ *
++ * - Neither the name of the WiseGuys Internet B.V. nor the names of
++ * its contributors may be used to endorse or promote products derived
++ * from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ ***************************************************************************/
++
++#ifndef _UTF8_MISC_H_
++#include "utf8misc.h"
++#endif
++
++
++int nextcharstart(const char *str, int position){
++    int pointer = position;
++
++    if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++        /*then str[pointer] is an escape character*/
++
++    char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count (by bit translation) following characters (only the weightest part)*/
++
++    while(escape_char & ESCAPE_MASK && str[pointer]){/*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
++        escape_char = escape_char <<1;
++        ++pointer;
++    }
++    }
++    if(str[pointer]){   /*finaly, if we are not on the \0 character, we jump to the next character*/
++        ++pointer;
++    }
++    return pointer;
++}
++
++
++int charcopy(const char *str, char *dest){
++
++    int pointer = 0;
++    if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++        /*then str[pointer] is an escape character*/
++
++        char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count following characters (only the weightest part)*/
++
++        while(escape_char & ESCAPE_MASK && str[pointer]){   /*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
++            dest[pointer] = str[pointer];
++            escape_char = escape_char <<1;
++            ++pointer;
++        }
++    }
++    if(str[pointer]){
++        dest[pointer] = str[pointer];
++        ++pointer;
++    }
++
++    return pointer;
++}
++
++
++int issame( char *lex, char *key, int len )
++{
++    /*printf("[%s] prefix of [%s] with length %i", lex, key, len);*/
++    int char_counter = 0;
++    int pointer = 0;
++    while(char_counter < len) {
++
++        if(key[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++            /*then key[pointer] is an escap character*/
++
++            char escape_char = ((key[pointer] & WEIGHT_MASK) << 1);     /*and we use it to count (only the weightest part)*/
++
++            while(escape_char & ESCAPE_MASK && key[pointer] == lex[pointer] ){
++                escape_char = escape_char <<1;
++                ++pointer;
++            }
++        }
++        ++char_counter; /*and we are on a new utf8 character*/
++        if ( key[pointer] != lex[pointer] ) {
++            return 0;
++            /*printf(" NO\n", lex, key, len);*/
++        }
++        ++pointer;
++    }
++    if ( lex[pointer] != '\0' ) {
++        return 0;
++        /*printf(" NO\n");*/
++    }
++
++    /*printf(" YES\n");*/
++
++    return 1;
++}
++
++
++extern int utfstrlen(const char* str){
++    int char_counter = 0;
++    int pointer = 0;
++    while(str[pointer]) {
++        pointer = nextcharstart(str, pointer);
++
++        ++char_counter; /*and we are on a new utf8 character*/
++    }
++    return char_counter;
++}
++
+--- misc/libtextcat-2.2/src/utf8misc.h	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/utf8misc.h	Mon Mar 31 11:29:14 2008
+@@ -1 +1,88 @@
+-dummy
++/***************************************************************************
++ *   Copyright (C) 2006 by Jocelyn Merand                                  *
++ *   joc.mer@gmail.com                                                     *
++ *                                                                         *
++ * THE BSD LICENSE
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * - Redistributions of source code must retain the above copyright
++ * notice, this list of conditions and the following disclaimer.
++ *
++ * - Redistributions in binary form must reproduce the above copyright
++ * notice, this list of conditions and the following disclaimer in the
++ * documentation and/or other materials provided with the
++ * distribution.
++ *
++ * - Neither the name of the WiseGuys Internet B.V. nor the names of
++ * its contributors may be used to endorse or promote products derived
++ * from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ ***************************************************************************/
++
++#ifndef _UTF8_MISC_H_
++#define _UTF8_MISC_H_
++
++/**
++ * These variables are used in character processing functions
++ * These have been added to manage utf-8 symbols, particularly escape chars
++ */
++#ifdef _UTF8_
++#define ESCAPE_MASK 0x80
++#define WEIGHT_MASK 0xF0
++#else
++#define ESCAPE_MASK 0xFF
++#define WEIGHT_MASK 0x00
++#endif
++
++
++/*
++ * Is used to jump to the next start of char
++ * of course it's only usefull when encoding is utf-8
++ * This function have been added by Jocelyn Merand to use libtextcat in OOo
++ */
++int nextcharstart(const char *str, int position);
++
++
++/*Copy the char in str to dest
++ * of course it's only usefull when encoding is utf8 and the symbol is encoded with more than 1 char
++ * return the number of char jumped
++ * This function have been added by Jocelyn Merand to use libtextcat in OOo
++ */
++int charcopy(const char *str, char *dest);
++
++
++/* checks if n-gram lex is a prefix of key and of length len
++* if _UTF8_ is defined, it uses escap characters and len is not realy the length of lex
++* in this case, len is the number of utf-8 char strlen("€") == 3 but len == 1
++*/
++int issame( char *lex, char *key, int len );
++
++
++/* Counts the number of characters
++* if _UTF8_ is defined, it uses escap characters and the result is not realy the length of str
++* in this case, the result is the number of utf-8 char strlen("€") == 3 but utfstrlen("€") == 1
++*/
++#ifdef __cplusplus
++extern "C" {
++#endif
++extern int utfstrlen(const char* str);
++#ifdef __cplusplus
++}
++#endif
++
++#endif
++
+--- misc/libtextcat-2.2/src/win32_config.h	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/win32_config.h	Mon Mar 31 11:29:14 2008
+@@ -1 +1,136 @@
+-dummy
++/* src/config.h.  Generated by configure.  */
++/* src/config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
++   systems. This function is required for `alloca.c' support on those systems.
++   */
++/* #undef CRAY_STACKSEG_END */
++
++/* Define to 1 if using `alloca.c'. */
++/* #undef C_ALLOCA */
++
++/* Define to 1 if you have `alloca', as a function or macro. */
++/* #undef HAVE_ALLOCA */
++
++/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
++   */
++/* #undef HAVE_ALLOCA_H */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
++/* #undef HAVE_DOPRNT */
++
++/* Define to 1 if you have the `gettimeofday' function. */
++/* #undef  HAVE_GETTIMEOFDAY */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++/* #undef  HAVE_INTTYPES_H */
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
++   to 0 otherwise. */
++#define HAVE_MALLOC 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `memset' function. */
++#define HAVE_MEMSET 1
++
++/* Define to 1 if your system has a GNU libc compatible `realloc' function,
++   and to 0 otherwise. */
++#define HAVE_REALLOC 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++/* #undef  HAVE_STDINT_H */
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `strchr' function. */
++#define HAVE_STRCHR 1
++
++/* Define to 1 if you have the `strdup' function. */
++#define HAVE_STRDUP 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++/* #undef HAVE_STRINGS_H */
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strpbrk' function. */
++#define HAVE_STRPBRK 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++/* #undef  HAVE_SYS_TIME_H */
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the `vprintf' function. */
++#define HAVE_VPRINTF 1
++
++/* Name of package */
++#define PACKAGE "libtextcat"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "libtextcat"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "libtextcat 2.2"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "libtextcat"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "2.2"
++
++/* If using the C implementation of alloca, define if you know the
++   direction of stack growth for your system; otherwise it will be
++   automatically deduced at run-time.
++        STACK_DIRECTION > 0 => grows toward higher addresses
++        STACK_DIRECTION < 0 => grows toward lower addresses
++        STACK_DIRECTION = 0 => direction of growth unknown */
++/* #undef STACK_DIRECTION */
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#define TIME_WITH_SYS_TIME 1
++
++/* Define to 1 if your <sys/time.h> declares `struct tm'. */
++/* #undef TM_IN_SYS_TIME */
++
++/* Version number of package */
++#define VERSION "2.2"
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* Define as `__inline' if that's what the C compiler calls it, or to nothing
++   if it is not supported. */
++/* #undef inline */
++
++/* Define to rpl_malloc if the replacement function should be used. */
++/* #undef malloc */
++
++/* Define to rpl_realloc if the replacement function should be used. */
++/* #undef realloc */
++
++/* Define to `unsigned' if <sys/types.h> does not define. */
++/* #undef size_t */
