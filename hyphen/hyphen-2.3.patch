@@ -67,9 +67,9 @@
 ! #
 ! #   $RCSfile: hyphen-2.3.patch,v $
 ! #
-! #   $Revision: 1.4 $
+! #   $Revision: 1.5 $
 ! #
-! #   last change: $Author: rene $ $Date: 2008-02-19 11:33:31 $
+! #   last change: $Author: rene $ $Date: 2008-04-11 08:55:46 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,3 +128,15 @@
 ! 	cp hyphen.tex hyphen.us
 ! 	patch < hyphen.patch
 ! 	perl substrings.pl hyphen.us hyph_en_US.dic ISO8859.-1 
+diff -urNad hyphen-2.3.1~/csutil.c hyphen-2.3.1/csutil.c
+--- misc/build/hyphen-2.3.1~/csutil.c	2003-06-01 02:04:00.000000000 +0200
++++ misc/build/hyphen-2.3.1/csutil.c	2008-04-06 23:43:46.000000000 +0200
+@@ -3493,7 +3493,7 @@
+ };
+ 
+ 
+-struct enc_entry encds[] = {
++static struct enc_entry encds[] = {
+ {"ISO8859-1",iso1_tbl},
+ {"ISO8859-2",iso2_tbl},
+ {"ISO8859-3",iso3_tbl},
