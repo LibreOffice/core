@@ -1,21 +1,33 @@
-#**************************************************************************
+#*************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/activex/msidl/makefile.mk,v 1.8 2007-11-06 15:42:06 rt Exp $
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
 #
-# =========================================================================
+# OpenOffice.org - a multi-platform office productivity suite
 #
-#     $Date: 2007-11-06 15:42:06 $
-#     $Author: rt $
-#     $Revision: 1.8 $
+# $RCSfile: makefile.mk,v $
 #
-# =========================================================================
+# $Revision: 1.9 $
 #
-#     Created: 1999/08/23
-#     Creator: obr
+# This file is part of OpenOffice.org.
 #
-#     Copyright (c) 1999 StarOffice Software Entwicklungs GmbH
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
 #
-#**************************************************************************
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
 
 PRJ=..$/..$/..
 PRJNAME=extensions
