@@ -1,21 +1,10 @@
 #ifndef __FRAMEWORK_HELPER_FIXEDDOCUMENTPROPERTIES_HXX_
 #define __FRAMEWORK_HELPER_FIXEDDOCUMENTPROPERTIES_HXX_
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
 
 namespace framework
 {
