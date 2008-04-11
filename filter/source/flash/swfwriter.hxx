@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: swfwriter.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:18:49 $
+ * $RCSfile: swfwriter.hxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,37 +34,17 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-
-#ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 
 // #i73264#
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 #include <vector>
 #include <stack>
