@@ -1,144 +1,65 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sfxbasecontroller.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:18:04 $
+ * $RCSfile: sfxbasecontroller.hxx,v $
+ * $Revision: 1.4 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
 #define _SFX_SFXBASECONTROLLER_HXX_
 
-#ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
-#endif
-
-#ifndef INCLUDED_SFX2_DLLAPI_H
 #include "sfx2/dllapi.h"
-#endif
-
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHDESCRIPTOR_HPP_
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLERBORDER_HPP_
 #include <com/sun/star/frame/XControllerBorder.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
 #include <com/sun/star/frame/XTitle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTION_HPP_
 #include <com/sun/star/ui/XContextMenuInterception.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTOR_HPP_
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XMOUSECLICKHANDLER_HPP_
 #include <com/sun/star/awt/XMouseClickHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XKEYHANDLER_HPP_
 #include <com/sun/star/awt/XKeyHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XUSERINPUTINTERCEPTION_HPP_
 #include <com/sun/star/awt/XUserInputInterception.hpp>
-#endif
 
 //________________________________________________________________________________________________________
 //  include of my own project
 //________________________________________________________________________________________________________
-
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-
-#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
 
 //________________________________________________________________________________________________________
 //  defines
