@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnuitem.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -278,8 +278,10 @@ void SfxMenuControl::StateChanged
         // SetItemText flackert in MenuBar insbes. unter OS/2 (Bug #20658)
         if ( // !bIsObjMenu && nicht wegen "Format/Datenbank"
              pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
-            pOwnMenu->SetItemText( GetId(), GetTitle() );
-
+        {
+             DBG_WARNING("Title of menu item changed - please check if this needs correction!");
+            // pOwnMenu->SetItemText( GetId(), GetTitle() );
+        }
         return;
     }
 
