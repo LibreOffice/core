@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh2.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,8 +102,7 @@ void SwWrtShell::Insert(SwField &rFld)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
-    USHORT nType = rFld.GetTyp()->Which();
-    if( HasSelection() && nType != RES_POSTITFLD)
+    if( HasSelection() )
         DelRight();
 
     SwEditShell::Insert(rFld);
