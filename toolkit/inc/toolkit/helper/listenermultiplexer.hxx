@@ -1,125 +1,62 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: listenermultiplexer.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:20:17 $
+ * $RCSfile: listenermultiplexer.hxx,v $
+ * $Revision: 1.7 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 #define _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 
-#ifndef TOOLKIT_DLLAPI_H
 #include <toolkit/dllapi.h>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XWindowListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLCONTAINERLISTENER_HPP_
 #include <com/sun/star/awt/XVclContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XKEYLISTENER_HPP_
 #include <com/sun/star/awt/XKeyListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMOUSELISTENER_HPP_
 #include <com/sun/star/awt/XMouseListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMOUSEMOTIONLISTENER_HPP_
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPAINTLISTENER_HPP_
 #include <com/sun/star/awt/XPaintListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOWLISTENER_HPP_
 #include <com/sun/star/awt/XTopWindowListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTLISTENER_HPP_
 #include <com/sun/star/awt/XTextListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XACTIONLISTENER_HPP_
 #include <com/sun/star/awt/XActionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XITEMLISTENER_HPP_
 #include <com/sun/star/awt/XItemListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSPINLISTENER_HPP_
 #include <com/sun/star/awt/XSpinListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XADJUSTMENTLISTENER_HPP_
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMENULISTENER_HPP_
 #include <com/sun/star/awt/XMenuListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TREE_XTREEEXPANSIONLISTENER_HPP_
 #include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TREE_XTREEEDITLISTENER_HPP_
 #include <com/sun/star/awt/tree/XTreeEditListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_VETOEXCEPTION_HPP_
 #include <com/sun/star/util/VetoException.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_MUTEXHELPER_HXX_
 #include <toolkit/helper/mutexhelper.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
-#endif
 
 //  ----------------------------------------------------
 //  class ListenerMultiplexerBase
