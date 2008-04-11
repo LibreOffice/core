@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: ImageControl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.48 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:28:45 $
+ * $RCSfile: ImageControl.cxx,v $
+ * $Revision: 1.49 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
-
-#ifndef _FRM_IMAGE_CONTROL_HXX_
 #include "ImageControl.hxx"
-#endif
 
 #ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
@@ -46,93 +38,34 @@
 #ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
 #endif
-#ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
-#endif
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef SVTOOLS_INC_IMAGERESOURCEACCESS_HXX
 #include <svtools/imageresourceaccess.hxx>
-#endif
-#ifndef _UNTOOLS_UCBLOCKBYTES_HXX
 #include <unotools/ucblockbytes.hxx>
-#endif
-#ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPOPUPMENU_HPP_
 #include <com/sun/star/awt/XPopupMenu.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POPUPMENUDIRECTION_HPP_
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
 #include <com/sun/star/awt/MouseButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_NOTCONNECTEDEXCEPTION_HPP_
 #include <com/sun/star/io/NotConnectedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
-#endif
-#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
-#endif
 
 #include <memory>
 
