@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmexpl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.37 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:12:20 $
+ * $RCSfile: fmexpl.cxx,v $
+ * $Revision: 1.38 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,37 +40,17 @@
 #ifndef _SVX_FMEXPL_HRC
 #include "fmexpl.hrc"
 #endif
-#ifndef _SVX_FMEXPL_HXX
 #include "fmexpl.hxx"
-#endif
 
 #ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
 #endif
-
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-
-#ifndef _SVX_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
-
-#ifndef _SVX_FMEXCH_HXX
 #include "fmexch.hxx"
-#endif
-
-#ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
-#endif
-
-#ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -84,115 +59,38 @@
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
-
-#ifndef _SVDITER_HXX //autogen
 #include "svditer.hxx"
-#endif
-
-#ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
-#endif
-
-#ifndef _SVX_FMUNDO_HXX
 #include <fmundo.hxx>
-#endif
-
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#endif
-
-#ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-
-#ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
 
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-
-#ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
-
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
-
-#ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
-#endif
-
-#ifndef _SVX_FMPAGE_HXX
 #include <svx/fmpage.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;
