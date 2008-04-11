@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: objxtor.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.81 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:21:18 $
+ * $RCSfile: objxtor.cxx,v $
+ * $Revision: 1.82 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -47,10 +42,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
@@ -61,32 +53,14 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
-#endif
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SFX_HELP_HXX
 #include <sfxhelp.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-
-#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -94,16 +68,9 @@
 #ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
 #endif
-
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PRINTWARNINGOPTIONS_HXX
 #include <svtools/printwarningoptions.hxx>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -157,10 +124,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 
 using ::basic::BasicManagerRepository;
-
-#ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
-#endif
 
 //====================================================================
 
