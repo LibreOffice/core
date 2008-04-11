@@ -1,240 +1,87 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sfxbasemodel.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 15:24:26 $
+ * $RCSfile: sfxbasemodel.hxx,v $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $Revision: 1.13 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _SFX_SFXBASEMODEL_HXX_
 #define _SFX_SFXBASEMODEL_HXX_
 
-#ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
-#endif
-
-#ifndef INCLUDED_SFX2_DLLAPI_H
 #include "sfx2/dllapi.h"
-#endif
-
-#ifndef _SAL_TYPES_H_
 #include "sal/types.h"
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
 #include <com/sun/star/frame/XModule.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLE_HPP_
 #include <com/sun/star/frame/XTitle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XUNTITLEDNUMBERS_HPP_
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
 #include <com/sun/star/document/XDocumentInfo.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XDOCUMENTPROPERTIESSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
 #include <com/sun/star/document/XEventBroadcaster.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_DOCUMENT_EVENTOBJECT_HPP_
 #include <com/sun/star/document/EventObject.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL2_HPP_
 #include <com/sun/star/frame/XModel2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_DOUBLEINITIALIZATIONEXCEPTION_HPP_
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE2_HPP_
 #include <com/sun/star/util/XModifiable2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
 #include <com/sun/star/util/XCloseListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XPRINTJOBBROADCASTER_HPP_
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE2_HPP_
 #include <com/sun/star/frame/XStorable2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
 #include <com/sun/star/frame/XLoadable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_XSTARBASICACCESS_HPP_
 #include <com/sun/star/script/XStarBasicAccess.hpp>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 
 #ifndef _LINK_HXX_
 #include <tools/link.hxx>
@@ -254,10 +101,7 @@
 
 //  include of my own project
 //________________________________________________________________________________________________________
-
-#ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
-#endif
 
 //________________________________________________________________________________________________________
 //  defines
