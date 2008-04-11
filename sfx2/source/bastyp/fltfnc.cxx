@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fltfnc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.78 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-26 15:06:14 $
+ * $RCSfile: fltfnc.cxx,v $
+ * $Revision: 1.79 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,151 +32,65 @@
 #include "precompiled_sfx2.hxx"
 
 #include "fltfnc.hxx"
-
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
 #include <com/sun/star/document/XTypeDetection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
 #include <com/sun/star/container/XContainerQuery.hpp>
-#endif
 
 #include <comphelper/sequenceashashmap.hxx>
 
 #ifndef _EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
 #endif
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-#ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
-#endif
-#ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _SBX_SBXOBJECT_HXX //autogen
 #include <basic/sbxobj.hxx>
-#endif
-#ifndef __SBX_SBXMETHOD_HXX //autogen
 #include <basic/sbxmeth.hxx>
-#endif
-#ifndef _SBXCORE_HXX //autogen
 #include <basic/sbxcore.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _RTL_USTRING_HXX //autogen
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _LCKBITEM_HXX //autogen
 #include <svtools/lckbitem.hxx>
-#endif
-#ifndef _INETTYPE_HXX //autogen
 #include <svtools/inettype.hxx>
-#endif
-#ifndef _SFXRECTITEM_HXX
 #include <svtools/rectitem.hxx>
-#endif
 
 #include <sot/storage.hxx>
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHDESCRIPTOR_HPP_
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTIONEVENT_HPP_
 #include <com/sun/star/frame/FrameActionEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
 #include <com/sun/star/frame/XFrameLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
 #include <com/sun/star/frame/XLoadEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFILTERDETECT_HPP_
 #include <com/sun/star/frame/XFilterDetect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -200,17 +109,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::vos;
-
-#ifndef _SVTOOLS_CTYPEITM_HXX
 #include <svtools/ctypeitm.hxx>
-#endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
 
 #include "sfxhelp.hxx"
 #include "sfxbasic.hxx"
