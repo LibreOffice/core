@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: eventattachermgr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:13:44 $
+ * $RCSfile: eventattachermgr.cxx,v $
+ * $Revision: 1.10 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,79 +36,31 @@
 #if defined( OS2 ) || defined( UNX )
 #include <wchar.h>
 #endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
-#ifndef _VOS_MACROS_HXX_
 #include <vos/macros.hxx>
-#endif
-
-#ifndef _COMPHELPER_EVENTATTACHERMGR_HXX_
 #include <comphelper/eventattachermgr.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLCLASS_HPP_
 #include <com/sun/star/reflection/XIdlClass.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLREFLECTION_HPP_
 #include <com/sun/star/reflection/XIdlReflection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XIDLMETHOD_HPP_
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINELISTENER_HPP_
 #include <com/sun/star/script/XEngineListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHER_HPP_
 #include <com/sun/star/script/XEventAttacher.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTLISTENER_HPP_
 #include <com/sun/star/script/XScriptListener.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
