@@ -1,113 +1,87 @@
-*** misc/BeanShell/build.xml	Fri Dec 19 17:14:27 2003
---- misc/build/BeanShell/build.xml	Mon May 30 15:47:00 2005
-***************
-*** 17,23 ****
-  		up the build dir!  It has to be done manually the first time (or put
-  		in the jar file). There must be a way to fix this...
-  -->
-! <project name="beanshell" default="compile" basedir=".">
-  
-  <!-- Project Configuration -->
-  
---- 17,23 ----
-  		up the build dir!  It has to be done manually the first time (or put
-  		in the jar file). There must be a way to fix this...
-  -->
-! <project name="beanshell" default="jarall" basedir=".">
-  
-  <!-- Project Configuration -->
-  
-***************
-*** 71,76 ****
---- 71,79 ----
-  		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
-  	-->
-  
-+ 	<property name="exclude-bsf" 
-+ 		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
-+ 
-  	<!-- Uncomment to build without the ASM class generator code.
-  	<property name="exclude-classgen" 
-  		value="bsh/org/objectweb/asm/**,bsh/ClassGeneratorImpl.java,bsh/ClassGeneratorUtil.java,bsh/DelayedEvalBshMethod.java"/>
-***************
-*** 81,86 ****
---- 84,92 ----
-  		value="bsh/servlet/*"/>
-  	-->
-  
-+ 	<property name="exclude-servlet" 
-+ 		value="bsh/servlet/*"/>
-+ 
-  	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
-  	<property name="legacy-excludes" 
-  		value="bsh/JThis.java"/>
-*** misc/BeanShell/makefile.mk	Mon May 30 15:55:35 2005
---- misc/build/BeanShell/makefile.mk	Mon May 30 15:47:00 2005
-***************
-*** 1 ****
-! dummy
---- 1,43 ----
-! #*************************************************************************
-! #
-! #   OpenOffice.org - a multi-platform office productivity suite
-! #
-! #   $RCSfile: bsh-2.0b1-src.patch,v $
-! #
-! #   $Revision: 1.6 $
-! #
-! #   last change: $Author: obo $ $Date: 2005-12-21 11:36:35 $
-! #
-! #   The Contents of this file are made available subject to
-! #   the terms of GNU Lesser General Public License Version 2.1.
-! #
-! #
-! #     GNU Lesser General Public License Version 2.1
-! #     =============================================
-! #     Copyright 2005 by Sun Microsystems, Inc.
-! #     901 San Antonio Road, Palo Alto, CA 94303, USA
-! #
-! #     This library is free software; you can redistribute it and/or
-! #     modify it under the terms of the GNU Lesser General Public
-! #     License version 2.1, as published by the Free Software Foundation.
-! #
-! #     This library is distributed in the hope that it will be useful,
-! #     but WITHOUT ANY WARRANTY; without even the implied warranty of
-! #     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-! #     Lesser General Public License for more details.
-! #
-! #     You should have received a copy of the GNU Lesser General Public
-! #     License along with this library; if not, write to the Free Software
-! #     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-! #     MA  02111-1307  USA
-! #
-! #*************************************************************************
-! 
-! PRJ=..$/..$/..$/..
-! PRJNAME=ooo_beanshell
-! TARGET=jarall
-! 
-! .INCLUDE : ant.mk
-! 
-! ALLTAR : ANTBUILD
-! 
-*** misc/BeanShell/src/bsh/ClassGeneratorUtil.java	2003-12-19 17:14:28.000000000 +0100
---- misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	2005-08-24 15:20:06.996244243 +0200
-***************
-*** 34,40 ****
-  package bsh;
-  
-  import bsh.org.objectweb.asm.*;
-! import java.lang.reflect.*;
-  import java.util.ArrayList;
-  import java.util.List;
-  
---- 34,42 ----
-  package bsh;
-  
-  import bsh.org.objectweb.asm.*;
-! import java.lang.reflect.Constructor;
-! import java.lang.reflect.InvocationTargetException;
-! import java.lang.reflect.Method;
-  import java.util.ArrayList;
-  import java.util.List;
-  
+--- misc/BeanShell/build.xml	Fri Dec 19 17:14:27 2003
++++ misc/build/BeanShell/build.xml	Fri Mar 28 15:55:04 2008
+@@ -17,7 +17,7 @@
+ 		up the build dir!  It has to be done manually the first time (or put
+ 		in the jar file). There must be a way to fix this...
+ -->
+-<project name="beanshell" default="compile" basedir=".">
++<project name="beanshell" default="jarall" basedir=".">
+ 
+ <!-- Project Configuration -->
+ 
+@@ -71,6 +71,9 @@
+ 		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
+ 	-->
+ 
++	<property name="exclude-bsf" 
++		value="bsh/util/BeanShellBSFEngine.java,TestBshBSF.java"/>
++
+ 	<!-- Uncomment to build without the ASM class generator code.
+ 	<property name="exclude-classgen" 
+ 		value="bsh/org/objectweb/asm/**,bsh/ClassGeneratorImpl.java,bsh/ClassGeneratorUtil.java,bsh/DelayedEvalBshMethod.java"/>
+@@ -80,6 +83,9 @@
+ 	<property name="exclude-servlet" 
+ 		value="bsh/servlet/*"/>
+ 	-->
++
++	<property name="exclude-servlet" 
++		value="bsh/servlet/*"/>
+ 
+ 	<!-- Legacy excludes.  Comment this *out* to build these legacy items -->
+ 	<property name="legacy-excludes" 
+--- misc/BeanShell/makefile.mk	Fri Mar 28 15:56:40 2008
++++ misc/build/BeanShell/makefile.mk	Fri Mar 28 15:56:06 2008
+@@ -1 +1,39 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2008 by Sun Microsystems, Inc.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# $RCSfile: bsh-2.0b1-src.patch,v $
++#
++# $Revision: 1.7 $
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++PRJNAME=ooo_beanshell
++TARGET=jarall
++
++.INCLUDE : ant.mk
++
++ALLTAR : ANTBUILD
++
+--- misc/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Dec 19 17:14:28 2003
++++ misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	Fri Mar 28 15:55:05 2008
+@@ -34,7 +34,9 @@
+ package bsh;
+ 
+ import bsh.org.objectweb.asm.*;
+-import java.lang.reflect.*;
++import java.lang.reflect.Constructor;
++import java.lang.reflect.InvocationTargetException;
++import java.lang.reflect.Method;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
