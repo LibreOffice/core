@@ -9990,8 +9990,7 @@ SfxVoidItem DeleteNote FN_DELETE_NOTE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR
-()
+SfxVoidItem DeleteAuthor FN_DELETE_NOTE_AUTHOR ( SfxStringItem Author FN_DELETE_NOTE_AUTHOR )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -10065,8 +10064,7 @@ SfxVoidItem HideNote FN_HIDE_NOTE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR
-()
+SfxVoidItem HideAuthor FN_HIDE_NOTE_AUTHOR ( SfxStringItem Author FN_HIDE_NOTE_AUTHOR )
 [
     /* flags: */
     AutoUpdate = FALSE,
