@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -411,6 +411,13 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 aNewAttr.Put(*pArgs);
             break;
         }
+
+        case SID_AUTOSPELL_MARKOFF:
+        case SID_AUTOSPELL_CHECK:
+        {
+            rView.ExecuteSlot(rReq);
+            break;
+        }
     }
 
     if(nEEWhich && pNewAttrs)
@@ -560,11 +567,21 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     }
                     break;
                 }
+            case SID_AUTOSPELL_MARKOFF:
+            case SID_AUTOSPELL_CHECK:
+            {
+                const SfxPoolItem* pState = rView.GetSlotState(nWhich);
+                if (pState)
+                    rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
+                else
+                    rSet.DisableItem( nWhich );
+                break;
+            }
+
             default:
                 rSet.InvalidateItem( nWhich );
                 break;
         }
-
 
         if(nEEWhich)
             rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
@@ -583,10 +600,8 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
+    long aOldHeight = pPostItMgr->GetActivePostIt()->GetPostItTextHeight();
     sal_uInt16 nSlot = rReq.GetSlot();
-    //sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
-    //const SfxItemSet *pNewAttrs = rReq.GetArgs();
-    //sal_uInt16 nEEWhich = 0;
     switch (nSlot)
     {
         case SID_CUT:
@@ -599,6 +614,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             pOLV->Paste();
             break;
     }
+    pPostItMgr->GetActivePostIt()->ResizeIfNeccessary(aOldHeight,pPostItMgr->GetActivePostIt()->GetPostItTextHeight());
 }
 
 void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
@@ -636,12 +652,12 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
                         rSet.DisableItem( SID_PASTE );
                 }
                 break;
-            /*
+
             case FN_PASTESPECIAL:
                 {
+                    rSet.DisableItem( FN_PASTESPECIAL );
                 }
                 break;
-            */
         }
         nWhich = aIter.NextWhich();
     }
@@ -703,26 +719,39 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
 void SwAnnotationShell::NoteExec(SfxRequest &rReq)
 {
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
-    if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
+    if ( !pPostItMgr )
         return;
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case FN_DELETE_NOTE:
-        case FN_DELETE_NOTE_AUTHOR:
+            if ( pPostItMgr->GetActivePostIt() )
+                pPostItMgr->GetActivePostIt()->Delete();
+            break;
         case FN_DELETE_ALL_NOTES:
-            {
-                pPostItMgr->GetActivePostIt()->Delete(nSlot);
-                break;
-            }
+            pPostItMgr->Delete();
+            break;
+        case FN_DELETE_NOTE_AUTHOR:
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, FALSE);
+            if ( pItem )
+                pPostItMgr->Delete( pItem->GetValue() );
+            break;
+        }
         case FN_HIDE_NOTE:
-        case FN_HIDE_NOTE_AUTHOR:
+            if ( pPostItMgr->GetActivePostIt() )
+                pPostItMgr->GetActivePostIt()->Hide();
+            break;
         case FN_HIDE_ALL_NOTES:
-            {
-                pPostItMgr->GetActivePostIt()->Hide(nSlot);
-                break;
-            }
+            pPostItMgr->Hide();
+            break;
+        case FN_HIDE_NOTE_AUTHOR:
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot, FALSE);
+            if ( pItem )
+                pPostItMgr->Hide( pItem->GetValue() );
+        }
     }
 }
 
@@ -858,12 +887,13 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     SfxUndoManager* pUndoManager = GetUndoManager();
     SwWrtShell &rSh = rView.GetWrtShell();
 
+    long aOldHeight = rView.GetPostItMgr()->GetActivePostIt() ? rView.GetPostItMgr()->GetActivePostIt()->GetPostItTextHeight() : 0;
+
     USHORT nId = rReq.GetSlot();
     sal_uInt16 nCnt = 1;
     const SfxPoolItem* pItem=0;
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ) )
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
-
     switch( nId )
     {
         case SID_UNDO:
@@ -914,6 +944,9 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
             break;
         }
     }
+
+    if (rView.GetPostItMgr()->GetActivePostIt())
+        rView.GetPostItMgr()->GetActivePostIt()->ResizeIfNeccessary(aOldHeight,rView.GetPostItMgr()->GetActivePostIt()->GetPostItTextHeight());
 }
 
 void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
