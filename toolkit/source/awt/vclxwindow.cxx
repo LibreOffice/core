@@ -1,141 +1,68 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclxwindow.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.85 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:05:41 $
+ * $RCSfile: vclxwindow.cxx,v $
+ * $Revision: 1.86 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWEVENT_HPP_
 #include <com/sun/star/awt/WindowEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
 #include <com/sun/star/awt/KeyModifier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
 #include <com/sun/star/awt/MouseEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
 #include <com/sun/star/awt/MouseButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_STYLE_HPP_
 #include <com/sun/star/awt/Style.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_DOCKINGEVENT_HPP_
 #include <com/sun/star/awt/DockingEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_ENDDOCKINGEVENT_HPP_
 #include <com/sun/star/awt/EndDockingEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_ENDPOPUPMODEEVENT_HPP_
 #include <com/sun/star/awt/EndPopupModeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWLISTENER2_HPP_
 #include <com/sun/star/awt/XWindowListener2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXPOINTER_HXX_
 #include <toolkit/awt/vclxpointer.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
-#endif
-#ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
 #include <toolkit/helper/accessibilityclient.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
-#endif
-#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
-#endif
 #include <vcl/tabpage.hxx>
-
-#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
 #include <comphelper/asyncnotification.hxx>
-#endif
-#ifndef TOOLKIT_INC_TOOLKIT_HELPER_SOLARRELEASE_HXX
 #include <toolkit/helper/solarrelease.hxx>
-#endif
 
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
