@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: server.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.22 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:17:35 $
+ * $RCSfile: server.cxx,v $
+ * $Revision: 1.23 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,87 +39,42 @@
 #ifndef NO_JPEG
 #include <svtools/jpeg.hxx>
 #endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_ //handmade
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
 
 #include <vos/socket.hxx>
 
 #if 1
-#ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
-#endif
-#ifndef _BASIC_TTSTRHLP_HXX
 #include <basic/ttstrhlp.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
-#ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include "testtool.hrc"
-#ifndef _SV_BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
-#endif
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
 //#ifndef _DTRANS_HXX //autogen
 //#include <so2/dtrans.hxx>
 //#endif
 #endif // 1
-
-#ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
-#endif
-#ifndef _RTL_URI_H_
 #include <rtl/uri.h>
-#endif
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
-
-#ifndef _STATEMNT_HXX
 #include "statemnt.hxx"
-#endif
-#ifndef _SCMDSTRM_HXX
 #include "scmdstrm.hxx"
-#endif
 #include "rcontrol.hxx"
-
-#ifndef _SERVER_HXX
 #include "server.hxx"
-#endif
-#ifndef SVTOOLS_TESTTOOL_HXX
 #include "testtool.hxx"
-#endif
-#ifndef AUTOMATION_HXX
 #include <automation/automation.hxx>
-#endif
 
 #include "basic/svtmsg.hrc"
 
