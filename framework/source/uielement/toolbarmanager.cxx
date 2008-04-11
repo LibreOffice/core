@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: toolbarmanager.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.38 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:54 $
+ * $RCSfile: toolbarmanager.cxx,v $
+ * $Revision: 1.39 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-#ifndef __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_
 #include <uielement/toolbarmanager.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -51,27 +43,13 @@
 #ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX
 #include <uielement/generictoolbarcontroller.hxx>
 #endif
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-#ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
-#endif
-#ifndef __FRAMEWORK_GENERAL_H_
 #include "general.h"
-#endif
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include "properties.h"
-#endif
-#ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 #include <helper/imageproducer.hxx>
-#endif
-#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_HXX_
 #include <classes/sfxhelperfunctions.hxx>
-#endif
-#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
 #include <classes/fwkresid.hxx>
-#endif
 #ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
@@ -81,84 +59,38 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
 #include <com/sun/star/ui/ItemType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTOOLBARCONTROLLER_HPP_
 #include <com/sun/star/frame/XToolbarController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
 #include <com/sun/star/awt/XDockableWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_XDOCKINGAREA_HPP_
 #include <com/sun/star/ui/DockingArea.hpp>
 #endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUIELEMENTSETTINGS_HPP_
 #include <com/sun/star/ui/XUIElementSettings.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <com/sun/star/ui/ImageType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
 #include <com/sun/star/frame/status/Visibility.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
-#endif
-#ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
 #include <svtools/toolboxcontroller.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
 #include <svtools/cmdoptions.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
-#endif
 #include <svtools/miscopt.hxx>
 #include <svtools/imageitm.hxx>
 #include <svtools/framestatuslistener.hxx>
@@ -166,12 +98,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
-#endif
 #include <svtools/cmdoptions.hxx>
 
 //_________________________________________________________________________________________________________________
