@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: objtest.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.38 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2008-03-18 16:04:19 $
+ * $RCSfile: objtest.cxx,v $
+ * $Revision: 1.39 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -51,28 +46,19 @@ using namespace com::sun::star::devtools;
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
 #include "sttresid.hxx"
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
 #ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
-#ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
-#endif
 //#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
 //#endif
@@ -80,9 +66,7 @@ using namespace com::sun::star::devtools;
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HXX_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -110,19 +94,13 @@ using namespace rtl;
 #include <basic/sbuno.hxx>
 
 //#include <basic/basrid.hxx>
-
-#ifndef _BASICRT_HXX
 #include <basic/basicrt.hxx>
-#endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
 #include "tcommuni.hxx"
 #include "comm_bas.hxx"
-
-#ifndef _CRETSTRM_HXX
 #include <cretstrm.hxx>
-#endif
 
 #include "objtest.hxx"
 #include "rcontrol.hxx"
@@ -132,10 +110,7 @@ using namespace rtl;
 
 #include <basic/mybasic.hxx>
 #include <basic/testtool.hxx>
-
-#ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
-#endif
 
 #include <algorithm>
 
@@ -2946,7 +2921,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.38 $
+    // search $Revision: 1.39 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
