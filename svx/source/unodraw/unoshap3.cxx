@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unoshap3.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-17 09:40:20 $
+ * $RCSfile: unoshap3.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,29 +32,13 @@
 #include "precompiled_svx.hxx"
 
 #define _SVX_USE_UNOGLOBALS_
-
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
 #include <com/sun/star/drawing/DoubleSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
 #include <com/sun/star/drawing/CameraGeometry.hpp>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -76,22 +55,10 @@
 #include <svx/polygn3d.hxx>
 #include "svx/unoshprp.hxx"
 #include "svx/svdmodel.hxx"
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolygontools.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
 
 using ::rtl::OUString;
 using namespace ::vos;
@@ -359,9 +326,7 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
 }
 
 //----------------------------------------------------------------------
-#ifndef _SVDITER_HXX
 #include <svditer.hxx>
-#endif
 
 struct ImpRememberTransAndRect
 {
