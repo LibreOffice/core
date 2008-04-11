@@ -1,110 +1,57 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: appbas.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.51 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:48:58 $
+ * $RCSfile: appbas.cxx,v $
+ * $Revision: 1.52 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
-#endif
-
-#ifndef _BASRDLL_HXX //autogen
 #include <basic/basrdll.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
-#endif
-#ifndef __SBX_SBX_FACTORY_HXX //autogen
 #include <basic/sbxfac.hxx>
-#endif
-#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
-#ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SB_SBMOD_HXX //autogen
 #include <basic/sbmod.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SB_SBMETH_HXX //autogen
 #include <basic/sbmeth.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _REGCODE_HXX
-#endif
-#ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
 
 #include <svtools/undoopt.hxx>
 #include <svtools/pathoptions.hxx>
@@ -138,17 +85,12 @@
 #include "basmgr.hxx"
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"
-
-#ifndef BASICMANAGERREPOSITORY_HXX
 #include <basic/basicmanagerrepository.hxx>
-#endif
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
 #include <sfx2/srchitem.hxx>
-#ifndef _VOS_SOCKET_HXX_ //autogen
 #include <vos/socket.hxx>
-#endif
 
 #define SFX_TYPEMAP
 #define Selection
