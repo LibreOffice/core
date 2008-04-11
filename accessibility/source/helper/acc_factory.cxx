@@ -1,150 +1,77 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: acc_factory.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:26:59 $
+ * $RCSfile: acc_factory.cxx,v $
+ * $Revision: 1.5 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_accessibility.hxx"
-
-#ifndef ACCESSIBILITY_HELPER_FACTORY_HXX
 #include <accessibility/helper/acc_factory.hxx>
-#endif
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX
 #include <toolkit/awt/vclxwindows.hxx>
 #endif
-
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEBUTTON_HXX
 #include <accessibility/standard/vclxaccessiblebutton.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLECHECKBOX_HXX
 #include <accessibility/standard/vclxaccessiblecheckbox.hxx>
-#endif
 #ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWCOMBOBOX_HXX
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
 #endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 #include <accessibility/standard/vclxaccessiblecombobox.hxx>
-#endif
 #ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWLISTBOX_HXX
 #include <accessibility/standard/vclxaccessibledropdownlistbox.hxx>
 #endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEEDIT_HXX
 #include <accessibility/standard/vclxaccessibleedit.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDTEXT_HXX
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLELISTBOX_HXX
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENU_HXX
 #include <accessibility/standard/vclxaccessiblemenu.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLERADIOBUTTON_HXX
 #include <accessibility/standard/vclxaccessibleradiobutton.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLESCROLLBAR_HXX
 #include <accessibility/standard/vclxaccessiblescrollbar.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLETEXTCOMPONENT_HXX
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOX_HXX
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLESTATUSBAR_HXX
 #include <accessibility/standard/vclxaccessiblestatusbar.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLETABCONTROL_HXX
 #include <accessibility/standard/vclxaccessibletabcontrol.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLETABPAGEWINDOW_HXX
 #include <accessibility/standard/vclxaccessibletabpagewindow.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEMENUBAR_HXX
 #include <accessibility/standard/vclxaccessiblemenubar.hxx>
-#endif
-#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEPOPUPMENU_HXX
 #include <accessibility/standard/vclxaccessiblepopupmenu.hxx>
-#endif
-
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABLISTBOX_HXX
 #include <accessibility/extended/accessibletablistbox.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOX_HXX
 #include <accessibility/extended/AccessibleBrowseBox.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEICONCHOICECTRL_HXX_
 #include <accessibility/extended/accessibleiconchoicectrl.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABBAR_HXX_
 #include <accessibility/extended/accessibletabbar.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLELISTBOX_HXX_
 #include <accessibility/extended/accessiblelistbox.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXHEADERBAR_HXX
 #include <accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx>
-#endif
-#ifndef INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
 #include <accessibility/extended/textwindowaccessibility.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBILEBROWSEBOXTABLECELL_HXX
 #include <accessibility/extended/AccessibleBrowseBoxTableCell.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
 #include <accessibility/extended/AccessibleBrowseBoxHeaderCell.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
 #include <accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx>
-#endif
-#ifndef ACCESSIBILITY_EXT_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
-#endif
-
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
 
 //........................................................................
 namespace accessibility
