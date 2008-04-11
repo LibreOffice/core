@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: layoutmanager.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.69 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:23:11 $
+ * $RCSfile: layoutmanager.cxx,v $
+ * $Revision: 1.70 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,161 +40,70 @@
 #ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
 #endif
-
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
 #include <classes/sfxhelperfunctions.hxx>
-
-#ifndef __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 #include <uielement/menubarwrapper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <classes/addonsoptions.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_WINDOWSTATECONFIGURATION_HXX_
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
 #include <classes/fwkresid.hxx>
-#endif
 
 #ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-
-#ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
 #include <uielement/progressbarwrapper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_UICONFIGURATION_GLOBALSETTINGS_HXX_
 #include <uiconfiguration/globalsettings.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTWINDOWPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUIFUNCTIONLISTENER_HPP_
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHHELPER_HPP_
 #include <com/sun/star/frame/XDispatchHelper.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_DOCKINGAREA_HXX
 #include <vcl/dockingarea.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
-#endif
-#ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXMENU_HXX_
 #include <toolkit/awt/vclxmenu.hxx>
-#endif
 #include <comphelper/mediadescriptor.hxx>
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 #include <svtools/cmdoptions.hxx>
 
 #include <algorithm>
