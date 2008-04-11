@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: salframe.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.223 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:51:57 $
+ * $RCSfile: salframe.cxx,v $
+ * $Revision: 1.224 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -53,75 +48,29 @@
 #include <postx.h>
 
 #include <salunx.h>
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
-#endif
-#ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALGDI_H
 #include <salgdi.h>
-#endif
-#ifndef _SV_SALFRAME_H
 #include <salframe.h>
-#endif
 #ifndef _SV_KEYCOES_HXX
 #include <vcl/keycodes.hxx>
 #endif
-#ifndef _SV_SOICON_HXX
 #include <soicon.hxx>
-#endif
-#ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
-#endif
-#ifndef _SV_DTINT_HXX
 #include <dtint.hxx>
-#endif
-#ifndef _VCL_SM_HXX
 #include <sm.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
-#ifndef _VCL_WMADAPTOR_HXX_
 #include <wmadaptor.hxx>
-#endif
-#ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
-#endif
-#ifndef _SV_SALPRN_H
 #include <salprn.h>
-#endif
-#ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
-#endif
 #include <vcl/svapp.hxx>
-
-#ifndef _SV_SALBMP_H
 #include <salbmp.h>
-#endif
-
-#ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #include <i18n_ic.hxx>
-#endif
-
-#ifndef _SAL_I18N_KEYSYM_HXX
 #include <i18n_keysym.hxx>
-#endif
-
-#ifndef _SAL_I18N_STATUS_HXX
 #include <i18n_status.hxx>
-#endif
 
 #include <algorithm>
 
