@@ -6,9 +6,7 @@
     #error "set FORMS_MODULE_NAMESPACE to your namespace identifier!"
 #endif
 
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
 
 //.........................................................................
 namespace FORMS_MODULE_NAMESPACE
