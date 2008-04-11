@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: UnoGraphicExporter.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.41 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 10:09:39 $
+ * $RCSfile: UnoGraphicExporter.cxx,v $
+ * $Revision: 1.42 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,195 +32,55 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XMIMETYPEINFO_HPP_
 #include <com/sun/star/document/XMimeTypeInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICRENDERER_HPP_
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONCONTINUATION_HPP_
 #include <com/sun/star/task/XInteractionContinuation.hpp>
-#endif
 
 #include <framework/interaction.hxx>
-
-#ifndef _COM_SUN_STAR_DRAWING_GRAPHICFILTERREQUEST_HPP_
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _FILTER_CONFIG_ITEM_HXX_
 #include <svtools/FilterConfigItem.hxx>
-#endif
-
-#ifndef SVTOOLS_OUTSTRM_HXX
 #include <svtools/outstrm.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWCONTACTOFSDROBJ_HXX
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#endif
-
-#ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
-#endif
-
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
-#endif
-
-#ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
-#endif
-
-#ifndef _XOUTBMP_HXX
 #include "xoutbmp.hxx"
-#endif
-
-#ifndef _SVX_IMPGRF_HXX
 #include "impgrf.hxx"
-#endif
-
-#ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _SVX_FMVIEW_HXX
 #include <svx/fmview.hxx>
-#endif
-
-#ifndef _SVX_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
-
-#ifndef _SVX_UNOWPAGE_HXX
 #include <svx/unopage.hxx>
-#endif
-
-#ifndef _SVX_PAGEITEM_HXX
 #include <svx/pageitem.hxx>
-#endif
-
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-
-#ifndef _SVX_FLDITEM_HXX
 #include <svx/flditem.hxx>
-#endif
 
 #include "boost/scoped_ptr.hpp"
 
@@ -246,18 +101,9 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // #114389# use new redirector instead of pPaintProc
