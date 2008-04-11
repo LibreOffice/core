@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmsrcimp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.36 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:58:04 $
+ * $RCSfile: fmsrcimp.cxx,v $
+ * $Revision: 1.37 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,116 +34,46 @@
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
-
-#ifndef _FMSRCCF_HXX_
 #include "fmsrccfg.hxx"
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _WLDCRD_HXX //autogen
 #include <tools/wldcrd.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _SVX_DIALMGR_HXX //autogen
 #include <svx/dialmgr.hxx>
-#endif
-
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _UNOTOOLS_TEXTSEARCH_HXX
 #include <unotools/textsearch.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
 #include <com/sun/star/util/SearchAlgorithms.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
 #include <com/sun/star/util/SearchResult.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
 #include <com/sun/star/util/SearchFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-
-#ifndef _FMSRCIMP_HXX
 #include "fmsrcimp.hxx"
-#endif
-
-#ifndef _FMSEARCH_HXX
 #include <svx/fmsearch.hxx>
-#endif
 
 #ifndef _FMSEARCH_HRC
 #include "fmsearch.hrc"
 #endif
-
-#ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 
