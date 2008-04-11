@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,6 @@ class SwView;
 class SwPostIt;
 class Edit;
 class MultiLineEdit;
-class SwRect;
 class PopupMenu;
 
 class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
@@ -71,15 +70,6 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         basegfx::B2DPoint                       maSixthPosition;
         basegfx::B2DPoint                       maSeventhPosition;
 
-    private:
-        // object's geometry
-        basegfx::B2DPolygon                     maTriangle;
-        basegfx::B2DPolygon                     maLine;
-        basegfx::B2DPolygon                     maLineTop;
-        LineInfo                                mLineInfo;
-        unsigned long                           mHeight;
-        bool                                    mbShadowedEffect;
-    protected:
         // helpers to fill and reset geometry
         void implEnsureGeometry();
         void implResetGeometry();
@@ -90,6 +80,15 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 
         virtual void drawGeometry(OutputDevice& rOutputDevice);
         virtual void createBaseRange(OutputDevice& rOutputDevice);
+
+    private:
+        // object's geometry
+        basegfx::B2DPolygon                     maTriangle;
+        basegfx::B2DPolygon                     maLine;
+        basegfx::B2DPolygon                     maLineTop;
+        LineInfo                                mLineInfo;
+        unsigned long                           mHeight;
+        bool                                    mbShadowedEffect;
 
     public:
         SwPostItAnkor(const basegfx::B2DPoint& rBasePos,
@@ -113,6 +112,8 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 
         void SetAllPosition(const basegfx::B2DPoint& rPoint1, const basegfx::B2DPoint& rPoint2, const basegfx::B2DPoint& rPoint3,
             const basegfx::B2DPoint& rPoint4, const basegfx::B2DPoint& rPoint5, const basegfx::B2DPoint& rPoint6, const basegfx::B2DPoint& rPoint7);
+        void SetTriPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2,const basegfx::B2DPoint& rPoint3,
+                                    const basegfx::B2DPoint& rPoint4,const basegfx::B2DPoint& rPoint5);
         void SetColorLineInfo(Color aBaseColor,const LineInfo& aLineInfo);
         void SetSecondPosition(const basegfx::B2DPoint& rNew);
         void SetThirdPosition(const basegfx::B2DPoint& rNew);
@@ -128,6 +129,7 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         bool getShadowedEffect() const { return mbShadowedEffect; }
         void setShadowedEffect(bool bNew);
 
+        virtual void Trigger(sal_uInt32 nTime);
 
         //sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
         // transform object coordinates. Transforms maBasePosition
@@ -155,15 +157,15 @@ class PostItTxt : public Window
         virtual void    Command( const CommandEvent& rCEvt );
         virtual void    DataChanged( const DataChangedEvent& aData);
         virtual void    LoseFocus();
-    public:
-        virtual void    GetFocus();
-        void            SetColor(Color &aColorDark,Color &aColorLight);
 
     public:
             PostItTxt(Window* pParent, WinBits nBits);
             ~PostItTxt();
 
-            void    SetTextView( OutlinerView* aEditView ) {    mpOutlinerView = aEditView; }
+            virtual void    GetFocus();
+            void            SetColor(Color &aColorDark,Color &aColorLight);
+            void            SetTextView( OutlinerView* aEditView ) {    mpOutlinerView = aEditView; }
+
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 };
 
@@ -191,6 +193,9 @@ class SwPostIt : public Window
         PopupMenu*      mpButtonPopup;
         sal_Int32       mnEventId;
         bool            mbMarginSide;
+        Rectangle       mPosSize;
+        SwRect          mAnkorRect;
+        long            mPageBorder;
 
     protected:
 
@@ -198,18 +203,20 @@ class SwPostIt : public Window
         virtual void    LoseFocus();
         virtual void    MouseButtonDown( const MouseEvent& rMEvt );
         virtual void    Paint( const Rectangle& rRect);
-        virtual void    Resize();
         virtual void    GetFocus();
+        void            SetPosAndSize();
 
+        DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
         void            InitControls();
+        void            CheckMetaText();
 
     public:
-        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr,bool bMarginSide);
+        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr);
         ~SwPostIt();
 
-        void    SetSizePixel( const Size& rNewSize );
-        void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder, USHORT nFlags = WINDOW_POSSIZE_ALL );
+        void    SetSize( const Size& rNewSize );
+        void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder);
         void    TranslateTopPosition(const long aAmount);
 
         void    MetaInfo(const bool bMeta);
@@ -223,17 +230,25 @@ class SwPostIt : public Window
         Outliner*       Engine()        { return mpOutliner;}
         SwPostItMgr*    Mgr()           { return mpMgr; }
         SwEditWin*      EditWin();
+        SwFmtFld*       Field()         { return mpFmtFld; }
+        String          GetAuthor() const;
 
         long            GetPostItTextHeight();
         void            UpdateData();
 
         void            SwitchToPostIt(USHORT aDirection);
+        void            SwitchToPostIt(bool aDirection);
         void            SwitchToFieldPos(bool bAfter = true);
 
         void            ExecuteCommand(USHORT aSlot);
-        void            Delete(USHORT aType);
-        void            Hide(USHORT aType);
-        void            DoResize() { Resize(); }
+        void            Delete();
+        void            HidePostIt();
+        void            DoResize();
+        void            ResizeIfNeccessary(long aOldHeight, long aNewHeight);
+
+        void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
+        const Point     VirtualPos()    { return mPosSize.TopLeft(); }
+        const Size      VirtualSize()   { return mPosSize.GetSize(); }
 
         void            ShowAnkorOnly(const Point &aPoint);
         void            ShowNote();
@@ -241,6 +256,7 @@ class SwPostIt : public Window
 
         void            ResetAttributes();
 
+        void            SetMarginSide(bool aMarginSide);
         void            SetReadonly(BOOL bSet);
         BOOL            IsReadOnly()        { return mbReadonly;}
 
@@ -258,6 +274,9 @@ class SwPostIt : public Window
         sal_Int32       GetScrollbarWidth();
 
         void            SetSpellChecking(bool bEnable);
+
+        void            ActivatePostIt();
+        void            DeactivatePostIt();
 
         /*
         //void          ClearModifyFlag()   { mpOutliner->SetModified(); }
