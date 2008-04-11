@@ -1,114 +1,59 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: datanavi.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:21:48 $
+ * $RCSfile: datanavi.hxx,v $
+ * $Revision: 1.9 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SVX_DATANAVI_HXX
 #define _SVX_DATANAVI_HXX
 
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_MENUBTN_HXX
 #include <vcl/menubtn.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
-#endif
-#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _SVTOOLS_INETTBC_HXX
 #include <svtools/inettbc.hxx>
-#endif
-#ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
-#endif
-#ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef _SFXDOCKWIN_HXX
 #include <sfx2/dockwin.hxx>
-#endif
-#ifndef _SFXCTRLITEM_HXX
 #include <sfx2/ctrlitem.hxx>
-#endif
-#ifndef _SVX_SIMPTABL_HXX
 #include <svx/simptabl.hxx>
-#endif
-
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XFORMS_XFORMSUIHELPER1_HPP_
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XFORMS_XMODEL_HPP_
 #include <com/sun/star/xforms/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XFORMS_XSUBMISSION_HPP_
 #include <com/sun/star/xforms/XSubmission.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_DOM_XNODE_HPP_
 #include <com/sun/star/xml/dom/XNode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_DOM_EVENTS_XEVENTTARGET_HPP_
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
-#endif
 
 #include "datalistener.hxx"
 #include <vector>
