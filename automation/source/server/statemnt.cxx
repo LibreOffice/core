@@ -1,56 +1,40 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: statemnt.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.35 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-07-13 11:35:16 $
+ * $RCSfile: statemnt.cxx,v $
+ * $Revision: 1.36 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_automation.hxx"
-
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
 
 #include <vcl/wintypes.hxx>
 #ifndef _DIALOG_HXX //autogen
@@ -59,15 +43,9 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _SV_MENUBTN_HXX //autogen
 #include <vcl/menubtn.hxx>
-#endif
-#ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
-#endif
-#ifndef _SVX_BRWBOX_HXX //autogen
 #include <svtools/brwbox.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -92,124 +70,61 @@
 #ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
-#ifndef _SV_TABCTRL_HXX //autogen
 #include <vcl/tabctrl.hxx>
-#endif
-#ifndef _SV_TABPAGE_HXX //autogen
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _SV_STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _PRGSBAR_HXX
 #include <svtools/prgsbar.hxx>
-#endif
-#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
-#endif
-#ifndef _SV_SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX //handmade
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_ //handmade
 #include <osl/diagnose.h>
-#endif
-
-#ifndef _SV_WINTYPES_HXX //autogen
 #include <vcl/wintypes.hxx>
-#endif
-#ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
-#endif
-#ifndef _SVTOOLS_ROADMAP_HXX
 #include <svtools/roadmap.hxx>
-#endif
-#ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
-#endif
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
-
-#ifndef _TIME_HXX //autogen
 #include <tools/time.hxx>
-#endif
-#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
 #ifndef _PRINT_HXX //autogen
 #include <vcl/print.hxx>
 #endif
 #ifndef _PRNDLG_HXX //autogen
 #include <vcl/prndlg.hxx>
 #endif
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
 #ifndef _SV_DRAG_HXX //autogen
 //#include <vcl/drag.hxx>
 #endif
-#ifndef _FSYS_HXX //autogen
 #include <tools/fsys.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
-#endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include <basic/ttstrhlp.hxx>
 #endif
-#ifndef _BASIC_DISPDEFS_HXX
 #include <basic/dispdefs.hxx>
-#endif
 #include <vos/socket.hxx>
 #include <svtools/pickerhistory.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
-
-#ifndef _STATEMNT_HXX
 #include "statemnt.hxx"
-#endif
-
-#ifndef _SCMDSTRM_HXX
 #include "scmdstrm.hxx"
-#endif
 
 #ifndef _RETSRTM_HXX
 #include "retstrm.hxx"
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
-#ifndef _EDITWIN_HXX
 #include "editwin.hxx"
 #endif
-#endif
-
-#ifndef _RCONTROL_HXX
 #include "rcontrol.hxx"
-#endif
-
-#ifndef _COMMUNI_HXX
 #include <automation/communi.hxx>
-#endif
-
-#ifndef SVTOOLS_TESTTOOL_HXX
 #include "testtool.hxx"
-#endif
 
 #include "profiler.hxx"
 
