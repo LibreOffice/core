@@ -2,21 +2,10 @@
 #define CONFIGMGR_SIMPLELOGGER_HXX_
 
 #include "simplelogger.hxx"
-
-#ifndef _COM_SUN_STAR_UTIL_LOGGING_XLOGGER_HPP_
 #include <com/sun/star/util/logging/XLogger.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
 
 #include <stdio.h>
 
