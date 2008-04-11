@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsrch.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,8 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
+
+#include "PostItMgr.hxx"
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -347,6 +349,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 }
                 break;
             }
+
             uno::Reference< frame::XDispatchRecorder > xRecorder =
                     GetViewFrame()->GetBindings().GetRecorder();
             //prevent additional dialogs in recorded macros
@@ -635,7 +638,6 @@ SwSearchOptions::SwSearchOptions( SwWrtShell* pSh, BOOL bBackward )
         bDontWrap = pSh->IsStartOfDoc();
     }
 }
-
 
 ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
 {
