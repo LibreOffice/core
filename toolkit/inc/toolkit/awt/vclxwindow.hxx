@@ -1,96 +1,57 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclxwindow.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.27 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:19 $
+ * $RCSfile: vclxwindow.hxx,v $
+ * $Revision: 1.28 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #define _TOOLKIT_AWT_VCLXWINDOW_HXX_
 
-#ifndef TOOLKIT_DLLAPI_H
 #include <toolkit/dllapi.h>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
 #include <com/sun/star/awt/XWindow2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVIEW_HPP_
 #include <com/sun/star/awt/XView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPOINTER_HPP_
 #include <com/sun/star/awt/XPointer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
 #include <com/sun/star/awt/XDockableWindow.hpp>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <tools/gen.hxx>    // Size
-
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
 
 #include <stdarg.h>
 #include <list>
