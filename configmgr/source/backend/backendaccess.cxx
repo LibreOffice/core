@@ -1,124 +1,62 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: backendaccess.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:01:15 $
+ * $RCSfile: backendaccess.cxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_configmgr.hxx"
-
-#ifndef CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 #include "backendaccess.hxx"
-#endif // CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
-
-#ifndef CONFIGMGR_LOGGER_HXX
 #include "logger.hxx"
-#endif
-
-#ifndef CONFIGMGR_MATCHLOCALE_HXX
 #include "matchlocale.hxx"
-#endif // CONFIGMGR_MATCHLOCALE_HXX
-
-#ifndef CONFIGMGR_BACKEND_LAYERMERGE_HXX
 #include "layermerge.hxx"
-#endif // CONFIGMGR_BACKEND_LAYERMERGE_HXX
-
-#ifndef CONFIGMGR_BACKEND_SCHEMABUILDER_HXX
 #include "schemabuilder.hxx"
-#endif // CONFIGMGR_BACKEND_SCHEMABUILDER_HXX
 
 #ifndef CONFIGMGR_BACKEND_UPDATEDISPATCHER_HXX
 #include "updatedispatch.hxx"
 #endif // CONFIGMGR_BACKEND_UPDATEDISPATCHER_HXX
-
-#ifndef CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
 #include "backendnotifier.hxx"
-#endif
-
-#ifndef CONFIGMGR_BACKEND_EMPTYLAYER_HXX
 #include "emptylayer.hxx"
-#endif
-
-#ifndef _CONFIGMGR_FILEHELPER_HXX_
 #include "filehelper.hxx"
-#endif
-
-#ifndef CONFIGMGR_SIMPLEINTERACTIONREQUEST_HXX
 #include "simpleinteractionrequest.hxx"
-#endif
-
-#ifndef CONFIGMGR_CONFIGINTERACTIONHANDLER_HXX
 #include "configinteractionhandler.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XVERSIONEDSCHEMASUPPLIER_HPP_
 #include <com/sun/star/configuration/backend/XVersionedSchemaSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
 #include <com/sun/star/configuration/backend/XCompositeLayer.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
 #include <com/sun/star/configuration/backend/XUpdatableLayer.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XUPDATABLELAYER_HPP_
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDENTITIES_HPP_
 #include <com/sun/star/configuration/backend/XBackendEntities.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
 #include <com/sun/star/configuration/backend/MergeRecoveryRequest.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MALFORMEDDATAEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/MalformedDataException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
 #include <com/sun/star/lang/NullPointerException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif // _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include "com/sun/star/task/XInteractionHandler.hpp"
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
-#endif
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
 #include <cppuhelper/exc_hlp.hxx>
 
