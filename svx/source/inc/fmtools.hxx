@@ -1,234 +1,106 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmtools.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:27:46 $
+ * $RCSfile: fmtools.hxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SVX_FMTOOLS_HXX
 #define _SVX_FMTOOLS_HXX
 
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_SQLERROREVENT_HPP_
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XINTERCEPTORINFO_HPP_
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
 #include <com/sun/star/awt/XControlModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
 #include <com/sun/star/awt/FontStrikeout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _SV_WINTYPES_HXX //autogen
 #include <vcl/wintypes.hxx>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
 
 #ifndef _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #endif
-
-#ifndef _SFXCTRLITEM_HXX //autogen wg. SfxControllerItem
 #include <sfx2/ctrlitem.hxx>
-#endif
-
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-
-#ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
-#endif
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
-#endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
-#endif
-
-#ifndef _FM_STATIC_HXX_
 #include "fmstatic.hxx"
-#endif
 
 #include <set>
 
