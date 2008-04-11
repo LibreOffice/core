@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: confproviderimpl2.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.32 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:56:53 $
+ * $RCSfile: confproviderimpl2.cxx,v $
+ * $Revision: 1.33 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,36 +33,17 @@
 
 #include <stdio.h>
 #include "confproviderimpl2.hxx"
-
-#ifndef CONFIGMGR_ROOTTREE_HXX_
 #include "roottree.hxx"
-#endif
-#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
-#endif
-#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
-#endif
-#ifndef CONFIGMGR_API_OBJECTREGISTRY_HXX_
 #include "objectregistry.hxx"
-#endif
-#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
-#endif
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
 #endif
-#ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
-#endif
-
-#ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 
 namespace configmgr
 {
