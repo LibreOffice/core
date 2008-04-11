@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docfile.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.198 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:34:12 $
+ * $RCSfile: docfile.cxx,v $
+ * $Revision: 1.199 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,147 +39,57 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_USEBACKUPEXCEPTION_HPP_
 #include <com/sun/star/embed/UseBackupException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XARCHIVER_HPP_
 #include <com/sun/star/util/XArchiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSTREAMLISTENER_HPP_
 #include <com/sun/star/io/XStreamListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASHEXCEPTION_HPP_
 #include <com/sun/star/ucb/NameClashException.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#endif
-
-#ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
-#endif
-#ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef  _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
 #include <svtools/lckbitem.hxx>
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
