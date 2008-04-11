@@ -1,84 +1,52 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fontsizemenucontroller.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:07:24 $
+ * $RCSfile: fontsizemenucontroller.cxx,v $
+ * $Revision: 1.9 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
-#ifndef __FRAMEWORK_UIELEMENT_FONTSIZEMENUCONTROLLER_HXX_
 #include <uielement/fontsizemenucontroller.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include "services.h"
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_MENUITEMSTYLE_HPP_
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -87,21 +55,15 @@
 #ifndef _VCL_MENU_HXX_
 #include <vcl/menu.hxx>
 #endif
-#ifndef _VCL_MAPUNIT_HXX
 #include <vcl/mapunit.hxx>
-#endif
 #ifndef _VCL_SVAPP_HXX_
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
-#endif
 #ifndef _VCL_OUTPUTDEVICE_HXX_
 #include <vcl/outdev.hxx>
 #endif
-#ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
-#endif
 #ifndef _SVTOOLS_CTRLTOOL_HXX_
 #include <svtools/ctrltool.hxx>
 #endif
