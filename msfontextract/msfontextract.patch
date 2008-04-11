@@ -1,290 +1,261 @@
-*** misc/libmspack/mspack/makefile.mk	Wed Nov  8 15:41:39 2006
---- misc/build/libmspack/mspack/makefile.mk	Wed Nov  8 15:41:26 2006
-***************
-*** 1 ****
-! dummy
---- 1,86 ----
-! #*************************************************************************
-! #
-! #   OpenOffice.org - a multi-platform office productivity suite
-! #
-! #   $RCSfile: msfontextract.patch,v $
-! #
-! #   $Revision: 1.8 $
-! #
-! #   last change: $Author: vg $ $Date: 2007-03-26 13:43:01 $
-! #
-! #   The Contents of this file are made available subject to
-! #   the terms of GNU Lesser General Public License Version 2.1.
-! #
-! #
-! #     GNU Lesser General Public License Version 2.1
-! #     =============================================
-! #     Copyright 2005 by Sun Microsystems, Inc.
-! #     901 San Antonio Road, Palo Alto, CA 94303, USA
-! #
-! #     This library is free software; you can redistribute it and/or
-! #     modify it under the terms of the GNU Lesser General Public
-! #     License version 2.1, as published by the Free Software Foundation.
-! #
-! #     This library is distributed in the hope that it will be useful,
-! #     but WITHOUT ANY WARRANTY; without even the implied warranty of
-! #     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-! #     Lesser General Public License for more details.
-! #
-! #     You should have received a copy of the GNU Lesser General Public
-! #     License along with this library; if not, write to the Free Software
-! #     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-! #     MA  02111-1307  USA
-! #
-! #*************************************************************************
-! 
-! PRJ=..$/..$/..$/..$/..$/
-! 
-! PRJNAME=msfontextract
-! TARGET=msfontextract
-! TARGETTYPE=CUI
-! LIBTARGET=NO
-! NO_DEFAULT_STL=TRUE
-! LIBSALCPPRT=
-! EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-! 
-! # --- Settings -----------------------------------------------------
-! 
-! 
-! .INCLUDE :  settings.mk
-! 
-! # --- Files --------------------------------------------------------
-! 
-! CCFILES=   \
-! 			msfontextract.c
-! 
-! .IF "$(SYSTEM_MSPACK)" != "YES"
-! CCFILES+=	\
-! 			system.c \
-! 			cabd.c	\
-! 			lzxd.c \
-!                         ministub .c
-! .ENDIF
-! 
-! OBJFILES=   \
-! 			$(OBJ)$/msfontextract.obj
-! 
-! .IF "$(SYSTEM_MSPACK)" != "YES"
-! OBJFILES +=	\
-! 			$(OBJ)$/system.obj	\
-! 			$(OBJ)$/cabd.obj	\
-! 			$(OBJ)$/lzxd.obj	\
-! 			$(OBJ)$/ministub.obj
-! .ENDIF
-! 
-! APP1TARGET= $(TARGET)
-! APP1OBJS=   $(OBJFILES)
-! 
-! APP1STDLIBS=
-! 
-! .IF "$(SYSTEM_MSPACK)" == "YES"
-! APP1STDLIBS+= -lmspack
-! .ENDIF
-! 
-! # --- Targets ------------------------------------------------------
-! 
-! .INCLUDE :  target.mk
-*** misc/libmspack/mspack/ministub.c	Wed Nov  8 15:41:39 2006
---- misc/build/libmspack/mspack/ministub.c	Wed Nov  8 15:41:26 2006
-***************
-*** 1 ****
-! dummy
---- 1,11 ----
-! #include <mspack.h>
-! 
-! /* other expansion types not needed */
-! int mszipd_init() {return MSPACK_ERR_DECRUNCH;}
-! int mszipd_decompress() {return MSPACK_ERR_DECRUNCH;}
-! void mszipd_free() {}
-! 
-! int qtmd_init() {return MSPACK_ERR_DECRUNCH;}
-! int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
-! void qtmd_free() {}
-! 
-*** misc/libmspack/mspack/msfontextract.c	Wed Nov  8 15:41:39 2006
---- misc/build/libmspack/mspack/msfontextract.c	Wed Nov  8 15:41:26 2006
-***************
-*** 1 ****
-! dummy
---- 1,107 ----
-! /*
-! * Portions (almost all!) (C) 2003 Stuart Caie.
-! * you can redistribute it and/or modify it under
-! * the terms of the GNU Lesser General Public License (LGPL) version 2.1
-! */
-! 
-! #include <ctype.h>
-! #include <stdio.h>
-! #include <stdlib.h>
-! #include <string.h>
-! #include <unistd.h>
-! #include <mspack.h>
-! 
-! char *error_msg(int error) {
-!   switch (error) {
-!   case MSPACK_ERR_OK:         return "no error";
-!   case MSPACK_ERR_ARGS:       return "bad arguments to library function";
-!   case MSPACK_ERR_OPEN:       return "error opening file";
-!   case MSPACK_ERR_READ:       return "read error";
-!   case MSPACK_ERR_WRITE:      return "write error";
-!   case MSPACK_ERR_SEEK:       return "seek error";
-!   case MSPACK_ERR_NOMEMORY:   return "out of memory";
-!   case MSPACK_ERR_SIGNATURE:  return "bad signature";
-!   case MSPACK_ERR_DATAFORMAT: return "error in data format";
-!   case MSPACK_ERR_CHECKSUM:   return "checksum error";
-!   case MSPACK_ERR_CRUNCH:     return "compression error";
-!   case MSPACK_ERR_DECRUNCH:   return "decompression error";
-!   }
-!   return "unknown error";
-! }
-! 
-! 
-! /* creates name of output file */
-! char *create_output_name(const char *fname, char *dir) {
-!   char c, *p, *name;
-!   if (!(name = malloc(strlen(fname) + (dir ? strlen(dir) : 0) + 2))) {
-!     fprintf(stderr, "out of memory!\n");
-!     return NULL;
-!   }
-!   /* start with blank name */
-!   *name = '\0';
-!   /* add output directory if needed */
-!   if (dir) {
-!     strcpy(name, dir);
-!     strcat(name, "/");
-!   }
-!   p = &name[strlen(name)];
-!   do {
-!     c = *fname++;
-!     *p++ = tolower((unsigned char) c);
-!   } while (c);
-! 
-!   return name;
-! }
-! 
-! 
-! int
-! main(int argc, char** argv)
-! {
-! 
-!   struct mscab_decompressor *cabd;
-!   struct mscabd_cabinet *cab;
-!   struct mscabd_file *file;
-!   char * ename = NULL;
-!   int err;
-! 
-!   /* argv[1] is the cabinet to extract */
-!   /* argv[2] is the path to extract to */
-!   if ((!(argv[1])) || (!(argv[2]))) {
-!     fprintf(stderr,"Usage: %s <cabinet> <destpath>\n",argv[0]);
-!     return 1;
-!   }
-! 
-!   /* initialize libmspack and create a CAB decompressor */
-!   MSPACK_SYS_SELFTEST(err);
-!   if (err) {
-!     fprintf(stderr,"Cannot initialize libmspack\n");
-!     return 1;
-!   }
-!   if (!(cabd = mspack_create_cab_decompressor(NULL))) {
-!      fprintf(stderr, "can't make decompressor: %s\n",
-!        error_msg(cabd->last_error(cabd)));
-!      return 1;
-!   }
-! 
-! 
-!    /* look for an embedded cabinet */
-!    if ((cab = cabd->search(cabd, argv[1]))) {
-!      /* for all files in the cabinet */
-!      for (file = cab->files; file; file = file->next) {
-!        if (!(ename = create_output_name(file->filename, argv[2]))) continue;
-!        if ((cabd->extract(cabd, file, ename))) {
-!          fprintf(stderr,"%s: extract error on \"%s\": %s\n",argv[1],
-!                 ename, error_msg(cabd->last_error(cabd)));
-!          exit(1);
-!        }
-!        free(ename);
-!      }
-!      cabd->close(cabd, cab);
-!    }
-!    else {
-!      fprintf(stderr, "%s: no embedded cabinet found\n", argv[1] );
-!    }
-!    mspack_destroy_cab_decompressor(cabd);
-!    return 0;
-! }
-! 
-*** misc/libmspack/mspack/mspack.h	Fri Dec 12 18:06:15 2003
---- misc/build/libmspack/mspack/mspack.h	Wed Nov  8 15:41:26 2006
-***************
-*** 120,125 ****
---- 120,130 ----
-  #include <sys/types.h>
-  #include <unistd.h>
-  
-+ /* MS Compiler defines size_t in stddef.h */
-+ #if defined(_MSC_VER) || defined(__MINGW32__)
-+ #include <stddef.h>
-+ #endif
-+ 
-  /**
-   * System self-test function, to ensure both library and calling program
-   * can use one another.
-*** misc/libmspack/mspack/system.h	Thu Sep 11 16:06:52 2003
---- misc/build/libmspack/mspack/system.h	Wed Nov  8 15:41:26 2006
-***************
-*** 12,23 ****
-  
-  #ifdef DEBUG
-  # include <stdio.h>
-! # define D(x) do { printf("%s:%d (%s) ",__FILE__, __LINE__, __FUNCTION__); \
-                     printf x ; fputc('\n', stdout); fflush(stdout);} while (0);
-  #else
-  # define D(x)
-  #endif
-  
-  /* endian-neutral reading of little-endian data */
-  #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
-  		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
---- 12,27 ----
-  
-  #ifdef DEBUG
-  # include <stdio.h>
-! # define D(x) do { printf("%s:%d ",__FILE__, __LINE__); \
-                     printf x ; fputc('\n', stdout); fflush(stdout);} while (0);
-  #else
-  # define D(x)
-  #endif
-  
-+ /* Brutal hack to make it compile with MS .NET Compiler that doesn't
-+    know what inline means. */
-+ #define inline
-+ 
-  /* endian-neutral reading of little-endian data */
-  #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
-  		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
-***************
-*** 39,44 ****
---- 43,49 ----
-  /* validates a system structure */
-  extern int mspack_valid_system(struct mspack_system *sys);
-  
-+ #if 0
-  /* inline memcmp() */
-  static inline int memcmp(const void *s1, const void *s2, size_t n) {
-    unsigned char *c1 = (unsigned char *) s1;
-***************
-*** 54,58 ****
---- 59,64 ----
-    while (*e) e++;
-    return e - s;
-  }
-+ #endif
-  
-  #endif
+--- misc/libmspack/mspack/makefile.mk	Mon Mar 31 11:34:58 2008
++++ misc/build/libmspack/mspack/makefile.mk	Mon Mar 31 11:34:31 2008
+@@ -1 +1,82 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2008 by Sun Microsystems, Inc.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# $RCSfile: msfontextract.patch,v $
++#
++# $Revision: 1.9 $
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..$/..$/
++
++PRJNAME=msfontextract
++TARGET=msfontextract
++TARGETTYPE=CUI
++LIBTARGET=NO
++NO_DEFAULT_STL=TRUE
++LIBSALCPPRT=
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++# --- Settings -----------------------------------------------------
++
++
++.INCLUDE :  settings.mk
++
++# --- Files --------------------------------------------------------
++
++CCFILES=   \
++			msfontextract.c
++
++.IF "$(SYSTEM_MSPACK)" != "YES"
++CCFILES+=	\
++			system.c \
++			cabd.c	\
++			lzxd.c \
++                        ministub .c
++.ENDIF
++
++OBJFILES=   \
++			$(OBJ)$/msfontextract.obj
++
++.IF "$(SYSTEM_MSPACK)" != "YES"
++OBJFILES +=	\
++			$(OBJ)$/system.obj	\
++			$(OBJ)$/cabd.obj	\
++			$(OBJ)$/lzxd.obj	\
++			$(OBJ)$/ministub.obj
++.ENDIF
++
++APP1TARGET= $(TARGET)
++APP1OBJS=   $(OBJFILES)
++
++APP1STDLIBS=
++
++.IF "$(SYSTEM_MSPACK)" == "YES"
++APP1STDLIBS+= -lmspack
++.ENDIF
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE :  target.mk
+--- misc/libmspack/mspack/ministub.c	Mon Mar 31 11:34:58 2008
++++ misc/build/libmspack/mspack/ministub.c	Mon Mar 31 11:34:02 2008
+@@ -1 +1,11 @@
+-dummy
++#include <mspack.h>
++
++/* other expansion types not needed */
++int mszipd_init() {return MSPACK_ERR_DECRUNCH;}
++int mszipd_decompress() {return MSPACK_ERR_DECRUNCH;}
++void mszipd_free() {}
++
++int qtmd_init() {return MSPACK_ERR_DECRUNCH;}
++int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
++void qtmd_free() {}
++
+--- misc/libmspack/mspack/msfontextract.c	Mon Mar 31 11:34:58 2008
++++ misc/build/libmspack/mspack/msfontextract.c	Mon Mar 31 11:34:02 2008
+@@ -1 +1,107 @@
+-dummy
++/*
++* Portions (almost all!) (C) 2003 Stuart Caie.
++* you can redistribute it and/or modify it under
++* the terms of the GNU Lesser General Public License (LGPL) version 2.1
++*/
++
++#include <ctype.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <mspack.h>
++
++char *error_msg(int error) {
++  switch (error) {
++  case MSPACK_ERR_OK:         return "no error";
++  case MSPACK_ERR_ARGS:       return "bad arguments to library function";
++  case MSPACK_ERR_OPEN:       return "error opening file";
++  case MSPACK_ERR_READ:       return "read error";
++  case MSPACK_ERR_WRITE:      return "write error";
++  case MSPACK_ERR_SEEK:       return "seek error";
++  case MSPACK_ERR_NOMEMORY:   return "out of memory";
++  case MSPACK_ERR_SIGNATURE:  return "bad signature";
++  case MSPACK_ERR_DATAFORMAT: return "error in data format";
++  case MSPACK_ERR_CHECKSUM:   return "checksum error";
++  case MSPACK_ERR_CRUNCH:     return "compression error";
++  case MSPACK_ERR_DECRUNCH:   return "decompression error";
++  }
++  return "unknown error";
++}
++
++
++/* creates name of output file */
++char *create_output_name(const char *fname, char *dir) {
++  char c, *p, *name;
++  if (!(name = malloc(strlen(fname) + (dir ? strlen(dir) : 0) + 2))) {
++    fprintf(stderr, "out of memory!\n");
++    return NULL;
++  }
++  /* start with blank name */
++  *name = '\0';
++  /* add output directory if needed */
++  if (dir) {
++    strcpy(name, dir);
++    strcat(name, "/");
++  }
++  p = &name[strlen(name)];
++  do {
++    c = *fname++;
++    *p++ = tolower((unsigned char) c);
++  } while (c);
++
++  return name;
++}
++
++
++int
++main(int argc, char** argv)
++{
++
++  struct mscab_decompressor *cabd;
++  struct mscabd_cabinet *cab;
++  struct mscabd_file *file;
++  char * ename = NULL;
++  int err;
++
++  /* argv[1] is the cabinet to extract */
++  /* argv[2] is the path to extract to */
++  if ((!(argv[1])) || (!(argv[2]))) {
++    fprintf(stderr,"Usage: %s <cabinet> <destpath>\n",argv[0]);
++    return 1;
++  }
++
++  /* initialize libmspack and create a CAB decompressor */
++  MSPACK_SYS_SELFTEST(err);
++  if (err) {
++    fprintf(stderr,"Cannot initialize libmspack\n");
++    return 1;
++  }
++  if (!(cabd = mspack_create_cab_decompressor(NULL))) {
++     fprintf(stderr, "can't make decompressor: %s\n",
++       error_msg(cabd->last_error(cabd)));
++     return 1;
++  }
++
++
++   /* look for an embedded cabinet */
++   if ((cab = cabd->search(cabd, argv[1]))) {
++     /* for all files in the cabinet */
++     for (file = cab->files; file; file = file->next) {
++       if (!(ename = create_output_name(file->filename, argv[2]))) continue;
++       if ((cabd->extract(cabd, file, ename))) {
++         fprintf(stderr,"%s: extract error on \"%s\": %s\n",argv[1],
++                ename, error_msg(cabd->last_error(cabd)));
++         exit(1);
++       }
++       free(ename);
++     }
++     cabd->close(cabd, cab);
++   }
++   else {
++     fprintf(stderr, "%s: no embedded cabinet found\n", argv[1] );
++   }
++   mspack_destroy_cab_decompressor(cabd);
++   return 0;
++}
++
+--- misc/libmspack/mspack/mspack.h	Fri Dec 12 18:06:15 2003
++++ misc/build/libmspack/mspack/mspack.h	Mon Mar 31 11:34:02 2008
+@@ -120,6 +120,11 @@
+ #include <sys/types.h>
+ #include <unistd.h>
+ 
++/* MS Compiler defines size_t in stddef.h */
++#if defined(_MSC_VER) || defined(__MINGW32__)
++#include <stddef.h>
++#endif
++
+ /**
+  * System self-test function, to ensure both library and calling program
+  * can use one another.
+--- misc/libmspack/mspack/system.h	Thu Sep 11 16:06:52 2003
++++ misc/build/libmspack/mspack/system.h	Mon Mar 31 11:34:02 2008
+@@ -12,12 +12,16 @@
+ 
+ #ifdef DEBUG
+ # include <stdio.h>
+-# define D(x) do { printf("%s:%d (%s) ",__FILE__, __LINE__, __FUNCTION__); \
++# define D(x) do { printf("%s:%d ",__FILE__, __LINE__); \
+                    printf x ; fputc('\n', stdout); fflush(stdout);} while (0);
+ #else
+ # define D(x)
+ #endif
+ 
++/* Brutal hack to make it compile with MS .NET Compiler that doesn't
++   know what inline means. */
++#define inline
++
+ /* endian-neutral reading of little-endian data */
+ #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
+ 		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
+@@ -39,6 +43,7 @@
+ /* validates a system structure */
+ extern int mspack_valid_system(struct mspack_system *sys);
+ 
++#if 0
+ /* inline memcmp() */
+ static inline int memcmp(const void *s1, const void *s2, size_t n) {
+   unsigned char *c1 = (unsigned char *) s1;
+@@ -54,5 +59,6 @@
+   while (*e) e++;
+   return e - s;
+ }
++#endif
+ 
+ #endif
