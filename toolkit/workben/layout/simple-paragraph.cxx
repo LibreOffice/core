@@ -7,16 +7,9 @@
 // include ---------------------------------------------------------------
 
 #include <stdio.h>
-
-#ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen wg. RET_OK, RET_CANCEL
 #include <vcl/msgbox.hxx>
-#endif
 
 #include <stdio.h>
 
