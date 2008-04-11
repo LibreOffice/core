@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: updatehelper.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 14:34:11 $
+ * $RCSfile: updatehelper.cxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,64 +34,26 @@
 #include <stdio.h>
 
 #include "updatehelper.hxx"
-
-#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
-#endif
-#ifndef CONFIGMGR_NODECONVERTER_HXX
 #include "nodeconverter.hxx"
-#endif
-#ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
-#endif
-#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
 #include "treechangefactory.hxx"
-#endif
-#ifndef CONFIGMGR_TREE_NODEFACTORY_HXX
 #include "treenodefactory.hxx"
-#endif
-#ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
-#endif
 
 // -----------------------------------------------------------------------------
-#ifndef INCLUDED_SHARABLE_NODE_HXX
 #include "node.hxx"
-#endif
-#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
 #include "treefragment.hxx"
-#endif
-#ifndef CONFIGMGR_NODEACCESS_HXX
 #include "nodeaccess.hxx"
-#endif
-#ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
-#endif
-#ifndef CONFIGMGR_BUILDDATA_HXX
 #include "builddata.hxx"
-#endif
-#ifndef CONFIGMGR_NODEVISITOR_HXX
 #include "nodevisitor.hxx"
-#endif
-
-#ifndef CONFIGMGR_VALUENODEACCESS_HXX
 #include "valuenodeaccess.hxx"
-#endif
-#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
 #include "groupnodeaccess.hxx"
-#endif
-#ifndef CONFIGMGR_SETNODEACCESS_HXX
 #include "setnodeaccess.hxx"
-#endif
 // -----------------------------------------------------------------------------
-
-#ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
 
 
 //..........................................................................
