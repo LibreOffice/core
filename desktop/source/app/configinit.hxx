@@ -1,13 +1,8 @@
 #ifndef _DESKTOP_CONFIGINIT_HXX_
 #define _DESKTOP_CONFIGINIT_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 /** creates a ConfigurationProvider instance
 Important: exceptions thrown from that method will contain a readily
@@ -33,9 +28,7 @@ com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
     CreateApplicationConfigurationProvider( );
 
 //-----------------------------------------------------------------------------
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
 
 /**
     sets an InteractionHandler for configuration errors in the current context.
