@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sddll1.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:26:00 $
+ * $RCSfile: sddll1.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,60 +36,28 @@
 #include "sddll.hxx"
 #include "diactrl.hxx"
 #include "tbx_ww.hxx"
-#ifndef SD_TEXT_OBJECT_BAR_HXX
 #include "TextObjectBar.hxx"
-#endif
-#ifndef SD_BEZIER_OBJECT_BAR_HXX
 #include "BezierObjectBar.hxx"
-#endif
-#ifndef SD_GRAPHIC_OBJECT_BAR_HXX
 #include "GraphicObjectBar.hxx"
-#endif
-#ifndef SD_MEDIA_OBJECT_BAR_HXX
 #include "MediaObjectBar.hxx"
-#endif
-#ifndef SD_IMPRESS_VIEW_SHELL_BASE_HXX
 #include "ImpressViewShellBase.hxx"
-#endif
-#ifndef SD_PRESENTATION_VIEW_SHELL_BASE_HXX
 #include "PresentationViewShellBase.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_BASE_HXX
 #include "OutlineViewShellBase.hxx"
-#endif
-#ifndef SD_SLIDE_SORTER_VIEW_SHELL_BASE_HXX
 #include "SlideSorterViewShellBase.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_VIEW_SHELL_BASE_HXX
 #include "GraphicViewShellBase.hxx"
-#endif
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
 #include "GraphicDocShell.hxx"
-#endif
 #ifndef SD_SLIDEBROWSER_SLIDE_SORTER_VIEW_SHELL_HXX
 #include "SlideSorterViewShell.hxx"
 #endif
 #ifndef SD_SLIDEBROWSER_TASK_PANE_VIEW_SHELL_HXX
 #include "TaskPaneViewShell.hxx"
 #endif
-#ifndef SD_FACTORY_IDS_HXX
 #include "FactoryIds.hxx"
-#endif
 #include "sdmod.hxx"
 #include "app.hrc"
 
