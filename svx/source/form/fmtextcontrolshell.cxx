@@ -1,180 +1,90 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmtextcontrolshell.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.14 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:15:48 $
+ * $RCSfile: fmtextcontrolshell.cxx,v $
+ * $Revision: 1.15 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef SVX_SOURCE_INC_FMTEXTCONTROLSHELL_HXX
 #include "fmtextcontrolshell.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMTEXTCONTROLFEATURE_HXX
 #include "fmtextcontrolfeature.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XMOUSELISTENER_HPP_
 #include <com/sun/star/awt/XMouseListener.hpp>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXMSGPOOL_HXX
 #include <sfx2/msgpool.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
 
 #include <sfx2/app.hxx>
-
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
-#endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-
-#ifndef SVX_SOURCE_FORM_FMTEXTCONTROLDIALOGS_HXX
 #include "fmtextcontroldialogs.hxx"
-#endif
-
-#ifndef _SVX_SRIPTSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
-#endif
 
 #include <svx/udlnitem.hxx>
 #include <svx/crsditem.hxx>
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
 
 #include <memory>
 
