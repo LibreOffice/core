@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdotxat.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:55:20 $
+ * $RCSfile: svdotxat.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -51,67 +46,23 @@
 #include <svx/sdtfchim.hxx>
 
 
-#ifndef _MyEDITVIEW_HXX
 #include <svx/editview.hxx>
-#endif
-
-#ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
-#endif
-
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _EDITOBJ_HXX //autogen
 #include <svx/editobj.hxx>
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
 
 #include <svx/charscaleitem.hxx>
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-
-#ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
-#endif
-
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SVX_NUMITEM_HXX //autogen
 #include <svx/numitem.hxx>
-#endif
-
-#ifndef _MyEDITENG_HXX //autogen
 #include <svx/editeng.hxx>
-#endif
-
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
