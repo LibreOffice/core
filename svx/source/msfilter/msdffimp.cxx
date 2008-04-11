@@ -1,59 +1,44 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: msdffimp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.153 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:58:30 $
+ * $RCSfile: msdffimp.cxx,v $
+ * $Revision: 1.154 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
 
 #include <math.h>
 #include <limits.h>
 #include <vector>
-
-#ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
-#endif
-#ifndef _SOLAR_H
 #include <tools/solar.h>               // UINTXX
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
 #include <sot/clsids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -66,9 +51,7 @@
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
@@ -95,86 +78,42 @@
 //      paraitem.hxx       editdata.hxx
 
 
-
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
 #ifndef _TOOLS_ZCODEC_HXX
 #include <tools/zcodec.hxx>
 #endif
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
-#ifndef _SVX_ESCHEREX_HXX
 #include <svx/escherex.hxx>
-#endif
 #ifndef _BGFX_RANGE_B2IRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
 #include <com/sun/star/container/XIdentifierContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
 #include <com/sun/star/drawing/GluePoint2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-#ifndef _SVX_CHARSCALEITEM_HXX
 #include <svx/charscaleitem.hxx>
-#endif
-#ifndef _SVX_KERNITEM_HXX
 #include <svx/kernitem.hxx>
-#endif
-#ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
-#endif
-#ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
-#endif
 #ifndef _TOOLS_URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <sot/storage.hxx>
 #endif
-
-#ifndef _SFX_OBJFAC_HXX
 #include <sfx2/docfac.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
-#endif
 //#ifndef _SFX_INTERNO_HXX
 //#include <sfx2/interno.hxx>
 //#endif
@@ -184,160 +123,62 @@
 //#endif
 #include <svx/sdgcpitm.hxx>
 #endif
-
-#ifndef _SDGMOITM_HXX
 #include <svx/sdgmoitm.hxx>
-#endif
-#ifndef _SVX_TSPTITEM_HXX
 #include <svx/tstpitem.hxx>
-#endif
-#ifndef _SVX_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
-#endif
-#ifndef _SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
 #ifndef _SVDOCAPT_HXX
 #include <svx/svdocapt.hxx>
 #endif
-
-#ifndef _SVDOEDGE_HXX
 #include <svx/svdoedge.hxx>
-#endif
-
-#ifndef _SVDOCIRC_HXX
 #include <svx/svdocirc.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
-#ifndef _SVX_FRMDIR_HXX
 #include <svx/frmdir.hxx>
-#endif
-#ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
-#ifndef _SVDTRANS_HXX
 #include <svx/svdtrans.hxx>
-#endif
-#ifndef _SXENDITM_HXX
 #include <svx/sxenditm.hxx>
-#endif
-#ifndef _SDGLUITM_HXX
 #include <svx/sdgluitm.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX //autogen
 #include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_SHDDITEM_HXX //autogen
 #include <svx/shdditem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SXEKITM_HXX
 #include <svx/sxekitm.hxx>
-#endif
-
-#ifndef _SVX_BULITEM_HXX
 #include <bulitem.hxx>
-#endif
-#ifndef _E3D_POLYSC3D_HXX
 #include <svx/polysc3d.hxx>
-#endif
-#ifndef _E3D_EXTRUD3D_HXX
 #include <svx/extrud3d.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include "svditer.hxx"
-#endif
-
-#ifndef _XPOLY_HXX
 #include <svx/xpoly.hxx>
-#endif
-
-#ifndef _XATTR_HXX
 #include "xattr.hxx"
-#endif
 
 #ifndef _IMPGRF_HXX //autogen
 #include "impgrf.hxx"
 #endif
-
-#ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx> // extern sichtbare Header-Datei
-#endif
 #include <svx/outliner.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editeng.hxx>
-#ifndef _MSASHAPE_HXX
 #include "msashape.hxx"
-#endif
-#ifndef _MSASHAPE3D_HXX
 #include "msashape3d.hxx"
-#endif
-#ifndef _GALLERY_HXX_
 #include "gallery.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
-#ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
-#ifndef _SDASAITM_HXX
 #include <svx/sdasaitm.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
 #endif
@@ -348,46 +189,21 @@
 #ifndef _VOS_NO_NAMESPACE
 using namespace vos;
 #endif
-
-#ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
-#endif
 #ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "../customshapes/EnhancedCustomShape2d.hxx"
-#endif
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
