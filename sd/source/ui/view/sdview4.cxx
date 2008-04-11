@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdview4.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.34 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:22:27 $
+ * $RCSfile: sdview4.cxx,v $
+ * $Revision: 1.35 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,103 +32,52 @@
 #include "precompiled_sd.hxx"
 
 #include "View.hxx"
-
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVX_FILLITEM_HXX //autogen
 #include <svx/xfillit.hxx>
-#endif
-#ifndef _SVDUNDO_HXX //autogen
 #include <svx/svdundo.hxx>
-#endif
-#ifndef _XOUTBMP_HXX //autogen
 #include <svx/xoutbmp.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVDOMEDIA_HXX
 #include <svx/svdomedia.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
 #ifndef _IMPGRF_HXX
 #include <svx/impgrf.hxx>
 #endif
 #include <sot/storage.hxx>
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _AVMEDIA_MEDIAWINDOW_HXX //autogen
 #include <avmedia/mediawindow.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
 
 #include "app.hrc"
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "DrawDocShell.hxx"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "imapinfo.hxx"
 #include "sdpage.hxx"
+<<<<<<< sdview4.cxx
 #include "view/SlideSorterView.hxx"
+=======
+#include "SlideView.hxx"
+>>>>>>> 1.33.22.3
 #include "undo/undoobjects.hxx"
 
 #include <comphelper/processfactory.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
-
-#ifndef _SOERR_HXX
 #include <svtools/soerr.hxx>
-#endif
 
 #include <sfx2/ipclient.hxx>
 
