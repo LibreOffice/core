@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: CustomAnimationPane.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 13:25:20 $
+ * $RCSfile: CustomAnimationPane.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,150 +32,54 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
-
-#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTCOMMANDS_HPP_
 #include <com/sun/star/presentation/EffectCommands.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
 #include <com/sun/star/animations/AnimationTransformType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_PARAGRAPHTARGET_HPP_
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SD_STLPROPERTYSET_HXX
 #include "STLPropertySet.hxx"
-#endif
-
-#ifndef _SD_CUSTOMANIMATIONPANE_HXX
 #include "CustomAnimationPane.hxx"
-#endif
-#ifndef _SD_CUSTOMANIMATIONDIALOG_HXX
 #include "CustomAnimationDialog.hxx"
-#endif
-#ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HXX
 #include "CustomAnimationCreateDialog.hxx"
-#endif
-#ifndef _SD_CUSTOMANIMATIONPANE_HRC
 #include "CustomAnimationPane.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATION_HRC
 #include "CustomAnimation.hrc"
-#endif
-#ifndef _SD_CUSTOMANIMATIONLIST_HXX
 #include "CustomAnimationList.hxx"
-#endif
-
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
 
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
 
 #include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
-
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include <DrawDocShell.hxx>
-#endif
-
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include <ViewShellBase.hxx>
-#endif
-
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-
-#ifndef SD_DRAW_CONTROLLER_HXX
 #include "DrawController.hxx"
-#endif
-
-#ifndef SD_RESID_HXX
 #include "sdresid.hxx"
-#endif
-
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
-
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
-
-#ifndef _SD_UNDO_ANIM_HXX
 #include "undoanim.hxx"
-#endif
-
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
-#ifndef _SDDLL_HXX
 #include "sddll.hxx"
-#endif
-#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
 #include "framework/FrameworkHelper.hxx"
-#endif
 
 #include "EventMultiplexer.hxx"
 #include "DialogListBox.hxx"
