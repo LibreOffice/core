@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sdview3.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.74 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:22:08 $
+ * $RCSfile: sdview3.cxx,v $
+ * $Revision: 1.75 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,118 +32,54 @@
 #include "precompiled_sd.hxx"
 
 #include "View.hxx"
-
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDOBJECTCLIPBOARDCREATOR_HPP_
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _FILELIST_HXX
 #include <sot/filelist.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
 #ifndef _EDITDATA_HXX
 #include <svx/editdata.hxx>
 #endif
-#ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
-#endif
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _SVX_XLNCLIT_HXX
 #include <svx/xlnclit.hxx>
-#endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _SVDITER_HXX //autogen
 #include <svx/svditer.hxx>
-#endif
-#ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SVDETC_HXX //autogen
 #include <svx/svdetc.hxx>
-#endif
-#ifndef _SVDUNDO_HXX //autogen
 #include <svx/svdundo.hxx>
-#endif
-#ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
 #include <sot/clsids.hxx>
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
-#endif
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
 #ifndef _EDITENG_HXX //autogen
 #include <svx/editeng.hxx>
 #endif
-#ifndef _E3D_OBJ3D_HXX
 #include <svx/obj3d.hxx>
-#endif
-#ifndef _E3D_UNDO_HXX
 #include <svx/e3dundo.hxx>
-#endif
 #include <svx/dbexch.hrc>
-#ifndef SVX_UNOMODEL_HXX
 #include <svx/unomodel.hxx>
-#endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
-#endif
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
 
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "DrawDocShell.hxx"
-#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#endif
-#ifndef SD_WINDOW_HXX
 #include "Window.hxx"
-#endif
 #include "sdxfer.hxx"
 #include "sdpage.hxx"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
