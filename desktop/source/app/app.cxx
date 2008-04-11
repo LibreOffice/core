@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: app.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.217 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 11:04:33 $
+ * $RCSfile: app.cxx,v $
+ * $Revision: 1.218 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -56,262 +51,98 @@
 #include "../migration/pages.hxx"
 
 #include <svtools/javacontext.hxx>
-
-#ifndef _COM_SUN_STAR_FRAME_XSESSIONMANAGERLISTENER_HPP_
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSDISPATCH_HPP_
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_CORRUPTEDCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
 #include <com/sun/star/view/XPrintable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDSETUPEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
-#endif
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJob.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
 #include <com/sun/star/task/XJob.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORYREGISTRATION_HPP_
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
-#endif
 
 #include <com/sun/star/java/XJavaVM.hpp>
-
-#ifndef _TOOLS_TESTTOOLLOADER_HXX_
 #include <tools/testtoolloader.hxx>
-#endif
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _VOS_SECURITY_HXX_
 #include <vos/security.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
-#endif
 #ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-#ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
-#endif
-#ifndef _TOOLS_TEMPFILE_HXX
 #include <tools/tempfile.hxx>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-#ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
-#endif
-#ifndef _OSL_SIGNAL_H_
 #include <osl/signal.h>
-#endif
 #include <rtl/uuid.h>
-
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <svtools/miscopt.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
 #include <svtools/syslocaleoptions.hxx>
-#endif
-#ifndef SVTOOLS_FOLDER_RESTRICTION_HXX
 #include <svtools/folderrestriction.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _RTL_STRBUF_HXX_
 #include <rtl/strbuf.hxx>
-#endif
-#ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
-#endif
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
-#endif
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
