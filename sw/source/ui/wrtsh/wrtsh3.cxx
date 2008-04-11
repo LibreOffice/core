@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh3.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,25 @@ BOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
     return bRet;
 }
 
+BOOL SwWrtShell::GotoField( const SwFmtFld& rFld )
+{
+    (this->*fnKillSel)( 0, sal_False );
+
+    BOOL bRet = SwCrsrShell::GotoFld( rFld );
+    if( bRet && IsSelFrmMode() )
+    {
+        UnSelectFrm();
+        LeaveSelFrmMode();
+    }
+
+    if( IsSelection() )
+    {
+        fnKillSel = &SwWrtShell::ResetSelect;
+        fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
+    }
+
+    return bRet;
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: FontWork-Slots invalidieren
