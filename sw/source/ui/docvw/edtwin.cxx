@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: edtwin.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.156 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 17:01:18 $
+ * $RCSfile: edtwin.cxx,v $
+ * $Revision: 1.157 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,261 +33,100 @@
 
 
 #include <tools/list.hxx>
-
-#ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_INPUTSEQUENCECHECKMODE_HPP_
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#endif
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 
-#ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-#ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _VCL_CMDEVT_H //autogen
 #include <vcl/cmdevt.h>
-#endif
 #include <sot/storage.hxx>
-#ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
 #include <svtools/securityoptions.hxx>
-#endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
 #endif
-#ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
-#endif
-#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXPTITEM_HXX
 #include <svtools/ptitem.hxx>
-#endif
-
-#ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
-#endif
-#ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
 //#ifndef _SVDVMARK_HXX //autogen
 //#include <svx/svdvmark.hxx>
 //#endif
-#ifndef _SVDHDL_HXX //autogen
 #include <svx/svdhdl.hxx>
-#endif
-#ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-#ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
-#endif
-#ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
-#endif
-#ifndef _SVX_FLDITEM_HXX //autogen
 #include <svx/flditem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX //autogen
 #include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX //autogen
 #include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
 
 #include <svx/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
-
-#ifndef _EDTWIN_HXX //autogen
 #include <edtwin.hxx>
-#endif
-#ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
-#endif
-#ifndef _WRTSH_HXX //autogen
 #include <wrtsh.hxx>
-#endif
-#ifndef IDOCUMENTSETTINGACCESS_HXX_INCLUDED
 #include <IDocumentSettingAccess.hxx>
-#endif
-#ifndef _FLDBAS_HXX //autogen
 #include <fldbas.hxx>
-#endif
-#ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
-#endif
-#ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
-#ifndef _VIEWOPT_HXX //autogen
 #include <viewopt.hxx>
-#endif
-#ifndef _SW_DRAWBASE_HXX //autogen
 #include <drawbase.hxx>
-#endif
-#ifndef _SW_DSELECT_HXX //autogen
 #include <dselect.hxx>
-#endif
-#ifndef _SWTEXTSH_HXX //autogen
 #include <textsh.hxx>
-#endif
-#ifndef _SHDWCRSR_HXX
 #include <shdwcrsr.hxx>
-#endif
-#ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
-#endif
-#ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
-#endif
-#ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
-#endif
-#ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
-#endif
-#ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
-#endif
-#ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
-#endif
-#ifndef _SWWVIEW_HXX //autogen
 #include <wview.hxx>
-#endif
-#ifndef _SWLISTSH_HXX //autogen
 #include <listsh.hxx>
-#endif
-#ifndef _GLOSLST_HXX //autogen
 #include <gloslst.hxx>
-#endif
-#ifndef SW_INPUTWIN_HXX //autogen
 #include <inputwin.hxx>
-#endif
-#ifndef _GLOSHDL_HXX //autogen
 #include <gloshdl.hxx>
-#endif
-#ifndef _SWUNDO_HXX
 #include <swundo.hxx>
-#endif
-#ifndef _SWDRWTXTSH_HXX //autogen
 #include <drwtxtsh.hxx>
-#endif
-#ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
-#endif
-#ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
-#endif
-#ifndef _ROMENU_HXX
 #include <romenu.hxx>
-#endif
-#ifndef _INITUI_HXX
 #include <initui.hxx>
-#endif
-#ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-#ifndef _EXTINPUT_HXX
 #include <extinput.hxx>
-#endif
-#ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
-#endif
-#ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
-#endif
-#ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
-#endif
-#ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
-#endif
-#ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-#ifndef _BREAKIT_HXX
 #include <breakit.hxx>
-#endif
-#ifndef _CHECKIT_HXX
 #include <checkit.hxx>
-#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -303,29 +137,17 @@
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
-#ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
 // OD 18.09.2003 #i18732#
-#ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
-#endif
 #include <toolkit/helper/vclunohelper.hxx>
 #include <charfmt.hxx>
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx> // #i23726#
-#ifndef _SWFORMATCLIPBOARD_HXX
 #include "formatclipboard.hxx"
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 #include "PostItMgr.hxx"
 #include "postit.hxx"
