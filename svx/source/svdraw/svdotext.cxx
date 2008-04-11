@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdotext.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.87 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 12:50:20 $
+ * $RCSfile: svdotext.cxx,v $
+ * $Revision: 1.88 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -52,100 +47,34 @@
 #include "svdtxhdl.hxx"  // DrawTextToPath
 #include <svx/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _EDITSTAT_HXX //autogen
 #include <editstat.hxx>
-#endif
-
-#ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
-#endif
-
-#ifndef _EDITOBJ_HXX //autogen
 #include <svx/editobj.hxx>
-#endif
-
-#ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-
-#ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
-#endif
 #include <svx/flditem.hxx>
-
-#ifndef _SVX_XFTOUIT_HXX
 #include <svx/xftouit.hxx>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
-#endif
-
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
-
-#ifndef _SVDPOOL_HXX
 #include <svx/svdpool.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
-
-#ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_TEXTPROPERTIES_HXX
 #include <svx/sdr/properties/textproperties.hxx>
-#endif
 
 // #110496#
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
 
 // #111111#
-#ifndef _SDR_CONTACT_VIEWCONTACTOFTEXTOBJ_HXX
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-#endif
-
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
 
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
