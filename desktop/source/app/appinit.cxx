@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: appinit.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.28 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:03:32 $
+ * $RCSfile: appinit.cxx,v $
+ * $Revision: 1.29 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,102 +37,47 @@
 #include "cmdlineargs.hxx"
 #include "desktopresid.hxx"
 #include "desktop.hrc"
-
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
 #include <com/sun/star/uno/XCurrentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#endif
 
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UCB_XCONTENTPROVIDERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentProviderFactory.hpp>
-#endif
-#ifndef _UNO_CURRENT_CONTEXT_HXX_
 #include <uno/current_context.hxx>
-#endif
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
-#endif
-#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
 #include <cppuhelper/bootstrap.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
-#endif
-#ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
-#endif
-#ifndef _COMPHELPER_REGPATHHELPER_HXX_
 #include <comphelper/regpathhelper.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLS_TEMPFILE_HXX
 #include <tools/tempfile.hxx>
-#endif
-#ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
 #include <ucbhelper/configurationkeys.hxx>
-#endif
 
 #include <cppuhelper/bootstrap.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/rcid.h>
 
 #include <rtl/logfile.hxx>
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/svapp.hxx>
-#ifndef INCLUDED_SVTOOLS_STARTOPTIONS_HXX
 #include <svtools/startoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
-#endif
 
 
 #define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
