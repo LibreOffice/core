@@ -1,9 +1,7 @@
 #ifndef CONFIGMGR_TREELOAD_HXX
 #define CONFIGMGR_TREELOAD_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
 #ifndef _CONFIGMGR_LOCAL_LOCAL_HXX_
 #include <localsession.hxx>
@@ -12,14 +10,8 @@
 #ifndef _CONFIGMGR_TREECACHE_HXX_
 #include <treecache.hxx>
 #endif
-
-#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include <options.hxx>
-#endif
-
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 // -----------------------------------------------------------------------------
 namespace configmgr
