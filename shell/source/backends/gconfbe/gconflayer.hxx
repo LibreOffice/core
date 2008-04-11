@@ -1,29 +1,15 @@
 #ifndef GCONFLAYER_HXX_
 #define GCONFLAYER_HXX_
 
-#ifndef GCONFBACKEND_HXX_
 #include "gconfbackend.hxx"
-#endif // GCONFBACKEND_HXX_
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
 #include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
-
-#ifndef _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
 #include <com/sun/star/util/XTimeStamped.hpp>
-#endif // _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
-
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif // _CPPUHELPER_IMPLBASE2_HXX_
 
 #define GCONF_PROXY_MODE_KEY "/system/proxy/mode"
 #define GCONF_AUTO_SAVE_KEY  "/apps/openoffice/auto_save"
