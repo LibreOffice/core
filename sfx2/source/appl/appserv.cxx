@@ -1,166 +1,88 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: appserv.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.74 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:50:24 $
+ * $RCSfile: appserv.cxx,v $
+ * $Revision: 1.75 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHHELPER_HPP_
 #include <com/sun/star/frame/XDispatchHelper.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEEXCEPTION_HPP_
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
-#endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COMPHELPER_STORAGEHELPER_HXX
 #include <comphelper/storagehelper.hxx>
-#endif
 
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
 #endif
-#ifndef _SFXVISIBILITYITEM_HXX
 #include <svtools/visitem.hxx>
-#endif
-#ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
-#endif
 
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SFXCANCEL_HXX //autogen
 #include <svtools/cancel.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
-#endif
-#ifndef _BASRDLL_HXX
 #include <basic/basrdll.hxx>
-#endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
