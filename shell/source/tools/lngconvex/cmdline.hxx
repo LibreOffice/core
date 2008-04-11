@@ -1,9 +1,7 @@
 #ifndef _CMDLINE_HXX_
 #define _CMDLINE_HXX_
 
-#ifndef _DEFS_HXX_
 #include "defs.hxx"
-#endif
 
 //---------------------------------
 /** Simple command line abstraction
