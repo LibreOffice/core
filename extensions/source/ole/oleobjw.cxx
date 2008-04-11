@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: oleobjw.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.18 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 14:46:59 $
+ * $RCSfile: oleobjw.cxx,v $
+ * $Revision: 1.19 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,50 +39,20 @@
 #include "osl/thread.h"
 
 #include "boost/scoped_array.hpp"
-
-#ifndef _COM_SUN_STAR_SCRIPT_FAILREASON_HPP_
 #include <com/sun/star/script/FailReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHENGINEEVENT_HPP_
 #include <com/sun/star/script/FinishEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTREASON_HPP_
 #include <com/sun/star/script/InterruptReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINELISTENER_HPP_
 #include <com/sun/star/script/XEngineListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XDEBUGGING_HPP_
 #include <com/sun/star/script/XDebugging.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XINVOCATION_HPP_
 #include <com/sun/star/script/XInvocation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_CONTEXTINFORMATION_HPP_
 #include <com/sun/star/script/ContextInformation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHREASON_HPP_
 #include <com/sun/star/script/FinishReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINE_HPP_
 #include <com/sun/star/script/XEngine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTENGINEEVENT_HPP_
 #include <com/sun/star/script/InterruptEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HPP_
 #include <com/sun/star/script/XLibraryAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
-#endif
 
 #include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
 #include "com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp"
@@ -95,9 +60,7 @@
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
 #include "jscriptclasses.hxx"
 
