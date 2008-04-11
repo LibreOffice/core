@@ -1,86 +1,49 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: fmsrcimp.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.15 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:59:01 $
+ * $RCSfile: fmsrcimp.hxx,v $
+ * $Revision: 1.16 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _FMSRCIMP_HXX
 #define _FMSRCIMP_HXX
 
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif // _SVX_FMTOOLS_HXX
-
-#ifndef _VOS_THREAD_HXX_ //autogen
 #include <vos/thread.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_ //autogen
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
 #include <com/sun/star/awt/XCheckBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
 #include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
-#endif
-
-#ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
-#endif
 
 // ===================================================================================================
 // Hilfsstrukturen
