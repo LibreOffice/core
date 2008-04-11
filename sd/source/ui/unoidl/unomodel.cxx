@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unomodel.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.109 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:58:18 $
+ * $RCSfile: unomodel.cxx,v $
+ * $Revision: 1.110 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,28 +33,16 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
-#endif
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
 
 #ifndef _UTL_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -67,100 +50,38 @@
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
-#ifndef _SVX_UNOFIELD_HXX
 #include <svx/unofield.hxx>
-#endif
-
-#ifndef _UNOMODEL_HXX
 #include <unomodel.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SVX_UNOFORBIDDENCHARSTABLE_HXX_
 #include <svx/UnoForbiddenCharsTable.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
-#endif
-
-#ifndef _SVX_UNONAMESPACEMAP_HXX_
 #include <svx/UnoNamespaceMap.hxx>
-#endif
-
-#ifndef _SVDLAYER_HXX //autogen
 #include <svx/svdlayer.hxx>
-#endif
-#ifndef _SVDSOB_HXX //autogen
 #include <svx/svdsob.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-
-#ifndef _SVX_UNOFILL_HXX_
 #include <svx/unofill.hxx>
-#endif
-
-#ifndef _SVX_UNOPOOL_HXX_
 #include <svx/unopool.hxx>
-#endif
-#ifndef _SVDORECT_HXX
 #include <svx/svdorect.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
-#endif
-
-#ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
 #include <toolkit/awt/vclxdevice.hxx>
-#endif
 
 #include <svtools/unoimap.hxx>
-
-#ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
 
 #include <svx/unoshape.hxx>
 #include <svx/unonrule.hxx>
 #include <svx/eeitem.hxx>
 
 // #99870# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-#ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
-#endif
-
-#ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
-#endif
-
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-
-#ifndef _SD_UNODOCUMENTSETTINGS_HXX_
 #include <UnoDocumentSettings.hxx>
-#endif
 
 #include <drawdoc.hxx>
 #include <glob.hrc>
@@ -176,41 +97,18 @@
 #include <stlpool.hxx>
 #include <unopback.hxx>
 #include <unokywds.hxx>
-#ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
-#endif
-#ifndef SD_CLIENT_VIEW_HXX
 #include "ClientView.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
-#endif
 #include "app.hrc"
 #include <vcl/pdfextoutdevdata.hxx>
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
-#endif
-
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
-#endif
 
 using ::rtl::OUString;
 
