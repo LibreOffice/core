@@ -1,133 +1,60 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: attributeproperties.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:49:18 $
+ * $RCSfile: attributeproperties.cxx,v $
+ * $Revision: 1.13 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
 #include <svx/sdr/properties/attributeproperties.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_ITEMSETTOOLS_HXX
 #include <svx/sdr/properties/itemsettools.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
-#endif
-
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-
-#ifndef _SVDDEF_HXX
 #include <svx/svddef.hxx>
-#endif
-
-#ifndef _SVX_XIT_HXX
 #include <svx/xit.hxx>
-#endif
-
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-
-#ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDIT_HXX
 #include <svx/xlnedit.hxx>
-#endif
-
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
-
-#ifndef _SVX_XFLFTRIT_HXX
 #include <svx/xflftrit.hxx>
-#endif
-
-#ifndef _SVX_XFLHTIT_HXX
 #include <svx/xflhtit.hxx>
-#endif
-
-#ifndef _SVX_XLNASIT_HXX
 #include <svx/xlnasit.hxx>
-#endif
-
-#ifndef _SVX_XFLASIT_HXX
 #include <svx/xflasit.hxx>
-#endif
-
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-
-#ifndef _SVDTRANS_HXX
 #include <svx/svdtrans.hxx>
-#endif
-
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
 
 // #114265#
-#ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
