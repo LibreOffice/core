@@ -1,16 +1,9 @@
 #include "vclxdialog.hxx"
-
-#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include "toolkit/helper/property.hxx"
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#endif
 
 
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -28,10 +21,7 @@
 
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 
 #include <com/sun/star/awt/PosSize.hpp>
 
