@@ -1,29 +1,12 @@
 #ifndef CONFIGMGR_LOCALBE_LOCALFILEHELPER_HXX_
 #define CONFIGMGR_LOCALBE_LOCALFILEHELPER_HXX_
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_INVALIDBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_CANNOTCONNECTEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/CannotConnectException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_INSUFFICIENTACCESSRIGHTSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/InsufficientAccessRightsException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 
 namespace configmgr
