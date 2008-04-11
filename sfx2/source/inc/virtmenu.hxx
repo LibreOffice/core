@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: virtmenu.hxx,v $
- * $Revision: 1.13 $
+ *
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +42,7 @@ class SfxMenuImageControl_Impl;
 
 SV_DECL_PTRARR_DEL( SfxMenuCtrlArr_Impl, SfxMenuControl*, 2, 2 )
 
-class SfxVirtualMenu
+class SAL_DLLPUBLIC_EXPORT SfxVirtualMenu
 {
 friend class SfxMenuControl;
 
