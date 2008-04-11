@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: drviewse.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.76 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:18:24 $
+ * $RCSfile: drviewse.cxx,v $
+ * $Revision: 1.77 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -45,94 +40,45 @@
 
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
-#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 #include "undo/undomanager.hxx"
-#ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
-
-#ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
-#endif
-#ifndef _EDITSTAT_HXX //autogen
 #include <svx/editstat.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
-#endif
-#ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
-#endif
-#ifndef _SV_SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-#ifndef _SVDOPATH_HXX //autogen
 #include <svx/svdopath.hxx>
-#endif
-#ifndef _SVDUNDO_HXX //autogen
 #include <svx/svdundo.hxx>
-#endif
-#ifndef _SVDORECT_HXX //autogen
 #include <svx/svdorect.hxx>
-#endif
-#ifndef _SVDOGRAF_HXX //autogen
 #include <svx/svdograf.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
-#endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
 #ifndef _FLDITEM_HXX
 #include <svx/flditem.hxx>
 #endif
-#ifndef _RULER_HXX
 #include <svx/ruler.hxx>
-#endif
 #ifndef _OBJ3D_HXX
 #include <svx/obj3d.hxx>
 #endif
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SVDOUNO_HXX //autogen
 #include <svx/svdouno.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
 
 // #UndoRedo#
-#ifndef _SFXSLSTITM_HXX
 #include <svtools/slstitm.hxx>
-#endif
 
 #include <sfx2/ipclient.hxx>
 
@@ -146,78 +92,40 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "drawdoc.hxx"
-#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
-#endif
-#ifndef SD_FU_TEXT_HXX
 #include "futext.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_RECTANGLE_HXX
 #include "fuconrec.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_CUSTOMSHAPE_HXX
 #include "fuconcs.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 #include "fuconuno.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_BEZIER_HXX
 #include "fuconbez.hxx"
-#endif
-#ifndef SD_FU_EDIT_GLUE_POINTS_HXX
 #include "fuediglu.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_ARC_HXX
 #include "fuconarc.hxx"
-#endif
-#ifndef SD_FU_CONSTRUCT_3D_OBJECT_HXX
 #include "fucon3d.hxx"
-#endif
 #include "sdresid.hxx"
-#ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
-#endif
-#ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
-#endif
 #include "PresentationViewShell.hxx"
 #include "sdpage.hxx"
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
 #endif
 #include "zoomlist.hxx"
-#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#endif
 #include "DrawDocShell.hxx"
 #include "sdattr.hxx"
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_TOOL_BAR_MANAGER_HXX
 #include "ToolBarManager.hxx"
-#endif
 
 // #97016#
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
 
 // #98721#
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
 
 // #110496#
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _AVMEDIA_MEDIAWINDOW_HXX //autogen
 #include <avmedia/mediawindow.hxx>
-#endif
 
 #include "Window.hxx"
 
