@@ -1,9 +1,7 @@
 #ifndef AWT_FORWARD_HXX
 #define AWT_FORWARD_HXX
 
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 
 #define IMPLEMENT_FORWARD_XTYPEPROVIDER1( classname, baseclass ) \
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL classname::getTypes(  ) throw (::com::sun::star::uno::RuntimeException) \
