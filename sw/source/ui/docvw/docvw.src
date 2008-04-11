@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docvw.src,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,3 +312,14 @@ String STR_POSTIT_YESTERDAY
 {
     Text [ en-US ] = "Yesterday," ;
 };
+
+String STR_DELETE_ALL_NOTES
+{
+    Text [ en-US ] = "All Notes" ;
+};
+
+String STR_DELETE_AUTHOR_NOTES
+{
+    Text [ en-US ] = "Notes by " ;
+};
+
