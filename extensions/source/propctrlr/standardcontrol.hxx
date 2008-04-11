@@ -1,84 +1,52 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: standardcontrol.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:54:41 $
+ * $RCSfile: standardcontrol.hxx,v $
+ * $Revision: 1.10 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 #define _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 
-#ifndef _EXTENSIONS_PROPCTRLR_COMMONCONTROL_HXX_
 #include "commoncontrol.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_INSPECTION_XNUMERICCONTROL_HPP_
 #include <com/sun/star/inspection/XNumericControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XSTRINGLISTCONTROL_HPP_
 #include <com/sun/star/inspection/XStringListControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XHYPERLINKCONTROL_HPP_
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _LONGCURR_HXX
 #include <vcl/longcurr.hxx>
-#endif
-#ifndef _CTRLBOX_HXX
 #include <svtools/ctrlbox.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _CALENDAR_HXX
 #include <svtools/calendar.hxx>
-#endif
-#ifndef _FMTFIELD_HXX_
 #include <svtools/fmtfield.hxx>
-#endif
 
 #include <set>
 
