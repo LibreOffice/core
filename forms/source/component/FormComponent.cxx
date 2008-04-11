@@ -1,120 +1,61 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: FormComponent.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.58 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:55:00 $
+ * $RCSfile: FormComponent.cxx,v $
+ * $Revision: 1.59 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
-
-#ifndef _FORMS_FORMCOMPONENT_HXX_
 #include "FormComponent.hxx"
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
 #ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
 #endif
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 #include "componenttools.hxx"
-#endif
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-
-#ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
-#endif
-#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
 #include <comphelper/listenernotification.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_EMPTYFONTDESCRIPTOR_HXX_
 #include <toolkit/helper/emptyfontdescriptor.hxx>
-#endif
 
 #include "frm_resource.hxx"
 #include "frm_resource.hrc"
