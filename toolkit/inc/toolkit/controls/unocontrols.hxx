@@ -1,144 +1,69 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unocontrols.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.40 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:04:01 $
+ * $RCSfile: unocontrols.hxx,v $
+ * $Revision: 1.41 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #define _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 
-#ifndef TOOLKIT_DLLAPI_H
 #include <toolkit/dllapi.h>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTLISTENER_HPP_
 #include <com/sun/star/awt/XTextListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XBUTTON_HPP_
 #include <com/sun/star/awt/XButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOGGLEBUTTON_HPP_
 #include <com/sun/star/awt/XToggleButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
 #include <com/sun/star/awt/XImageConsumer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XIMAGEPRODUCER_HPP_
 #include <com/sun/star/awt/XImageProducer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XRADIOBUTTON_HPP_
 #include <com/sun/star/awt/XRadioButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XITEMLISTENER_HPP_
 #include <com/sun/star/awt/XItemListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
 #include <com/sun/star/awt/XCheckBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFIXEDHYPERLINK_HPP_
 #include <com/sun/star/awt/XFixedHyperlink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFIXEDTEXT_HPP_
 #include <com/sun/star/awt/XFixedText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
 #include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCOMBOBOX_HPP_
 #include <com/sun/star/awt/XComboBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDATEFIELD_HPP_
 #include <com/sun/star/awt/XDateField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSPINFIELD_HPP_
 #include <com/sun/star/awt/XSpinField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTIMEFIELD_HPP_
 #include <com/sun/star/awt/XTimeField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XNUMERICFIELD_HPP_
 #include <com/sun/star/awt/XNumericField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCURRENCYFIELD_HPP_
 #include <com/sun/star/awt/XCurrencyField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPATTERNFIELD_HPP_
 #include <com/sun/star/awt/XPatternField.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XPROGRESSBAR_HPP_
 #include <com/sun/star/awt/XProgressBar.hpp>
-#endif
-
-#ifndef _TOOLKIT_AWT_UNOCONTROLMODEL_HXX_
 #include <toolkit/controls/unocontrolmodel.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_UNOCONTROLBASE_HXX_
 #include <toolkit/controls/unocontrolbase.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
-#endif
-
-#ifndef _IMGCONS_HXX
 #include <vcl/imgcons.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 
 #include <list>
 
