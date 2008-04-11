@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: PrintManager.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.21 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:04:23 $
+ * $RCSfile: PrintManager.cxx,v $
+ * $Revision: 1.22 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,23 +38,14 @@
 #include "PrintManager.hxx"
 
 #include <svx/editstat.hxx>
-#ifndef _SD_OPTSITEM_HXX
 #include "optsitem.hxx"
-#endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "drawview.hxx"
-#ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "DrawViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
-#endif
-//#include "SlideSorterViewShell.hxx"
 #include "Outliner.hxx"
 #include "Window.hxx"
 #include "FrameView.hxx"
@@ -68,41 +54,26 @@
 #include <tools/multisel.hxx>
 #include <svtools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
-#endif
-#ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
-#endif
 #include "sdresid.hxx"
 #include <svx/svdetc.hxx>
-#ifndef _SVDOPAGE_HXX
 #include <svx/svdopage.hxx>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/svditer.hxx>
 
 #include "strings.hrc"
 
 #include <svx/svdopath.hxx>
-
-#ifndef _B3D_BASE3D_HXX
 #include <goodies/base3d.hxx>
-#endif
 
 #include "sdabstdlg.hxx"
 #include "printdlg.hrc"
 #include "prntopts.hrc"
 #include "app.hrc"
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
 #include <svx/paperinf.hxx>
 #include <svx/xlnclit.hxx>
 #include "printdialog.hxx"
