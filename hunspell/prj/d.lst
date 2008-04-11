@@ -1,6 +1,5 @@
 ..\%__SRC%\lib\lib*.*        %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\lib\hyphen.lib        %_DEST%\lib%_EXT%\hyphen.lib
+..\%__SRC%\lib\hunspell.lib        %_DEST%\lib%_EXT%\hunspell.lib
 
-..\%__SRC%\misc\build\hyphen-2.3\hyphen.h %_DEST%\inc\hyphen.h
-..\%__SRC%\misc\build\hyphen-2.3\.libs\libhyphen.a %_DEST%\lib%_EXT%\libhyphen.a
-..\%__SRC%\misc\build\hyphen-2.3\hyph_en_US.dic %_DEST%\bin\hyph_en_US.dic
+mkdir: %_DEST%\inc%_EXT%\hunspell
+..\%__SRC%\inc\*.hxx         %_DEST%\inc%_EXT%\hunspell\*.hxx

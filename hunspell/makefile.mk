@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rene $ $Date: 2008-01-04 19:47:26 $
+#   last change: $Author: rene $ $Date: 2008-04-11 09:17:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@ TARGET=hunspell
 TARFILE_NAME=hunspell-1.1.12-2
 TARFILE_ROOTDIR=hunspell-1.1.12
 
+#ADDITIONAL_FILES += src/hunspell/makefile.mk
+
 PATCH_FILE_NAME=hunspell-1.1.12.patch
 
 .IF "$(GUI)"=="UNX"
@@ -56,7 +58,7 @@ PATCH_FILE_NAME=hunspell-1.1.12.patch
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --without-ui --without-readline --with-pic
 
-BUILD_ACTION=make
+BUILD_ACTION=make && make check
 
 OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.1.a
 
@@ -70,7 +72,6 @@ BUILD_ACTION=cd src/hunspell && dmake
 
 OUT2INC= \
     $(BUILD_DIR)$/src$/hunspell$/*.hxx
-
 
 # --- Targets ------------------------------------------------------
 

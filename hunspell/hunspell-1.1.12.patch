@@ -1,303 +1,379 @@
---- affixmgr.cxx	2007-09-04 09:49:30.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/affixmgr.cxx	2008-01-04 19:52:35.000000000 +0100
-@@ -25,6 +63,10 @@
- #endif
- #endif
- 
-+#ifdef OS2
-+#undef DEBUG
-+#endif
-+
- AffixMgr::AffixMgr(const char * affpath, HashMgr* ptr) 
- {
-   // register hash manager and load affix data from aff file
-@@ -2789,7 +2831,7 @@
- 
- int AffixMgr::expand_rootword(struct guessword * wlst, int maxn, const char * ts,
-     int wl, const unsigned short * ap, unsigned short al, char * bad, int badl,
--    char * phone)
-+    char * phone_)
- {
- 
-     int nh=0;
-@@ -2801,8 +2843,8 @@
-        wlst[nh].orig = NULL;
-        nh++;
-        // add special phonetic version
--       if (phone && (nh < maxn)) {
--    	    wlst[nh].word = mystrdup(phone);
-+       if (phone_ && (nh < maxn)) {
-+    	    wlst[nh].word = mystrdup(phone_);
-     	    wlst[nh].allow = (1 == 0);
-     	    wlst[nh].orig = mystrdup(ts);
-     	    nh++;
-@@ -2832,11 +2874,11 @@
-                     wlst[nh].orig = NULL;
-                     nh++;
-                     // add special phonetic version
--    		    if (phone && (nh < maxn)) {
-+    		    if (phone_ && (nh < maxn)) {
-     			char st[MAXWORDUTF8LEN];
--    			strcpy(st, phone);
-+    			strcpy(st, phone_);
-     			strcat(st, sptr->getKey());
--    			reverseword(st + strlen(phone));
-+    			reverseword(st + strlen(phone_));
-     			wlst[nh].word = mystrdup(st);
-     			wlst[nh].allow = (1 == 0);
-     			wlst[nh].orig = mystrdup(newword);
---- atypes.hxx	2007-09-01 08:57:35.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/atypes.hxx	2008-01-04 19:52:35.000000000 +0100
-@@ -9,7 +9,7 @@
- static inline void HUNSPELL_WARNING(FILE *, const char *, ...) {}
- #endif
- #endif
--
+*** misc/hunspell-1.1.12/src/hunspell/affixmgr.cxx	Tue Sep  4 09:49:30 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/affixmgr.cxx	Thu Apr 10 20:27:15 2008
+***************
+*** 25,30 ****
+--- 25,34 ----
+  #endif
+  #endif
+  
++ #ifdef OS2
++ #undef DEBUG
++ #endif
 + 
- // HUNSTEM def.
- #define HUNSTEM
- 
-@@ -91,8 +91,3 @@
+  AffixMgr::AffixMgr(const char * affpath, HashMgr* ptr) 
+  {
+    // register hash manager and load affix data from aff file
+***************
+*** 2789,2795 ****
+  
+  int AffixMgr::expand_rootword(struct guessword * wlst, int maxn, const char * ts,
+      int wl, const unsigned short * ap, unsigned short al, char * bad, int badl,
+!     char * phone)
+  {
+  
+      int nh=0;
+--- 2793,2799 ----
+  
+  int AffixMgr::expand_rootword(struct guessword * wlst, int maxn, const char * ts,
+      int wl, const unsigned short * ap, unsigned short al, char * bad, int badl,
+!     char * phone_)
+  {
+  
+      int nh=0;
+***************
+*** 2801,2808 ****
+         wlst[nh].orig = NULL;
+         nh++;
+         // add special phonetic version
+!        if (phone && (nh < maxn)) {
+!     	    wlst[nh].word = mystrdup(phone);
+      	    wlst[nh].allow = (1 == 0);
+      	    wlst[nh].orig = mystrdup(ts);
+      	    nh++;
+--- 2805,2812 ----
+         wlst[nh].orig = NULL;
+         nh++;
+         // add special phonetic version
+!        if (phone_ && (nh < maxn)) {
+!     	    wlst[nh].word = mystrdup(phone_);
+      	    wlst[nh].allow = (1 == 0);
+      	    wlst[nh].orig = mystrdup(ts);
+      	    nh++;
+***************
+*** 2832,2842 ****
+                      wlst[nh].orig = NULL;
+                      nh++;
+                      // add special phonetic version
+!     		    if (phone && (nh < maxn)) {
+      			char st[MAXWORDUTF8LEN];
+!     			strcpy(st, phone);
+      			strcat(st, sptr->getKey());
+!     			reverseword(st + strlen(phone));
+      			wlst[nh].word = mystrdup(st);
+      			wlst[nh].allow = (1 == 0);
+      			wlst[nh].orig = mystrdup(newword);
+--- 2836,2846 ----
+                      wlst[nh].orig = NULL;
+                      nh++;
+                      // add special phonetic version
+!     		    if (phone_ && (nh < maxn)) {
+      			char st[MAXWORDUTF8LEN];
+!     			strcpy(st, phone_);
+      			strcat(st, sptr->getKey());
+!     			reverseword(st + strlen(phone_));
+      			wlst[nh].word = mystrdup(st);
+      			wlst[nh].allow = (1 == 0);
+      			wlst[nh].orig = mystrdup(newword);
+*** misc/hunspell-1.1.12/src/hunspell/atypes.hxx	Sat Sep  1 08:57:35 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/atypes.hxx	Thu Apr 10 20:27:15 2008
+***************
+*** 9,15 ****
+  static inline void HUNSPELL_WARNING(FILE *, const char *, ...) {}
+  #endif
+  #endif
+! 
+  // HUNSTEM def.
+  #define HUNSTEM
+  
+--- 9,15 ----
+  static inline void HUNSPELL_WARNING(FILE *, const char *, ...) {}
+  #endif
+  #endif
+!  
+  // HUNSTEM def.
+  #define HUNSTEM
+  
+***************
+*** 91,98 ****
+  };
+  
+  #endif
+- 
+- 
+- 
+- 
+- 
+--- 91,93 ----
+*** misc/hunspell-1.1.12/src/hunspell/csutil.cxx	Thu Aug 23 09:27:39 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	Thu Apr 10 20:27:15 2008
+***************
+*** 18,29 ****
+  #include "langnum.hxx"
+  
+  #ifdef OPENOFFICEORG
+! #  include <unicode/uchar.h>
+  #else
+! #  ifndef MOZILLA_CLIENT
+! #    include "utf_info.cxx"
+! #    define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
+! #  endif
+  #endif
+  
+  #ifdef MOZILLA_CLIENT
+--- 18,29 ----
+  #include "langnum.hxx"
+  
+  #ifdef OPENOFFICEORG
+! #include <unicode/uchar.h>
+  #else
+! #ifndef MOZILLA_CLIENT
+! #include "utf_info.cxx"
+! #define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
+! #endif
+  #endif
+  
+  #ifdef MOZILLA_CLIENT
+***************
+*** 125,131 ****
+          case 0x90:
+          case 0xa0:
+          case 0xb0: {
+!             HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Unexpected continuation bytes in %d. character position\n%s\n", u8 - src, src);    
+              u2->h = 0xff;
+              u2->l = 0xfd;
+              break;
+--- 125,131 ----
+          case 0x90:
+          case 0xa0:
+          case 0xb0: {
+!             HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Unexpected continuation bytes in %ld. character position\n%s\n", static_cast<long>(u8 - src), src);    
+              u2->h = 0xff;
+              u2->l = 0xfd;
+              break;
+***************
+*** 137,143 ****
+                  u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
+                  u8++;
+              } else {
+!                 HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
+                  u2->h = 0xff;
+                  u2->l = 0xfd;
+              }
+--- 137,143 ----
+                  u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
+                  u8++;
+              } else {
+!                 HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
+                  u2->h = 0xff;
+                  u2->l = 0xfd;
+              }
+***************
+*** 151,162 ****
+                      u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
+                      u8++;
+                  } else {
+!                     HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
+                      u2->h = 0xff;
+                      u2->l = 0xfd;
+                  }
+              } else {
+!                 HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
+                  u2->h = 0xff;
+                  u2->l = 0xfd;
+              }
+--- 151,162 ----
+                      u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
+                      u8++;
+                  } else {
+!                     HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
+                      u2->h = 0xff;
+                      u2->l = 0xfd;
+                  }
+              } else {
+!                 HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
+                  u2->h = 0xff;
+                  u2->l = 0xfd;
+              }
+*** misc/hunspell-1.1.12/src/hunspell/hunspell.cxx	Tue Aug 28 15:17:30 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/hunspell.cxx	Thu Apr 10 20:27:15 2008
+***************
+*** 1,3 ****
+--- 1,7 ----
++ #ifdef _MSC_VER
++ #pragma setlocale("C")
++ #endif
++ 
+  #include "license.hunspell"
+  #include "license.myspell"
+  
+***************
+*** 12,18 ****
+  #endif
+  
+  #include "hunspell.hxx"
+! #include "hunspell.h"
+  
+  #ifndef MOZILLA_CLIENT
+  #ifndef W32
+--- 16,26 ----
+  #endif
+  
+  #include "hunspell.hxx"
+! #ifndef OPENOFFICEORG
+! #ifndef MOZILLA_CLIENT
+! //#include "hunspell.h"
+! #endif
+! #endif
+  
+  #ifndef MOZILLA_CLIENT
+  #ifndef W32
+***************
+*** 1727,1755 ****
+  }
+  
+  #endif // END OF HUNSPELL_EXPERIMENTAL CODE
+- 
+- Hunhandle *Hunspell_create(const char * affpath, const char * dpath)
+- {
+-         return (Hunhandle*)(new Hunspell(affpath, dpath));
+- }
+- 
+- void Hunspell_destroy(Hunhandle *pHunspell)
+- {
+-         delete (Hunspell*)(pHunspell);
+- }
+- 
+- int Hunspell_spell(Hunhandle *pHunspell, const char *word)
+- {
+-         return ((Hunspell*)pHunspell)->spell(word);
+- }
+- 
+- char *Hunspell_get_dic_encoding(Hunhandle *pHunspell)
+- {
+-         return ((Hunspell*)pHunspell)->get_dic_encoding();
+- }
+- 
+- int Hunspell_suggest(Hunhandle *pHunspell, char*** slst, const char * word)
+- {
+-         return ((Hunspell*)pHunspell)->suggest(slst, word);
+- }
+- 
+--- 1735,1737 ----
+*** misc/hunspell-1.1.12/src/hunspell/license.hunspell	Thu Jun 14 14:07:47 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/license.hunspell	Thu Apr 10 20:27:15 2008
+***************
+*** 56,59 ****
+   *
+   * ***** END LICENSE BLOCK ***** */
+  
+- #include "config.h"
+--- 56,58 ----
+*** misc/hunspell-1.1.12/src/hunspell/makefile.mk	Fri Apr  6 10:05:32 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/makefile.mk	Thu Apr 10 20:28:34 2008
+***************
+*** 60,70 ****
+  #
+  #*************************************************************************
+  
+! PRJ = ..
+  
+  PRJNAME	= hunspell
+  TARGET	= hunspell
+! LIBTARGET=NO
+  
+  #----- Settings ---------------------------------------------------------
+  
+--- 60,70 ----
+  #
+  #*************************************************************************
+  
+! PRJ = ../../../../../..
+  
+  PRJNAME	= hunspell
+  TARGET	= hunspell
+! LIBTARGET=YES
+  
+  #----- Settings ---------------------------------------------------------
+  
+***************
+*** 73,79 ****
+  # --- Files --------------------------------------------------------
+  
+  # all_target: ALLTAR DICTIONARY
+! all_target: ALLTAR
+  
+  ##CXXFLAGS += -I..$/..$/lingutil
+  ##CFLAGSCXX += -I..$/..$/lingutil
+--- 73,79 ----
+  # --- Files --------------------------------------------------------
+  
+  # all_target: ALLTAR DICTIONARY
+! #all_target: ALLTAR
+  
+  ##CXXFLAGS += -I..$/..$/lingutil
+  ##CFLAGSCXX += -I..$/..$/lingutil
+***************
+*** 81,87 ****
+  
+  CDEFS+=-DOPENOFFICEORG
+  
+! SLOFILES=	\
+  		$(SLO)$/affentry.obj \
+  		$(SLO)$/affixmgr.obj \
+  		$(SLO)$/dictmgr.obj \
+--- 81,87 ----
+  
+  CDEFS+=-DOPENOFFICEORG
+  
+! OBJFILES=	\
+  		$(SLO)$/affentry.obj \
+  		$(SLO)$/affixmgr.obj \
+  		$(SLO)$/dictmgr.obj \
+***************
+*** 93,99 ****
+  
+  LIB1TARGET= $(SLB)$/lib$(TARGET).lib
+  LIB1ARCHIV= $(LB)/lib$(TARGET).a
+! LIB1OBJFILES= $(SLOFILES)
+  
+  # DIC2BIN= \
+  #	en_US.aff \
+--- 93,99 ----
+  
+  LIB1TARGET= $(SLB)$/lib$(TARGET).lib
+  LIB1ARCHIV= $(LB)/lib$(TARGET).a
+! LIB1OBJFILES= $(OBJFILES)
+  
+  # DIC2BIN= \
+  #	en_US.aff \
+*** misc/hunspell-1.1.12/src/hunspell/suggestmgr.cxx	Tue Sep  4 13:21:26 2007
+--- misc/build/hunspell-1.1.12/src/hunspell/suggestmgr.cxx	Thu Apr 10 20:27:15 2008
+***************
+*** 118,124 ****
+        return ns;
+  }
+  
+! // generate suggestions for a mispelled word
+  //    pass in address of array of char * pointers
+  // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
+  
+--- 118,124 ----
+        return ns;
+  }
+  
+! // generate suggestions for a misspelled word
+  //    pass in address of array of char * pointers
+  // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
+  
+diff -urNad hunspell-1.1.9~/src/hunspell/csutil.cxx hunspell-1.1.9/src/hunspell/csutil.cxx
+--- hunspell-1.1.9~/src/hunspell/csutil.cxx	2007-07-16 08:48:38.000000000 +0200
++++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	2008-04-07 00:13:28.000000000 +0200
+@@ -4937,7 +4937,7 @@
+ { 0x00, 0xff, 0xff },
  };
  
- #endif
--
--
--
--
--
---- csutil.cxx	2007-08-23 09:27:39.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/csutil.cxx	2008-01-04 19:52:36.000000000 +0100
-@@ -18,12 +56,12 @@
- #include "langnum.hxx"
- 
- #ifdef OPENOFFICEORG
--#  include <unicode/uchar.h>
-+#include <unicode/uchar.h>
- #else
--#  ifndef MOZILLA_CLIENT
--#    include "utf_info.cxx"
--#    define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
--#  endif
-+#ifndef MOZILLA_CLIENT
-+#include "utf_info.cxx"
-+#define UTF_LST_LEN (sizeof(utf_lst) / (sizeof(unicode_info)))
-+#endif
- #endif
- 
- #ifdef MOZILLA_CLIENT
-@@ -125,7 +163,7 @@
-         case 0x90:
-         case 0xa0:
-         case 0xb0: {
--            HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Unexpected continuation bytes in %d. character position\n%s\n", u8 - src, src);    
-+            HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Unexpected continuation bytes in %ld. character position\n%s\n", static_cast<long>(u8 - src), src);    
-             u2->h = 0xff;
-             u2->l = 0xfd;
-             break;
-@@ -137,7 +175,7 @@
-                 u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
-                 u8++;
-             } else {
--                HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
-+                HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
-                 u2->h = 0xff;
-                 u2->l = 0xfd;
-             }
-@@ -151,12 +189,12 @@
-                     u2->l = (*u8 << 6) + (*(u8+1) & 0x3f);
-                     u8++;
-                 } else {
--                    HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
-+                    HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
-                     u2->h = 0xff;
-                     u2->l = 0xfd;
-                 }
-             } else {
--                HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %d. character position:\n%s\n", u8 - src, src);
-+                HUNSPELL_WARNING(stderr, "UTF-8 encoding error. Missing continuation byte in %ld. character position:\n%s\n", static_cast<long>(u8 - src), src);
-                 u2->h = 0xff;
-                 u2->l = 0xfd;
-             }
---- hunspell.cxx	2007-08-28 15:17:30.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/hunspell.cxx	2008-01-04 19:52:36.000000000 +0100
-@@ -1,3 +1,7 @@
-+#ifdef _MSC_VER
-+#pragma setlocale("C")
-+#endif
-+
- #include "license.hunspell"
- #include "license.myspell"
- 
-@@ -12,7 +55,11 @@
- #endif
- 
- #include "hunspell.hxx"
--#include "hunspell.h"
-+#ifndef OPENOFFICEORG
-+#ifndef MOZILLA_CLIENT
-+//#include "hunspell.h"
-+#endif
-+#endif
- 
- #ifndef MOZILLA_CLIENT
- #ifndef W32
-@@ -1727,29 +1774,3 @@
- }
- 
- #endif // END OF HUNSPELL_EXPERIMENTAL CODE
--
--Hunhandle *Hunspell_create(const char * affpath, const char * dpath)
--{
--        return (Hunhandle*)(new Hunspell(affpath, dpath));
--}
--
--void Hunspell_destroy(Hunhandle *pHunspell)
--{
--        delete (Hunspell*)(pHunspell);
--}
--
--int Hunspell_spell(Hunhandle *pHunspell, const char *word)
--{
--        return ((Hunspell*)pHunspell)->spell(word);
--}
--
--char *Hunspell_get_dic_encoding(Hunhandle *pHunspell)
--{
--        return ((Hunspell*)pHunspell)->get_dic_encoding();
--}
--
--int Hunspell_suggest(Hunhandle *pHunspell, char*** slst, const char * word)
--{
--        return ((Hunspell*)pHunspell)->suggest(slst, word);
--}
--
---- license.hunspell	2007-06-14 14:07:47.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/license.hunspell	2008-01-04 19:52:36.000000000 +0100
-@@ -55,5 +55,3 @@
-  * the terms of any one of the MPL, the GPL or the LGPL.
-  *
-  * ***** END LICENSE BLOCK ***** */
--
--#include "config.h"
---- makefile.mk	2007-04-06 10:05:32.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/makefile.mk	2008-01-04 19:52:36.000000000 +0100
-@@ -33,38 +28,15 @@
- #   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- #   MA  02111-1307  USA
- #
--#
--#   Sun Industry Standards Source License Version 1.1
--#   =================================================
--#   The contents of this file are subject to the Sun Industry Standards
--#   Source License Version 1.1 (the "License"); You may not use this file
--#   except in compliance with the License. You may obtain a copy of the
--#   License at http://www.openoffice.org/license.html.
--#
--#   Software provided under this License is provided on an "AS IS" basis,
--#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
--#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
--#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
--#   See the License for the specific provisions governing your rights and
--#   obligations concerning the Software.
--#
--#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
--#
--#   Copyright: 2000 by Sun Microsystems, Inc.
--#
--#   All Rights Reserved.
--#
--#   Contributor(s): _______________________________________
--#
--#
--#
- #*************************************************************************
- 
--PRJ = ..
-+PRJ = ..$/..$/..
- 
--PRJNAME	= hunspell
-+PRJNAME	= lingucomponent
- TARGET	= hunspell
--LIBTARGET=NO
-+USE_DEFFILE = TRUE
-+
-+
- 
- #----- Settings ---------------------------------------------------------
- 
-@@ -72,39 +44,44 @@
- 
- # --- Files --------------------------------------------------------
- 
-+.IF "$(SYSTEM_HUNSPELL)" == "YES"
-+@all:
-+	@echo "Using system hunspell..."
-+.ENDIF
-+
- # all_target: ALLTAR DICTIONARY
- all_target: ALLTAR
- 
--##CXXFLAGS += -I..$/..$/lingutil
--##CFLAGSCXX += -I..$/..$/lingutil
--##CFLAGSCC += -I..$/..$/lingutil
--
-+.IF "$(GUI)" == "UNX"
- CDEFS+=-DOPENOFFICEORG
-+.ENDIF
- 
- SLOFILES=	\
- 		$(SLO)$/affentry.obj \
- 		$(SLO)$/affixmgr.obj \
--		$(SLO)$/dictmgr.obj \
- 		$(SLO)$/csutil.obj \
--		$(SLO)$/utf_info.obj \
-+		$(SLO)$/phonet.obj \
- 		$(SLO)$/hashmgr.obj \
- 		$(SLO)$/suggestmgr.obj \
- 		$(SLO)$/hunspell.obj
- 
--LIB1TARGET= $(SLB)$/lib$(TARGET).lib
--LIB1ARCHIV= $(LB)/lib$(TARGET).a
--LIB1OBJFILES= $(SLOFILES)
--
--# DIC2BIN= \
--#	en_US.aff \
--#	en_US.dic
--#
--#	de_DE.aff \
--#	de_DE.dic
--
-+SHL1TARGET= 	$(TARGET)
- 
--# DICTIONARY : 
--#	+$(COPY) $(foreach,i,$(DIC2BIN) $i) $(BIN)
-+.IF "$(GUI)" == "UNX"
-+SHL1STDLIBS= 	$(ICUUCLIB)
-+.ELSE
-+SHL1STDLIBS=
-+.ENDIF
-+
-+# build DLL
-+SHL1DEPN=
-+SHL1IMPLIB=	i$(TARGET)
-+SHL1LIBS=	$(SLB)$/$(TARGET).lib
-+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-+DEF1NAME=	$(SHL1TARGET)
-+.IF "$(GUI)$(COM)"=="WNTGCC"
-+DEFLIB1NAME =$(TARGET)
-+.ENDIF
- 
- 
- # --- Targets ------------------------------------------------------
---- suggestmgr.cxx	2007-09-04 13:21:26.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/suggestmgr.cxx	2008-01-04 19:52:36.000000000 +0100
-@@ -118,7 +156,7 @@
-       return ns;
- }
- 
--// generate suggestions for a mispelled word
-+// generate suggestions for a misspelled word
- //    pass in address of array of char * pointers
- // onlycompoundsug: probably bad suggestions (need for ngram sugs, too)
- 
+-struct enc_entry encds[] = {
++static struct enc_entry encds[] = {
+ {"ISO8859-1",iso1_tbl},
+ {"ISO8859-2",iso2_tbl},
+ {"ISO8859-3",iso3_tbl},
