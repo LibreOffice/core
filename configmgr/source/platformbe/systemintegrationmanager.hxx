@@ -1,49 +1,17 @@
 #ifndef CONFIGMGR_BACKEND_SYSTEMINTEGRATIONMANAGER_HXX_
 #define CONFIGMGR_BACKEND_SYSTEMINTEGRATIONMANAGER_HXX_
 
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
 #include <com/sun/star/configuration/backend/XBackend.hpp>
-#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKEND_HPP_
-
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif // _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif // _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDSETUPEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDCHANGESNOTIFIER_HPP_
 #include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSINGLELAYERSTRATUM_HPP_
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
-#endif // _CPPUHELPER_COMPBASE4_HXX_
 
 #ifndef INCLUDED_MAP
 #include <map>
