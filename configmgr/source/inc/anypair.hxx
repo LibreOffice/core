@@ -1,17 +1,9 @@
 #ifndef CFGMGR_ANYPAIR_HXX
 #define CFGMGR_ANYPAIR_HXX
 
-#ifndef _UNO_ANY2_H_
 #include <uno/any2.h>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
 namespace configmgr
 {
