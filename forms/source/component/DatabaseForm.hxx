@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: DatabaseForm.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.35 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 16:50:04 $
+ * $RCSfile: DatabaseForm.hxx,v $
+ * $Revision: 1.36 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,108 +32,41 @@
 #define _FRM_DATABASEFORM_HXX_
 
 #include "propertybaghelper.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLERRORLISTENER_HPP_
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMSUBMITMETHOD_HPP_
 #include <com/sun/star/form/FormSubmitMethod.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XSUBMIT_HPP_
 #include <com/sun/star/form/XSubmit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XDATABASEPARAMETERBROADCASTER2_HPP_
 #include <com/sun/star/form/XDatabaseParameterBroadcaster2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVELISTENER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVEBROADCASTER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_NAVIGATIONBARMODE_HPP_
 #include <com/sun/star/form/NavigationBarMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XLOADLISTENER_HPP_
 #include <com/sun/star/form/XLoadListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
 #include <com/sun/star/sdbc/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
 
 
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
-#ifndef _FRM_INTERFACE_CONTAINER_HXX_
 #include "InterfaceContainer.hxx"
-#endif
 
 #include "connectivity/parameters.hxx"
 #include "connectivity/filtermanager.hxx"
@@ -146,28 +74,13 @@
 #ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
 #endif
-#ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
-#endif
 
 namespace com { namespace sun { namespace star { namespace sdbc {
     class SQLException;
