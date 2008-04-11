@@ -1,102 +1,66 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdoashp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.47 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:54:16 $
+ * $RCSfile: svdoashp.cxx,v $
+ * $Revision: 1.48 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef _SVDOASHP_HXX
 #include <svx/svdoashp.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
 #include <unotools/datetime.hxx>
-#endif
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
 #endif
 #endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XCUSTOMSHAPEENGINE_HPP_
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 #ifndef __com_sun_star_awt_Rectangle_hpp_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
-#ifndef _SVX_UNOPOLYHELPER_HXX
 #include "unopolyhelper.hxx"
-#endif
 #include <comphelper/processfactory.hxx>
 #include <svtools/urihelper.hxx>
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
-#endif
-#ifndef _SVDDRAG_HXX
 #include <svx/svddrag.hxx>
-#endif
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include "svdxout.hxx"
@@ -115,37 +79,24 @@
 #include <svx/svdoutl.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
-
-#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
-#endif
-#ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
-#endif
-#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
 #include "../customshapes/EnhancedCustomShape2d.hxx"
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP__
 #include <com/sun/star/beans/PropertyValues.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
-#endif
 #ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
 #ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
-#endif
 #ifndef __COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP__
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
 
 //      textitem.hxx        editdata.hxx
 #include <svx/xlnclit.hxx>
@@ -155,63 +106,24 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_CUSTOMSHAPEPROPERTIES_HXX
 #include <svx/sdr/properties/customshapeproperties.hxx>
-#endif
-#ifndef _SDR_CONTACT_VIEWCONTACTOFSDROBJCUSTOMSHAPE_HXX
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
-#endif
 
 // #i37011#
-#ifndef _SVX_XLNCLIT_HXX //autogen
 #include <svx/xlnclit.hxx>
-#endif
-
-#ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
-#endif
-
-#ifndef _SVX_XFLTRIT_HXX
 #include <svx/xfltrit.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
-
-#ifndef _SVX_XFLHTIT_HXX
 #include <svx/xflhtit.hxx>
-#endif
-
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 // #i37448#
-#ifndef _SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
 
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
