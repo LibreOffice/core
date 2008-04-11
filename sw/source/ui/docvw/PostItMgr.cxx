@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PostItMgr.cxx,v $
- * $Revision: 1.5 $
+ *
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +57,6 @@
 #include <postit.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
-#include <comcore.hrc>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #include <tools/color.hxx>
