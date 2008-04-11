@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatch.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2721,6 +2721,32 @@ void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
 {
     ExecutePopup( nConfigId, pWin, pPos );
 }
+
+SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos )
+{
+    SfxDispatcher &rDisp = *SFX_APP()->GetDispatcher_Impl();
+    sal_uInt16 nShLevel = 0;
+    SfxShell *pSh;
+    nShLevel=0;
+
+    if ( rDisp.pImp->bQuiet )
+    {
+        nConfigId = 0;
+        nShLevel = rDisp.pImp->aStack.Count();
+    }
+
+    Window *pWindow = pWin ? pWin : rDisp.pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->GetWindow();
+    for ( pSh = rDisp.GetShell(nShLevel); pSh; ++nShLevel, pSh = rDisp.GetShell(nShLevel) )
+    {
+        const ResId& rResId = pSh->GetInterface()->GetPopupMenuResId();
+        if ( ( nConfigId == 0 && rResId.GetId() ) || ( nConfigId != 0 && rResId.GetId() == nConfigId ) )
+        {
+                return SfxPopupMenuManager::Popup( rResId, rDisp.GetFrame(), pPos ? *pPos : pWindow->GetPointerPosPixel(), pWindow );
+        }
+    }
+    return 0;
+}
+
 
 //----------------------------------------------------------------------
 void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId, Window *pWin, const Point *pPos )
