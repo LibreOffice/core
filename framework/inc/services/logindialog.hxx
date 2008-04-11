@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: logindialog.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:21:03 $
+ * $RCSfile: logindialog.hxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -43,92 +38,35 @@
 #ifndef __FRAMEWORK_THREADHELPER_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
 #endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 #include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
 #include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
 #include <macros/xserviceinfo.hxx>
-#endif
 
 #include <services/logindialog.hrc>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-
-#ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
-#endif
-
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-
-#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
-#endif
-
-#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
-#endif
 
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -137,10 +75,7 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-
-#ifndef _SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
