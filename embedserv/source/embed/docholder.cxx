@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: docholder.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.30 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:26:03 $
+ * $RCSfile: docholder.cxx,v $
+ * $Revision: 1.31 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #if defined(_MSC_VER) && (_MSC_VER > 1310)
@@ -45,101 +40,41 @@
 #include "iipaobj.hxx"
 #include "common.h"
 #include <Windows.h>
-
-#ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMCHILDFACTORY_HPP_
 #include <com/sun/star/awt/XSystemChildFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTWINDOWPERR_HPP_
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
 #include <com/sun/star/ui/XUIElement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseAble.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVIEW_HPP_
 #include <com/sun/star/awt/XView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER2_HPP_
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
-#endif
 
 using namespace ::com::sun::star;
 
