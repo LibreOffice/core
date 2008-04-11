@@ -16,18 +16,9 @@
 #pragma warning(pop)
 #endif
 #endif // #ifdef Py_PYTHON_H
-
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_CANNOTCONVERTEXCEPTION_HPP_
 #include <com/sun/star/script/CannotConvertException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 
 /**
    External interface of the Python UNO bridge.
