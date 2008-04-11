@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: objmisc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.99 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 12:34:33 $
+ * $RCSfile: objmisc.cxx,v $
+ * $Revision: 1.100 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,78 +34,35 @@
 #ifndef _INETMSG_HXX //autogen
 #include <svtools/inetmsg.hxx>
 #endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
 #include <vos/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-
-#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHENGINEEVENT_HPP_
 #include <com/sun/star/script/FinishEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTREASON_HPP_
 #include <com/sun/star/script/InterruptReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINELISTENER_HPP_
 #include <com/sun/star/script/XEngineListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XDEBUGGING_HPP_
 #include <com/sun/star/script/XDebugging.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XINVOKATION_HPP_
 #include <com/sun/star/script/XInvocation.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_CONTEXTINFORMATION_HPP_
 #include <com/sun/star/script/ContextInformation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_FINISHREASON_HPP_
 #include <com/sun/star/script/FinishReason.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XENGINE_HPP_
 #include <com/sun/star/script/XEngine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_INTERRUPTENGINEEVENT_HPP_
 #include <com/sun/star/script/InterruptEngineEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HPP_
 #include <com/sun/star/script/XLibraryAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XSCRIPTINVOCATIONCONTEXT_HPP_
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
 
 
 #include <com/sun/star/script/provider/XScript.hpp>
@@ -141,28 +93,17 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::provider;
 using namespace ::com::sun::star::container;
-
-#ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
-#endif
 #ifndef _SB_BASMGR_HXX
 #include <basic/basmgr.hxx>
 #endif
 #ifndef _VCL_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
-#endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
-#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
-#endif
 
 #include <svtools/pathoptions.hxx>
 #include <unotools/ucbhelper.hxx>
