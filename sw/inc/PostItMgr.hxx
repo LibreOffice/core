@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PostItMgr.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@ class SfxHint;
 class SwPostIt;
 class SwEditWin;
 class Color;
+class SvxSearchItem;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -111,7 +112,8 @@ class SwPostItMgr: public SfxListener
         bool                            mbLayout;
         long                            mbLayoutHeight;
         long                            mbLayouting;
-        bool                            mbDeletingSeveral;
+        bool                            mbReadOnly;
+        bool                            mbDeleteNote;
 
         typedef std::list<SwPostItItem*>::iterator  SwPostItItem_iterator;
         typedef std::list<SwPostIt*>::iterator      SwPostIt_iterator;
@@ -150,7 +152,8 @@ class SwPostItMgr: public SfxListener
             void LayoutPostIts();
             bool CalcRects();
 
-            void AutoScroll(const SwPostIt* pPostIt);
+            void MakeVisible(const SwPostIt* pPostIt,long aPage = -1);
+
             bool ShowScrollbar(const unsigned long aPage) const;
             bool HasNotes() const ;
             bool ShowNotes() const;
@@ -169,7 +172,8 @@ class SwPostItMgr: public SfxListener
             void Delete(String aAuthor);
             void Delete();
 
-            void Hide(SwPostItField* aPostItField, bool All = false);
+            void Hide( SwPostItField* pPostItField );
+            void Hide( const String& rAuthor );
             void Hide();
             void Show();
 
@@ -193,5 +197,3 @@ class SwPostItMgr: public SfxListener
 };
 
 #endif
-
-
