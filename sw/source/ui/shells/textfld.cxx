@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfld.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,6 +96,8 @@
 #include <app.hrc>
 #endif
 
+#include "PostItMgr.hxx"
+#include "postit.hxx"
 
 using namespace nsSwDocInfoSubType;
 
@@ -333,6 +335,36 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
 
+            case FN_DELETE_NOTE:
+                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
+                    GetView().GetPostItMgr()->GetActivePostIt()->Delete();
+            break;
+            case FN_DELETE_ALL_NOTES:
+                if ( GetView().GetPostItMgr() )
+                    GetView().GetPostItMgr()->Delete();
+            break;
+            case FN_DELETE_NOTE_AUTHOR:
+            {
+                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot, FALSE);
+                if ( pNoteItem && GetView().GetPostItMgr() )
+                    GetView().GetPostItMgr()->Delete( pNoteItem->GetValue() );
+            }
+            break;
+            case FN_HIDE_NOTE:
+                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
+                    GetView().GetPostItMgr()->GetActivePostIt()->Hide();
+            break;
+            case FN_HIDE_ALL_NOTES:
+                if ( GetView().GetPostItMgr() )
+                    GetView().GetPostItMgr()->Hide();
+            break;
+            case FN_HIDE_NOTE_AUTHOR:
+            {
+                SFX_REQUEST_ARG( rReq, pNoteItem, SfxStringItem, nSlot, FALSE);
+                if ( pNoteItem && GetView().GetPostItMgr() )
+                    GetView().GetPostItMgr()->Hide( pNoteItem->GetValue() );
+            }
+            break;
             case FN_POSTIT:
             {
                 SwPostItField* pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
@@ -344,6 +376,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( !(sAuthor = aUserOpt.GetFullName()).Len())
                         if( !(sAuthor = aUserOpt.GetID()).Len() )
                             sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+                    if( rSh.HasSelection() )
+                    {
+                        rSh.NormalizePam(true);
+                        rSh.KillPams();
+                        rSh.ClearMark();
+                    }
                     SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
                     aFldMgr.InsertFld(aData);
                     rSh.Push();
@@ -577,7 +615,6 @@ FIELD_INSERT:
     }
 }
 
-
 void SwTextShell::StateField( SfxItemSet &rSet )
 {
     SwWrtShell& rSh = GetShell();
@@ -590,6 +627,23 @@ void SwTextShell::StateField( SfxItemSet &rSet )
     {
         switch (nWhich)
         {
+            case FN_DELETE_NOTE:
+            case FN_DELETE_NOTE_AUTHOR:
+            case FN_DELETE_ALL_NOTES:
+            case FN_HIDE_NOTE:
+            case FN_HIDE_NOTE_AUTHOR:
+            case FN_HIDE_ALL_NOTES:
+                {
+                    SwPostItMgr* pPostItMgr = GetView().GetPostItMgr();
+                    if ( !pPostItMgr )
+                        rSet.InvalidateItem( nWhich );
+                    else if ( !pPostItMgr->GetActivePostIt() )
+                    {
+                        rSet.InvalidateItem( FN_DELETE_NOTE );
+                        rSet.InvalidateItem( FN_HIDE_NOTE );
+                    }
+                }
+            break;
             case FN_EDIT_FIELD:
             {
                 /* #108536# Fields can be selected, too now. Removed
