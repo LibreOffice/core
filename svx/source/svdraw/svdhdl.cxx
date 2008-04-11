@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdhdl.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.31 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:51:40 $
+ * $RCSfile: svdhdl.cxx,v $
+ * $Revision: 1.32 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -41,26 +36,14 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmrkv.hxx>
-
-#ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
 
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
 #endif
-
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-
-#ifndef _B3D_B3DCOLOR_HXX
 #include <goodies/b3dcolor.hxx>
-#endif
 
 #include <svx/sxekitm.hxx>
 #include "svdstr.hrc"
@@ -74,53 +57,18 @@
 #include <svx/xflftrit.hxx>
 
 // #105678#
-#ifndef _SVDOPATH_HXX
 #include <svx/svdopath.hxx>
-#endif
-
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYANIMATEDBITMAPEX_HXX
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYBITMAPEX_HXX
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYBITMAP_HXX
 #include <svx/sdr/overlay/overlaybitmap.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
 #include <svx/sdr/overlay/overlaylinestriped.hxx>
-#endif
-
-#ifndef _SDR_OVERLAY_OVERLAYTRIANGLE_HXX
 #include <svx/sdr/overlay/overlaytriangle.hxx>
-#endif
-
-#ifndef _SDRPAGEWINDOW_HXX
 #include <svx/sdrpagewindow.hxx>
-#endif
-
-#ifndef _SDRPAINTWINDOW_HXX
 #include <sdrpaintwindow.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
