@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: postit.hxx,v $
- * $Revision: 1.4 $
+ *
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +33,7 @@
 #define _POSTIT_HXX
 
 #include <vcl/window.hxx>
+#include <swrect.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 //TODO: move to cxx
