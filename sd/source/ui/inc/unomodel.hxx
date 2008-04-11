@@ -1,110 +1,60 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unomodel.hxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.34 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 14:02:10 $
+ * $RCSfile: unomodel.hxx,v $
+ * $Revision: 1.35 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef SD_UNO_MODEL_HXX
 #define SD_UNO_MODEL_HXX
 
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUMMARIZER_HPP_
 #include <com/sun/star/drawing/XDrawPageSummarizer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGEDUPLICATOR_HPP_
 #include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XLAYERSUPPLIER_HPP_
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONSUPPLIER_HPP_
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_XCUSTOMPRESENTATIONSUPPLIER_HPP_
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XLAYERMANAGER_HPP_
 #include <com/sun/star/drawing/XLayerManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATION_HPP_
 #include <com/sun/star/presentation/XPresentation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
 #include <com/sun/star/util/MeasureUnit.hpp>
-#endif
 
 #include <rtl/ref.hxx>
 
-#ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
-#endif
-
-#ifndef _SFX_SFXBASEMODEL_HXX_
 #include <sfx2/sfxbasemodel.hxx>
-#endif
-#ifndef _SVX_FMDMOD_HXX
 #include <svx/fmdmod.hxx>
-#endif
 
 #include <svx/unoipset.hxx>
 
