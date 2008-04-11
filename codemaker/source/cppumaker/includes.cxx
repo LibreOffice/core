@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: includes.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:37:21 $
+ * $RCSfile: includes.cxx,v $
+ * $Revision: 1.8 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -171,7 +166,7 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
             }
         }
     }
-    out << "#ifndef _SAL_CONFIG_H_\n#include \"sal/config.h\"\n#endif\n";
+    out << "#include \"sal/config.h\"\n";
     if (companionHdl) {
         out << "\n";
         dumpInclude(out, *companionHdl, false);
@@ -201,91 +196,77 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
         }
     }
     static char const * hxxExtension[2] = { "h", "hxx" };
-    static char const * hxxExtensionUpper[2] = { "H", "HXX" };
     if (m_includeAny) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _COM_SUN_STAR_UNO_ANY_" << hxxExtensionUpper[m_hpp]
-            << "_\n#include \"com/sun/star/uno/Any." << hxxExtension[m_hpp]
-            << "\"\n#endif\n";
+        out << "#include \"com/sun/star/uno/Any." << hxxExtension[m_hpp]
+            << "\"\n";
     }
     if (m_includeReference) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _COM_SUN_STAR_UNO_REFERENCE_"
-            << hxxExtensionUpper[m_hpp]
-            << "_\n#include \"com/sun/star/uno/Reference."
-            << hxxExtension[m_hpp] << "\"\n#endif\n";
+        out << "#include \"com/sun/star/uno/Reference."
+            << hxxExtension[m_hpp] << "\"\n";
     }
     if (m_includeSequence) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _COM_SUN_STAR_UNO_SEQUENCE_" << hxxExtensionUpper[m_hpp]
-            << "_\n#include \"com/sun/star/uno/Sequence." << hxxExtension[m_hpp]
-            << "\"\n#endif\n";
+        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[m_hpp]
+            << "\"\n";
     }
     if (m_includeType) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _COM_SUN_STAR_UNO_TYPE_" << hxxExtensionUpper[m_hpp]
-            << "_\n#include \"com/sun/star/uno/Type." << hxxExtension[m_hpp]
-            << "\"\n#endif\n";
+        out << "#include \"com/sun/star/uno/Type." << hxxExtension[m_hpp]
+            << "\"\n";
     }
     if (m_includeCppuMacrosHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _CPPU_MACROS_HXX_\n"
-                "#include \"cppu/macros.hxx\"\n#endif\n");
+        out << ("#include \"cppu/macros.hxx\"\n");
     }
     if (m_includeCppuUnotypeHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef INCLUDED_CPPU_UNOTYPE_HXX\n"
-                "#include \"cppu/unotype.hxx\"\n#endif\n");
+        out << ("#include \"cppu/unotype.hxx\"\n");
     }
     if (m_includeOslDoublecheckedlockingH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H\n"
-                "#include \"osl/doublecheckedlocking.h\"\n#endif\n");
+        out << ("#include \"osl/doublecheckedlocking.h\"\n");
     }
     if (m_includeOslMutexHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _OSL_MUTEX_HXX_\n#include \"osl/mutex.hxx\"\n#endif\n";
+        out << "#include \"osl/mutex.hxx\"\n";
     }
     if (m_includeRtlStrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _RTL_STRBUF_HXX_\n"
-                "#include \"rtl/strbuf.hxx\"\n#endif\n");
+        out << ("#include \"rtl/strbuf.hxx\"\n");
     }
     if (m_includeRtlStringH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _RTL_STRING_H_\n#include \"rtl/string.h\"\n#endif\n";
+        out << "#include \"rtl/string.h\"\n";
     }
     if (m_includeRtlTextencH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _RTL_TEXTENC_H\n#include \"rtl/textenc.h\"\n#endif\n";
+        out << "#include \"rtl/textenc.h\"\n";
     }
     if (m_includeRtlUstrbufHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _RTL_USTRBUF_HXX_\n"
-                "#include \"rtl/ustrbuf.hxx\"\n#endif\n");
+        out << ("#include \"rtl/ustrbuf.hxx\"\n");
     }
     if (m_includeRtlUstringH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _RTL_USTRING_H_\n#include \"rtl/ustring.h\"\n#endif\n";
+        out << "#include \"rtl/ustring.h\"\n";
     }
     if (m_includeRtlUstringHxx) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _RTL_USTRING_HXX_\n"
-                "#include \"rtl/ustring.hxx\"\n#endif\n");
+        out << ("#include \"rtl/ustring.hxx\"\n");
     }
     if (m_includeSalTypesH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#ifndef _SAL_TYPES_H_\n#include \"sal/types.h\"\n#endif\n";
+        out << "#include \"sal/types.h\"\n";
     }
     if (m_includeTypelibTypeclassH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _TYPELIB_TYPECLASS_H_\n"
-                "#include \"typelib/typeclass.h\"\n#endif\n");
+        out << ("#include \"typelib/typeclass.h\"\n");
     }
     if (m_includeTypelibTypedescriptionH) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << ("#ifndef _TYPELIB_TYPEDESCRIPTION_H_\n"
-                "#include \"typelib/typedescription.h\"\n#endif\n");
+        out << ("#include \"typelib/typedescription.h\"\n");
     }
 }
 
@@ -294,17 +275,12 @@ void Includes::dumpInclude(
     rtl::OString const & suffix)
 {
     static char const * extension[2] = { "hdl", "hpp" };
-    static char const * extensionUpper[2] = { "HDL", "HPP" };
-    out << "#ifndef _" << registryType.replace('/', '_').toAsciiUpperCase();
-    if (suffix.getLength() > 0) {
-        out << "_" << suffix.toAsciiUpperCase();
-    }
-    out << "_" <<  extensionUpper[hpp] << "_\n#include \""
+    out << "#include \""
         << registryType;
     if (suffix.getLength() > 0) {
         out << "/" << suffix;
     }
-    out << "." << extension[hpp] << "\"\n#endif\n";
+    out << "." << extension[hpp] << "\"\n";
 }
 
 bool Includes::isInterfaceType(rtl::OString const & registryType) const {
