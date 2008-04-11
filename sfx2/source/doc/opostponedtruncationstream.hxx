@@ -1,86 +1,50 @@
 /*************************************************************************
  *
- *  $RCSfile: opostponedtruncationstream.hxx,v $
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $Revision: 1.3 $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 14:34:37 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $RCSfile: opostponedtruncationstream.hxx,v $
+ * $Revision: 1.4 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 #ifndef _SFX_OPOSTPONEDTRUNCATIONFILESTREAM_HXX
 #define _SFX_OPOSTPONEDTRUNCATIONFILESTREAM_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XASYNCOUTPUTMONITOR_HPP_
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
-#endif
-
-#ifndef INCLUDED_SFX2_DLLAPI_H
 #include "sfx2/dllapi.h"
-#endif
 
 //==================================================================
 // OPostponedTruncationFileStream
