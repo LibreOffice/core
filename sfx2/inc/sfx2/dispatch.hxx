@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatch.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@ class SfxHintPoster;
 class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
+class SfxPopupMenuManager;
 
 struct SfxDispatcher_Impl;
 struct SfxPlugInInfo_Impl;
@@ -112,7 +113,7 @@ class SFX2_DLLPUBLIC SfxDispatcher
     BOOL                            bFlushed;
 
 private:
-                        // auf temporaer ausgewerteten Todos suchen
+    // auf temporaer ausgewerteten Todos suchen
     SAL_DLLPRIVATE BOOL CheckVirtualStack( const SfxShell& rShell, BOOL bDeep );
 
 #ifndef _SFX_HXX
@@ -201,6 +202,9 @@ public:
 
     SfxShell*           GetShell(USHORT nIdx) const;
     SfxViewFrame*       GetFrame() const;
+
+    // caller has to clean up the Manager on his own
+    static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos );
 
     void                ExecutePopup( const ResId &rId,
                               Window *pWin = 0, const Point *pPosPixel = 0 );
