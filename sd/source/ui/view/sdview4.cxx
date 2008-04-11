@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdview4.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,11 +65,7 @@
 #include "strings.hrc"
 #include "imapinfo.hxx"
 #include "sdpage.hxx"
-<<<<<<< sdview4.cxx
 #include "view/SlideSorterView.hxx"
-=======
-#include "SlideView.hxx"
->>>>>>> 1.33.22.3
 #include "undo/undoobjects.hxx"
 
 #include <comphelper/processfactory.hxx>
