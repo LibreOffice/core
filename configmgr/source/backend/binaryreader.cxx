@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: binaryreader.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:57:13 $
+ * $RCSfile: binaryreader.cxx,v $
+ * $Revision: 1.9 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
 ************************************************************************/
 
@@ -37,61 +32,29 @@
 #include "precompiled_configmgr.hxx"
 
 #include "binaryreader.hxx"
-
-#ifndef CONFIGMGR_BINARYTYPE_HXX
 #include "binarytype.hxx"
-#endif
-
-#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
-#endif
-#ifndef _CONFIGMGR_FILEHELPER_HXX_
 #include "filehelper.hxx"
-#endif
-#ifndef _CONFIGMGR_OSLSTREAM_HXX_
 #include "oslstream.hxx"
-#endif
 
 
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATAOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XDataOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_BUFFERSIZEEXCEEDEDEXCEPTION_HPP_
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_UNEXPECTEDEOFEXCEPTION_HPP_
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
-#endif
 
 #include <cppuhelper/implbase1.hxx>
-
-#ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
 #define INCLUDED_ALGORITHM
 #endif
-
-#ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
-#endif
 
 #define ASCII(x) rtl::OUString::createFromAscii(x)
 
