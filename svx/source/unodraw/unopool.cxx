@@ -1,94 +1,55 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: unopool.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.20 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:25:56 $
+ * $RCSfile: unopool.cxx,v $
+ * $Revision: 1.21 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
 
 #include <comphelper/propertysetinfo.hxx>
-
-#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SVX_UNOPOOL_HXX_
 #include "unopool.hxx"
-#endif
-#ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
-#endif
-#ifndef _SVDPOOL_HXX
 #include <svx/svdpool.hxx>
-#endif
-#ifndef SVX_UNOPROV_HXX
 #include <svx/unoprov.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVX_UNOSHPRP_HXX
 #include <svx/unoshprp.hxx>
-#endif
-#ifndef _SVX_XFLBSTIT_HXX
 #include <svx/xflbstit.hxx>
-#endif
-#ifndef _SVX_XFLBMTIT_HXX
 #include <svx/xflbmtit.hxx>
-#endif
-#ifndef _SVX_UNOWPAGE_HXX
 #include <svx/unopage.hxx>
-#endif
-#ifndef _SVDETC_HXX
 #include <svx/svdetc.hxx>
-#endif
-#ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
-#endif
 
 #include "unoapi.hxx"
 #include <memory>
