@@ -1,164 +1,73 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dlged.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.53 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-06 19:14:10 $
+ * $RCSfile: dlged.cxx,v $
+ * $Revision: 1.54 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
-
-#ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFUNC_HXX
 #include "dlgedfunc.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDFAC_HXX
 #include "dlgedfac.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDMOD_HXX
 #include <dlgedmod.hxx>
-#endif
-
-#ifndef _BASCTL_DLGEDPAGE_HXX
 #include "dlgedpage.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDVIEW_HXX
 #include "dlgedview.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
 #include "dlgedobj.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDCLIP_HXX
 #include "dlgedclip.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDDEF_HXX
 #include <dlgeddef.hxx>
-#endif
-
-#ifndef _BASCTL_PROPBRW_HXX
 #include "propbrw.hxx"
-#endif
-
-#ifndef _LOCALIZATIONMGR_HXX
 #include <localizationmgr.hxx>
-#endif
 
 #include <basidesh.hxx>
 #include <iderdll.hxx>
-
-#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
-#endif
-
-#ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _XMLSCRIPT_XML_HELPER_HXX_
 #include <xmlscript/xml_helper.hxx>
-#endif
-
-#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XDIALOG_HPP_
 #include <com/sun/star/awt/XDialog.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCEPERSISTENCE_HPP_
 #include <com/sun/star/resource/XStringResourcePersistence.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 
 // #i74769#
-#ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
-#endif
 
 using namespace comphelper;
 using namespace ::com::sun::star;
