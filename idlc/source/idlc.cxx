@@ -1,77 +1,47 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: idlc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.11 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:00:54 $
+ * $RCSfile: idlc.cxx,v $
+ * $Revision: 1.12 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
-#ifndef _IDLC_IDLC_HXX_
 #include <idlc/idlc.hxx>
-#endif
-
-#ifndef _IDLC_ERRORHANDLER_HXX_
 #include <idlc/errorhandler.hxx>
-#endif
-#ifndef _IDLC_ASTSCOPE_HXX_
 #include <idlc/astscope.hxx>
-#endif
-#ifndef _IDLC_ASTMODULE_HXX_
 #include <idlc/astmodule.hxx>
-#endif
-#ifndef _IDLC_ASTSERVICE_HXX_
 #include <idlc/astservice.hxx>
-#endif
-#ifndef _IDLC_ASTCONSTANTS_HXX_
 #include <idlc/astconstants.hxx>
-#endif
-#ifndef _IDLC_ASTEXCEPTION_HXX_
 #include <idlc/astexception.hxx>
-#endif
-#ifndef _IDLC_ASTUNION_HXX_
 #include <idlc/astunion.hxx>
-#endif
-#ifndef _IDLC_ASTENUM_HXX_
 #include <idlc/astenum.hxx>
-#endif
-#ifndef _IDLC_ASTINTERFACE_HXX_
 #include <idlc/astinterface.hxx>
-#endif
-#ifndef _IDLC_ASTOPERATION_HXX_
 #include <idlc/astoperation.hxx>
-#endif
-#ifndef _IDLC_ASTBASETYPE_HXX_
 #include <idlc/astbasetype.hxx>
-#endif
 #include "idlc/astdeclaration.hxx"
 #include "idlc/astparameter.hxx"
 #include "idlc/astsequence.hxx"
