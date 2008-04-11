@@ -1,37 +1,33 @@
 <?xml version='1.0' encoding="UTF-8"?>
 <!--
 
-	OpenOffice.org - a multi-platform office productivity suite
-
-	$RCSfile: sofftodocbookheadings.xsl,v $
-
-	$Revision: 1.9 $
-
-	last change: $Author: vg $ $Date: 2007-10-23 11:40:31 $
-
-	The Contents of this file are made available subject to
-	the terms of GNU Lesser General Public License Version 2.1.
-
-
-	  GNU Lesser General Public License Version 2.1
-	  =============================================
-	  Copyright 2005 by Sun Microsystems, Inc.
-	  901 San Antonio Road, Palo Alto, CA 94303, USA
-
-	  This library is free software; you can redistribute it and/or
-	  modify it under the terms of the GNU Lesser General Public
-	  License version 2.1, as published by the Free Software Foundation.
-
-	  This library is distributed in the hope that it will be useful,
-	  but WITHOUT ANY WARRANTY; without even the implied warranty of
-	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-	  Lesser General Public License for more details.
-
-	  You should have received a copy of the GNU Lesser General Public
-	  License along with this library; if not, write to the Free Software
-	  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-	  MA  02111-1307  USA
-
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  
+  Copyright 2008 by Sun Microsystems, Inc.
+ 
+  OpenOffice.org - a multi-platform office productivity suite
+ 
+  $RCSfile: sofftodocbookheadings.xsl,v $
+ 
+  $Revision: 1.10 $
+ 
+  This file is part of OpenOffice.org.
+ 
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+ 
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+ 
 -->
 <xsl:stylesheet version="1.0" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="http://openoffice.org/2000/meta" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" xmlns:config="http://openoffice.org/2001/config" office:class="text" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="office meta table number dc fo xlink chart math script xsl draw svg dr3d form config text style">
 	<xsl:output method="xml" indent="yes" omit-xml-declaration="no"/>
