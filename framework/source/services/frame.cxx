@@ -1,35 +1,31 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: frame.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.105 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-04 14:12:20 $
+ * $RCSfile: frame.cxx,v $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * $Revision: 1.106 $
  *
+ * This file is part of OpenOffice.org.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -39,174 +35,54 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #include <dispatch/dispatchprovider.hxx>
-#endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
 #endif
-
-#ifndef __FRAMEWORK_DISPATCH_CLOSEDISPATCHER_HXX_
 #include <dispatch/closedispatcher.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_WINDOWCOMMANDDISPATCH_HXX_
 #include <dispatch/windowcommanddispatch.hxx>
-#endif
-
-#ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
 #include <loadenv/loadenv.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
 #include <helper/oframes.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
-#endif
-
-#ifndef _FRAMEWORK_TITLEHELPER_HXX_
 #include <helper/titlehelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
 #include <classes/droptargetlistener.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
-#endif
-
-#ifndef __FRAMEWORK_TARGETHELPER_HXX_
 #include <loadenv/targethelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 #include <classes/framelistanalyzer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_DOCKINGAREADEFAULTACCEPTOR_HXX_
 #include <helper/dockingareadefaultacceptor.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX_
 #include <dispatch/dispatchinformationprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
 #include <pattern/window.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
-
-#ifndef __FRAMEWORK_PROPERTIES_H_
 #include <properties.h>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
 #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XTITLECHANGEBROADCASTER_HPP_
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
@@ -215,58 +91,22 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
-
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
-#endif
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX
 #include <cppuhelper/proptypehlp.hxx>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
 
 #ifdef ENABLE_ASSERTIONS
     #ifndef _RTL_STRBUF_HXX_
