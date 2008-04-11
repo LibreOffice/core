@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmdi.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,7 @@
 
 #include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
+#include <postit.hxx>
 
 USHORT  SwView::nMoveType = NID_PGE;
 USHORT  SwView::nActMark = 0;
@@ -234,11 +235,11 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     pWrtShell->UnlockPaint();
     if( bUnLockView )
         pWrtShell->LockView( FALSE );
+
     if ( mpPostItMgr )
     {
         mpPostItMgr->Rescale();
-        if ( pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
-            mpPostItMgr->CalcRects();
+        mpPostItMgr->CalcRects();
         mpPostItMgr->LayoutPostIts();
     }
 
@@ -483,7 +484,6 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
-
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
             rSh.MoveFldType( pFldType, bNext );
         }
