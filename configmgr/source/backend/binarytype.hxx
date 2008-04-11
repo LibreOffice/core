@@ -1,9 +1,7 @@
 #ifndef CONFIGMGR_BINARYTYPE_HXX
 #define CONFIGMGR_BINARYTYPE_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
 
 namespace configmgr
 {
