@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: window.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.277 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-04-03 15:49:34 $
+ * $RCSfile: window.cxx,v $
+ * $Revision: 1.278 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,167 +33,67 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef _SV_SALFRAME_HXX
 #include <vcl/salframe.hxx>
-#endif
-#ifndef _SV_SALOBJ_HXX
 #include <vcl/salobj.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALGTYPE_HXX
 #include <vcl/salgtype.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
 #include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_SALCTRLHANDLE_HXX
 #include <vcl/salctrlhandle.hxx>
-#endif
 
 #include <vcl/unohelp.hxx>
-
-#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
 #endif
-#ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_WINDATA_HXX
 #include <vcl/windata.hxx>
-#endif
-#ifndef _SV_DBGGUI_HXX
 #include <vcl/dbggui.hxx>
-#endif
-#ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
-#endif
-#ifndef _SV_OUTDEV_H
 #include <vcl/outdev.h>
-#endif
-#ifndef _SV_REGION_H
 #include <vcl/region.h>
-#endif
-#ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _SV_CURSOR_HXX
 #include <vcl/cursor.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WINDOW_H
 #include <vcl/window.h>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
-#endif
-#ifndef _SV_SYSCHILD_HXX
 #include <vcl/syschild.hxx>
-#endif
-#ifndef _SV_BRDWIN_HXX
 #include <vcl/brdwin.hxx>
-#endif
-#ifndef _SV_HELPWIN_HXX
 #include <vcl/helpwin.hxx>
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
-#endif
-#ifndef _SV_TOOLBOX_H
 #include <vcl/toolbox.h>
-#endif
-#ifndef _VCL_FONTCFG_HXX
 #include <vcl/fontcfg.hxx>
-#endif
 #include <vcl/sysdata.hxx>
-#ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx> // Button::GetStandardText
-#endif
-#ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
-#endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
-
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
 #include <com/sun/star/awt/XDisplayConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
 
 #include <vcl/dialog.hxx>
 #include <vcl/unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
 #include <vcl/impbmpconv.hxx>
-
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-
-#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include "vcl/lazydelete.hxx"
