@@ -1,92 +1,52 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: typeblop.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.9 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:45:36 $
+ * $RCSfile: typeblop.cxx,v $
+ * $Revision: 1.10 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
-#ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
-#endif
 #ifndef __REGISTRY_REFLWRIT_HXX__
 #include <registry/reflwrit.hxx>
 #endif
-
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XINTERFACETYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTSTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XMODULETYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XModuleTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XINTERFACEMETHODTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XINTERFACEATTRIBUTETYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XMETHODPARAMETER_HPP_
 #include <com/sun/star/reflection/XMethodParameter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XCOMPOUNDTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XINDIRECTTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REFLECTION_XENUMTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _CODEMAKER_GLOBAL_HXX_
 #include <codemaker/global.hxx>
-#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -483,9 +443,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     {
                         rtTypeClass = RT_TYPE_EXCEPTION;
                     }
-#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTSTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
-#endif
 
                     Reference< XCompoundTypeDescription > xComp(xType, UNO_QUERY);
 
