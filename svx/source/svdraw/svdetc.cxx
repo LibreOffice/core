@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdetc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.33 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:20:43 $
+ * $RCSfile: svdetc.cxx,v $
+ * $Revision: 1.34 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include "forbiddencharacterstable.hxx"
-#endif
 
 #include <svx/svdetc.hxx>
 #include "svditext.hxx"
@@ -49,122 +41,40 @@
 #include "svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-
-#ifndef _SV_BMPACC_HXX //autogen
 #include <vcl/bmpacc.hxx>
-#endif
-
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _CONFIG_HXX
 #include <tools/config.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
 #include <svtools/cacheoptions.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
-#endif
-
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
-#endif
-
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
-
-#ifndef _SVX__XGRADIENT_HXX //autogen
 #include <svx/xgrad.hxx>
-#endif
-
-#ifndef SVX_XFILLIT0_HXX //autogen
 #include <svx/xfillit0.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SVX_XFLHTIT_HXX //autogen
 #include <svx/xflhtit.hxx>
-#endif
-
-#ifndef _SVX_XBTMPIT_HXX //autogen
 #include <svx/xbtmpit.hxx>
-#endif
-
-#ifndef _SVX_XFLGRIT_HXX //autogen
 #include <svx/xflgrit.hxx>
-#endif
-
-#ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
-#endif
-
-#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
-#endif
-
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
 
 // #97870#
-#ifndef _SVX_XFLBCKIT_HXX
 #include <svx/xflbckit.hxx>
-#endif
-#ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
-#endif
-#ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
-#endif
-
-#ifndef _B3D_B3DCOLOR_HXX
 #include <goodies/b3dcolor.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx> //add CHINA001
-#endif
 
 //#i80528#
-#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
 #include <svx/sdr/contact/viewcontact.hxx>
-#endif
 
 /******************************************************************************
 * Globale Daten der DrawingEngine
