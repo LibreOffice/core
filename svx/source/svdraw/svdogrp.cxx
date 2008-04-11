@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdogrp.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.36 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:06:23 $
+ * $RCSfile: svdogrp.cxx,v $
+ * $Revision: 1.37 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifndef _SVXLINKMGR_HXX //autogen
 #include <linkmgr.hxx>
-#endif
 
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
@@ -46,9 +38,7 @@
 #ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
 #include <unotools/datetime.hxx>
-#endif
 
 #include <svx/svdogrp.hxx>
 
@@ -57,10 +47,7 @@
 #include <sfx2/lnkbase.hxx>
 #endif
 #endif
-
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 #include <svtools/urihelper.hxx>
 
@@ -82,35 +69,15 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SVDPOOL_HXX
 #include <svx/svdpool.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_GROUPPROPERTIES_HXX
 #include <svx/sdr/properties/groupproperties.hxx>
-#endif
 
 // #110094#
-#ifndef _SDR_CONTACT_VIEWCONTACTOFGROUP_HXX
 #include <svx/sdr/contact/viewcontactofgroup.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
