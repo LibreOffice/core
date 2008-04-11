@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdata.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.55 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: obo $ $Date: 2008-02-25 16:54:21 $
+ * $RCSfile: svdata.cxx,v $
+ * $Revision: 1.56 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -40,12 +35,8 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALFRAME_HXX
 #include <vcl/salframe.hxx>
-#endif
 
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
@@ -53,82 +44,33 @@
 
 #include <osl/process.h>
 #include <osl/file.hxx>
-#ifndef _UNO_CURRENT_CONTEXT_HXX_
 #include <uno/current_context.hxx>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
-#ifndef _VCL_FONTCFG_HXX
 #include <vcl/fontcfg.hxx>
-#endif
-#ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <vcl/configsettings.hxx>
-#endif
-#ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_WINDOW_H
 #include <vcl/window.h>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
-#endif
-
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx> // for Button::GetStandardText
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>  // for DockingManager
-#endif
-
-#ifndef _SV_SALIMESTATUS_HXX
 #include <vcl/salimestatus.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_JAVANOTCONFIGUREDEXCEPTION_HPP_
 #include <com/sun/star/java/JavaNotConfiguredException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_JAVAVMCREATIONFAILUREEXCEPTION_HPP_
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_MISSINGJAVARUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/java/MissingJavaRuntimeException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_JAVADISABLEDEXCEPTION_HPP_
 #include <com/sun/star/java/JavaDisabledException.hpp>
-#endif
 
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
 #include <vcl/salsys.hxx>
 #include <vcl/svids.hrc>
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
