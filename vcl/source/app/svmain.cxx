@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svmain.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.71 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-07 16:41:55 $
+ * $RCSfile: svmain.cxx,v $
+ * $Revision: 1.72 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -54,101 +49,47 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef _SV_SALINST_HXX
 #include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALOGL_HXX
 #include <vcl/salogl.hxx>
-#endif
-#ifndef _SV_SALWTYPE_HXX
 #include <vcl/salwtype.hxx>
-#endif
 #ifndef _VOS_SIGNAL_HXX
 #include <vos/signal.hxx>
 #endif
 #ifndef _VOS_SOCKET_HXX
 #include <vos/socket.hxx>
 #endif
-#ifndef _TOOLS_H
 #include <tools/tools.h>
-#endif
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #ifndef _UNIQID_HXX
 #include <tools/unqid.hxx>
 #endif
-#ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_DBGGUI_HXX
 #include <vcl/dbggui.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
-#endif
 #ifndef _SV_RESMGR_HXX
 #include <tools/resmgr.hxx>
 #endif
-#ifndef _SV_ACCMGR_HXX
 #include <vcl/accmgr.hxx>
-#endif
-#ifndef _SV_IDLEMGR_HXX
 #include <vcl/idlemgr.hxx>
-#endif
-#ifndef _SV_OUTDEV_H
 #include <vcl/outdev.h>
-#endif
-#ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
-#endif
-#ifndef _SV_PRINT_H
 #include <vcl/print.h>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
-#ifndef _VCL_UNOWRAP_HXX
 #include <vcl/unowrap.hxx>
-#endif
-#ifndef _SV_SALSYS_HXX
 #include <vcl/salsys.hxx>
-#endif
-#ifndef _SV_SALTIMER_HXX
 #include <vcl/saltimer.hxx>
-#endif
-#ifndef _SV_SALIMESTATUS_HXX
 #include <vcl/salimestatus.hxx>
-#endif
-#ifndef _SV_IMPIMAGETREE_HXX
 #include <vcl/impimagetree.hxx>
-#endif
-#ifndef _VCL_XCONNECTION_HXX
 #include <vcl/xconnection.hxx>
-#endif
 
 #include <vos/process.hxx>
 #include <osl/file.hxx>
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
 #include <rtl/logfile.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -162,13 +103,8 @@ using namespace ::com::sun::star::lang;
 
 #include <vcl/fontcfg.hxx>
 #include <vcl/configsettings.hxx>
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _UNO_CURRENT_CONTEXT_HXX_
 #include <uno/current_context.hxx>
-#endif
 
 
 // =======================================================================
