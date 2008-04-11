@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mn.src,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -439,32 +439,32 @@
     MenuItem\
     {\
         Identifier = FN_DELETE_NOTE_AUTHOR ;\
-        HelpID = FN_DELETE_NOTE ;\
-        Text [ en-US ] = "Delete Author's N~otes" ;\
+        HelpID = FN_DELETE_NOTE_AUTHOR ;\
+        Text [ en-US ] = "Delete ~All Notes by " ;\
     };\
     MenuItem\
     {\
         Identifier = FN_DELETE_ALL_NOTES ;\
-        HelpID = FN_DELETE_NOTE ;\
-        Text [ en-US ] = "Delete All No~tes" ;\
+        HelpID = FN_DELETE_ALL_NOTES ;\
+        Text [ en-US ] = "~Delete All Notes" ;\
     };\
     /*
     MenuItem\
     {\
         Identifier = FN_HIDE_NOTE ;\
-        HelpID = FN_DELETE_NOTE ;\
+        HelpID = FN_HIDE_NOTE ;\
         Text [ en-US ] = "~Hide note" ;\
     };\
     MenuItem\
     {\
-        Identifier = FN_HIDE_NOTE_AUTHOR ;\
-        HelpID = FN_DELETE_NOTE ;\
+        Identifier = FN_HIDE_NOTE_AUTHOR     ;\
+        HelpID = FN_HIDE_NOTE_AUTHOR ;\
         Text [ en-US ] = "Hide ~author" ;\
     };\
     MenuItem\
     {\
         Identifier = FN_HIDE_ALL_NOTES ;\
-        HelpID = FN_DELETE_NOTE ;\
+        HelpID = FN_HIDE_ALL_NOTES ;\
         Text [ en-US ] = "Hide all ~notes" ;\
     };
     */
