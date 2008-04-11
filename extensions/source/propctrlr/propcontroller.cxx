@@ -1,128 +1,74 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: propcontroller.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.40 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: kz $ $Date: 2008-03-05 17:13:39 $
+ * $RCSfile: propcontroller.cxx,v $
+ * $Revision: 1.41 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
 #include "propcontroller.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #include "pcrstrings.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
 #include "standardcontrol.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 #include "linedescriptor.hxx"
-#endif
 #ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPERTYEDITOR_HXX_
 #include "propertyeditor.hxx"
-#endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
 #endif
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 #include "formstrings.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
 #include "formmetadata.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
 #include "formbrowsertools.hxx"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
 #include "propertycomposer.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_ALREADYINITIALIZEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-#endif
 /** === end UNO includes === **/
-
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
-#endif
 
 #include <algorithm>
 #include <functional>
