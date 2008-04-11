@@ -1,31 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: winproc.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org - a multi-platform office productivity suite
  *
+ * $RCSfile: winproc.cxx,v $
+ * $Revision: 1.124 $
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * This file is part of OpenOffice.org.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -35,102 +34,40 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-
-#ifndef _SV_SALWTYPE_HXX
 #include <vcl/salwtype.hxx>
-#endif
-#ifndef _SV_SALFRAME_HXX
 #include <vcl/salframe.hxx>
-#endif
-
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #ifndef _INTN_HXX
 //#include <tools/intn.hxx>
 #endif
-
-#ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
-#endif
 #include <vcl/unohelp.hxx>
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-
-#ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_DBGGUI_HXX
 #include <vcl/dbggui.hxx>
-#endif
-#ifndef _SV_WINDATA_HXX
 #include <vcl/windata.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-#ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
-#ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_CURSOR_HXX
 #include <vcl/cursor.hxx>
-#endif
-#ifndef _SV_ACCMGR_HXX
 #include <vcl/accmgr.hxx>
-#endif
-#ifndef _SV_PRINT_H
 #include <vcl/print.h>
-#endif
-#ifndef _SV_WINDOW_H
 #include <vcl/window.h>
-#endif
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
-#endif
-#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
-#endif
-#ifndef _SV_HELPWIN_HXX
 #include <vcl/helpwin.hxx>
-#endif
-#ifndef _SV_BRDWIN_HXX
 #include <vcl/brdwin.hxx>
-#endif
-#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
 #include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
-#endif
 
 #include <dndlcon.hxx>
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
 #include <com/sun/star/awt/MouseEvent.hpp>
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
 char dbgbuffer[1024];
