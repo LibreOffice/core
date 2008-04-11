@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdattr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.33 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: rt $ $Date: 2008-03-12 09:48:45 $
+ * $RCSfile: svdattr.cxx,v $
+ * $Revision: 1.34 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -37,43 +32,18 @@
 #include "precompiled_svx.hxx"
 
 
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTANIMATIONKIND_HPP_
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTANIMATIONDIRECTION_HPP_
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
 #include <com/sun/star/drawing/ConnectorType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_MEASUREKIND_HPP_
 #include <com/sun/star/drawing/MeasureKind.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTHORZPOS_HPP_
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_MEASURETEXTVERTPOS_HPP_
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
 
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -89,10 +59,7 @@
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
 #endif
-
-#ifndef _SVX_XMLCNITM_HXX
 #include "xmlcnitm.hxx"
-#endif
 
 #include <svx/svxids.hrc>
 #include <svx/xtable.hxx>    // fuer RGB_Color()
@@ -105,22 +72,13 @@
 #include <svx/adjitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/writingmodeitem.hxx>
-
-#ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
-#endif
-
-#ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
-#endif
 
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
-
-#ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
-#endif
 
 #define ITEMID_BOX SDRATTR_TABLE_BORDER
 #define ITEMID_BOXINFO SDRATTR_TABLE_BORDER_INNER
