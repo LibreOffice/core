@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewTabBarModule.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,17 +32,10 @@
 #define SD_FRAMEWORK_VIEW_TAB_BAR_MODULE_HXX
 
 #include "MutexOwner.hxx"
-<<<<<<< ViewTabBarModule.hxx
 
-=======
->>>>>>> 1.2.234.3
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
-<<<<<<< ViewTabBarModule.hxx
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
-=======
-#include <com/sun/star/drawing/framework/XToolBarController.hpp>
->>>>>>> 1.2.234.3
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase1.hxx>
