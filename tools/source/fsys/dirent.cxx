@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: dirent.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.26 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 13:01:54 $
+ * $RCSfile: dirent.cxx,v $
+ * $Revision: 1.27 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -53,41 +48,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-
-#ifndef _COMDEP_HXX
 #include "comdep.hxx"
-#endif
-#ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
-#endif
 #define _TOOLS_HXX
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 #ifdef UNX
 #define _MAX_PATH 260
 #endif
-
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
 
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
 
 #include <osl/file.hxx>
-#ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
-#endif
 
 
 using namespace osl;
