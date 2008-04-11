@@ -1,35 +1,30 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: svdoattr.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.50 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:04:55 $
+ * $RCSfile: svdoattr.cxx,v $
+ * $Revision: 1.51 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -53,159 +48,49 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdomeas.hxx>
-
-#ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
-#endif
-
-#ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-
-#ifndef _XENUM_HXX //autogen
 #include <svx/xenum.hxx>
-#endif
-
-#ifndef _SVX_XLINEIT0_HXX //autogen
 #include <svx/xlineit0.hxx>
-#endif
-
-#ifndef _SVX_XLNSTWIT_HXX //autogen
 #include <svx/xlnstwit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDWIT_HXX //autogen
 #include <svx/xlnedwit.hxx>
-#endif
-
-#ifndef SVX_XFILLIT0_HXX //autogen
 #include <svx/xfillit0.hxx>
-#endif
-
-#ifndef _SVX_XFLBMTIT_HXX //autogen
 #include <svx/xflbmtit.hxx>
-#endif
-
-#ifndef _SVX_TEXTIT0_HXX //autogen
 #include <svx/xtextit0.hxx>
-#endif
-
-#ifndef _SVX_XFLBSTIT_HXX //autogen
 #include <svx/xflbstit.hxx>
-#endif
-
-#ifndef _SVX_XFLBTOXY_HXX //autogen
 #include <svx/xflbtoxy.hxx>
-#endif
-
-#ifndef _SVX_XFTSHIT_HXX //autogen
 #include <svx/xftshit.hxx>
-#endif
 
 
-#ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
-#endif
-
-#ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
-#endif
 
 //#include <svx/charscaleitem.hxx>
-
-#ifndef _SVX_XLNSTCIT_HXX //autogen
 #include <svx/xlnstcit.hxx>
-#endif
-
-#ifndef _SVX_XLNWTIT_HXX //autogen
 #include <svx/xlnwtit.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
-#endif
-
-#ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-
-#ifndef _SVX_XLNCLIT_HXX //autogen
 #include <svx/xlnclit.hxx>
-#endif
-
-#ifndef _SVX_XFLCLIT_HXX //autogen
 #include <svx/xflclit.hxx>
-#endif
-
-#ifndef _SVX_XLNTRIT_HXX //autogen
 #include <svx/xlntrit.hxx>
-#endif
-
-#ifndef _SVX_XFLTRIT_HXX //autogen
 #include <svx/xfltrit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDCIT_HXX //autogen
 #include <svx/xlnedcit.hxx>
-#endif
-
-#ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
-#endif
-
-#ifndef _SVX_XFLBCKIT_HXX
 #include <svx/xflbckit.hxx>
-#endif
-
-#ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
-#endif
-
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-#ifndef _SVX_XLNDSIT_HXX
 #include <svx/xlndsit.hxx>
-#endif
-#ifndef _SVX_XLNEDIT_HXX //autogen
 #include <svx/xlnedit.hxx>
-#endif
-#ifndef _SVX_XFLGRIT_HXX
 #include <svx/xflgrit.hxx>
-#endif
-#ifndef _SVX_XFLFTRIT_HXX
 #include <svx/xflftrit.hxx>
-#endif
-#ifndef _SVX_XFLHTIT_HXX //autogen
 #include <svx/xflhtit.hxx>
-#endif
-#ifndef _SVX_XLNSTIT_HXX
 #include <svx/xlnstit.hxx>
-#endif
-
-#ifndef _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
 #include <svx/sdr/properties/attributeproperties.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _SVX_XLINJOIT_HXX
 #include <xlinjoit.hxx>
-#endif
-
-#ifndef _SVX_SVDOIMP_HXX
 #include <svdoimp.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
