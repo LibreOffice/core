@@ -1,44 +1,36 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: canvastools.cxx,v $
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
- *  $Revision: 1.13 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:30:41 $
+ * $RCSfile: canvastools.cxx,v $
+ * $Revision: 1.14 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file is part of OpenOffice.org.
  *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -83,28 +75,13 @@
 #ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP__
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2ISIZE_HXX
 #include <basegfx/vector/b2isize.hxx>
-#endif
-#ifndef _BGFX_POINT_B2IPOINT_HXX
 #include <basegfx/point/b2ipoint.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2IRECTANGLE_HXX
 #include <basegfx/range/b2irectangle.hxx>
-#endif
 
 // #i79917#
 #include <basegfx/polygon/b2dpolygon.hxx>
