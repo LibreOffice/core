@@ -1,3 +1,4 @@
 lcairo	cairo	: soltools NULL
 lcairo	cairo			    usr1	-	all	lcairo_mkout NULL
 lcairo	cairo			    nmake	-	all	lcairo_cairo NULL
+lcairo	cairo\zipped		    nmake	-	all	lcairo_zipped lcairo_cairo NULL
