@@ -1,8 +1,11 @@
-mkdir: %_DEST%\inc%_EXT%\external\cairo
-..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\cairo\*.h
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
-..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%
-..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
-..\%__SRC%\bin\xsltproc* %_DEST%\bin%_EXT%
+mkdir: %_DEST%\inc%_EXT%\cairo
+..\%__SRC%\inc\cairo\*.h %_DEST%\inc%_EXT%\cairo\*.h
+
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\lib*.so.*
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
+..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
+..\%__SRC%\lib\lib*.la %_DEST%\lib%_EXT%\lib*.la
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\bin\*.dll.* %_DEST%\bin%_EXT%\*.dll.*
