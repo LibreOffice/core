@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objserv.cxx,v $
- * $Revision: 1.103 $
+ * $Revision: 1.104 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -656,7 +656,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     bDialogUsed = aHelper.GUIStoreModel( GetModel(),
                                                     ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
                                                     aDispatchArgs,
-                                                    bPreselectPassword );
+                                                    bPreselectPassword,
+                                                    GetSharedFileURL() );
 
                 // the scripting signature might be preserved
                 // pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
