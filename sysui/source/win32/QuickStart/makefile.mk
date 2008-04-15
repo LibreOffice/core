@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +41,8 @@ TARGETTYPE=GUI
 
 .INCLUDE :  settings.mk
 
+UWINAPILIB =
+
 # --- Resources ----------------------------------------------------
 
 RCFILES=OOQuickStart.rc
@@ -52,6 +54,7 @@ OBJFILES=$(OBJ)$/QuickStart.obj
 APP1OBJS=$(OBJFILES)
 APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
+APP1RPATH=BRAND
 .IF "$(COM)"=="GCC"
 APP1STDLIBS=-luuid
 .ELSE
