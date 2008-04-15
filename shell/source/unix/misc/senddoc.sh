@@ -1,8 +1,12 @@
 #!/bin/sh
 URI_ENCODE="`dirname $0`/uri-encode"
+FOPTS=""
 
-echo "$@" > /tmp/log.obr.$$
-echo "$#" >> /tmp/log.obr.$$
+# linux file utility needs -L option to resolve symlinks
+if [ "`uname -s`" = "Linux" ]
+then
+  FOPTS="-L"
+fi
 
 # tries to locate the executable specified
 # as first parameter in the user's path.
@@ -27,7 +31,7 @@ run_mozilla() {
         moz=$1
     fi
 
-    if file "$moz" | grep "script" > /dev/null && grep "[NM]PL" "$moz" > /dev/null; then
+    if file $FOPTS "$moz" | grep "script" > /dev/null && grep "[NM]PL" "$moz" > /dev/null; then
         "$moz" -remote 'ping()' 2>/dev/null >/dev/null
         if [ $? -eq 2 ]; then
             "$1" -compose "$2" &
@@ -236,6 +240,48 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ${MAILER} "${MAILTO}" &
         ;;
 
+    groupwise)
+
+        while [ "$1" != "" ]; do
+            case $1 in
+                --to)
+                    if [ "${TO}" != "" ]; then
+                        MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
+                    else
+                        TO="$2"
+                    fi
+                    shift
+                    ;;
+                --cc)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --bcc)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --subject)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --body)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                --attach)
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | ${URI_ENCODE}`
+                    shift
+                    ;;
+                *)
+                    ;;
+            esac
+            shift;
+        done
+
+        MAILTO="mailto:${TO}?${MAILTO}"
+        ${MAILER} "${MAILTO}" &
+        ;;
+
     dtmail)
 
         while [ "$1" != "" ]; do
@@ -257,7 +303,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
         ;;
 
-    sylpheed)
+    sylpheed | claws)
 
         while [ "$1" != "" ]; do
             case $1 in
@@ -266,7 +312,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ } $2"
+                    ATTACH="${ATTACH:-}${ATTACH:+ }$2"
                     shift
                     ;;
                 *)
@@ -275,7 +321,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             shift;
         done
 
-         ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
+         ${MAILER} ${TO:+--compose} "${TO:-}" ${ATTACH:+--attach} "${ATTACH:-}"
         ;;
 
     Mail | Thunderbird | *.app )
