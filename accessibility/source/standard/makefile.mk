@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,37 +43,38 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/accessiblemenubasecomponent.obj		\
-            $(SLO)$/accessiblemenucomponent.obj			\
-            $(SLO)$/accessiblemenuitemcomponent.obj		\
-            $(SLO)$/vclxaccessiblebox.obj				\
-            $(SLO)$/vclxaccessiblebutton.obj			\
-            $(SLO)$/vclxaccessiblecheckbox.obj			\
-            $(SLO)$/vclxaccessiblecombobox.obj			\
-            $(SLO)$/vclxaccessibledropdowncombobox.obj	\
-            $(SLO)$/vclxaccessibledropdownlistbox.obj	\
-            $(SLO)$/vclxaccessibleedit.obj				\
-            $(SLO)$/vclxaccessiblefixedhyperlink.obj    \
-            $(SLO)$/vclxaccessiblefixedtext.obj         \
-            $(SLO)$/vclxaccessiblelist.obj				\
-            $(SLO)$/vclxaccessiblelistbox.obj			\
-            $(SLO)$/vclxaccessiblelistitem.obj			\
-            $(SLO)$/vclxaccessiblemenu.obj				\
-            $(SLO)$/vclxaccessiblemenubar.obj			\
-            $(SLO)$/vclxaccessiblemenuitem.obj			\
-            $(SLO)$/vclxaccessiblemenuseparator.obj		\
-            $(SLO)$/vclxaccessiblepopupmenu.obj			\
-            $(SLO)$/vclxaccessibleradiobutton.obj		\
-            $(SLO)$/vclxaccessiblescrollbar.obj			\
-            $(SLO)$/vclxaccessiblestatusbar.obj			\
-            $(SLO)$/vclxaccessiblestatusbaritem.obj		\
-            $(SLO)$/vclxaccessibletabcontrol.obj		\
-            $(SLO)$/vclxaccessibletabpage.obj			\
-            $(SLO)$/vclxaccessibletabpagewindow.obj		\
-            $(SLO)$/vclxaccessibletextcomponent.obj		\
-            $(SLO)$/vclxaccessibletextfield.obj			\
-            $(SLO)$/vclxaccessibletoolbox.obj			\
-            $(SLO)$/vclxaccessibletoolboxitem.obj       \
+    $(SLO)$/accessiblemenubasecomponent.obj	\
+    $(SLO)$/accessiblemenucomponent.obj \
+    $(SLO)$/accessiblemenuitemcomponent.obj \
+    $(SLO)$/floatingwindowaccessible.obj \
+    $(SLO)$/vclxaccessiblebox.obj \
+    $(SLO)$/vclxaccessiblebutton.obj \
+    $(SLO)$/vclxaccessiblecheckbox.obj \
+    $(SLO)$/vclxaccessiblecombobox.obj \
+    $(SLO)$/vclxaccessibledropdowncombobox.obj \
+    $(SLO)$/vclxaccessibledropdownlistbox.obj \
+    $(SLO)$/vclxaccessibleedit.obj \
+    $(SLO)$/vclxaccessiblefixedhyperlink.obj \
+    $(SLO)$/vclxaccessiblefixedtext.obj \
+    $(SLO)$/vclxaccessiblelist.obj \
+    $(SLO)$/vclxaccessiblelistbox.obj \
+    $(SLO)$/vclxaccessiblelistitem.obj \
+    $(SLO)$/vclxaccessiblemenu.obj \
+    $(SLO)$/vclxaccessiblemenubar.obj \
+    $(SLO)$/vclxaccessiblemenuitem.obj \
+    $(SLO)$/vclxaccessiblemenuseparator.obj \
+    $(SLO)$/vclxaccessiblepopupmenu.obj \
+    $(SLO)$/vclxaccessibleradiobutton.obj \
+    $(SLO)$/vclxaccessiblescrollbar.obj \
+    $(SLO)$/vclxaccessiblestatusbar.obj \
+    $(SLO)$/vclxaccessiblestatusbaritem.obj \
+    $(SLO)$/vclxaccessibletabcontrol.obj \
+    $(SLO)$/vclxaccessibletabpage.obj \
+    $(SLO)$/vclxaccessibletabpagewindow.obj \
+    $(SLO)$/vclxaccessibletextcomponent.obj \
+    $(SLO)$/vclxaccessibletextfield.obj \
+    $(SLO)$/vclxaccessibletoolbox.obj \
+    $(SLO)$/vclxaccessibletoolboxitem.obj 
 
 # --- Targets ------------------------------------------------------
 
