@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_writer.scp,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Wrt
-    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_PRG_WRT);
     ParentID = gid_Module_Prg;
     Sortkey = "100";
@@ -39,11 +38,15 @@ Module gid_Module_Prg_Wrt
 End
 
 Module gid_Module_Prg_Wrt_Bin
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_WRT_BIN );
     ParentID = gid_Module_Prg_Wrt;
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
+  #ifdef UNX
+    Styles = (HIDDEN_ROOT);
+  #endif
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
     gid_File_Bin_Cde_Sletter,gid_File_Bin_Cde_Smemo,gid_File_Bin_Cde_Svcard,
     gid_File_Lib_Jsreader, gid_File_Lib_Wps2star,
@@ -92,7 +95,11 @@ Module gid_Module_Brand_Prg_Wrt
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Wrt";
     Description = "gid_Module_Brand_Prg_Wrt";
+  #ifdef UNX
+    ParentID = gid_Module_Prg_Wrt;
+  #else
     ParentID = gid_Module_Prg_Wrt_Bin;
+  #endif
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
