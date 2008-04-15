@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2222,7 +2222,13 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
             // first page in book mode is always special:
             if ( bFirstRow && mbBookMode )
-                nCurrentRowWidth += pStartOfRow->Frm().Width() + nSidebarWidth;
+            {
+                // --> OD 2008-04-08 #i88036#
+//                nCurrentRowWidth += pStartOfRow->Frm().Width() + nSidebarWidth;
+                nCurrentRowWidth +=
+                    pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
+                // <--
+            }
 
             // center page if possible
             const long nSizeDiff = nVisWidth > nCurrentRowWidth ?
@@ -2236,7 +2242,12 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             const long nRowEnd   = nRowStart + nCurrentRowWidth;
 
             if ( bFirstRow && mbBookMode )
-                nX += pStartOfRow->Frm().Width() + nSidebarWidth;
+            {
+                // --> OD 2008-04-08 #i88036#
+//                nX += pStartOfRow->Frm().Width() + nSidebarWidth;
+                nX += pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
+                // <--
+            }
 
             SwPageFrm* pEndOfRow = pPageFrm;
             SwPageFrm* pPageToAdjust = pStartOfRow;
@@ -2376,8 +2387,14 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 bool SwRootFrm::IsLeftToRightViewLayout() const
 {
     // Layout direction determined by layout direction of the first page.
-    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
-    return !pPage->IsRightToLeft() && !pPage->IsVertical();
+    // --> OD 2008-04-08 #i88036#
+    // Only ask a non-empty page frame for its layout direction
+//    const SwPageFrm* pPage = dynamic_cast<const SwPageFrm*>(Lower());
+//    return !pPage->IsRightToLeft() && !pPage->IsVertical();
+    const SwPageFrm& rPage =
+                    dynamic_cast<const SwPageFrm*>(Lower())->GetFormatPage();
+    return !rPage.IsRightToLeft() && !rPage.IsVertical();
+    // <--
 }
 
 /*const SwRect SwRootFrm::GetExtendedPageArea( USHORT nPageNumber ) const
@@ -2394,7 +2411,30 @@ const SwPageFrm& SwPageFrm::GetFormatPage() const
 {
     const SwPageFrm* pRet = this;
     if ( IsEmptyPage() )
+    {
         pRet = static_cast<const SwPageFrm*>( OnRightPage() ? GetNext() : GetPrev() );
+        // --> OD 2008-04-08 #i88035#
+        // Typically a right empty page frame has a next non-empty page frame and
+        // a left empty page frame has a previous non-empty page frame.
+        // But under certain cirsumstances this assumption is not true -
+        // e.g. during insertion of a left page at the end of the document right
+        // after a left page in an intermediate state a right empty page does not
+        // have a next page frame.
+        if ( pRet == 0 )
+        {
+            if ( OnRightPage() )
+            {
+                pRet = static_cast<const SwPageFrm*>( GetPrev() );
+            }
+            else
+            {
+                pRet = static_cast<const SwPageFrm*>( GetNext() );
+            }
+        }
+        ASSERT( pRet,
+                "<SwPageFrm::GetFormatPage()> - inconsistent layout: empty page without previous and next page frame --> crash." );
+        // <--
+    }
     return *pRet;
 }
 
