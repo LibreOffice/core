@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,11 +47,15 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=$(APP1OBJS)
+OBJFILES=$(APP1OBJS) $(APP2OBJS)
 
 APP1NOSAL=TRUE
 APP1OBJS=$(OBJ)$/guistdio.obj
 APP1TARGET=$(TARGET)
+
+APP2NOSAL=TRUE
+APP2OBJS=$(OBJ)$/unopkgio.obj
+APP2TARGET=unopkgio
 
 # --- Targets ------------------------------------------------------
 
