@@ -1,4 +1,4 @@
-PKG=%pkgprefix-desktop-integratn
+PKG=%pkgprefix30-desktop-int
 NAME=%PRODUCTNAME Solaris desktop integration
 CATEGORY=application
 BASEDIR=/
