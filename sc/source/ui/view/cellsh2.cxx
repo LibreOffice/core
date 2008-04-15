@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh2.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1232,6 +1232,15 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
                     if ( !bAnyQuery )
                         rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_DEFINE_DBNAME:
+                {
+                    if ( pDocSh && pDocSh->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
                 }
                 break;
 
