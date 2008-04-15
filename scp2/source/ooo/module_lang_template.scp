@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_lang_template.scp,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,8 @@ Module gid_Module_Langpack_Root_Template
              gid_File_Registry_Spool_Oo_Common_Cjk_Xcu,
              gid_File_Registry_Spool_Oo_Common_Ctl_Xcu,
              gid_File_Registry_Spool_Oo_Common_Korean_Xcu,
-             gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu);
+             gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu,
+             gid_File_InfoPlist_Lang);
 End
 
 Module gid_Module_Langpack_Resource_Template
