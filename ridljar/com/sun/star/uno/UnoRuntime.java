@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoRuntime.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +41,9 @@ import com.sun.star.lib.util.WeakMap;
 /**
  * The central class needed for implementing or using UNO components in Java.
  *
- * <p>The methods <code>generateOid</code>, <code>queryInterface</code> and
- * <code>areSame</code> delegate calls to the implementing objects and are used
- * instead of <code>hashCode</code>, casts, <code>instanceof</code>,
- * <code>==</code>, and <code>equals</code>.<p>
+ * <p>The methods <code>queryInterface</code> and <code>areSame</code> delegate
+ * calls to the implementing objects and are used instead of casts,
+ * <code>instanceof</code>, <code>==</code>, and <code>equals</code>.<p>
  *
  * <p>For historic reasons, this class is not <code>final</code>, and has a
  * <code>public</code> constructor.  These artifacts are considered mistakes,
@@ -99,10 +98,13 @@ public class UnoRuntime {
 
     /**
      * Generates a world wide unique object identifier (OID) for the given
-     * object.
+     * Java object.
      *
      * <p>It is guaranteed that subsequent calls to this method with the same
-     *  object will give the same ID.</p>
+     * Java object will give the same ID.</p>
+     *
+     * <p>This method is generally of little use for client code.  It should be
+     * considered a mistake that this method is published at all.</p>
      *
      * @param object any object for which a OID shall be generated; must not be
      * <code>null</code>
