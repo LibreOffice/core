@@ -8,7 +8,7 @@
 #
 # $RCSfile: macro.pl,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,7 @@ write_ALL_LANG();
 write_OTHER_LANGS();
 write_DIR_ISOLANGUAGE_ALL_LANG_2();
 write_DIR_ISOLANGUAGE_ALL_LANG();
+write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ();
 write_DIR_IDENT_ALL_LANG();
 write_EXTRA_ALL_LANG();
 write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG();
@@ -111,6 +112,16 @@ sub write_DIR_ISOLANGUAGE_ALL_LANG
     print OUTFILE "\\\n\tDosName (en-US) = \"en\"; \\\n\t";
     print OUTFILE "OTHER_LANGS";
         print OUTFILE "\n\n";
+}
+
+sub write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ
+{
+    print OUTFILE "#define DIR_ISOLANGUAGE_ALL_LANG_LPROJ ";
+    foreach $lang (@completelangiso) {
+        print OUTFILE "\\\n\tDosName ($lang) = \"$lang.lproj\"";
+        print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
+    }
+    print OUTFILE "\n\n";
 }
 
 sub write_DIR_IDENT_ALL_LANG
