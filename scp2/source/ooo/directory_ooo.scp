@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@ End
 Directory gid_Dir_Bundle_Contents
     ParentID = gid_Dir_Bundle;
     HostName = "Contents";
+    Styles = (OFFICEDIRECTORY);
 End
 #endif
 
@@ -48,6 +49,13 @@ End
 Directory gid_Dir_Bundle_Contents_Resources
     ParentID = gid_Dir_Bundle_Contents;
     HostName = "Resources";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_Resources_Lang
+    ParentID = gid_Dir_Bundle_Contents_Resources;
+    DIR_ISOLANGUAGE_ALL_LANG_LPROJ;
 End
 #endif
 
