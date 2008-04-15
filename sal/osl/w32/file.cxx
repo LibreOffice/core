@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2482,6 +2482,9 @@ oslFileError SAL_CALL osl_openFile(
         if ( uFlags & osl_File_OpenFlag_Write )
             dwAccess |= GENERIC_WRITE;
         else
+            dwShare  |= FILE_SHARE_WRITE;
+
+        if ( uFlags & osl_File_OpenFlag_NoLock )
             dwShare  |= FILE_SHARE_WRITE;
 
         if ( uFlags & osl_File_OpenFlag_Create )
