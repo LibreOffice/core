@@ -4,6 +4,507 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<!-- UTI declarations for OS X >= 10.4	-->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<!-- Writer documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.text</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxw</string>
+					<string>sdw</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.writer</string>
+					<string>application/vnd.stardivision.writer</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.text</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Text</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odt</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.text</string>
+				</array>
+			</dict>
+		</dict>
+		
+		<!-- Calc documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.spreadsheet</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxc</string>
+					<string>sdc</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.calc</string>
+					<string>application/vnd.stardivision.calc</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.spreadsheet</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Spreadsheet</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ods</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.spreadsheet</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Impress documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.presentation</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxi</string>
+					<string>sdd</string>
+					<string>sdp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.impress</string>
+					<string>application/vnd.stardivision.impress</string>
+					<string>application/vnd.stardivision.impress-packed</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.presentation</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Presentation</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.presentation</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Draw documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.graphics</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxd</string>
+					<string>sda</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.draw</string>
+					<string>application/vnd.stardivision.draw</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.graphics</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Drawing</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odg</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.graphics</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Text master documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.text-master</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Master</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxg</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.writer.global</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.text-master</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Master</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.text-master</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Math documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.formula</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Formula</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sxm</string>
+					<string>smf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.math</string>
+					<string>application/vnd.stardivision.math</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.formula</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Formula</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.formula</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Text template documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.text-template</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Text Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>stw</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.writer.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.text-template</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Text Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ott</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.text-template</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Spreadsheet template documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.spreadsheet-template</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Spreadsheet Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>stc</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.calc.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.spreadsheet-template</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Spreadsheet Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ots</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.spreadsheet-template</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Presentation template documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.presentation-template</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Presentation Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sti</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.impress.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.presentation-template</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Presentation Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>otp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.presentation-template</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Drawing template documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.graphics-template</string>
+			<key>UTTypeDescription</key>
+			<string>${FILEFORMATNAME} ${FILEFORMATVERSION} Drawing Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>std</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.sun.xml.draw.template</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.graphics-template</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Drawing Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>otg</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.graphics-template</string>
+				</array>
+			</dict>
+		</dict>
+
+		<!-- Base documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.database</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Database</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odb</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.database</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	
+	<!-- Document type declaration for OS X < 10.4 -->
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -94,7 +595,6 @@
 				<string>application/vnd.sun.xml.impress</string>
 				<string>application/vnd.stardivision.impress</string>
 				<string>application/vnd.stardivision.impress-packed</string>
-
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>presentation.icns</string>
@@ -482,6 +982,46 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.openoffice.text</string>
+				<string>org.oasis-open.opendocument.text</string>
+				<string>org.openoffice.spreadsheet</string>
+				<string>org.oasis-open.opendocument.spreadsheet</string>
+				<string>org.openoffice.presentation</string>
+				<string>org.oasis-open.opendocument.presentation</string>
+				<string>org.openoffice.graphics</string>
+				<string>org.oasis-open.opendocument.graphics</string>
+				<string>org.openoffice.text-master</string>
+				<string>org.oasis-open.opendocument.text-master</string>
+				<string>org.openoffice.formula</string>
+				<string>org.oasis-open.opendocument.formula</string>
+				<string>org.openoffice.text-template</string>
+				<string>org.oasis-open.opendocument.text-template</string>
+				<string>org.openoffice.spreadsheet-template</string>
+				<string>org.oasis-open.opendocument.spreadsheet-template</string>
+				<string>org.openoffice.presentation-template</string>
+				<string>org.oasis-open.opendocument.presentation-template</string>
+				<string>org.openoffice.graphics-template</string>
+				<string>org.oasis-open.opendocument.graphics-template</string>
+				<string>org.oasis-open.opendocument.database</string>
+				<string>org.oasis-open.opendocument.chart</string>
+				<string>public.rtf</string>
+				<string>public.html</string>
+				<string>public.jpeg</string>
+				<string>public.tiff</string>
+				<string>public.png</string>
+				<string>public.xbitmap-image</string>
+				<string>com.adobe.encapsulated-postscript</string>
+				<string>com.microsoft.bmp</string>
+				<string>com.microsoft.word.doc</string>
+				<string>com.microsoft.excel.xls</string>
+				<string>com.microsoft.powerpoint.ppt</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>%EXECUTABLE</string>
@@ -489,14 +1029,14 @@
 	<string>${PRODUCTNAME} ${ABOUTBOXPRODUCTVERSION} %SOURCE</string>
 	<key>CFBundleIconFile</key>
 	<string>main.icns</string>
-    	<key>CFBundleShortVersionString</key>
-    	<string>${ABOUTBOXPRODUCTVERSION}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>${ABOUTBOXPRODUCTVERSION}</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.openoffice.script</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-    	<key>CFBundleName</key>
-    	<string>${PRODUCTNAME}</string>
+	<key>CFBundleName</key>
+	<string>${PRODUCTNAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
