@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_draw.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,35 +32,23 @@
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-draw.xcu";
 End
 
 File gid_File_Help_Sdraw_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdraw);
-    Patchfiles = ("sdraw.db",
-                  "sdraw.ht",
-                  "sdraw.jar",
-                  "sdraw.key",
-                  "sdraw.idx/CONTEXTS",
-                  "sdraw.idx/DICTIONARY",
-                  "sdraw.idx/DOCS",
-                  "sdraw.idx/DOCS.TAB",
-                  "sdraw.idx/EDGE",
-                  "sdraw.idx/LINKNAMES",
-                  "sdraw.idx/OFFSETS",
-                  "sdraw.idx/POSITIONS",
-                  "sdraw.idx/SCHEMA"); 
+    Patchfiles = (); 
 End
 
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sdraw);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 // new user interface configuration files
@@ -82,14 +70,14 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_draw_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_draw_filters.xcu";
 End
@@ -103,7 +91,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Setup_Draw_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-draw.xcu";
 End
@@ -117,7 +105,7 @@ End
 
 File gid_File_Oo_Office_Ui_Drawwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DrawWindowState.xcu";
 End
