@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmodelapi.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -399,7 +399,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocument( const ::rtl::OUString& _sAt
                 {
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
-                    aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveAs")),aArgs);
+                    aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveAs")),aArgs, sal_False, ::rtl::OUString() );
                     //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
@@ -474,7 +474,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocAsPDF( const ::rtl::OUString& _sAt
                 {
                     Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
                     SfxStoringHelper aHelper(xMgr);
-                    aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportToPDF")),aArgs);
+                    aHelper.GUIStoreModel(_xModel,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportToPDF")),aArgs, sal_False, ::rtl::OUString);
                     //  xStor->storeToURL(rFileName,aArgs);
                     bRet = sal_True;
                 }
