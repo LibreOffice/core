@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediadescriptor.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -489,6 +489,16 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 -----------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStream()
 {
+    return addInputStream_Impl( sal_True );
+}
+
+sal_Bool MediaDescriptor::addInputStreamNoLock()
+{
+    return addInputStream_Impl( sal_False );
+}
+
+sal_Bool MediaDescriptor::addInputStream_Impl( sal_Bool bLockFile )
+{
     // check for an already existing stream item first
     const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM());
     if (pIt != end())
@@ -517,7 +527,7 @@ sal_Bool MediaDescriptor::addInputStream()
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
         ::rtl::OUString sNormalizedURL = impl_normalizeURL(sURL);
-        return impl_openStreamWithURL(sNormalizedURL);
+        return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
 #if OSL_DEBUG_LEVEL>0
     catch(const css::uno::Exception& ex)
@@ -716,7 +726,7 @@ class StillReadWriteInteraction : public ::ucbhelper::InterceptedInteraction
 /*-----------------------------------------------
     25.03.2004 12:29
 -----------------------------------------------*/
-sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
+sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, sal_Bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
     // prepare the environment
@@ -763,7 +773,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
         bModeRequestedExplicitly = sal_True;
     }
 
-    if (!bReadOnly)
+    if ( !bReadOnly && bLockFile )
     {
         try
         {
@@ -792,19 +802,20 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {
+        rtl::OUString aScheme;
+
         try
         {
             css::uno::Reference< css::ucb::XContentIdentifier > xContId(
                 aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
 
-            rtl::OUString aScheme;
             if ( xContId.is() )
                 aScheme = xContId->getContentProviderScheme();
 
             // Only file system content provider is able to provide XStream
             // so for this content impossibility to create XStream triggers
-            // switch to readonly mode
-            if( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+            // switch to readonly mode in case of opening with locking on
+            if( bLockFile && aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
                 bReadOnly = sal_True;
             else
                 aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
@@ -821,7 +832,11 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
         pInteraction->resetErrorStates();
         try
         {
-            xInputStream = aContent.openStream();
+            // all the contents except file-URLs should be opened as usual
+            if ( bLockFile || !aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+                xInputStream = aContent.openStream();
+            else
+                xInputStream = aContent.openStreamNoLock();
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
