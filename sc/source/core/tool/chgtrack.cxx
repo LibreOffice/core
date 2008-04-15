@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +73,30 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeActionLinkEntry, nMemPoolChangeActionLinkEntry
 // loaded MSB > eigenes => inkompatibel
 #define SC_CHGTRACK_FILEFORMAT_FIRST    0x0001
 #define SC_CHGTRACK_FILEFORMAT  0x0001
+
+// --- ScChangeActionLinkEntry ---------------------------------------------
+
+#if DEBUG_CHANGETRACK
+String ScChangeActionLinkEntry::ToString() const
+{
+    String aReturn;
+    if ( pAction )
+    {
+        aReturn = String::CreateFromInt64( static_cast< sal_Int64 >( pAction->GetActionNumber() ) );
+    }
+    else if ( pLink && pLink->pAction )
+    {
+        aReturn = String::CreateFromAscii( "*" );
+        aReturn += String::CreateFromInt64( static_cast< sal_Int64 >( pLink->pAction->GetActionNumber() ) );
+    }
+    else
+    {
+        aReturn = String::CreateFromAscii( "-" );
+    }
+
+    return aReturn;
+}
+#endif // DEBUG_CHANGETRACK
 
 // --- ScChangeAction ------------------------------------------------------
 
@@ -533,9 +557,9 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
 
 
 void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
-        BOOL /* bSplitRange */ ) const
+        BOOL /* bSplitRange */, bool bWarning ) const
 {
-    if (IsRejecting())
+    if ( IsRejecting() && bWarning )
     {
         // #112261# Add comment if rejection may have resulted in references
         // not properly restored in formulas. See specification at
@@ -943,6 +967,146 @@ BOOL ScChangeAction::LoadCellList( ScChangeAction* pOfAction,
     return TRUE;
 }
 
+#if DEBUG_CHANGETRACK
+String ScChangeAction::ToString( ScDocument* pDoc ) const
+{
+    String aReturn;
+
+    String aNumber = String::CreateFromInt64( static_cast< sal_Int64 >( GetActionNumber() ) );
+
+    String aActionState;
+    ScChangeActionState eActionState = GetState();
+    switch ( eActionState )
+    {
+        case SC_CAS_VIRGIN:
+            {
+                aActionState = String::CreateFromAscii( " " );
+            }
+            break;
+        case SC_CAS_ACCEPTED:
+            {
+                aActionState = String::CreateFromAscii( "+" );
+            }
+            break;
+        case SC_CAS_REJECTED:
+            {
+                aActionState = String::CreateFromAscii( "-" );
+            }
+            break;
+    }
+
+    String aRejectAction;
+    if ( IsRejecting() )
+    {
+        aRejectAction += 'r';
+        aRejectAction += String::CreateFromInt64( static_cast< sal_Int64 >( GetRejectAction() ) );
+    }
+
+    String aReference;
+    GetRefString( aReference, pDoc, TRUE );
+
+    String aAuthor = GetUser();
+
+    DateTime aDT = GetDateTime();
+    String aDate = ScGlobal::pLocaleData->getDate( aDT );
+    aDate += ' ';
+    aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
+
+    String aDescription;
+    GetDescription( aDescription, pDoc );
+
+    String aLinkAny;
+    const ScChangeActionLinkEntry* pLinkA = pLinkAny;
+    while ( pLinkA )
+    {
+        if ( !aLinkAny.Len() )
+        {
+            aLinkAny = String::CreateFromAscii( "(Any:" );
+        }
+        aLinkAny += String::CreateFromAscii( " ->" );
+        aLinkAny += pLinkA->ToString();
+        pLinkA = pLinkA->GetNext();
+    }
+    if ( aLinkAny.Len() )
+    {
+        aLinkAny += ')';
+    }
+
+    String aLinkDeletedIn;
+    const ScChangeActionLinkEntry* pLinkDI = pLinkDeletedIn;
+    while ( pLinkDI )
+    {
+        if ( !aLinkDeletedIn.Len() )
+        {
+            aLinkDeletedIn = String::CreateFromAscii( "(DeletedIn:" );
+        }
+        aLinkDeletedIn += String::CreateFromAscii( " ->" );
+        aLinkDeletedIn += pLinkDI->ToString();
+        pLinkDI = pLinkDI->GetNext();
+    }
+    if ( aLinkDeletedIn.Len() )
+    {
+        aLinkDeletedIn += ')';
+    }
+
+    String aLinkDeleted;
+    const ScChangeActionLinkEntry* pLinkD = pLinkDeleted;
+    while ( pLinkD )
+    {
+        if ( !aLinkDeleted.Len() )
+        {
+            aLinkDeleted = String::CreateFromAscii( "(Deleted:" );
+        }
+        aLinkDeleted += String::CreateFromAscii( " ->" );
+        aLinkDeleted += pLinkD->ToString();
+        pLinkD = pLinkD->GetNext();
+    }
+    if ( aLinkDeleted.Len() )
+    {
+        aLinkDeleted += ')';
+    }
+
+    String aLinkDependent;
+    const ScChangeActionLinkEntry* pLinkDp = pLinkDependent;
+    while ( pLinkDp )
+    {
+        if ( !aLinkDependent.Len() )
+        {
+            aLinkDependent = String::CreateFromAscii( "(Dependent:" );
+        }
+        aLinkDependent += String::CreateFromAscii( " ->" );
+        aLinkDependent += pLinkDp->ToString();
+        pLinkDp = pLinkDp->GetNext();
+    }
+    if ( aLinkDependent.Len() )
+    {
+        aLinkDependent += ')';
+    }
+
+    aReturn += aNumber;
+    aReturn += aActionState;
+    aReturn += aRejectAction;
+    aReturn += String::CreateFromAscii( ": " );
+    aReturn += aReference;
+    aReturn += ' ';
+    aReturn += aAuthor;
+    aReturn += ' ';
+    aReturn += aDate;
+    aReturn += ' ';
+    aReturn += aDescription;
+    aReturn += ' ';
+    aReturn += aLinkAny;
+    aReturn += ' ';
+    aReturn += aLinkDeletedIn;
+    aReturn += ' ';
+    aReturn += aLinkDeleted;
+    aReturn += ' ';
+    aReturn += aLinkDependent;
+
+    return aReturn;
+}
+#endif // DEBUG_CHANGETRACK
+
 
 // --- ScChangeActionIns ---------------------------------------------------
 
@@ -1003,9 +1167,9 @@ BOOL ScChangeActionIns::Store( SvStream& rStrm, ScMultipleWriteHeader& rHdr ) co
 
 
 void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
-        BOOL bSplitRange ) const
+        BOOL bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
     USHORT nWhatId;
     switch ( GetType() )
@@ -1335,9 +1499,9 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
 
 
 void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
-        BOOL bSplitRange ) const
+        BOOL bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
     USHORT nWhatId;
     switch ( GetType() )
@@ -1622,9 +1786,9 @@ void ScChangeActionMove::GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const
 
 
 void ScChangeActionMove::GetDescription( String& rStr, ScDocument* pDoc,
-        BOOL bSplitRange ) const
+        BOOL bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
     BOOL bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
 
@@ -1970,9 +2134,9 @@ void ScChangeActionContent::GetNewString( String& rStr ) const
 
 
 void ScChangeActionContent::GetDescription( String& rStr, ScDocument* pDoc,
-        BOOL bSplitRange ) const
+        BOOL bSplitRange, bool bWarning ) const
 {
-    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
     String aRsc( ScGlobal::GetRscString( STR_CHANGED_CELL ) );
 
@@ -4540,7 +4704,8 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                             AddDependentWithNotify( pActMove, pHere );
                         } while ( ( pHere = pHere->GetNextContent() ) != NULL );
                     }
-                    else
+                    // #i87003# [Collaboration] Move range and insert content in FromRange is not merged correctly
+                    else if ( ( GetMergeState() != SC_CTMS_PREPARE && GetMergeState() != SC_CTMS_OWN ) || p->GetActionNumber() <= pAct->GetActionNumber() )
                         p->UpdateReference( this, eMode, rFrom, nDx, nDy, nDz );
                 }
             }
@@ -4565,7 +4730,8 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                             // geloescht wird in DeleteCellEntries
                         }
                     }
-                    else
+                    // #i87003# [Collaboration] Move range and insert content in FromRange is not merged correctly
+                    else if ( ( GetMergeState() != SC_CTMS_PREPARE && GetMergeState() != SC_CTMS_OWN ) || p->GetActionNumber() <= pAct->GetActionNumber() )
                         p->UpdateReference( this, eMode, rTo, nDx, nDy, nDz );
                     if ( bActRejected &&
                             ((ScChangeActionContent*)p)->IsTopContent() &&
@@ -4605,6 +4771,18 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                         p->SetDeletedIn( pAct );
                     pLink = pLink->GetNext();
                 }
+
+                // #i87049# [Collaboration] Conflict between delete row and insert content is not merged correctly
+                for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
+                {
+                    if ( !p->IsDeletedIn( pAct ) && pAct->IsInsertType() &&
+                         p->GetType() == SC_CAT_CONTENT &&
+                         pAct->GetBigRange().Intersects( p->GetBigRange() ) )
+                    {
+                        p->SetDeletedIn( pAct );
+                    }
+                }
+
                 for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
                 {
                     if ( p == pAct )
@@ -4631,6 +4809,17 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
                     if ( p )
                         p->RemoveDeletedIn( pAct );
                     pLink = pLink->GetNext();
+                }
+
+                // #i87049# [Collaboration] Conflict between delete row and insert content is not merged correctly
+                for ( ScChangeAction* p = *ppFirstAction; p; p = p->GetNext() )
+                {
+                    if ( p->IsDeletedIn( pAct ) && pAct->IsInsertType() &&
+                         p->GetType() == SC_CAT_CONTENT &&
+                         pAct->GetBigRange().Intersects( p->GetBigRange() ) )
+                    {
+                        p->RemoveDeletedIn( pAct );
+                    }
                 }
             }
             break;
@@ -5447,165 +5636,8 @@ void ScChangeTrack::MergeActionState( ScChangeAction* pAct, const ScChangeAction
     }
 }
 
-String ScChangeAction::toString( ScDocument* pDoc ) const
-{
-    String aReturn;
-
-    String aNumber = String::CreateFromInt64( static_cast< sal_Int64 >( GetActionNumber() ) );
-
-    String aActionState;
-    ScChangeActionState eActionState = GetState();
-    switch ( eActionState )
-    {
-        case SC_CAS_VIRGIN:
-            {
-                aActionState = String::CreateFromAscii( " " );
-            }
-            break;
-        case SC_CAS_ACCEPTED:
-            {
-                aActionState = String::CreateFromAscii( "+" );
-            }
-            break;
-        case SC_CAS_REJECTED:
-            {
-                aActionState = String::CreateFromAscii( "-" );
-            }
-            break;
-    }
-
-    String aRejectAction;
-    if ( IsRejecting() )
-    {
-        aRejectAction += 'r';
-        aRejectAction += String::CreateFromInt64( static_cast< sal_Int64 >( GetRejectAction() ) );
-    }
-
-    String aReference;
-    GetRefString( aReference, pDoc, TRUE );
-
-    String aAuthor = GetUser();
-
-    DateTime aDT = GetDateTime();
-    String aDate = ScGlobal::pLocaleData->getDate( aDT );
-    aDate += ' ';
-    aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
-
-    String aDescription;
-    GetDescription( aDescription, pDoc );
-
-    String aLinkAny;
-    const ScChangeActionLinkEntry* pLinkA = pLinkAny;
-    while ( pLinkA )
-    {
-        if ( !aLinkAny.Len() )
-        {
-            aLinkAny = String::CreateFromAscii( "(Any:" );
-        }
-        aLinkAny += String::CreateFromAscii( " ->" );
-        aLinkAny += pLinkA->toString();
-        pLinkA = pLinkA->GetNext();
-    }
-    if ( aLinkAny.Len() )
-    {
-        aLinkAny += ')';
-    }
-
-    String aLinkDeletedIn;
-    const ScChangeActionLinkEntry* pLinkDI = pLinkDeletedIn;
-    while ( pLinkDI )
-    {
-        if ( !aLinkDeletedIn.Len() )
-        {
-            aLinkDeletedIn = String::CreateFromAscii( "(DeletedIn:" );
-        }
-        aLinkDeletedIn += String::CreateFromAscii( " ->" );
-        aLinkDeletedIn += pLinkDI->toString();
-        pLinkDI = pLinkDI->GetNext();
-    }
-    if ( aLinkDeletedIn.Len() )
-    {
-        aLinkDeletedIn += ')';
-    }
-
-    String aLinkDeleted;
-    const ScChangeActionLinkEntry* pLinkD = pLinkDeleted;
-    while ( pLinkD )
-    {
-        if ( !aLinkDeleted.Len() )
-        {
-            aLinkDeleted = String::CreateFromAscii( "(Deleted:" );
-        }
-        aLinkDeleted += String::CreateFromAscii( " ->" );
-        aLinkDeleted += pLinkD->toString();
-        pLinkD = pLinkD->GetNext();
-    }
-    if ( aLinkDeleted.Len() )
-    {
-        aLinkDeleted += ')';
-    }
-
-    String aLinkDependent;
-    const ScChangeActionLinkEntry* pLinkDp = pLinkDependent;
-    while ( pLinkDp )
-    {
-        if ( !aLinkDependent.Len() )
-        {
-            aLinkDependent = String::CreateFromAscii( "(Dependent:" );
-        }
-        aLinkDependent += String::CreateFromAscii( " ->" );
-        aLinkDependent += pLinkDp->toString();
-        pLinkDp = pLinkDp->GetNext();
-    }
-    if ( aLinkDependent.Len() )
-    {
-        aLinkDependent += ')';
-    }
-
-    aReturn += aNumber;
-    aReturn += aActionState;
-    aReturn += aRejectAction;
-    aReturn += String::CreateFromAscii( ": " );
-    aReturn += aReference;
-    aReturn += ' ';
-    aReturn += aAuthor;
-    aReturn += ' ';
-    aReturn += aDate;
-    aReturn += ' ';
-    aReturn += aDescription;
-    aReturn += ' ';
-    aReturn += aLinkAny;
-    aReturn += ' ';
-    aReturn += aLinkDeletedIn;
-    aReturn += ' ';
-    aReturn += aLinkDeleted;
-    aReturn += ' ';
-    aReturn += aLinkDependent;
-
-    return aReturn;
-}
-
-String ScChangeActionLinkEntry::toString() const
-{
-    String aReturn;
-    if ( pAction )
-    {
-        aReturn = String::CreateFromInt64( static_cast< sal_Int64 >( pAction->GetActionNumber() ) );
-    }
-    else if ( pLink && pLink->pAction )
-    {
-        aReturn = String::CreateFromAscii( "*" );
-        aReturn += String::CreateFromInt64( static_cast< sal_Int64 >( pLink->pAction->GetActionNumber() ) );
-    }
-    else
-    {
-        aReturn = String::CreateFromAscii( "-" );
-    }
-
-    return aReturn;
-}
-
-String ScChangeTrack::toString() const
+#if DEBUG_CHANGETRACK
+String ScChangeTrack::ToString() const
 {
     String aReturn;
 
@@ -5614,7 +5646,7 @@ String ScChangeTrack::toString() const
     const ScChangeAction* pGenerated = GetFirstGenerated();
     while ( pGenerated )
     {
-        aReturn += pGenerated->toString( pDoc );
+        aReturn += pGenerated->ToString( pDoc );
         aReturn += '\n';
         pGenerated = pGenerated->GetNext();
     }
@@ -5624,7 +5656,7 @@ String ScChangeTrack::toString() const
     const ScChangeAction* pAction = GetFirst();
     while ( pAction )
     {
-        aReturn += pAction->toString( pDoc );
+        aReturn += pAction->ToString( pDoc );
         aReturn += '\n';
         pAction = pAction->GetNext();
     }
@@ -5632,3 +5664,4 @@ String ScChangeTrack::toString() const
 
     return aReturn;
 }
+#endif // DEBUG_CHANGETRACK
