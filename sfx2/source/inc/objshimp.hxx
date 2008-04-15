@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objshimp.hxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,7 +115,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         bLoadReadonly:1,
                         bUseUserData:1,
                         bSaveVersionOnClose:1,
-                        m_bIsDocShared:1; // whether the document should be edited in shared mode
+                        m_bSharedXMLFlag:1, // whether the flag should be stored in xml file
+                        m_bAllowShareControlFileClean:1; // whether the flag should be stored in xml file
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
