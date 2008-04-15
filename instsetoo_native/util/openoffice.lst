@@ -277,7 +277,7 @@ BrOffice
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -336,7 +336,7 @@ BrOffice_wJRE
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -395,7 +395,7 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0/register.html?id=${INSTANCE_URN}&amp;cid=923142
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
