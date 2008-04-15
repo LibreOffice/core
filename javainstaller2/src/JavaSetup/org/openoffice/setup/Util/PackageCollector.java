@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PackageCollector.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +79,46 @@ public class PackageCollector {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             collectUninstallPackages(child, allPackages);
+        }
+    }
+
+    static public void sortPackages(Vector allPackages, Vector sortedPackages, String mode) {
+        for (int i = 0; i < allPackages.size(); i++) {
+            boolean integrated = false;
+            PackageDescription packageData = (PackageDescription) allPackages.get(i);
+
+            if ( i == 0 ) {
+                sortedPackages.add(packageData);
+                integrated = true;
+            } else {
+                int position = packageData.getOrder();
+                for (int j = 0; j < sortedPackages.size(); j++) {
+                    PackageDescription sortedPackageData = (PackageDescription) sortedPackages.get(j);
+                    int compare = sortedPackageData.getOrder();
+
+                    if ( position < compare ) {
+                        sortedPackages.add(j, packageData);
+                        integrated = true;
+                        break;
+                    }
+                }
+
+                // no break used -> adding at the end
+                if ( ! integrated ) {
+                    sortedPackages.add(packageData);
+                }
+            }
+        }
+
+        // reverse order for uninstallation
+        if ( mode.equalsIgnoreCase("uninstall")) {
+            int number = sortedPackages.size();
+            for (int i = 0; i < number; i++) {
+                if ( i > 0 ) {
+                    PackageDescription sortPackageData = (PackageDescription) sortedPackages.remove(i);
+                    sortedPackages.add(0,sortPackageData);
+                }
+            }
         }
     }
 
