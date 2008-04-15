@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleObjectFactory.java,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -351,21 +351,12 @@ public class AccessibleObjectFactory {
                 break;
             case AccessibleRole.MENU:
                 c = new Menu(xAccessible, xAccessibleContext);
-                // !!! FIXME !!!
-                // Menu items are always visible, but change SHOWING state
-//              if (!xAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
-//                  c.setVisible(false);
-//              }
                 break;
             case AccessibleRole.MENU_BAR:
                 c = new MenuContainer(javax.accessibility.AccessibleRole.MENU_BAR, xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.MENU_ITEM:
                 c = new MenuItem(xAccessible, xAccessibleContext);
-                // Menu items are always visible, but change SHOWING state
-//              if (!xAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
-//                  c.setVisible(false);
-//              }
                 break;
             case AccessibleRole.POPUP_MENU:
                 c = new MenuContainer(javax.accessibility.AccessibleRole.POPUP_MENU, xAccessible, xAccessibleContext);
@@ -476,14 +467,8 @@ public class AccessibleObjectFactory {
 //                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
                 }
             }
-            // Set the boundings of the component if it is visible ..
-            if (!xAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
-                c.setVisible(false);
-            }
-            // Set the components' enabled state ..
-            if (!xAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
-                c.setEnabled(false);
-            }
+
+            AccessibleStateAdapter.setComponentState(c, xAccessibleStateSet);
 
             if (! Build.PRODUCT) {
                 String property = System.getProperty("AccessBridgeLogging");
