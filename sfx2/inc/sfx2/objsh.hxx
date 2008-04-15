@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objsh.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -307,9 +307,15 @@ public:
     sal_Bool                    IsHelpDocument() const;
 
     sal_Bool                    IsDocShared() const;
-    void                        SetDocShared( sal_Bool bShared );
-    ::rtl::OUString             GetSharedFileUrl() const;
-    void                        SetSharedFileUrl( const ::rtl::OUString& rSharedFileUrl );
+    ::rtl::OUString             GetSharedFileURL() const;
+    sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
+    void                        DisconnectFromShared();
+    SAL_DLLPRIVATE void         FreeSharedFile();
+    SAL_DLLPRIVATE void         FreeSharedFile( const ::rtl::OUString& aTempFileURL );
+    SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
+
+    void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
+    sal_Bool                    HasSharedXMLFlagSet() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
