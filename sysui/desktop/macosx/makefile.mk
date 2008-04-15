@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,7 @@ dummy:
 ZIPFLAGS = -r
 ZIP1TARGET = osxicons
 ZIP1DIR = ../icons
-ZIP1LIST := $(shell $(PERL) list_icons.pl < Info.plist)
+ZIP1LIST := $(shell $(PERL) -w list_icons.pl < Info.plist)
 
 .IF "$(GUIBASE)"!="aqua"
 CREATOR_TYPE=OOo2
@@ -64,6 +64,13 @@ SOURCE=$(RSCREVISION)
 CWS=[CWS:$(CWS_WORK_STAMP)]
 .ENDIF
 
+.IF "$(WITH_LANG)"!=""
+ULFDIR:=$(COMMONMISC)$/desktopshare
+.ELSE # "$(WITH_LANG)"!=""
+ULFDIR:=..$/share
+WITH_LANG *= en-US           # Fallback for configure w/o --with-lang switch
+.ENDIF # "$(WITH_LANG)"!=""
+
 # --- Targets --------------------------------------------------
 
 .INCLUDE : target.mk
@@ -72,12 +79,25 @@ ZIP1TARGETN : Info.plist extract_icons_names.pl
 
 ALLTAR : $(COMMONMISC)$/{PkgInfo Info.plist}
 
+.IF "$(WITH_LANG)"!=""
+ALLTAR : $(COMMONBIN)$/InfoPlist_{$(WITH_LANG)}.zip
+.ENDIF
+
 $(COMMONMISC)$/PkgInfo :
     echo "APPL$(CREATOR_TYPE)" > $@
 
 
 $(COMMONMISC)$/Info.plist : $$(@:f)
-     sed -e "s|\%EXECUTABLE|${EXECUTABLE}|g" -e "s|\%SOURCE|[$(SOURCE)$(CWS)]|g" $< > $@
+    sed -e "s|\%EXECUTABLE|${EXECUTABLE}|g" -e "s|\%SOURCE|[$(SOURCE)$(CWS)]|g" $< > $@
 
+$(COMMONBIN)$/InfoPlist_{$(WITH_LANG)}.zip : $(COMMONMISC)$/$$(@:b)/InfoPlist.strings
+    cd $(<:d) && zip ../$(@:f).$(INPATH) $(<:f)
+    $(MV) -f $(COMMONMISC)$/$(@:f).$(INPATH) $@
+
+$(COMMONMISC)$/InfoPlist_{$(WITH_LANG)}$/InfoPlist.strings : Info.plist $(ULFDIR)$/documents.ulf
+    $(MKDIRHIER) $(@:d)
+    $(PERL) -w gen_strings.pl -l $(@:d:d:b:s/InfoPlist_//) -p $< | iconv -f UTF-8 -t UTF-16 > $@.$(INPATH)
+    $(MV) -f $@.$(INPATH) $@
+    
 .ENDIF		# "$(OS)"!="MACOSX"	
 
