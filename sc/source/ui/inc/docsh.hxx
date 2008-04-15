@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,12 +40,13 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewsh.hxx>
 
-#include <com/sun/star/frame/XLoadable.hpp>
 #include "scdllapi.h"
 #include "scdll.hxx"
 #include "document.hxx"
 #include "shellids.hxx"
 #include "refreshtimer.hxx"
+
+#include <hash_map>
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -75,6 +76,8 @@ class ScOptSolverSave;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
+
+typedef ::std::hash_map< ULONG, ULONG > ScChangeActionMergeMap;
 
 //==================================================================
 
@@ -152,6 +155,9 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE void          UnlockPaint_Impl(BOOL bDoc);
     SC_DLLPRIVATE void          LockDocument_Impl(USHORT nNew);
     SC_DLLPRIVATE void          UnlockDocument_Impl(USHORT nNew);
+
+    SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
+    SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
 
 protected:
 
@@ -245,7 +251,8 @@ public:
     void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
-    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, ULONG nOffset = 0 );
+    void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, ULONG nOffset = 0, ScChangeActionMergeMap* pMergeMap = NULL, bool bInverseMap = false );
+    bool            MergeSharedDocument( ScDocShell* pSharedDocShell );
 
     ScChangeAction* GetChangeAction( const ScAddress& rPos );
     void            SetChangeComment( ScChangeAction* pAction, const String& rComment );
@@ -363,7 +370,7 @@ public:
 
     SfxBindings*    GetViewBindings();
 
-    ScTabViewShell* GetBestViewShell();
+    ScTabViewShell* GetBestViewShell( BOOL bOnlyVisible = TRUE );
     ScSbxDocHelper* GetDocHelperObject() { return pDocHelper; }
 
     void            SetDocumentModifiedPending( BOOL bVal )
@@ -399,13 +406,6 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
-
-    bool            MergeSharedDocument( ScDocument& rSharedDoc );
-
-private:
-
-    void            SwitchDocumentToShared( bool bShared );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadable > LoadSharedDocument();
 };
 
 SO2_DECL_REF(ScDocShell)
