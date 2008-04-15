@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,6 +86,11 @@ sub register_extensions
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
+    # unset any LIBRARY_PATH variable
+    delete $ENV{ 'DYLD_LIBRARY_PATH'};
+    delete $ENV{ 'LD_LIBRARY_PATH'};
+    delete $ENV{ 'LIBRARY_PATH'};
+
     # my $extensiondir = $officedir . $installer::globals::separator . "share" .
     #           $installer::globals::separator . "extension" .
     #           $installer::globals::separator . "install";
@@ -110,7 +115,7 @@ sub register_extensions
             if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
             if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
 
-            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " 2\>\&1 |";
+            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $installer::globals::temppath . " 2\>\&1 |";
 
             print "... $systemcall ...\n";
 
@@ -184,7 +189,17 @@ sub create_package
     {
         installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
         my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
-        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && rm -f $installdir/tmp.dmg";
+        my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
+        $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+
+        my $sla = 'sla.r';
+        my $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+
+        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
+                if ($$ref ne "") {
+            $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
+        }
+        $systemcall .= "rm -f $installdir/tmp.dmg";
     }
     else
     {
