@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelativeUriExcessParentSegments.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ module com { module sun { module star { module uri {
 
    @since OOo 2.0.0
  */
-enum RelativeUriExcessParentSegments {
+published enum RelativeUriExcessParentSegments {
     /**
        causes excess special parent segments to be treated as an error.
      */
