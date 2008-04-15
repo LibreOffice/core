@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guisaveas.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,8 @@ public:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                     const ::rtl::OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
-                    sal_Bool bPreselectPassword );
+                    sal_Bool bPreselectPassword,
+                    ::rtl::OUString aUserSelectedName );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
