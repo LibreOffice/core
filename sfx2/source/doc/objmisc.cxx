@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objmisc.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -526,56 +526,191 @@ void SfxObjectShell::SetModalMode_Impl( sal_Bool bModal )
 }
 
 //--------------------------------------------------------------------
+sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
+{
+    sal_Bool bResult = sal_True;
+
+    if ( bShared != IsDocShared() )
+    {
+        sal_Bool bOldValue = HasSharedXMLFlagSet();
+        SetSharedXMLFlag( bShared );
+
+        if ( bSave )
+        {
+            SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( this );
+
+            if ( pViewFrame )
+            {
+                // TODO/LATER: currently the application guards against the reentrance problem
+                const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
+                SfxBoolItem* pResult = PTR_CAST( SfxBoolItem, pItem );
+                bResult = ( pResult && pResult->GetValue() );
+            }
+        }
+
+        if ( bResult )
+        {
+            // TODO/LATER: Is it possible that the following calls fail?
+            if ( bShared )
+            {
+                ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                try
+                {
+                    ::svt::ShareControlFile aControlFile( aOrigURL );
+                    aControlFile.InsertOwnEntry();
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO/LATER: in future the switching should not happen and an error should be shown
+                }
+
+                pImp->m_aSharedFileURL = aOrigURL;
+                GetMedium()->SwitchDocumentToTempFile();
+            }
+            else
+            {
+                ::rtl::OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                GetMedium()->SwitchDocumentToFile( GetSharedFileURL() );
+                pImp->m_aSharedFileURL = ::rtl::OUString();
+
+                // now remove the temporary file the document was based on
+                ::utl::UCBContentHelper::Kill( aTempFileURL );
+
+                try
+                {
+                    ::svt::ShareControlFile aControlFile( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+                    aControlFile.RemoveFile();
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+        }
+        else
+        {
+            // the saving has failed!
+            SetSharedXMLFlag( bOldValue );
+        }
+    }
+    else
+        bResult = sal_False; // the second switch to the same mode
+
+    if ( bResult )
+        SetTitle( String() );
+
+    return bResult;
+}
+
+//--------------------------------------------------------------------
+
+void SfxObjectShell::DisconnectFromShared()
+{
+    if ( IsDocShared() )
+    {
+        if ( pMedium && pMedium->GetStorage().is() )
+        {
+            // set medium to noname
+            pMedium->SetName( String(), sal_True );
+            pMedium->Init_Impl();
+
+            // drop resource
+            SetNoName();
+            InvalidateName();
+
+            // untitled document must be based on temporary storage
+            // the medium should not dispose the storage in this case
+            if ( pMedium->GetStorage() == GetStorage() )
+                ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium );
+
+            pMedium->Close();
+            FreeSharedFile();
+
+            SfxMedium* pTmpMedium = pMedium;
+            ForgetMedium();
+            if( !DoSaveCompleted( pTmpMedium ) )
+                SetError( ERRCODE_IO_GENERAL );
+            else
+            {
+                // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
+                pMedium->CanDisposeStorage_Impl( sal_False );
+            }
+
+            pMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
+            pMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
+
+            SetTitle( String() );
+        }
+    }
+}
+
+//--------------------------------------------------------------------
+
+void SfxObjectShell::FreeSharedFile()
+{
+    if ( pMedium )
+        FreeSharedFile( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+}
+
+//--------------------------------------------------------------------
+void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
+{
+    SetSharedXMLFlag( sal_False );
+
+    if ( IsDocShared() && aTempFileURL.getLength()
+      && !SfxMedium::EqualURLs( aTempFileURL, GetSharedFileURL() ) )
+    {
+        if ( pImp->m_bAllowShareControlFileClean )
+        {
+            try
+            {
+                ::svt::ShareControlFile aControlFile( GetSharedFileURL() );
+                aControlFile.RemoveEntry();
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+
+        // the cleaning is forbidden only once
+        pImp->m_bAllowShareControlFileClean = sal_True;
+
+        // now remove the temporary file the document is based currently on
+        ::utl::UCBContentHelper::Kill( aTempFileURL );
+
+        pImp->m_aSharedFileURL = ::rtl::OUString();
+    }
+}
+
+//--------------------------------------------------------------------
+void SfxObjectShell::DoNotCleanShareControlFile()
+{
+    pImp->m_bAllowShareControlFileClean = sal_False;
+}
+
+//--------------------------------------------------------------------
+void SfxObjectShell::SetSharedXMLFlag( sal_Bool bFlag ) const
+{
+    pImp->m_bSharedXMLFlag = bFlag;
+}
+
+//--------------------------------------------------------------------
+sal_Bool SfxObjectShell::HasSharedXMLFlagSet() const
+{
+    return pImp->m_bSharedXMLFlag;
+}
+
+//--------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::IsDocShared() const
 {
-    return pImp->m_bIsDocShared;
+    return ( pImp->m_aSharedFileURL.getLength() > 0 );
 }
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::SetDocShared( sal_Bool bShared )
-{
-    pImp->m_bIsDocShared = bShared;
-    if ( !bShared )
-    {
-        try
-        {
-            ::svt::ShareControlFile aControlFile( GetSharedFileUrl() );
-            aControlFile.RemoveFile();
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-
-    SetTitle( String() );
-}
-
-//--------------------------------------------------------------------
-
-::rtl::OUString SfxObjectShell::GetSharedFileUrl() const
+::rtl::OUString SfxObjectShell::GetSharedFileURL() const
 {
     return pImp->m_aSharedFileURL;
-}
-
-//--------------------------------------------------------------------
-
-void SfxObjectShell::SetSharedFileUrl( const ::rtl::OUString& aURL )
-{
-    // TODO/LATER: should be supported only for file: urls
-    pImp->m_aSharedFileURL = aURL;
-    try
-    {
-        ::svt::ShareControlFile aControlFile( aURL );
-        aControlFile.InsertOwnEntry();
-    }
-    catch( uno::Exception& )
-    {
-        // TODO/LATER: in future the switching should not happen and an error should be shown
-    }
-
-    SetTitle( String() );
 }
 
 //--------------------------------------------------------------------
@@ -795,7 +930,7 @@ String SfxObjectShell::GetTitle
         return X(aNoName);
     }
 
-    const INetURLObject aURL( IsDocShared() ? GetSharedFileUrl() : ::rtl::OUString( GetMedium()->GetName() ) );
+    const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : ::rtl::OUString( GetMedium()->GetName() ) );
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
@@ -1876,7 +2011,7 @@ void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
 
 String SfxObjectShell::GetAPIName() const
 {
-    INetURLObject aURL( IsDocShared() ? GetSharedFileUrl() : ::rtl::OUString( GetMedium()->GetName() ) );
+    INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : ::rtl::OUString( GetMedium()->GetName() ) );
     String aName( aURL.GetBase() );
     if( !aName.Len() )
         aName = aURL.GetURLNoPass();
