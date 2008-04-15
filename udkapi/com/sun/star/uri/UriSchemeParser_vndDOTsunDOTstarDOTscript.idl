@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTscript.idl,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 module com { module sun { module star { module uri {
 
-interface XUriSchemeParser;
+published interface XUriSchemeParser;
 
 /**
    parses textual representations of absolute &ldquo;vnd.sun.star.script&rdquo;
@@ -53,7 +53,8 @@ interface XUriSchemeParser;
 
    @since OOo 2.0.0
  */
-service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser {};
+published service UriSchemeParser_vndDOTsunDOTstarDOTscript: XUriSchemeParser
+{};
 
 }; }; }; };
 
