@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_writer.scp,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,7 @@
 
 #include "macros.inc"
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Swd , swd)
+STD_UNO_LIB_FILE( gid_File_Lib_Swd , swd)
 
 File gid_File_Lib_Hwpreader
     TXT_FILE_BODY;
@@ -40,7 +40,7 @@ File gid_File_Lib_Hwpreader
     Name = "hwp.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED, UNO_COMPONENT, PATCH);
+    Styles = (PACKED, UNO_COMPONENT);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -48,7 +48,7 @@ File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(swriter);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 #ifdef SOLAR_JAVA
@@ -57,36 +57,23 @@ File gid_File_Jar_Writer2latex
     TXT_FILE_BODY;
     Name = "writer2latex.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 #endif
 #endif
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-writer.xcu";
 End
 
 File gid_File_Help_Swriter_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(swriter);
-    Patchfiles = ("swriter.db",
-                  "swriter.ht",
-                  "swriter.jar",
-                  "swriter.key",
-                  "swriter.tree",
-                  "swriter.idx/CONTEXTS",
-                  "swriter.idx/DICTIONARY",
-                  "swriter.idx/DOCS",
-                  "swriter.idx/DOCS.TAB",
-                  "swriter.idx/EDGE",
-                  "swriter.idx/LINKNAMES",
-                  "swriter.idx/OFFSETS",
-                  "swriter.idx/POSITIONS",
-                  "swriter.idx/SCHEMA");
+    Patchfiles = ();
 End
 
 /*
@@ -113,56 +100,56 @@ End
 */
 File gid_File_Oo_Office_Ui_Writercommands_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/WriterCommands.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Writercommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterCommands.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_writer_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_writer_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_web_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_web_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_global_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_global_filters.xcu";
 End
@@ -183,7 +170,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Setup_Writer_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-writer.xcu";
 End
@@ -204,21 +191,21 @@ End
 
 File gid_File_Oo_Office_Ui_Xformswindowstate_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/XFormsWindowState.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Writerformwindowstate_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/WriterFormWindowState.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Writerreportwindowstate_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/WriterReportWindowState.xcs";
 End
@@ -239,56 +226,56 @@ End
 
 File gid_File_Oo_Office_Ui_Writerwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Xformswindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/XFormsWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerformwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterFormWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerreportwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterReportWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerglobalwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterGlobalWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu";
 End
 
 File gid_File_Stw_MediaWikiTemplate
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Wiki;
     Name = "/xslt/export/wiki/oopedia-style.ott";
 End
 
 File gid_File_Xsl_MediaWiki
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Wiki;
     Name = "/xslt/export/wiki/odt2mediawiki.xsl";
 End
