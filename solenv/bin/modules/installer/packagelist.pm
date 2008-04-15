@@ -8,7 +8,7 @@
 #
 # $RCSfile: packagelist.pm,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -71,6 +71,8 @@ sub analyze_list
 
     @allpackages = ();
 
+    my $moduleshash = get_module_hash($moduleslist);
+
     for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
     {
         my $onepackage = ${$packagelist}[$i];
@@ -87,7 +89,8 @@ sub analyze_list
 
         push(@allmodules, $onegid);
 
-        get_children($moduleslist, $onegid, \@allmodules);
+        # get_children($moduleslist, $onegid, \@allmodules);
+        get_children_with_hash($moduleshash, $onegid, \@allmodules);
 
         $onepackage->{'allmodules'} = \@allmodules;
 
@@ -95,6 +98,49 @@ sub analyze_list
     }
 
     return \@allpackages;
+}
+
+###################################################
+# Creating a hash, that contains the module gids
+# as keys and the parentids as values
+###################################################
+
+sub get_module_hash
+{
+    my ($moduleslist) = @_;
+
+    my %modulehash = ();
+
+    for ( my $i = 0; $i <= $#{$moduleslist}; $i++ )
+    {
+        my $gid = ${$moduleslist}[$i]->{'gid'};
+        # Containing only modules with parent. Root modules can be ignored.
+        if ( ${$moduleslist}[$i]->{'ParentID'} ) { $modulehash{$gid} = ${$moduleslist}[$i]->{'ParentID'}; }
+    }
+
+    return \%modulehash;
+}
+
+########################################################
+# Recursively defined procedure to order
+# modules and directories
+########################################################
+
+sub get_children_with_hash
+{
+    my ($modulehash, $parentgid, $newitemorder) = @_;
+
+    foreach my $gid ( keys %{$modulehash} )
+    {
+        my $parent = $modulehash->{$gid};
+
+        if ( $parent eq $parentgid )
+        {
+            push(@{$newitemorder}, $gid);
+            my $parent = $gid;
+            get_children_with_hash($modulehash, $parent, $newitemorder);    # recursive!
+        }
+    }
 }
 
 ########################################################
