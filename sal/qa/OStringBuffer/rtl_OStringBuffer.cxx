@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtl_OStringBuffer.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,12 +170,19 @@ namespace rtl_OStringBuffer
             );
         }
 
+        void ctor_005() {
+            rtl::OStringBuffer b1;
+            b1.makeStringAndClear();
+            rtl::OStringBuffer b2(b1);
+        }
+
         CPPUNIT_TEST_SUITE(ctors);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST(ctor_003);
         CPPUNIT_TEST(ctor_003_1);
         CPPUNIT_TEST(ctor_004);
+        CPPUNIT_TEST(ctor_005);
         CPPUNIT_TEST_SUITE_END();
     };
 
