@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shortcut_ooo.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,7 @@ Shortcut gid_Shortcut_Lib_Xslt
 #else
     Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
 #endif
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
@@ -52,7 +52,7 @@ Shortcut gid_Shortcut_Lib_Xslt_2
     ShortcutID = gid_Shortcut_Lib_Xslt;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
@@ -91,28 +91,28 @@ Shortcut gid_Shortcut_Lib_Icudata
     FileID = gid_File_Lib_Icudata;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icui18n
     FileID = gid_File_Lib_Icui18n;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icule
     FileID = gid_File_Lib_Icule;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 Shortcut gid_Shortcut_Lib_Icuuc
     FileID = gid_File_Lib_Icuuc;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
-    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
