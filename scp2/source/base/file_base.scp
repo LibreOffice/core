@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_base.scp,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@ File gid_File_Exe_Sbase
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(sbase);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 #if defined WNT
@@ -42,137 +42,125 @@ File gid_File_Exe_Odbcconfig
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(odbcconfig);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 #endif
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Abp, abp)
-STD_RES_FILE_PATCH( gid_File_Res_Abp, abp)
+STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
+STD_RES_FILE( gid_File_Res_Abp, abp)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbp, dbp)
-STD_RES_FILE_PATCH( gid_File_Res_Dbp, dbp)
+STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
+STD_RES_FILE( gid_File_Res_Dbp, dbp)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
-STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
+STD_UNO_LIB_FILE( gid_File_Lib_Dbu, dbu )
+STD_RES_FILE( gid_File_Res_Dbu, dbu)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Adabasui, adabasui )
-STD_RES_FILE_PATCH( gid_File_Res_Adabasui, adabasui)
+STD_UNO_LIB_FILE( gid_File_Lib_Adabasui, adabasui )
+STD_RES_FILE( gid_File_Res_Adabasui, adabasui)
 
-STD_RES_FILE_PATCH( gid_File_Res_Cnr, cnr)
-STD_RES_FILE_PATCH( gid_File_Res_Sdbcl, sdbcl)
-STD_RES_FILE_PATCH( gid_File_Res_Sdberr, sdberr)
+STD_RES_FILE( gid_File_Res_Cnr, cnr)
+STD_RES_FILE( gid_File_Res_Sdbcl, sdbcl)
+STD_RES_FILE( gid_File_Res_Sdberr, sdberr)
 
 #ifdef ENABLE_REPORTDESIGN
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rpt, rpt )
-STD_RES_FILE_PATCH( gid_File_Res_Rpt, rpt)
+STD_UNO_LIB_FILE( gid_File_Lib_Rpt, rpt )
+STD_RES_FILE( gid_File_Res_Rpt, rpt)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptui, rptui )
-STD_RES_FILE_PATCH( gid_File_Res_Rptui, rptui)
+STD_UNO_LIB_FILE( gid_File_Lib_Rptui, rptui )
+STD_RES_FILE( gid_File_Res_Rptui, rptui)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptxml, rptxml )
+STD_UNO_LIB_FILE( gid_File_Lib_Rptxml, rptxml )
 
 #endif
 
 File gid_File_Help_Sdatabase_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdatabase);
-    Patchfiles = ("sdatabase.db",
-                  "sdatabase.ht",
-                  "sdatabase.jar",
-                  "sdatabase.key",
-                  "sdatabase.idx/CONTEXTS",
-                  "sdatabase.idx/DICTIONARY",
-                  "sdatabase.idx/DOCS",
-                  "sdatabase.idx/DOCS.TAB",
-                  "sdatabase.idx/EDGE",
-                  "sdatabase.idx/LINKNAMES",
-                  "sdatabase.idx/OFFSETS",
-                  "sdatabase.idx/POSITIONS",
-                  "sdatabase.idx/SCHEMA"); 
+    Patchfiles = (); 
 End
 
 File gid_File_Registry_Spool_Oo_Setup_Base_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-base.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Base_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name = "/registry/spool/org/openoffice/Office/Common-base.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_database_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_database_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_database_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Setup_Report_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-report.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Embedding_Report_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-report.xcu";
 End
 
 File gid_File_Oo_Office_Reportdesign_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/ReportDesign.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Dbreportwindowstate_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/DbReportWindowState.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Dbreportwindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbReportWindowState.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Reportcommands_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/ReportCommands.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Reportcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ReportCommands.xcu";
 End
