@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.165 $
+# $Revision: 1.166 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -74,7 +74,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.165 $ ';
+    $id_str = ' $Revision: 1.166 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -86,9 +86,6 @@
 #                       #
 #########################
 
-    if (defined $ENV{CWS_WORK_STAMP}) {
-        $vcsid = CwsConfig->new()->vcsid();
-    };
     $modules_number++;
     $perl = "";
     $remove_command = "";
@@ -117,9 +114,9 @@
     $show = 0;
     $checkparents = 0;
     $deliver = 0;
-    $pre_custom_job = 0;
-    $custom_job = 0;
-    $post_custom_job = 0;
+    $pre_custom_job = '';
+    $custom_job = '';
+    $post_custom_job = '';
     %LocalDepsHash = ();
     %BuildQueue = ();
     %PathHash = ();
@@ -155,9 +152,10 @@
     $tmp_dir = get_tmp_dir(); # temp directory for checkout and other actions
 #    $dmake_batch = undef;     #
     @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+    %build_list_paths = (); # build lists names
     %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
     $pre_job = 'announce'; # job to add for not-single module build
-    $post_job = 'deliver'; # -"-
+    $post_job = '';        # -"-
     %windows_procs = ();
     @warnings = (); # array of warnings to be shown at the end of the process
     @errors = (); # array of errors to be shown at the end of the process
@@ -180,6 +178,7 @@
     %weights_hash = (); # hash contains info about how many modules are dependent from one module
 #    %weight_stored = ();
     $grab_output = 1;
+    $stop_build_on_error = 0; # for multiprocessing mode: do not build further module if there is an error
     $server_mode = 0;
     $setenv_string = ''; # string for configuration of the client environment
     $ports_string = ''; # string with possible ports for server
@@ -220,7 +219,7 @@
     $deliver_command = $ENV{DELIVER};
     if ($dlv_switch) {
         $deliver_command .= ' '. $dlv_switch;
-    } else {
+    } elsif (!$html) {
         $deliver_command .= " -quiet";
     }
     $ENV{mk_tmp}++;
@@ -260,8 +259,8 @@
     }
     if (scalar keys %broken_build) {
         cancel_build();
-    } elsif (!$custom_job && $post_custom_job) {
-        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
+#    } elsif (!$custom_job && $post_custom_job) {
+#        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
     };
     if (scalar @warnings) {
         print STDERR $_ foreach (@warnings);
@@ -274,7 +273,7 @@
             print $echo."$DeadPrj\n";
         };
         print $new_line;
-        print $echo."not found and couldn't be built. Maybe you should correct build lists.\n";
+        print $echo."not found and couldn't be built. Dependencies on that module(s) ignored. Maybe you should correct build lists.\n";
         print $new_line;
         do_exit(1) if ($checkparents);
     };
@@ -310,18 +309,23 @@
 sub get_build_list_path {
     my $module = shift;
     my @possible_dirs = ($module, $module. '.lnk');
+    return $build_list_paths{$module} if (defined $build_list_paths{$module});
     foreach (@possible_dirs) {
         my $possible_dir_path = $StandDir.$_.'/prj/';
         if (-d $possible_dir_path) {
-            foreach (@possible_build_lists) {
-                my $possible_build_list_path = $possible_dir_path . $_;
-                return $possible_build_list_path if (-f $possible_build_list_path);
+            foreach my $build_list (@possible_build_lists) {
+                my $possible_build_list_path = CorrectPath($possible_dir_path . $build_list);
+                if (-f $possible_build_list_path) {
+                    $build_list_paths{$module} = $possible_build_list_path;
+                    return $possible_build_list_path;
+                };
             }
             print_error("There's no build list for $module");
         };
     };
     $dead_parents{$module}++;
-    return retrieve_build_list($module);
+    $build_list_paths{$module} = CorrectPath(retrieve_build_list($module));
+    return $build_list_paths{$module};
 };
 
 #
@@ -416,7 +420,6 @@ sub BuildAll {
         };
         while ($Prj = PickPrjToBuild(\%global_deps_hash)) {
             if (!defined $dead_parents{$Prj}) {
-                print $new_line;
                 if (scalar keys %broken_build) {
                     print $echo . "Skipping project $Prj because of error(s)\n";
                     RemoveFromDependencies($Prj, \%global_deps_hash);
@@ -470,12 +473,13 @@ sub dmake_dir {
     $jobs_hash{$BuildDir}->{START_TIME} = time();
     $jobs_hash{$BuildDir}->{STATUS} = 'building';
     if ($BuildDir =~ /(\s)/o) {
-        do_pre_job($`) if ($' eq $pre_job);
-        $error_code = do_post_job($`, $BuildDir) if ($' eq $post_job);
-        RemoveFromDependencies($BuildDir, \%LocalDepsHash);
-        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code);
+        $error_code = do_custom_job($BuildDir, \%LocalDepsHash);
+#        do_pre_job($`, $pre_job) if ($' eq $pre_job);
+#        $error_code = do_post_job($`, $', \%LocalDepsHash) if ($' eq $post_job);
+#        RemoveFromDependencies($BuildDir, \%LocalDepsHash);
+#        html_store_job_info(\%LocalDepsHash, $BuildDir, $error_code);
     } else {
-        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir);
+        html_store_job_info(\%LocalDepsHash, $BuildDir);
         print_error("$BuildDir not found!!\n") if (!-d $BuildDir);
         if (!-d $BuildDir) {
             $new_BuildDir = $BuildDir;
@@ -498,22 +502,24 @@ sub dmake_dir {
         };
         RemoveFromDependencies($BuildDir, \%LocalDepsHash) if (!$child);
         return if ($cmd_file || $show);
-        chdir $BuildDir;
-        getcwd();
-        if ($html) {
-            my $log_file = $jobs_hash{$BuildDir}->{LONG_LOG_PATH};
-            my $log_dir = File::Basename::dirname($log_file);
-            if (!-d $log_dir) {
-                 system("$perl $mkout");
-            };
-            $error_code = system ("$dmake > $log_file 2>&1");
-            if (!$grab_output && -f $log_file) {
-                system("cat $log_file");
-            };
-        } else {
-            $error_code = system ("$dmake");
-        };
-        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code) if (!$child);
+        $error_code = run_job($dmake, $BuildDir);
+#        chdir $BuildDir;
+#        getcwd();
+#        if ($html) {
+#            my $log_file = $jobs_hash{$BuildDir}->{LONG_LOG_PATH};
+#            my $log_dir = File::Basename::dirname($log_file);
+#            if (!-d $log_dir) {
+#                 system("$perl $mkout");
+#            };
+#            $error_code = system ("$dmake > $log_file 2>&1");
+#           if (!$grab_output && -f $log_file) {
+#                system("cat $log_file");
+#            };
+#        } else {
+#            $error_code = system ("$dmake");
+#        };
+
+        html_store_job_info(\%LocalDepsHash, $BuildDir, $error_code) if (!$child);
     };
     if ($error_code && $ignore) {
         push(@ignored_errors, $BuildDir);
@@ -524,7 +530,11 @@ sub dmake_dir {
         $| = 1;
         select $oldfh;
         $| =1;
-        _exit($? >> 8) if ($? && ($? != -1));
+        if ($error_code) {
+            _exit($error_code >> 8);
+        } else {
+            _exit($? >> 8) if ($? && ($? != -1));
+        };
         _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
         print_error("Error $? occurred while making $BuildDir");
@@ -637,13 +647,18 @@ sub get_deps_hash {
     %DeadDependencies = ();
     $module_to_build = shift;
     my $dependencies_hash = shift;
-    if ($deliver || $custom_job) {
-        add_pre_job($dependencies_hash, $module_to_build);
-        add_post_job($dependencies_hash, $module_to_build) if ($modules_types{$module_to_build} ne 'lnk');
+    if ($custom_job) {
+        if ($modules_types{$module_to_build} ne 'lnk') {
+            add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
+            add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
+            add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
+            add_dependent_job($dependencies_hash, $module_to_build, $post_job);
+            add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
+        };
         return;
     };
     if ( defined $modules_types{$module_to_build} && $modules_types{$module_to_build} ne 'mod') {
-        add_pre_job($dependencies_hash, $module_to_build);
+        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
         return;
     };
 
@@ -718,36 +733,39 @@ sub get_deps_hash {
 #    check_deps_hash($dependencies_hash);
     resolve_aliases($dependencies_hash, \%PathHash);
     if (!$prepare) {
-        add_pre_job($dependencies_hash, $module_to_build);
-        add_post_job($dependencies_hash, $module_to_build) if ($module_to_build ne $CurrentPrj);
+        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
+        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
+        add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
+        add_dependent_job($dependencies_hash, $module_to_build, $post_job) if ($module_to_build ne $CurrentPrj);
+        add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
     };
     store_weights($dependencies_hash);
 };
 
 #
-# procedure adds $pre_job to each module's dependancy hash
+# procedure adds which is independent from anothers, but anothers are dependent from it
 #
-sub add_pre_job {
-    my ($dependencies_hash, $module) = @_;
-    my $job = "$module $pre_job";
-    # $pre_job is independent while all other jobs are dependent from it
+sub add_prerequisite_job {
+    my ($dependencies_hash, $module, $job) = @_;
+    return if (!$job);
+    $job = "$module $job";
     foreach (keys %$dependencies_hash) {
         $deps_hash = $$dependencies_hash{$_};
         $$deps_hash{$job}++;
     };
     $$dependencies_hash{$job} = {};
-
 };
 
 #
-# procedure adds $post_job to each module's dependancy hash
+# procedure adds a job wich is dependent from all already registered jobs
 #
-sub add_post_job {
+sub add_dependent_job {
     # $post_job is dependent from all jobs
-    my ($dependencies_hash, $module) = @_;
+    my ($dependencies_hash, $module, $job) = @_;
+    return if (!$job);
     my %deps_hash = ();
     $deps_hash{$_}++ foreach (keys %$dependencies_hash);
-    $$dependencies_hash{"$module $post_job"} = \%deps_hash;
+    $$dependencies_hash{"$module $job"} = \%deps_hash;
 };
 
 #
@@ -876,8 +894,8 @@ sub get_stand_dir {
         die "No environment set\n";
     };
     my $StandDir;
-    my $root_dir = File::Spec->rootdir();
     $StandDir = getcwd();
+    my $previous_dir = '';
     do {
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
             if (-e $StandDir . '/prj/'.$_) {
@@ -885,11 +903,12 @@ sub get_stand_dir {
                 $StandDir = $`;
                 $CurrentPrj = $1;
                 return $StandDir;
-            } elsif ($StandDir eq $root_dir) {
+            } elsif ($StandDir eq $previous_dir) {
                 $ENV{mk_tmp} = '';
                 print_error('Found no project to build');
             };
         };
+        $previous_dir = $StandDir;
         $StandDir = Cwd::realpath($StandDir . '/..');
     }
     while (chdir '..');
@@ -917,7 +936,7 @@ sub CheckPlatform {
     return 1 if (($ENV{GUI} eq 'UNX') && ($Platform eq 'u'));
     return 1 if (($ENV{GUI} eq 'OS2') && ($Platform eq 'p'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
-                       (($Platform eq 'w') || ($Platform eq 'n')));
+                 (($Platform eq 'w') || ($Platform eq 'n')));
     return 0;
 };
 
@@ -934,16 +953,6 @@ sub RemoveFromDependencies {
     foreach $Prj (keys %$Dependencies) {
         my $prj_deps_hash = $$Dependencies{$Prj};
         delete $$prj_deps_hash{$ExclPrj} if (defined $$prj_deps_hash{$ExclPrj});
-#        foreach (keys %$prj_deps_hash) {print ("$_ ")};
-
-#        foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-#            if ((${$$Dependencies{$Prj}}[$i] eq $ExclPrj) ||
-#                (${$$Dependencies{$Prj}}[$i] eq $ExclPrj_orig)) {
-#                splice (@{$$Dependencies{$Prj}}, $i, 1);
-#                $i = 0;
-#                last;
-#            };
-#        };
     };
 };
 
@@ -986,7 +995,13 @@ sub check_deps_hash {
                     };
                     $log_name = $string;
                     if ($log_name eq "$module $custom_job") {
-                        $log_name = "$module custom_job";
+                        $log_name = "custom_job";
+                    };
+                    if ($log_name eq "$module $pre_custom_job") {
+                        $log_name = "pre_custom_job";
+                    };
+                    if ($log_name eq "$module $post_custom_job") {
+                        $log_name = "post_custom_job";
                     };
                     $log_name =~ s/\\|\//\./g;
                     $log_name =~ s/\s/_/g;
@@ -1147,7 +1162,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1181,6 +1196,7 @@ sub usage {
     print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SRC_ROOT}\n";
     print STDERR "          --html_path      - set html page path\n";
     print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
+    print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --dontchekoutmissingmodules - do not chekout missing modules when running prepare (links still will be broken)\n";
     print STDERR "   Custom jobs:\n";
     print STDERR "        --job=job_string        - execute custom job in (each) module. job_string is a shell script/command to be executed instead of regular dmake jobs\n";
@@ -1252,6 +1268,7 @@ sub get_options {
         $arg =~ /^-V$/          and do_exit(0);
         $arg =~ /^-m$/            and get_modes()         and next;
         $arg =~ /^--mode$/        and get_modes()         and next;
+        $arg =~ /^--stoponerror$/        and $stop_build_on_error = 1         and next;
         if ($arg =~ /^--$/) {
             push (@dmake_args, get_dmake_args()) if (!$custom_job);
             next;
@@ -1264,17 +1281,22 @@ sub get_options {
     };
     $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from && $build_all_cont);
-    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
+#    print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     print_error('Switches --with_branches and --since collision') if ($build_from && $build_since);
     if ($show) {
         $QuantityToBuild = 0;
         $cmd_file = '';
     };
     print_error('Switches --job and --deliver collision') if ($custom_job && $deliver);
-    $post_job = $custom_job if ($custom_job);
+    $custom_job = 'deliver' if $deliver;
+    $post_job = 'deliver' if (!$custom_job);
     $incompatible = scalar keys %incompatibles;
-    if ($prepare && !$incompatible) {
-        print_error("--prepare is for use with --from switch only!\n");
+    if ($prepare) {
+        print_error("--prepare is for use with --from switch only!\n") if (!$incompatible);
+        if ( $^O eq 'MSWin32' ) {
+            print "\nATTENTION: Using Windows OS to prepare the CWS is highly unrecommended! It is unsequre and veeeery slooooow. The links will not be broken, the delivered files from the linked modules will not be undelivered, moreover file removal can fail. Use UNIX if possible. Proceed only if you exactly know what you do, otherwise break the build with Ctrl+C\n\n";
+            sleep(10);
+        };
     };
     if ($QuantityToBuild) {
         if ($ignore && !$html) {
@@ -1286,6 +1308,8 @@ sub get_options {
         if ($server_mode) {
             print_error("Switches -P and --server collision");
         };
+    } elsif ($stop_build_on_error) {
+        print_error("Switche --stoponerror is only for multiprocessing builds");
     };
     if ($server_mode) {
         $html++;
@@ -1376,8 +1400,9 @@ sub cancel_build {
 #
 sub store_error {
     my ($pid, $error_code) = @_;
+    return 0 if (!$error_code);
     my $child_nick = $processes_hash{$pid};
-    if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+    if ($ENV{GUI} eq 'WNT') {
         if (!defined $had_error{$child_nick}) {
             $had_error{$child_nick}++;
             return 1;
@@ -1385,6 +1410,14 @@ sub store_error {
     };
     $broken_modules_hashes{$folders_hashes{$child_nick}}++;
     $broken_build{$child_nick} = $error_code;
+    if ($stop_build_on_error) {
+        clear_from_child($pid);
+        # Let all children finish their work
+        while (children_number()) {
+            handle_dead_children(1);
+        };
+        cancel_build();
+    };
     return 0;
 };
 
@@ -1395,6 +1428,7 @@ sub handle_dead_children {
     my $running_children = children_number();
     return if (!$running_children);
     my $force_wait = shift;
+    my $try_once_more = 0;
     do {
         my $pid = 0;
         if ($ENV{GUI} eq 'WNT' && !$cygwin) {
@@ -1403,16 +1437,10 @@ sub handle_dead_children {
                 my $proc_obj = $windows_procs{$pid};
                 $proc_obj->GetExitCode($exit_code);
                 if ( $exit_code != 259 ) {
-                    my $try_once_more = 0;
-                    $try_once_more  = store_error($pid, $exit_code) if ($exit_code);
+                    $try_once_more  = store_error($pid, $exit_code);
                     delete $windows_procs{$pid};
                     if ($try_once_more) {
-                        # A malicious hack for misterious windows problems - try 2 times
-                        # to run dmake in the same directory if errors occurs
-                        my $child_nick = $processes_hash{$pid};
-                        $running_children{$folders_hashes{$child_nick}}--;
-                        delete $processes_hash{$pid};
-                        start_child($child_nick, $folders_hashes{$child_nick});
+                        give_second_chance($pid);
                     } else {
                         clear_from_child($pid);
                     };
@@ -1427,11 +1455,25 @@ sub handle_dead_children {
                 $pid = waitpid( -1, &WNOHANG);
             };
             if ($pid > 0) {
-                store_error($pid, $?) if ($?);
-                clear_from_child($pid);
+                $try_once_more = store_error($pid, $?);
+                if ($try_once_more) {
+                    give_second_chance($pid);
+                } else {
+                    clear_from_child($pid);
+                };
             };
         };
     } while(children_number() >= $QuantityToBuild);
+};
+
+sub give_second_chance {
+    my $pid = shift;
+    # A malicious hack for misterious windows problems - try 2 times
+    # to run dmake in the same directory if errors occurs
+    my $child_nick = $processes_hash{$pid};
+    $running_children{$folders_hashes{$child_nick}}--;
+    delete $processes_hash{$pid};
+    start_child($child_nick, $folders_hashes{$child_nick});
 };
 
 sub clear_from_child {
@@ -1445,7 +1487,7 @@ sub clear_from_child {
                             $folders_hashes{$child_nick});
     };
     my $module = $module_by_hash{$folders_hashes{$child_nick}};
-    html_store_dmake_dir_info($folders_hashes{$child_nick}, $child_nick, $error_code);
+    html_store_job_info($folders_hashes{$child_nick}, $child_nick, $error_code);
     $running_children{$folders_hashes{$child_nick}}--;
     delete $processes_hash{$pid};
     $only_dependent = 0;
@@ -1506,24 +1548,25 @@ sub start_child {
     $jobs_hash{$job_dir}->{STATUS} = 'building';
     if ($job_dir =~ /(\s)/o) {
         my $error_code = undef;
-        do_pre_job($`) if ($' eq $pre_job);
-        $error_code = do_post_job($`, $job_dir) if ($' eq $post_job);
-        html_store_dmake_dir_info($dependencies_hash, $job_dir, $error_code);
-        if ($error_code) {
-            # give windows (4nt) one more chance
-            if ($ENV{GUI} eq 'WNT' && !$cygwin) {
-                $error_code = do_post_job($`, $job_dir);
-            };
-            if ($error_code) {
-                $broken_modules_hashes{$dependencies_hash}++;
-                $broken_build{$job_dir} = $error_code;
-            }
-        } else {
-            RemoveFromDependencies($job_dir, $dependencies_hash);
-        };
+#        do_pre_job($`, $pre_job) if ($' eq $pre_job);
+        $error_code = do_custom_job($job_dir, $dependencies_hash);
+#        $error_code = do_post_job($`, $', $dependencies_hash) if ($' eq $post_job);
+#        html_store_job_info($dependencies_hash, $job_dir, $error_code);
+#        if ($error_code) {
+#            # give windows (4nt) one more chance
+#            if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+#                $error_code = do_post_job($`, $post_job, $dependencies_hash);
+#            };
+#            if ($error_code) {
+#                $broken_modules_hashes{$dependencies_hash}++;
+#                $broken_build{$job_dir} = $error_code;
+#            }
+#        } else {
+#            RemoveFromDependencies($job_dir, $dependencies_hash);
+#        };
         return;
     };
-    html_store_dmake_dir_info($dependencies_hash, $job_dir);
+    html_store_job_info($dependencies_hash, $job_dir);
     my $pid = undef;
     my $children_running;
     my $oldfh = select STDOUT;
@@ -1598,9 +1641,9 @@ sub build_multiprocessing {
 
 sub mp_success_exit {
 #    close_server_socket();
-    if (!$custom_job && $post_custom_job) {
-        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
-    };
+#    if (!$custom_job && $post_custom_job) {
+#        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
+#    };
     print "\nMultiprocessing build is finished\n";
     print "Maximal number of processes run: $maximal_processes\n";
     do_exit(0);
@@ -1641,27 +1684,80 @@ sub build_actual_queue {
     } while (!are_all_dependent($build_queue));
 };
 
-
-sub do_pre_job {
-    my $module = shift;
-    announce_module($module);
-    if ($pre_custom_job && defined $modules_types{$module} && ($modules_types{$module} eq 'mod')) {
-        my $module_path = CorrectPath($StandDir.$module);
-        chdir $module_path;
-        getcwd();
-        my $cj_error_code = system ("$pre_custom_job");
-        print_error("Cannot run pre job \"$pre_custom_job\"") if ($cj_error_code);
-    };
-};
-
-
-sub do_post_custom_job {
-    my $module_path = shift;
-    chdir $module_path;
+sub run_job {
+    my ($job, $path, $registered_name) = @_;
+    my $job_to_do = $job;
+    $job_to_do = $deliver_command if ($job eq 'deliver');
+    $registered_name = $path if (!defined $registered_name);
+    chdir $path;
     getcwd();
-    my $cj_error_code = system ("$post_custom_job");
-    print_error("Cannot run post job \"$post_custom_job\"") if ($cj_error_code);
+
+    if ($html) {
+        my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
+        my $log_dir = File::Basename::dirname($log_file);
+        if (!-d $log_dir) {
+             system("$perl $mkout");
+        };
+        $error_code = system ("$job_to_do > $log_file 2>&1");
+        if (!$grab_output && -f $log_file) {
+            system("cat $log_file");
+        };
+    } else {
+        $error_code = system ("$job_to_do");
+    };
+    return $error_code;
 };
+
+sub do_custom_job {
+    my ($module_job, $dependencies_hash) = @_;
+    $module_job =~ /(\s)/o;
+    my $module = $`;
+    my $job = $';
+    html_store_job_info($dependencies_hash, $module_job);
+    my $error_code = 0;
+    if ($job eq $pre_job) {
+        announce_module($module);
+#        html_store_job_info($dependencies_hash, $job_dir);
+        RemoveFromDependencies($module_job, $dependencies_hash);
+    } else {
+        $error_code = run_job($job, CorrectPath($StandDir.$module), $module_job);
+        if ($error_code) {
+            # give windows (4nt) one more chance
+            if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+                $error_code = run_job($job, CorrectPath($StandDir.$module), $module_job);
+            };
+        };
+        if ($error_code) {
+            $broken_modules_hashes{$dependencies_hash}++;
+            $broken_build{$module} = $error_code;
+        } else {
+            RemoveFromDependencies($module_job, $dependencies_hash);
+        };
+    };
+    html_store_job_info($dependencies_hash, $module_job, $error_code);
+    return $error_code;
+};
+
+#sub do_pre_job {
+#    my $module = shift;
+#    announce_module($module);
+#    if ($pre_custom_job && defined $modules_types{$module} && ($modules_types{$module} eq 'mod')) {
+#        my $module_path = CorrectPath($StandDir.$module);
+#        chdir $module_path;
+#        getcwd();
+#        my $cj_error_code = system ("$pre_custom_job");
+#        print_error("Cannot run pre job \"$pre_custom_job\"") if ($cj_error_code);
+#    };
+#};
+
+
+#sub do_post_custom_job {
+#    my $module_path = shift;
+#    chdir $module_path;
+#    getcwd();
+#    my $cj_error_code = system ("$post_custom_job");
+#    print_error("Cannot run post job \"$post_custom_job\"") if ($cj_error_code);
+#};
 
 #
 # Print announcement for module just started
@@ -1689,6 +1785,7 @@ sub print_announce {
     } else {
         $text = "Building module $Prj\n";
     };
+    print $new_line;
     print $echo . "=============\n";
     print $echo . $text;
     print $echo . "=============\n";
@@ -1833,8 +1930,17 @@ sub get_cvs_module
 
     $cvs_module->module($module);
     $cvs_module->cvs_method($method);
-    $cvs_module->vcsid($vcsid);
-    $cvs_module->cvs_server($server);
+    if ($ENV{VCSID}) {
+        $cvs_module->vcsid($ENV{VCSID});
+    } elsif (!$cvs_module->vcsid()) {
+        $cvs_module->vcsid($vcsid);
+    };
+    if ($cvs_module->cvs_remote()) {
+        # default: use information from user config files:
+        $cvs_module->cvs_server($cvs_module->cvs_remote());
+    } else {
+        $cvs_module->cvs_server($server);
+    };
     $cvs_module->cvs_repository($repository);
 
     return $cvs_module;
@@ -1871,23 +1977,34 @@ sub get_cvs_root
         my $master = $cws->master();
 
         my $workspace_lst = get_workspace_lst();
-        my $workspace_db = GenInfoParser->new();
-        my $success = $workspace_db->load_list($workspace_lst);
-        if ( !$success ) {
-            print_error("Can't load workspace list '$workspace_lst'.", 4);
-        }
+        if ($workspace_lst) {
+            my $workspace_db = GenInfoParser->new();
+            my $success = $workspace_db->load_list($workspace_lst);
+            if ( !$success ) {
+                print_error("Can't load workspace list '$workspace_lst'.", 4);
+            };
 
-        my $key = "$master/drives/o:/projects/$module/scs";
-        $cvsroot = $workspace_db->get_value($key);
+            my $key = "$master/drives/o:/projects/$module/scs";
+            $cvsroot = $workspace_db->get_value($key);
 
-        if ( !$cvsroot  ) {
-            print STDERR "\nWarning: No such module '$module' for '$master' in workspace database $workspace_lst. Maybe you should correct build lists.\n";
-            $dead_parents{$module}++;
-            return (undef, undef, undef, undef);
-        }
+            if ( !$cvsroot  ) {
+                print STDERR "\nWarning: No such module '$module' for '$master' in workspace database $workspace_lst. Maybe you should correct build lists.\n";
+                $dead_parents{$module}++;
+                return (undef, undef, undef, undef);
+            };
+        } elsif (open(CVSROOT, CorrectPath("$StandDir$CurrentPrj/CVS/Root"))) {
+            $cvsroot = <CVSROOT>;
+            close CVSROOT;
+            chomp $cvsroot;
+        } else {
+            print_error('Cannot figure out cvs parameters for checkout. No CVS/Root...', 1);
+        };
     };
     my ($dummy1, $method, $user_at_server, $repository) = split(/:/, $cvsroot);
-    my ($dummy2, $server) = split(/@/, $user_at_server);
+    my ($vcsid, $server) = split(/@/, $user_at_server);
+    if ((!defined $vcsid) || ((defined $ENV{VCSID}) && ($vcsid ne $ENV{VCSID}))) {
+        $vcsid = $ENV{VCSID};
+    };
 
     if ( ! ($method && $server && $repository ) ) {
         print_error("Can't determine CVS server for module '$module'.", 0);
@@ -1911,12 +2028,14 @@ sub get_workspace_lst
     else {
         $home = $ENV{HOME};
     }
-    my $localini = "$home/localini";
-    if ( ! -f "$localini/stand.lst" ) {
-        my $globalini = get_globalini();
-        return "$globalini/stand.lst";
-    }
-    return "$localini/stand.lst";
+    my $inifile = "$home/localini/stand.lst";
+    if (-f $inifile) {
+        return $inifile;
+#    } else {
+#        $inifile = get_globalini() . "/stand.lst";
+#        return $inifile if (-f $inifile);
+    };
+    return '';
 }
 
 #
@@ -1938,10 +2057,17 @@ sub ensure_clear_module {
         };
     };
     if ($module_type eq 'lnk') {
-        print "\nBreaking link $lnk_name...\n";
-        return if ($show);
-        checkout_module($module);
-        my $action = '';
+            if ( $^O eq 'MSWin32' ) {
+                my $message = "The link $lnk_name will not be broken. This can cause inconsistent build";
+                print STDERR "\nWarning: $message\n";
+                push(@warnings, $message);
+                return;
+            } else {
+                print "\nBreaking link $lnk_name...\n";
+                return if ($show);
+                checkout_module($module);
+                my $action = '';
+            };
         if ( $^O eq 'MSWin32' ) {
             if(!rename("$StandDir$lnk_name", "$StandDir$module.backup.lnk")) {
                 $action = 'rename';
@@ -1954,8 +2080,14 @@ sub ensure_clear_module {
         print_error("Cannot $action $StandDir$lnk_name. Please $action it manually") if ($action);
     } else {
         if ($chekoutmissing) {
-            print "Checking out consistent " . $module . "...\n";
-            checkout_module ($module) if (!$show);
+            if ( $^O eq 'MSWin32' ) {
+                my $message = "No module $module check out. This can cause inconsistent build";
+                print STDERR "\nWarning: $message\n";
+                push(@warnings, $message);
+            } else {
+                print "Checking out consistent " . $module . "...\n";
+                checkout_module ($module) if (!$show);
+            };
         }
     };
 };
@@ -1964,24 +2096,25 @@ sub ensure_clear_module {
 # Procedure removes output tree from the module (without common trees)
 #
 sub clear_module {
-    my $Prj = shift;
-    print "Removing module's $Prj output trees...\n";
+    my $module = shift;
+    print "Removing module's $module output trees...\n";
     print "\n" and return if ($show);
-    opendir DIRHANDLE, $StandDir.$Prj;
+    opendir DIRHANDLE, $StandDir.$module;
     my @dir_content = readdir(DIRHANDLE);
     closedir(DIRHANDLE);
     foreach (@dir_content) {
         next if (/^\.+$/);
-        my $dir = CorrectPath($StandDir.$Prj.'/'.$_);
+        my $dir = CorrectPath($StandDir.$module.'/'.$_);
         if ((!-d $dir.'/CVS') && is_output_tree($dir)) {
             #print "I would delete $dir\n";
-            rmtree("$dir", 0, 1);
-            if (defined $SIG{__WARN__} && -d $dir) {
-                system("rm -rf $dir");
+            rmtree("$dir", 0, 1) if ($ENV{USE_SHELL} ne '4nt');
+            if (-d $dir) {
+                system("$remove_command $dir");
                 if (-d $dir) {
-                    print_error("Cannot delete $dir");
+                    push(@warnings, "Cannot delete $dir");
+#print_error("Cannot delete $dir");
                 } else {
-                    print STDERR (">>> Removed $dir by force\n");
+                    print STDERR (">>> Removed $dir by force\n") if ($ENV{USE_SHELL} ne '4nt');
                 };
             };
         };
@@ -2055,7 +2188,7 @@ sub retrieve_build_list {
         return undef;
     };
     # no need to announce this module
-    print " ok\n";
+    print "-> ok\n";
     eval {
         mkpath($solver_inc_dir) if (!-e $solver_inc_dir);
     };
@@ -2144,7 +2277,7 @@ sub prepare_incompatible_build {
     if (scalar @warnings) {
         print "WARNING(S):\n";
         print STDERR "$_\n" foreach (@warnings);
-        print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n";
+        print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n" if (!$prepare);
         sleep(10);
     };
     if ($prepare) {
@@ -2242,34 +2375,20 @@ sub get_platforms {
     };
 
     my $workspace_lst = get_workspace_lst();
-    my $workspace_db = GenInfoParser->new();
-    my $success = $workspace_db->load_list($workspace_lst);
-    if ( !$success ) {
-        print_error("Can't load workspace list '$workspace_lst'.", 4);
-    }
-    my $access_path = $ENV{WORK_STAMP} . '/Environments';
-    my @platforms_available = $workspace_db->get_keys($access_path);
-    my $solver = $ENV{SOLARVERSION};
-    foreach (@platforms_available) {
-        my $s_path = $solver . '/' .  $_;
-        $$platforms_ref{$_}++ if (-d $s_path);
+    if ($workspace_lst) {
+        my $workspace_db = GenInfoParser->new();
+        my $success = $workspace_db->load_list($workspace_lst);
+        if ( !$success ) {
+            print_error("Can't load workspace list '$workspace_lst'.", 4);
+        }
+        my $access_path = $ENV{WORK_STAMP} . '/Environments';
+        my @platforms_available = $workspace_db->get_keys($access_path);
+        my $solver = $ENV{SOLARVERSION};
+        foreach (@platforms_available) {
+            my $s_path = $solver . '/' .  $_;
+            $$platforms_ref{$_}++ if (-d $s_path);
+        };
     };
-
-#    my ($iserverbin, @platforms_conf);
-#    $iserverbin = "i_server -d ";
-#    $iserverbin .= $ENV{SOLAR_ENV_ROOT} . '/b_server/config/stand.lst -i ';
-#    my $workstamp = $ENV{WORK_STAMP};
-#    @platforms_conf = `$iserverbin $workstamp/Environments -l`;
-#    if ( $platforms_conf[0]  =~ /Environments/ ) {
-#        shift @platforms_conf;
-#    }
-
-#    foreach (@platforms_conf) {
-#        s/\s//g;
-#        my $s_path = $solver . '/' .  $_;
-#        $$platforms_ref{$_}++ if (-e $s_path);
-#    };
-#    delete $platforms_to_copy{$_} foreach (split(',', $only_platform));
 
     if (!scalar keys %platforms) {
         # An Auses wish - fallback to INPATH for new platforms
@@ -2300,26 +2419,31 @@ sub clear_delivered {
         print "\nRemoving delivered for $platform\n";
         my %solar_vars = ();
         read_ssolar_vars($platform, \%solar_vars);
-        foreach (keys %solar_vars) {
-            if (!defined $backup_vars{$_}) {
-                $backup_vars{$_} = $ENV{$_};
+        if (scalar keys %solar_vars) {
+            foreach (keys %solar_vars) {
+                if (!defined $backup_vars{$_}) {
+                    $backup_vars{$_} = $ENV{$_};
+                };
+                $ENV{$_} = $solar_vars{$_};
             };
-            $ENV{$_} = $solar_vars{$_};
         };
         my $undeliver = "$deliver_command $deliver_delete_switches $nul";
+#        my $current_dir = getcwd();
         foreach my $module (sort @modules_built) {
             my $module_path = CorrectPath($StandDir.$module);
-            print "Removing delivered from module $module\n";
-            next if ($show);
-            my $current_dir = getcwd();
-            chdir($module_path.'.lnk') or chdir($module_path);
-            if (system($undeliver)) {
-                $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
-                print_error("Cannot run: $undeliver");
-            }
-            chdir $current_dir;
-            getcwd();
+            if (!(chdir($module_path.'.lnk') or chdir($module_path))) {
+                push(@warnings, "Could not remove delivered files from the module $module. Your build can become inconsistent.\n");
+            } else {
+                print "Removing delivered from module $module\n";
+                next if ($show);
+                if (system($undeliver)) {
+                    $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
+                    print_error("Cannot run: $undeliver");
+                }
+            };
         };
+#        chdir $current_dir;
+#        getcwd();
     };
     $ENV{$_} = $backup_vars{$_} foreach (keys %backup_vars);
 };
@@ -2338,7 +2462,10 @@ sub read_ssolar_vars {
         $setsolar = '/net/jumbo2.germany/buildenv/r/etools/setsolar.pl' if ! -e $setsolar;
         $tmp_file = $ENV{HOME} . "/.solar.env.$$.tmp";
     };
-    print_error('There is no setsolar found') if !-e $setsolar;
+    if (!-e $setsolar) {
+        print STDERR "There is no setsolar found. Falling back to current platform settings\n";
+        return;
+    }
     my $pro = "";
     if ($platform =~ /\.pro$/) {
         $pro = "-pro";
@@ -2373,7 +2500,8 @@ sub get_solar_vars {
         next if (!defined $deliver_env{$1});
         $var = $1;
         if ( $^O eq 'MSWin32' ) {
-            /$var=(\S+)$/o;
+            my $string_tail = $';
+            $string_tail =~ /=(\S+)$/o;
             $value = $1;
         } else {
             /\'(\S+)\'$/o;
@@ -2481,51 +2609,51 @@ sub do_exit {
     exit($exit_code);
 };
 
-sub get_post_job {
-    my $job = $deliver_command;
-    $job = $custom_job if ($custom_job);
-    return $job;
-};
+#sub get_post_job {
+#    my $job = $deliver_command;
+#    $job = $custom_job if ($custom_job);
+#    return $job;
+#};
 
-sub do_post_job {
-    my $job = get_post_job();
-    if ($show) {
-        print $job . "\n";
-        return;
-    }
-    my $module = shift;
-    my $post_job_name = shift;
-    delete $build_in_progress{$module};
-    $module_path = CorrectPath($StandDir.$module);
-    my $error_code = undef;
-    if ($cmd_file) {
-        print "cd $module_path\n";
-        print "$job\n";
-    } else {
-        chdir $module_path;
-        getcwd();
-        if ($html) {
-            # tested on Linux only!!
-            my $log_file = $jobs_hash{$post_job_name}->{LONG_LOG_PATH};
-            my $log_dir = File::Basename::dirname($log_file);
-            if (!-d $log_dir) {
-                eval {mkpath($log_dir)};
-                print_error("Cannot create log directory $log_dir") if ($@);
-            };
-            $error_code = system ("$job > $log_file 2>&1");
-            if (!$grab_output && -f $log_file) {
-                system("cat $log_file");
-            };
-        } else {
-            $error_code = system ("$job");
-        }
-    };
-    $build_is_finished{$module}++ if (!defined $modules_with_errors{$module});
-    if (!$error_code && $post_custom_job) {
-        do_post_custom_job(CorrectPath($StandDir.$module));
-    };
-    return $error_code;
-};
+#sub do_post_job {
+#    my $job = get_post_job();
+#    if ($show) {
+#        print $job . "\n";
+#        return;
+#    }
+#    my $module = shift;
+#    my $post_job_name = shift;
+#    delete $build_in_progress{$module};
+#    $module_path = CorrectPath($StandDir.$module);
+#    my $error_code = undef;
+#    if ($cmd_file) {
+#        print "cd $module_path\n";
+#        print "$job\n";
+#    } else {
+#        chdir $module_path;
+#        getcwd();
+#        if ($html) {
+#            # tested on Linux only!!
+#            my $log_file = $jobs_hash{$post_job_name}->{LONG_LOG_PATH};
+#            my $log_dir = File::Basename::dirname($log_file);
+#            if (!-d $log_dir) {
+#                eval {mkpath($log_dir)};
+#                print_error("Cannot create log directory $log_dir") if ($@);
+#            };
+#            $error_code = system ("$job > $log_file 2>&1");
+#            if (!$grab_output && -f $log_file) {
+#                system("cat $log_file");
+#            };
+#        } else {
+#            $error_code = system ("$job");
+#        }
+#    };
+#    $build_is_finished{$module}++ if (!defined $modules_with_errors{$module});
+#    if (!$error_code && $post_custom_job) {
+#        do_post_custom_job(CorrectPath($StandDir.$module));
+#    };
+#    return $error_code;
+#};
 
 #
 # Procedure sorts module in user-frendly order
@@ -2564,7 +2692,7 @@ sub generate_html_file {
 #    my @stat = stat($html_file);
 #    if (defined $write_secs) {
         # Regular update no often than once in 5 sec
-        return if (!$force_update && (time - $html_last_updated < 5));
+#        return if (!$force_update && (time - $html_last_updated < 5));
 #    }
     $html_last_updated = time;
     my @modules_order = sort_modules_appearance();
@@ -2592,7 +2720,7 @@ sub generate_html_file {
     if ($BuildAllParents) {
         print HTML 'document.write("<table valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0>");' . "\n";
         print HTML 'document.write("    <tr>");' . "\n";
-        print HTML 'document.write("<td><a id=ErroneousModules href=\"javascript:top.Error(\'\', \'';
+        print HTML 'document.write("        <td><a id=ErroneousModules href=\"javascript:top.Error(\'\', \'';
         print HTML join('<br>', sort keys %modules_with_errors);
         print HTML '\', \'\')\"); title=\"';
         print HTML scalar keys %modules_with_errors;
@@ -2600,7 +2728,7 @@ sub generate_html_file {
         print HTML 'document.write("        <td height=8* width=';
         print HTML $successes_percent + $errors_percent;
         if (scalar keys %modules_with_errors) {
-            print HTML '* bgcolor=red valign=top></td>");';
+            print HTML '* bgcolor=red valign=top></td>");' . "\n";
         } else {
             print HTML '* bgcolor=#25A528 valign=top></td>");' . "\n";
         };
@@ -2623,10 +2751,11 @@ sub generate_html_file {
         next if ($modules_types{$_} eq 'lnk');
         my ($errors_info_line, $dirs_info_line, $errors_number, $successes_percent, $errors_percent, $time) = get_html_info($_);
 #<one module>
-        print HTML 'document.write("<tr><td width=*>");' . "\n";
+        print HTML 'document.write("    <tr>");' . "\n";
+        print HTML 'document.write("        <td width=*>");' . "\n";
 
         if (defined $dirs_info_line) {
-            print HTML 'document.write("<a id=';
+            print HTML 'document.write("            <a id=';
             print HTML $_;
             print HTML ' href=\"javascript:top.Error(\'';
             print HTML $_ , '\', ' ;
@@ -2641,8 +2770,11 @@ sub generate_html_file {
         };
 
 
-        print HTML 'document.write("</td><td><table width=100% valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0><tr>");' . "\n";
-        print HTML 'document.write("<td height=15* width=';
+        print HTML 'document.write("        </td>");' . "\n";
+        print HTML 'document.write("        <td>");' . "\n";
+        print HTML 'document.write("            <table width=100% valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0>");' . "\n";
+        print HTML 'document.write("                <tr>");' . "\n";
+        print HTML 'document.write("                    <td height=15* width=';
 
         print HTML $successes_percent + $errors_percent;
         if ($errors_number) {
@@ -2650,13 +2782,15 @@ sub generate_html_file {
         } else {
             print HTML '* bgcolor=#25A528 valign=top></td>");' . "\n";
         };
-        print HTML 'document.write("<td width=';
+        print HTML 'document.write("                    <td width=';
 
         print HTML 100 - ($successes_percent + $errors_percent);
         print HTML '* bgcolor=lightgrey valign=top></td>");' . "\n";
-        print HTML 'document.write("</tr></table></td>");' . "\n";
-        print HTML 'document.write("<td align=\"center\">', $time, '</td>");' . "\n";
-        print HTML 'document.write("</tr>");' . "\n";
+        print HTML 'document.write("                </tr>");' . "\n";
+        print HTML 'document.write("            </table>");' . "\n";
+        print HTML 'document.write("        </td>");' . "\n";
+        print HTML 'document.write("        <td align=\"center\">', $time, '</td>");' . "\n";
+        print HTML 'document.write("    </tr>");' . "\n";
 # </one module>
     }
     print HTML 'document.write("</table>");' . "\n";
@@ -2776,33 +2910,27 @@ sub generate_html_file {
     print HTML '    if (Module == \'\') {' . "\n";
     print HTML '        if (Message1 != \'\') {' . "\n";
     print HTML '            var erroneous_modules = Message1.split("<br>");' . "\n";
-    print HTML '            var ErrorsNumber = erroneous_modules.length;' . "\n";
-    print HTML '            var ErroneousModulesObj = top.innerFrame.frames[2].document.getElementById("ErroneousModules");' . "\n";
-    print HTML '            var OldErrors = null;' . "\n";
-    print HTML '            if (ErroneousModulesObj) {' . "\n";
-    print HTML '                OldErrors = ErroneousModulesObj.getAttribute(\'errors\');' . "\n";
-    print HTML '            }' . "\n";
-    print HTML '            if ((OldErrors == null) || (OldErrors != ErrorsNumber)) {' . "\n";
-    print HTML '                top.innerFrame.frames[2].document.write("<h3 id=ErroneousModules errors=" + erroneous_modules.length + ">Modules with errors:</h3>");' . "\n";
-    print HTML '                for (i = 0; i < erroneous_modules.length; i++) {' . "\n";
-    print HTML '                    top.innerFrame.frames[2].document.write("<a href=\"");' . "\n";
-    print HTML '                    top.innerFrame.frames[2].document.write(top.frames[0].document.getElementById(erroneous_modules[i]).getAttribute(\'href\'));' . "\n";
-    print HTML '                    top.innerFrame.frames[2].document.write("\"); title=\"");' . "\n";
-    print HTML '                    top.innerFrame.frames[2].document.write(top.frames[0].document.getElementById(erroneous_modules[i]).getAttribute(\'title\'));' . "\n";
-    print HTML '                    top.innerFrame.frames[2].document.write("\">" + erroneous_modules[i] + "</a>&nbsp ");' . "\n";
-    print HTML '                }' . "\n";
-    print HTML '                top.innerFrame.frames[2].document.close();' . "\n";
-    print HTML '            }            ' . "\n";
-    print HTML '        }' . "\n";
+    print HTML '            var ErrorNumber = erroneous_modules.length;' . "\n";
+
+    print HTML '            top.innerFrame.frames[2].document.write("<h3 id=ErroneousModules errors=" + erroneous_modules.length + ">Modules with errors:</h3>");' . "\n";
+    print HTML '            for (i = 0; i < ErrorNumber; i++) {' . "\n";
+    print HTML '                var ModuleObj = top.innerFrame.frames[0].document.getElementById(erroneous_modules[i]);' . "\n";
+    print HTML '                top.innerFrame.frames[2].document.write("<a href=\"");' . "\n";
+    print HTML '                top.innerFrame.frames[2].document.write(ModuleObj.getAttribute(\'href\'));' . "\n";
+    print HTML '                top.innerFrame.frames[2].document.write("\"); title=\"");' . "\n";
+    print HTML '                top.innerFrame.frames[2].document.write("\">" + erroneous_modules[i] + "</a>&nbsp ");' . "\n";
+    print HTML '            };' . "\n";
+    print HTML '            top.innerFrame.frames[2].document.close();' . "\n";
+    print HTML '        };' . "\n";
     print HTML '    } else {' . "\n";
     print HTML '        var ModuleNameObj = top.innerFrame.frames[2].document.getElementById("ModuleErrors");' . "\n";
     print HTML '        var OldErrors = null;' . "\n";
-    print HTML '        var ErrorsNumber = Message1.split("<br>").length;' . "\n";
+    print HTML '        var ErrorNumber = Message1.split("<br>").length;' . "\n";
     print HTML '        if ((ModuleNameObj != null) && (Module == ModuleNameObj.getAttribute(\'name\')) ) {' . "\n";
     print HTML '            OldErrors = ModuleNameObj.getAttribute(\'errors\');' . "\n";
     print HTML '        }' . "\n";
-    print HTML '        if ((OldErrors == null) || (OldErrors != ErrorsNumber)) {' . "\n";
-    print HTML '            top.innerFrame.frames[2].document.write("<h3 id=ModuleErrors errors=" + ErrorsNumber + " name=\"" + Module + "\">Errors in module " + Module + ":</h3>");' . "\n";
+    print HTML '        if ((OldErrors == null) || (OldErrors != ErrorNumber)) {' . "\n";
+    print HTML '            top.innerFrame.frames[2].document.write("<h3 id=ModuleErrors errors=" + ErrorNumber + " name=\"" + Module + "\">Errors in module " + Module + ":</h3>");' . "\n";
     print HTML '            top.innerFrame.frames[2].document.write(Message1);' . "\n";
     print HTML '            top.innerFrame.frames[2].document.close();' . "\n";
     print HTML '        }' . "\n";
@@ -2814,10 +2942,9 @@ sub generate_html_file {
     print HTML '     refreshInfoFrames();' . "\n";
     print HTML '};' . "\n\n";
 
-    print HTML 'function setRefreshRate(RefreshRate) {' . "\n";
-    print HTML '    if (isNaN(RefreshRate * 1)) {' . "\n";
-    print HTML '        alert(RefreshRate + " is not a number. Ignored.");' . "\n";
-    print HTML '    } else {' . "\n";
+    print HTML 'function setRefreshRate() {' . "\n";
+    print HTML '    RefreshRate = document.Formular.rate.value;' . "\n";
+    print HTML '    if (!isNaN(RefreshRate * 1)) {' . "\n";
     print HTML '        top.frames[0].clearInterval(IntervalID);' . "\n";
     print HTML '        IntervalID = top.frames[0].setInterval("updateInnerFrame()", RefreshRate * 1000);' . "\n";
     print HTML '    };' . "\n";
@@ -2826,7 +2953,7 @@ sub generate_html_file {
     print HTML 'function initFrames() {' . "\n";
     print HTML '    var urlquery = location.href.split("?");' . "\n";
     print HTML '    if (urlquery.length == 1) {' . "\n";
-    print HTML '        document.write("<html><head><TITLE id=MainTitle>unxsols4.pro</TITLE>");' . "\n";
+    print HTML '        document.write("<html><head><TITLE id=MainTitle>' . $ENV{INPATH} .'</TITLE>");' . "\n";
     print HTML '        document.write("    <frameset rows=\"12%,88%\">");' . "\n";
     print HTML '        document.write("        <frame name=\"topFrame\" src=\"" + urlquery + "?initTop\"/>");' . "\n";
     print HTML '        document.write("        <frame name=\"innerFrame\" src=\"" + urlquery + "?initInnerPage\"/>");' . "\n";
@@ -2848,15 +2975,16 @@ sub generate_html_file {
     print HTML '        document.write("    <table border=\"0\"> <tr>");' . "\n";
     print HTML '        document.write("<td>Refresh rate(sec):</td>");' . "\n";
     print HTML '        document.write("<th>");' . "\n";
-    print HTML '        document.write("<FORM action=\"\?initTop\">");' . "\n";
+    print HTML '        document.write("<FORM name=\"Formular\" onsubmit=\"setRefreshRate()\">");' . "\n";
     print HTML '        document.write("<input type=\"hidden\" name=\"initTop\" value=\"\"/>");' . "\n";
     print HTML '        document.write("<input type=\"text\" id=\"RateValue\" name=\"rate\" autocomplete=\"off\" value=\"" + UpdateRate + "\" size=\"1\"/>");' . "\n";
-    print HTML '        document.write("<input type=\"button\" value=\"OK\">");' . "\n";
+    print HTML '        document.write("<input type=\"submit\" value=\"OK\">");' . "\n";
     print HTML '        document.write("</FORM>");' . "\n";
     print HTML '        document.write("</th></tr></table>");' . "\n";
     print HTML '        document.write("</div>");' . "\n";
     print HTML '        document.write("    </frameset>");' . "\n";
     print HTML '        document.write("</body></html>");' . "\n";
+    print HTML '        top.frames[0].clearInterval(IntervalID);' . "\n";
     print HTML '        IntervalID = top.frames[0].setInterval("updateInnerFrame()", UpdateRate * 1000);' . "\n";
     print HTML '    } else if (urlquery[1] == "initInnerPage") {' . "\n";
     print HTML '        document.write("<html><head>");' . "\n";
@@ -2925,7 +3053,6 @@ sub get_dirs_info_line {
             $log_path_string = $jobs_hash{$job}->{LOG_PATH};
         };
         $log_path_string =~ s/\\/\//g;
-        $dirs_info_line .= 'file:///' if (($ENV{GUI} eq 'WNT') && (!$cygwin));
         $dirs_info_line .= $log_path_string;
     };
     $dirs_info_line .= '<br>';
@@ -2999,24 +3126,20 @@ sub get_progress_percentage {
 #
 # This procedure stores the dmake result in %html_info
 #
-sub html_store_dmake_dir_info {
+sub html_store_job_info {
     return if (!$html);
     my ($deps_hash, $build_dir, $error_code) = @_;
     my $force_update = 0;
-    if ($build_dir =~ /(\s)/o) {
-        $error_code = 0 if (!defined $error_code);
-    } else {
+    if ($build_dir =~ /(\s)/o && (defined $error_code)) {
         $force_update++ if (!children_number());
     }
     my $module = $module_by_hash{$deps_hash};
     my $module_info_hash = $html_info{$module};
 #    $$module_info_hash{BUILD_TIME} += $jobs_hash{$build_dir}->{FINISH_TIME} - $jobs_hash{$build_dir}->{START_TIME};
+    my $dmake_array;
     if (defined $error_code) {
         $jobs_hash{$build_dir}->{FINISH_TIME} = time();
         $$module_info_hash{BUILD_TIME} += $jobs_hash{$build_dir}->{FINISH_TIME} - $jobs_hash{$build_dir}->{START_TIME};
-    }
-    my $dmake_array;
-    if (defined $error_code) {
         if ($error_code) {
             $jobs_hash{$build_dir}->{STATUS} = 'error';
             $dmake_array = $$module_info_hash{ERRORFUL};
@@ -3228,13 +3351,15 @@ sub get_job_string {
             return '' if (!$job_dir);
             $jobs_hash{$job_dir}->{START_TIME} = time();
             $jobs_hash{$job_dir}->{STATUS} = 'building';
-            if ($job_dir =~ /(\s)/o) {
-                if ($' eq $pre_job) {
-                    do_pre_job($`);
-                    html_store_dmake_dir_info($dependencies_hash, $job_dir, undef);
-                    RemoveFromDependencies($job_dir, $dependencies_hash);
-                    $job_dir = '';
-                };
+            if ($job_dir =~ /(\s)$pre_job/o) {
+                do_custom_job($job_dir, $dependencies_hash);
+                $job_dir = '';
+#                if ($' eq $pre_job) {
+#                    do_pre_job($`, $pre_job);
+#                    html_store_job_info($dependencies_hash, $job_dir, undef);
+#                    RemoveFromDependencies($job_dir, $dependencies_hash);
+#                    $job_dir = '';
+#                };
             };
         } while (!$job_dir);
     } else {
@@ -3248,13 +3373,14 @@ sub get_job_string {
             return '' if (!$job_dir);
             $jobs_hash{$job_dir}->{START_TIME} = time();
             $jobs_hash{$job_dir}->{STATUS} = 'building';
-            if ($job_dir =~ /(\s)/o) {
-                if ($' eq $pre_job) {
-                    do_pre_job($`);
-                    html_store_dmake_dir_info($dependencies_hash, $job_dir, undef);
-                    RemoveFromDependencies($job_dir, $dependencies_hash);
+            if ($job_dir =~ /(\s)$pre_job/o) {
+#                if ($' eq $pre_job) {
+                    do_custom_job($job_dir, $dependencies_hash);
+#                    do_pre_job($`, $pre_job);
+#                    html_store_job_info($dependencies_hash, $job_dir, undef);
+#                    RemoveFromDependencies($job_dir, $dependencies_hash);
                     $job_dir = '';
-                }
+#                }
             };
         } while (!$job_dir);
     };
@@ -3264,8 +3390,9 @@ sub get_job_string {
     my $log_file = $jobs_hash{$job_dir}->{LONG_LOG_PATH};
 #    $jobs_hash{$job_dir}->{CLIENT} = $pid;
     my $full_job_dir = $job_dir;
-    if (($job_dir =~ /(\s)/o) && ($' eq $post_job)) {
-        $job = get_post_job();
+    if ($job_dir =~ /(\s)/o) {
+        $job = $';
+        $job = $deliver_command if ($job eq $post_job);
         $full_job_dir = CorrectPath($StandDir.$`);
     }
     my $log_dir = File::Basename::dirname($log_file);
