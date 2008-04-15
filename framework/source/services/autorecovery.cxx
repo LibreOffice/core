@@ -8,7 +8,7 @@
  *
  * $RCSfile: autorecovery.cxx,v $
  *
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,8 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
+#include <svtools/documentlockfile.hxx>
+
 #include <tools/urlobj.hxx>
 
 //_______________________________________________
@@ -2045,6 +2047,30 @@ void AutoRecovery::implts_prepareSessionShutdown()
 }
 
 //-----------------------------------------------
+/* Currently the document is not closed in case of crash,
+   so the lock file must be removed explicitly
+*/
+void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
+{
+    if ( rInfo.Document.is() )
+    {
+        try
+        {
+            css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
+            ::rtl::OUString aURL = xStore->getLocation();
+            if ( aURL.getLength() )
+            {
+                ::svt::DocumentLockFile aLockFile( aURL );
+                aLockFile.RemoveFile();
+            }
+        }
+        catch( const css::uno::Exception& )
+        {}
+    }
+}
+
+
+//-----------------------------------------------
 /* TODO WORKAROUND:
 
         #i64599#
@@ -2125,6 +2151,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
          ++pIt                       )
     {
         AutoRecovery::TDocumentInfo aInfo = *pIt;
+
+        // WORKAROUND... Since the documents are not closed the lock file must be removed explicitly
+        lc_removeLockFile( aInfo );
 
         // WORKAROUND ... see comment of this method
         if (lc_checkIfSaveForbiddenByArguments(aInfo))
