@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,6 +222,9 @@ public:
     sal_Bool            TryStorage();
     SAL_DLLPRIVATE ErrCode Unpack_Impl( const String& );
     sal_Bool            IsStorage();
+
+    sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading );
+    void                UnlockFile();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage();
