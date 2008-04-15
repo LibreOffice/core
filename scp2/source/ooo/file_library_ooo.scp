@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.285 $
+ * $Revision: 1.286 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -589,7 +589,7 @@ File gid_File_Lib_Stringresource
   #endif
 End
 
-#if defined ENABLE_VBA && !defined MACOSX // see sc/util/makefile.mk
+#if defined ENABLE_VBA
 #ifndef VBA_EXTENSION
 
 File gid_File_Lib_Vbaobj
