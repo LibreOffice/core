@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filstr.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,7 @@ namespace fileaccess {
 
     public:
 
-        XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath );
+        XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock );
 
         /**
          *  Returns an error code as given by filerror.hxx
@@ -225,6 +225,8 @@ namespace fileaccess {
         shell*       m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
         sal_Bool     m_nIsOpen;
+
+        sal_Bool     m_bLock;
 
         ReconnectingFile    m_aFile;
 
