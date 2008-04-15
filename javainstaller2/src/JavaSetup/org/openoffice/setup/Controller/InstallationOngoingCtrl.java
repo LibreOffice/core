@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallationOngoingCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@ import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.PackageDescription;
 import org.openoffice.setup.Util.LogManager;
 import org.openoffice.setup.Util.InfoDir;
+import org.openoffice.setup.Util.PackageCollector;
 import org.openoffice.setup.Util.SystemManager;
 import java.io.File;
 import java.util.Vector;
@@ -75,6 +76,14 @@ public class InstallationOngoingCtrl extends PanelController {
         InstallationOngoing panel = (InstallationOngoing)getPanel();
         panel.setStopButtonActionCommand(getSetupFrame().ACTION_STOP);
         panel.addStopButtonActionListener(getSetupFrame().getSetupActionListener());
+
+        // creating sorted list of packages to install
+        InstallData installData = InstallData.getInstance();
+        Vector installPackages = installData.getInstallPackages();
+
+        Vector sortedPackages = new Vector();
+        PackageCollector.sortPackages(installPackages, sortedPackages, "install");
+        installData.setInstallPackages(sortedPackages);
 
         Installer installer = InstallerFactory.getInstance();
         installer.preInstallationOngoing();
