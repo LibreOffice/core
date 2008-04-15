@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profile_ooo.scp,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@ Profile gid_Profile_Configmgr_Ini
     Name = "configmgr.ini";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (NETWORK, PATCH);
+    Styles = (NETWORK);
 End
 
 Profile gid_Profile_Setup_Ini
@@ -60,7 +60,7 @@ Profile gid_Profile_Uno_Ini
     Name = "uno.ini";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (NETWORK,PATCH);
+    Styles = (NETWORK);
 End
 
 Profile gid_Profile_Fundamentalbasis_Ini
