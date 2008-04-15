@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_calc.scp,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,33 +30,33 @@
 
 #include "macros.inc"
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Solver, solver)
+STD_UNO_LIB_FILE( gid_File_Lib_Solver, solver)
 
 File gid_File_Lib_Lpsolve
     Name = SPECIAL_NAME(lpsolve55);
-    PACKED_LIB_FILE_BODY_PATCH;
+    PACKED_LIB_FILE_BODY;
 End
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Analysis, analysis)
+STD_UNO_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Calc, calc)
+STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Date, date)
+STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc, sc)
+STD_UNO_LIB_FILE( gid_File_Lib_Sc, sc)
 
-STD_LIB_FILE_PATCH( gid_File_Lib_Scui, scui)
+STD_LIB_FILE( gid_File_Lib_Scui, scui)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Scd, scd)
+STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
 
-STD_LIB_FILE_PATCH( gid_File_Lib_Tfu, tfu)
+STD_LIB_FILE( gid_File_Lib_Tfu, tfu)
 
 //
 // start binfilter #110743#
 //
 
 #ifndef WITHOUT_BINFILTER
-STD_LIB_FILE_PATCH( gid_File_Lib_Bf_Sc, bf_sc)
+STD_LIB_FILE( gid_File_Lib_Bf_Sc, bf_sc)
 STD_RES_FILE( gid_File_Res_Bf_Sc, bf_sc)
 #endif
 
@@ -64,41 +64,28 @@ STD_RES_FILE( gid_File_Res_Bf_Sc, bf_sc)
 // end binfilter #110743#
 //
 
-STD_RES_FILE_PATCH( gid_File_Res_Solver, solver)
+STD_RES_FILE( gid_File_Res_Solver, solver)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
-STD_RES_FILE_PATCH( gid_File_Res_Date, date)
+STD_RES_FILE( gid_File_Res_Date, date)
 
-STD_RES_FILE_PATCH( gid_File_Res_Sc, sc )
+STD_RES_FILE( gid_File_Res_Sc, sc )
 
 STD_RES_FILE( gid_File_Res_Tfu, tfu )
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-calc.xcu";
 End
 
 File gid_File_Help_Scalc_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(scalc);
-    Patchfiles = ("scalc.db",
-                  "scalc.ht",
-                  "scalc.jar",
-                  "scalc.key",
-                  "scalc.tree",
-                  "scalc.idx/CONTEXTS",
-                  "scalc.idx/DICTIONARY",
-                  "scalc.idx/DOCS",
-                  "scalc.idx/DOCS.TAB",
-                  "scalc.idx/EDGE",
-                  "scalc.idx/LINKNAMES",
-                  "scalc.idx/OFFSETS",
-                  "scalc.idx/POSITIONS",
-                  "scalc.idx/SCHEMA");
+    Patchfiles = ();
 End
 
 // new user interface configuration files
@@ -119,7 +106,7 @@ End
 
 File gid_File_Oo_Office_Ui_Calccommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
 End
@@ -133,14 +120,14 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_calc_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_calc_filters.xcu";
 End
@@ -154,7 +141,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Setup_Calc_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-calc.xcu";
 End
@@ -168,7 +155,7 @@ End
 
 File gid_File_Oo_Office_Ui_Calcwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/CalcWindowState.xcu";
 End
@@ -177,5 +164,5 @@ File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(scalc);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
