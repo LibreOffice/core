@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SolarisHelper.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,6 +147,7 @@ public class SolarisHelper {
         adminFile.add(idependLine);
 
         String rdependLine = "rdepend=nocheck";
+        // String rdependLine = "rdepend=quit";
         if ( data.isUserInstallation() ) { rdependLine = "rdepend=nocheck"; }
         adminFile.add(rdependLine);
 
