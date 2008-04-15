@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_rpm.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ $(RPMFILES) : $(SPECFILE)
         --buildroot $(ABSLOCALOUT)$/misc$/$(@:b) \
         --define "_builddir $(COMMONMISC)$/$(@:b:s/-/ /:1)" \
         --define "productname $(PRODUCTNAME.$(@:b:s/-/ /:1))" \
-        --define "pkgprefix $(@:b:s/-/ /:1)" \
+        --define "pkgprefix $(@:b:s/-/ /:1)$(PRODUCTVERSION.$(@:b:s/-/ /:1))" \
         --define "unixfilename $(UNIXFILENAME.$(@:b:s/-/ /:1))" \
         --define "iconprefix $(ICONPREFIX.$(@:b:s/-/ /:1))" \
         --define "version $(PKGVERSION.$(@:b:s/-/ /:1))" \
