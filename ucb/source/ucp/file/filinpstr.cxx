@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filinpstr.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,14 +44,19 @@ using namespace com::sun::star::ucb;
 
 
 
-XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
+XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock )
     : m_pMyShell( pMyShell ),
       m_xProvider( pMyShell->m_pProvider ),
+      m_bLock( bLock ),
       m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    osl::FileBase::RC err = m_aFile.open( OpenFlag_Read );
+    sal_uInt32 nFlags = OpenFlag_Read;
+    if ( !bLock )
+        nFlags |= OpenFlag_NoLock;
+
+    osl::FileBase::RC err = m_aFile.open( nFlags );
     if( err != osl::FileBase::E_None )
     {
         m_nIsOpen = false;
