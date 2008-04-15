@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filinpstr.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ namespace fileaccess {
     {
     public:
 
-        XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath );
+        XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock );
 
         virtual ~XInputStream_impl();
 
@@ -152,6 +152,8 @@ namespace fileaccess {
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider >            m_xProvider;
         sal_Bool                                           m_nIsOpen;
+
+        sal_Bool                                           m_bLock;
 
         ReconnectingFile                                   m_aFile;
 
