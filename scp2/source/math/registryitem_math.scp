@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_math.scp,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -508,7 +508,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sxm";
     Value = "soffice.StarMathDocument.6";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem__Smf
@@ -524,7 +524,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".smf";
     Value = "soffice.StarMathDocument.5";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 // new odf file extension
@@ -586,7 +586,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".odf";
     Value = "opendocument.MathDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odf
@@ -595,7 +595,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = "application/vnd.oasis.opendocument.formula";
     Value = "opendocument.MathDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_Curver
@@ -693,7 +693,7 @@ RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Open_Command
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = "opendocument.MathDocument.1\shell\open\command";
     Value = "\"<progpath>\program\smath.exe\" -o \"%1\"";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Print_Command
@@ -754,7 +754,7 @@ End
 //     ModuleID = gid_Module_Root;
 //     Name = ".mml";
 //     Value = "opendocument.MathDocument.1";
-//     Styles = (PATCH);
+//     Styles = ();
 // End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Smath_Exe
