@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_impress.scp,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -638,7 +638,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sdd";
     Value = "soffice.StarImpressDocument.5";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem__Sdp
@@ -655,7 +655,7 @@ End
 //     ModuleID = gid_Module_Root;
 //     Name = ".sdp";
 //     Value = "soffice.StarStorageDocument.5";
-//     Styles = (PATCH);
+//     Styles = ();
 // End
 
 RegistryItem gid_Regitem__Sxi
@@ -671,7 +671,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sxi";
     Value = "soffice.StarImpressDocument.6";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 // new odp file extension
@@ -717,7 +717,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".odp";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odp
@@ -726,7 +726,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = "application/vnd.oasis.opendocument.presentation";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 
@@ -849,7 +849,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "opendocument.ImpressDocument.1\shell\open\command";
     Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Print_Command
@@ -1107,7 +1107,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".otp";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sti
@@ -1116,7 +1116,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sti";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Ppt
@@ -1125,7 +1125,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".ppt";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pps
@@ -1134,7 +1134,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".pps";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Pot
@@ -1143,7 +1143,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".pot";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simpress_Exe
