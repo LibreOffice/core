@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_python_mailmerge.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,13 @@
 
 Module gid_Module_Optional_Pymailmerge
     PackageInfo = "packinfo_office.txt";
+    InstallOrder = "1100";
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON_MAILMERGE );
     ParentID = gid_Module_Optional_Pyuno;
     Files = (gid_File_Pymailmerge, gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu);
     Minimal = NO;
     Default = YES;
-    Styles = ( );
+    Styles = ();
 End
 
 File gid_File_Pymailmerge
