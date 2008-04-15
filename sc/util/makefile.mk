@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -250,9 +250,7 @@ LIB8OBJFILES = \
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
 
-# SHL9RPATH=OXT and SHL9STDLIBS containing non-URE libs does not work reliably
-# anywhere, and would break the build on MACOSX:
-.IF "$(ENABLE_VBA)"=="YES" && "$(OS)" != "MACOSX"
+.IF "$(ENABLE_VBA)"=="YES"
 
 TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
@@ -261,7 +259,11 @@ SHL9IMPLIB=	i$(TARGET_VBA)
 SHL9VERSIONMAP=$(TARGET_VBA).map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
+.IF "$(VBA_EXTENSION)"=="YES"
 SHL9RPATH=OXT
+.ELSE
+SHL9RPATH=OOO
+.ENDIF
 
 SHL9STDLIBS= \
         $(CPPUHELPERLIB) \
@@ -297,7 +299,7 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk
 
-.IF "$(VBA_EXTENSION)"=="YES" && "$(OS)" != "MACOSX" # see above
+.IF "$(VBA_EXTENSION)"=="YES"
     COMP=build_extn
 .ENDIF
 
