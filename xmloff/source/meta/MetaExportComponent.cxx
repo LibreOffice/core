@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MetaExportComponent.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,9 +166,22 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         }
 #endif
 
-        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION, ::rtl::OUString::createFromAscii( "1.1" ) );
+        const sal_Char* pVersion = 0;
+        switch( getDefaultVersion() )
+        {
+        case SvtSaveOptions::ODFVER_012: pVersion = "1.2"; break;
+        case SvtSaveOptions::ODFVER_011: pVersion = "1.1"; break;
+        case SvtSaveOptions::ODFVER_010: break;
 
-        SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
+        default:
+            DBG_ERROR("xmloff::XMLMetaExportComponent::exportDoc(), unexpected odf default version!");
+        }
+
+        if( pVersion )
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
+                            ::rtl::OUString::createFromAscii(pVersion) );
+
+            SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                         sal_True, sal_True );
 
         // NB: office:meta is now written by _ExportMeta
