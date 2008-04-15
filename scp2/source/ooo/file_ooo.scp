@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.237 $
+ * $Revision: 1.238 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2119,7 +2119,7 @@ File gid_File_Rdb_Offapi
     Name = "offapi.rdb";
 End
 
-#if defined ENABLE_VBA && !defined MACOSX // see sc/util/makefile.mk
+#if defined ENABLE_VBA
 #ifndef VBA_EXTENSION
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
