@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "saltimer.h"
 #include "salinst.h"
 #include "salframeview.h"
+#include "aqua11yfactory.h"
 #include "vcl/salwtype.hxx"
 #include "vcl/window.hxx"
 
@@ -127,9 +128,11 @@ AquaSalFrame::~AquaSalFrame()
     if( mpDockMenuEntry )
         // life cycle comment: the menu has ownership of the item, so no release
         [AquaSalInstance::GetDynamicDockMenu() removeItem: mpDockMenuEntry];
-    if( mpView )
+    if ( mpView ) {
+        [AquaA11yFactory revokeView: mpView];
         [mpView release];
-    if (mpWindow)
+    }
+    if ( mpWindow )
         [mpWindow release];
 }
 
@@ -355,6 +358,9 @@ void AquaSalFrame::initShow()
             SetPosSize( nNewX, nNewY, 0, 0,  SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
         }
     }
+
+    // make sure the view is present in the wrapper list before any children receive focus
+    [AquaA11yFactory registerView: mpView];
 }
 
 void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
