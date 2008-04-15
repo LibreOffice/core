@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -424,6 +424,18 @@ public:
         If false is returned the build ids are not available (yet).
     **/
     bool getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const;
+
+    static const sal_uInt16 OOo_1x = 10;
+    static const sal_uInt16 OOo_2x = 20;
+    static const sal_uInt16 OOo_Current = 30;
+
+    /** this checks the build it and returns
+
+        * OOo_1x for files created with OpenOffice.org 1.x or StarOffice 7 (this also includes binary import over binfilter)
+        * OOo_2x for files created with OpenOffice.org 2.x or StarOffice 8
+        * OOo_Current for files created with OpenOffice.org 3.x and StarOffice9 or newer or for files not created with OpenOffice.org or StarOffice
+    */
+    sal_uInt16 getGeneratorVersion() const;
 
     /** If true, the URL for graphic shapes may be stored as a package URL and
         loaded later (on demand) by the application. Otherwise graphics are
