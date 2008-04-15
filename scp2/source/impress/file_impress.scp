@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_impress.scp,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,17 +32,17 @@
 
 File gid_File_Lib_Placeware
     Name = LIBNAME(placeware);
-    PACKED_UNO_LIB_FILE_BODY_PATCH;
+    PACKED_UNO_LIB_FILE_BODY;
 End
 
 File gid_File_Lib_Animcore
 	Name = SPECIAL_NAME(animcore);
-	PACKED_UNO_LIB_FILE_BODY_PATCH;
+	PACKED_UNO_LIB_FILE_BODY;
 End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-impress.xcu";
 End
@@ -50,29 +50,16 @@ End
 File gid_File_Help_Simpress_Zip
     Dir = gid_Dir_Help_Isolanguage;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE,DONT_OVERWRITE,PATCH);
+    Styles = (ARCHIVE,DONT_OVERWRITE);
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(simpress);
-    Patchfiles = ("simpress.db",
-                  "simpress.ht",
-                  "simpress.jar",
-                  "simpress.key",
-                  "simpress.tree",
-                  "simpress.idx/CONTEXTS",
-                  "simpress.idx/DICTIONARY",
-                  "simpress.idx/DOCS",
-                  "simpress.idx/DOCS.TAB",
-                  "simpress.idx/EDGE",
-                  "simpress.idx/LINKNAMES",
-                  "simpress.idx/OFFSETS",
-                  "simpress.idx/POSITIONS",
-                  "simpress.idx/SCHEMA"); 
+    Patchfiles = (); 
 End
 
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(simpress);
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 // new user interface configuration files
@@ -94,14 +81,14 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_impress_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_impress_filters.xcu";
 End
@@ -115,7 +102,7 @@ End
 
 File gid_File_Registry_Spool_Oo_Setup_Impress_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-impress.xcu";
 End
@@ -129,7 +116,7 @@ End
 
 File gid_File_Oo_Office_Ui_Impresswindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu";
 End
@@ -159,7 +146,7 @@ End
 
 File gid_File_Oo_Office_Ui_Effects_Xcu
 	TXT_FILE_BODY;
-	Styles = (PACKED,PATCH);
+	Styles = (PACKED);
 	Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
 	Name = "/registry/data/org/openoffice/Office/UI/Effects.xcu";
 End
