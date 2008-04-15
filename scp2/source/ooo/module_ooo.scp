@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_ooo.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,9 @@ Module gid_Module_Root
     Sortkey = "10";
     PackageInfo = "packinfo_office.txt";
     TabPackageInfo = "packinfo_office_tab.txt";
+    InstallOrder = "20";
     MOD_NAME_DESC(MODULE_ROOT_OSL);
+    XpdPackageName = "gid_Module_Root_Files_1";
 End
 
 Module gid_Module_Prg
