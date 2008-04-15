@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objstor.cxx,v $
- * $Revision: 1.208 $
+ * $Revision: 1.209 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -632,8 +632,13 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
-        uno::Reference< embed::XStorage > xStorage = pMed->GetStorage();
-        if( xStorage.is() && pMed->GetLastStorageCreationState() == ERRCODE_NONE )
+        pMedium->LockOrigFileOnDemand( sal_True );
+
+        uno::Reference< embed::XStorage > xStorage;
+        if ( pMedium->GetError() == ERRCODE_NONE )
+            xStorage = pMedium->GetStorage();
+
+        if( xStorage.is() && pMedium->GetLastStorageCreationState() == ERRCODE_NONE )
         {
             DBG_ASSERT( pFilter, "No filter for storage found!" );
 
@@ -1277,6 +1282,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     if ( bStorageBasedTarget )
     {
+        rMedium.LockOrigFileOnDemand( sal_False );
+        if ( rMedium.GetErrorCode() )
+            return sal_False;
+
         rMedium.GetOutputStorage();
 
         // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
@@ -2490,38 +2499,15 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
     }
 
-//REMOVE        if ( aURL == aActName && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) ) )
-//REMOVE        {
-//REMOVE            if ( IsReadOnly() )
-//REMOVE            {
-//REMOVE                SetError(ERRCODE_SFX_DOCUMENTREADONLY);
-//REMOVE                return sal_False;
-//REMOVE            }
-//REMOVE
-//REMOVE            // gleicher Filter? -> Save()
-//REMOVE            const SfxFilter *pFilter = pActMed->GetFilter();
-//REMOVE            if ( pFilter && pFilter->GetFilterName() == aFilterName )
-//REMOVE            {
-//REMOVE                pImp->bIsSaving=sal_False;
-//REMOVE                if ( aParams )
-//REMOVE                {
-//REMOVE                    SfxItemSet* pSet = pMedium->GetItemSet();
-//REMOVE                    pSet->ClearItem( SID_PASSWORD );
-//REMOVE                    pSet->Put( *aParams );
-//REMOVE                }
-//REMOVE
-//REMOVE                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOC,this));
-//REMOVE                BOOL bRet = DoSave_Impl();
-//REMOVE                SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_SAVEDOCDONE,this));
-//REMOVE                return bRet;
-//REMOVE            }
-//REMOVE        }
-
     // this notification should be already sent by caller in sfxbasemodel
     // SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,this));
 
     if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
         aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
+
+    ::rtl::OUString aTempFileURL;
+    if ( IsDocShared() )
+        aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
     {
@@ -2559,6 +2545,21 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
             SFX_ITEMSET_GET( (*aParams), pFilterOptItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
             if ( pFilterOptItem )
                 pSet->Put( *pFilterOptItem );
+
+            if ( IsDocShared() && aTempFileURL.getLength() )
+            {
+                // this is a shared document that has to be disconnected from the old location
+                FreeSharedFile( aTempFileURL );
+
+                if ( pFilter->IsOwnFormat()
+                  && pFilter->UsesStorage()
+                  && pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+                {
+                    // the target format is the own format
+                    // the target document must be shared
+                    SwitchToShared( sal_True, sal_False );
+                }
+            }
         }
 
         if ( bWasReadonly && !bSaveTo )
