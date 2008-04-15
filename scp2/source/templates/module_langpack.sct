@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_langpack.sct,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,6 @@ Module gid_Module_Langpack_Root_<LANGUAGE_>
     ParentID = gid_Module_Langpack_Languageroot;
     Sortkey = "<SORTKEY>";
     Language = "<LANGUAGE>";
-    Assigns = gid_Module_Langpack_Root_Template;
     MOD_NAME_DESC(MODULE_LANGPACK_<LANGUAGEBIG_>);
-    PackageInfo = "packinfo_office_lang.txt";
     Styles =(LANGUAGEMODULE, SHOW_MULTILINGUAL_ONLY);
 End
