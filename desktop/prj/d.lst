@@ -118,7 +118,7 @@ mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 
 ..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\guistdio.com
 ..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\crashrep.com
-..\%__SRC%\bin\guistdio.exe %_DEST%\bin%_EXT%\unopkg.com
+..\%__SRC%\bin\unopkgio.exe %_DEST%\bin%_EXT%\unopkg.com
 
 ..\scripts\ure-link %_DEST%\bin%_EXT%\ure-link
 ..\scripts\basis-link %_DEST%\bin%_EXT%\basis-link
