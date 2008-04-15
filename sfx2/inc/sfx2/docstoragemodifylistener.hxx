@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstoragemodifylistener.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,11 +63,10 @@ namespace sfx2
 
     class SFX2_DLLPUBLIC DocumentStorageModifyListener : public DocumentStorageModifyListener_Base
     {
-        ::osl::Mutex&           m_rMutex;
         IModifiableDocument*    m_pDocument;
 
     public:
-        DocumentStorageModifyListener( ::osl::Mutex& _rMutex, IModifiableDocument& _rDocument );
+        DocumentStorageModifyListener( IModifiableDocument& _rDocument );
 
         void dispose();
 
