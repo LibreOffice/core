@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclcanvas.scp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,4 +30,4 @@
 
 #include "macros.inc"
 
-SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_VCLCanvas, vclcanvas.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_VCLCanvas, vclcanvas.uno)
