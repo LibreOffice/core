@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directxcanvas.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,10 @@
 
 #ifdef WNT
 #if defined(M1300) || defined(M1400) || defined(_gcc3)
-SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_DirectXCanvas, directxcanvas.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectXCanvas, directxcanvas.uno)
 #endif
 #endif
 
 #ifdef WNT
-SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
 #endif
