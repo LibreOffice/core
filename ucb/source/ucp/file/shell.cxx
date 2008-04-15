@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shell.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -671,10 +671,11 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 
 uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
-             const rtl::OUString& aUnqPath )
+             const rtl::OUString& aUnqPath,
+             sal_Bool bLock )
     throw()
 {
-    XInputStream_impl* xInputStream = new XInputStream_impl( this,aUnqPath ); // from filinpstr.hxx
+    XInputStream_impl* xInputStream = new XInputStream_impl( this, aUnqPath, bLock ); // from filinpstr.hxx
 
     sal_Int32 ErrorCode = xInputStream->CtorSuccess();
 
@@ -707,10 +708,11 @@ shell::open( sal_Int32 CommandId,
 
 uno::Reference< io::XStream > SAL_CALL
 shell::open_rw( sal_Int32 CommandId,
-                const rtl::OUString& aUnqPath )
+                const rtl::OUString& aUnqPath,
+                sal_Bool bLock )
     throw()
 {
-    XStream_impl* xStream = new XStream_impl( this,aUnqPath );  // from filstr.hxx
+    XStream_impl* xStream = new XStream_impl( this, aUnqPath, bLock );  // from filstr.hxx
 
     sal_Int32 ErrorCode = xStream->CtorSuccess();
 
