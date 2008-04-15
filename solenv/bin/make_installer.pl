@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.105 $
+# $Revision: 1.106 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -397,6 +397,7 @@ if (( ! $installer::globals::iswindowsbuild ) &&
     ( ! $installer::globals::islinuxrpmbuild ) &&
     ( ! $installer::globals::issolarispkgbuild ) &&
     ( $installer::globals::packageformat ne "installed" ) &&
+    ( $installer::globals::packageformat ne "dmg" ) &&
     ( $installer::globals::packageformat ne "archive" ))
     { installer::control::check_oxtfiles($filesinproductarrayref); }
 
