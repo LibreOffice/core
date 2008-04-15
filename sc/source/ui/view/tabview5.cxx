@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview5.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,8 @@
 #include "seltrans.hxx"
 #include "scmod.hxx"
 #include "AccessibilityHints.hxx"
+#include "docsh.hxx"
+
 #include <vcl/svapp.hxx>
 
 // STATIC DATA -----------------------------------------------------------
@@ -356,25 +358,26 @@ void ScTabView::UpdateLayerLocks()
         BOOL bEx = aViewData.GetViewShell()->IsDrawSelMode();
         BOOL bProt = aViewData.GetDocument()->IsTabProtected( nTab ) ||
                      aViewData.GetSfxDocShell()->IsReadOnly();
+        BOOL bShared = aViewData.GetDocShell()->IsDocShared();
 
         SdrLayer* pLayer;
         SdrLayerAdmin& rAdmin = pDrawView->GetModel()->GetLayerAdmin();
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_BACK);
         if (pLayer)
-            pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx );
+            pDrawView->SetLayerLocked( pLayer->GetName(), bProt || !bEx || bShared );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_INTERN);
         if (pLayer)
             pDrawView->SetLayerLocked( pLayer->GetName(), TRUE );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_FRONT);
         if (pLayer)
-            pDrawView->SetLayerLocked( pLayer->GetName(), bProt );
+            pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
-            pDrawView->SetLayerLocked( pLayer->GetName(), bProt );
+            pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_HIDDEN);
         if (pLayer)
         {
-            pDrawView->SetLayerLocked( pLayer->GetName(), bProt );
+            pDrawView->SetLayerLocked( pLayer->GetName(), bProt || bShared );
             pDrawView->SetLayerVisible( pLayer->GetName(), sal_False);
         }
     }
