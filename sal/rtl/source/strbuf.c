@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: strbuf.c,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +73,10 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
         newCapacity = oldStr->length;
 
     rtl_string_new_WithLength( newStr, newCapacity );
-    (*newStr)->length = oldStr->length;
-    rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length );
+    if (oldStr->length > 0) {
+        (*newStr)->length = oldStr->length;
+        rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length );
+    }
     return newCapacity;
 }
 
