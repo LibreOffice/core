@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.139 $
+ * $Revision: 1.140 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,6 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 {
     // counter for SfxBaseModel instances created.
     static sal_Int64                                        g_nInstanceCounter      ;
-    ::osl::Mutex&                                           m_rMutex                ;
     SfxObjectShellRef                                       m_pObjectShell          ;
     ::rtl::OUString                                         m_sURL                  ;
     ::rtl::OUString                                         m_sRuntimeUID           ;
@@ -173,10 +172,9 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
 
-    IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& aMutex, SfxObjectShell* pObjectShell )
-            :   m_rMutex                ( aMutex        )
-            ,   m_pObjectShell          ( pObjectShell  )
-            ,   m_aInterfaceContainer   ( aMutex        )
+    IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
+            :   m_pObjectShell          ( pObjectShell  )
+            ,   m_aInterfaceContainer   ( rMutex        )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
@@ -2833,7 +2831,7 @@ void SfxBaseModel::ListenForStorage_Impl( const uno::Reference< embed::XStorage 
     {
         if ( !m_pData->m_pStorageModifyListen.is() )
         {
-            m_pData->m_pStorageModifyListen = new ::sfx2::DocumentStorageModifyListener( m_pData->m_rMutex, *m_pData );
+            m_pData->m_pStorageModifyListen = new ::sfx2::DocumentStorageModifyListener( *m_pData );
         }
 
         // no need to deregister the listening for old storage since it should be disposed automatically
