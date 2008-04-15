@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bc.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1036,7 +1036,9 @@ BaseContent::open(
     }
     else
     {
-        if( aCommandArgument.Mode == OpenMode::DOCUMENT )
+        if( aCommandArgument.Mode == OpenMode::DOCUMENT ||
+            aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE )
+
         {
             Reference< io::XOutputStream > outputStream( aCommandArgument.Sink,UNO_QUERY );
             if( outputStream.is() )
@@ -1046,18 +1048,22 @@ BaseContent::open(
                                   outputStream );
             }
 
+            sal_Bool bLock = ( aCommandArgument.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE );
+
             Reference< io::XActiveDataSink > activeDataSink( aCommandArgument.Sink,UNO_QUERY );
             if( activeDataSink.is() )
             {
                 activeDataSink->setInputStream( m_pMyShell->open( nMyCommandIdentifier,
-                                                                  m_aUncPath ) );
+                                                                  m_aUncPath,
+                                                                  bLock ) );
             }
 
             Reference< io::XActiveDataStreamer > activeDataStreamer( aCommandArgument.Sink,UNO_QUERY );
             if( activeDataStreamer.is() )
             {
                 activeDataStreamer->setStream( m_pMyShell->open_rw( nMyCommandIdentifier,
-                                                                    m_aUncPath ) );
+                                                                    m_aUncPath,
+                                                                    bLock ) );
             }
         }
         else if ( aCommandArgument.Mode == OpenMode::ALL        ||
