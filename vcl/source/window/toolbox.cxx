@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbox.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5935,6 +5935,14 @@ USHORT ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< I
                 return nPos;
     }
     return TOOLBOX_ITEM_NOTFOUND;
+}
+
+void ToolBox::ChangeHighlight( USHORT nPos )
+{
+    if ( nPos < GetItemCount() ) {
+        ImplGrabFocus( 0 );
+        ImplChangeHighlight ( ImplGetItem ( GetItemId ( (USHORT) nPos ) ), FALSE );
+    }
 }
 
 void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
