@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1149,7 +1149,7 @@ Reference< XStorage > ODatabaseModelImpl::switchToStorage( const Reference< XSto
 // -----------------------------------------------------------------------------
 namespace
 {
-    void lcl_modifyListening( ::osl::Mutex& _rMutex, ::sfx2::IModifiableDocument& _rDocument,
+    void lcl_modifyListening( ::sfx2::IModifiableDocument& _rDocument,
         const Reference< XStorage >& _rxStorage, ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >& _inout_rListener,
         bool _bListen )
     {
@@ -1169,7 +1169,8 @@ namespace
 
         if ( xModify.is() && _bListen )
         {
-            _inout_rListener = new ::sfx2::DocumentStorageModifyListener( _rMutex, _rDocument );
+            // the listener from sfx2 uses SolarMutex internally
+            _inout_rListener = new ::sfx2::DocumentStorageModifyListener( _rDocument );
             xModify->addModifyListener( _inout_rListener.get() );
         }
     }
@@ -1179,13 +1180,13 @@ namespace
 Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
 {
     // stop listening for modifications at the old storage
-    lcl_modifyListening( m_xMutex->getMutex(), *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, false );
+    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, false );
 
     // set new storage
     m_xDocumentStorage.reset( _rxNewRootStorage, SharedStorage::TakeOwnership );
 
     // start listening for modifications
-    lcl_modifyListening( m_xMutex->getMutex(), *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, true );
+    lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, true );
 
     // forward new storage to Basic and Dialog library containers
     if ( m_xBasicLibraries.is() )
