@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_quickstart.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,6 @@
 File gid_File_Exe_Quickstart
     BIN_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = gid_Brand_Dir_Program;
     Name = "quickstart.exe";
 End
