@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -63,7 +63,15 @@ EXCEPTIONSFILES=\
         $(OBJ)$/HelpCompiler.obj \
         $(SLO)$/HelpLinker.obj \
         $(SLO)$/HelpCompiler.obj
-
+.IF "$(OS)" == "MACOSX" && "$(CPU)" == "P" && "$(COM)" == "GCC"
+# There appears to be a GCC 4.0.1 optimization error causing _file:good() to
+# report true right before the call to writeOut at HelpLinker.cxx:1.12 l. 954
+# but out.good() to report false right at the start of writeOut at
+# HelpLinker.cxx:1.12 l. 537:
+NOOPTFILES=\
+        $(OBJ)$/HelpLinker.obj \
+        $(SLO)$/HelpLinker.obj
+.ENDIF
 
 APP1TARGET= $(TARGET)
 APP1OBJS=\
