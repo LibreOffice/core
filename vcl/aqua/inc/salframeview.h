@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 #ifndef _VCL_SALFRAMEVIEW_H
 #define _VCL_SALFRAMEVIEW_H
 
+#include "aqua11ywrapper.h"
+
 @interface SalFrameWindow : NSWindow
 {
     AquaSalFrame*       mpFrame;
@@ -49,6 +51,7 @@
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(MacOSBOOL)containsMouse;
+-(::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >)accessibleContext;
 
 /* NSDraggingDestination protocol methods
  */
@@ -63,7 +66,7 @@
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
 @end
 
-@interface SalFrameView : NSView <NSTextInput>
+@interface SalFrameView : AquaA11yWrapper <NSTextInput>
 {
     AquaSalFrame*       mpFrame;
 
@@ -119,6 +122,9 @@
 -(void)noop: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
+-(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext;
+-(id)parentAttribute;
+-(NSView *)viewElementForParent;
 /*
   Event hook for D&D service.
 
