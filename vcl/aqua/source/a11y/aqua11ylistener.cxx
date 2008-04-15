@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: aqua11ylistener.cxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "aqua11ylistener.hxx"
+#include "aqua11yfactory.h"
+#include "aqua11yfocustracker.hxx"
+#include "aqua11ytextwrapper.h"
+#include "aqua11ywrapper.h"
+#include "salinst.h"
+
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+
+using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+NSString * getTableNotification( const AccessibleEventObject& aEvent )
+{
+    AccessibleTableModelChange aChange;
+    NSString * notification = nil;
+
+    if( (aEvent.NewValue >>= aChange) &&
+        ( AccessibleTableModelChangeType::INSERT == aChange.Type || AccessibleTableModelChangeType::DELETE == aChange.Type ) &&
+        aChange.FirstRow != aChange.LastRow )
+    {
+        notification = NSAccessibilityRowCountChangedNotification;
+    }
+
+    return notification;
+}
+
+//------------------------------------------------------------------------------
+
+AquaA11yEventListener::AquaA11yEventListener(id wrapperObject, sal_Int16 role) : m_wrapperObject(wrapperObject), m_role(role)
+{
+    [ m_wrapperObject retain ];
+}
+
+//------------------------------------------------------------------------------
+
+AquaA11yEventListener::~AquaA11yEventListener()
+{
+    [ m_wrapperObject release ];
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+AquaA11yEventListener::disposing( const EventObject& Source ) throw( RuntimeException )
+{
+    [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+AquaA11yEventListener::notifyEvent( const AccessibleEventObject& aEvent ) throw( RuntimeException )
+{
+    NSString * notification = nil;
+    id element = m_wrapperObject;
+
+    // TODO: NSAccessibilityValueChanged, NSAccessibilitySelectedRowsChangedNotification
+    switch( aEvent.EventId )
+    {
+        case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED:
+            if( m_role != AccessibleRole::LIST ) {
+                Reference< XAccessible > xAccessible;
+                if( aEvent.NewValue >>= xAccessible )
+                    AquaA11yFocusTracker::get().setFocusedObject( xAccessible );
+            }
+            break;
+
+        case AccessibleEventId::NAME_CHANGED:
+            notification = NSAccessibilityTitleChangedNotification;
+            break;
+
+        case AccessibleEventId::CHILD:
+            // TODO: map to NSAccessibilityCreatedNotification/NSAccessibilityUIElementDestroyedNotification
+            // once we found out which object to pass to it.
+            if(aEvent.NewValue.hasValue()) {
+                //notification = NSAccessibilityCreatedNotification;
+            } else if(aEvent.OldValue.hasValue()) {
+                //notification = NSAccessibilityUIElementDestroyedNotification
+             }
+            break;
+
+        case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            // TODO: depricate or remember all children
+            break;
+
+        case AccessibleEventId::BOUNDRECT_CHANGED:
+            // TODO: check against remembered size/position and send
+            //       NSAccessibilityMovedNotification or NSAccessibilityResized Notification
+            break;
+
+        case AccessibleEventId::SELECTION_CHANGED:
+            notification = NSAccessibilitySelectedChildrenChangedNotification;
+            break;
+
+        case AccessibleEventId::TEXT_SELECTION_CHANGED:
+            notification = NSAccessibilitySelectedTextChangedNotification;
+            break;
+
+        case AccessibleEventId::TABLE_MODEL_CHANGED:
+            notification = getTableNotification(aEvent);
+            break;
+
+        case AccessibleEventId::CARET_CHANGED:
+            notification = NSAccessibilitySelectedTextChangedNotification;
+            break;
+
+        case AccessibleEventId::TEXT_CHANGED:
+            notification = NSAccessibilityValueChangedNotification;
+            break;
+
+        default:
+            break;
+    }
+
+    if( nil != notification )
+        NSAccessibilityPostNotification(element, notification);
+}
