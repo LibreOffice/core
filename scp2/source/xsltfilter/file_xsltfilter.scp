@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_xsltfilter.scp,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +32,14 @@
 
 File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_xslt_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_xslt_filters.xcu";
 End
@@ -53,14 +53,14 @@ End
 
 File gid_File_Xsl_Docbooktosoffheadings
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Docbook;
     Name = "docbooktosoffheadings.xsl";
 End
 
 File gid_File_Xsl_Sofftodocbookheadings
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Docbook;
     Name = "sofftodocbookheadings.xsl";
 End
@@ -116,7 +116,7 @@ End
 
 File gid_File_Xsl_Export_Xhtml_Table
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/table.xsl";
 End
