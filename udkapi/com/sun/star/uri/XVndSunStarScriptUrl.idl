@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XVndSunStarScriptUrl.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,7 @@ module com { module sun { module star { module uri {
 
    @since OOo 2.0.0
  */
-interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
+published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
     /**
        returns the name part of this URL.
 

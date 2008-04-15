@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XUriSchemeParser.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,7 @@ module com { module sun { module star { module uri {
 
    @since OOo 2.0.0
  */
-interface XUriSchemeParser: com::sun::star::uno::XInterface {
+published interface XUriSchemeParser: com::sun::star::uno::XInterface {
     /**
        parses the textual representation of an absolute URI.
 
