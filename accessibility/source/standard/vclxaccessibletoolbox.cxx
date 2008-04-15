@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolbox.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -779,5 +779,81 @@ Reference< XAccessible > VCLXAccessibleToolBox::GetChildAccessible( const VclWin
     return xReturn;
 }
 // -----------------------------------------------------------------------------
-
-
+// XAccessibleSelection
+// -----------------------------------------------------------------------------
+void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+        throw IndexOutOfBoundsException();
+    ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
+    USHORT nPos = static_cast < USHORT > (nChildIndex);
+    pToolBox->ChangeHighlight( nPos );
+}
+// -----------------------------------------------------------------------------
+sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+        throw IndexOutOfBoundsException();
+    ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
+    USHORT nPos = static_cast < USHORT > (nChildIndex);
+    if ( pToolBox != NULL && pToolBox->GetHighlightItemId() == pToolBox->GetItemId( nPos ) )
+        return sal_True;
+    else
+        return sal_False;
+}
+// -----------------------------------------------------------------------------
+void VCLXAccessibleToolBox::clearAccessibleSelection(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
+    pToolBox -> LoseFocus();
+}
+// -----------------------------------------------------------------------------
+void VCLXAccessibleToolBox::selectAllAccessibleChildren(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    // intentionally empty. makes no sense for a toolbox
+}
+// -----------------------------------------------------------------------------
+sal_Int32 VCLXAccessibleToolBox::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    sal_Int32 nRet = 0;
+    for ( sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
+    {
+        if ( isAccessibleChildSelected( i ) )
+        {
+            nRet = 1;
+            break; // a toolbox can only have (n)one selected child
+        }
+    }
+    return nRet;
+}
+// -----------------------------------------------------------------------------
+Reference< XAccessible > VCLXAccessibleToolBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
+        throw IndexOutOfBoundsException();
+    Reference< XAccessible > xChild;
+    for ( sal_Int32 i = 0, j = 0, nCount = getAccessibleChildCount(); i < nCount; i++ )
+    {
+        if ( isAccessibleChildSelected( i ) && ( j++ == nSelectedChildIndex ) )
+        {
+            xChild = getAccessibleChild( i );
+            break;
+        }
+    }
+    return xChild;
+}
+// -----------------------------------------------------------------------------
+void VCLXAccessibleToolBox::deselectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
+        throw IndexOutOfBoundsException();
+    clearAccessibleSelection(); // a toolbox can only have (n)one selected child
+}
+// -----------------------------------------------------------------------------
