@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshb.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -437,6 +437,8 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+    ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
+    bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -445,25 +447,25 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
         switch ( nWhich )
         {
             case SID_INSERT_DIAGRAM:
-                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_SMATH:
-                if ( bOle || bTabProt || !SvtModuleOptions().IsMath() )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsMath() || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_OBJECT:
             case SID_INSERT_PLUGIN:
             case SID_INSERT_FLOATINGFRAME:
-                if (bOle || bTabProt)
+                if ( bOle || bTabProt || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_SOUND:
             case SID_INSERT_VIDEO:
-                if (bOle || bTabProt || !SvxPluginFileDlg::IsAvailable(nWhich))
+                if ( bOle || bTabProt || !SvxPluginFileDlg::IsAvailable(nWhich) || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -478,7 +480,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
             case SID_INSERT_GRAPHIC:
             case SID_INSERT_AVMEDIA:
             case SID_FONTWORK_GALLERY_FLOATER:
-                if (bTabProt)
+                if ( bTabProt || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
