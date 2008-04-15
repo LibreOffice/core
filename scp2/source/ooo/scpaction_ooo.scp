@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scpaction_ooo.scp,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,14 @@ ScpAction scp_Copy_License_Txt
     Subdir = "LICENSEs";
   #endif
 End
+
+#ifdef MACOSX
+ScpAction scp_Copy_Thirdpartylicense_Readme_Html
+    Copy = "THIRDPARTYLICENSEREADME.html";
+    Name= "THIRDPARTYLICENSEREADME.html";
+    Subdir = "LICENSEs";
+End
+#endif
 
 ScpAction scp_Copy_Readme_Html
   #ifdef UNX
