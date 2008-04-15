@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.140 $
+ * $Revision: 1.141 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1440,7 +1440,16 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
     if ( impl_isDisposed() )
         throw lang::DisposedException();
 
-    return m_pData->m_pObjectShell.Is() ? ::rtl::OUString(m_pData->m_pObjectShell->GetMedium()->GetName()) : m_pData->m_sURL;
+    if ( m_pData->m_pObjectShell.Is() )
+    {
+        // TODO/LATER: is it correct that the shared document returns shared file location?
+        if ( m_pData->m_pObjectShell->IsDocShared() )
+            return m_pData->m_pObjectShell->GetSharedFileURL();
+        else
+            return ::rtl::OUString(m_pData->m_pObjectShell->GetMedium()->GetName());
+    }
+
+    return m_pData->m_sURL;
 }
 
 //________________________________________________________________________________________________________
@@ -1484,7 +1493,11 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
               && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Author" ) ) )
               && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ) )
               && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) ) ) )
-                throw lang::IllegalArgumentException();
+            {
+                ::rtl::OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "Unexpected MediaDescriptor parameter: " ) );
+                aMessage += aSeqArgs[nInd].Name;
+                throw lang::IllegalArgumentException( aMessage, uno::Reference< uno::XInterface >(), 1 );
+            }
         }
 
         SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2549,7 +2562,47 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
     //sal_Bool aSaveAsTemplate = sal_False;
 
-    if ( m_pData->m_pObjectShell )
+    sal_Bool bSaved = sal_False;
+    if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
+      && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+      && SfxMedium::EqualURLs( getLocation(), sURL ) )
+    {
+        // this is the same file URL as the current document location, try to use storeOwn if possible
+
+        ::comphelper::SequenceAsHashMap aArgHash( seqArguments );
+        ::rtl::OUString aFilterString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+        ::rtl::OUString aFilterName = aArgHash.getUnpackedValueOrDefault( aFilterString, ::rtl::OUString() );
+        if ( aFilterName.getLength() )
+        {
+            SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+            if ( pMedium )
+            {
+                const SfxFilter* pFilter = pMedium->GetFilter();
+                if ( pFilter && aFilterName.equals( pFilter->GetFilterName() ) )
+                {
+                    aArgHash.erase( aFilterString );
+                    aArgHash.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
+
+                    try
+                    {
+                        storeSelf( aArgHash.getAsConstPropertyValueList() );
+                        bSaved = sal_True;
+                    }
+                    catch( const lang::IllegalArgumentException& )
+                    {
+                        // some additional arguments do not allow to use saving, SaveAs should be done
+                        // but only for normal documents, the shared documents would be overwritten in this case
+                        // that would mean an information loss
+                        // TODO/LATER: need a new interaction for this case
+                        if ( m_pData->m_pObjectShell->IsDocShared() )
+                            throw;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( !bSaved && m_pData->m_pObjectShell )
     {
         SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,
                                                 m_pData->m_pObjectShell ) );
