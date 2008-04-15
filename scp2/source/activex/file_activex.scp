@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_activex.scp,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 
 File gid_File_Lib_Soactivex
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "so_activex.dll";
 End
