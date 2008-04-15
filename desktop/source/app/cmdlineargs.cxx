@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,8 @@
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+
+#include <svtools/documentlockfile.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::lang;
@@ -407,6 +409,9 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nolockcheck" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
+        // Workaround for automated testing
+        ::svt::DocumentLockFile::AllowInteraction( sal_False );
+
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-help" ))
