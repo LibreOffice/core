@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.h,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -657,6 +657,7 @@ typedef void *oslFileHandle;
 #define osl_File_OpenFlag_Read      0x00000001L
 #define osl_File_OpenFlag_Write     0x00000002L
 #define osl_File_OpenFlag_Create    0x00000004L
+#define osl_File_OpenFlag_NoLock    0x00000008L
 
 /** Open a regular file.
 
