@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shell.hxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -238,7 +238,8 @@ namespace fileaccess {
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         open( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath )
+              const rtl::OUString& aUnqPath,
+              sal_Bool bLock )
             throw();
 
 
@@ -249,7 +250,8 @@ namespace fileaccess {
 
         com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
         open_rw( sal_Int32 CommandId,
-                 const rtl::OUString& aUnqPath )
+                 const rtl::OUString& aUnqPath,
+                 sal_Bool bLock )
             throw();
 
 
