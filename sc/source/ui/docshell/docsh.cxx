@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svtools/fltrcfg.hxx>
+#include <svtools/documentlockfile.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/virdev.hxx>
 #include "chgtrack.hxx"
@@ -760,16 +761,22 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case SFX_EVENT_LOADFINISHED:
                 {
-                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
+                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() )
                     {
-                        SetSharedFileUrl( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-                        GetMedium()->SwitchDocumentToTempFile();
+                        SwitchToShared( sal_True, sal_False );
+
+                        ScViewData* pViewData = GetViewData();
+                        ScTabView* pTabView = ( pViewData ? dynamic_cast< ScTabView* >( pViewData->GetView() ) : NULL );
+                        if ( pTabView )
+                        {
+                            pTabView->UpdateLayerLocks();
+                        }
                     }
                 }
                 break;
             case SFX_EVENT_VIEWCREATED:
                 {
-                    if ( IsDocShared() )
+                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading() )
                     {
                         ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
@@ -796,36 +803,53 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         while ( bRetry )
                         {
                             bRetry = false;
-                            uno::Reference< frame::XLoadable > xLoadable;
+                            uno::Reference< frame::XModel > xModel;
                             try
                             {
                                 // load shared file
-                                xLoadable.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
-                                uno::Reference< util::XCloseable > xCloseable( xLoadable, uno::UNO_QUERY_THROW );
+                                xModel.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
+                                uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY_THROW );
 
                                 // check if shared flag is set in shared file
                                 bool bShared = false;
-                                ScModelObj* pDocObj = ScModelObj::getImplementation( xLoadable );
-                                if ( pDocObj )
+                                ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+                                ScDocShell* pSharedDocShell = ( pDocObj ? dynamic_cast< ScDocShell* >( pDocObj->GetObjectShell() ) : NULL );
+                                if ( pSharedDocShell )
                                 {
-                                    ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pDocObj->GetEmbeddedObject() );
-                                    if ( pDocShell )
-                                    {
-                                        bShared = pDocShell->IsDocShared();
-                                    }
+                                    bShared = pSharedDocShell->HasSharedXMLFlagSet();
                                 }
 
                                 if ( bShared )
                                 {
-                                    uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY_THROW );
+                                    uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW );
 
                                     if ( xStorable->isReadonly() )
                                     {
                                         xCloseable->close( sal_True );
-                                        // TODO: get name of user who has the write lock
+
                                         String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        try
+                                        {
+                                            ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
+                                            uno::Sequence< ::rtl::OUString > aData = aLockFile.GetLockData();
+                                            if ( aData.getLength() > LOCKFILE_SYSUSERNAME_ID )
+                                            {
+                                                if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() > 0 )
+                                                {
+                                                    aUserName = aData[LOCKFILE_OOOUSERNAME_ID];
+                                                }
+                                                else if ( aData[LOCKFILE_SYSUSERNAME_ID].getLength() > 0 )
+                                                {
+                                                    aUserName = aData[LOCKFILE_SYSUSERNAME_ID];
+                                                }
+                                            }
+                                        }
+                                        catch ( uno::Exception& )
+                                        {
+                                        }
                                         String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_SAVE_LATER ) );
                                         aMessage.SearchAndReplaceAscii( "%1", aUserName );
+
                                         WarningBox aBox( GetActiveDialogParent(), WinBits( WB_RETRY_CANCEL | WB_DEF_RETRY ), aMessage );
                                         if ( aBox.Execute() == RET_RETRY )
                                         {
@@ -836,10 +860,9 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     {
                                         // merge changes from shared file into temp file
                                         bool bSaveToShared = false;
-                                        if ( pDocObj )
+                                        if ( pSharedDocShell )
                                         {
-                                            ScDocument* pShareDoc = pDocObj->GetDocument();
-                                            bSaveToShared = MergeSharedDocument( *pShareDoc );
+                                            bSaveToShared = MergeSharedDocument( pSharedDocShell );
                                         }
 
                                         // close shared file
@@ -865,7 +888,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             aValues[0].Name = ::rtl::OUString::createFromAscii( "FilterName" );
                                             aValues[0].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
                                             SC_MOD()->SetInSharedDocSaving( true );
-                                            xStor->storeToURL( GetSharedFileUrl(), aValues );
+                                            xStor->storeToURL( GetSharedFileURL(), aValues );
                                             SC_MOD()->SetInSharedDocSaving( false );
 
                                             if ( bChangedViewSettings )
@@ -888,14 +911,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     SfxBindings* pBindings = GetViewBindings();
                                     if ( pBindings )
                                     {
-                                        SfxStringItem aPathItem( SID_PATH, GetSharedFileUrl() );
-                                        const SfxPoolItem* ppArgs[] = { &aPathItem, 0 };
-                                        const SfxBoolItem* pRet = (const SfxBoolItem*)pBindings->ExecuteSynchron( SID_SAVEASDOC, ppArgs );
-                                        if ( pRet && pRet->GetValue() )
-                                        {
-                                            SwitchDocumentToShared( false );
-                                            pBindings->ExecuteSynchron( SID_SAVEDOC );
-                                        }
+                                        pBindings->ExecuteSynchron( SID_SAVEASDOC );
                                     }
                                 }
                             }
@@ -906,7 +922,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                                 try
                                 {
-                                    uno::Reference< util::XCloseable > xClose( xLoadable, uno::UNO_QUERY_THROW );
+                                    uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
                                     xClose->close( sal_True );
                                 }
                                 catch ( uno::Exception& )
