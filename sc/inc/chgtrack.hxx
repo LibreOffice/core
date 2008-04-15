@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,8 @@
 // core/inc
 #include "refupdat.hxx"
 #endif
+
+#define DEBUG_CHANGETRACK 0
 
 
 class ScBaseCell;
@@ -184,7 +186,9 @@ public:
     ScChangeActionLinkEntry*        GetNext()           { return pNext; }
     const ScChangeAction*           GetAction() const   { return pAction; }
     ScChangeAction*                 GetAction()         { return pAction; }
-    String                          toString() const;
+#if DEBUG_CHANGETRACK
+    String                          ToString() const;
+#endif // DEBUG_CHANGETRACK
 };
 
 // --- ScChangeActionCellListEntry -----------------------------------------
@@ -458,7 +462,7 @@ public:
                                 // eine Spalte/Zeile beruecksichtigt (fuer
                                 // Auflistung der einzelnen Eintraege).
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const;
+                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
@@ -478,7 +482,9 @@ public:
                                 // only to be used in the XML import
             void                AddDependent( ULONG nActionNumber,
                                         const ScChangeTrack* pTrack );
-            String              toString( ScDocument* pDoc ) const;
+#if DEBUG_CHANGETRACK
+            String              ToString( ScDocument* pDoc ) const;
+#endif // DEBUG_CHANGETRACK
 };
 
 
@@ -513,7 +519,7 @@ public:
                                         const ScChangeActionType eType); // only to use in the XML import
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const;
+                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
 };
 
 
@@ -648,7 +654,7 @@ public:
             short               GetCutOffCount() const { return nCutOff; }
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const;
+                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
             void                SetCutOffInsert( ScChangeActionIns* p, short n )
                                     { pCutOff = p; nCutOff = n; }   // only to use in the XML import
                                                                     // this should be protected, but for the XML import it is public
@@ -732,7 +738,7 @@ public:
             void                GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const;
 
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const;
+                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
@@ -935,7 +941,7 @@ public:
             const ScBaseCell*   GetOldCell() const { return pOldCell; }
             const ScBaseCell*   GetNewCell() const { return pNewCell; }
     virtual void                GetDescription( String&, ScDocument*,
-                                    BOOL bSplitRange = FALSE ) const;
+                                    BOOL bSplitRange = FALSE, bool bWarning = true ) const;
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
 
@@ -1432,7 +1438,9 @@ public:
             void                AppendCloned( ScChangeAction* pAppend );
             ScChangeTrack*      Clone( ScDocument* pDocument ) const;
             void                MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
-            String              toString() const;
+#if DEBUG_CHANGETRACK
+            String              ToString() const;
+#endif // DEBUG_CHANGETRACK
 };
 
 
