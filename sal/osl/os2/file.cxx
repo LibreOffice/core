@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -697,6 +697,9 @@ oslFileHandle osl_createFileHandleFromFD( int fd )
             pHandleImpl->ustrFilePath = NULL;
             rtl_uString_new( &pHandleImpl->ustrFilePath );
             pHandleImpl->fd = fd;
+
+            /* FIXME: should detect whether the file has been locked */
+            pHandleImpl->bLocked = sal_True;
         }
     }
 
@@ -783,21 +786,28 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
             fd = open( buffer, flags | O_BINARY, mode);
             if ( fd >= 0 )
             {
-                /* check if file lock is enabled and clear l_type member of flock otherwise */
-                if( (char *) -1 == pFileLockEnvVar )
+                sal_Bool bNeedsLock = ( ( uFlags & osl_File_OpenFlag_NoLock ) == 0 );
+                sal_Bool bLocked = sal_False;
+                if( bNeedsLock )
                 {
-                    /* FIXME: this is not MT safe */
-                    pFileLockEnvVar = getenv("SAL_ENABLE_FILE_LOCKING");
+                    /* check if file lock is enabled and clear l_type member of flock otherwise */
+                    if( (char *) -1 == pFileLockEnvVar )
+                    {
+                        /* FIXME: this is not MT safe */
+                        pFileLockEnvVar = getenv("SAL_ENABLE_FILE_LOCKING");
 
-                    if( NULL == pFileLockEnvVar)
-                        pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
+                        if( NULL == pFileLockEnvVar)
+                            pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
+                    }
+
+                    if( NULL == pFileLockEnvVar )
+                        aflock.l_type = 0;
+
+                    /* lock the file if flock.l_type is set */
+                    bLocked = ( F_WRLCK != aflock.l_type || -1 != fcntl( fd, F_SETLK, &aflock ) );
                 }
 
-                if( NULL == pFileLockEnvVar )
-                    aflock.l_type = 0;
-
-                /* lock the file if flock.l_type is set */
-                if( F_WRLCK != aflock.l_type || -1 != fcntl( fd, F_SETLK, &aflock ) )
+                if ( !bNeedsLock || bLocked )
                 {
                     /* allocate memory for impl structure */
                     pHandleImpl = (oslFileHandleImpl*) rtl_allocateMemory( sizeof(oslFileHandleImpl) );
@@ -805,6 +815,7 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
                     {
                         pHandleImpl->ustrFilePath = ustrFilePath;
                         pHandleImpl->fd = fd;
+                        pHandleImpl->bLocked = bLocked;
 
                         *pHandle = (oslFileHandle) pHandleImpl;
 
@@ -855,11 +866,14 @@ oslFileError osl_closeFile( oslFileHandle Handle )
             aflock.l_start = 0;
             aflock.l_len = 0;
 
-            /* FIXME: check if file is really locked ?  */
+            if ( pHandleImpl->bLocked )
+            {
+                /* FIXME: check if file is really locked ?  */
 
-            /* release the file share lock on this file */
-            if( -1 == fcntl( pHandleImpl->fd, F_SETLK, &aflock ) )
-                PERROR( "osl_closeFile", "unlock failed" );
+                /* release the file share lock on this file */
+                if( -1 == fcntl( pHandleImpl->fd, F_SETLK, &aflock ) )
+                    PERROR( "osl_closeFile", "unlock failed" );
+            }
         }
 
         if( 0 > close( pHandleImpl->fd ) )
