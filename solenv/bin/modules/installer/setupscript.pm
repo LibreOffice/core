@@ -8,7 +8,7 @@
 #
 # $RCSfile: setupscript.pm,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -172,6 +172,18 @@ sub add_lowercase_productname_setupscriptvariable
                 my $newline = "\%LCPRODUCTEXTENSION " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
             }
+            elsif  ( $key eq "PRODUCTVERSION" )
+            {
+                $value =~ s/\.//g;
+                my $newline = "\%WITHOUTDOTPRODUCTVERSION " . $value . "\n";
+                push(@{$variablesref} ,$newline);
+            }
+            elsif  ( $key eq "OOOBASEVERSION" )
+            {
+                $value =~ s/\.//g;
+                my $newline = "\%WITHOUTDOTOOOBASEVERSION " . $value . "\n";
+                push(@{$variablesref} ,$newline);
+            }
 
         }
     }
@@ -224,6 +236,18 @@ sub replace_all_setupscriptvariables_in_script
 {
     my ( $scriptref, $variablesref ) = @_;
 
+    # make hash of variables to be substituted if they appear in the script
+    my %subs;
+    for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+    {
+        my $variableline = ${$variablesref}[$j];
+
+        if ( $variableline =~ /^\s*(\%\w+?)\s+(.*?)\s*$/ )
+        {
+            $subs{$1}= $2;
+        }
+    }
+
     for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
     {
         my $line = ${$scriptref}[$i];
@@ -232,20 +256,10 @@ sub replace_all_setupscriptvariables_in_script
         {
             # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
 
-            for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
+            foreach my $key ( keys %subs )
             {
-                my $variableline = ${$variablesref}[$j];
-
-                my ($key, $value);
-
-                if ( $variableline =~ /^\s*(\%\w+?)\s+(.*?)\s*$/ )
-                {
-                    $key = $1;
-                    $value = $2;
-                }
-
-                $line =~ s /$key/$value/g;
-
+                my $value = $subs{$key};
+                $line =~ s/$key/$value/g;
                 ${$scriptref}[$i] = $line;
             }
         }
