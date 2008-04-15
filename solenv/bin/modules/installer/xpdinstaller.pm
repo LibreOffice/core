@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -457,6 +457,21 @@ sub remove_lang_values
             delete($module->{$key});
         }
     }
+}
+
+###################################################
+# Setting package install order
+###################################################
+
+sub get_order_value
+{
+    my ( $module ) = @_;
+
+    my $value = "1000"; # Setting the default value
+
+    if ( $module->{'InstallOrder'} ) { $value = $module->{'InstallOrder'}; }
+
+    return $value;
 }
 
 ###################################################
@@ -1053,6 +1068,10 @@ sub get_file_content
         $line = get_tag_line($doubleindent, "size", $value);
         push(@xpdfile, $line);
 
+        $value = get_order_value($module);
+        $line = get_tag_line($doubleindent, "installorder", $value);
+        push(@xpdfile, $line);
+
         $value = get_md5_value($packagename);
         $line = get_tag_line($doubleindent, "md5", $value);
         push(@xpdfile, $line);
@@ -1173,12 +1192,15 @@ sub create_emptyparents_xpd_file
     my ($parentgid, $modulesarrayref, $xpddir) = @_;
 
     my $module = get_module($parentgid, $modulesarrayref);
+    my $grandpagid = "";
 
     if ( $module ne "" )
     {
         my $packagename = "";
         # all content saved in scp is now available and can be used to create the xpd file
         my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "", 0, "");
+
+        $grandpagid = $newparentgid;
 
         my $xpdfilename = get_xpd_filename($parentgid, 0);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1192,6 +1214,59 @@ sub create_emptyparents_xpd_file
     # push(@installer::globals::emptyxpdparents, $parentgid);
     push( @installer::globals::createdxpdfiles, $parentgid);
 
+    return $grandpagid;
+}
+
+###################################################
+# Creating additional xpd files for empty parents
+###################################################
+
+sub filter_content_from_xpdfile
+{
+    my ($xpdfile) = @_;
+
+    my @newxpdfile = ();
+
+    my $include = 1;
+
+    for ( my $i = 0; $i <= $#{$xpdfile}; $i++ )
+    {
+        my $line = ${$xpdfile}[$i];
+
+        if (( $line =~ /^\s*\<installunit/ ) && ( $include )) { $include = 0; }
+        if ( $include ) { push(@newxpdfile, $line); }
+        if (( $line =~ /^\s*\<\/installunit/ ) && ( ! $include )) { $include = 1; }
+    }
+
+    return \@newxpdfile;
+}
+
+##########################################################################
+# Changing the parent inside the xpd file
+# Old: <package name="gid_Module_Root" parent="root">
+# New: <package name="gid_Module_Root_Files_1" parent="gid_Module_Root">
+##########################################################################
+
+sub change_parent_in_xpdfile
+{
+    my ($xpdfile, $modulename) = @_;
+
+    for ( my $i = 0; $i <= $#{$xpdfile}; $i++ )
+    {
+        if ( ${$xpdfile}[$i] =~ /^\s*\<package name\s*=\s*\"(\S+?)\"\s+parent\s*=\s*\"(\S+?)\"\s*\>\s*$/ )
+        {
+            my $oldname = $1;
+            my $oldparent = $2;
+
+            my $newname = $modulename;
+            my $newparent = $oldname;
+
+            ${$xpdfile}[$i] =~ s/\"\Q$oldname\E\"/\"$newname\"/;
+            ${$xpdfile}[$i] =~ s/\"\Q$oldparent\E\"/\"$newparent\"/;
+
+            last;
+        }
+    }
 }
 
 ###################################################
@@ -1234,12 +1309,32 @@ sub create_xpd_file
         my $xpdfilename = get_xpd_filename($modulegid, $linkpackage);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
 
+        # Very special handling for Root module:
+        # Because packages should only be assigned to leaves and not to knods,
+        # the root module is divided into a knod without package and a new
+        # leave with package. The name of the leave is defined at $module->{'XpdPackageName'}.
+        if ( $module->{'XpdPackageName'} )
+        {
+            my $newxpdfilename = get_xpd_filename($module->{'XpdPackageName'}, 0);
+            $newxpdfilename = $xpddir . $installer::globals::separator . $newxpdfilename;
+            my $emptyfilecontent = filter_content_from_xpdfile($xpdfile);
+
+            installer::files::save_file($xpdfilename, $emptyfilecontent);
+            push(@installer::globals::allxpdfiles, $xpdfilename);
+            $infoline = "Saving xpd file: $xpdfilename\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            $xpdfilename = $newxpdfilename;
+            change_parent_in_xpdfile($xpdfile, $module->{'XpdPackageName'});
+        }
+
         installer::files::save_file($xpdfilename, $xpdfile);
         push( @installer::globals::createdxpdfiles, $modulegid);
         push(@installer::globals::allxpdfiles, $xpdfilename);
-        my $infoline = "Saving xpd file: $xpdfilename\n";
+        $infoline = "Saving xpd file: $xpdfilename\n";
         push( @installer::globals::logfileinfo, $infoline);
 
+        my $grandpagid = "root";
         if ( $parentgid ne "root" )
         {
             my $create_missing_parent = is_empty_parent($parentgid, $allpackages);
@@ -1247,9 +1342,20 @@ sub create_xpd_file
             # if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::emptyxpdparents) ))
             if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::createdxpdfiles) ))
             {
-                create_emptyparents_xpd_file($parentgid, $modulesarrayref, $xpddir);
+                $grandpagid = create_emptyparents_xpd_file($parentgid, $modulesarrayref, $xpddir);
             }
         }
+
+        if ( $grandpagid ne "root" )
+        {
+            my $create_missing_parent = is_empty_parent($grandpagid, $allpackages);
+
+            # if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($parentgid, \@installer::globals::emptyxpdparents) ))
+            if (( $create_missing_parent ) && ( ! installer::existence::exists_in_array($grandpagid, \@installer::globals::createdxpdfiles) ))
+            {
+                create_emptyparents_xpd_file($grandpagid, $modulesarrayref, $xpddir);
+             }
+         }
     }
     else
     {
