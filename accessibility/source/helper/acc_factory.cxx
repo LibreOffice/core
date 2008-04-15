@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acc_factory.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,9 +73,21 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 
+#include <floatingwindowaccessible.hxx>
+
 //........................................................................
 namespace accessibility
 {
+
+inline bool hasFloatingChild(Window *pWindow)
+{
+    Window * pChild = pWindow->GetAccessibleChildWindow(0);
+    if( pChild && WINDOW_FLOATINGWINDOW == pChild->GetType() )
+        return true;
+
+    return false;
+}
+
 //........................................................................
 
     using namespace ::com::sun::star::uno;
@@ -357,6 +369,14 @@ namespace accessibility
             else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
             {
                 xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
+            }
+            else if ( nType == WINDOW_FLOATINGWINDOW )
+            {
+                xContext = new FloatingWindowAccessible( _pXWindow );
+            }
+            else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
+            {
+                xContext = new FloatingWindowAccessible( _pXWindow );
             }
             else if ( nType == WINDOW_HELPTEXTWINDOW )
             {
