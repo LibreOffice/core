@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -99,8 +99,8 @@ $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)
     pkgmk -r . -f $(MISC)$/$(@:b:b:s/-/ /:1)$/prototype -o -d $(PKGDIR) ARCH=$(PKGARCH) VERSION=$(PKGVERSION.$(@:b:s/-/ /:1)),REV=$(PKGREV).$(PKGDATESTRING)
-    $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)-desktop-integratn
-    @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)-desktop-integratn | gzip > $@
-    @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)-desktop-integratn
+    $(FASPAC) $(SOLARBINDIR)/faspac-so.sh -a -d $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int
+    @tar -cf - -C $(PKGDIR) $(@:b:b:s/-/ /:1:s/.//)30-desktop-int | gzip > $@
+    @rm -rf $(PKGDIR)/$(@:b:b:s/-/ /:1:s/.//)-desktop-int30
 
 .ENDIF
