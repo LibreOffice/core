@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accresmgr.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ void TkResMgr::ensureImplExists()
 
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-    ByteString sResMgrName( "tk" );
+    ByteString sResMgrName( "acc" );
 
     m_pImpl = SimpleResMgr::Create( sResMgrName.GetBuffer(), aLocale );
 
