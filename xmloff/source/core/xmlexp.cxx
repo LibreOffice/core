@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.137 $
+ * $Revision: 1.138 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +119,7 @@ using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
+sal_Char __READONLY_DATA sXML_1_2[] = "1.2";
 
 const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
 
@@ -212,6 +213,8 @@ public:
     // <--
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
+
+    SvtSaveOptions                                      maSaveOptions;
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -1216,8 +1219,22 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     // office:version = ...
     if( !mbExtended )
-        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
-                      OUString::createFromAscii(sXML_1_1) );
+    {
+        const sal_Char* pVersion = 0;
+        switch( getDefaultVersion() )
+        {
+        case SvtSaveOptions::ODFVER_012: pVersion = sXML_1_2; break;
+        case SvtSaveOptions::ODFVER_011: pVersion = sXML_1_1; break;
+        case SvtSaveOptions::ODFVER_010: break;
+
+        default:
+            DBG_ERROR("xmloff::SvXMLExport::exportDoc(), unexpected odf default version!");
+        }
+
+        if( pVersion )
+            AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
+                              OUString::createFromAscii(pVersion) );
+    }
 
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
@@ -2256,6 +2273,17 @@ uno::Reference< embed::XStorage > SvXMLExport::GetTargetStorage()
 {
     return mpImpl->mxTargetStorage;
 }
+
+/// returns the currently configured default version for odf export
+SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
+{
+    if( mpImpl )
+        return mpImpl->maSaveOptions.GetODFDefaultVersion();
+
+    // fatal error, use current version as default
+    return SvtSaveOptions::ODFVER_012;
+}
+
 
 //=============================================================================
 
