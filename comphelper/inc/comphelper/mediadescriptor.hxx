@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediadescriptor.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,10 +149,16 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     A might existing InteractionHandler will be used automaticly,
                     to solve problems!
 
+            @param  bLockFile
+                    specifies whether the file should be locked
+
             @return TRUE, if the stream was already part of the descriptor or could
                     be created as new item. FALSE otherwhise.
          */
+        // HACK: IT SHOULD BE ONLY ONE METHOD, THE TEMPORARY SOLUTION ALLOWS TO AVOID INCOMPATIBLE BUILD
+        sal_Bool addInputStream_Impl( sal_Bool bLockFile );
         sal_Bool addInputStream();
+        sal_Bool addInputStreamNoLock();
 
         //---------------------------------------
         /** @short  it checks if the descriptor describes a readonly stream.
@@ -215,14 +221,19 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @param  sURL
                     the URL for open.
 
+            @param  bLockFile
+                    specifies whether the file should be locked
+
             @return TRUE if the stream could be added successfully.
                     Note: If FALSE is returned, the error was already handled inside!
 
             @throw  [css::uno::RuntimeException]
                     if the MediaDescriptor seems to be invalid!
          */
-        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithURL(const ::rtl::OUString& sURL)
-            throw(::com::sun::star::uno::RuntimeException);
+        COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithURL(
+            const ::rtl::OUString& sURL,
+            sal_Bool bLockFile
+            ) throw(::com::sun::star::uno::RuntimeException);
 
         //---------------------------------------
         /** @short  some URL parts can make trouble for opening streams (e.g. jumpmarks.)
