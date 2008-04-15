@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessibletoolboxitem.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,8 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
+
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 // class VCLXAccessibleToolBoxItem ------------------------------------------
 
@@ -552,7 +554,10 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleAtPoin
 // -----------------------------------------------------------------------------
 void SAL_CALL VCLXAccessibleToolBoxItem::grabFocus(  ) throw (RuntimeException)
 {
-    // no focus for each item
+    Reference < XAccessibleSelection > rxAccessibleSelection ( getAccessibleParent(), UNO_QUERY );
+    if ( rxAccessibleSelection.is() ) {
+        rxAccessibleSelection -> selectAccessibleChild ( getAccessibleIndexInParent() );
+    }
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getForeground(  ) throw (RuntimeException)
