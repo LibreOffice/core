@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XVndSunStarScriptUrlReference.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@ module com { module sun { module star { module uri {
 /**
    represents absolute &ldquo;vnd.sun.star.script&rdquo; URL references.
  */
-interface XVndSunStarScriptUrlReference {
+published interface XVndSunStarScriptUrlReference {
     /**
        represents the generic features of the URL reference.
 
