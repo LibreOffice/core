@@ -8,7 +8,7 @@
 #
 # $RCSfile: msiglobal.pm,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -849,7 +849,8 @@ sub create_transforms
         # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
         # exists and if it is larger than 0 bytes. If this is true, then no error occured.
-        # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29"
+        # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
+        # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
         if ($returnvalue)
         {
@@ -861,14 +862,19 @@ sub create_transforms
             my $digest = Digest::MD5->new->addfile(*FILE)->hexdigest;
             close(FILE);
 
-            my $problemchecksum = "b66190a70145a57773ec769e16777b29"; # File MsiTran.exe in version 4.0.6000.16384
+            my @problemchecksums = ("b66190a70145a57773ec769e16777b29", "aa25d3445b94ffde8ef0c1efb77a56b8");
+            my $isproblemchecksum = 0;
 
-            $infoline = "Checksum of problematic MsiTran.exe (4.0.6000.16384): $problemchecksum\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "Checksum of used MsiTran.exe: $digest\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            foreach my $problemchecksum ( @problemchecksums )
+            {
+                $infoline = "Checksum of problematic MsiTran.exe: $problemchecksum\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                $infoline = "Checksum of used MsiTran.exe: $digest\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                if ( $digest eq $problemchecksum ) { $isproblemchecksum = 1; }
+            }
 
-            if ( $digest eq $problemchecksum )
+            if ( $isproblemchecksum )
             {
                 # Check existence of mst
                 if ( -f $transformfile )
@@ -1989,3 +1995,4 @@ sub read_saved_mappings
 }
 
 1;
+
