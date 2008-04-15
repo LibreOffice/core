@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,12 @@
 
 Module gid_Module_Root_Brand
     ParentID = gid_Module_Root;
+    InstallOrder = "150";
     Name = "ooobrand";
     Description = "OOo Brand";
     Sortkey = "1030";
     Default = YES;
-    Styles = (HIDDEN_ROOT, ROOT_BRAND_PACKAGE);
+    Styles = (HIDDEN_ROOT,ROOT_BRAND_PACKAGE,ISUPDATEPACKAGE);
     PackageInfo = "packinfo_brand.txt";
     Dirs = (gid_Brand_Dir_Program,
             gid_Brand_Dir_Share,
@@ -124,7 +125,7 @@ End
 // Language specific brand module
 
 Module gid_Module_Langpack_Brand_Template
-    ParentID = gid_Module_Langpack_Root_Template;
+    ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Brand_Template";
     Description = "gid_Module_Langpack_Brand_Template";
     Styles = (TEMPLATEMODULE);
@@ -323,6 +324,7 @@ End
 Unixlink gid_Brand_Unixlink_BasisLink
     BIN_FILE_BODY;
     Styles = ();
+    // Styles = (LAYERLINK);
     Name = "basis-link";
     Dir = gid_Dir_Brand_Root;
     Target = "../openoffice.org/basis${OOOBASEVERSION}";
@@ -715,6 +717,13 @@ End
 Profile gid_Brand_Profile_Soffice_Ini
     ModuleID = gid_Module_Root_Brand;
     Name = PROFILENAME(soffice);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Brand_Profile_Setup_Ini
+    ModuleID = gid_Module_Root_Brand;
+    Name = PROFILENAME(setup);
     Dir = gid_Brand_Dir_Program;
     Styles = (NETWORK);
 End
@@ -1115,3 +1124,98 @@ ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap
     Value = "${ORIGIN}/" PROFILENAME(fundamental);
 End
 #endif
+
+ProfileItem gid_Brand_Profileitem_Setup_Uno_Java_Comppath
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "UNO_JAVA_COMPPATH";
+    Value = "$ORIGIN/classes";
+End
+
+ProfileItem gid_Brand_Profileitem_Setup_Uno_Services
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "UNO_SERVICES";
+    Value = "$ORIGIN/setup_services.rdb";
+End
+
+ProfileItem gid_Brand_Profileitem_Setup_Uno_Types
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UNO_TYPES";
+    Value = "$ORIGIN/types.rdb";
+End
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Alluserset
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "ALLUSERS";
+    Value = "[ALLUSERS]";
+    Inifiletablekey = "AllUsersSet";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Findproduct
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "FINDPRODUCT";
+    Value = "[FINDPRODUCT]";
+    Inifiletablekey = "FindProductSet";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Productcode
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "ProductCode";
+    Value = "<productcode>";
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Upgradecode
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "UpgradeCode";
+    Value = "<upgradecode>";
+End
+#endif
+
+ProfileItem gid_Brand_Profileitem_Setup_Productbuildid
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Brand_Profileitem_Setup_Buildid
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 9;
+    Key = "buildid";
+    Value = "<buildid>";
+End
