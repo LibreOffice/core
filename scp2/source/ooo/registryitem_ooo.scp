@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_ooo.scp,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,6 +406,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Styles = (LANGUAGEPACK);
 End
 
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "INSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Officeinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
@@ -422,6 +431,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
 	Styles = (LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[OFFICEINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Basisinstall
@@ -442,6 +460,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Styles = (LANGUAGEPACK);
 End
 
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[BASISINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
+End
+
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
@@ -458,6 +485,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
 	Styles = (LANGUAGEPACK);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[UREINSTALLLOCATION]";
+	Styles = (PATCH,LANGUAGEPACK);
 End
 
 RegistryItem gid_Regitem_Sog
