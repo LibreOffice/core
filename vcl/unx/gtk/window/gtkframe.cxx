@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -752,16 +752,24 @@ GtkSalFrame::GetAtkRole( GtkWindow* window )
                     role = ATK_ROLE_FRAME;
                     break;
 
-                // Ignore window objects for sub-menus, which are exposed
-                // as children of their parent menu
+                /* Ignore window objects for sub-menus, combo- and list boxes,
+                 *  which are exposed as children of their parents.
+                 */
                 case accessibility::AccessibleRole::WINDOW:
                 {
-                    Window *pChild = pWindow->GetChild( 0 );
-                    if( pChild )
+                    USHORT type = WINDOW_WINDOW;
+                    bool parentIsMenuFloatingWindow = false;
+
+                    Window *pParent = pWindow->GetParent();
+                    if( pParent ) {
+                        type = pParent->GetType();
+                        parentIsMenuFloatingWindow = ( TRUE == pParent->IsMenuFloatingWindow() );
+                    }
+
+                    if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&
+                        (WINDOW_MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
                     {
-                        uno::Reference< accessibility::XAccessible > xAccessible( pChild->GetAccessible( true ) );
-                        if( xAccessible.is() )
-                            role = ATK_ROLE_WINDOW;
+                        role = ATK_ROLE_WINDOW;
                     }
                 }
                 break;
