@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,7 @@ dummy:
 ZIPFLAGS = -r
 ZIP1TARGET = osxres
 #ZIP1DIR = 
-ZIP1LIST = MainMenu.nib cursors
+ZIP1LIST = MainMenu.nib/*.nib cursors/*.png
 
 # --- Targets --------------------------------------------------
 
