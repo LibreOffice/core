@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleStateAdapter.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.accessibility.AccessibleStateType;
 import com.sun.star.accessibility.XAccessibleStateSet;
 
 public class AccessibleStateAdapter {
@@ -87,7 +88,7 @@ public class AccessibleStateAdapter {
     }
 
     private static void printOutOfSyncMessage(AccessibleState s, java.awt.Component c, boolean enabled) {
-        System.err.println("*** ERROR *** " + s + " state out of sync (" + !enabled + ", " + enabled + ") for " + getDisplayName(c));
+        System.err.println("*** ERROR *** " + s + " state out of sync (UNO state set: " + !enabled + ", Java component state: " + enabled + ") for " + getDisplayName(c));
     }
 
     public static AccessibleState getAccessibleState(Object any) {
@@ -112,6 +113,28 @@ public class AccessibleStateAdapter {
         AccessibleStateSet ass = new AccessibleStateSet();
         ass.add(AccessibleExtendedState.DEFUNCT);
         return ass;
+    }
+
+    public static void setComponentState(java.awt.Component c,
+            XAccessibleStateSet xAccessibleStateSet) {
+
+        try {
+            if (xAccessibleStateSet != null) {
+                // Set the boundings of the component if it is visible ..
+                if (!xAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
+                    c.setVisible(false);
+                }
+                // Set the components' enabled state ..
+                if (!xAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
+                    c.setEnabled(false);
+                }
+                // Set the components' focusable state ..
+                if (!xAccessibleStateSet.contains(AccessibleStateType.FOCUSABLE)) {
+                    c.setFocusable(false);
+                }
+            }
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
     }
 
     public static AccessibleStateSet getAccessibleStateSet(java.awt.Component c,
