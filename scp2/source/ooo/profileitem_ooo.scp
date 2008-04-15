@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,109 +285,6 @@ ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl
 End
 
 //end configmgr
-
-ProfileItem gid_Profileitem_Setup_Uno_Java_Comppath
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "UNO_JAVA_COMPPATH";
-    Value = "$ORIGIN/classes";
-End
-
-ProfileItem gid_Profileitem_Setup_Uno_Services
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 2;
-    Key = "UNO_SERVICES";
-    Value = "$ORIGIN/setup_services.rdb";
-End
-
-ProfileItem gid_Profileitem_Setup_Uno_Types
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 3;
-    Key = "UNO_TYPES";
-    Value = "$ORIGIN/types.rdb";
-End
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Setup_Alluserset
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 4;
-    Key = "ALLUSERS";
-    Value = "[ALLUSERS]";
-    Inifiletablekey = "AllUsersSet";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-
-#endif
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Setup_Findproduct
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "FINDPRODUCT";
-    Value = "[FINDPRODUCT]";
-    Inifiletablekey = "FindProductSet";
-    Inifiletableaction = "1";
-    Styles = (INIFILETABLE);
-End
-
-#endif
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Setup_Productcode
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "ProductCode";
-    Value = "<productcode>";
-End
-
-#endif
-
-#ifdef WNT
-
-ProfileItem gid_Profileitem_Setup_Upgradecode
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 7;
-    Key = "UpgradeCode";
-    Value = "<upgradecode>";
-End
-
-#endif
-
-ProfileItem gid_Profileitem_Setup_Productbuildid
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 8;
-    Key = "ProductBuildid";
-    Value = "<productbuildid>";
-End
-
-ProfileItem gid_Profileitem_Setup_Buildid
-    ProfileID = gid_Profile_Setup_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 9;
-    Key = "buildid";
-    Value = "<buildid>";
-End
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
