@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UriReferenceFactory.idl,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 module com { module sun { module star { module uri {
 
-interface XUriReferenceFactory;
+published interface XUriReferenceFactory;
 
 /**
    creates URI references.
@@ -73,7 +73,7 @@ interface XUriReferenceFactory;
 
    @since OOo 2.0.0
  */
-service UriReferenceFactory: XUriReferenceFactory;
+published service UriReferenceFactory: XUriReferenceFactory;
 
 }; }; }; };
 
