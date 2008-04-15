@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+
+#include <svtools/saveopt.hxx>
+
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase6.hxx>
@@ -541,6 +544,9 @@ public:
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
+
+    /// returns the currently configured default version for odf export
+    SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()
