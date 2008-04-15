@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guisaveas.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1173,7 +1173,8 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetNamedModuleManager
 sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
                                             const ::rtl::OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
-                                            sal_Bool bPreselectPassword )
+                                            sal_Bool bPreselectPassword,
+                                            ::rtl::OUString aUserSelectedName )
 {
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
@@ -1320,7 +1321,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             aStdDirIter->second >>= sStandardDir;
 
         sal_Bool bExit = sal_False;
-        ::rtl::OUString aUserSelectedName;
         while ( !bExit )
         {
             bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName, bPreselectPassword, aPath, nDialog, sStandardDir );
