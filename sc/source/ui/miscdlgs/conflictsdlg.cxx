@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conflictsdlg.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@
 #include "conflictsdlg.hxx"
 #include "conflictsdlg.hrc"
 #include "scresid.hxx"
-#include "docsh.hxx"
 #include "viewdata.hxx"
 #include "tabview.hxx"
 
@@ -136,18 +135,57 @@ ScConflictsListEntry* ScConflictsListHelper::GetOwnActionEntry( ScConflictsList&
     return NULL;
 }
 
+void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap )
+{
+    if ( !pMergeMap )
+    {
+        return;
+    }
+
+    for ( ScChangeActionList::iterator aItr = rActionList.begin(); aItr != rActionList.end(); )
+    {
+        ScChangeActionMergeMap::iterator aItrMap = pMergeMap->find( *aItr );
+        if ( aItrMap != pMergeMap->end() )
+        {
+            *aItr = aItrMap->second;
+            aItr++;
+        }
+        else
+        {
+            aItr = rActionList.erase( aItr );
+            DBG_ERROR( "ScConflictsListHelper::Transform_Impl: erased action from conflicts list!" );
+        }
+    }
+}
+
+void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsList,
+    ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap )
+{
+    ScConflictsList::iterator aEnd = rConflictsList.end();
+    for ( ScConflictsList::iterator aItr = rConflictsList.begin(); aItr != aEnd; ++aItr )
+    {
+        if ( pSharedMap )
+        {
+            ScConflictsListHelper::Transform_Impl( aItr->maSharedActions, pSharedMap );
+        }
+
+        if ( pOwnMap )
+        {
+            ScConflictsListHelper::Transform_Impl( aItr->maOwnActions, pOwnMap );
+        }
+    }
+}
+
 
 //=============================================================================
 // class ScConflictsFinder
 //=============================================================================
 
-ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pSharedTrack, ULONG nStartShared, ULONG nEndShared,
-        ScChangeTrack* pOwnTrack, ULONG nStartOwn, ULONG nEndOwn,
-        ScConflictsList& rConflictsList )
-    :mpSharedTrack( pSharedTrack )
+ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, ULONG nStartShared, ULONG nEndShared,
+        ULONG nStartOwn, ULONG nEndOwn, ScConflictsList& rConflictsList )
+    :mpTrack( pTrack )
     ,mnStartShared( nStartShared )
     ,mnEndShared( nEndShared )
-    ,mpOwnTrack( pOwnTrack )
     ,mnStartOwn( nStartOwn )
     ,mnEndOwn( nEndOwn )
     ,mrConflictsList( rConflictsList )
@@ -175,7 +213,7 @@ ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAct
         ScChangeActionList::const_iterator aEndShared = aItr->maSharedActions.end();
         for ( ScChangeActionList::const_iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aEndShared; ++aItrShared )
         {
-            if ( DoActionsIntersect( mpSharedTrack->GetAction( *aItrShared ), pAction ) )
+            if ( DoActionsIntersect( mpTrack->GetAction( *aItrShared ), pAction ) )
             {
                 return &(*aItr);
             }
@@ -184,7 +222,7 @@ ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAct
         ScChangeActionList::const_iterator aEndOwn = aItr->maOwnActions.end();
         for ( ScChangeActionList::const_iterator aItrOwn = aItr->maOwnActions.begin(); aItrOwn != aEndOwn; ++aItrOwn )
         {
-            if ( DoActionsIntersect( mpOwnTrack->GetAction( *aItrOwn ), pAction ) )
+            if ( DoActionsIntersect( mpTrack->GetAction( *aItrOwn ), pAction ) )
             {
                 return &(*aItr);
             }
@@ -205,7 +243,7 @@ ScConflictsListEntry* ScConflictsFinder::GetEntry( ULONG nSharedAction, const Sc
 
     // try to get a list entry for which the shared action intersects with any
     // other action of this entry
-    pEntry = GetIntersectingEntry( mpSharedTrack->GetAction( nSharedAction ) );
+    pEntry = GetIntersectingEntry( mpTrack->GetAction( nSharedAction ) );
     if ( pEntry )
     {
         pEntry->maSharedActions.push_back( nSharedAction );
@@ -217,7 +255,7 @@ ScConflictsListEntry* ScConflictsFinder::GetEntry( ULONG nSharedAction, const Sc
     ScChangeActionList::const_iterator aEnd = rOwnActions.end();
     for ( ScChangeActionList::const_iterator aItr = rOwnActions.begin(); aItr != aEnd; ++aItr )
     {
-        pEntry = GetIntersectingEntry( mpOwnTrack->GetAction( *aItr ) );
+        pEntry = GetIntersectingEntry( mpTrack->GetAction( *aItr ) );
         if ( pEntry )
         {
             pEntry->maSharedActions.push_back( nSharedAction );
@@ -233,70 +271,19 @@ ScConflictsListEntry* ScConflictsFinder::GetEntry( ULONG nSharedAction, const Sc
     return &(mrConflictsList.back());
 }
 
-void ScConflictsFinder::RemovePrevContentEntries()
-{
-    ScConflictsList::iterator aEnd = mrConflictsList.end();
-    for ( ScConflictsList::iterator aItr = mrConflictsList.begin(); aItr != aEnd; ++aItr )
-    {
-        for ( ScChangeActionList::iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aItr->maSharedActions.end(); )
-        {
-            bool bPrevContent = false;
-            ScChangeAction* pAction = mpSharedTrack->GetAction( *aItrShared );
-            if ( pAction && pAction->GetType() == SC_CAT_CONTENT )
-            {
-                ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
-                if ( pNextContent && aItr->HasSharedAction( pNextContent->GetActionNumber() ) )
-                {
-                    bPrevContent = true;
-                }
-            }
-            if ( bPrevContent )
-            {
-                aItrShared = aItr->maSharedActions.erase( aItrShared );
-            }
-            else
-            {
-                ++aItrShared;
-            }
-        }
-
-        for ( ScChangeActionList::iterator aItrOwn = aItr->maOwnActions.begin(); aItrOwn != aItr->maOwnActions.end(); )
-        {
-            bool bPrevContent = false;
-            ScChangeAction* pAction = mpOwnTrack->GetAction( *aItrOwn );
-            if ( pAction && pAction->GetType() == SC_CAT_CONTENT )
-            {
-                ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
-                if ( pNextContent && aItr->HasOwnAction( pNextContent->GetActionNumber() ) )
-                {
-                    bPrevContent = true;
-                }
-            }
-            if ( bPrevContent )
-            {
-                aItrOwn = aItr->maOwnActions.erase( aItrOwn );
-            }
-            else
-            {
-                ++aItrOwn;
-            }
-        }
-    }
-}
-
 bool ScConflictsFinder::Find()
 {
-    if ( !mpSharedTrack || !mpOwnTrack )
+    if ( !mpTrack )
     {
         return false;
     }
 
     bool bReturn = false;
-    ScChangeAction* pSharedAction = mpSharedTrack->GetAction( mnStartShared );
+    ScChangeAction* pSharedAction = mpTrack->GetAction( mnStartShared );
     while ( pSharedAction && pSharedAction->GetActionNumber() <= mnEndShared )
     {
         ScChangeActionList aOwnActions;
-        ScChangeAction* pOwnAction = mpOwnTrack->GetAction( mnStartOwn );
+        ScChangeAction* pOwnAction = mpTrack->GetAction( mnStartOwn );
         while ( pOwnAction && pOwnAction->GetActionNumber() <= mnEndOwn )
         {
             if ( DoActionsIntersect( pSharedAction, pOwnAction ) )
@@ -323,8 +310,6 @@ bool ScConflictsFinder::Find()
         pSharedAction = pSharedAction->GetNext();
     }
 
-    RemovePrevContentEntries();
-
     return bReturn;
 }
 
@@ -343,8 +328,8 @@ ScConflictsResolver::~ScConflictsResolver()
 {
 }
 
-void ScConflictsResolver::HandleAction( ScChangeAction* pAction, ULONG nOffset,
-    bool bIsSharedAction, bool bHandleContentAction, bool bHandleNonContentAction )
+void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
+    bool bHandleContentAction, bool bHandleNonContentAction )
 {
     if ( !mpTrack || !pAction )
     {
@@ -354,7 +339,7 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, ULONG nOffset,
     if ( bIsSharedAction )
     {
         ScConflictsListEntry* pConflictEntry = ScConflictsListHelper::GetSharedActionEntry(
-            mrConflictsList, pAction->GetActionNumber() - nOffset );
+            mrConflictsList, pAction->GetActionNumber() );
         if ( pConflictEntry )
         {
             ScConflictAction eConflictAction = pConflictEntry->meConflictAction;
@@ -381,7 +366,8 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, ULONG nOffset,
                 {
                     if ( bHandleContentAction )
                     {
-                        mpTrack->SelectContent( pAction );
+                        // do nothing
+                        //mpTrack->SelectContent( pAction );
                     }
                 }
                 else
@@ -398,7 +384,7 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, ULONG nOffset,
     else
     {
         ScConflictsListEntry* pConflictEntry = ScConflictsListHelper::GetOwnActionEntry(
-            mrConflictsList, pAction->GetActionNumber() - nOffset );
+            mrConflictsList, pAction->GetActionNumber() );
         if ( pConflictEntry )
         {
             ScConflictAction eConflictAction = pConflictEntry->meConflictAction;
@@ -408,7 +394,8 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, ULONG nOffset,
                 {
                     if ( bHandleContentAction )
                     {
-                        mpTrack->SelectContent( pAction );
+                        // do nothing
+                        //mpTrack->SelectContent( pAction );
                     }
                 }
                 else
@@ -582,7 +569,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
     if ( pAction && pDoc )
     {
         String aDesc;
-        pAction->GetDescription( aDesc, pDoc, TRUE );
+        pAction->GetDescription( aDesc, pDoc, TRUE, false );
         aString += aDesc;
         aString += '\t';
 
@@ -866,10 +853,18 @@ void ScConflictsDlg::UpdateView()
                 ScChangeAction* pAction = mpSharedTrack->GetAction( *aItrShared );
                 if ( pAction )
                 {
+                    // only display shared top content entries
+                    if ( pAction->GetType() == SC_CAT_CONTENT )
+                    {
+                        ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
+                        if ( pNextContent && aItr->HasSharedAction( pNextContent->GetActionNumber() ) )
+                        {
+                            continue;
+                        }
+                    }
+
                     String aString( GetActionString( pAction, mpSharedDoc ) );
-                    RedlinData* pUserData = new RedlinData();
-                    pUserData->pData = static_cast< void* >( pAction );
-                    maLbConflicts.InsertEntry( aString, pUserData, pRootEntry );
+                    maLbConflicts.InsertEntry( aString, static_cast< RedlinData* >( NULL ), pRootEntry );
                 }
             }
 
@@ -879,6 +874,16 @@ void ScConflictsDlg::UpdateView()
                 ScChangeAction* pAction = mpOwnTrack->GetAction( *aItrOwn );
                 if ( pAction )
                 {
+                    // only display own top content entries
+                    if ( pAction->GetType() == SC_CAT_CONTENT )
+                    {
+                        ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
+                        if ( pNextContent && aItr->HasOwnAction( pNextContent->GetActionNumber() ) )
+                        {
+                            continue;
+                        }
+                    }
+
                     String aString( GetActionString( pAction, mpOwnDoc ) );
                     RedlinData* pUserData = new RedlinData();
                     pUserData->pData = static_cast< void* >( pAction );
