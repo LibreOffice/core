@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.108 $
+# $Revision: 1.109 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -183,6 +183,8 @@ SHL1USE_EXPORTS=name
 SHL1STDLIBS+=$(BASEBMPLIB)
 SHL1STDLIBS+= \
              -framework QTKit
+LIB1FILES+= \
+            $(SLB)$/sala11y.lib
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
