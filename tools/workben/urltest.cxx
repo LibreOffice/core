@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urltest.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1589,6 +1589,24 @@ main()
             url, INET_PROT_PRIV_SOFFICE, urlobj.GetProtocol());
         bSuccess &= assertEqual(
             url, url,
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        // #i80134#:
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\\\foobar\\%20#"));
+        urlobj = INetURLObject(url, INET_PROT_FILE);
+        bSuccess &= assertEqual(url, INET_PROT_FILE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("file://foobar/%2520%23")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\\\foo_bar\\%20#"));
+        urlobj = INetURLObject(url, INET_PROT_FILE);
+        bSuccess &= assertEqual(url, INET_PROT_FILE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("file://foo_bar/%2520%23")),
             rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
     }
 
