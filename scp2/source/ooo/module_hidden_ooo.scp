@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.92 $
+ * $Revision: 1.93 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +33,12 @@
 Module gid_Module_Root_Files_2
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "30";
 	Name = "gid_Module_Root_Files_2";
 	Description = "gid_Module_Root_Files_2";
 	Sortkey = "1200";
 	Default = YES;
-	Styles = (HIDDEN_ROOT,ISUPDATEPACKAGE);
+	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Bin_Cde_Open_Url,
 	gid_File_Bin_Configimport,
 	gid_File_Bin_Gnome_Open_Url,
@@ -87,6 +88,7 @@ End
 Module gid_Module_Root_Files_3
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "40";
 	Name = "gid_Module_Root_Files_3";
 	Description = "gid_Module_Root_Files_3";
 	Sortkey = "1300";
@@ -136,6 +138,7 @@ End
 Module gid_Module_Root_Files_4
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "50";
 	Name = "gid_Module_Root_Files_4";
 	Description = "gid_Module_Root_Files_4";
 	Sortkey = "1400";
@@ -256,6 +259,7 @@ Module gid_Module_Root_Files_5
     PackageInfo = "packinfo_office.txt";
     TabPackageInfo = "packinfo_office_tab.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "60";
 	Name = "gid_Module_Root_Files_5";
 	Description = "gid_Module_Root_Files_5";
 	Sortkey = "1500";
@@ -351,7 +355,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Syssh,
 	gid_File_Ucptdoc1,
 	gid_File_Ucpexpand1,
-	gid_File_Lib_Hunspell,
 	gid_File_Lib_Portaudio,
 	gid_File_Lib_Sndfile,
 	gid_File_Lib_Tvhlp1,
@@ -450,6 +453,7 @@ End
 Module gid_Module_Root_Files_6
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "70";
 	Name = "gid_Module_Root_Files_6";
 	Description = "gid_Module_Root_Files_6";
 	Sortkey = "1600";
@@ -841,6 +845,7 @@ End
 Module gid_Module_Root_Files_7
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "80";
 	Name = "gid_Module_Root_Files_7";
 	Description = "gid_Module_Root_Files_7";
 	Sortkey = "1900";
@@ -855,6 +860,7 @@ End
 Module gid_Module_Root_Files_8
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "90";
 	Name = "gid_Module_Root_Files_8";
 	Description = "gid_Module_Root_Files_8";
 	Sortkey = "2000";
@@ -870,6 +876,7 @@ End
 Module gid_Module_Root_Fonts_OOo_Hidden
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
+    InstallOrder = "100";
 	Name = "gid_Module_Root_Fonts_OOo_Hidden";
 	Description = "gid_Module_Root_Fonts_OOo_Hidden";
 	Sortkey = "2100";
