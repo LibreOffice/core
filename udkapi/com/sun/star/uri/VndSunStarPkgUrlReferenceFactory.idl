@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VndSunStarPkgUrlReferenceFactory.idl,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +33,15 @@
 
 module com { module sun { module star { module uri {
 
-interface XVndSunStarPkgUrlReferenceFactory;
+published interface XVndSunStarPkgUrlReferenceFactory;
 
 /**
    creates &ldquo;vnd.sun.star.pkg&rdquo; URL references.
 
    @since OOo 2.0.0
  */
-service VndSunStarPkgUrlReferenceFactory: XVndSunStarPkgUrlReferenceFactory;
+published service VndSunStarPkgUrlReferenceFactory:
+    XVndSunStarPkgUrlReferenceFactory;
 
 }; }; }; };
 
