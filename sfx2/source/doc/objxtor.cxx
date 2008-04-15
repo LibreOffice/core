@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objxtor.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,8 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,bLoadReadonly( sal_False )
     ,bUseUserData( sal_True )
     ,bSaveVersionOnClose( sal_False )
-    ,m_bIsDocShared( sal_False )
+    ,m_bSharedXMLFlag( sal_False )
+    ,m_bAllowShareControlFileClean( sal_True )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,bDoNotTouchDocInfo( sal_False )
@@ -422,24 +423,7 @@ SfxObjectShell::~SfxObjectShell()
         pMedium->CloseAndReleaseStreams_Impl();
 
         if ( IsDocShared() )
-        {
-            ::rtl::OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            if ( GetSharedFileUrl().getLength() && !SfxMedium::EqualURLs( aTempFileURL, GetSharedFileUrl() ) )
-            {
-                try
-                {
-                    ::svt::ShareControlFile aControlFile( GetSharedFileUrl() );
-                    aControlFile.RemoveEntry();
-                }
-                catch( uno::Exception& )
-                {
-                }
-
-
-                // now remove the temporary file the document is based currently on
-                ::utl::UCBContentHelper::Kill( pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-            }
-        }
+            FreeSharedFile();
 
         DELETEX( pMedium );
     }
