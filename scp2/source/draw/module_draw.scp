@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_draw.scp,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Draw
-    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_DRAW );
     ParentID = gid_Module_Prg;
     Sortkey = "300";
@@ -39,11 +38,15 @@ Module gid_Module_Prg_Draw
 End
 
 Module gid_Module_Prg_Draw_Bin
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_DRAW_BIN );
     ParentID = gid_Module_Prg_Draw;
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
+  #ifdef UNX
+    Styles = (HIDDEN_ROOT);
+  #endif
     Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
     gid_File_Registry_Spool_Oo_Common_Draw_Xcu,gid_File_Registry_Spool_Oo_Setup_Draw_Xcu,
     gid_File_Oo_Office_Ui_Drawwindowstate_Xcs,gid_File_Oo_Office_Ui_Drawwindowstate_Xcu,
@@ -63,7 +66,11 @@ Module gid_Module_Brand_Prg_Draw
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Draw";
     Description = "gid_Module_Brand_Prg_Draw";
+  #ifdef UNX
+    ParentID = gid_Module_Prg_Draw;
+  #else
     ParentID = gid_Module_Prg_Draw_Bin;
+  #endif
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
