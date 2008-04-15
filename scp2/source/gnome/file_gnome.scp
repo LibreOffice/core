@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_gnome.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
@@ -40,7 +40,7 @@ End
 
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(gconfbe1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
@@ -51,6 +51,6 @@ File gid_File_Bin_Gnome_Set_Default_Application
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-set-default-application";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
