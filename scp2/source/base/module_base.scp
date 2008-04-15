@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_base.scp,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Base
-    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_PRG_BASE);
     ParentID = gid_Module_Prg;
     Sortkey = "500";
@@ -39,11 +38,15 @@ Module gid_Module_Prg_Base
 End
 
 Module gid_Module_Prg_Base_Bin
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_BASE_BIN );
     ParentID = gid_Module_Prg_Base;
     Sortkey = "100";
     Minimal = NO;
     Default = YES;
+  #ifdef UNX
+    Styles = (HIDDEN_ROOT);
+  #endif
     Files = (
         gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
@@ -76,7 +79,11 @@ Module gid_Module_Brand_Prg_Base
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Base";
     Description = "gid_Module_Brand_Prg_Base";
+  #ifdef UNX
+    ParentID = gid_Module_Prg_Base;
+  #else
     ParentID = gid_Module_Prg_Base_Bin;
+  #endif
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
