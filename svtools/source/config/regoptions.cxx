@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regoptions.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,6 +147,7 @@ namespace svt
     DECLARE_STATIC_LAZY_USTRING( ReminderDate );
     DECLARE_STATIC_LAZY_USTRING( RequestDialog );
     DECLARE_STATIC_LAZY_USTRING( ShowMenuItem );
+    DECLARE_STATIC_LAZY_USTRING( Patch );
 
     //====================================================================
     //= RegOptionsImpl
@@ -279,14 +280,15 @@ namespace svt
         sal_Int32 nIntDate = 0;
         sStringValue = ::rtl::OUString();
         m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sStringValue;
-        if ( sStringValue.getLength() )
+        bool bIsPatchDate = ( sStringValue.equals( lcl_getPatchName() ) != sal_False );
+        if ( !bIsPatchDate && sStringValue.getLength() )
         {
             nIntDate = lcl_convertString2Date( sStringValue );
             OSL_ENSURE( nIntDate, "RegOptionsImpl::RegOptionsImpl: incorrect value found for the reminder date!" );
         }
         m_aReminderDate.SetDate( nIntDate );
-        OSL_ENSURE( !sStringValue.getLength() || m_aReminderDate.IsValid(),
-            "RegOptionsImpl::RegOptionsImpl: inavlid reminder date value!" );
+        OSL_ENSURE( bIsPatchDate || !sStringValue.getLength() || m_aReminderDate.IsValid(),
+                        "RegOptionsImpl::RegOptionsImpl: inavlid reminder date value!" );
     }
 
     //--------------------------------------------------------------------
@@ -377,12 +379,17 @@ namespace svt
         m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sDate;
         if ( sDate.getLength() )
         {
-            nDate = lcl_convertString2Date( sDate );
-            if ( nDate > 0 )
+            if ( sDate.equals( lcl_getPatchName() ) )
+                bRet = true;
+            else
             {
-                Date aReminderDate;
-                aReminderDate.SetDate( nDate );
-                bRet = aReminderDate <= Date();
+                nDate = lcl_convertString2Date( sDate );
+                if ( nDate > 0 )
+                {
+                    Date aReminderDate;
+                    aReminderDate.SetDate( nDate );
+                    bRet = aReminderDate <= Date();
+                }
             }
         }
         return bRet;
