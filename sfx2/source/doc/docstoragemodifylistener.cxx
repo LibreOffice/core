@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstoragemodifylistener.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #include "precompiled_sfx2.hxx"
 
 #include "sfx2/docstoragemodifylistener.hxx"
+#include <sfx2/app.hxx>
+#include <vos/mutex.hxx>
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -58,9 +60,8 @@ namespace sfx2
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    DocumentStorageModifyListener::DocumentStorageModifyListener( ::osl::Mutex& _rMutex, IModifiableDocument& _rDocument )
-        :m_rMutex( _rMutex )
-        ,m_pDocument( &_rDocument )
+    DocumentStorageModifyListener::DocumentStorageModifyListener( IModifiableDocument& _rDocument )
+        :m_pDocument( &_rDocument )
     {
     }
 
@@ -72,14 +73,14 @@ namespace sfx2
     //--------------------------------------------------------------------
     void DocumentStorageModifyListener::dispose()
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         m_pDocument = NULL;
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL DocumentStorageModifyListener::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_rMutex );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         // storageIsModified must not contain any locking!
         if ( m_pDocument )
             m_pDocument->storageIsModified();
