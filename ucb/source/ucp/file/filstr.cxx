@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filstr.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,16 +102,21 @@ XTYPEPROVIDER_IMPL_7( XStream_impl,
 
 
 
-XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
+XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock )
     : m_bInputStreamCalled( false ),
       m_bOutputStreamCalled( false ),
       m_pMyShell( pMyShell ),
       m_xProvider( m_pMyShell->m_pProvider ),
+      m_bLock( bLock ),
       m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    osl::FileBase::RC err = m_aFile.open( OpenFlag_Read | OpenFlag_Write );
+    sal_uInt32 nFlags = ( OpenFlag_Read | OpenFlag_Write );
+    if ( !bLock )
+        nFlags |= OpenFlag_NoLock;
+
+    osl::FileBase::RC err = m_aFile.open( nFlags );
     if(  err != osl::FileBase::E_None )
     {
         m_nIsOpen = false;
