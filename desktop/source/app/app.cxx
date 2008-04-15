@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.218 $
+ * $Revision: 1.219 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,7 @@
 #include <svtools/apearcfg.hxx>
 #include <svtools/misccfg.hxx>
 #include <svtools/filter.hxx>
+#include <svtools/regoptions.hxx>
 
 #include "langselect.hxx"
 
@@ -1559,6 +1560,7 @@ void Desktop::Main()
         // First Start Wizard
         if ( IsFirstStartWizardNeeded() && !pCmdLineArgs->IsNoFirstStartWizard() )
         {
+            ::svt::RegOptions().removeReminder(); // remove patch registration reminder
             Reference< XJob > xFirstStartJob( xSMgr->createInstance(
                 DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
             if (xFirstStartJob.is())
@@ -1571,7 +1573,8 @@ void Desktop::Main()
                 lArgs[1].Value <<= GetLicensePath();
 
                 xFirstStartJob->execute(lArgs) >>= bDone;
-                if (!bDone) {
+                if ( !bDone )
+                {
                     return;
                 }
             }
