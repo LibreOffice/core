@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_url.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +137,7 @@ typedef struct
 {
     rtl_uString* ustrFilePath;      /* holds native file path */
     int fd;
+    sal_Bool bLocked;
 } oslFileHandleImpl;
 
 
