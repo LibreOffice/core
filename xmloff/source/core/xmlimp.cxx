@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1788,6 +1788,22 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
     {
     }
     return bRet;
+}
+
+sal_uInt16 SvXMLImport::getGeneratorVersion() const
+{
+    sal_Int32 nUPD, nBuild;
+
+    if( getBuildIds( nUPD, nBuild ) )
+    {
+        if( nUPD == 680 )
+            return OOo_2x;
+
+        if( nUPD >= 640 && nUPD <= 645 )
+            return OOo_1x;
+    }
+
+    return OOo_Current;
 }
 
 bool SvXMLImport::isGraphicLoadOnDemandSupported() const
