@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ilstbox.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,9 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -2871,15 +2873,18 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
     mnPopupModeStartSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
     EnableSaveBackground();
-}
 
-// -----------------------------------------------------------------------
+    Window * pBorderWindow = ImplGetBorderWindow();
+    if( pBorderWindow )
+    {
+        SetAccessibleRole(accessibility::AccessibleRole::PANEL);
+        pBorderWindow->SetAccessibleRole(accessibility::AccessibleRole::WINDOW);
+    }
+    else
+    {
+        SetAccessibleRole(accessibility::AccessibleRole::WINDOW);
+    }
 
-uno::Reference< ::com::sun::star::accessibility::XAccessible > ImplListBoxFloatingWindow::CreateAccessible()
-{
-    // Hide Accessible for this Window, because it's a top window we don't want to see as a top window.
-    // Must be handled in the ListBox/ComboBox Accessibility Implementation
-    return NULL;
 }
 
 // -----------------------------------------------------------------------
