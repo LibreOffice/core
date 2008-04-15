@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedocdlg.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ void ScShareDocumentDlg::UpdateView()
     {
         try
         {
-            ::svt::ShareControlFile aControlFile( mpDocShell->GetSharedFileUrl() );
+            ::svt::ShareControlFile aControlFile( mpDocShell->GetSharedFileURL() );
             uno::Sequence< uno::Sequence< ::rtl::OUString > > aUsersData = aControlFile.GetUsersData();
             const uno::Sequence< ::rtl::OUString >* pUsersData = aUsersData.getConstArray();
             sal_Int32 nLength = aUsersData.getLength();
@@ -137,31 +137,31 @@ void ScShareDocumentDlg::UpdateView()
 
                 for ( sal_Int32 i = 0; i < nLength; ++i )
                 {
-                    if ( pUsersData[i].getLength() != SHARED_ENTRYSIZE )
+                    if ( pUsersData[i].getLength() > SHARED_EDITTIME_ID )
                     {
-                        continue;
-                    }
+                        String aUser;
+                        if ( pUsersData[i][SHARED_OOOUSERNAME_ID].getLength() )
+                        {
+                            aUser = pUsersData[i][SHARED_OOOUSERNAME_ID];
+                        }
+                        else if ( pUsersData[i][SHARED_SYSUSERNAME_ID].getLength() )
+                        {
+                            aUser = pUsersData[i][SHARED_SYSUSERNAME_ID];
+                        }
+                        else
+                        {
+                            aUser = maStrUnkownUser;
+                            aUser += ' ';
+                            aUser += String::CreateFromInt32( nUnknownUser++ );
+                        }
 
-                    String aUser = pUsersData[i][SHARED_OOOUSERNAME_ID];
-                    aUser.EraseLeadingAndTrailingChars();
-                    if ( aUser.Len() == 0 )
-                    {
-                        aUser = pUsersData[i][SHARED_SYSUSERNAME_ID];
-                        aUser.EraseLeadingAndTrailingChars();
-                    }
-                    if ( aUser.Len() == 0 )
-                    {
-                        aUser = maStrUnkownUser;
-                        aUser += ' ';
-                        aUser += String::CreateFromInt32( nUnknownUser++ );
-                    }
+                        String aDateTime = pUsersData[i][SHARED_EDITTIME_ID];
 
-                    String aDateTime = pUsersData[i][SHARED_EDITTIME_ID];
-
-                    String aString( aUser );
-                    aString += '\t';
-                    aString += aDateTime;
-                    maLbUsers.InsertEntry( aString, NULL );
+                        String aString( aUser );
+                        aString += '\t';
+                        aString += aDateTime;
+                        maLbUsers.InsertEntry( aString, NULL );
+                    }
                 }
             }
             else
@@ -181,9 +181,11 @@ void ScShareDocumentDlg::UpdateView()
         // get OOO user name
         SvtUserOptions aUserOpt;
         String aUser = aUserOpt.GetFirstName();
-        aUser += ' ';
+        if ( aUser.Len() > 0 )
+        {
+            aUser += ' ';
+        }
         aUser += aUserOpt.GetLastName();
-        aUser.EraseLeadingAndTrailingChars();
         if ( aUser.Len() == 0 )
         {
             // get sys user name
@@ -191,7 +193,6 @@ void ScShareDocumentDlg::UpdateView()
             ::osl::Security aSecurity;
             aSecurity.getUserName( aUserName );
             aUser = aUserName;
-            aUser.EraseLeadingAndTrailingChars();
         }
         if ( aUser.Len() == 0 )
         {
