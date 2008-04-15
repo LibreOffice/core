@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_draw.scp,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -608,7 +608,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sda";
     Value = "soffice.StarDrawDocument.5";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem__Sxd
@@ -624,7 +624,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".sxd";
     Value = "soffice.StarDrawDocument.6";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 // new odg file extension 
@@ -686,7 +686,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".odg";
     Value = "opendocument.DrawDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odg
@@ -695,7 +695,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = "application/vnd.oasis.opendocument.graphics";
     Value = "opendocument.DrawDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Odg_Openoffice_Drawdocument_1_Shellnew
@@ -767,7 +767,7 @@ RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Open_Command
     ModuleID = gid_Module_Prg_Draw_Bin;
     Subkey = "opendocument.DrawDocument.1\shell\open\command";
     Value = "\"<progpath>\program\sdraw.exe\" -o \"%1\"";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Print_Command
@@ -990,7 +990,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".otg";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Std
@@ -999,7 +999,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".std";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sdraw_Exe
