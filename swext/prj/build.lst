@@ -1,6 +1,6 @@
 swext swext :   XALAN:xalan jut javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons officecfg readlicense_oo NULL
 swext swext             usr1    -    all    swext_mkout NULL
-swext swext\mediawiki\help\en-US\com.sun.sun-mediawiki                  nmake   -    all    swext_mwhelp NULL
+swext swext\mediawiki\help                                              nmake   -    all    swext_mwhelp NULL
 swext swext\mediawiki\src\registry\schema\org\openoffice\Office\Custom  nmake   -    all    swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office\Custom    nmake   -    all    swext_mwcustomdata swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office           nmake   -    all    swext_mwofficedata NULL
