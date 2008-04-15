@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conflictsdlg.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <svx/ctredlin.hxx>
 
 #include "chgtrack.hxx"
+#include "docsh.hxx"
 
 class ScViewData;
 
@@ -80,12 +81,18 @@ typedef ::std::vector< ScConflictsListEntry > ScConflictsList;
 
 class ScConflictsListHelper
 {
-public:
-    static bool                    HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction );
-    static bool                    HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction );
+private:
+    static void                     Transform_Impl( ScChangeActionList& rActionList, ScChangeActionMergeMap* pMergeMap );
 
-    static ScConflictsListEntry*   GetSharedActionEntry( ScConflictsList& rConflictsList, ULONG nSharedAction );
-    static ScConflictsListEntry*   GetOwnActionEntry( ScConflictsList& rConflictsList, ULONG nOwnAction );
+public:
+    static bool                     HasSharedAction( ScConflictsList& rConflictsList, ULONG nSharedAction );
+    static bool                     HasOwnAction( ScConflictsList& rConflictsList, ULONG nOwnAction );
+
+    static ScConflictsListEntry*    GetSharedActionEntry( ScConflictsList& rConflictsList, ULONG nSharedAction );
+    static ScConflictsListEntry*    GetOwnActionEntry( ScConflictsList& rConflictsList, ULONG nOwnAction );
+
+    static void                     TransformConflictsList( ScConflictsList& rConflictsList,
+                                        ScChangeActionMergeMap* pSharedMap, ScChangeActionMergeMap* pOwnMap );
 };
 
 
@@ -96,10 +103,9 @@ public:
 class ScConflictsFinder
 {
 private:
-    ScChangeTrack*          mpSharedTrack;
+    ScChangeTrack*          mpTrack;
     ULONG                   mnStartShared;
     ULONG                   mnEndShared;
-    ScChangeTrack*          mpOwnTrack;
     ULONG                   mnStartOwn;
     ULONG                   mnEndOwn;
     ScConflictsList&        mrConflictsList;
@@ -107,12 +113,10 @@ private:
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
     ScConflictsListEntry*   GetIntersectingEntry( const ScChangeAction* pAction ) const;
     ScConflictsListEntry*   GetEntry( ULONG nSharedAction, const ScChangeActionList& rOwnActions );
-    void                    RemovePrevContentEntries();
 
 public:
-                            ScConflictsFinder( ScChangeTrack* pSharedTrack, ULONG nStartShared, ULONG nEndShared,
-                                ScChangeTrack* pOwnTrack, ULONG nStartOwn, ULONG nEndOwn,
-                                ScConflictsList& rConflictsList );
+                            ScConflictsFinder( ScChangeTrack* pTrack, ULONG nStartShared, ULONG nEndShared,
+                                ULONG nStartOwn, ULONG nEndOwn, ScConflictsList& rConflictsList );
     virtual                 ~ScConflictsFinder();
 
     bool                    Find();
@@ -133,9 +137,8 @@ public:
                         ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList& rConflictsList );
     virtual             ~ScConflictsResolver();
 
-    void                HandleAction( ScChangeAction* pAction, ULONG nOffset,
-                            bool bIsSharedAction, bool bHandleContentAction,
-                            bool bHandleNonContentAction );
+    void                HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
+                            bool bHandleContentAction, bool bHandleNonContentAction );
 };
 
 
