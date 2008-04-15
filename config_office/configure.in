@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-04-09 16:42:18 $
+dnl * Date: $Date: 2008-04-15 11:56:42 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.262 $ )
+AC_REVISION( $Revision: 1.263 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -53,7 +53,8 @@ AC_ARG_WITH(vba-package-format,
                           either the unopkg executeable or the extension manager
                           gui.
                          
-                          Note: "extn" is the defualt. 
+                          Note: "builtin" is the default, "extn" can cause
+                          problems.
                           Usage: --with-vba-package-format="builtin" or
                                  --with-vba-package-format="extn"
 ],,)              
@@ -1816,6 +1817,7 @@ if test "$ENABLE_VBA" = "YES"; then
       if test "$with_vba_package_format" = "extn"; then
          VBA_EXTENSION=YES
          AC_MSG_RESULT([uno extension])
+         AC_MSG_WARN([--with-vba-package-format=extn can cause problems])
       else if test "$with_vba_package_format" = "builtin"; then
             VBA_EXTENSION=NO
             AC_MSG_RESULT([build into installset])
@@ -1825,8 +1827,8 @@ if test "$ENABLE_VBA" = "YES"; then
       fi
  
    else
-      VBA_EXTENSION=YES
-      AC_MSG_RESULT([defaulting to build as uno extension])
+      VBA_EXTENSION=NO
+      AC_MSG_RESULT([defaulting to build into installset])
    fi
 else
       VBA_EXTENSION=NO
