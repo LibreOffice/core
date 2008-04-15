@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.236 $
+ * $Revision: 1.237 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@ End
 
 File gid_File_Basic_Euro
     Dir = gid_Dir_Basic_Euro;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     Name = "basicsrveuro.zip";
 End
 
@@ -50,7 +50,7 @@ End
 
 File gid_File_Basic_Importwiz
     Dir = gid_Dir_Basic_Importwiz;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     Name = "basicsrvimport.zip";
 End
 
@@ -86,7 +86,7 @@ End
 
 File gid_File_Basic_Tools
     Dir = gid_Dir_Basic_Tools;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     Name = "basicsrvtools.zip";
 End
 
@@ -115,7 +115,7 @@ End
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "pagein";
 End
 
@@ -126,7 +126,7 @@ End
 #if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Lib_Npsoplugin
         BIN_FILE_BODY;
-        Styles          = (PACKED,PATCH);
+        Styles          = (PACKED);
         Dir             = gid_Dir_Program;
         Name            = SPECIAL_NAME(npsoplugin);
 End
@@ -135,7 +135,7 @@ End
 #if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
-        Styles          = (PACKED,PATCH);
+        Styles          = (PACKED);
         Dir             = gid_Dir_Program;
  #ifdef UNX
         Name            = "nsplugin";
@@ -162,7 +162,7 @@ End
 File gid_File_Script_Setofficelang
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "setofficelang";
 End
 
@@ -171,7 +171,7 @@ End
 File gid_File_Bin_Configimport
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
   #ifdef UNX
     Name = "configimport.bin";
   #else
@@ -184,7 +184,7 @@ End
 File gid_File_Script_Configimport
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "configimport";
 End
 
@@ -193,7 +193,7 @@ End
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
   #ifdef UNX
     Name = "gengal.bin";
   #else
@@ -218,7 +218,7 @@ File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -240,7 +240,7 @@ File gid_File_Bin_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "open-url";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -251,28 +251,28 @@ File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-open-url";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Bin_Gnome_Open_Url_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "gnome-open-url.bin";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Bin_Kde_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "kde-open-url";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Bin_Cde_Open_Url
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "cde-open-url";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -283,7 +283,7 @@ File gid_File_Bin_Uri_Encode
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "uri-encode";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -293,7 +293,7 @@ File gid_File_Bin_Senddoc
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = "senddoc";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
   #else
     Name = "senddoc.exe";
     Styles = (PACKED);
@@ -305,7 +305,7 @@ End
 File gid_File_Bin_Spadmin_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "spadmin.bin";
 End
 
@@ -402,51 +402,51 @@ File gid_File_Dtd_Toolbar
     Name = "toolbar.dtd";
 End
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Eme, eme)
+STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
+STD_FILTER_FILE( gid_File_Filter_Emp, emp)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Icg, icg)
+STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Egi, egi)
+STD_FILTER_FILE( gid_File_Filter_Egi, egi)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Epb, epb)
+STD_FILTER_FILE( gid_File_Filter_Epb, epb)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Epg, epg)
+STD_FILTER_FILE( gid_File_Filter_Epg, epg)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Epp, epp)
+STD_FILTER_FILE( gid_File_Filter_Epp, epp)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Eps, eps)
+STD_FILTER_FILE( gid_File_Filter_Eps, eps)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ept, ept)
+STD_FILTER_FILE( gid_File_Filter_Ept, ept)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Era, era)
+STD_FILTER_FILE( gid_File_Filter_Era, era)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Eti, eti)
+STD_FILTER_FILE( gid_File_Filter_Eti, eti)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Exp, exp)
+STD_FILTER_FILE( gid_File_Filter_Exp, exp)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Icd, icd)
+STD_FILTER_FILE( gid_File_Filter_Icd, icd)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Idx, idx)
+STD_FILTER_FILE( gid_File_Filter_Idx, idx)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ime, ime)
+STD_FILTER_FILE( gid_File_Filter_Ime, ime)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ipb, ipb)
+STD_FILTER_FILE( gid_File_Filter_Ipb, ipb)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ipd, ipd)
+STD_FILTER_FILE( gid_File_Filter_Ipd, ipd)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ips, ips)
+STD_FILTER_FILE( gid_File_Filter_Ips, ips)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ipt, ipt)
+STD_FILTER_FILE( gid_File_Filter_Ipt, ipt)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ipx, ipx)
+STD_FILTER_FILE( gid_File_Filter_Ipx, ipx)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Ira, ira)
+STD_FILTER_FILE( gid_File_Filter_Ira, ira)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Itg, itg)
+STD_FILTER_FILE( gid_File_Filter_Itg, itg)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Iti, iti)
+STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
@@ -458,14 +458,9 @@ STD_RES_FILE( gid_File_Res_Eme, eme )
 
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(shared);
-    Patchfiles = ("shared.db",
-                  "shared.ht",
-                  "shared.jar",
-                  "shared.key",
-                  "shared.tree",
-                  "err.html");
+    Patchfiles = ();
 End
 
 File gid_File_Help_Help_Zip
@@ -476,27 +471,14 @@ End
 
 File gid_File_Help_Sbasic_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sbasic);
-    Patchfiles = ("sbasic.db",
-                  "sbasic.ht",
-                  "sbasic.jar",
-                  "sbasic.key",
-                  "sbasic.tree",
-                  "sbasic.idx/CONTEXTS",
-                  "sbasic.idx/DICTIONARY",
-                  "sbasic.idx/DOCS",
-                  "sbasic.idx/DOCS.TAB",
-                  "sbasic.idx/EDGE",
-                  "sbasic.idx/LINKNAMES",
-                  "sbasic.idx/OFFSETS",
-                  "sbasic.idx/POSITIONS",
-                  "sbasic.idx/SCHEMA");
+    Patchfiles = ();
 End
 
 File gid_File_Help_Schart_Zip
     Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
@@ -507,7 +489,7 @@ File gid_File_Jar_Accessbridge
     Name = "java_uno_accessbridge.jar";
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT,PATCH);
+    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT);
 End
 
 #endif
@@ -520,7 +502,7 @@ STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE_PATCH( gid_File_Jar_Classes, classes )
+STD_JAR_FILE( gid_File_Jar_Classes, classes )
 
 #endif
 
@@ -534,7 +516,7 @@ File gid_File_Jar_Jut
     TXT_FILE_BODY;
     Name = JARFILENAME(jut);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -547,7 +529,7 @@ File gid_File_Jar_Officebean
     TXT_FILE_BODY;
     Name = JARFILENAME(officebean);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -556,21 +538,21 @@ End
 
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE_PATCH( gid_File_Jar_Report, report )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Table, table )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Letter, letter )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Form, form )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Fax, fax )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Agenda, agenda )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Query, query )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Web, web )
+UNO_JAR_FILE( gid_File_Jar_Report, report )
+UNO_JAR_FILE( gid_File_Jar_Table, table )
+UNO_JAR_FILE( gid_File_Jar_Letter, letter )
+UNO_JAR_FILE( gid_File_Jar_Form, form )
+UNO_JAR_FILE( gid_File_Jar_Fax, fax )
+UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
+UNO_JAR_FILE( gid_File_Jar_Query, query )
+UNO_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
 #ifndef SYSTEM_HSQLDB
-STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb, hsqldb )
+STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
 #endif
-STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
+STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -578,7 +560,7 @@ File gid_File_Jar_Commonwizards
     TXT_FILE_BODY;
     Name = JARFILENAME(commonwizards);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 #endif
 
@@ -588,16 +570,16 @@ File gid_File_Jar_Sandbox
     TXT_FILE_BODY;
     Name = JARFILENAME(sandbox);
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 #endif
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -606,21 +588,21 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,PATCH);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
 
 #ifdef SOLAR_JAVA
 #ifndef SYSTEM_XALAN
-STD_JAR_FILE_PATCH( gid_File_Jar_Xalan, xalan )
-STD_JAR_FILE_PATCH( gid_File_Jar_Serializer, serializer )
+STD_JAR_FILE( gid_File_Jar_Xalan, xalan )
+STD_JAR_FILE( gid_File_Jar_Serializer, serializer )
 #endif
 #ifndef SYSTEM_XERCES
-STD_JAR_FILE_PATCH( gid_File_Jar_XercesImpl, xercesImpl )
+STD_JAR_FILE( gid_File_Jar_XercesImpl, xercesImpl )
 #endif
 #ifndef SYSTEM_XML_APIS
-STD_JAR_FILE_PATCH( gid_File_Jar_Xml_Apis, xml-apis )
+STD_JAR_FILE( gid_File_Jar_Xml_Apis, xml-apis )
 #endif
 #endif
 
@@ -630,231 +612,231 @@ File gid_File_Conf_Fpdb
     TXT_FILE_BODY;
     Name = "fpdb.conf";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Afrikaans
     TXT_FILE_BODY;
     Name = "afrikaans.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Albanian
     TXT_FILE_BODY;
     Name = "albanian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Amharic_Utf
     TXT_FILE_BODY;
     Name = "amharic_utf.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Arabic
     TXT_FILE_BODY;
     Name = "arabic.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Armenian
     TXT_FILE_BODY;
     Name = "armenian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Basque
     TXT_FILE_BODY;
     Name = "basque.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Belarus
     TXT_FILE_BODY;
     Name = "belarus.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Bosnian
     TXT_FILE_BODY;
     Name = "bosnian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Breton
     TXT_FILE_BODY;
     Name = "breton.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Catalan
     TXT_FILE_BODY;
     Name = "catalan.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Chinese_Simplified
     TXT_FILE_BODY;
     Name = "chinese_simplified.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Chinese_Traditional
     TXT_FILE_BODY;
     Name = "chinese_traditional.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Croatian
     TXT_FILE_BODY;
     Name = "croatian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Czech
     TXT_FILE_BODY;
     Name = "czech.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Danish
     TXT_FILE_BODY;
     Name = "danish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Drents
     TXT_FILE_BODY;
     Name = "drents.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Dutch
     TXT_FILE_BODY;
     Name = "dutch.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_English
     TXT_FILE_BODY;
     Name = "english.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Esperanto
     TXT_FILE_BODY;
     Name = "esperanto.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Estonian
     TXT_FILE_BODY;
     Name = "estonian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Finnish
     TXT_FILE_BODY;
     Name = "finnish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_French
     TXT_FILE_BODY;
     Name = "french.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Frisian
     TXT_FILE_BODY;
     Name = "frisian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Georgian
     TXT_FILE_BODY;
     Name = "georgian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_German
     TXT_FILE_BODY;
     Name = "german.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Greek
     TXT_FILE_BODY;
     Name = "greek.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Hebrew
     TXT_FILE_BODY;
     Name = "hebrew.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Hindi
     TXT_FILE_BODY;
     Name = "hindi.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Hungarian
     TXT_FILE_BODY;
     Name = "hungarian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Icelandic
     TXT_FILE_BODY;
     Name = "icelandic.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Indonesian
     TXT_FILE_BODY;
     Name = "indonesian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Irish_Gaelic
     TXT_FILE_BODY;
     Name = "irish_gaelic.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 
@@ -862,259 +844,259 @@ File gid_File_Lm_Italian
     TXT_FILE_BODY;
     Name = "italian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Japanese
     TXT_FILE_BODY;
     Name = "japanese.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Korean
     TXT_FILE_BODY;
     Name = "korean.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Latin
     TXT_FILE_BODY;
     Name = "latin.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Latvian
     TXT_FILE_BODY;
     Name = "latvian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Lithuanian
     TXT_FILE_BODY;
     Name = "lithuanian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Malay
     TXT_FILE_BODY;
     Name = "malay.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Manx_Gaelic
     TXT_FILE_BODY;
     Name = "manx_gaelic.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Marathi
     TXT_FILE_BODY;
     Name = "marathi.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Middle_Frisian
     TXT_FILE_BODY;
     Name = "middle_frisian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Mingo
     TXT_FILE_BODY;
     Name = "mingo.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Nepali
     TXT_FILE_BODY;
     Name = "nepali.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Norwegian
     TXT_FILE_BODY;
     Name = "norwegian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Persian
     TXT_FILE_BODY;
     Name = "persian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Polish
     TXT_FILE_BODY;
     Name = "polish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Portuguese
     TXT_FILE_BODY;
     Name = "portuguese.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Quechua
     TXT_FILE_BODY;
     Name = "quechua.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Romanian
     TXT_FILE_BODY;
     Name = "romanian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Romansh
     TXT_FILE_BODY;
     Name = "romansh.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Russian
     TXT_FILE_BODY;
     Name = "russian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Sanskrit
     TXT_FILE_BODY;
     Name = "sanskrit.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Scots
     TXT_FILE_BODY;
     Name = "scots.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Scots_Gaelic
     TXT_FILE_BODY;
     Name = "scots_gaelic.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Serbian_Ascii
     TXT_FILE_BODY;
     Name = "serbian_ascii.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Slovak_Ascii
     TXT_FILE_BODY;
     Name = "slovak_ascii.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Slovenian
     TXT_FILE_BODY;
     Name = "slovenian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Spanish
     TXT_FILE_BODY;
     Name = "spanish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Swahili
     TXT_FILE_BODY;
     Name = "swahili.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Swedish
     TXT_FILE_BODY;
     Name = "swedish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Tagalog
     TXT_FILE_BODY;
     Name = "tagalog.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Tamil
     TXT_FILE_BODY;
     Name = "tamil.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Thai
     TXT_FILE_BODY;
     Name = "thai.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Turkish
     TXT_FILE_BODY;
     Name = "turkish.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Ukrainian
     TXT_FILE_BODY;
     Name = "ukrainian.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Vietnamese
     TXT_FILE_BODY;
     Name = "vietnamese.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Welsh
     TXT_FILE_BODY;
     Name = "welsh.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_Lm_Yiddish_Utf
     TXT_FILE_BODY;
     Name = "yiddish_utf.lm";
     Dir = gid_Dir_Share_Fingerprint;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 
@@ -1226,7 +1208,7 @@ End
 
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
-    Styles = (ARCHIVE,PATCH);
+    Styles = (ARCHIVE);
     Dir = gid_Dir_Program;
     Name = "mozruntime.zip";
 End
@@ -1237,7 +1219,7 @@ End
 
 File gid_File_Oo_Inet_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/Inet.xcs";
 End
@@ -1251,7 +1233,7 @@ End
 
 File gid_File_Oo_Office_Addons_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Addons.xcs";
 End
@@ -1286,7 +1268,7 @@ End
 
 File gid_File_Oo_Office_Ui_Basicidewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/BasicIDEWindowState.xcu";
 End
@@ -1322,28 +1304,28 @@ End
 */
 File gid_File_Oo_Office_Calc_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Calc.xcs";
 End
 
 File gid_File_Oo_Office_Calc_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Calc.xcu";
 End
 
 File gid_File_Oo_Office_CalcAddIns_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/CalcAddIns.xcs";
 End
 
 File gid_File_Oo_Office_Chart_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Chart.xcs";
 End
@@ -1357,7 +1339,7 @@ End
 
 File gid_File_Oo_Office_Ui_Chartcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ChartCommands.xcu";
 End
@@ -1371,7 +1353,7 @@ End
 
 File gid_File_Oo_Office_Ui_Chartwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ChartWindowState.xcu";
 End
@@ -1406,7 +1388,7 @@ End
 
 File gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu";
 End
@@ -1427,63 +1409,63 @@ End
 
 File gid_File_Oo_Office_Common_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
 End
 
 File gid_File_Oo_Office_Extendedcolorscheme_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/ExtendedColorScheme.xcu";
 End
 
 File gid_File_Oo_Office_Paths_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Paths.xcs";
 End
 
 File gid_File_Oo_Office_Logging_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Logging.xcs";
 End
 
 File gid_File_Oo_Office_OptionsDialog_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/OptionsDialog.xcs";
 End
 
 File gid_File_Oo_Office_Recovery_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
 End
 
 File gid_File_Oo_Office_Paths_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Paths.xcu";
 End
 
 File gid_File_Oo_Office_Logging_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Logging.xcu";
 End
@@ -1497,35 +1479,35 @@ End
 
 File gid_File_Oo_Office_Compatibility_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Compatibility.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Controller_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/Controller.xcs";
 End
 
 File gid_File_Oo_Office_Ui_Controller_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/Controller.xcu";
 End
 
 File gid_File_Oo_Office_Dataaccess_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/DataAccess.xcs";
 End
 
 File gid_File_Oo_Office_Dataaccess_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/DataAccess.xcu";
 End
@@ -1539,7 +1521,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbucommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbuCommands.xcu";
 End
@@ -1553,7 +1535,7 @@ End
 
 File gid_File_Oo_Office_Ui_Basewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/BaseWindowState.xcu";
 End
@@ -1567,7 +1549,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbtablewindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbTableWindowState.xcu";
 End
@@ -1581,7 +1563,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbbrowserwindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbBrowserWindowState.xcu";
 End
@@ -1596,7 +1578,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbtabledatawindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbTableDataWindowState.xcu";
 End
@@ -1611,7 +1593,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbquerywindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbQueryWindowState.xcu";
 End
@@ -1625,7 +1607,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbrelationwindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbRelationWindowState.xcu";
 End
@@ -1646,14 +1628,14 @@ End
 
 File gid_File_Oo_Office_ExtensionManager_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/ExtensionManager.xcs";
 End
 
 File gid_File_Oo_Office_ExtensionManager_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/ExtensionManager.xcu";
 End
@@ -1674,14 +1656,14 @@ End
 
 File gid_File_Oo_Office_Embedding_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
 	Name = "/registry/data/org/openoffice/Office/Embedding.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Chart_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-chart.xcu";
 End
@@ -1695,28 +1677,28 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
 
 File gid_File_Oo_Office_Ui_GlobalSettings_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/GlobalSettings.xcs";
 End
 
 File gid_File_Oo_Office_Impress_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Impress.xcs";
 End
 
 File gid_File_Oo_Office_Impress_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Impress.xcu";
 End
@@ -1737,7 +1719,7 @@ End
 
 File gid_File_Oo_Office_Jobs_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Jobs.xcu";
 End
@@ -1751,7 +1733,7 @@ End
 
 File gid_File_Oo_Office_Labels_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Labels.xcu";
 End
@@ -1779,7 +1761,7 @@ End
 
 File gid_File_Oo_Office_TabBrowse_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/TabBrowse.xcs";
 End
@@ -1793,7 +1775,7 @@ End
 
 File gid_File_Oo_Office_Protocolhandler_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/ProtocolHandler.xcu";
 End
@@ -1863,7 +1845,7 @@ End
 
 File gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/StartModuleWindowState.xcu";
 End
@@ -1877,7 +1859,7 @@ End
 
 File gid_File_Oo_Office_Ui_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/UI.xcs";
 End
@@ -1891,7 +1873,7 @@ End
 
 File gid_File_Oo_Office_Writer_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Writer.xcs";
 End
@@ -1912,21 +1894,21 @@ End
 
 File gid_File_Oo_Office_WebWizard_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/WebWizard.xcu";
 End
 
 File gid_File_Oo_Office_FormWizard_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/FormWizard.xcs";
 End
 
 File gid_File_Oo_Office_FormWizard_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/FormWizard.xcu";
 End
@@ -1949,7 +1931,7 @@ End
 
 File gid_File_Oo_Office_Writerweb_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/WriterWeb.xcs";
 End
@@ -1970,14 +1952,14 @@ End
 
 File gid_File_Oo_Setup_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/Setup.xcs";
 End
 
 File gid_File_Oo_Setup_Start_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     Name = "/registry/spool/org/openoffice/Setup-start.xcu";
 End
@@ -1998,7 +1980,7 @@ End
 
 File gid_File_Oo_System_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/System.xcs";
 End
@@ -2054,7 +2036,7 @@ End
 
 File gid_File_Oo_Ucb_Configuration_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb;
     Name = "/registry/data/org/openoffice/ucb/Configuration.xcu";
 End
@@ -2075,14 +2057,14 @@ End
 
 File gid_File_Oo_Userprofile_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/UserProfile.xcs";
 End
 
 File gid_File_Oo_Userprofile_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/UserProfile.xcu";
 End
@@ -2096,7 +2078,7 @@ End
 
 File gid_File_Oo_Vcl_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/VCL.xcu";
 End
@@ -2142,14 +2124,14 @@ End
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE, PATCH);
+    Styles = (PACKED, OVERWRITE);
     Name = "oovbaapi.rdb";
 End
 #else
 File gid_File_ExtnVba
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE, PATCH);
+    Styles = (PACKED, OVERWRITE);
     Name = "vbaapi.oxt";
 End
 #endif
@@ -2157,68 +2139,68 @@ End
 
 File gid_File_Registry_Lang
     Dir = gid_Dir_Share_Registry_Res_Lang;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(registry);
 End
 
 File gid_File_Registry_Filter_Zip
     Dir = gid_Dir_Share_Registry_Res_Lang;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(fcfg_langpack);
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_base_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_base_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_base_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_chart_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_chart_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_chart_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_internalgraphics_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_GraphicFilter;
     Name = "/registry/spool/fcfg_internalgraphics_filters.xcu";
 End
@@ -2313,224 +2295,10 @@ End
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     TXT_FILE_BODY;
-    Styles = (ARCHIVE,PATCH);
+    Styles = (ARCHIVE);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
-    Patchfiles = ("modules/schart/accelerator/en-US/default.xml",
-                  "modules/schart/menubar/menubar.xml",
-                  "modules/schart/statusbar/statusbar.xml",
-                  "modules/schart/toolbar/toolbar.xml",
-                  "modules/schart/toolbar/standardbar.xml",
-                  "modules/dbbrowser/menubar/menubar.xml",
-                  "modules/dbapp/menubar/menubar.xml",
-                  "modules/dbquery/menubar/menubar.xml",
-                  "modules/dbrelation/menubar/menubar.xml",
-                  "modules/dbtable/menubar/menubar.xml",
-                  "modules/sbibliography/menubar/menubar.xml",
-                  "modules/scalc/menubar/menubar.xml",
-                  "modules/scalc/toolbar/standardbar.xml",
-                  "modules/scalc/toolbar/insertbar.xml",
-                  "modules/scalc/accelerator/de/default.xml",
-                  "modules/scalc/accelerator/en-GB/default.xml",
-                  "modules/scalc/accelerator/en-US/default.xml",
-                  "modules/scalc/accelerator/es/default.xml",
-                  "modules/scalc/accelerator/fr/default.xml",
-                  "modules/starmath/menubar/menubar.xml",
-                  "modules/StartModule/menubar/menubar.xml",
-                  "modules/BasicIDE/menubar/menubar.xml",
-                  "modules/BasicIDE/toolbar/insertcontrolsbar.xml",
-                  "modules/BasicIDE/toolbar/translationbar.xml",
-                  "modules/BasicIDE/toolbar/dialogbar.xml",
-                  "modules/BasicIDE/toolbar/macrobar.xml",
-                  "modules/sglobal/accelerator/de/default.xml",
-                  "modules/sglobal/accelerator/en-GB/default.xml",
-                  "modules/sglobal/accelerator/en-US/default.xml",
-                  "modules/sglobal/accelerator/es/default.xml",
-                  "modules/sglobal/accelerator/fr/default.xml",
-                  "modules/sglobal/menubar/menubar.xml",
-                  "modules/sglobal/toolbar/insertbar.xml",
-                  "modules/sglobal/statusbar/statusbar.xml",
-                  "modules/sweb/accelerator/de/default.xml",
-                  "modules/sweb/accelerator/en-GB/default.xml",
-                  "modules/sweb/accelerator/en-US/default.xml",
-                  "modules/sweb/accelerator/es/default.xml",
-                  "modules/sweb/accelerator/fr/default.xml",
-                  "modules/sweb/menubar/menubar.xml",
-                  "modules/sweb/toolbar/insertbar.xml",
-                  "modules/sweb/statusbar/statusbar.xml",
-                  "modules/swriter/accelerator/de/default.xml",
-                  "modules/swriter/accelerator/en-GB/default.xml",
-                  "modules/swriter/accelerator/en-US/default.xml",
-                  "modules/swriter/accelerator/es/default.xml",
-                  "modules/swriter/accelerator/fr/default.xml",
-                  "modules/swriter/menubar/menubar.xml",
-                  "modules/swriter/toolbar/insertbar.xml",
-                  "modules/swriter/statusbar/statusbar.xml",
-                  "modules/simpress/accelerator/de/default.xml",
-                  "modules/simpress/accelerator/en-GB/default.xml",
-                  "modules/simpress/accelerator/en-US/default.xml",
-                  "modules/simpress/accelerator/es/default.xml",
-                  "modules/simpress/accelerator/fr/default.xml",
-                  "modules/simpress/menubar/menubar.xml",
-				  "modules/simpress/toolbar/insertbar.xml",
-                  "modules/sdraw/accelerator/de/default.xml",
-                  "modules/sdraw/accelerator/en-GB/default.xml",
-                  "modules/sdraw/accelerator/en-US/default.xml",
-                  "modules/sdraw/accelerator/es/default.xml",
-                  "modules/sdraw/accelerator/fr/default.xml",
-                  "modules/sdraw/menubar/menubar.xml",
-				  "modules/sdraw/toolbar/insertbar.xml",
-                  "global/accelerator/default.xml",
-                  "global/accelerator/es/default.xml",
-                  "global/accelerator/en-US/default.xml",
-                  "modules/swform/accelerator/de/default.xml",
-                  "modules/swform/accelerator/en-US/default.xml",
-                  "modules/swform/accelerator/es/default.xml",
-                  "modules/swform/accelerator/fr/default.xml",
-                  "modules/swform/menubar/menubar.xml",
-                  "modules/swform/statusbar/statusbar.xml",
-                  "modules/swform/toolbar/alignmentbar.xml",
-                  "modules/swform/toolbar/arrowshapes.xml",
-                  "modules/swform/toolbar/basicshapes.xml",
-                  "modules/swform/toolbar/bezierobjectbar.xml",
-                  "modules/swform/toolbar/calloutshapes.xml",
-                  "modules/swform/toolbar/colorbar.xml",
-                  "modules/swform/toolbar/drawbar.xml",
-                  "modules/swform/toolbar/drawingobjectbar.xml",
-                  "modules/swform/toolbar/drawtextobjectbar.xml",
-                  "modules/swform/toolbar/extrusionobjectbar.xml",
-                  "modules/swform/toolbar/flowchartshapes.xml",
-                  "modules/swform/toolbar/fontworkobjectbar.xml",
-                  "modules/swform/toolbar/fontworkshapetype.xml",
-                  "modules/swform/toolbar/formcontrols.xml",
-                  "modules/swform/toolbar/formdesign.xml",
-                  "modules/swform/toolbar/formsfilterbar.xml",
-                  "modules/swform/toolbar/formsnavigationbar.xml",
-                  "modules/swform/toolbar/formtextobjectbar.xml",
-                  "modules/swform/toolbar/frameobjectbar.xml",
-                  "modules/swform/toolbar/fullscreenbar.xml",
-                  "modules/swform/toolbar/graffilterbar.xml",
-                  "modules/swform/toolbar/graphicobjectbar.xml",
-                  "modules/swform/toolbar/insertbar.xml",
-                  "modules/swform/toolbar/insertobjectbar.xml",
-                  "modules/swform/toolbar/mediaobjectbar.xml",
-                  "modules/swform/toolbar/moreformcontrols.xml",
-                  "modules/swform/toolbar/numobjectbar.xml",
-                  "modules/swform/toolbar/oleobjectbar.xml",
-                  "modules/swform/toolbar/optimizetablebar.xml",
-                  "modules/swform/toolbar/previewobjectbar.xml",
-                  "modules/swform/toolbar/standardbar.xml",
-                  "modules/swform/toolbar/starshapes.xml",
-                  "modules/swform/toolbar/symbolshapes.xml",
-                  "modules/swform/toolbar/tableobjectbar.xml",
-                  "modules/swform/toolbar/textobjectbar.xml",
-                  "modules/swform/toolbar/toolbar.xml",
-                  "modules/swform/toolbar/viewerbar.xml",
-                  "modules/swreport/accelerator/de/default.xml",
-                  "modules/swreport/accelerator/en-US/default.xml",
-                  "modules/swreport/accelerator/es/default.xml",
-                  "modules/swreport/accelerator/fr/default.xml",
-                  "modules/swreport/menubar/menubar.xml",
-                  "modules/swreport/statusbar/statusbar.xml",
-                  "modules/swreport/toolbar/alignmentbar.xml",
-                  "modules/swreport/toolbar/arrowshapes.xml",
-                  "modules/swreport/toolbar/basicshapes.xml",
-                  "modules/swreport/toolbar/bezierobjectbar.xml",
-                  "modules/swreport/toolbar/calloutshapes.xml",
-                  "modules/swreport/toolbar/colorbar.xml",
-                  "modules/swreport/toolbar/drawbar.xml",
-                  "modules/swreport/toolbar/drawingobjectbar.xml",
-                  "modules/swreport/toolbar/drawtextobjectbar.xml",
-                  "modules/swreport/toolbar/extrusionobjectbar.xml",
-                  "modules/swreport/toolbar/flowchartshapes.xml",
-                  "modules/swreport/toolbar/fontworkobjectbar.xml",
-                  "modules/swreport/toolbar/fontworkshapetype.xml",
-                  "modules/swreport/toolbar/formcontrols.xml",
-                  "modules/swreport/toolbar/formdesign.xml",
-                  "modules/swreport/toolbar/formsfilterbar.xml",
-                  "modules/swreport/toolbar/formsnavigationbar.xml",
-                  "modules/swreport/toolbar/formtextobjectbar.xml",
-                  "modules/swreport/toolbar/frameobjectbar.xml",
-                  "modules/swreport/toolbar/fullscreenbar.xml",
-                  "modules/swreport/toolbar/graffilterbar.xml",
-                  "modules/swreport/toolbar/graphicobjectbar.xml",
-                  "modules/swreport/toolbar/insertbar.xml",
-                  "modules/swreport/toolbar/insertobjectbar.xml",
-                  "modules/swreport/toolbar/mediaobjectbar.xml",
-                  "modules/swreport/toolbar/moreformcontrols.xml",
-                  "modules/swreport/toolbar/numobjectbar.xml",
-                  "modules/swreport/toolbar/oleobjectbar.xml",
-                  "modules/swreport/toolbar/optimizetablebar.xml",
-                  "modules/swreport/toolbar/previewobjectbar.xml",
-                  "modules/swreport/toolbar/standardbar.xml",
-                  "modules/swreport/toolbar/starshapes.xml",
-                  "modules/swreport/toolbar/symbolshapes.xml",
-                  "modules/swreport/toolbar/tableobjectbar.xml",
-                  "modules/swreport/toolbar/textobjectbar.xml",
-                  "modules/swreport/toolbar/toolbar.xml",
-                  "modules/swreport/toolbar/viewerbar.xml",
-                  "modules/swxform/accelerator/de/default.xml",
-                  "modules/swxform/accelerator/en-US/default.xml",
-                  "modules/swxform/accelerator/es/default.xml",
-                  "modules/swxform/accelerator/fr/default.xml",
-                  "modules/swxform/menubar/menubar.xml",
-                  "modules/swxform/statusbar/statusbar.xml",
-                  "modules/swxform/toolbar/alignmentbar.xml",
-                  "modules/swxform/toolbar/arrowshapes.xml",
-                  "modules/swxform/toolbar/basicshapes.xml",
-                  "modules/swxform/toolbar/bezierobjectbar.xml",
-                  "modules/swxform/toolbar/calloutshapes.xml",
-                  "modules/swxform/toolbar/colorbar.xml",
-                  "modules/swxform/toolbar/drawbar.xml",
-                  "modules/swxform/toolbar/drawingobjectbar.xml",
-                  "modules/swxform/toolbar/drawtextobjectbar.xml",
-                  "modules/swxform/toolbar/extrusionobjectbar.xml",
-                  "modules/swxform/toolbar/flowchartshapes.xml",
-                  "modules/swxform/toolbar/fontworkobjectbar.xml",
-                  "modules/swxform/toolbar/fontworkshapetype.xml",
-                  "modules/swxform/toolbar/formcontrols.xml",
-                  "modules/swxform/toolbar/formdesign.xml",
-                  "modules/swxform/toolbar/formsfilterbar.xml",
-                  "modules/swxform/toolbar/formsnavigationbar.xml",
-                  "modules/swxform/toolbar/formtextobjectbar.xml",
-                  "modules/swxform/toolbar/frameobjectbar.xml",
-                  "modules/swxform/toolbar/fullscreenbar.xml",
-                  "modules/swxform/toolbar/graffilterbar.xml",
-                  "modules/swxform/toolbar/graphicobjectbar.xml",
-                  "modules/swxform/toolbar/insertbar.xml",
-                  "modules/swxform/toolbar/insertobjectbar.xml",
-                  "modules/swxform/toolbar/mediaobjectbar.xml",
-                  "modules/swxform/toolbar/moreformcontrols.xml",
-                  "modules/swxform/toolbar/numobjectbar.xml",
-                  "modules/swxform/toolbar/oleobjectbar.xml",
-                  "modules/swxform/toolbar/optimizetablebar.xml",
-                  "modules/swxform/toolbar/previewobjectbar.xml",
-                  "modules/swxform/toolbar/standardbar.xml",
-                  "modules/swxform/toolbar/starshapes.xml",
-                  "modules/swxform/toolbar/symbolshapes.xml",
-                  "modules/swxform/toolbar/tableobjectbar.xml",
-                  "modules/swxform/toolbar/textobjectbar.xml",
-                  "modules/swxform/toolbar/toolbar.xml",
-                  "modules/swxform/toolbar/viewerbar.xml",
-
-                  "modules/dbreport/toolbar/Formatting.xml",
-                  "modules/dbreport/toolbar/alignmentbar.xml",
-                  "modules/dbreport/toolbar/arrowshapes.xml",
-                  "modules/dbreport/toolbar/basicshapes.xml",
-                  "modules/dbreport/toolbar/calloutshapes.xml",
-                  "modules/dbreport/toolbar/flowchartshapes.xml",
-                  "modules/dbreport/toolbar/reportcontrols.xml",
-                  "modules/dbreport/toolbar/drawbar.xml",
-                  "modules/dbreport/toolbar/resizebar.xml",
-                  "modules/dbreport/toolbar/sectionalignmentbar.xml",
-                  "modules/dbreport/toolbar/starshapes.xml",
-                  "modules/dbreport/toolbar/symbolshapes.xml",
-                  "modules/dbreport/toolbar/toolbar.xml",
-                  "modules/dbreport/menubar/menubar.xml",
-                  "modules/dbreport/statusbar/statusbar.xml",
-                  "modules/dbreport/accelerator/de-DE/default.xml",
-                  "modules/dbreport/accelerator/en-GB/default.xml",
-                  "modules/dbreport/accelerator/en-US/default.xml");
+    Patchfiles = ();
 End
 
 #ifdef WNT
@@ -2573,7 +2341,7 @@ End
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "pagein-common";
 End
 
@@ -2649,14 +2417,14 @@ End
 
 File gid_File_Xsl_Export_Common_Styles_Styles_Collector
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
     Name = "/xslt/export/common/styles/style_collector.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Styles_Style_Mapping_Css
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
     Name = "/xslt/export/common/styles/style_mapping_css.xsl";
 End
@@ -2677,7 +2445,7 @@ End
 
 File gid_File_Xsl_Export_Common_Table_Table_Cells
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Table;
     Name = "/xslt/export/common/table/table_cells.xsl";
 End
@@ -2698,35 +2466,35 @@ End
 
 File gid_File_Xsl_Export_Spreadsheetml_Formular
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
     Name = "/xslt/export/spreadsheetml/formular.xsl";
 End
 
 File gid_File_Xsl_Export_Spreadsheetml_Ooo2spreadsheetml
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
     Name = "/xslt/export/spreadsheetml/ooo2spreadsheetml.xsl";
 End
 
 File gid_File_Xsl_Export_Spreadsheetml_Style_Mapping
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
     Name = "/xslt/export/spreadsheetml/style_mapping.xsl";
 End
 
 File gid_File_Xsl_Export_Spreadsheetml_Styles
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
     Name = "/xslt/export/spreadsheetml/styles.xsl";
 End
 
 File gid_File_Xsl_Export_Spreadsheetml_Table
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
     Name = "/xslt/export/spreadsheetml/table.xsl";
 End
@@ -2817,14 +2585,14 @@ End
 
 File gid_File_Xsl_Import_Spreadsheetml_Spreadsheetml2ooo
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Spreadsheetml;
     Name = "/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl";
 End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo.xsl";
 End
@@ -2860,7 +2628,7 @@ End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Page
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_page.xsl";
 End
@@ -2874,14 +2642,14 @@ End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Table
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_table.xsl";
 End
 
 File gid_File_Xsl_Import_Wordml_Wordml2ooo_Text
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Import_Wordml;
     Name = "/xslt/import/wordml/wordml2ooo_text.xsl";
 End
@@ -2915,7 +2683,7 @@ File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;
     Name = "legacy_binfilters.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY, PATCH);
+    Styles = (PACKED, STARREGISTRY);
 End
 #endif
 
@@ -2923,7 +2691,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY, PATCH);
+    Styles = (PACKED, STARREGISTRY);
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
@@ -3053,9 +2821,9 @@ File gid_File_Config_Javasettingsunopkginstall
     Dir = gid_Dir_Config;
     Name = "javasettingsunopkginstall.xml";
   #ifdef SOLARIS
-    Styles = (PACKED,PATCH,CONFIGFILE);
+    Styles = (PACKED,CONFIGFILE);
   #else
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
   #endif
     SolarisGroup = "other";
 End
@@ -3070,12 +2838,12 @@ File gid_File_Stclient_Wrapper
 #else
     Name = "stclient_wrapper";
 #endif
-    Styles = (PATCH);
+    Styles = ();
 End
 
 File gid_File_Registry_Spool_Oo_Office_Jobs_Stclient_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
     Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-stclient.xcu";
 End
