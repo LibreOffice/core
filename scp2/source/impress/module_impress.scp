@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_impress.scp,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,6 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Impress
-    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
     ParentID = gid_Module_Prg;
     Sortkey = "400";
@@ -39,11 +38,15 @@ Module gid_Module_Prg_Impress
 End
 
 Module gid_Module_Prg_Impress_Bin
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_BIN );
     ParentID = gid_Module_Prg_Impress;
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
+  #ifdef UNX
+    Styles = (HIDDEN_ROOT);
+  #endif
     Files = (gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Registry_Spool_Oo_Common_Impress_Xcu,gid_File_Registry_Spool_Oo_Setup_Impress_Xcu,
     gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu,
@@ -64,7 +67,11 @@ Module gid_Module_Brand_Prg_Impress
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Impress";
     Description = "gid_Module_Brand_Prg_Impress";
+  #ifdef UNX
+    ParentID = gid_Module_Prg_Impress;
+  #else
     ParentID = gid_Module_Prg_Impress_Bin;
+  #endif
     Sortkey = "100";
     Minimal = YES;
     Default = YES;
