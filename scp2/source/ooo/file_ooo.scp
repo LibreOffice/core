@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.238 $
+ * $Revision: 1.239 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2795,6 +2795,15 @@ File gid_File_Res_Bundle
     Dir = gid_Dir_Bundle_Contents_Resources;
     Name = "osxres.zip";
     Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_InfoPlist_Lang
+    Dir = gid_Dir_Bundle_Contents_Resources_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    EXTRA_ALL_LANG(InfoPlist);
 End
 #endif
 
