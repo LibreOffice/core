@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcu,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,6 +127,9 @@
       </prop>
       <prop oor:name="ProductVersionID">
         <value>${SERVICETAG_URN}</value>
+      </prop>
+      <prop oor:name="ReminderDate">
+        <value>Patch</value>
       </prop>
       <node oor:name="ProductVersions">
       </node>
