@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.106 $
+# $Revision: 1.107 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -448,6 +448,9 @@ installer::logger::print_message( "... analyzing unix links ... \n" );
 
 my $unixlinksinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Unixlink");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks1.log", $unixlinksinproductarrayref); }
+
+# $unixlinksinproductarrayref = installer::scriptitems::filter_layerlinks_from_unixlinks($unixlinksinproductarrayref);
+# if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks1b.log", $unixlinksinproductarrayref); }
 
 installer::logger::print_message( "... analyzing profile ... \n" );
 
@@ -1438,6 +1441,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # ... replacing the variable PRODUCTDIRECTORYNAME in the shellscriptfile by $staticpath
 
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "PRODUCTDIRECTORYNAME", $staticpath);
+                # installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "BASISDIRECTORYVERSION", $allvariableshashref->{'OOOBASEVERSION'});
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
                 # changing into the "install" directory to create installation sets
