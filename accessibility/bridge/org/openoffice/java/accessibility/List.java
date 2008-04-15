@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: List.java,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,6 +180,30 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         }
 
         /*
+         * AccessibleComponent
+         */
+
+        /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
+        public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
+            javax.accessibility.Accessible child = null;
+            try {
+                XAccessible xAccessible = unoAccessibleComponent.getAccessibleAtPoint(new com.sun.star.awt.Point(p.x, p.y));
+                if (xAccessible != null) {
+                    // Re-use the active descandant wrapper if possible
+                    javax.accessibility.Accessible activeDescendant = List.this.activeDescendant;
+                    if ((activeDescendant instanceof ListItem) && xAccessible.equals(((ListItem) activeDescendant).unoAccessible)) {
+                        child = activeDescendant;
+                    } else {
+                        child = new ListItem(xAccessible);
+                    }
+                }
+                return child;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /*
         * AccessibleSelection
         */
 
@@ -242,11 +266,12 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                                            javax.accessibility.AccessibleContext ac = new AccessibleListItem(xAccessibleContext);
-                                            if (ac != null) {
-                                                ac.setAccessibleParent(List.this);
-                                                accessibleContext = ac;
-                                            }
+                        javax.accessibility.AccessibleContext ac = new AccessibleListItem(xAccessibleContext);
+                        if (ac != null) {
+                            ac.setAccessibleParent(List.this);
+                            accessibleContext = ac;
+                        }
+                        AccessibleStateAdapter.setComponentState(this, xAccessibleContext.getAccessibleStateSet());
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
