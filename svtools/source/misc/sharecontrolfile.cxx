@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharecontrolfile.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,13 +65,14 @@ ShareControlFile::ShareControlFile( const ::rtl::OUString& aOrigURL, const uno::
     if ( !m_xFactory.is() )
         m_xFactory = ::comphelper::getProcessServiceFactory();
 
-    if ( !aOrigURL.getLength() )
+    INetURLObject aDocURL( aOrigURL );
+    if ( aDocURL.HasError() )
         throw lang::IllegalArgumentException();
 
-    INetURLObject aDocURL( aOrigURL );
     ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".~sharing." ) );
     aShareURLString += aDocURL.GetName();
+    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "#" ) );
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 
     OpenStream();
@@ -98,6 +99,8 @@ void ShareControlFile::OpenStream()
 
     if ( !m_xStream.is() && m_aURL.getLength() )
     {
+        // TODO/LATER: let it work with html access as well
+        // TODO/LATER: let the new file locking be used
         uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
             uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
                 xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
@@ -234,7 +237,8 @@ uno::Sequence< ::rtl::OUString > ShareControlFile::ParseEntry( const uno::Sequen
 {
     SvtUserOptions aUserOpt;
     ::rtl::OUString aName = aUserOpt.GetFirstName();
-    aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+    if ( aName.getLength() )
+        aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
     aName += aUserOpt.GetLastName();
 
     return aName;
