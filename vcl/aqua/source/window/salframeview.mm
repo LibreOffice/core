@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include "salgdi.h"
 #include "salframe.h"
 #include "salframeview.h"
+#include "aqua11yfactory.h"
+#include "vcl/window.hxx"
 
 #include "vcl/svapp.hxx"
  
@@ -268,6 +270,11 @@ static const struct ExceptionalKey
         mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
 }
 
+-(::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessibleContext >)accessibleContext
+{
+    return mpFrame -> GetWindow() -> GetAccessible() -> getAccessibleContext();
+}
+
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
   return [mDraggingDestinationHandler draggingEntered: sender];
@@ -325,6 +332,7 @@ static const struct ExceptionalKey
     {
         mMarkedRange = NSMakeRange(NSNotFound, 0);
         mSelectedRange = NSMakeRange(NSNotFound, 0);
+        mpReferenceWrapper = nil;
 		mpMouseEventListener = nil;
     }
 
@@ -962,6 +970,30 @@ static const struct ExceptionalKey
 
     mpFrame->VCLToCocoa( rect );
     return rect;
+}
+
+-(id)parentAttribute {
+    return (NSView *) mpFrame -> mpWindow;
+}
+
+-(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
+{
+    if ( mpReferenceWrapper == nil ) {
+        // some frames never become visible ..
+        Window *pWindow = mpFrame -> GetWindow();
+        if ( ! pWindow ) 
+            return nil;
+
+        mpReferenceWrapper = new ReferenceWrapper;
+        mpReferenceWrapper -> rAccessibleContext =  pWindow -> /*GetAccessibleChildWindow( 0 ) ->*/ GetAccessible() -> getAccessibleContext();
+        [ AquaA11yFactory insertIntoWrapperRepository: self forAccessibleContext: mpReferenceWrapper -> rAccessibleContext ];
+    }
+    return [ super accessibleContext ];
+}
+
+-(NSView *)viewElementForParent
+{
+    return (NSView *) mpFrame -> mpWindow;
 }
 
 -(void)registerMouseEventListener: (id)theListener
