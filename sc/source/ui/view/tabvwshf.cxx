@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshf.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -692,6 +692,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 {
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
+    ScDocShell* pDocShell   = pViewData->GetDocShell();
     ScMarkData& rMark       = GetViewData()->GetMarkData();
     SCTAB       nTab        = pViewData->GetTabNo();
 
@@ -772,7 +773,8 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TAB_MENU_RENAME:
                 if ( !pDoc->IsDocEditable() ||
-                     pDoc->IsTabProtected(nTab) ||nTabSelCount > 1 )
+                     pDoc->IsTabProtected(nTab) ||nTabSelCount > 1 ||
+                     ( pDocShell && pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
