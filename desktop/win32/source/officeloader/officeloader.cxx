@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeloader.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -304,8 +304,6 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             for (int i = 1; i < argc; ++i) {
                 n += _tcslen(argv[i]) + 3;
             }
-            n += MY_LENGTH(" \"-env:INIFILEPATH=") + _tcslen(szIniDirectory)
-                + MY_LENGTH("soffice.ini\"");
             lpCommandLine = new TCHAR[n + 1];
         }
         _tcscpy(lpCommandLine, _T("\""));
@@ -316,9 +314,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 _tcscat(lpCommandLine, argv[i]);
             }
         }
-        _tcscat(lpCommandLine, _T("\" \"-env:INIFILEPATH="));
-        _tcscat(lpCommandLine, szIniDirectory);
-        _tcscat(lpCommandLine, _T("soffice.ini\""));
+        _tcscat(lpCommandLine, _T("\""));
         first = false;
 
         TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
