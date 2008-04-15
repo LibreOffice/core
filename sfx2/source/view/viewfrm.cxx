@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfrm.cxx,v $
- * $Revision: 1.134 $
+ * $Revision: 1.135 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +89,7 @@
 #include <basic/sbx.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
+#include <svtools/sharecontrolfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -459,8 +460,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     sal_Bool bOK = sal_False;
                     if ( !pVersionItem )
                     {
+                        sal_Bool bHasStorage = pMed->HasStorage_Impl();
                         // switching edit mode could be possible without reload
-                        if ( pMed->HasStorage_Impl() && pMed->GetStorage() == pSh->GetStorage() )
+                        if ( bHasStorage && pMed->GetStorage() == pSh->GetStorage() )
                         {
                             // TODO/LATER: faster creation of copy
                             if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage(), pMed ) )
@@ -471,6 +473,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
                         pMed->CompleteReOpen();
+                        if ( bHasStorage )
+                            pMed->LockOrigFileOnDemand( sal_True );
+
                         if ( !pMed->GetErrorCode() )
                             bOK = sal_True;
                     }
@@ -618,7 +623,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 String aURL = pURLItem ? pURLItem->GetValue() :
                                 pMedium->GetName();
 
-                sal_Bool bHandsOff = pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE;
+                sal_Bool bHandsOff =
+                    ( pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE && !xOldObj->IsDocShared() );
 
                 // bestehende SfxMDIFrames f"ur dieses Doc leeren
                 // eigenes Format oder R/O jetzt editierbar "offnen?
@@ -685,6 +691,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 
+                // TODO/LATER: Temporary solution, the SfxMedium must know the original URL as aLogicName
+                //             SfxMedium::Transfer_Impl() will be vorbidden then.
+                if ( xOldObj->IsDocShared() )
+                    pNewSet->Put( SfxStringItem( SID_FILE_NAME, xOldObj->GetSharedFileURL() ) );
+
                 //pNewMedium = new SfxMedium( aURL, nMode, pMedium->IsDirect(), bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
                 //pNewSet = pNewMedium->GetItemSet();
                 if ( pURLItem )
@@ -724,9 +735,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( !pURLItem || pURLItem->GetValue() == xOldObj->GetMedium()->GetName() )
                     xOldObj->Get_Impl()->bForbidCaching = sal_True;
 
+                sal_Bool bHasStorage = pMedium->HasStorage_Impl();
                 if( bHandsOff )
                 {
-                    if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == xOldObj->GetStorage() )
+                    if ( bHasStorage && pMedium->GetStorage() == xOldObj->GetStorage() )
                     {
                         // TODO/LATER: faster creation of copy
                         if ( !xOldObj->ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
@@ -758,6 +770,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // back to old medium
                         pMedium->ReOpen();
+
+                        if ( bHasStorage )
+                            pMedium->LockOrigFileOnDemand( sal_True );
+
                         xOldObj->DoSaveCompleted( pMedium );
                     }
 
@@ -790,6 +806,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 else
                 {
+                    if ( xNewObj->IsDocShared() )
+                    {
+                        // the file is shared but the closing can chang the sharing control file
+                        xOldObj->DoNotCleanShareControlFile();
+                    }
+
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
                     UpdateDocument_Impl();
                 }
