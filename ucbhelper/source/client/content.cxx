@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1182,6 +1182,7 @@ Reference< XResultSet > Content::createSortedCursor(
 
     return aResult;
 }
+
 //=========================================================================
 Reference< XInputStream > Content::openStream()
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -1208,6 +1209,31 @@ Reference< XInputStream > Content::openStream()
 }
 
 //=========================================================================
+Reference< XInputStream > Content::openStreamNoLock()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    if ( !isDocument() )
+        return Reference< XInputStream >();
+
+    Reference< XActiveDataSink > xSink = new ActiveDataSink;
+
+    OpenCommandArgument2 aArg;
+    aArg.Mode       = OpenMode::DOCUMENT_SHARE_DENY_NONE;
+    aArg.Priority   = 0; // unused
+    aArg.Sink       = xSink;
+    aArg.Properties = Sequence< Property >( 0 ); // unused
+
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aArg;
+
+    m_xImpl->executeCommand( aCommand );
+
+    return xSink->getInputStream();
+}
+
+//=========================================================================
 Reference< XStream > Content::openWriteableStream()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -1218,6 +1244,31 @@ Reference< XStream > Content::openWriteableStream()
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
+    aArg.Priority   = 0; // unused
+    aArg.Sink       = xStreamer;
+    aArg.Properties = Sequence< Property >( 0 ); // unused
+
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aArg;
+
+    m_xImpl->executeCommand( aCommand );
+
+    return xStreamer->getStream();
+}
+
+//=========================================================================
+Reference< XStream > Content::openWriteableStreamNoLock()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    if ( !isDocument() )
+        return Reference< XStream >();
+
+    Reference< XActiveDataStreamer > xStreamer = new ActiveDataStreamer;
+
+    OpenCommandArgument2 aArg;
+    aArg.Mode       = OpenMode::DOCUMENT_SHARE_DENY_NONE;
     aArg.Priority   = 0; // unused
     aArg.Sink       = xStreamer;
     aArg.Properties = Sequence< Property >( 0 ); // unused
