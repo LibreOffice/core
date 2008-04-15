@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: smoketest.pl,v $
 #
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -261,7 +261,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.32 $ ';
+$id_str = ' $Revision: 1.33 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -464,7 +464,7 @@ sub doTest {
 
     # patch config (error 3)
 
-    $Command = "$PERL config.pl \"$basisdir \" \"$userinstallpath \" \"$DATA \"";
+    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \"";
     execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)
