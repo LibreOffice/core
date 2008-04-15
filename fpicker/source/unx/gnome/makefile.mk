@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +59,7 @@ GTK_TWO_FOUR:=$(shell @$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo ok)
 
 dummy:
     @echo "Cannot build gtk filepicker because" 
-    @$(PKGCONFIG) --print-errors --exists 'gtk+-2.0 >= 2.4.0'
+    @$(PKG_CONFIG) --print-errors --exists 'gtk+-2.0 >= 2.4.0'
 
 .ELSE
 
