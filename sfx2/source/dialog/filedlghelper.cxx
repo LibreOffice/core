@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filedlghelper.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1562,6 +1562,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             }
             catch( IllegalArgumentException ){}
         }
+
+        // the item should remain only if it was set by the dialog
+        rpSet->ClearItem( SID_SELECTION );
 
         if( mbExport )
         {
