@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,8 +194,14 @@ BOOL ImplSVMainHook( BOOL * pbInit )
         osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
         rtl::OString aByteExe( rtl::OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
 
+#ifdef DEBUG
+        aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
+        const char* pArgv[] = { aByteExe.getStr(), NULL };
+        NSApplicationMain( 3, pArgv );
+#else
         const char* pArgv[] = { aByteExe.getStr(), NULL };
         NSApplicationMain( 1, pArgv );
+#endif
     }
     else
     {
