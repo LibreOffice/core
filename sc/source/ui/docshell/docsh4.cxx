@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 
 
 using namespace ::com::sun::star;
@@ -73,6 +74,7 @@ using namespace ::com::sun::star;
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
 #include <svtools/PasswordHelper.hxx>
+#include <svtools/documentlockfile.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"
@@ -828,6 +830,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pOtherDocSh->GetError() )                 // nur Errors
                     {
                         BOOL bHadTrack = ( aDocument.GetChangeTrack() != NULL );
+                        ULONG nStart = 0;
+                        if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
+                        {
+                            nStart = pChangeTrack->GetActionMax() + 1;
+                        }
 
                         if ( nSlot == SID_DOCUMENT_COMPARE )
                             CompareDocument( *pOtherDocSh->GetDocument() );
@@ -836,13 +843,18 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                         //  show "accept changes" dialog
                         //! get view for this document!
-
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if (pViewFrm)
-                            pViewFrm->ShowChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId(),TRUE); //@51669
-//                        SfxBindings* pBindings = GetViewBindings();
-                        if (pBindings)
-                            pBindings->Invalidate(FID_CHG_ACCEPT);
+                        if ( !IsDocShared() )
+                        {
+                            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                            if ( pViewFrm )
+                            {
+                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId(), TRUE ); //@51669
+                            }
+                            if ( pBindings )
+                            {
+                                pBindings->Invalidate( FID_CHG_ACCEPT );
+                            }
+                        }
 
                         rReq.SetReturnValue( SfxInt32Item( nSlot, 0 ) );        //! ???????
                         rReq.Done();
@@ -855,6 +867,24 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 ScChangeViewSettings aChangeViewSet;
                                 aChangeViewSet.SetShowChanges(TRUE);
                                 aDocument.SetChangeViewSettings(aChangeViewSet);
+                            }
+                        }
+                        else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
+                        {
+                            ULONG nEnd = pChangeTrack->GetActionMax();
+                            if ( nEnd >= nStart )
+                            {
+                                // only show changes from merged document
+                                ScChangeViewSettings aChangeViewSet;
+                                aChangeViewSet.SetShowChanges( TRUE );
+                                aChangeViewSet.SetShowAccepted( TRUE );
+                                aChangeViewSet.SetHasActionRange( true );
+                                aChangeViewSet.SetTheActionRange( nStart, nEnd );
+                                aDocument.SetChangeViewSettings( aChangeViewSet );
+
+                                // update view
+                                PostPaintExtras();
+                                PostPaintGridAll();
                             }
                         }
                     }
@@ -973,7 +1003,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_SHARE_DOC:
             {
-                ScShareDocumentDlg aDlg( GetActiveDialogParent(), GetViewData() );
+                ScViewData* pViewData = GetViewData();
+                if ( !pViewData )
+                {
+                    rReq.Ignore();
+                    break;
+                }
+
+                ScShareDocumentDlg aDlg( GetActiveDialogParent(), pViewData );
                 if ( aDlg.Execute() == RET_OK )
                 {
                     bool bSetShared = aDlg.IsShareDocumentChecked();
@@ -993,50 +1030,78 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             }
                             if ( bContinue )
                             {
-                                SwitchDocumentToShared( true );
-                                if ( pBindings )
+                                EnableSharedSettings( true );
+
+                                SC_MOD()->SetInSharedDocSaving( true );
+                                if ( !SwitchToShared( sal_True, sal_True ) )
                                 {
-                                    SC_MOD()->SetInSharedDocSaving( true );
-                                    pBindings->ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
-                                    SC_MOD()->SetInSharedDocSaving( false );
+                                    // TODO/LATER: what should be done in case the switch has failed?
+                                    // for example in case the user has cancelled the saveAs operation
                                 }
-                                SetSharedFileUrl( GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-                                GetMedium()->SwitchDocumentToTempFile();
+
+                                SC_MOD()->SetInSharedDocSaving( false );
+
                                 InvalidateName();
                                 GetUndoManager()->Clear();
+
+                                ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
+                                if ( pTabView )
+                                {
+                                    pTabView->UpdateLayerLocks();
+                                }
                             }
                         }
                         else
                         {
-                            uno::Reference< frame::XLoadable > xLoadable;
+                            uno::Reference< frame::XModel > xModel;
                             try
                             {
                                 // load shared file
-                                xLoadable.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
-                                uno::Reference< util::XCloseable > xCloseable( xLoadable, uno::UNO_QUERY_THROW );
+                                xModel.set( LoadSharedDocument(), uno::UNO_QUERY_THROW );
+                                uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY_THROW );
 
                                 // check if shared flag is set in shared file
                                 bool bShared = false;
-                                ScModelObj* pDocObj = ScModelObj::getImplementation( xLoadable );
+                                ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
                                 if ( pDocObj )
                                 {
                                     ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pDocObj->GetEmbeddedObject() );
                                     if ( pDocShell )
                                     {
-                                        bShared = pDocShell->IsDocShared();
+                                        bShared = pDocShell->HasSharedXMLFlagSet();
                                     }
                                 }
 
                                 if ( bShared )
                                 {
-                                    uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY_THROW );
+                                    uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW );
                                     if ( xStorable->isReadonly() )
                                     {
                                         xCloseable->close( sal_True );
-                                        // TODO: get name of user who has the write lock
+
                                         String aUserName( ScGlobal::GetRscString( STR_UNKNOWN_USER ) );
+                                        try
+                                        {
+                                            ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
+                                            uno::Sequence< ::rtl::OUString > aData = aLockFile.GetLockData();
+                                            if ( aData.getLength() > LOCKFILE_SYSUSERNAME_ID )
+                                            {
+                                                if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() > 0 )
+                                                {
+                                                    aUserName = aData[LOCKFILE_OOOUSERNAME_ID];
+                                                }
+                                                else if ( aData[LOCKFILE_SYSUSERNAME_ID].getLength() > 0 )
+                                                {
+                                                    aUserName = aData[LOCKFILE_SYSUSERNAME_ID];
+                                                }
+                                            }
+                                        }
+                                        catch ( uno::Exception& )
+                                        {
+                                        }
                                         String aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage.SearchAndReplaceAscii( "%1", aUserName );
+
                                         WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
                                         aBox.Execute();
                                     }
@@ -1047,15 +1112,24 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         if ( aBox.Execute() == RET_YES )
                                         {
                                             xCloseable->close( sal_True );
+
+                                            if ( !SwitchToShared( sal_False, sal_True ) )
+                                            {
+                                                // TODO/LATER: what should be done in case the switch has failed?
+                                                // for example in case the user has cancelled the saveAs operation
+                                            }
+
+                                            EnableSharedSettings( false );
+
                                             if ( pBindings )
                                             {
                                                 pBindings->ExecuteSynchron( SID_SAVEDOC );
                                             }
-                                            SwitchDocumentToShared( false );
-                                            GetMedium()->SwitchDocumentToFile( GetSharedFileUrl() );
-                                            if ( pBindings )
+
+                                            ScTabView* pTabView = dynamic_cast< ScTabView* >( pViewData->GetView() );
+                                            if ( pTabView )
                                             {
-                                                pBindings->ExecuteSynchron( SID_SAVEDOC );
+                                                pTabView->UpdateLayerLocks();
                                             }
                                         }
                                         else
@@ -1070,7 +1144,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                     WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
                                         ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
                                     aBox.Execute();
-                                    SwitchDocumentToShared( false );
                                 }
                             }
                             catch ( uno::Exception& )
@@ -1080,7 +1153,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 try
                                 {
-                                    uno::Reference< util::XCloseable > xClose( xLoadable, uno::UNO_QUERY_THROW );
+                                    uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
                                     xClose->close( sal_True );
                                 }
                                 catch ( uno::Exception& )
@@ -2128,6 +2201,15 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                 }
                 break;
 
+            case SID_DOCUMENT_COMPARE:
+                {
+                    if ( IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
             //  Wenn eine Formel editiert wird, muss FID_RECALC auf jeden Fall enabled sein.
             //  Recalc fuer das Doc war mal wegen #29898# disabled, wenn AutoCalc an war,
             //  ist jetzt wegen #41540# aber auch immer enabled.
@@ -2425,7 +2507,7 @@ SCTAB ScDocShell::GetCurTab()
     return pViewData ? pViewData->GetTabNo() : static_cast<SCTAB>(0);
 }
 
-ScTabViewShell* ScDocShell::GetBestViewShell()
+ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     // falsches Doc?
@@ -2434,7 +2516,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell()
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame) );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();
@@ -2489,26 +2571,30 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     {
         USHORT nSlot = pImpl->pRequest->GetSlot();
         SfxMedium* pMed = pImpl->pDocInserter->CreateMedium();
-        pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-        if ( SID_DOCUMENT_COMPARE == nSlot )
+        // #i87094# If a .odt was selected pMed is NULL.
+        if (pMed)
         {
-            if ( pMed->GetFilter() )
-                pImpl->pRequest->AppendItem(
-                    SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-            String sOptions = ScDocumentLoader::GetOptions( *pMed );
-            if ( sOptions.Len() > 0 )
-                pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
-        }
-        const SfxPoolItem* pItem = NULL;
-        SfxItemSet* pSet = pMed->GetItemSet();
-        if ( pSet &&
-             pSet->GetItemState( SID_VERSION, TRUE, &pItem ) == SFX_ITEM_SET &&
-             pItem->ISA( SfxInt16Item ) )
-        {
-            pImpl->pRequest->AppendItem( *pItem );
-        }
+            pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
+            if ( SID_DOCUMENT_COMPARE == nSlot )
+            {
+                if ( pMed->GetFilter() )
+                    pImpl->pRequest->AppendItem(
+                            SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
+                String sOptions = ScDocumentLoader::GetOptions( *pMed );
+                if ( sOptions.Len() > 0 )
+                    pImpl->pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
+            }
+            const SfxPoolItem* pItem = NULL;
+            SfxItemSet* pSet = pMed->GetItemSet();
+            if ( pSet &&
+                    pSet->GetItemState( SID_VERSION, TRUE, &pItem ) == SFX_ITEM_SET &&
+                    pItem->ISA( SfxInt16Item ) )
+            {
+                pImpl->pRequest->AppendItem( *pItem );
+            }
 
-        Execute( *(pImpl->pRequest) );
+            Execute( *(pImpl->pRequest) );
+        }
     }
 
     pImpl->bIgnoreLostRedliningWarning = false;
@@ -2517,44 +2603,55 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
 //------------------------------------------------------------------
 
-void ScDocShell::SwitchDocumentToShared( bool bShared )
+void ScDocShell::EnableSharedSettings( bool bEnable )
 {
-    SetDocShared( bShared );
     SetDocumentModified();
-    SfxBindings* pBindings = GetViewBindings();
-    if ( pBindings )
+
+    if ( bEnable )
     {
-        pBindings->Invalidate( SID_SHARE_DOC );
-    }
-    if ( bShared )
-    {
+        aDocument.EndChangeTracking();
         aDocument.StartChangeTracking();
+
+        // hide accept or reject changes dialog
+        USHORT nId = ScAcceptChgDlgWrapper::GetChildWindowId();
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if ( pViewFrame && pViewFrame->HasChildWindow( nId ) )
+        {
+            pViewFrame->ToggleChildWindow( nId );
+            SfxBindings* pBindings = GetViewBindings();
+            if ( pBindings )
+            {
+                pBindings->Invalidate( FID_CHG_ACCEPT );
+            }
+        }
     }
     else
     {
         aDocument.EndChangeTracking();
     }
+
     ScChangeViewSettings aChangeViewSet;
     aChangeViewSet.SetShowChanges( FALSE );
     aDocument.SetChangeViewSettings( aChangeViewSet );
 }
 
-uno::Reference< frame::XLoadable > ScDocShell::LoadSharedDocument()
+uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
 {
-    uno::Reference< frame::XLoadable > xLoadable;
+    uno::Reference< frame::XModel > xModel;
     try
     {
+        SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< lang::XMultiServiceFactory > xFactory(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xLoadable.set(
-            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ), uno::UNO_QUERY_THROW );
-        uno::Sequence< beans::PropertyValue > aArgs(2);
-        aArgs[0].Name = ::rtl::OUString::createFromAscii( "URL" );
-        aArgs[0].Value <<= GetSharedFileUrl();
-        aArgs[1].Name = ::rtl::OUString::createFromAscii( "FilterName" );
-        aArgs[1].Value <<= ::rtl::OUString( GetMedium()->GetFilter()->GetFilterName() );
-        SC_MOD()->SetInSharedDocLoading( true );
-        xLoadable->load( aArgs );
+        uno::Reference< frame::XComponentLoader > xLoader(
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+            uno::UNO_QUERY_THROW );
+        uno::Sequence < beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii( "Hidden" );
+        aArgs[0].Value <<= sal_True;
+        xModel.set(
+            xLoader->loadComponentFromURL( GetSharedFileURL(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0, aArgs ),
+            uno::UNO_QUERY_THROW );
         SC_MOD()->SetInSharedDocLoading( false );
     }
     catch ( uno::Exception& )
@@ -2563,14 +2660,14 @@ uno::Reference< frame::XLoadable > ScDocShell::LoadSharedDocument()
         SC_MOD()->SetInSharedDocLoading( false );
         try
         {
-            uno::Reference< util::XCloseable > xClose( xLoadable, uno::UNO_QUERY_THROW );
+            uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
             xClose->close( sal_True );
-            return uno::Reference< frame::XLoadable >();
+            return uno::Reference< frame::XModel >();
         }
         catch ( uno::Exception& )
         {
-            return uno::Reference< frame::XLoadable >();
+            return uno::Reference< frame::XModel >();
         }
     }
-    return xLoadable;
+    return xModel;
 }
