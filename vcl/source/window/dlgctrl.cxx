@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1002,7 +1002,7 @@ Window* Window::GetLabelFor() const
     {
         Window* pSWindow = NULL;
         // get index, form start and form end
-        USHORT nIndex, nFormStart, nFormEnd;
+        USHORT nIndex=0, nFormStart=0, nFormEnd=0;
         pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
                                            const_cast<Window*>(this),
                                            nIndex,
