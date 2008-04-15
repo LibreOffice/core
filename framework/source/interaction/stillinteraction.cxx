@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stillinteraction.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,10 @@
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
+
+#ifndef _COM_SUN_STAR_DOCUMENT_LOCKEDDOCUMENTREQUEST_HPP_
+#include <com/sun/star/document/LockedDocumentRequest.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -128,6 +132,7 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
     // and other ones (ambigous but not unknown filter ...)
     css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
+    css::document::LockedDocumentRequest aLockedDocumentRequest;
 
     if (aRequest>>=aAmbigousFilterRequest)
     {
@@ -145,6 +150,16 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
         // errors must break loading => abort
         sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK;
         if (xApprove.is() && bWarning)
+            xApprove->select();
+        else
+        if (xAbort.is())
+            xAbort->select();
+    }
+    else
+    if( aRequest >>= aLockedDocumentRequest )
+    {
+        // the locked document should be opened readonly by default
+        if (xApprove.is())
             xApprove->select();
         else
         if (xAbort.is())
