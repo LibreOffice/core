@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_base.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +116,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
     Subkey = "opendocument.DatabaseDocument.1\shell\open\command";
     ModuleID = gid_Module_Prg_Base_Bin;
     Value = "\"<progpath>\program\sbase.exe\" -o \"%1\"";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 // "OpenWith" Windows Registry keys for .odb
@@ -135,7 +135,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     ModuleID = gid_Module_Root;
     Name = ".odb";
     Value = "opendocument.ImpressDocument.1";
-    Styles = (PATCH);
+    Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sbase_Exe
