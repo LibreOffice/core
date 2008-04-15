@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,6 +150,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
+    ScDocShell* pDocShell   = pViewData->GetDocShell();
     ScMarkData& rMark       = pViewData->GetMarkData();
     SCCOL       nPosX       = pViewData->GetCurX();
     SCROW       nPosY       = pViewData->GetCurY();
@@ -178,6 +179,17 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 }
                 break;
 
+            case SID_OPENDLG_EDIT_PRINTAREA:
+            case SID_ADD_PRINTAREA:
+            case SID_DEFINE_PRINTAREA:
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
             case SID_DELETE_PRINTAREA:
                 if ( nTabSelCount > 1 )
                 {
@@ -190,6 +202,10 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 }
                 else if ( !pDoc->GetPrintRangeCount( nTab ) && !pDoc->IsPrintEntireSheet( nTab ) )
                     rSet.DisableItem( nWhich );
+                if ( pDocShell && pDocShell->IsDocShared() )
+                {
+                    rSet.DisableItem( nWhich );
+                }
                 break;
 
             case SID_STATUS_PAGESTYLE:
@@ -322,11 +338,29 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case FID_PROTECT_DOC:
-                rSet.Put(SfxBoolItem(nWhich, pDoc->IsDocProtected()));
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                    else
+                    {
+                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsDocProtected() ) );
+                    }
+                }
                 break;
 
             case FID_PROTECT_TABLE:
-                rSet.Put(SfxBoolItem(nWhich, pDoc->IsTabProtected(nTab)));
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                    else
+                    {
+                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsTabProtected( nTab ) ) );
+                    }
+                }
                 break;
 
             case SID_AUTO_OUTLINE:
@@ -361,8 +395,8 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_CHG_SHOW:
                 {
-                    if(pDoc->GetChangeTrack()==NULL || GetViewData()->GetDocShell()->IsDocShared())
-                                rSet.DisableItem( nWhich);
+                    if ( pDoc->GetChangeTrack() == NULL || ( pDocShell && pDocShell->IsDocShared() ) )
+                        rSet.DisableItem( nWhich );
                 }
                 break;
             case FID_CHG_ACCEPT:
@@ -376,7 +410,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                             rSet.DisableItem( nWhich);
                         }
                     }
-                    if ( GetViewData()->GetDocShell()->IsDocShared() )
+                    if ( pDocShell && pDocShell->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -385,7 +419,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_FORMATPAGE:
                 //! bei geschuetzten Tabellen ???
-                if (GetViewData()->GetDocShell()->IsReadOnly())
+                if ( pDocShell && ( pDocShell->IsReadOnly() || pDocShell->IsDocShared() ) )
                     rSet.DisableItem( nWhich );
                 break;
 
