@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_lang_template.scp,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-Module gid_Module_Langpack_Root_Template
+Module gid_Module_Langpack_Basis_Template
     ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Root_Template";
     Description = "gid_Module_Langpack_Root_Template";
@@ -57,7 +57,7 @@ Module gid_Module_Langpack_Root_Template
 End
 
 Module gid_Module_Langpack_Resource_Template
-    ParentID = gid_Module_Langpack_Root_Template;
+    ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Resource_Template";
     Description = "gid_Module_Langpack_Resource_Template";
     Styles = (TEMPLATEMODULE);
@@ -126,7 +126,7 @@ Module gid_Module_Langpack_Resource_Template
 End
 
 Module gid_Module_Langpack_Help_Template
-    ParentID = gid_Module_Langpack_Root_Template;
+    ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Help_Template";
     Description = "gid_Module_Langpack_Help_Template";
     Styles = (TEMPLATEMODULE);
@@ -136,7 +136,7 @@ Module gid_Module_Langpack_Help_Template
 End
 
 Module gid_Module_Langpack_Fonts_Template
-    ParentID = gid_Module_Langpack_Root_Template;
+    ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Fonts_Template";
     Description = "gid_Module_Langpack_Fonts_Template";
     Styles = (TEMPLATEMODULE);
