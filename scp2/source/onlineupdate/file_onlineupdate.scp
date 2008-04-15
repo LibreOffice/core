@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_onlineupdate.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,20 +30,20 @@
 
 #include "macros.inc"
 
-SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updchk , updchk.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
 
-STD_RES_FILE_PATCH( gid_File_Res_Upd, upd )
+STD_RES_FILE( gid_File_Res_Upd, upd )
 
 File gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Addons;
     Name = "/registry/spool/org/openoffice/Office/Addons/Addons-onlineupdate.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
     Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu";
 End
@@ -53,6 +53,6 @@ File gid_File_Bin_UnpackUpdate
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "unpack_update";
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
 End
 #endif
