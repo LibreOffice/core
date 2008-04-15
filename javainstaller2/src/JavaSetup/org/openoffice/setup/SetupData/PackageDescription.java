@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PackageDescription.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,7 @@ public class PackageDescription implements TreeNode {
     private String  pkgSubdir = null;
     private String  pkgLanguage = null;
     private int     pkgSize     = 0;
+    private int     pkgOrder    = 0;
     private int     pkgType     = NOTA_UNIT;
     private boolean pkgExists = true;  // must be default, especially for uninstallation
     private boolean isRelocatable = true;
@@ -153,6 +154,10 @@ public class PackageDescription implements TreeNode {
 
     public void setSize(int size) {
         pkgSize = size;
+    }
+
+    public int getOrder() {
+        return pkgOrder;
     }
 
     // public int getAccumulatedSize() {
@@ -454,6 +459,14 @@ public class PackageDescription implements TreeNode {
             if (subSection != null) {
                 String sz = subSection.getValue();
                 pkgSize = Integer.parseInt(sz);
+            }
+            subSection = section.getElement("installorder");
+            if (subSection != null) {
+                String order = subSection.getValue();
+                pkgOrder = Integer.parseInt(order);
+            } else {
+                // Setting the default for packages without order
+                pkgOrder = 1000;
             }
             subSection = section.getElement("md5");
             if (subSection != null) {
