@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interactionrequest.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +265,7 @@ public:
   * along with an interaction request to indicate the possiblity to approve
   * the request.
   */
-class InteractionApprove : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionApprove : public InteractionContinuation,
                            public com::sun::star::lang::XTypeProvider,
                            public com::sun::star::task::XInteractionApprove
 {
@@ -302,7 +302,7 @@ public:
   * along with an interaction request to indicate the possiblity to disapprove
   * the request.
   */
-class InteractionDisapprove : public InteractionContinuation,
+class UCBHELPER_DLLPUBLIC InteractionDisapprove : public InteractionContinuation,
                               public com::sun::star::lang::XTypeProvider,
                               public com::sun::star::task::XInteractionDisapprove
 {
