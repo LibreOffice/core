@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessiblerelationsethelper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,17 +96,9 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nInde
 sal_Bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType )
     throw (uno::RuntimeException)
 {
-    sal_Int32 nCount(getRelationCount());
-    sal_Int32 i(0);
-    sal_Bool bFound(sal_False);
-    while ((i < nCount) && !bFound)
-    {
-        if (maRelations[i].RelationType == aRelationType)
-            bFound = sal_True;
-        else
-            i++;
-    }
-    return bFound;
+    AccessibleRelation defaultRelation; // default is INVALID
+    AccessibleRelation relationByType = getRelationByType(aRelationType);
+    return relationByType.RelationType != defaultRelation.RelationType;
 }
 
 AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16 aRelationType )
@@ -118,11 +110,11 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16
     while ((i < nCount) && !bFound)
     {
         if (maRelations[i].RelationType == aRelationType)
-            bFound = sal_True;
+            return maRelations[i];
         else
             i++;
     }
-    return maRelations[i];
+    return AccessibleRelation();
 }
 
 void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRelation)
