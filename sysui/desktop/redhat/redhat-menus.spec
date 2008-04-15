@@ -211,29 +211,6 @@ END
   mv -f /etc/mailcap.tmp$$ /etc/mailcap
 fi
 
-# Check whether to activate the gnome-set-default-application stuff (GNOME < 2.6) 
-if [ "$1" = "1" ]
-then
-  if [ -x /usr/bin/gnome-panel ]
-  then
-    /usr/bin/gnome-panel --version | grep ' 2\.[024]\.' > /dev/null
-    if [ "$?" = "0" ]; then
-      cat >> /usr/bin/%unixfilename.tmp$$ << EOF
-#!/bin/sh
-USERDIR=\`sed -n -e 's/UserInstallation=//p' /etc/%unixfilename/program/bootstraprc | sed -e "s|.SYSUSERCONFIG|\$HOME|"\`
-# Run gnome-set-default-application on first office launch
-if [ ! -d \$USERDIR ]
-then
-  /etc/%unixfilename/program/gnome-set-default-application '%unixfilename' 'application/vnd.oasis.opendocument' 'application/vnd.sun.xml' 'application/vnd.stardivision'
-fi
-EOF
-      sed -n -e '2,$ p' /usr/bin/%unixfilename >> /usr/bin/%unixfilename.tmp$$
-      mv -f /usr/bin/%unixfilename.tmp$$ /usr/bin/%unixfilename
-      chmod 0755 /usr/bin/%unixfilename
-    fi
-  fi
-fi
-
 %preun
 # remove from /etc/mailcap only on de-install
 if [ "$1" = 0 ]
