@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -734,6 +734,21 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
     /**
+      * This methods gives read access to the content stream of a content (i.e
+      * the content of a file located at the local file system).
+      * Internally it executes the command "open" at the content.
+      * The method requests opening without locking.
+      *
+      * @return an implementation of the interface XInputStream, which can
+      *         be used to read the content's data.
+      */
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+    openStreamNoLock()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
+    /**
       * This methods gives read/write access to the content stream of a content (i.e
       * the content of a file located at the local file system).
       * Internally it executes the command "open" at the content.
@@ -746,6 +761,21 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+    /**
+      * This methods gives read/write access to the content stream of a content (i.e
+      * the content of a file located at the local file system).
+      * Internally it executes the command "open" at the content.
+      * The method requests opening without locking.
+      *
+      * @return an implementation of the interface XStream, which can
+      *         be used to read/write the content's data.
+      */
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
+    openWriteableStreamNoLock()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).
