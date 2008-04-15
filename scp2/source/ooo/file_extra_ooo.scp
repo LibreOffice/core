@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_extra_ooo.scp,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +33,14 @@
 File gid_File_Extra_Autocorr
     Dir = gid_Dir_Share_Autocorr;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, PATCH);
+    Styles = (ARCHIVE);
     Name = "autocorr.zip";
 End
 
 File gid_File_Extra_Autotextshare_Lang
     Dir = gid_Dir_Autotext_Language;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE, PATCH);
+    Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(autotextshare);
 End
 
@@ -64,21 +64,16 @@ End
 File gid_File_Extra_Cfgusr
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE, PATCH);
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
     Name = "cfgusr.zip";
 End
 
 File gid_File_Extra_Cfgsrv
     Dir = gid_Dir_Config;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE,PATCH);
+    Styles = (ARCHIVE);
     Name = "cfgsrvnolang.zip";
-    Patchfiles = ("wizard/form/styles/dark.css",
-                  "wizard/form/styles/grey.css",
-                  "wizard/form/styles/ice.css",
-                  "wizard/form/styles/orange.css",
-                  "wizard/form/styles/violet.css",
-                  "wizard/form/styles/water.css");
+    Patchfiles = ();
 End
 
 File gid_File_Extra_Common_Inc
@@ -134,71 +129,71 @@ End
 File gid_File_Extra_Glas_Blue_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "glas-blue.zip";
 End
 
 File gid_File_Extra_Glas_Green_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "glas-green.zip";
 End
 
 File gid_File_Extra_Glas_Red_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "glas-red.zip";
 End
 
 File gid_File_Extra_Round_Gorilla_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "round-gorilla.zip";
 End
 
 File gid_File_Extra_Round_White_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "round-white.zip";
 End
 File gid_File_Extra_Simple_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "simple.zip";
 End
 File gid_File_Extra_Square_Blue_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "square-blue.zip";
 End
 File gid_File_Extra_Square_Gray_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "square-gray.zip";
 End
 File gid_File_Extra_Square_Green_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "square-green.zip";
 End
 File gid_File_Extra_Square_Red_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "square-red.zip";
 End
 File gid_File_Extra_Square_Yellow_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
-	Styles = (PATCH);
+	Styles = ();
     Name = "square-yellow.zip";
 End
 
@@ -221,7 +216,7 @@ End
 File gid_File_Extra_Fontunxppds
     Dir = gid_Dir_Psprint_Driver;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE,PATCH);
+    Styles = (ARCHIVE);
     Name = "fontunxppds.zip";
 End
 #endif
@@ -278,14 +273,9 @@ End
 
 File gid_File_Extra_Gallsystem
     Dir = gid_Dir_Gallery;
-    ARCHIVE_TXT_FILE_BODY_PATCH;
+    ARCHIVE_TXT_FILE_BODY;
     Name = "gallsystem.zip";
-    Patchfiles = ("sg24.sdg",
-                  "sg24.sdv",
-                  "sg24.thm",
-                  "sg36.sdg",
-                  "sg36.sdv",
-                  "sg36.thm");
+    Patchfiles = ();
 End
 
 File gid_File_Extra_Gallwwwback
@@ -309,15 +299,15 @@ End
 File gid_File_Extra_Palettes
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE, PATCH);
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
     Name = "palettes.zip";
-    Patchfiles = ("standard.soc");
+    Patchfiles = ();
 End
 
 File gid_File_Extra_Palettes_Lang
     Dir = gid_Dir_User_Config;
     USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE, PATCH);
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
     EXTRA_ALL_LANG(palettes);
 End
 
@@ -387,7 +377,7 @@ End
 File gid_File_Extra_Tplwizdesktop_Lang
     Dir = gid_Dir_Template_Internal;
     TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE, PATCH);
+    Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(tplwizdesktop);
 End
 
