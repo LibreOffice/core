@@ -400,6 +400,18 @@ check_jre_version()
                 break
             fi
         done
+
+        # check new version format, where version number is not part of line 3 (1.6)
+        if [ ! "$java_runtime_sufficient" = "yes" ]; then
+            javaoutput=`$java_runtime -version 2>&1 | head ${tail_args} -3`
+            for i in $java_versions_supported; do
+                versionmatch=`echo $javaoutput | grep $i`
+                if [ ! -z "$versionmatch" ]; then
+                    java_runtime_sufficient="yes"
+                    break
+                fi
+            done
+        fi
     fi
 }
 
