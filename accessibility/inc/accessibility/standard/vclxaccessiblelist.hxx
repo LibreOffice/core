@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessiblelist.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,6 +224,7 @@ protected:
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 private:
     void notifyVisibleStates(sal_Bool _bSetNew );
+    void UpdateVisibleLineCount();
 };
 
 #endif

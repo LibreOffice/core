@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessiblelist.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,18 +95,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
             break;
         }
     }
-    if ( m_pListBoxHelper )
-    {
-        if ( (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
-            m_nVisibleLineCount = m_pListBoxHelper->GetDisplayLineCount();
-        else
-        {
-            USHORT nCols = 0,
-                nLines = 0;
-            m_pListBoxHelper->GetMaxVisColumnsAndLines (nCols, nLines);
-            m_nVisibleLineCount = nLines;
-        }
-    }
+    UpdateVisibleLineCount();
 
     USHORT nCount = static_cast<USHORT>(getAccessibleChildCount());
     m_aAccessibleChildren.reserve(nCount);
@@ -187,6 +176,7 @@ void VCLXAccessibleList::notifyVisibleStates(sal_Bool _bSetNew )
 
     ListItems::iterator aIter = m_aAccessibleChildren.begin();
     ListItems::iterator aEnd = m_aAccessibleChildren.end();
+    UpdateVisibleLineCount();
     // adjust the index inside the VCLXAccessibleListItem
     for (;aIter != aEnd ; ++aIter)
     {
@@ -353,6 +343,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         pItem->SetSelected( bNowSelected );
 
         // Set the child's VISIBLE state.
+        UpdateVisibleLineCount();
         USHORT nTopEntry = 0;
         if ( m_pListBoxHelper )
             nTopEntry = m_pListBoxHelper->GetTopEntry();
@@ -499,6 +490,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleAt( const awt
     Reference< XAccessible > xChild;
     if ( m_pListBoxHelper )
     {
+        UpdateVisibleLineCount();
         if ( contains( rPoint ) && m_nVisibleLineCount > 0 )
         {
             Point aPos = VCLPoint( rPoint );
@@ -537,6 +529,23 @@ Sequence< ::rtl::OUString > VCLXAccessibleList::getSupportedServiceNames (void)
     return aNames;
 }
 // -----------------------------------------------------------------------------
+
+void VCLXAccessibleList::UpdateVisibleLineCount()
+{
+    if ( m_pListBoxHelper )
+    {
+        if ( (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
+            m_nVisibleLineCount = m_pListBoxHelper->GetDisplayLineCount();
+        else
+        {
+            USHORT nCols = 0,
+                nLines = 0;
+            m_pListBoxHelper->GetMaxVisColumnsAndLines (nCols, nLines);
+            m_nVisibleLineCount = nLines;
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 void VCLXAccessibleList::UpdateEntryRange_Impl()
 {
@@ -549,6 +558,7 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
         nTop = m_pListBoxHelper->GetTopEntry();
     if ( nTop != m_nLastTopEntry )
     {
+        UpdateVisibleLineCount();
         sal_Int32 nBegin = Min( m_nLastTopEntry, nTop );
         sal_Int32 nEnd = Max( m_nLastTopEntry + m_nVisibleLineCount, nTop + m_nVisibleLineCount );
         for (USHORT i = static_cast<USHORT>(nBegin); (i <= static_cast<USHORT>(nEnd)); ++i)
