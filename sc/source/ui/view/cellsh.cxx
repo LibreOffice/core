@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +124,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     BOOL bOnlyNotBecauseOfMatrix;
     BOOL bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
@@ -219,6 +220,18 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_OPENDLG_CONDFRMT :
+                {
+                    if ( !bEditable && bOnlyNotBecauseOfMatrix )
+                    {
+                        bNeedEdit = FALSE;
+                    }
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        bDisable = TRUE;
+                    }
+                }
+                break;
+
             case FID_CONDITIONAL_FORMAT :
             case SID_CELL_FORMAT_RESET :
             case FID_CELL_FORMAT :
@@ -226,6 +239,15 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 // nur wegen Matrix nicht editierbar? Attribute trotzdem ok
                 if ( !bEditable && bOnlyNotBecauseOfMatrix )
                     bNeedEdit = FALSE;
+                break;
+
+            case FID_VALIDATION:
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        bDisable = TRUE;
+                    }
+                }
                 break;
 
             case SID_TRANSLITERATE_HALFWIDTH:
@@ -255,6 +277,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 
 void ScCellShell::GetCellState( SfxItemSet& rSet )
 {
+    ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
     ScAddress aCursor( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
                         GetViewData()->GetTabNo() );
@@ -295,6 +318,14 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                         bNeedEdit=FALSE;
                     }
 
+                }
+                break;
+            case SID_INSERT_POSTIT:
+                {
+                    if ( pDocShell && pDocShell->IsDocShared() )
+                    {
+                        bDisable = TRUE;
+                    }
                 }
                 break;
         }
@@ -952,6 +983,18 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_HANGUL_HANJA_CONVERSION:
                 ScViewUtil::HideDisabledSlot( rSet, pData->GetBindings(), nWhich );
             break;
+
+            case FID_DEFINE_NAME:
+            case FID_INSERT_NAME:
+            case FID_USE_NAME:
+            case SID_DEFINE_COLROWNAMERANGES:
+                {
+                    if ( pDocSh && pDocSh->IsDocShared() )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
 
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
