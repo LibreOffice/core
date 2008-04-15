@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: confuno.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,7 +274,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 sal_Bool bDocShared = sal_False;
                 if ( aValue >>= bDocShared )
                 {
-                    pDocShell->SetDocShared( bDocShared );
+                    pDocShell->SetSharedXMLFlag( bDocShared );
                 }
             }
             else
@@ -408,7 +408,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             // <--
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->IsDocShared() );
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
             }
             else
             {
