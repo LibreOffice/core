@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxpicklist.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,7 +403,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // Hilfe nicht in History
-                INetURLObject aURL( pMed->GetOrigURL() );
+                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
 
@@ -434,7 +434,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // Hilfe nicht in History
-                INetURLObject aURL( pMed->GetOrigURL() );
+                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
 
