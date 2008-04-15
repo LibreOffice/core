@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2478,6 +2478,47 @@ sub collect_all_languagemodules
             $installer::globals::alllangmodules{$onefeature->{'gid'}} = $onefeature->{'Language'};
         }
     }
+}
+
+#####################################################################################
+# Unixlinks are not always required. For Linux RPMs and Solaris Packages they are
+# created dynamically. Exception: For package formats "installed" or "archive".
+# In scp2 this unixlinks have the flag LAYERLINK.
+#####################################################################################
+
+sub filter_layerlinks_from_unixlinks
+{
+    my ( $unixlinksref ) = @_;
+
+    my @alllinks = ();
+
+    for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
+    {
+        my $isrequired = 1;
+
+        my $onelink = ${$unixlinksref}[$i];
+        my $styles = "";
+        if ( $onelink->{'Styles'} ) { $styles = $onelink->{'Styles'}; }
+
+        if ( $styles =~ /\bLAYERLINK\b/ )
+        {
+            # Platforms, that do not need the layer links
+            if (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
+            {
+                $isrequired = 0;
+            }
+
+            # Package formats, that need the layer link (platform independent)
+            if (( $installer::globals::packageformat eq "installed" ) || ( $installer::globals::packageformat eq "archive" ))
+            {
+                $isrequired = 1;
+            }
+        }
+
+        if ( $isrequired ) { push(@alllinks, $onelink); }
+    }
+
+    return \@alllinks;
 }
 
 1;
