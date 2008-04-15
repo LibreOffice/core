@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdmailsuppl.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,9 @@
 //------------------------------------------------------------------------
 #include <osl/diagnose.h>
 #include <osl/thread.h>
-#include <osl/process.h>
+
+#include <rtl/bootstrap.hxx>
+
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 #include "cmdmailsuppl.hxx"
@@ -155,13 +157,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     OStringBuffer aBuffer;
     aBuffer.append("\"");
 
-    OUString aProgramURL;
-    if ( osl_Process_E_None != osl_getExecutableFile(&aProgramURL.pData) )
-    {
-        throw ::com::sun::star::uno::Exception(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not determine executable path")),
-            static_cast < XSimpleMailClient * > (this));
-    }
+    OUString aProgramURL(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program/senddoc"));
+    rtl::Bootstrap::expandMacros(aProgramURL);
 
     OUString aProgram;
     if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
@@ -171,15 +168,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             static_cast < XSimpleMailClient * > (this));
     }
 
-    // The mail client launchers are expected to be in the same directory as the main
-    // executable, so prefixing the launchers with the path of the executable including
-    // the last slash
-    OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
-    sal_Int32 nIndex = aTmp.lastIndexOf('/');
-    if (nIndex > 0)
-        aBuffer.append(aTmp.copy(0, nIndex+1));
-
-    aBuffer.append("senddoc\" ");
+    aBuffer.append(OUStringToOString(aProgram, osl_getThreadTextEncoding()));
+    aBuffer.append("\" ");
 
     try
     {
