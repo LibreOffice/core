@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urlobj.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -805,7 +805,13 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                      && p1[1] == '\\')
             {
                 p1 += 2;
-                if (scanDomain(p1, pEnd) > 0 && (p1 == pEnd || *p1 == '\\'))
+                sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
+                    p1, pEnd - p1, '\\');
+                sal_Unicode const * pe = n == -1 ? pEnd : p1 + n;
+                if (parseHostOrNetBiosName(
+                        p1, pe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
+                        true, NULL) ||
+                    scanDomain(p1, pe) > 0 && p1 == pe)
                 {
                     m_eScheme = INET_PROT_FILE; // 7th
                     eMechanism = ENCODE_ALL;
@@ -1084,15 +1090,22 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
                         && pPos[1] == '\\')
                     {
                         sal_Unicode const * p1 = pPos + 2;
-                        if (scanDomain(p1, pEnd) > 0
-                            && (p1 == pEnd || *p1 == nFragmentDelimiter
-                                || *p1 == '\\'))
+                        sal_Unicode const * pe = p1;
+                        while (pe < pEnd && *pe != '\\' &&
+                               *pe != nFragmentDelimiter)
+                        {
+                            ++pe;
+                        }
+                        if (parseHostOrNetBiosName(
+                                p1, pe, bOctets, ENCODE_ALL,
+                                RTL_TEXTENCODING_DONTKNOW, true, NULL) ||
+                            scanDomain(p1, pe) > 0 && p1 == pe)
                         {
                             aSynAbsURIRef.
                                 appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
                             pHostPortBegin = pPos + 2;
-                            pHostPortEnd = p1;
-                            pPos = p1;
+                            pHostPortEnd = pe;
+                            pPos = pe;
                             nSegmentDelimiter = '\\';
                             break;
                         }
@@ -2748,7 +2761,6 @@ bool INetURLObject::parseHostOrNetBiosName(
     EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bNetBiosName,
     rtl::OUStringBuffer* pCanonic)
 {
-    OSL_ENSURE(pCanonic != 0, "Null pCanonic");
     rtl::OUString aTheCanonic;
     if (pBegin < pEnd)
     {
@@ -2786,15 +2798,20 @@ bool INetURLObject::parseHostOrNetBiosName(
                         case '|':
                             return false;;
                         }
-                    appendUCS4(buf, nUTF32, eEscapeType, bOctets,
-                               PART_URIC, '%', eCharset, true);
+                    if (pCanonic != NULL) {
+                        appendUCS4(
+                            buf, nUTF32, eEscapeType, bOctets, PART_URIC, '%',
+                            eCharset, true);
+                    }
                 }
                 aTheCanonic = buf.makeStringAndClear();
             }
             else
                 return false;
     }
-    *pCanonic = aTheCanonic;
+    if (pCanonic != NULL) {
+        *pCanonic = aTheCanonic;
+    }
     return true;
 }
 
