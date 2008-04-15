@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: config.pl,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,29 +73,32 @@ $setup_XML = "Setup.xcu";
 
 ### main ###
 
-$idStr = ' $Revision: 1.4 $ ';
+$idStr = ' $Revision: 1.5 $ ';
 $idStr =~ /Revision:\s+(\S+)\s+\$/
   ? ($cpflat2minor_rev = $1) : ($cpflat2minor_rev = "-");
 
-if ( ($#ARGV >= 2) ) {
+if ( ($#ARGV >= 3) ) {
     $ARGV[0] =~ s/\"//g;
     $ARGV[1] =~ s/\"//g;
     $ARGV[2] =~ s/\"//g;
+    $ARGV[3] =~ s/\"//g;
     chop($ARGV[0]);
     chop($ARGV[1]);
     chop($ARGV[2]);
+    chop($ARGV[3]);
 }
 
-if ( ! ( ($#ARGV >= 2) && $ARGV[0] && $ARGV[1] && $ARGV[2] && (-d $ARGV[2]) ) ) {
-    print "Usage: config <installpath> <userinstallpath> <datapath>\n" ;
+if ( ! ( ($#ARGV >= 3) && $ARGV[0] && $ARGV[1] && $ARGV[2] && $ARGV[3] && (-d $ARGV[3]) ) ) {
+    print "Usage: config <basispath> <brandpath> <userinstallpath> <datapath>\n" ;
     exit(1);
 }
 
-$installdir = $ARGV[0];
-$userinstalldir = $ARGV[1];
-$datapath = $ARGV[2];
+$basisdir = $ARGV[0];
+$branddir = $ARGV[1];
+$userinstalldir = $ARGV[2];
+$datapath = $ARGV[3];
 
-$fullquickstart_path = $installdir . "program" . $pathslash . "quickstart.exe";
+$fullquickstart_path = $branddir . "program" . $pathslash . "quickstart.exe";
 
 print "patching config ... \n";
 if (!-d "$userinstalldir$User_Office_Path") {
@@ -120,7 +123,7 @@ if ($gui ne "UNX") {
 }
 
 #delete joblist
-$fullsource_path = $installdir . $jobs_XML_Path;
+$fullsource_path = $basisdir . $jobs_XML_Path;
 unlink ($fullsource_path);
 
 exit(0);
