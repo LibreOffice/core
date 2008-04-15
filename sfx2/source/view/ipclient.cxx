@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ipclient.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -947,7 +947,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                     aHelper.GUIStoreModel( xEmbModel,
                                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SaveAs" ) ),
                                             aDispatchArgs,
-                                            sal_False );
+                                            sal_False,
+                                            ::rtl::OUString() );
                 }
                 catch( task::ErrorCodeIOException& aErrorEx )
                 {
