@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderlineprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-08 05:58:18 $
+ *  last change: $Author: aw $ $Date: 2008-04-16 04:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,18 +70,15 @@ namespace drawinglayer
 
             if(!getStart().equal(getEnd()) && (getCreateInside() || getCreateOutside()))
             {
-                const bool bInsideUsed(!basegfx::fTools::equalZero(getLeftWidth()));
-
-                if(bInsideUsed)
+                if(isInsideUsed())
                 {
                     // get data and vectors
-                    const bool bOutsideUsed(!basegfx::fTools::equalZero(getRightWidth()));
                     const double fWidth(getWidth());
                     basegfx::B2DVector aVector(getEnd() - getStart());
                     aVector.normalize();
                     const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
-                    if(bOutsideUsed)
+                    if(isOutsideUsed())
                     {
                         // both used, double line definition. Create left and right offset
                         xRetval.realloc(getCreateInside() && getCreateOutside() ? 2 : 1);
@@ -90,46 +87,71 @@ namespace drawinglayer
                         if(getCreateInside())
                         {
                             // create geometry for left
-                            const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (getLeftWidth() - fWidth)));
+                            const basegfx::B2DVector aLeftOff(aPerpendicular * (0.5 * (getCorrectedLeftWidth() - fWidth)));
+                            const basegfx::B2DPoint aTmpStart(getStart() + aLeftOff - (getExtendInnerStart() * aVector));
+                            const basegfx::B2DPoint aTmpEnd(getEnd() + aLeftOff + (getExtendInnerEnd() * aVector));
                             basegfx::B2DPolygon aLeft;
-                            aLeft.append(getStart() + aLeftOff - (getExtendInnerStart() * aVector));
-                            aLeft.append(getEnd() + aLeftOff + (getExtendInnerEnd() * aVector));
 
-                            if(basegfx::fTools::equal(1.0, getLeftWidth()))
+                            if(leftIsHairline())
                             {
+                                // create hairline primitive
+                                aLeft.append(aTmpStart);
+                                aLeft.append(aTmpEnd);
+
                                 xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                                     aLeft,
                                     getRGBColor()));
                             }
                             else
                             {
-                                xRetval[nInsert++] = Primitive2DReference(new PolygonStrokePrimitive2D(
-                                    aLeft,
-                                    attribute::LineAttribute(getRGBColor(), getLeftWidth()),
-                                    attribute::StrokeAttribute()));
+                                // create filled polygon primitive. Already tried to create thick lines
+                                // with the correct LineWidth, but this leads to problems when no AA
+                                // is available and fat line special case reductions between 0.5 < x < 2.5 line widths
+                                // are executed due to the FilledPolygon-do-not-paint-their-bottom-and-right-lines.
+                                const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
+
+                                aLeft.append(aTmpStart + aLineWidthOffset);
+                                aLeft.append(aTmpEnd + aLineWidthOffset);
+                                aLeft.append(aTmpEnd - aLineWidthOffset);
+                                aLeft.append(aTmpStart - aLineWidthOffset);
+                                aLeft.setClosed(true);
+
+                                xRetval[nInsert++] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
+                                    basegfx::B2DPolyPolygon(aLeft), getRGBColor()));
                             }
                         }
 
                         if(getCreateOutside())
                         {
                             // create geometry for right
-                            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - getRightWidth())));
+                            const basegfx::B2DVector aRightOff(aPerpendicular * (0.5 * (fWidth - getCorrectedRightWidth())));
+                            const basegfx::B2DPoint aTmpStart(getStart() + aRightOff - (getExtendOuterStart() * aVector));
+                            const basegfx::B2DPoint aTmpEnd(getEnd() + aRightOff + (getExtendOuterEnd() * aVector));
                             basegfx::B2DPolygon aRight;
-                            aRight.append(getStart() + aRightOff - (getExtendOuterStart() * aVector));
-                            aRight.append(getEnd() + aRightOff + (getExtendOuterEnd() * aVector));
 
-                            if(basegfx::fTools::equal(1.0, getRightWidth()))
+                            if(rightIsHairline())
                             {
+                                // create hairline primitive
+                                aRight.append(aTmpStart);
+                                aRight.append(aTmpEnd);
+
                                 xRetval[nInsert++] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                                     aRight,
                                     getRGBColor()));
                             }
                             else
                             {
-                                xRetval[nInsert++] = Primitive2DReference(new PolygonStrokePrimitive2D(
-                                    aRight,
-                                    attribute::LineAttribute(getRGBColor(), getRightWidth()),
-                                    attribute::StrokeAttribute()));
+                                // create filled polygon primitive
+                                const basegfx::B2DVector aLineWidthOffset((getCorrectedRightWidth() * 0.5) * aPerpendicular);
+
+                                aRight.append(aTmpStart + aLineWidthOffset);
+                                aRight.append(aTmpEnd + aLineWidthOffset);
+                                aRight.append(aTmpEnd - aLineWidthOffset);
+                                aRight.append(aTmpStart - aLineWidthOffset);
+                                aRight.setClosed(true);
+
+                                xRetval[nInsert++] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
+                                    basegfx::B2DPolyPolygon(aRight), getRGBColor()));
                             }
                         }
                     }
@@ -139,22 +161,33 @@ namespace drawinglayer
                         basegfx::B2DPolygon aPolygon;
                         const double fMaxExtStart(::std::max(getExtendInnerStart(), getExtendOuterStart()));
                         const double fMaxExtEnd(::std::max(getExtendInnerEnd(), getExtendOuterEnd()));
-                        aPolygon.append(getStart() - (fMaxExtStart * aVector));
-                        aPolygon.append(getEnd() + (fMaxExtEnd * aVector));
+                        const basegfx::B2DPoint aTmpStart(getStart() - (fMaxExtStart * aVector));
+                        const basegfx::B2DPoint aTmpEnd(getEnd() + (fMaxExtEnd * aVector));
                         xRetval.realloc(1);
 
-                        if(basegfx::fTools::equal(1.0, getLeftWidth()))
+                        if(leftIsHairline())
                         {
+                            // create hairline primitive
+                            aPolygon.append(aTmpStart);
+                            aPolygon.append(aTmpEnd);
+
                             xRetval[0] = Primitive2DReference(new PolygonHairlinePrimitive2D(
                                 aPolygon,
                                 getRGBColor()));
                         }
                         else
                         {
-                            xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(
-                                aPolygon,
-                                attribute::LineAttribute(getRGBColor(), getLeftWidth()),
-                                attribute::StrokeAttribute()));
+                            // create filled polygon primitive
+                            const basegfx::B2DVector aLineWidthOffset((getCorrectedLeftWidth() * 0.5) * aPerpendicular);
+
+                            aPolygon.append(aTmpStart + aLineWidthOffset);
+                            aPolygon.append(aTmpEnd + aLineWidthOffset);
+                            aPolygon.append(aTmpEnd - aLineWidthOffset);
+                            aPolygon.append(aTmpStart - aLineWidthOffset);
+                            aPolygon.setClosed(true);
+
+                            xRetval[0] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
+                                basegfx::B2DPolyPolygon(aPolygon), getRGBColor()));
                         }
                     }
                 }

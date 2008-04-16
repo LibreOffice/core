@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderlineprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-08 05:51:15 $
+ *  last change: $Author: aw $ $Date: 2008-04-16 04:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,45 @@ namespace drawinglayer
             unsigned                                        mbCreateOutside : 1;
 
             // helpers
-            double getWidth() const { return mfLeftWidth + mfDistance + mfRightWidth; }
+            double getCorrectedLeftWidth() const
+            {
+                return basegfx::fTools::equal(1.0, mfLeftWidth) ? 0.0 : mfLeftWidth;
+            }
+
+            double getCorrectedDistance() const
+            {
+                return basegfx::fTools::equal(1.0, mfDistance) ? 0.0 : mfDistance;
+            }
+
+            double getCorrectedRightWidth() const
+            {
+                return basegfx::fTools::equal(1.0, mfRightWidth) ? 0.0 : mfRightWidth;
+            }
+
+            double getWidth() const
+            {
+                return getCorrectedLeftWidth() + getCorrectedDistance() + getCorrectedRightWidth();
+            }
+
+            bool leftIsHairline() const
+            {
+                return basegfx::fTools::equal(1.0, mfLeftWidth);
+            }
+
+            bool rightIsHairline() const
+            {
+                return basegfx::fTools::equal(1.0, mfRightWidth);
+            }
+
+            bool isInsideUsed() const
+            {
+                return !basegfx::fTools::equalZero(mfLeftWidth);
+            }
+
+            bool isOutsideUsed() const
+            {
+                return !basegfx::fTools::equalZero(mfRightWidth);
+            }
 
         protected:
             // create local decomposition

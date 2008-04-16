@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-04-16 04:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,31 +36,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-//////////////////////////////////////////////////////////////////////////////
-// includes for namespace basegfx
-
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
-#include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_RASTER_BZPIXELRASTER_HXX
-#include <basegfx/raster/bzpixelraster.hxx>
 #endif
 
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
 #endif
 
+#ifndef _BGFX_RASTER_BZPIXELRASTER_HXX
+#include <basegfx/raster/bzpixelraster.hxx>
+#endif
+
+#ifndef _BGFX_RASTER_B3DPOLYPOLYGONRASTERCONVERTER_HXX
+#include <basegfx/raster/b3dpolypolygonrasterconverter.hxx>
+#endif
+
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #endif
-
-//////////////////////////////////////////////////////////////////////////////
-// includes for namespace drawinglayer
 
 #ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
@@ -70,8 +64,12 @@
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
-#include <drawinglayer/attribute/fillattribute.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/textureprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
+#include <drawinglayer/texture/texture3d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
@@ -82,8 +80,8 @@
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
+#include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
@@ -102,20 +100,12 @@
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLABELPRIMITIVE3D_HXX
-#include <drawinglayer/primitive3d/sdrlabelprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
-#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -124,467 +114,9 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace basegfx
+namespace
 {
-    class BDInterpolator
-    {
-    protected:
-        double                                      mfVal;
-        double                                      mfInc;
-
-    public:
-        BDInterpolator() {}
-        BDInterpolator(double fValA, double fValB, sal_uInt32 nCount) : mfVal(fValA), mfInc((fValB - fValA) / (double)nCount) {}
-
-        double getVal() const { return mfVal; }
-        double getInc() const { return mfInc; }
-        void increment() { mfVal += mfInc; }
-        void increment(double fStep) { mfVal += fStep * mfInc; }
-    };
-
-    class BColorInterpolator
-    {
-    protected:
-        BColor                                      maVal;
-        BColor                                      maInc;
-
-    public:
-        BColorInterpolator() {}
-        BColorInterpolator(const BColor& rValA, const BColor& rValB, sal_uInt32 nCount) : maVal(rValA), maInc((rValB - rValA) / (double)nCount) {}
-
-        const BColor& getVal() const { return maVal; }
-        const BColor& getInc() const { return maInc; }
-        void increment() { maVal += maInc; }
-        void increment(double fStep) { maVal += fStep * maInc; }
-    };
-
-    class B3DVectorInterpolator
-    {
-    protected:
-        B3DVector                                   maVal;
-        B3DVector                                   maInc;
-
-    public:
-        B3DVectorInterpolator() {}
-        B3DVectorInterpolator(const B3DVector& rValA, const B3DVector& rValB, sal_uInt32 nCount) : maVal(rValA), maInc((rValB - rValA) / (double)nCount) {}
-
-        const B3DVector& getVal() const { return maVal; }
-        const B3DVector& getInc() const { return maInc; }
-        void increment() { maVal += maInc; }
-        void increment(double fStep) { maVal += fStep * maInc; }
-    };
-
-    class B2DPointInterpolator
-    {
-    protected:
-        B2DPoint                                    maVal;
-        B2DPoint                                    maInc;
-        BDInterpolator                              maZInv;
-
-    public:
-        B2DPointInterpolator() {}
-        B2DPointInterpolator(const B2DPoint& rValA, const B2DPoint& rValB, double fInvZEyeA, double fInvZEyeB, sal_uInt32 nCount)
-        :   maVal(rValA),
-            maInc((rValB - rValA) / (double)nCount),
-            maZInv(fInvZEyeA, fInvZEyeB, nCount)
-        {}
-
-        const B2DPoint& getVal() const { return maVal; }
-        const B2DPoint& getInc() const { return maInc; }
-        double getZVal() const { return maZInv.getVal(); }
-        double getZInc() const { return maZInv.getInc(); }
-        void increment() { maVal += maInc; maZInv.increment(); }
-        void increment(double fStep) { maVal += fStep * maInc; maZInv.increment(fStep); }
-    };
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-#define SCANLINE_EMPTY_INDEX (0xffffffff)
-
-namespace basegfx
-{
-    class B3DScanlineEntry
-    {
-    protected:
-        sal_Int32                                   mnLine;
-        sal_uInt32                                  mnLineCount;
-        BDInterpolator                              maX;
-        BDInterpolator                              maZ;
-
-        // values for normal and texture coordinate interpolation are optional,
-        // held simply by an index. Empty is marked by SCANLINE_EMPTY_INDEX to which it needs
-        // to be initialized
-        sal_uInt32                                  mnBColorIndex;
-        sal_uInt32                                  mnNormalIndex;
-        sal_uInt32                                  mnTextureCoordinateIndex;
-
-    public:
-        B3DScanlineEntry() {}
-
-        // data write access
-        void setLine(sal_Int32 nLine) { mnLine = nLine; }
-        void setLineCount(sal_uInt32 nLineCount) { mnLineCount = nLineCount; }
-        void setXInterpolator(const BDInterpolator& rInt) { maX = rInt; }
-        void setZInterpolator(const BDInterpolator& rInt) { maZ = rInt; }
-        void setBColorIndex(sal_uInt32 nIndex) { mnBColorIndex = nIndex; }
-        void setNormalIndex(sal_uInt32 nIndex) { mnNormalIndex = nIndex; }
-        void setTextureCoordinateIndex(sal_uInt32 nIndex) { mnTextureCoordinateIndex = nIndex; }
-
-        // data read access
-        sal_Int32 getLine() const { return mnLine; }
-        sal_uInt32 getLineCount() const { return mnLineCount; }
-        const BDInterpolator& getXInterpolator() const { return maX; }
-        const BDInterpolator& getZInterpolator() const { return maZ; }
-        sal_uInt32 getBColorIndex() const {return mnBColorIndex; }
-        sal_uInt32 getNormalIndex() const {return mnNormalIndex; }
-        sal_uInt32 getTextureCoordinateIndex() const {return mnTextureCoordinateIndex; }
-
-        bool simpleLineSortComparator(const B3DScanlineEntry& rComp) const
-        {
-            return (maX.getVal() < rComp.maX.getVal());
-        }
-
-        bool operator<(const B3DScanlineEntry& rComp) const
-        {
-            if(mnLine == rComp.mnLine)
-            {
-                return simpleLineSortComparator(rComp);
-            }
-
-            return (mnLine < rComp.mnLine);
-        }
-
-        bool isValid() const
-        {
-            return (0L != mnLineCount);
-        }
-
-        bool decrement(sal_uInt32 nCount = 1L)
-        {
-            if(mnLineCount > nCount)
-            {
-                mnLineCount -= nCount;
-                return true;
-            }
-            else
-            {
-                mnLineCount = 0L;
-                return false;
-            }
-        }
-
-        void increment()
-        {
-            maX.increment();
-            maZ.increment();
-        }
-
-        void increment(double fStep)
-        {
-            maX.increment(fStep);
-            maZ.increment(fStep);
-        }
-    };
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
-    class B3DPolyPolygonRasterConverter
-    {
-    protected:
-        ::std::vector< B3DScanlineEntry >               maGlobalEntries;
-        ::std::vector< BColorInterpolator >             maGlobalBColorInterpolators;
-        ::std::vector< B3DVectorInterpolator >          maGlobalNormalInterpolators;
-        ::std::vector< B2DPointInterpolator >           maGlobalTextureCoordinateInterpolators;
-
-        // bitfield
-        unsigned                                        mbAreaMode : 1;
-
-        struct scanlineEntryComparator
-        {
-            bool operator()( const B3DScanlineEntry* pA, const B3DScanlineEntry* pB)
-            {
-                // here, Y is the same anyways (sorting a scanline), so simple compare is enough
-                OSL_ENSURE(pA && pB, "scanlineEntryComparator: empty pointer (!)");
-                return pA->simpleLineSortComparator(*pB);
-            }
-        };
-
-        // add BColor interpolator, return index
-        sal_uInt32 addBColor(const BColor& rA, const BColor& rB, sal_uInt32 nDelta)
-        {
-            maGlobalBColorInterpolators.push_back(BColorInterpolator(rA, rB, nDelta));
-            return (maGlobalBColorInterpolators.size() - 1L);
-        }
-
-        // add normal interpolator, return index
-        sal_uInt32 addNormal(const B3DVector& rA, const B3DVector& rB, sal_uInt32 nDelta)
-        {
-            maGlobalNormalInterpolators.push_back(B3DVectorInterpolator(rA, rB, nDelta));
-            return (maGlobalNormalInterpolators.size() - 1L);
-        }
-
-        // add texture interpolator, return index
-        sal_uInt32 addTextureCoordinate(const B2DPoint& rA, const B2DPoint& rB, double fZEyeA, double fZEyeB, sal_uInt32 nDelta)
-        {
-            const double fInvZEyeA(fTools::equalZero(fZEyeA) ? fZEyeA : 1.0 / fZEyeA);
-            const double fInvZEyeB(fTools::equalZero(fZEyeB) ? fZEyeB : 1.0 / fZEyeB);
-            maGlobalTextureCoordinateInterpolators.push_back(B2DPointInterpolator(rA * fInvZEyeA, rB * fInvZEyeB, fInvZEyeA, fInvZEyeB, nDelta));
-            return (maGlobalTextureCoordinateInterpolators.size() - 1L);
-        }
-
-        void increment(B3DScanlineEntry& rScanEntry)
-        {
-            rScanEntry.increment();
-
-            const sal_uInt32 nBColor(rScanEntry.getBColorIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nBColor)
-            {
-                maGlobalBColorInterpolators[nBColor].increment();
-            }
-
-            const sal_uInt32 nNormal(rScanEntry.getNormalIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nNormal)
-            {
-                maGlobalNormalInterpolators[nNormal].increment();
-            }
-
-            const sal_uInt32 nTextureCoordinate(rScanEntry.getTextureCoordinateIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nTextureCoordinate)
-            {
-                maGlobalTextureCoordinateInterpolators[nTextureCoordinate].increment();
-            }
-        }
-
-        void increment(B3DScanlineEntry& rScanEntry, double fStep)
-        {
-            rScanEntry.increment(fStep);
-
-            const sal_uInt32 nBColor(rScanEntry.getBColorIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nBColor)
-            {
-                maGlobalBColorInterpolators[nBColor].increment(fStep);
-            }
-
-            const sal_uInt32 nNormal(rScanEntry.getNormalIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nNormal)
-            {
-                maGlobalNormalInterpolators[nNormal].increment(fStep);
-            }
-
-            const sal_uInt32 nTextureCoordinate(rScanEntry.getTextureCoordinateIndex());
-
-            if(SCANLINE_EMPTY_INDEX != nTextureCoordinate)
-            {
-                maGlobalTextureCoordinateInterpolators[nTextureCoordinate].increment(fStep);
-            }
-        }
-
-        void addEdge(const B3DPolygon& rPolygon, const B3DHomMatrix& rInvEyeToView, sal_uInt32 nIndA, sal_uInt32 nIndB)
-        {
-            B3DPoint aPntA(rPolygon.getB3DPoint(nIndA));
-            B3DPoint aPntB(rPolygon.getB3DPoint(nIndB));
-            sal_Int32 nLineA((sal_Int32)(aPntA.getY()));
-            sal_Int32 nLineB((sal_Int32)(aPntB.getY()));
-
-            if(nLineA == nLineB)
-            {
-                if(!mbAreaMode)
-                {
-                    B3DScanlineEntry aNewEntry;
-
-                    aNewEntry.setLine(nLineA);
-                    aNewEntry.setLineCount(0L);
-                    aNewEntry.setXInterpolator(BDInterpolator(aPntA.getX(), aPntB.getX(), 1L));
-                    aNewEntry.setZInterpolator(BDInterpolator(aPntA.getZ(), aPntB.getZ(), 1L));
-                    aNewEntry.setBColorIndex(SCANLINE_EMPTY_INDEX);
-                    aNewEntry.setNormalIndex(SCANLINE_EMPTY_INDEX);
-                    aNewEntry.setTextureCoordinateIndex(SCANLINE_EMPTY_INDEX);
-
-                    maGlobalEntries.push_back(aNewEntry);
-                }
-            }
-            else
-            {
-                if(nLineB < nLineA)
-                {
-                    ::std::swap(aPntA, aPntB);
-                    ::std::swap(nLineA, nLineB);
-                    ::std::swap(nIndA, nIndB);
-                }
-
-                const sal_uInt32 nLineDelta(nLineB - nLineA);
-                B3DScanlineEntry aNewEntry;
-
-                aNewEntry.setLine(nLineA);
-                aNewEntry.setLineCount(nLineDelta);
-                aNewEntry.setXInterpolator(BDInterpolator(aPntA.getX(), aPntB.getX(), nLineDelta));
-                aNewEntry.setZInterpolator(BDInterpolator(aPntA.getZ(), aPntB.getZ(), nLineDelta));
-
-                const bool bColUsed(mbAreaMode && rPolygon.areBColorsUsed());
-                aNewEntry.setBColorIndex(bColUsed ? addBColor(rPolygon.getBColor(nIndA), rPolygon.getBColor(nIndB), nLineDelta) : SCANLINE_EMPTY_INDEX);
-
-                const bool bNrmUsed(mbAreaMode && rPolygon.areNormalsUsed());
-                aNewEntry.setNormalIndex(bNrmUsed ? addNormal(rPolygon.getNormal(nIndA), rPolygon.getNormal(nIndB), nLineDelta) : SCANLINE_EMPTY_INDEX);
-
-                const bool bTexUsed(mbAreaMode && rPolygon.areTextureCoordinatesUsed());
-                if(bTexUsed)
-                {
-                    const double fEyeA((rInvEyeToView * aPntA).getZ());
-                    const double fEyeB((rInvEyeToView * aPntB).getZ());
-                    aNewEntry.setTextureCoordinateIndex(addTextureCoordinate(
-                        rPolygon.getTextureCoordinate(nIndA),
-                        rPolygon.getTextureCoordinate(nIndB),
-                        fEyeA, fEyeB, nLineDelta));
-                }
-                else
-                {
-                    aNewEntry.setTextureCoordinateIndex(SCANLINE_EMPTY_INDEX);
-                }
-
-                maGlobalEntries.push_back(aNewEntry);
-            }
-        }
-
-        // virtual rasterconverter
-        virtual void processSpan(const B3DScanlineEntry& rA, const B3DScanlineEntry& rB, sal_Int32 nLine, sal_uInt32 nSpanCount) = 0;
-        virtual void processLine(const B3DScanlineEntry& rEntry, sal_Int32 nLine) = 0;
-
-    public:
-        B3DPolyPolygonRasterConverter(bool bArea)
-        :   mbAreaMode(bArea)
-        {
-        }
-
-        virtual ~B3DPolyPolygonRasterConverter()
-        {
-        }
-
-        void addPolygon(const B3DPolygon& rPolygon, const B3DHomMatrix& rInvEyeToView)
-        {
-            const sal_uInt32 nPointCount(rPolygon.count());
-
-            if(nPointCount)
-            {
-                const sal_uInt32 nLoopCount((mbAreaMode || rPolygon.isClosed()) ? nPointCount : nPointCount - 1L);
-                const bool bEnoughEdges(mbAreaMode ? (nLoopCount > 2L) : (nLoopCount > 0L));
-
-                if(bEnoughEdges)
-                {
-                    for(sal_uInt32 a(0L); a < nLoopCount; a++)
-                    {
-                        addEdge(rPolygon, rInvEyeToView, a, (a + 1L) % nPointCount);
-                    }
-                }
-            }
-        }
-
-        void rasterconvert(sal_Int32 nStartLine, sal_Int32 nStopLine)
-        {
-            OSL_ENSURE(nStartLine <= nStopLine, "rasterconvert: wrong start/stop line (!)");
-
-            if(maGlobalEntries.size())
-            {
-                // sort global entries by YStart, xPos once
-                ::std::sort(maGlobalEntries.begin(), maGlobalEntries.end());
-
-                // local parameters
-                ::std::vector< B3DScanlineEntry >::iterator aCurrentGlobalEntry(maGlobalEntries.begin());
-                ::std::vector< B3DScanlineEntry* > aCurrentScanLine;
-                ::std::vector< B3DScanlineEntry* > aNextScanLine;
-                ::std::vector< B3DScanlineEntry* >::iterator aScanLineEntry;
-                sal_Int32 nLineNumber(nStartLine);
-                sal_uInt32 nPairCount;
-
-                while((nLineNumber < nStopLine) && (aCurrentScanLine.size() || aCurrentGlobalEntry != maGlobalEntries.end()))
-                {
-                    // add all global entries which start at current Y to current scanline
-                    while(aCurrentGlobalEntry != maGlobalEntries.end() && aCurrentGlobalEntry->getLine() <= nLineNumber)
-                    {
-                        if(aCurrentGlobalEntry->getLine() < nLineNumber)
-                        {
-                            // adapt to current line in nLineNumber by decrementing count incrementing accordigly
-                            const sal_uInt32 nLineDiff(nLineNumber - aCurrentGlobalEntry->getLine());
-
-                            if(aCurrentGlobalEntry->decrement(nLineDiff))
-                            {
-                                increment(*aCurrentGlobalEntry, (double)nLineDiff);
-                                aCurrentScanLine.push_back(&(*(aCurrentGlobalEntry)));
-                            }
-                        }
-                        else
-                        {
-                            aCurrentScanLine.push_back(&(*(aCurrentGlobalEntry)));
-                        }
-
-                        aCurrentGlobalEntry++;
-                    }
-
-                    if(mbAreaMode)
-                    {
-                        // sort current scanline using simple comparator (only X is compared)
-                        ::std::sort(aCurrentScanLine.begin(), aCurrentScanLine.end(), scanlineEntryComparator());
-                    }
-
-                    // process current scanline
-                    aScanLineEntry = aCurrentScanLine.begin();
-                    aNextScanLine.clear();
-                    nPairCount = 0L;
-
-                    while(aScanLineEntry != aCurrentScanLine.end())
-                    {
-                        B3DScanlineEntry& rPrevScanLineEntry(**aScanLineEntry++);
-
-                        if(mbAreaMode)
-                        {
-                            // area mode, look for 2nd span
-                            if(aScanLineEntry != aCurrentScanLine.end())
-                            {
-                                // work on span from rPrevScanLineEntry to aScanLineEntry, nLineNumber is valid
-                                processSpan(rPrevScanLineEntry, **aScanLineEntry, nLineNumber, nPairCount++);
-                            }
-                        }
-                        else
-                        {
-                            // work on line position rPrevScanLineEntry
-                            processLine(rPrevScanLineEntry, nLineNumber);
-                        }
-
-                        // do decrement counter and (evtl) increment to next line
-                        if(rPrevScanLineEntry.decrement())
-                        {
-                            increment(rPrevScanLineEntry);
-                            aNextScanLine.push_back(&rPrevScanLineEntry);
-                        }
-                    }
-
-                    // copy back next scanline if count has changed
-                    if(aNextScanLine.size() != aCurrentScanLine.size())
-                    {
-                        aCurrentScanLine = aNextScanLine;
-                    }
-
-                    // increment nLineNumber
-                    nLineNumber++;
-                }
-            }
-        }
-    };
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
-    BitmapEx getBitmapEx(const BPixelRaster& rRaster)
+    BitmapEx BPixelRasterToBitmapEx(const basegfx::BPixelRaster& rRaster)
     {
         BitmapEx aRetval;
         const sal_uInt32 nWidth(rRaster.getWidth());
@@ -606,7 +138,7 @@ namespace basegfx
                 {
                     for(sal_uInt32 x(0L); x < nWidth; x++)
                     {
-                        const BPixel& rPixel(rRaster.getBPixel(nIndex++));
+                        const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
 
                         if(rPixel.getOpacity())
                         {
@@ -625,11 +157,11 @@ namespace basegfx
 
         return aRetval;
     }
-} // end of namespace basegfx
+} // end of anonymous namespace
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+// own default 3D rasterconverter based on basic 3d raster implementation
+// in basegfx
 
 namespace drawinglayer
 {
@@ -643,8 +175,8 @@ namespace drawinglayer
             const processor3d::DefaultProcessor3D&      mrProcessor;
 
             // virtual rasterconverter
-            virtual void processSpan(const basegfx::B3DScanlineEntry& rA, const basegfx::B3DScanlineEntry& rB, sal_Int32 nLine, sal_uInt32 nSpanCount);
-            virtual void processLine(const basegfx::B3DScanlineEntry& rEntry, sal_Int32 nLine);
+            virtual void processSpan(const basegfx::B3DScanline& rA, const basegfx::B3DScanline& rB, sal_Int32 nLine, sal_uInt32 nSpanCount);
+            virtual void processLine(const basegfx::B3DScanline& rEntry, sal_Int32 nLine);
 
         public:
             BZPolyRaCon(
@@ -659,7 +191,7 @@ namespace drawinglayer
             {}
         };
 
-        void BZPolyRaCon::processSpan(const basegfx::B3DScanlineEntry& rA, const basegfx::B3DScanlineEntry& rB, sal_Int32 nLine, sal_uInt32 nSpanCount)
+        void BZPolyRaCon::processSpan(const basegfx::B3DScanline& rA, const basegfx::B3DScanline& rB, sal_Int32 nLine, sal_uInt32 nSpanCount)
         {
             if(!(nSpanCount & 0x0001))
             {
@@ -891,7 +423,7 @@ namespace drawinglayer
             }
         }
 
-        void BZPolyRaCon::processLine(const basegfx::B3DScanlineEntry& rEntry, sal_Int32 nLine)
+        void BZPolyRaCon::processLine(const basegfx::B3DScanline& rEntry, sal_Int32 nLine)
         {
             if(nLine >= 0L && nLine < (sal_Int32)mrBuffer.getHeight())
             {
@@ -974,326 +506,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace texture
-    {
-        class GeoTexSvxMono : public GeoTexSvx
-        {
-        protected:
-            basegfx::BColor                             maSingleColor;
-            double                                      mfOpacity;
-
-        public:
-            GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity);
-
-            // compare operator
-            virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const;
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
-        };
-
-        GeoTexSvxMono::GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity)
-        :   maSingleColor(rSingleColor),
-            mfOpacity(fOpacity)
-        {
-        }
-
-        bool GeoTexSvxMono::operator==(const GeoTexSvx& rGeoTexSvx) const
-        {
-            const GeoTexSvxMono* pCompare = dynamic_cast< const GeoTexSvxMono* >(&rGeoTexSvx);
-            return (pCompare
-                && maSingleColor == pCompare->maSingleColor
-                && mfOpacity == pCompare->mfOpacity);
-        }
-
-        void GeoTexSvxMono::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
-        {
-            rBColor = maSingleColor;
-        }
-
-        void GeoTexSvxMono::modifyOpacity(const basegfx::B2DPoint& /*rUV*/, double& rfOpacity) const
-        {
-            rfOpacity = mfOpacity;
-        }
-    } // end of namespace texture
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace texture
-    {
-        class GeoTexSvxBitmap : public GeoTexSvx
-        {
-        protected:
-            Bitmap                                      maBitmap;
-            BitmapReadAccess*                           mpRead;
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
-            double                                      mfMulX;
-            double                                      mfMulY;
-
-            // helpers
-            bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
-
-        public:
-            GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
-            virtual ~GeoTexSvxBitmap();
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
-        };
-
-        GeoTexSvxBitmap::GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :   maBitmap(rBitmap),
-            mpRead(0L),
-            maTopLeft(rTopLeft),
-            maSize(rSize),
-            mfMulX(0.0),
-            mfMulY(0.0)
-        {
-            mpRead = maBitmap.AcquireReadAccess();
-            OSL_ENSURE(mpRead, "GeoTexSvxBitmap: Got no read access to Bitmap (!)");
-            mfMulX = (double)mpRead->Width() / maSize.getX();
-            mfMulY = (double)mpRead->Height() / maSize.getY();
-        }
-
-        GeoTexSvxBitmap::~GeoTexSvxBitmap()
-        {
-            delete mpRead;
-        }
-
-        bool GeoTexSvxBitmap::impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const
-        {
-            if(mpRead)
-            {
-                rX = (sal_Int32)((rUV.getX() - maTopLeft.getX()) * mfMulX);
-
-                if(rX >= 0L && rX < mpRead->Width())
-                {
-                    rY = (sal_Int32)((rUV.getY() - maTopLeft.getY()) * mfMulY);
-
-                    return (rY >= 0L && rY < mpRead->Height());
-                }
-            }
-
-            return false;
-        }
-
-        void GeoTexSvxBitmap::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
-        {
-            sal_Int32 nX, nY;
-
-            if(impIsValid(rUV, nX, nY))
-            {
-                const double fConvertColor(1.0 / 255.0);
-                const BitmapColor aBMCol(mpRead->GetColor(nY, nX));
-                const basegfx::BColor aBSource(
-                    (double)aBMCol.GetRed() * fConvertColor,
-                    (double)aBMCol.GetGreen() * fConvertColor,
-                    (double)aBMCol.GetBlue() * fConvertColor);
-
-                rBColor = aBSource;
-            }
-            else
-            {
-                rfOpacity = 0.0;
-            }
-        }
-
-        void GeoTexSvxBitmap::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
-        {
-            sal_Int32 nX, nY;
-
-            if(impIsValid(rUV, nX, nY))
-            {
-                const BitmapColor aBMCol(mpRead->GetColor(nY, nX));
-                const Color aColor(aBMCol.GetRed(), aBMCol.GetGreen(), aBMCol.GetBlue());
-
-                rfOpacity = ((double)(0xff - aColor.GetLuminance()) * (1.0 / 255.0));
-            }
-            else
-            {
-                rfOpacity = 0.0;
-            }
-        }
-    } // end of namespace texture
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace texture
-    {
-        class GeoTexSvxBitmapTiled : public GeoTexSvxBitmap
-        {
-        protected:
-            // helpers
-            basegfx::B2DPoint impGetCorrected(const basegfx::B2DPoint& rUV) const
-            {
-                double fX(fmod(rUV.getX() - maTopLeft.getX(), maSize.getX()));
-                double fY(fmod(rUV.getY() - maTopLeft.getY(), maSize.getY()));
-
-                if(fX < 0.0)
-                {
-                    fX += maSize.getX();
-                }
-
-                if(fY < 0.0)
-                {
-                    fY += maSize.getY();
-                }
-
-                return basegfx::B2DPoint(fX + maTopLeft.getX(), fY + maTopLeft.getY());
-            }
-
-        public:
-            GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
-        };
-
-        GeoTexSvxBitmapTiled::GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize)
-        :   GeoTexSvxBitmap(rBitmap, rTopLeft, rSize)
-        {
-        }
-
-        void GeoTexSvxBitmapTiled::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
-        {
-            if(mpRead)
-            {
-                GeoTexSvxBitmap::modifyBColor(impGetCorrected(rUV), rBColor, rfOpacity);
-            }
-        }
-
-        void GeoTexSvxBitmapTiled::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
-        {
-            if(mpRead)
-            {
-                GeoTexSvxBitmap::modifyOpacity(impGetCorrected(rUV), rfOpacity);
-            }
-        }
-    } // end of namespace texture
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace texture
-    {
-        class GeoTexSvxMultiHatch : public GeoTexSvx
-        {
-        protected:
-            basegfx::BColor                 maColor;
-            double                          mfLogicPixelSize;
-            GeoTexSvxHatch*                 mp0;
-            GeoTexSvxHatch*                 mp1;
-            GeoTexSvxHatch*                 mp2;
-
-            // bitfield
-            unsigned                        mbFillBackground : 1;
-
-            // helpers
-            bool impIsOnHatch(const basegfx::B2DPoint& rUV) const;
-
-        public:
-            GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize);
-            virtual ~GeoTexSvxMultiHatch();
-            virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
-            virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
-
-            // dada access
-            bool getFillBackground() const { return mbFillBackground; }
-        };
-
-        GeoTexSvxMultiHatch::GeoTexSvxMultiHatch(const primitive3d::HatchTexturePrimitive3D& rPrimitive, double fLogicPixelSize)
-        :   mfLogicPixelSize(fLogicPixelSize),
-            mp0(0L),
-            mp1(0L),
-            mp2(0L)
-        {
-            const attribute::FillHatchAttribute& rHatch(rPrimitive.getHatch());
-            const basegfx::B2DRange aOutlineRange(0.0, 0.0, rPrimitive.getTextureSize().getX(), rPrimitive.getTextureSize().getY());
-            const double fAngleA(-rHatch.getAngle());
-            maColor = rHatch.getColor();
-            mbFillBackground = rHatch.isFillBackground();
-            mp0 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA);
-
-            if(attribute::HATCHSTYLE_DOUBLE == rHatch.getStyle() || attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
-            {
-                mp1 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI2);
-            }
-
-            if(attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
-            {
-                mp2 = new GeoTexSvxHatch(aOutlineRange, rHatch.getDistance(), fAngleA + F_PI4);
-            }
-        }
-
-        GeoTexSvxMultiHatch::~GeoTexSvxMultiHatch()
-        {
-            delete mp0;
-            delete mp1;
-            delete mp2;
-        }
-
-        bool GeoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
-        {
-            double fSmallestDistance();
-
-            if(mp0->getDistanceToHatch(rUV) < mfLogicPixelSize)
-            {
-                return true;
-            }
-
-            if(mp1 && mp1->getDistanceToHatch(rUV) < mfLogicPixelSize)
-            {
-                return true;
-            }
-
-            if(mp2 && mp2->getDistanceToHatch(rUV) < mfLogicPixelSize)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        void GeoTexSvxMultiHatch::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const
-        {
-            if(impIsOnHatch(rUV))
-            {
-                rBColor = maColor;
-            }
-            else if(!mbFillBackground)
-            {
-                rfOpacity = 0.0;
-            }
-        }
-
-        void GeoTexSvxMultiHatch::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
-        {
-            if(mbFillBackground || impIsOnHatch(rUV))
-            {
-                rfOpacity = 1.0;
-            }
-            else
-            {
-                rfOpacity = 0.0;
-            }
-        }
-    } // end of namespace texture
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+// the DefaultProcessor3D itself
 
 namespace drawinglayer
 {
@@ -1954,7 +1167,7 @@ namespace drawinglayer
         {
             if(mpBZPixelRaster)
             {
-                return basegfx::getBitmapEx(*mpBZPixelRaster);
+                return BPixelRasterToBitmapEx(*mpBZPixelRaster);
             }
 
             return BitmapEx();

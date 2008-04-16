@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-04-16 04:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,33 +1050,44 @@ namespace drawinglayer
 
                     if(nCount)
                     {
-                        const bool bNeedQuadro(basegfx::fTools::more(fDiscreteLineWidth, 1.5));
                         aHairlinePolyPolygon.transform(maCurrentTransformation);
 
-                        for(sal_uInt32 a(0); a < nCount; a++)
+                        if(basegfx::fTools::more(fDiscreteLineWidth, 1.5))
                         {
-                            // draw the basic hairline polygon
-                            basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
-                            mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                            // line width is in range ]1.5 .. 2.5], use four hairlines
+                            // drawn in a square
+                            basegfx::B2DHomMatrix aMat;
 
-                            if(bNeedQuadro)
+                            for(sal_uInt32 a(0); a < nCount; a++)
                             {
-                                // line width is in range ]1.5 .. 2.5], use four hairlines
-                                // drawn in a square. Create the three other ones
-                                basegfx::B2DHomMatrix aMat;
-
-                                aMat.set(0, 2, 1);
-                                aCandidate.transform(aMat);
+                                basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                aMat.set(0, 2, 0);
-                                aMat.set(1, 2, 1);
+                                aMat.set(0, 2, 1.0);
+                                aMat.set(1, 2, 0.0);
                                 aCandidate.transform(aMat);
+
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
 
-                                aMat.set(0, 2, -1);
-                                aMat.set(1, 2, 0);
+                                aMat.set(0, 2, 0.0);
+                                aMat.set(1, 2, 1.0);
                                 aCandidate.transform(aMat);
+
+                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                aMat.set(0, 2, -1.0);
+                                aMat.set(1, 2, 0.0);
+                                aCandidate.transform(aMat);
+
+                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                            }
+                        }
+                        else
+                        {
+                            for(sal_uInt32 a(0); a < nCount; a++)
+                            {
+                                // draw the basic hairline polygon
+                                const basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
                                 mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
                             }
                         }

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2006-12-13 16:57:09 $
+#   last change: $Author: aw $ $Date: 2008-04-16 04:59:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/texture.obj
+        $(SLO)$/texture.obj				\
+        $(SLO)$/texture3d.obj
 
 # --- Targets ----------------------------------
 
