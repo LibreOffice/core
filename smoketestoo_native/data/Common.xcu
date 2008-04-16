@@ -15,4 +15,11 @@
    </prop>
    </node>
  </node>
+ <node oor:name="Help">
+   <node oor:name="Registration">
+     <prop oor:name="ReminderDate">
+       <value/>
+     </prop>
+   </node>
+ </node>
 </oor:component-data>
