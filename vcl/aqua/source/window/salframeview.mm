@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +46,11 @@ static USHORT ImplGetModifierMask( unsigned int nMask, bool bKeyEvent )
     if( (nMask & NSShiftKeyMask) != 0 )
         nRet |= KEY_SHIFT;
     if( (nMask & NSControlKeyMask) != 0 )
-        nRet |= KEY_MOD1;
+        nRet |= KEY_MOD3;
     if( (nMask & NSAlternateKeyMask) != 0 )
         nRet |= bKeyEvent ? KEY_MOD3 : KEY_MOD2;
     if( (nMask & NSCommandKeyMask) != 0 )
-        nRet |= KEY_MOD3;
+        nRet |= KEY_MOD1;
     return nRet;
 }
 
@@ -83,7 +83,7 @@ static USHORT ImplMapCharCode( sal_Unicode aCode )
         KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20,
         KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_F26, 0, 0,
         0, 0, 0, 0, 0, 0, 0, KEY_INSERT,
-        KEY_DELETE, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
+        0, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
         0, 0, 0, 0, 0, KEY_MENU, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, KEY_UNDO, KEY_REPEAT, KEY_FIND, KEY_HELP, 0,
@@ -434,7 +434,7 @@ static const struct ExceptionalKey
         
         USHORT nModMask = ImplGetModifierMask( [pEvent modifierFlags], false );
         // #i82284# emulate ctrl left
-        if( nModMask == KEY_MOD1 && nButton == MOUSE_LEFT )
+        if( nModMask == KEY_MOD3 && nButton == MOUSE_LEFT )
         {
             nModMask    = 0;
             nButton     = MOUSE_RIGHT;
@@ -777,6 +777,25 @@ static const struct ExceptionalKey
 -(void)deleteForward: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f];
+}
+
+-(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b'];
+}
+
+-(void)deleteWordBackward: (id)aSender
+{
+    // FIXME: this is configurable in tools->customize; just entering
+    // the default here. We need a real solution in the long term
+    [self sendKeyInputAndReleaseToFrame: (KEY_MOD1 | KEY_BACKSPACE) character: '\b'];
+}
+
+-(void)deleteWordForward: (id)aSender
+{
+    // FIXME: this is configurable in tools->customize; just entering
+    // the default here. We need a real solution in the long term
+    [self sendKeyInputAndReleaseToFrame: (KEY_MOD1 | KEY_DELETE) character: 0x7f];
 }
 
 -(void)cancelOperation: (id)aSender
