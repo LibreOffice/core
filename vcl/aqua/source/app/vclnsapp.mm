@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.mm,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,17 +63,47 @@
         if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
         {
             AquaSalFrame* pFrame = [(SalFrameWindow*)pKeyWin getSalFrame];
+            // handle Cmd-W
+            // FIXME: the correct solution would be to handle this in framework
+            // in the menu code
+            // however that is currently being revised, so let's use a preliminary solution here
+            // this hack is based on assumption
+            // a) Cmd-W is the same in all languages in OOo's menu conig
+            // b) Cmd-W is the same in all languages in on MacOS
+            // for now this seems to be true
+            if( (pFrame->mnStyleMask & NSClosableWindowMask) != 0 )
+            {
+                if( ([pEvent modifierFlags] & (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask)) == NSCommandKeyMask
+                    && [[pEvent charactersIgnoringModifiers] isEqualToString: @"w"] )
+                {
+                    [pFrame->getWindow() windowShouldClose: nil];
+                    return;
+                }
+            }
+            
             // dispatch to view directly to avoid the key event being consumed by the menubar
             // popup windows do not get the focus, so they don't get these either
             // simplest would be dispatch this to the key window always if it is without parent
             // however e.g. in document we want the menu shortcut if e.g. the stylist has focus
-            if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 )
+            if( pFrame->mpParent && (pFrame->mnStyle & SAL_FRAME_STYLE_FLOAT) == 0 ) 
             {
                 [[pKeyWin contentView] keyDown: pEvent];
                 return;
             }
+            
+            // see whether the main menu consumes this event
+            // if not, we want to dispatch it ourselves. Unless we do this "trick"
+            // the main menu just beeps for an unknown or disabled key equivalent
+            // and swallows the event wholesale
+            NSMenu* pMainMenu = [NSApp mainMenu];
+            if( pMainMenu == 0 || ! [pMainMenu performKeyEquivalent: pEvent] )
+                [[pKeyWin contentView] keyDown: pEvent];
+            
+            // at this point either the menu has executed the accelerator
+            // or we have dispatched the event
+            // so no need to dispatch further
+            return;
         }
-
     }
     else if( eType == NSScrollWheel )
     {
