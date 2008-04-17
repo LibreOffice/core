@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkdata.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -752,7 +752,8 @@ void GtkXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
             if( bWait && ! wasEvent )
                 g_main_context_iteration( NULL, TRUE );
         }
-        else {
+        else if( userEventFn( this ) )
+           {
             /* #i41693# in case the dispatch thread hangs in join
              * for this thread the condition will never be set
              * workaround: timeout of 1 second a emergency exit
