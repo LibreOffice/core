@@ -8,7 +8,7 @@
  *
  * $RCSfile: aqua11ytextattributeswrapper.mm,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ using namespace ::rtl;
 
 +(int)convertUnderlineStyle:(PropertyValue)property {
     int underlineStyle = NSNoUnderlineStyle;
-    sal_Int16 value;
+    sal_Int16 value = 0;
     property.Value >>= value;
     if ( value != FontUnderline::NONE 
       && value != FontUnderline::DONTKNOW) {
@@ -61,7 +61,7 @@ using namespace ::rtl;
 
 +(int)convertBoldStyle:(PropertyValue)property {
     int boldStyle = 0;
-    float value;
+    float value = 0;
     property.Value >>= value;
     if ( value == FontWeight::SEMIBOLD
       || value == FontWeight::BOLD
@@ -83,7 +83,7 @@ using namespace ::rtl;
 
 +(MacOSBOOL)isStrikethrough:(PropertyValue)property {
     MacOSBOOL strikethrough = NO;
-    sal_Int16 value;
+    sal_Int16 value = 0;
     property.Value >>= value;
     if ( value != FontStrikeout::NONE
       && value != FontStrikeout::DONTKNOW ) {
@@ -94,7 +94,7 @@ using namespace ::rtl;
 
 +(MacOSBOOL)convertBoolean:(PropertyValue)property {
     MacOSBOOL myBoolean = NO;
-    bool value;
+    bool value = sal_False;
     property.Value >>= value;
     if ( value ) {
         myBoolean = YES;
@@ -103,7 +103,7 @@ using namespace ::rtl;
 }
 
 +(NSNumber *)convertShort:(PropertyValue)property {
-    sal_Int16 value;
+    sal_Int16 value = 0;
     property.Value >>= value;
     return [ NSNumber numberWithShort: value ];
 }
