@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.219 $
+ * $Revision: 1.220 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,6 +143,8 @@
 #include <sfx2/sfx.hrc>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/bootstrap.hxx>
+
+#include "vos/process.hxx"
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -332,8 +334,7 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pArgs )
     {
-            ::vos::OExtCommandLine aArgs;
-            pArgs = new CommandLineArgs( aArgs );
+            pArgs = new CommandLineArgs( true );
     }
     }
 
@@ -1646,10 +1647,6 @@ void Desktop::Main()
                         xBackingComp->attachFrame(xBackingFrame);
                         CloseSplashScreen();
                         xContainerWindow->setVisible(sal_True);
-
-                        Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
-                        if (pCompWindow)
-                            pCompWindow->Update();
                     }
                 }
             }
