@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_cmdenv.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "../../deployment/gui/dp_gui.hrc"
+#include "../../deployment/gui/dp_gui_shared.hxx"
 #include "unopkg_shared.h"
 #include "osl/thread.h"
 #include "rtl/memory.h"
@@ -47,6 +49,7 @@
 #include "com/sun/star/container/ElementExistException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
+#include "com/sun/star/deployment/PlatformException.hpp"
 #include "com/sun/star/i18n/XCollator.hpp"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 #include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
@@ -264,6 +267,8 @@ void CommandEnvironmentImpl::handle(
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
     deployment::LicenseIndividualAgreementException licAgreementExc;
+    deployment::PlatformException platExc;
+
 
     bool bLicenseException = false;
     if (request >>= wtExc) {
@@ -312,6 +317,15 @@ void CommandEnvironmentImpl::handle(
     {
         //Only if the unopgk was started with gui + extension then we user is asked.
         //In console mode there is no asking.
+        approve = true;
+    }
+    else if (request >>= platExc)
+    {
+        String sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()));
+        sMsg.SearchAndReplaceAllAscii("%Name", platExc.package->getDisplayName());
+        ::rtl::OString oMsg = ::rtl::OUStringToOString(sMsg, osl_getThreadTextEncoding());
+
+        fprintf(stdout, "\n%s\n\n", oMsg.getStr());
         approve = true;
     }
     else {
