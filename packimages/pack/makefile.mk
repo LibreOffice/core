@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,17 +40,16 @@ RSCCUSTOMIMG*=$(PRJ)
 
 IMAGES := $(COMMONBIN)$/images.zip
 SORTED_LIST=$(RES)$/img$/sorted.lst
-BRANDINGIMG*=$(SOLARSRC)$/default_images
 # Custom sets, at 24x24 & 16x16 fall-back to industrial preferentially
-CUSTOM_PREFERRED_FALLBACK_1*=$(SOLARSRC)$/ooo_custom_images$/tango
-CUSTOM_PREFERRED_FALLBACK_2*=$(SOLARSRC)$/ooo_custom_images$/industrial
-CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango
+CUSTOM_IMAGE_SETS=hicontrast industrial crystal tango classic8
 CUSTOM_IMAGES+=$(foreach,i,$(CUSTOM_IMAGE_SETS) images_$i)
-CUSTOM_IMAGES+=$(COMMONBIN)$/nologo$/images.zip
+CUSTOM_PREFERRED_FALLBACK_1*=-c $(SOLARSRC)$/ooo_custom_images$/tango
+CUSTOM_PREFERRED_FALLBACK_2*=-c $(SOLARSRC)$/ooo_custom_images$/industrial
 
 CRYSTAL_TARBALL=$(SOLARSRC)$/external_images$/ooo_crystal_images-1.tar.gz
+CLASSIC8_TARBALL=$(SOLARSRC)$/ooo_custom_images$/classic8/classic8_images.tar.gz
 
-ALLTAR : $(IMAGES) $(CUSTOM_IMAGES)
+ALLTAR : $(IMAGES) $(CUSTOM_IMAGES) $(COMMONBIN)$/images_brand.zip
 
 $(IMAGES) $(CUSTOM_IMAGES) : $(SORTED_LIST)
 
@@ -72,11 +71,11 @@ $(COMMONBIN)$/images.zip .PHONY: $(RES)$/img$/commandimagelist.ilst
     $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -l $(SOLARCOMMONRESDIR)$/img -s $(SORTED_LIST) -l $(RES)$/img -o $@
 
 images_% : $(RES)$/img$/commandimagelist.ilst
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) -c $(CUSTOM_PREFERRED_FALLBACK_1) -c $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
+    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:s/images_//) -c $(MISC)$/$(@:s/images_//) $(CUSTOM_PREFERRED_FALLBACK_1) $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $(COMMONBIN)$/$@.zip
 
-$(COMMONBIN)$/%$/images.zip  .PHONY : $(RES)$/img$/commandimagelist.ilst
-    @@-$(MKDIR) $(COMMONBIN)$/$(@:d:d:f)
-    $(PERL) $(SOLARENV)$/bin$/packimages.pl -g $(SOLARSRC)$/$(RSCDEFIMG) -m $(SOLARSRC)$/$(RSCDEFIMG) -c $(BRANDINGIMG)$/$(@:d:d:f) -c $(RSCCUSTOMIMG)$/$(@:d:d:f) -c $(RSCCUSTOMIMG) -c $(SOLARSRC)$/ooo_custom_images$/$(@:d:d:f) -c $(MISC)$/$(@:d:d:f) -c $(CUSTOM_PREFERRED_FALLBACK_1) -c $(CUSTOM_PREFERRED_FALLBACK_2) -l $(SOLARCOMMONRESDIR)$/img -l $(RES)$/img -s $(SORTED_LIST) -o $@
+# make sure to have one to keep packing happy
+$(COMMONBIN)$/images_brand.zip:
+    @$(TOUCH) $@
 
 # generate the HiContrast icon set
 $(MISC)$/hicontrast.flag .PHONY :
@@ -90,8 +89,18 @@ $(MISC)$/crystal.flag : $(CRYSTAL_TARBALL)
 .ENDIF
     @$(TYPE) $@ || echo "ERROR: unpacking $(CRYSTAL_TARBALL) failed"
 
+# unpack the classic8 icon set
+$(MISC)$/classic8.flag : $(CLASSIC8_TARBALL)
+    cd $(MISC) && gunzip -c $(CLASSIC8_TARBALL) | ( tar -xf - ) && $(TOUCH) $(@:f)
+.IF "$(GUI)"=="UNX"
+    chmod -R g+w $(MISC)$/classic8
+.ENDIF
+    @$(TYPE) $@ || echo "ERROR: unpacking $(CLASSIC8_TARBALL) failed"
+
 # dependencies
 images_hicontrast : $(MISC)$/hicontrast.flag $(RES)$/img$/commandimagelist.ilst
 
 images_crystal : $(MISC)$/crystal.flag $(RES)$/img$/commandimagelist.ilst
+
+images_classic8 : $(MISC)$/classic8.flag $(RES)$/img$/commandimagelist.ilst
 
