@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
+#include "rtl/process.h"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -53,8 +54,8 @@ namespace {
 
 class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
 public:
-    explicit ExtCommandLineSupplier(vos::OExtCommandLine & commandLine):
-        m_commandLine(commandLine), m_count(commandLine.getCommandArgCount()),
+    explicit ExtCommandLineSupplier():
+        m_count(rtl_getAppCommandArgCount()),
         m_index(0) {}
 
     virtual ~ExtCommandLineSupplier() {}
@@ -62,7 +63,7 @@ public:
     virtual bool next(rtl::OUString * argument) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_count) {
-            if (!m_commandLine.getCommandArg(m_index++, *argument)) {
+            if (!rtl_getAppCommandArg(m_index++, &argument->pData )) {
                 OSL_ASSERT(false);
             }
             return true;
@@ -72,7 +73,6 @@ public:
     }
 
 private:
-    vos::OExtCommandLine & m_commandLine;
     sal_uInt32 m_count;
     sal_uInt32 m_index;
 };
@@ -114,11 +114,11 @@ CommandLineArgs::CommandLineArgs()
 }
 
 // intialize class with command line parameters from process environment
-CommandLineArgs::CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine )
+CommandLineArgs::CommandLineArgs( bool bConvert )
 {
     ResetParamValues();
-    ExtCommandLineSupplier s( aExtCmdLine );
-    ParseCommandLine_Impl( s, true );
+    ExtCommandLineSupplier s;
+    ParseCommandLine_Impl( s, bConvert );
 }
 
 CommandLineArgs::CommandLineArgs( Supplier& supplier )
@@ -160,6 +160,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier, bool convert )
         {
             break;
         }
+
         if ( convert )
         {
             // convert file URLs to internal form #112849#
@@ -924,7 +925,7 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
 
     return m_eArgumentCount == NONE ||
            ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
-           ( ( m_eArgumentCount == ONE ) && ( m_aBoolParams[ CMD_BOOLPARAM_PSN ] ));
+           ( ( m_eArgumentCount == ONE ) && m_aBoolParams[ CMD_BOOLPARAM_PSN ] );
 }
 
 } // namespace desktop
