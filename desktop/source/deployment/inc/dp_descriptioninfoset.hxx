@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,7 +259,7 @@ private:
         of this function.
     */
     SAL_DLLPRIVATE ::rtl::OUString
-        DescriptionInfoset::getNodeValueFromExpression(::rtl::OUString const & expression) const;
+        getNodeValueFromExpression(::rtl::OUString const & expression) const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > m_element;
