@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,8 @@ IDLFILES = \
         UpdateInformationProvider.idl           \
         XPackageInformationProvider.idl         \
         PackageInformationProvider.idl          \
-        LicenseIndividualAgreementException.idl
+        LicenseIndividualAgreementException.idl \
+        PlatformException.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk
