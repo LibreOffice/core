@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.h,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +119,9 @@
 -(void)deleteBackward: (id)aSender;
 -(void)deleteForward: (id)aSender;
 -(void)cancelOperation: (id)aSender;
+-(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender;
+-(void)deleteWordBackward: (id)aSender;
+-(void)deleteWordForward: (id)aSender;
 -(void)noop: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
