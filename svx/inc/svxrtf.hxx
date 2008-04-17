@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxrtf.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ namespace com { namespace sun { namespace star {
         class XDocumentProperties;
     }
     namespace util {
-        class DateTime;
+        struct DateTime;
     }
 } } }
 
