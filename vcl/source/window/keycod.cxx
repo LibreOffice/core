@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: keycod.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,30 +49,6 @@
 
 
 // =======================================================================
-#ifdef MACOSX
-static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
-{
-    0, 0, 0,                                                // KEYFUNC_DONTKNOW
-    KEY_N | KEY_MOD3, 0, 0,                                 // KEYFUNC_NEW
-    KEY_O | KEY_MOD3, KEY_OPEN, 0,                          // KEYFUNC_OPEN
-    KEY_S | KEY_MOD3, 0, 0,                                 // KEYFUNC_SAVE
-    0, 0, 0,                                                // KEYFUNC_SAVEAS
-    KEY_P | KEY_MOD3, 0, 0,                                 // KEYFUNC_PRINT
-    KEY_W | KEY_MOD3, KEY_F4 | KEY_MOD3, 0,                 // KEYFUNC_CLOSE
-    KEY_Q | KEY_MOD3, KEY_F4 | KEY_MOD2, 0,                 // KEYFUNC_QUIT
-    KEY_X | KEY_MOD3, KEY_DELETE | KEY_SHIFT, KEY_CUT,      // KEYFUNC_CUT
-    KEY_C | KEY_MOD3, KEY_INSERT | KEY_MOD3, KEY_COPY,      // KEYFUNC_COPY
-    KEY_V | KEY_MOD3, KEY_INSERT | KEY_SHIFT, KEY_PASTE,    // KEYFUNC_PASTE
-    KEY_Z | KEY_MOD3, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO,   // KEYFUNC_UNDO
-    0, 0, 0,                                                // KEYFUNC_REDO
-    KEY_DELETE, 0, 0,                                       // KEYFUNC_DELETE
-    KEY_REPEAT, 0, 0,                                       // KEYFUNC_REPEAT
-    KEY_F | KEY_MOD3, KEY_FIND, 0,                          // KEYFUNC_FIND
-    KEY_F | KEY_SHIFT | KEY_MOD3, KEY_SHIFT | KEY_FIND, 0,  // KEYFUNC_FINDBACKWARD
-    KEY_RETURN | KEY_MOD2, 0, 0,                            // KEYFUNC_PROPERTIES
-    0, 0, 0                                                 // KEYFUNC_FRONT
-};
-#else
 static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
 {
     0, 0, 0,                                                // KEYFUNC_DONTKNOW
@@ -95,7 +71,7 @@ static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
     KEY_RETURN | KEY_MOD2, 0, 0,                            // KEYFUNC_PROPERTIES
     0, 0, 0                                                 // KEYFUNC_FRONT
 };
-#endif
+
 // -----------------------------------------------------------------------
 
 void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3 )
