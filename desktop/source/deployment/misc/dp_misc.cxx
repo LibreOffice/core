@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_misc.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,28 +65,6 @@ using ::rtl::OUString;
 
 namespace dp_misc {
 namespace {
-
-struct StrOperatingSystem :
-        public rtl::StaticWithInit<const OUString, StrOperatingSystem> {
-    const OUString operator () () {
-        OUString os( RTL_CONSTASCII_USTRINGPARAM("$_OS") );
-        ::rtl::Bootstrap::expandMacros( os );
-        return os;
-    }
-};
-
-struct StrPlatform : public rtl::StaticWithInit<
-    const OUString, StrPlatform> {
-    const OUString operator () () {
-        ::rtl::OUStringBuffer buf;
-        buf.append( StrOperatingSystem::get() );
-        buf.append( static_cast<sal_Unicode>('_') );
-        OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
-        ::rtl::Bootstrap::expandMacros( arch );
-        buf.append( arch );
-        return buf.makeStringAndClear();
-    }
-};
 
 struct UnoRc : public rtl::StaticWithInit<
     const boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
@@ -156,31 +134,6 @@ bool existsOfficePipe()
 } // anon namespace
 
 //==============================================================================
-OUString const & getPlatformString()
-{
-    return StrPlatform::get();
-}
-
-//==============================================================================
-bool platform_fits( OUString const & platform_string )
-{
-    sal_Int32 index = 0;
-    for (;;)
-    {
-        const OUString token(
-            platform_string.getToken( 0, ',', index ).trim() );
-        // check if this platform:
-        if (token.equalsIgnoreAsciiCase( StrPlatform::get() ) ||
-            (token.indexOf( '_' ) < 0 && /* check OS part only */
-             token.equalsIgnoreAsciiCase( StrOperatingSystem::get() )))
-        {
-            return true;
-        }
-        if (index < 0)
-            break;
-    }
-    return false;
-}
 
 namespace {
 inline OUString encodeForRcFile( OUString const & str )
