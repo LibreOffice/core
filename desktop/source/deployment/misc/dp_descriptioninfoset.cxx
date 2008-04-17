@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,8 @@
 #include "dp_resource.h"
 #include "sal/config.h"
 
+#include "comphelper/sequence.hxx"
+#include "comphelper/makesequence.hxx"
 #include "boost/optional.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -147,15 +149,59 @@ DescriptionInfoset::~DescriptionInfoset() {}
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:identifier/@value")));
 }
 
-::rtl::OUString DescriptionInfoset::getVersion() const {
+::rtl::OUString DescriptionInfoset::getNodeValueFromExpression(::rtl::OUString const & expression) const
+{
     css::uno::Reference< css::xml::dom::XNode > n;
-    if (m_element.is()) {
-        n = m_xpath->selectSingleNode(
-            m_element,
-            ::rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("desc:version/@value")));
+    if (m_element.is())
+    {
+        n = m_xpath->selectSingleNode(m_element, expression);
     }
     return n.is() ? getNodeValue(n) : ::rtl::OUString();
+}
+
+
+::rtl::OUString DescriptionInfoset::getVersion() const
+{
+    return getNodeValueFromExpression( ::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("desc:version/@value")));
+}
+
+css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getSupportedPlaforms() const
+{
+    //When there is no description.xml then we assume that we support all platforms
+    if (! m_element.is())
+    {
+        return comphelper::makeSequence(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")));
+    }
+
+    //Check if the <platform> element was provided. If not the default is "all" platforms
+    css::uno::Reference< css::xml::dom::XNode > nodePlatform(
+        m_xpath->selectSingleNode(m_element, ::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("desc:platform"))));
+    if (!nodePlatform.is())
+    {
+        return comphelper::makeSequence(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")));
+    }
+
+    //There is a platform element.
+    const ::rtl::OUString value = getNodeValueFromExpression(::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("desc:platform/@value")));
+    //parse the string, it can contained multiple strings separated by commas
+    ::std::vector< ::rtl::OUString> vec;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        ::rtl::OUString aToken = value.getToken( 0, ',', nIndex );
+        aToken = aToken.trim();
+        if (aToken.getLength())
+            vec.push_back(aToken);
+
+    }
+    while (nIndex >= 0);
+
+    return comphelper::containerToSequence(vec);
 }
 
 css::uno::Reference< css::xml::dom::XNodeList >
