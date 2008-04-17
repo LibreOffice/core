@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "dp_ucb.h"
 #include "dp_interact.h"
 #include "dp_dependencies.hxx"
+#include "dp_platform.hxx"
 #include "dp_description.hxx"
 #include "dp_descriptioninfoset.hxx"
 #include "dp_identifier.hxx"
@@ -66,6 +67,7 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/LicenseException.hpp"
 #include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
+#include "com/sun/star/deployment/PlatformException.hpp"
 #include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
@@ -120,6 +122,9 @@ class BackendImpl : public ImplBaseT
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv,
             bool skip_registration = false );
+
+        bool checkPlatform(
+            css::uno::Reference< css::ucb::XCommandEnvironment > const &  environment);
 
         bool checkDependencies(
             css::uno::Reference< css::ucb::XCommandEnvironment > const &
@@ -487,6 +492,36 @@ DescriptionInfoset BackendImpl::PackageImpl::getDescriptionInfoset()
     return DescriptionInfoset(getMyBackend()->getComponentContext(), root);
 }
 
+bool BackendImpl::PackageImpl::checkPlatform(
+    css::uno::Reference< css::ucb::XCommandEnvironment > const &  environment)
+{
+    bool ret = false;
+    DescriptionInfoset info(getDescriptionInfoset());
+    Sequence<OUString> platforms(info.getSupportedPlaforms());
+    if (hasValidPlatform(platforms))
+    {
+        ret = true;
+    }
+    else
+    {
+        ret = false;
+        rtl::OUString msg(
+            RTL_CONSTASCII_USTRINGPARAM("unsupported platform"));
+        Any e(
+            css::deployment::PlatformException(
+                msg, static_cast<OWeakObject *>(this), this));
+        if (!interactContinuation(
+                e, cppu::UnoType< css::task::XInteractionApprove >::get(),
+                environment, NULL, NULL))
+        {
+            throw css::deployment::DeploymentException(
+                msg, static_cast<OWeakObject *>(this), e);
+        }
+    }
+    return ret;
+}
+
+
 bool BackendImpl::PackageImpl::checkDependencies(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & environment,
     ExtensionDescription const & description)
@@ -642,7 +677,8 @@ bool BackendImpl::PackageImpl::checkDependencies(
     } catch (NoDescriptionException& ) {
         return sal_True;
     }
-    return checkDependencies(xCmdEnv, *spDescription)
+    return checkPlatform(xCmdEnv)
+        && checkDependencies(xCmdEnv, *spDescription)
         && checkLicense(xCmdEnv, *spDescription, bInstalled, aContextName);
 }
 
