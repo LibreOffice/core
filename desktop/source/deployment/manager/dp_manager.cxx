@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "dp_ucb.h"
 #include "dp_resource.h"
+#include "dp_platform.hxx"
 #include "dp_manager.h"
 #include "dp_identifier.hxx"
 #include "rtl/ustrbuf.hxx"
