@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_misc.h,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,13 +75,6 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
-
-//==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString const & getPlatformString();
-
-//==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool platform_fits( ::rtl::OUString const & platform_string );
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
