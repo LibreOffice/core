@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,7 +72,9 @@ SHL1OBJS = \
         $(SLO)$/db.obj \
         $(SLO)$/dp_version.obj \
         $(SLO)$/dp_descriptioninfoset.obj \
-        $(SLO)$/dp_dependencies.obj
+        $(SLO)$/dp_dependencies.obj \
+        $(SLO)$/dp_platform.obj
+        
 SHL1STDLIBS = \
     $(BERKELEYLIB) \
     $(CPPUHELPERLIB) \
