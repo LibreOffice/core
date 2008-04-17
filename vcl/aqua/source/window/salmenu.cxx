@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,37 +140,57 @@ static void initAppMenu()
                         [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
                     }
 
+                    // WARNING: ultra ugly code ahead
 
-                    // FIXME: there probably is a more canonical way to set the string
-                    // in the application menu
-
-                    // replace instances of "NewApplication" (artifact from out .nib)
-                    // by the application name
-
-                    // get the application name
-                    ResHookProc pProc = ResMgr::GetReadStringHook();
-                    String aAppName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
-                    if( pProc )
-                        pProc( aAppName );
-
-                    int nItems = [pAppMenu numberOfItems];
-                    for( int i = 4; i < nItems; i++ )
+                    // rename standard entries
+                    // rename "Services"
+                    pNewItem = [pAppMenu itemAtIndex: 4];
+                    if( pNewItem )
                     {
-                        NSMenuItem* pItem = [pAppMenu itemAtIndex: i];
-                        if( pItem != nil )
-                        {
-                            OUString aTitle( GetOUString( [pItem title] ) );
-                            sal_Int32 nInd = aTitle.indexOfAsciiL( "NewApplication", 14 );
-                            if( nInd != -1 )
-                            {
-                                rtl::OUStringBuffer aBuf( aTitle.getLength()*2 );
-                                aBuf.append( aTitle.copy( 0, nInd ) );
-                                aBuf.append( aAppName );
-                                if( aTitle.getLength() > nInd + 14 )
-                                    aBuf.append( aTitle.copy( nInd+14, aTitle.getLength() - nInd - 14 ) );
-                                [pItem setTitle: [CreateNSString( aBuf.makeStringAndClear() ) autorelease]];
-                            }
-                        }
+                        pString = CreateNSString( String( ResId( SV_MENU_MAC_SERVICES, *pMgr ) ) );
+                        [pNewItem  setTitle: pString];
+                        if( pString )
+                            [pString release];
+                    }
+
+                    // rename "Hide NewApplication"
+                    pNewItem = [pAppMenu itemAtIndex: 6];
+                    if( pNewItem )
+                    {
+                        pString = CreateNSString( String( ResId( SV_MENU_MAC_HIDEAPP, *pMgr ) ) );
+                        [pNewItem  setTitle: pString];
+                        if( pString )
+                            [pString release];
+                    }
+
+                    // rename "Hide Others"
+                    pNewItem = [pAppMenu itemAtIndex: 7];
+                    if( pNewItem )
+                    {
+                        pString = CreateNSString( String( ResId( SV_MENU_MAC_HIDEALL, *pMgr ) ) );
+                        [pNewItem  setTitle: pString];
+                        if( pString )
+                            [pString release];
+                    }
+
+                    // rename "Show all"
+                    pNewItem = [pAppMenu itemAtIndex: 8];
+                    if( pNewItem )
+                    {
+                        pString = CreateNSString( String( ResId( SV_MENU_MAC_SHOWALL, *pMgr ) ) );
+                        [pNewItem  setTitle: pString];
+                        if( pString )
+                            [pString release];
+                    }
+
+                    // rename "Quit NewApplication"
+                    pNewItem = [pAppMenu itemAtIndex: 10];
+                    if( pNewItem )
+                    {
+                        pString = CreateNSString( String( ResId( SV_MENU_MAC_QUITAPP, *pMgr ) ) );
+                        [pNewItem  setTitle: pString];
+                        if( pString )
+                            [pString release];
                     }
                 }
             }
@@ -567,13 +587,7 @@ void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, cons
     nModifier=rKeyCode.GetAllModifier();
 
     // should always use the command key
-    int nItemModifier = NSCommandKeyMask;
-
-    // ignore KEY_MOD1, Ctrl replaced by Command
-    #if 0
-    if (nModifier & KEY_MOD1)
-        nItemModifier |= NSControlKeyMask; // for the Ctrl key
-    #endif
+    int nItemModifier = 0;
 
     if (nModifier & KEY_SHIFT)
     {
@@ -582,8 +596,14 @@ void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, cons
             nCommandKey = nKeyCode - KEY_A + 'A';
     }
 
+    if (nModifier & KEY_MOD1)
+        nItemModifier |= NSCommandKeyMask;
+
     if(nModifier & KEY_MOD2)
         nItemModifier |= NSAlternateKeyMask;
+
+    if(nModifier & KEY_MOD3)
+        nItemModifier |= NSControlKeyMask;
 
     AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) pSalMenuItem;
     NSString* pString = CreateNSString( rtl::OUString( &nCommandKey, 1 ) );
