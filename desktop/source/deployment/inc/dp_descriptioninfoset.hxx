@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +97,23 @@ public:
        textual version representation
     */
     ::rtl::OUString getVersion() const;
+
+    /**
+        Returns a list of supported platforms.
+
+        If the extension does not specify a platform by leaving out the platform element
+        then we assume that the extension supports all platforms. In this case the returned
+        sequence will have one element, which is &quot;all&quot;.
+        If the platform element is present but does not specify a platform then an empty
+        sequence is returned. Examples for invalid platform elements:
+        <pre>
+            <platform />, <platform value="" />, <platfrom value=",">
+        </pre>
+
+        The value attribute can contain various platform tokens. They must be separated by
+        commas.Each token will be stripped from leading and trailing white space (trim()).
+    */
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedPlaforms() const;
 
     /**
         Returns the localized publisher name and the corresponding URL.
@@ -237,6 +254,12 @@ private:
     static SAL_DLLPRIVATE ::rtl::OUString
         localeToString(::com::sun::star::lang::Locale const & locale);
 
+    /** Gets the node value for a given expression. The expression is used in
+        m_xpath-selectSingleNode. The value of the returned node is return value
+        of this function.
+    */
+    SAL_DLLPRIVATE ::rtl::OUString
+        DescriptionInfoset::getNodeValueFromExpression(::rtl::OUString const & expression) const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > m_element;
