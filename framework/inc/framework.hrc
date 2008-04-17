@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,25 +54,28 @@
 #define STR_BACKING_CREATE                  3
 #define STR_BACKING_TEMPLATE                4
 #define STR_BACKING_FILE                    5
-#define BMP_BACKING_BACKGROUND_LEFT         6
-#define BMP_BACKING_BACKGROUND_MIDDLE       7
-#define BMP_BACKING_BACKGROUND_RIGHT        8
-#define BMP_BACKING_BACKGROUND_RTL_LEFT     9
-#define BMP_BACKING_BACKGROUND_RTL_MIDDLE   10
-#define BMP_BACKING_BACKGROUND_RTL_RIGHT    11
-#define BMP_BACKING_WRITER                  12
-#define BMP_BACKING_CALC                    13
-#define BMP_BACKING_IMPRESS                 14
-#define BMP_BACKING_DRAW                    15
-#define BMP_BACKING_DATABASE                16
-#define BMP_BACKING_OPENFILE                17
-#define BMP_BACKING_OPENTEMPLATE            18
-#define BMP_BACKING_EXT                     19
-#define STR_BACKING_EXTHELP                 20
-#define BMP_BACKING_REG                     21
-#define STR_BACKING_REGHELP                 22
-#define BMP_BACKING_INFO                    23
-#define STR_BACKING_INFOHELP                24
+#define BMP_BACKING_WRITER                  6
+#define BMP_BACKING_CALC                    7
+#define BMP_BACKING_IMPRESS                 8
+#define BMP_BACKING_DRAW                    9
+#define BMP_BACKING_DATABASE                10
+#define BMP_BACKING_OPENFILE                11
+#define BMP_BACKING_OPENTEMPLATE            12
+#define BMP_BACKING_EXT                     13
+#define STR_BACKING_EXTHELP                 14
+#define BMP_BACKING_REG                     15
+#define STR_BACKING_REGHELP                 16
+#define BMP_BACKING_INFO                    17
+#define STR_BACKING_INFOHELP                18
+
+#define RES_BACKING_IMAGES                  (DLG_BACKING+1)
+#define RES_BACKING_IMAGES_HC               (DLG_BACKING+2)
+
+#define BMP_BACKING_BACKGROUND_LEFT         1
+#define BMP_BACKING_BACKGROUND_MIDDLE       2
+#define BMP_BACKING_BACKGROUND_RIGHT        3
+#define BMP_BACKING_BACKGROUND_RTL_LEFT     4
+#define BMP_BACKING_BACKGROUND_RTL_RIGHT    5
 
 
 #endif
