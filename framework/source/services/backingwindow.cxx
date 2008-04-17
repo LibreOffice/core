@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,16 +130,11 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maOpenText( this, WB_WORDBREAK | WB_VCENTER ),
     maOpenButton( this, WB_CENTER | WB_BEVELBUTTON ),
     maToolbox( this, WB_DIALOGCONTROL ),
-    maBackgroundLeft( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) ),
-    maBackgroundMiddle( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) ),
-    maBackgroundRight( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) ),
     maWelcomeString( FwkResId( STR_BACKING_WELCOME ) ),
     maProductString( FwkResId( STR_BACKING_WELCOMEPRODUCT ) ),
     maCreateString( FwkResId( STR_BACKING_CREATE ) ),
     maOpenString( FwkResId( STR_BACKING_FILE ) ),
     maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
-    maLabelTextColor( 0x26, 0x35, 0x42 ),
-    maWelcomeTextColor( 0x26, 0x35, 0x42 ),
     maButtonImageSize( 10, 10 ),
     mbInitControls( false ),
     mpAccExec( NULL )
@@ -161,13 +156,6 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     String aRegHelpText( FwkResId( STR_BACKING_REGHELP ) );
     BitmapEx aInfoImage( FwkResId( BMP_BACKING_INFO ) );
     String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
-
-    if( GetSettings().GetLayoutRTL() )
-    {
-        // replace images by RTL versions
-        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_RIGHT ) );
-        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_LEFT) );
-    }
 
     // clean up resource stack
     FreeResource();
@@ -209,12 +197,86 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maTemplateButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateButton" ) ) ) );
     maOpenButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:OpenButton" ) ) ) );
     maToolbox.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Toolbox" ) ) ) );
+
+    // init background
+    initBackground();
 }
 
 
 BackingWindow::~BackingWindow()
 {
     delete mpAccExec;
+}
+
+class ImageContainerRes : public Resource
+{
+    public:
+    ImageContainerRes( const ResId& i_rId ) : Resource( i_rId ) {}
+    ~ImageContainerRes() { FreeResource(); }
+};
+
+void BackingWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
+    {
+        SetBackground();
+        initBackground();
+    }
+}
+
+void BackingWindow::initBackground()
+{
+    bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+    maWelcomeTextColor = maLabelTextColor =  bDark ? Color( COL_WHITE ) : Color( 0x26, 0x35, 0x42 );
+    Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
+
+    // select image set
+    ImageContainerRes aRes( FwkResId( bDark ? RES_BACKING_IMAGES_HC : RES_BACKING_IMAGES ) );
+
+    // scale middle segment
+    Size aMiddleSize;
+    if( !! maBackgroundMiddle )
+        aMiddleSize = maBackgroundMiddle.GetSizePixel();
+    // load middle segment
+    maBackgroundMiddle = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_MIDDLE ) );
+    // and scale it to previous size
+    if( aMiddleSize.Width() && aMiddleSize.Height() )
+        maBackgroundMiddle.Scale( aMiddleSize );
+
+    if( GetSettings().GetLayoutRTL() )
+    {
+        // replace images by RTL versions
+        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_RIGHT ) );
+        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RTL_LEFT) );
+    }
+    else
+    {
+        maBackgroundLeft = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_LEFT ) );
+        maBackgroundRight = BitmapEx( FwkResId( BMP_BACKING_BACKGROUND_RIGHT ) );
+    }
+
+    maWelcome.SetControlForeground( maWelcomeTextColor );
+    maWelcome.SetControlBackground( aTextBGColor );
+    maProduct.SetControlForeground( maWelcomeTextColor );
+    maProduct.SetControlBackground( aTextBGColor );
+    maCreateText.SetControlForeground( maLabelTextColor );
+    maCreateText.SetControlBackground( aTextBGColor );
+    maWriterText.SetControlForeground( maLabelTextColor );
+    maWriterText.SetControlBackground( aTextBGColor );
+    maCalcText.SetControlForeground( maLabelTextColor );
+    maCalcText.SetControlBackground( aTextBGColor );
+    maImpressText.SetControlForeground( maLabelTextColor );
+    maImpressText.SetControlBackground( aTextBGColor );
+    maDrawText.SetControlForeground( maLabelTextColor );
+    maDrawText.SetControlBackground( aTextBGColor );
+    maDBText.SetControlForeground( maLabelTextColor );
+    maDBText.SetControlBackground( aTextBGColor );
+    maTemplateText.SetControlForeground( maLabelTextColor );
+    maTemplateText.SetControlBackground( aTextBGColor );
+    maOpenText.SetControlForeground( maLabelTextColor );
+    maOpenText.SetControlBackground( aTextBGColor );
 }
 
 void BackingWindow::initControls()
@@ -242,7 +304,6 @@ void BackingWindow::initControls()
     maTextFont.SetSize( Size( 0, 18 ) );
     maTextFont.SetWeight( WEIGHT_BOLD );
     maWelcome.SetFont( maTextFont );
-    maWelcome.SetControlForeground( maWelcomeTextColor );
     // get metric to get correct width factor and adjust
     long nW = (maWelcome.GetFontMetric().GetWidth()*95)/100;
     maTextFont.SetSize( Size( nW, 18 ) );
@@ -257,7 +318,6 @@ void BackingWindow::initControls()
     if( maControlRect.GetWidth() < nBtnPos + maWelcomeSize.Width() + 20 )
         maControlRect.Right() = maControlRect.Left() + maWelcomeSize.Width() + nBtnPos + 20;
 
-    maWelcome.SetControlBackground( Color( COL_WHITE ) );
     maWelcome.Show();
 
     nYPos += maWelcomeSize.Height();
@@ -265,7 +325,6 @@ void BackingWindow::initControls()
     // set product string
     maTextFont.SetSize( Size( 0, 30 ) );
     maProduct.SetFont( maTextFont );
-    maProduct.SetControlForeground( maWelcomeTextColor );
 
     // get metric to get correct width factor and adjust
     nW = (maProduct.GetFontMetric().GetWidth()*95)/100;
@@ -280,7 +339,6 @@ void BackingWindow::initControls()
     if( maControlRect.GetWidth() < maProductSize.Width() + nBtnPos + 10 )
         maControlRect.Right() = maControlRect.Left() + maProductSize.Width() + nBtnPos + 10;
 
-    maProduct.SetControlBackground( Color( COL_WHITE ) );
     maProduct.Show();
 
     nYPos += (maProductSize.Height()*3)/2;
@@ -293,8 +351,6 @@ void BackingWindow::initControls()
     maCreateText.SetFont( maTextFont );
     maCreateText.SetControlFont( maTextFont );
     maCreateSize = Size( maCreateText.GetTextWidth( maCreateString ), maCreateText.GetTextHeight() );
-    maCreateText.SetControlBackground( Color( COL_WHITE ) );
-    maCreateText.SetControlForeground( maLabelTextColor );
     maCreateText.Show();
 
     nYPos += (maCreateSize.Height()*3)/2;
@@ -422,14 +478,12 @@ void BackingWindow::layoutButtonAndText(
     // setup text
     i_rText.SetFont( maTextFont );
     i_rText.SetControlFont( maTextFont );
-    i_rText.SetControlForeground( maLabelTextColor );
     String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
     i_rMnemns.CreateMnemonic( aText );
     i_rText.SetText( aText );
 
     long nTextWidth = i_rText.GetTextWidth( i_rText.GetText() );
     i_rText.SetPaintTransparent( TRUE );
-    i_rText.SetControlBackground( Color( COL_WHITE ) );
 
     nTextWidth += maButtonImageSize.Width() + 30;
     if( nColumn >= 0 && nColumn < static_cast<int>(sizeof(mnColumnWidth)/sizeof(mnColumnWidth[0])) )
@@ -445,12 +499,24 @@ void BackingWindow::layoutButtonAndText(
 
 void BackingWindow::Paint( const Rectangle& )
 {
-    Gradient aGrad( GRADIENT_LINEAR, Color( 0xa3, 0xae, 0xb8 ), Color( 0x73, 0x7e, 0x88 ) );
-    DrawGradient( Rectangle( Point( 0, 0 ), GetSizePixel() ), aGrad );
+    bool bDark = GetSettings().GetStyleSettings().GetWindowColor().IsDark();
+
+    Color aBackColor( bDark ? COL_BLACK : COL_WHITE );
+    if( bDark )
+    {
+        SetLineColor();
+        SetFillColor( aBackColor );
+        DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+    }
+    else
+    {
+        Gradient aGrad( GRADIENT_LINEAR, Color( 0xa3, 0xae, 0xb8 ), Color( 0x73, 0x7e, 0x88 ) );
+        DrawGradient( Rectangle( Point( 0, 0 ), GetSizePixel() ), aGrad );
+    }
 
     // fill control rect
     SetLineColor();
-    SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( aBackColor );
     DrawRect( maControlRect );
 
     // draw bitmap

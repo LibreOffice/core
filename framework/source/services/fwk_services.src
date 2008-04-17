@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwk_services.src,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,26 +55,6 @@ Window DLG_BACKING
     String STR_BACKING_FILE
     {
         Text [ en-US ] = "~Open a document...";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_LEFT
-    {
-        File = "backing.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_MIDDLE
-    {
-        File = "backing_space.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RIGHT
-    {
-        File = "backing_right.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RTL_LEFT
-    {
-        File = "backing_rtl_left.png";
-    };
-    Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
-    {
-        File = "backing_rtl_right.png";
     };
     Bitmap BMP_BACKING_WRITER
     {
@@ -127,6 +107,54 @@ Window DLG_BACKING
     String STR_BACKING_INFOHELP
     {
         Text [ en-US ] = "Get more information about %PRODUCTNAME";
+    };
+};
+
+Resource RES_BACKING_IMAGES
+{
+    Bitmap BMP_BACKING_BACKGROUND_LEFT
+    {
+        File = "backing.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_MIDDLE
+    {
+        File = "backing_space.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RIGHT
+    {
+        File = "backing_right.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_LEFT
+    {
+        File = "backing_rtl_left.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
+    {
+        File = "backing_rtl_right.png";
+    };
+};
+
+Resource RES_BACKING_IMAGES_HC
+{
+    Bitmap BMP_BACKING_BACKGROUND_LEFT
+    {
+        File = "backing_hc.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_MIDDLE
+    {
+        File = "backing_space_hc.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RIGHT
+    {
+        File = "backing_right_hc.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_LEFT
+    {
+        File = "backing_rtl_left_hc.png";
+    };
+    Bitmap BMP_BACKING_BACKGROUND_RTL_RIGHT
+    {
+        File = "backing_rtl_right_hc.png";
     };
 };
 
