@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_component.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "dp_component.hrc"
 #include "dp_backend.h"
+#include "dp_platform.hxx"
 #include "dp_ucb.h"
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
