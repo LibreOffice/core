@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,6 @@
 #define _DESKTOP_COMMANDLINEARGS_HXX_
 
 #include <rtl/ustring.hxx>
-#include <vos/process.hxx>
 #include <osl/mutex.hxx>
 
 
@@ -118,7 +117,7 @@ class CommandLineArgs
         };
 
         CommandLineArgs();
-        CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine );
+        CommandLineArgs( bool bConvert );
         CommandLineArgs( Supplier& supplier );
 
         // generic methods to access parameter
