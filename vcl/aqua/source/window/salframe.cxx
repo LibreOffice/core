@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -929,11 +929,11 @@ XubString AquaSalFrame::GetKeyName( USHORT nKeyCode )
         if( (nKeyCode & KEY_SHIFT) != 0 )
             aResult.append( sal_Unicode( 0x21e7 ) );
         if( (nKeyCode & KEY_MOD1) != 0 )
-            aResult.append( sal_Unicode( 0x2303 ) );
+            aResult.append( sal_Unicode( 0x2318 ) );
         // we do not really handle Alt (see below)
         // we map it to MOD3, whichis actually Command
         if( (nKeyCode & (KEY_MOD2|KEY_MOD3)) != 0 )
-            aResult.append( sal_Unicode( 0x2318 ) );
+            aResult.append( sal_Unicode( 0x2303 ) );
 
         aResult.append( it->second );
     }
@@ -1268,9 +1268,11 @@ SalPointerState AquaSalFrame::GetPointerState()
     if( nState & shiftKey )
         state.mnState |= KEY_SHIFT;
     if( nState & controlKey )
-        state.mnState |= KEY_MOD1;
+        state.mnState |= KEY_MOD3;
     if( nState & optionKey )
         state.mnState |= KEY_MOD2;
+    if( nState & cmdKey )
+        state.mnState |= KEY_MOD1;
 
     return state;
 }
