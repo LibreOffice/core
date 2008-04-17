@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_cmdenv.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 #include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
 #include "com/sun/star/deployment/VersionException.hpp"
 #include "com/sun/star/deployment/InstallException.hpp"
+#include "com/sun/star/deployment/PlatformException.hpp"
 #include "com/sun/star/deployment/ui/LicenseDialog.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
 #include "tools/resid.hxx"
@@ -309,6 +310,7 @@ void ProgressCommandEnv::handle(
     deployment::LicenseIndividualAgreementException licAgreementExc;
     deployment::VersionException verExc;
     deployment::InstallException instExc;
+    deployment::PlatformException platExc;
 
     // selections:
     bool approve = false;
@@ -472,6 +474,15 @@ void ProgressCommandEnv::handle(
             approve = box.Execute() == RET_OK;
             abort = !approve;
         }
+    }
+    else if (request >>= platExc)
+    {
+            vos::OGuard guard(Application::GetSolarMutex());
+            String sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()));
+            sMsg.SearchAndReplaceAllAscii("%Name", platExc.package->getDisplayName());
+            ErrorBox box(activeDialog(), WB_OK, sMsg);
+            box.Execute();
+            approve = true;
     }
 
 
