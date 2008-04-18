@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdata.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@
 #include "miscuno.hxx"
 #include "unonames.hxx"
 #include "inputopt.hxx"
+#include "viewutil.hxx"
 #include <xmloff/xmluconv.hxx>
 #include "ViewSettingsSequenceDefines.hxx"
 #include <rtl/ustrbuf.hxx>
@@ -677,76 +678,61 @@ void ScViewData::SetPagebreakMode( BOOL bSet )
     RefreshZoom();
 }
 
-BOOL ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
-                                SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab )
+
+ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) const
+{
+    ScMarkType eMarkType = SC_MARK_NONE;
+
+    if ( rNewMark.IsMarked() || rNewMark.IsMultiMarked() )
+    {
+        if ( rNewMark.IsMultiMarked() )
+            rNewMark.MarkToSimple();
+
+        if ( rNewMark.IsMarked() && !rNewMark.IsMultiMarked() )
+        {
+            rNewMark.GetMarkArea( rRange );
+            if (ScViewUtil::HasFiltered( rRange, GetDocument()))
+                eMarkType = SC_MARK_SIMPLE_FILTERED;
+            else
+                eMarkType = SC_MARK_SIMPLE;
+        }
+        else
+            eMarkType = SC_MARK_MULTI;
+    }
+    if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+    {
+        if (eMarkType == SC_MARK_NONE)
+            eMarkType = SC_MARK_SIMPLE;
+        rRange = ScRange( GetCurX(), GetCurY(), GetTabNo() );
+    }
+    return eMarkType;
+}
+
+
+ScMarkType ScViewData::GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
+                                SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const
 {
     //  parameter bMergeMark is no longer needed: The view's selection is never modified
     //  (a local copy is used), and a multi selection that adds to a single range can always
     //  be treated like a single selection (#108266# - GetSimpleArea isn't used in selection
     //  handling itself)
 
+    ScRange aRange;
     ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
-
-    if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
-    {
-        if ( aNewMark.IsMultiMarked() )
-            aNewMark.MarkToSimple();
-
-        if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
-        {
-            ScRange aMarkRange;
-            aNewMark.GetMarkArea( aMarkRange );
-            rStartCol = aMarkRange.aStart.Col();
-            rStartRow = aMarkRange.aStart.Row();
-            rStartTab = aMarkRange.aStart.Tab();
-            rEndCol = aMarkRange.aEnd.Col();
-            rEndRow = aMarkRange.aEnd.Row();
-            rEndTab = aMarkRange.aEnd.Tab();
-        }
-        else
-        {
-            rStartCol = rEndCol = GetCurX();
-            rStartRow = rEndRow = GetCurY();
-            rStartTab = rEndTab = GetTabNo();
-            return FALSE;
-        }
-    }
-    else
-    {
-        rStartCol = rEndCol = GetCurX();
-        rStartRow = rEndRow = GetCurY();
-        rStartTab = rEndTab = GetTabNo();
-    }
-    return TRUE;
+    ScMarkType eMarkType = GetSimpleArea( aRange, aNewMark);
+    aRange.GetVars( rStartCol, rStartRow, rStartTab, rEndCol, rEndRow, rEndTab);
+    return eMarkType;
 }
 
-BOOL ScViewData::GetSimpleArea( ScRange& rRange )
+ScMarkType ScViewData::GetSimpleArea( ScRange& rRange ) const
 {
     //  parameter bMergeMark is no longer needed, see above
 
     ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
-
-    if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
-    {
-        if ( aNewMark.IsMultiMarked() )
-            aNewMark.MarkToSimple();
-
-        if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
-            aNewMark.GetMarkArea( rRange );
-        else
-        {
-            rRange = ScRange( GetCurX(), GetCurY(), GetTabNo() );
-            return FALSE;
-        }
-    }
-    else
-    {
-        rRange = ScRange( GetCurX(), GetCurY(), GetTabNo() );
-    }
-    return TRUE;
+    return GetSimpleArea( rRange, aNewMark);
 }
 
-void ScViewData::GetMultiArea( ScRangeListRef& rRange )
+void ScViewData::GetMultiArea( ScRangeListRef& rRange ) const
 {
     //  parameter bMergeMark is no longer needed, see GetSimpleArea
 
@@ -780,7 +766,7 @@ BOOL ScViewData::SimpleColMarked()
     SCCOL nEndCol;
     SCROW nEndRow;
     SCTAB nEndTab;
-    if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
         if (nStartRow==0 && nEndRow==MAXROW)
             return TRUE;
 
@@ -795,7 +781,7 @@ BOOL ScViewData::SimpleRowMarked()
     SCCOL nEndCol;
     SCROW nEndRow;
     SCTAB nEndTab;
-    if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
         if (nStartCol==0 && nEndCol==MAXCOL)
             return TRUE;
 
@@ -804,16 +790,11 @@ BOOL ScViewData::SimpleRowMarked()
 
 BOOL ScViewData::IsMultiMarked()
 {
-    // test for "real" multi selection, calling MarkToSimple on a local copy
+    // Test for "real" multi selection, calling MarkToSimple on a local copy,
+    // and taking filtered in simple area marks into account.
 
-    if ( aMarkData.IsMultiMarked() )
-    {
-        ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
-        aNewMark.MarkToSimple();
-        if ( aNewMark.IsMultiMarked() )
-            return TRUE;
-    }
-    return FALSE;
+    ScRange aDummy;
+    return GetSimpleArea( aDummy) != SC_MARK_SIMPLE;
 }
 
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
