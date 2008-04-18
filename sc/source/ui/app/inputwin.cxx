@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inputwin.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1568,7 +1568,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
             eRet = SC_NAME_INPUT_SHEET;
         else if ( ScRangeData::IsNameValid( rText, pDoc ) )     // nothing found, create new range?
         {
-            if ( pViewData->GetSimpleArea( aRange ) )
+            if ( pViewData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                 eRet = SC_NAME_INPUT_DEFINE;
             else
                 eRet = SC_NAME_INPUT_BAD_SELECTION;
@@ -1697,7 +1697,8 @@ void ScPosWnd::DoEnter()
                     ScRangeName* pNames = pDoc->GetRangeName();
                     ScRange aSelection;
                     USHORT nIndex = 0;
-                    if ( pNames && !pNames->SearchName( aText, nIndex ) && pViewData->GetSimpleArea( aSelection ) )
+                    if ( pNames && !pNames->SearchName( aText, nIndex ) &&
+                            (pViewData->GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );
                         ScAddress aCursor( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
