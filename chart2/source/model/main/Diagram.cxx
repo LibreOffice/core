@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Diagram.cxx,v $
- * $Revision: 1.22 $
+ *
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +44,8 @@
 #include "AxisHelper.hxx"
 #include "SceneProperties.hxx"
 #include "DisposeHelper.hxx"
+#include "BaseGFXHelper.hxx"
+#include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -75,9 +78,12 @@ enum
     PROP_DIAGRAM_REL_SIZE,
     PROP_DIAGRAM_SORT_BY_X_VALUES,
     PROP_DIAGRAM_CONNECT_BARS,
-    PROP_DIAGRMA_RIGHT_ANGLED_AXES,
+    PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
     PROP_DIAGRAM_STARTING_ANGLE,
-    PROP_DIAGRAM_GROUP_BARS_PER_AXIS
+    PROP_DIAGRAM_RIGHT_ANGLED_AXES,
+    PROP_DIAGRAM_PERSPECTIVE,
+    PROP_DIAGRAM_ROTATION_HORIZONTAL,
+    PROP_DIAGRAM_ROTATION_VERTICAL
 };
 
 void lcl_AddPropertiesToVector(
@@ -112,8 +118,8 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("RightAngledAxes"),
-                  PROP_DIAGRMA_RIGHT_ANGLED_AXES,
+        Property( C2U("GroupBarsPerAxis"),
+                  PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -126,11 +132,29 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U("GroupBarsPerAxis"),
-                  PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+        Property( C2U("RightAngledAxes"),
+                  PROP_DIAGRAM_RIGHT_ANGLED_AXES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("Perspective"),
+                  PROP_DIAGRAM_PERSPECTIVE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U("RotationHorizontal"),
+                  PROP_DIAGRAM_ROTATION_HORIZONTAL,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U("RotationVertical"),
+                  PROP_DIAGRAM_ROTATION_VERTICAL,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -138,9 +162,9 @@ void lcl_AddDefaultsToMap(
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
-    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRMA_RIGHT_ANGLED_AXES, false );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
@@ -562,6 +586,64 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
+}
+
+// ____ XFastPropertySet ____
+void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
+    throw(beans::UnknownPropertyException,
+          beans::PropertyVetoException,
+          lang::IllegalArgumentException,
+          lang::WrappedTargetException, uno::RuntimeException)
+{
+    //special treatment for some 3D properties
+    if( PROP_DIAGRAM_PERSPECTIVE == nHandle )
+    {
+        sal_Int32 fPerspective = 20;
+        if( rValue >>=fPerspective )
+            ThreeDHelper::setCameraDistance( this, ThreeDHelper::PerspectiveToCameraDistance( fPerspective ) );
+    }
+    else if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle
+        || PROP_DIAGRAM_ROTATION_VERTICAL == nHandle )
+    {
+        sal_Int32 nNewAngleDegree = 0;
+        if( rValue >>=nNewAngleDegree )
+        {
+            sal_Int32 nHorizontal, nVertical;
+            ThreeDHelper::getRotationFromDiagram( const_cast< Diagram* >( this ), nHorizontal, nVertical );
+            if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle )
+                nHorizontal = nNewAngleDegree;
+            else
+                nVertical = nNewAngleDegree;
+            ThreeDHelper::setRotationToDiagram( this, nHorizontal, nVertical );
+        }
+    }
+    else
+        ::property::OPropertySet::setFastPropertyValue( nHandle, rValue );
+}
+
+void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+{
+    //special treatment for some 3D properties
+    if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
+    {
+        sal_Int32 nPerspective = ::basegfx::fround( ThreeDHelper::CameraDistanceToPerspective(
+            ThreeDHelper::getCameraDistance( const_cast< Diagram* >( this ) ) ) );
+        rValue = uno::makeAny(nPerspective);
+    }
+    else if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle
+        || PROP_DIAGRAM_ROTATION_VERTICAL == nHandle )
+    {
+        sal_Int32 nHorizontal, nVertical;
+        ThreeDHelper::getRotationFromDiagram( const_cast< Diagram* >( this ), nHorizontal, nVertical );
+        sal_Int32 nAngleDegree = 0;
+        if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle )
+            nAngleDegree = nHorizontal;
+        else
+            nAngleDegree = nVertical;
+        rValue = uno::makeAny(nAngleDegree);
+    }
+    else
+        ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );
 }
 
 // ================================================================================
