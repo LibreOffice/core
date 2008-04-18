@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ooo_brand.scp,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,33 +92,5 @@ File gid_Brand_File_Share_Xdg_Math
 End
 
 #endif
-
-File gid_Brand_File_ImagesCrystal_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_crystal.zip";
-    Styles = (PACKED);
-End
-
-File gid_Brand_File_ImagesHicontrast_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_hicontrast.zip";
-    Styles = (PACKED);
-End
-
-File gid_Brand_File_ImagesIndustrial_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_industrial.zip";
-    Styles = (PACKED);
-End
-
-File gid_Brand_File_ImagesTango_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_tango.zip";
-    Styles = (PACKED);
-End
 
 BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )
