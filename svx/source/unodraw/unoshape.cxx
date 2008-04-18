@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.171 $
+ * $Revision: 1.172 $
  *
  * This file is part of OpenOffice.org.
  *
