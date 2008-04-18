@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLStreamImpl.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +46,8 @@ class OOXMLStreamImpl : public OOXMLStream
     void init();
 
     uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<io::XInputStream> mxStorageStream;
     uno::Reference<embed::XStorage> mxStorage;
-    uno::Reference<io::XInputStream> mxInputStream;
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     uno::Reference<io::XStream> mxDocumentStream;
     uno::Reference<xml::sax::XFastParser> mxFastParser;
@@ -57,12 +57,13 @@ class OOXMLStreamImpl : public OOXMLStream
 
     rtl::OUString msId;
     rtl::OUString msPath;
+    rtl::OUString msTarget;
 
-    bool getTarget(uno::Reference<embed::XRelationshipAccess>
-                   xRelationshipAccess,
-                   StreamType_t nStreamType,
-                   const ::rtl::OUString & rId,
-                   ::rtl::OUString & rDocumentTarget);
+    bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
+                       xRelationshipAccess,
+                       StreamType_t nStreamType,
+                       const ::rtl::OUString & rId,
+                       ::rtl::OUString & rDocumentTarget);
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
 
@@ -70,12 +71,12 @@ public:
     (OOXMLStreamImpl & rStream, StreamType_t nType);
     OOXMLStreamImpl
     (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<embed::XStorage> xStorage,
+     uno::Reference<io::XInputStream> xStorageStream,
      StreamType_t nType);
     OOXMLStreamImpl(OOXMLStreamImpl & rStream, const rtl::OUString & rId);
     OOXMLStreamImpl
     (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<embed::XStorage> xStorage,
+     uno::Reference<io::XInputStream> xStorageStream,
      const rtl::OUString & rId);
 
     virtual ~OOXMLStreamImpl();
@@ -83,9 +84,11 @@ public:
     virtual uno::Reference<xml::sax::XParser> getParser();
     virtual uno::Reference<xml::sax::XFastParser> getFastParser();
     virtual uno::Reference<io::XInputStream> getDocumentStream();
-    virtual uno::Reference<io::XInputStream> getInputStream();
+    virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<uno::XComponentContext> getContext();
-    ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+    virtual const ::rtl::OUString & getTarget() const;
+
     virtual uno::Reference<xml::sax::XFastTokenHandler>
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
 
