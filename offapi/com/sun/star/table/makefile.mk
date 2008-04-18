@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,6 +58,7 @@ IDLFILES=\
     ShadowFormat.idl\
     ShadowLocation.idl\
     TableBorder.idl\
+    TableBorderDistances.idl\
     TableChart.idl\
     TableCharts.idl\
     TableChartsEnumeration.idl\
