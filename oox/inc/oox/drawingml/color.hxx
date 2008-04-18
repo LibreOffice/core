@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: color.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,60 +31,103 @@
 #ifndef OOX_DRAWINGML_COLOR_HXX
 #define OOX_DRAWINGML_COLOR_HXX
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
-#include "oox/drawingml/clrscheme.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include <map>
+#include <sal/types.h>
 
-namespace oox { namespace drawingml {
+namespace oox { namespace core {
+    class XmlFilterBase;
+} }
 
-class Color;
-class colorChoiceContext;
-class clrChangeContext;
+namespace oox {
+namespace drawingml {
 
-typedef boost::shared_ptr< Color > ColorPtr;
-
-struct ColorTransformation
-{
-    sal_Int32 mnToken;
-    sal_Int32 mnValue;
-    ColorTransformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
-};
+// ============================================================================
 
 class Color
 {
-
-    friend class oox::drawingml::colorChoiceContext;
-    friend class oox::drawingml::clrChangeContext;
-
 public:
+                        Color();
+                        ~Color();
 
-    Color();
-    ~Color();
+    /** Returns a preset color, e.g. used in the a:prstClr element. */
+    static sal_Int32    getPresetColor( sal_Int32 nToken );
+    /** Returns a system color, e.g. used in the a:sysClr element. */
+    static sal_Int32    getSystemColor( sal_Int32 nToken, sal_Int32 nDefault = -1 );
 
-    sal_Int32   getColor( const oox::core::XmlFilterBase& rFilterBase ) const;
+    /** Sets an RGB value (hexadecimal RRGGBB) from the a:srgbClr element. */
+    void                setSrgbClr( sal_Int32 nRGB );
+    /** Sets the percentual RGB values from the a:scrgbClr element. */
+    void                setScrgbClr( sal_Int32 nR, sal_Int32 nG, sal_Int32 nB );
+    /** Sets the HSL values from the a:hslClr element. */
+    void                setHslClr( sal_Int32 nHue, sal_Int32 nSat, sal_Int32 nLum );
+    /** Sets a predefined color from the a:prstClr element. */
+    void                setPrstClr( sal_Int32 nToken );
+    /** Sets a scheme color from the a:schemeClr element. */
+    void                setSchemeClr( sal_Int32 nToken );
+    /** Sets a system color from the a:sysClr element. */
+    void                setSysClr( sal_Int32 nToken, sal_Int32 nLastRGB );
 
-    sal_Bool    hasAlpha() const { return mbAlphaColor; };
-    sal_Int32   getAlpha() const;
+    /** Inserts the passed color transformation. */
+    void                addTransformation( sal_Int32 nElement, sal_Int32 nValue = -1 );
+    /** Inserts Excel specific color tint (-1.0...0.0 = shade, 0.0...1.0 = tint). */
+    void                addExcelTintTransformation( double fTint );
 
-    sal_Bool    isUsed() const { return mbUsed; };
+    /** Removes transparence from the color. */
+    void                clearTransparence();
 
-    //HSL values = 0 ÷ 1
-    //RGB values = 0 ÷ 255
-    static void RGBtoHSL( sal_uInt8 R, sal_uInt8 G, sal_uInt8 B, double& H, double& S, double& L );
-    static void HSLtoRGB( double H, double S, double L, sal_uInt8& R, sal_uInt8& G, sal_uInt8& B );
+    /** Returns true, if the color is initialized. */
+    bool                isUsed() const { return meMode != COLOR_UNUSED; };
+    /** Returns the final RGB color value. */
+    sal_Int32           getColor( const ::oox::core::XmlFilterBase& rFilter ) const;
+
+    /** Returns true, if the color has a transparence set. */
+    bool                hasTransparence() const;
+    /** Returns the transparence of the color (0 = opaque, 100 = full transparent). */
+    sal_Int16           getTransparence() const;
 
 private:
+    /** Converts the color components to RGB values. */
+    void                toRgb() const;
+    /** Converts the color components to CRGB values (gamma corrected percentage). */
+    void                toCrgb() const;
+    /** Converts the color components to HSL values. */
+    void                toHsl() const;
 
-    sal_Int32       mnColor;
-    sal_Int32       mnAlpha;
-    sal_Bool        mbUsed;
-    sal_Bool        mbSchemeColor;
-    sal_Bool        mbAlphaColor;
+private:
+    enum ColorMode
+    {
+        COLOR_UNUSED,       /// Color is not used, or undefined.
+        COLOR_RGB,          /// Absolute RGB (r/g/b: 0...255).
+        COLOR_CRGB,         /// Relative RGB (r/g/b: 0...100000).
+        COLOR_HSL,          /// HSL (hue: 0...21600000, sat/lum: 0...100000).
+        COLOR_SCHEME,       /// Color from scheme.
+        COLOR_FINAL         /// Finalized RGB color.
+    };
 
-    std::vector< ColorTransformation > maColorTransformation;
+    struct Transformation
+    {
+        sal_Int32           mnToken;
+        sal_Int32           mnValue;
+
+        explicit            Transformation( sal_Int32 nToken, sal_Int32 nValue ) : mnToken( nToken ), mnValue( nValue ) {}
+    };
+    typedef ::std::vector< Transformation > TransformVec;
+
+    mutable ColorMode   meMode;         /// Current color mode.
+    mutable TransformVec maTransforms;  /// Color transformations.
+    mutable sal_Int32   mnC1;           /// Red, red%, hue, scheme token, or final RGB.
+    mutable sal_Int32   mnC2;           /// Green, green%, or saturation.
+    mutable sal_Int32   mnC3;           /// Blue, blue%, or luminance.
+    sal_Int32           mnAlpha;        /// Alpha value (color opacity).
 };
 
-} }
+typedef boost::shared_ptr< Color > ColorPtr;
 
-#endif  //  OOX_DRAWINGML_COLOR_HXX
+// ============================================================================
+
+} // namespace drawingml
+} // namespace oox
+
+#endif
+
