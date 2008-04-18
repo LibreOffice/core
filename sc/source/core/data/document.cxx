@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1598,7 +1598,8 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark,
                                     SCsCOL nDx, SCsROW /* nDy */,
-                                    const ScCopyBlockFromClipParams* pCBFCP )
+                                    const ScCopyBlockFromClipParams* pCBFCP,
+                                    SCROW & rClipStartRow )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
@@ -1612,7 +1613,7 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
     const ScBitMaskCompressedArray< SCROW, BYTE> & rSourceFlags =
         pCBFCP->pClipDoc->GetRowFlagsArray( nFlagTab);
 
-    SCROW nSourceRow = pCBFCP->pClipDoc->aClipRange.aStart.Row();
+    SCROW nSourceRow = rClipStartRow;
     SCROW nSourceEnd = pCBFCP->pClipDoc->aClipRange.aEnd.Row();
     SCROW nDestRow = nRow1;
 
@@ -1637,13 +1638,15 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
             nDestRow += nFollow + 1;
         }
     }
+    rClipStartRow = nSourceRow;
 }
 
 
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                 USHORT nInsFlag,
                                 ScDocument* pRefUndoDoc, ScDocument* pClipDoc, BOOL bResetCut,
-                                BOOL bAsLink, BOOL bIncludeFiltered, BOOL bSkipAttrForEmpty )
+                                BOOL bAsLink, BOOL bIncludeFiltered, BOOL bSkipAttrForEmpty,
+                                const ScRangeList * pDestRanges )
 {
     if (!bIsClip)
     {
@@ -1718,10 +1721,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     }
                 }
             }
-            SCCOL nCol1 = rDestRange.aStart.Col();
-            SCROW nRow1 = rDestRange.aStart.Row();
-            SCCOL nCol2 = rDestRange.aEnd.Col();
-            SCROW nRow2 = rDestRange.aEnd.Row();
+            SCCOL nAllCol1 = rDestRange.aStart.Col();
+            SCROW nAllRow1 = rDestRange.aStart.Row();
+            SCCOL nAllCol2 = rDestRange.aEnd.Col();
+            SCROW nAllRow2 = rDestRange.aEnd.Row();
 
             SCCOL nXw = 0;
             SCROW nYw = 0;
@@ -1756,15 +1759,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             //  on top of existing attributes instead.
             if ( ( nInsFlag & IDF_ATTRIB ) && !bSkipAttrForEmpty )
                 nDelFlag |= IDF_ATTRIB;
-            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
-
-            bInsertingFromOtherDoc = TRUE;  // kein Broadcast/Listener aufbauen bei Insert
-            SCCOL nC1 = nCol1;
-            SCROW nR1 = nRow1;
-            SCCOL nC2 = nC1 + nXw;
-            SCROW nR2 = nR1 + nYw;
-            SCCOL nClipStartCol = pClipDoc->aClipRange.aStart.Col();
-            SCROW nClipStartRow = pClipDoc->aClipRange.aStart.Row();
 
             ScCopyBlockFromClipParams aCBFCP;
             aCBFCP.pRefUndoDoc = pRefUndoDoc;
@@ -1788,32 +1782,84 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     pTab[j]->IncRecalcLevel();
                 }
 
+            ScRangeList aLocalRangeList;
+            if (!pDestRanges)
+            {
+                aLocalRangeList.Append( rDestRange);
+                pDestRanges = &aLocalRangeList;
+            }
+
+            bInsertingFromOtherDoc = TRUE;  // kein Broadcast/Listener aufbauen bei Insert
+
             // bei mindestens 64 Zeilen wird in ScColumn::CopyFromClip voralloziert
-            BOOL bDoDouble = ( nYw < 64 && nRow2 - nRow1 > 64);
+            BOOL bDoDouble = ( nYw < 64 && nAllRow2 - nAllRow1 > 64);
             BOOL bOldDouble = ScColumn::bDoubleAlloc;
             if (bDoDouble)
                 ScColumn::bDoubleAlloc = TRUE;
 
-            do
+            SCCOL nClipStartCol = pClipDoc->aClipRange.aStart.Col();
+            SCROW nClipStartRow = pClipDoc->aClipRange.aStart.Row();
+            // WaE: commented because unused:   SCCOL nClipEndCol = pClipDoc->aClipRange.aEnd.Col();
+            SCROW nClipEndRow = pClipDoc->aClipRange.aEnd.Row();
+            for (ULONG nRange = 0; nRange < pDestRanges->Count(); ++nRange)
             {
+                const ScRange* pRange = pDestRanges->GetObject( nRange);
+                SCCOL nCol1 = pRange->aStart.Col();
+                SCROW nRow1 = pRange->aStart.Row();
+                SCCOL nCol2 = pRange->aEnd.Col();
+                SCROW nRow2 = pRange->aEnd.Row();
+
+                DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+
+                SCCOL nC1 = nCol1;
+                SCROW nR1 = nRow1;
+                SCCOL nC2 = nC1 + nXw;
+                if (nC2 > nCol2)
+                    nC2 = nCol2;
+                SCROW nR2 = nR1 + nYw;
+                if (nR2 > nRow2)
+                    nR2 = nRow2;
+
                 do
                 {
-                    SCsCOL nDx = ((SCsCOL)nC1) - nClipStartCol;
-                    SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
-                    if ( bIncludeFiltered )
-                        CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP );
-                    else
-                        CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark, nDx, nDy, &aCBFCP );
-                    nC1 = nC2 + 1;
-                    nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
-                }
-                while (nC1 <= nCol2);
-                nC1 = nCol1;
-                nC2 = nC1 + nXw;
-                nR1 = nR2 + 1;
-                nR2 = Min((SCROW)(nR1 + nYw), nRow2);
+                    // Pasting is done column-wise, when pasting to a filtered
+                    // area this results in partitioning and we have to
+                    // remember and reset the start row for each column until
+                    // it can be advanced for the next chunk of unfiltered
+                    // rows.
+                    SCROW nSaveClipStartRow = nClipStartRow;
+                    do
+                    {
+                        nClipStartRow = nSaveClipStartRow;
+                        SCsCOL nDx = ((SCsCOL)nC1) - nClipStartCol;
+                        SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
+                        if ( bIncludeFiltered )
+                        {
+                            CopyBlockFromClip( nC1, nR1, nC2, nR2, rMark, nDx,
+                                    nDy, &aCBFCP );
+                            nClipStartRow += nR2 - nR1 + 1;
+                        }
+                        else
+                        {
+                            CopyNonFilteredFromClip( nC1, nR1, nC2, nR2, rMark,
+                                    nDx, nDy, &aCBFCP, nClipStartRow );
+                        }
+                        // Not needed for columns, but if it was this would be how to.
+                        //if (nClipStartCol > nClipEndCol)
+                        //    nClipStartCol = pClipDoc->aClipRange.aStart.Col();
+                        nC1 = nC2 + 1;
+                        nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
+                    } while (nC1 <= nCol2);
+                    if (nClipStartRow > nClipEndRow)
+                        nClipStartRow = pClipDoc->aClipRange.aStart.Row();
+                    nC1 = nCol1;
+                    nC2 = nC1 + nXw;
+                    if (nC2 > nCol2)
+                        nC2 = nCol2;
+                    nR1 = nR2 + 1;
+                    nR2 = Min((SCROW)(nR1 + nYw), nRow2);
+                } while (nR1 <= nRow2);
             }
-            while (nR1 <= nRow2);
 
             ScColumn::bDoubleAlloc = bOldDouble;
 
@@ -1833,35 +1879,50 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                         pClipRangeNames[i]->ReplaceRangeNamesInUse( aClipRangeMap );
                 }
                 // then update the formulas, they might need the just updated range names
-                nC1 = nCol1;
-                nR1 = nRow1;
-                nC2 = nC1 + nXw;
-                nR2 = nR1 + nYw;
-                do
+                for (ULONG nRange = 0; nRange < pDestRanges->Count(); ++nRange)
                 {
+                    const ScRange* pRange = pDestRanges->GetObject( nRange);
+                    SCCOL nCol1 = pRange->aStart.Col();
+                    SCROW nRow1 = pRange->aStart.Row();
+                    SCCOL nCol2 = pRange->aEnd.Col();
+                    SCROW nRow2 = pRange->aEnd.Row();
+
+                    SCCOL nC1 = nCol1;
+                    SCROW nR1 = nRow1;
+                    SCCOL nC2 = nC1 + nXw;
+                    if (nC2 > nCol2)
+                        nC2 = nCol2;
+                    SCROW nR2 = nR1 + nYw;
+                    if (nR2 > nRow2)
+                        nR2 = nRow2;
                     do
                     {
-                        for (SCTAB k = 0; k <= MAXTAB; k++)
+                        do
                         {
-                            if ( pTab[k] && rMark.GetTableSelect(k) )
-                                pTab[k]->ReplaceRangeNamesInUse(nC1, nR1,
-                                    nC2, nR2, aClipRangeMap );
-                        }
-                        nC1 = nC2 + 1;
-                        nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
-                    } while (nC1 <= nCol2);
-                    nC1 = nCol1;
-                    nC2 = nC1 + nXw;
-                    nR1 = nR2 + 1;
-                    nR2 = Min((SCROW)(nR1 + nYw), nRow2);
-                } while (nR1 <= nRow2);
+                            for (SCTAB k = 0; k <= MAXTAB; k++)
+                            {
+                                if ( pTab[k] && rMark.GetTableSelect(k) )
+                                    pTab[k]->ReplaceRangeNamesInUse(nC1, nR1,
+                                        nC2, nR2, aClipRangeMap );
+                            }
+                            nC1 = nC2 + 1;
+                            nC2 = Min((SCCOL)(nC1 + nXw), nCol2);
+                        } while (nC1 <= nCol2);
+                        nC1 = nCol1;
+                        nC2 = nC1 + nXw;
+                        if (nC2 > nCol2)
+                            nC2 = nCol2;
+                        nR1 = nR2 + 1;
+                        nR2 = Min((SCROW)(nR1 + nYw), nRow2);
+                    } while (nR1 <= nRow2);
+                }
             }
             if ( pClipRangeNames )
                 delete [] pClipRangeNames;
             // Listener aufbauen nachdem alles inserted wurde
-            StartListeningFromClip( nCol1, nRow1, nCol2, nRow2, rMark, nInsFlag );
+            StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
             // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-            BroadcastFromClip( nCol1, nRow1, nCol2, nRow2, rMark, nInsFlag );
+            BroadcastFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
             if (bResetCut)
                 pClipDoc->bCutMode = FALSE;
             SetAutoCalc( bOldAutoCalc );
