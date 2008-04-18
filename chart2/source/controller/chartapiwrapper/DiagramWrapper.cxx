@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,9 +116,12 @@ enum
 
     PROP_DIAGRAM_SORT_BY_X_VALUES,
 
-    PROP_DIAGRMA_RIGHT_ANGLED_AXES,
-
     PROP_DIAGRAM_STARTING_ANGLE,
+
+    PROP_DIAGRAM_RIGHT_ANGLED_AXES,
+    PROP_DIAGRAM_PERSPECTIVE,
+    PROP_DIAGRAM_ROTATION_HORIZONTAL,
+    PROP_DIAGRAM_ROTATION_VERTICAL,
 
     PROP_DIAGRAM_HAS_X_AXIS,
     PROP_DIAGRAM_HAS_X_AXIS_DESCR,
@@ -235,14 +238,6 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //new for 3D charts
-    rOutProperties.push_back(
-        Property( C2U("RightAngledAxes"),
-                  PROP_DIAGRMA_RIGHT_ANGLED_AXES,
-                  ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
-
     //for pie and donut charts
     rOutProperties.push_back(
         Property( C2U( "StartingAngle" ),
@@ -250,6 +245,32 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0) ),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //new for 3D charts
+    rOutProperties.push_back(
+        Property( C2U("RightAngledAxes"),
+                  PROP_DIAGRAM_RIGHT_ANGLED_AXES,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("Perspective"),
+                  PROP_DIAGRAM_PERSPECTIVE,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U("RotationHorizontal"),
+                  PROP_DIAGRAM_ROTATION_HORIZONTAL,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U("RotationVertical"),
+                  PROP_DIAGRAM_ROTATION_VERTICAL,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 
     // XAxisXSupplier
     rOutProperties.push_back(
