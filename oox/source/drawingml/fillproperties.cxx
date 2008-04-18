@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "tokens.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
@@ -176,10 +177,10 @@ void FillProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBas
         }
         if ( eFillStyle == drawing::FillStyle_SOLID )
         {
-            if ( maFillColor->isUsed() && maFillColor->hasAlpha() )
+            if ( maFillColor->isUsed() && maFillColor->hasTransparence() )
             {
                 const rtl::OUString sFillTransparence( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
-                xPropSet->setPropertyValue( sFillTransparence, Any( static_cast< sal_Int16 >( ( 100000 - maFillColor->getAlpha() ) / 1000 ) ) );
+                xPropSet->setPropertyValue( sFillTransparence, Any( maFillColor->getTransparence() ) );
             }
         }
         else if ( eFillStyle == drawing::FillStyle_GRADIENT )
@@ -308,12 +309,15 @@ void FillProperties::createTransformedGraphic( const oox::core::XmlFilterBase& r
             {
                 sal_Int32 nClrChangeFrom = maColorChangeFrom->getColor( rFilterBase );
                 sal_Int32 nClrChangeTo = maColorChangeTo->getColor( rFilterBase );
-                sal_Int32 nAlphaTo = maColorChangeTo->getAlpha();
-                if ( ( nClrChangeFrom != nClrChangeTo ) || ( maColorChangeTo->hasAlpha() && ( nAlphaTo != 1000000 ) ) )
+                if ( ( nClrChangeFrom != nClrChangeTo ) || maColorChangeTo->hasTransparence() )
                 {
                     Reference< XGraphicTransformer > xTransformer( xGraphic, UNO_QUERY );
                     if ( xTransformer.is() )
-                        xGraphic = xTransformer->colorChange( xGraphic, nClrChangeFrom, 9, nClrChangeTo, static_cast< sal_Int8 >( ( nAlphaTo / 39062 ) ) );
+                    {
+                        sal_Int16 nTransTo = maColorChangeTo->getTransparence();
+                        sal_Int8 nAlphaTo = static_cast< sal_Int8 >( (100 - nTransTo) / 39.062 );
+                        xGraphic = xTransformer->colorChange( xGraphic, nClrChangeFrom, 9, nClrChangeTo, nAlphaTo );
+                    }
                 }
             }
             static const OUString sGraphic( CREATE_OUSTRING( "Graphic" ) );

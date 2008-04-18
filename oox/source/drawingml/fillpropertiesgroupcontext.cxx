@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fillpropertiesgroupcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -506,15 +506,16 @@ clrChangeContext::clrChangeContext( ContextHandler& rParent, const Reference< XF
 : ContextHandler( rParent )
 , mraClrFrom( raClrFrom )
 , mraClrTo( raClrTo )
-, mbUseAlpha( xAttributes->getOptionalValueToken( XML_useA, XML_true ) == XML_true ? sal_True : sal_False )
 {
-    mraClrFrom = ColorPtr( new Color() );
-    mraClrTo = ColorPtr( new Color() );
+    mraClrFrom.reset( new Color );
+    mraClrTo.reset( new Color );
+    AttributeList aAttribs( xAttributes );
+    mbUseAlpha = aAttribs.getBool( XML_useA, true );
 }
 clrChangeContext::~clrChangeContext()
 {
     if ( !mbUseAlpha )
-        mraClrTo->mbAlphaColor = sal_False;
+        mraClrTo->clearTransparence();
 }
 Reference< XFastContextHandler > clrChangeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& )
     throw (SAXException, RuntimeException)
