@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdata.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,28 @@ enum ScFollowMode { SC_FOLLOW_NONE, SC_FOLLOW_LINE, SC_FOLLOW_FIX, SC_FOLLOW_JUM
 //  Mausmodi um Bereiche zu selektieren
 enum ScRefType { SC_REFTYPE_NONE, SC_REFTYPE_REF, SC_REFTYPE_FILL,
                     SC_REFTYPE_EMBED_LT, SC_REFTYPE_EMBED_RB };
+
+/** States GetSimpleArea() returns for the underlying selection marks, so the
+    caller can react if the result is not of type SC_MARK_SIMPLE. */
+enum ScMarkType
+{
+    SC_MARK_NONE            = 0,    // Not returned by GetSimpleArea(), used internally.
+                                    // Nothing marked always results in the
+                                    // current cursor position being selected and a simple mark.
+    SC_MARK_SIMPLE          = 1,    // Simple rectangular area marked, no filtered rows.
+    SC_MARK_FILTERED        = 2,    // At least one mark contains filtered rows.
+    SC_MARK_SIMPLE_FILTERED =       // Simple rectangular area marked containing filtered rows.
+        SC_MARK_SIMPLE |
+        SC_MARK_FILTERED,  // 3
+    SC_MARK_MULTI           = 4     // Multiple selection marks.
+    /* TODO: if filtered multi-selection was implemented, this would be the value to use. */
+#if 0
+        ,
+    SC_MARK_MULTI_FILTERED  =       // Multiple selection marks containing filtered rows.
+        SC_MARK_MULTI |
+        SC_MARK_FILTERED   // 6
+#endif
+};
 
 class ScDocShell;
 class ScDocument;
@@ -307,10 +329,12 @@ public:
     double          GetPPTX() const { return nPPTX; }
     double          GetPPTY() const { return nPPTY; }
 
-    BOOL            GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
-                                    SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab );
-    BOOL            GetSimpleArea( ScRange& rRange );
-    void            GetMultiArea( ScRangeListRef& rRange );
+    ScMarkType      GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
+                                    SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const;
+    ScMarkType      GetSimpleArea( ScRange& rRange ) const;
+                    /// May modify rNewMark using MarkToSimple().
+    ScMarkType      GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) const;
+    void            GetMultiArea( ScRangeListRef& rRange ) const;
 
     BOOL            SimpleColMarked();
     BOOL            SimpleRowMarked();
