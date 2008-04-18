@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tp_3D_SceneGeometry.cxx,v $
- * $Revision: 1.5 $
+ *
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +41,6 @@
 #include "DiagramHelper.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
-#include <basegfx/numeric/ftools.hxx>
 #include <rtl/math.hxx>
 #include <svx/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
@@ -56,13 +56,13 @@ using namespace ::com::sun::star;
 namespace
 {
 
-void lcl_shiftAngleToValidRange( double& rfAngleDegree )
+void lcl_shiftAngleToValidRange( sal_Int64& rnAngleDegree )
 {
     //valid range:  ]-180,180]
-    while( rfAngleDegree<=-180.0 )
-        rfAngleDegree+=360.0;
-    while( rfAngleDegree>180.0 )
-        rfAngleDegree-=360.0;
+    while( rnAngleDegree<=-180 )
+        rnAngleDegree+=360;
+    while( rnAngleDegree>180 )
+        rnAngleDegree-=360;
 }
 
 void lcl_SetMetricFieldLimits( MetricField& rField, sal_Int64 nLimit )
@@ -71,35 +71,6 @@ void lcl_SetMetricFieldLimits( MetricField& rField, sal_Int64 nLimit )
     rField.SetFirst(-1*nLimit);
     rField.SetMax(nLimit);
     rField.SetLast(nLimit);
-}
-
-double lcl_CameraDistanceToPerspective( double fCameraDistance )
-{
-    double fRet = fCameraDistance;
-    double fMin, fMax;
-    ThreeDHelper::getCameraDistanceRange( fMin, fMax );
-    //fMax <-> 0; fMin <->100
-    //a/x + b = y
-    double a = 100.0*fMax*fMin/(fMax-fMin);
-    double b = -a/fMax;
-
-    fRet = a/fCameraDistance + b;
-
-    return fRet;
-}
-double lcl_PerspectiveToCameraDistance( double fPerspective )
-{
-    double fRet = fPerspective;
-    double fMin, fMax;
-    ThreeDHelper::getCameraDistanceRange( fMin, fMax );
-    //fMax <-> 0; fMin <->100
-    //a/x + b = y
-    double a = 100.0*fMax*fMin/(fMax-fMin);
-    double b = -a/fMax;
-
-    fRet = a/(fPerspective - b);
-
-    return fRet;
 }
 
 }
@@ -133,10 +104,6 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
     fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
 
-    lcl_shiftAngleToValidRange( fXAngle );
-    lcl_shiftAngleToValidRange( fYAngle );
-    lcl_shiftAngleToValidRange( fZAngle );
-
     DBG_ASSERT( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
 
     lcl_SetMetricFieldLimits( m_aMFZRotation, 90 );
@@ -144,6 +111,10 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_nXRotation = ::basegfx::fround(fXAngle*pow(10.0,m_aMFXRotation.GetDecimalDigits()));
     m_nYRotation = ::basegfx::fround(-1.0*fYAngle*pow(10.0,m_aMFYRotation.GetDecimalDigits()));
     m_nZRotation = ::basegfx::fround(-1.0*fZAngle*pow(10.0,m_aMFZRotation.GetDecimalDigits()));
+
+    lcl_shiftAngleToValidRange( m_nXRotation );
+    lcl_shiftAngleToValidRange( m_nYRotation );
+    lcl_shiftAngleToValidRange( m_nZRotation );
 
     m_aMFXRotation.SetValue(m_nXRotation);
     m_aMFYRotation.SetValue(m_nYRotation);
@@ -170,8 +141,9 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_aCbxPerspective.Check( aProjectionMode == drawing::ProjectionMode_PERSPECTIVE );
     m_aCbxPerspective.SetToggleHdl( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveToggled ));
 
-    m_aMFPerspective.SetValue( ::basegfx::fround( lcl_CameraDistanceToPerspective(
-        ThreeDHelper::getCameraDistance( m_xSceneProperties ) ) ) );
+    sal_Int32 nPerspectivePercentage = 20;
+    m_xSceneProperties->getPropertyValue( C2U("Perspective")) >>= nPerspectivePercentage;
+    m_aMFPerspective.SetValue( nPerspectivePercentage );
 
     m_aMFPerspective.EnableUpdateData( nTimeout );
     m_aMFPerspective.SetUpdateDataHdl( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveChanged ) );
@@ -258,9 +230,7 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
     try
     {
         m_xSceneProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( aMode ));
-
-        ThreeDHelper::setCameraDistance( m_xSceneProperties
-            , lcl_PerspectiveToCameraDistance( (double)m_aMFPerspective.GetValue() ) );
+        m_xSceneProperties->setPropertyValue( C2U("Perspective"), uno::makeAny( (sal_Int32)m_aMFPerspective.GetValue() ));
     }
     catch( const uno::Exception & ex )
     {
