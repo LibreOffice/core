@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: TableBorderDistances.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-04-18 13:47:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_table_TableBorderDistances_idl__
+#define __com_sun_star_table_TableBorderDistances_idl__
+
+#ifndef __com_sun_star_table_BorderLine_idl__
+#include <com/sun/star/table/BorderLine.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** contains the distance settings of the border lines of all cells in a cell
+    range.
+
+    <p>In a queried structure, the flags in
+        <member>TableBorderDistances::Is...DistanceValid</member> indicate that not all
+    lines of the boxes have the same values.</p>
+
+    <p>In a structure which is used for setting, these flags determine
+        if the corresponding distance should be set or if the old value should
+    be kept.</p>
+ */
+published struct TableBorderDistances
+{
+
+        /** contains the distance between the top lines and other contents.
+     */
+        short TopDistance;
+
+    //-------------------------------------------------------------------------
+
+        /** specifies whether the value of <member>TableBorder::TopDistance</member>
+        is used.
+     */
+        boolean IsTopDistanceValid;
+        //-------------------------------------------------------------------------
+
+        /** contains the distance between the bottom lines and other contents.
+         */
+        short BottomDistance;
+
+        //-------------------------------------------------------------------------
+
+        /** specifies whether the value of <member>TableBorder::BottomDistance</member>
+                is used.
+         */
+        boolean IsBottomDistanceValid;
+        //-------------------------------------------------------------------------
+
+        /** contains the distance between the left lines and other contents.
+         */
+        short LeftDistance;
+
+        //-------------------------------------------------------------------------
+
+        /** specifies whether the value of <member>TableBorder::LeftDistance</member>
+                is used.
+         */
+        boolean IsLeftDistanceValid;
+        //-------------------------------------------------------------------------
+
+        /** contains the distance between the right lines and other contents.
+         */
+        short RightDistance;
+
+        //-------------------------------------------------------------------------
+
+        /** specifies whether the value of <member>TableBorder::RightDistance</member>
+                is used.
+         */
+        boolean IsRightDistanceValid;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
