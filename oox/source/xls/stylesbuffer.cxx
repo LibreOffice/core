@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylesbuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,8 +274,11 @@ const sal_uInt32 BIFF_CFRULE_FONT_ESCAPEM   = 0x00000001;   /// Font escapement 
 
 // ----------------------------------------------------------------------------
 
-sal_Int32 lclGetRgbColor( sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, sal_uInt8 nA )
+template< typename StreamType >
+sal_Int32 lclReadRgbColor( StreamType& rStrm )
 {
+    sal_uInt8 nR, nG, nB, nA;
+    rStrm >> nR >> nG >> nB >> nA;
     sal_Int32 nValue = nA;
     nValue <<= 8;
     nValue |= nR;
@@ -290,127 +293,148 @@ sal_Int32 lclGetRgbColor( sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, sal_uInt8 nA
 
 // ----------------------------------------------------------------------------
 
-OoxColor::OoxColor() :
-    mfTint( 0.0 ),
-    mnType( XML_auto ),
-    mnValue( 0 )
+Color::Color() :
+    meMode( COLOR_AUTO ),
+    mnValue( 0 ),
+    mfTint( 0.0 )
 {
 }
 
-OoxColor::OoxColor( sal_Int32 nType, sal_Int32 nValue, double fTint ) :
-    mfTint( fTint ),
-    mnType( nType ),
-    mnValue( nValue )
+void Color::setAuto()
 {
+    meMode = COLOR_AUTO;
+    mnValue = 0;
+    mfTint = 0.0;
 }
 
-bool OoxColor::isAuto() const
+void Color::setRgb( sal_Int32 nRgbValue, double fTint )
 {
-    return mnType == XML_auto;
-}
-
-void OoxColor::set( sal_Int32 nType, sal_Int32 nValue, double fTint )
-{
+    meMode = COLOR_RGB;
+    mnValue = nRgbValue;
     mfTint = fTint;
-    mnType = nType;
-    mnValue = nValue;
 }
 
-void OoxColor::importColor( const AttributeList& rAttribs )
+void Color::setTheme( sal_Int32 nThemeIdx, double fTint )
 {
-    mfTint = rAttribs.getDouble( XML_tint, 0.0 );
+    meMode = COLOR_THEME;
+    mnValue = nThemeIdx;
+    mfTint = fTint;
+}
+
+void Color::setIndexed( sal_Int32 nPaletteIdx, double fTint )
+{
+    meMode = COLOR_INDEXED;
+    mnValue = nPaletteIdx;
+    mfTint = fTint;
+}
+
+void Color::importColor( const AttributeList& rAttribs )
+{
     if( rAttribs.getBool( XML_auto, false ) )
-    {
-        mnType = XML_auto;
-    }
+        setAuto();
     else if( rAttribs.hasAttribute( XML_rgb ) )
-    {
-        mnType = XML_rgb;
-        mnValue = rAttribs.getHex( XML_rgb, API_RGB_TRANSPARENT );
-    }
+        setRgb( rAttribs.getHex( XML_rgb, API_RGB_TRANSPARENT ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_theme ) )
-    {
-        mnType = XML_theme;
-        mnValue = rAttribs.getInteger( XML_theme, -1 );
-    }
+        setTheme( rAttribs.getInteger( XML_theme, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else if( rAttribs.hasAttribute( XML_indexed ) )
-    {
-        mnType = XML_indexed;
-        mnValue = rAttribs.getInteger( XML_indexed, -1 );
-    }
+        setIndexed( rAttribs.getInteger( XML_indexed, -1 ), rAttribs.getDouble( XML_tint, 0.0 ) );
     else
     {
-        mnType = XML_auto;
-        OSL_ENSURE( false, "OoxColor::importColor - unknown color type" );
+        OSL_ENSURE( false, "Color::importColor - unknown color type" );
+        setAuto();
     }
 }
 
-void OoxColor::importColor( RecordInputStream& rStrm )
+void Color::importColor( RecordInputStream& rStrm )
 {
     sal_uInt8 nFlags, nIndex;
     sal_Int16 nTint;
     rStrm >> nFlags >> nIndex >> nTint;
+
+    // scale tint from signed 16-bit to double range -1.0 ... 1.0
+    double fTint = nTint;
+    if( nTint < 0 )
+        fTint /= SAL_MIN_INT16;
+    else if( nTint > 0 )
+        fTint /= SAL_MAX_INT16;
+
     switch( extractValue< sal_uInt8 >( nFlags, 1, 7 ) )
     {
         case OOBIN_COLOR_AUTO:
-            mnType = XML_auto;
+            setAuto();
             rStrm.skip( 4 );
         break;
         case OOBIN_COLOR_INDEXED:
-            mnType = XML_indexed;
-            mnValue = nIndex;
+            setIndexed( nIndex, fTint );
             rStrm.skip( 4 );
         break;
         case OOBIN_COLOR_RGB:
-            importColorRgb( rStrm );
+            setRgb( lclReadRgbColor( rStrm ), fTint );
         break;
         case OOBIN_COLOR_THEME:
-            mnType = XML_theme;
-            mnValue = nIndex;
+            setTheme( nIndex, fTint );
             rStrm.skip( 4 );
         break;
         default:
-            OSL_ENSURE( false, "OoxColor::importColor - unknown color type" );
-            mnType = XML_auto;
+            OSL_ENSURE( false, "Color::importColor - unknown color type" );
+            setAuto();
             rStrm.skip( 4 );
     }
-    // scale tint from signed 16-bit to double range -1.0 ... 1.0
-    mfTint = static_cast< double >( nTint ) / 0x8000;
 }
 
-void OoxColor::importColorId( RecordInputStream& rStrm )
+void Color::importColorId( RecordInputStream& rStrm )
 {
-    mfTint = 0.0;
-    mnType = XML_indexed;
-    rStrm >> mnValue;
+    setIndexed( rStrm.readInt32() );
 }
 
-void OoxColor::importColorRgb( RecordInputStream& rStrm )
+void Color::importColorRgb( RecordInputStream& rStrm )
 {
-    mfTint = 0.0;
-    mnType = XML_rgb;
-    sal_uInt8 nR, nG, nB, nA;
-    rStrm >> nR >> nG >> nB >> nA;
-    mnValue = lclGetRgbColor( nR, nG, nB, nA );
+    setRgb( lclReadRgbColor( rStrm ) );
 }
 
-void OoxColor::importColorId( BiffInputStream& rStrm, bool b16Bit )
+void Color::importColorId( BiffInputStream& rStrm, bool b16Bit )
 {
-    mfTint = 0.0;
-    mnType = XML_indexed;
-    mnValue = b16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
+    setIndexed( b16Bit ? rStrm.readuInt16() : rStrm.readuInt8() );
 }
 
-void OoxColor::importColorRgb( BiffInputStream& rStrm )
+void Color::importColorRgb( BiffInputStream& rStrm )
 {
-    mfTint = 0.0;
-    mnType = XML_rgb;
-    sal_uInt8 nR, nG, nB, nA;
-    rStrm >> nR >> nG >> nB >> nA;
-    mnValue = lclGetRgbColor( nR, nG, nB, nA );
+    setRgb( lclReadRgbColor( rStrm ) );
 }
 
-RecordInputStream& operator>>( RecordInputStream& rStrm, OoxColor& orColor )
+bool Color::isAuto() const
+{
+    return meMode == COLOR_AUTO;
+}
+
+sal_Int32 Color::getColor( const WorkbookHelper& rHelper, sal_Int32 nAuto ) const
+{
+    switch( meMode )
+    {
+        case COLOR_AUTO:    return nAuto;
+        case COLOR_FINAL:   return mnValue;
+
+        case COLOR_RGB:     mnValue &= 0xFFFFFF;                                        break;
+        case COLOR_THEME:   mnValue = rHelper.getTheme().getColorByIndex( mnValue );    break;
+        case COLOR_INDEXED: mnValue = rHelper.getStyles().getPaletteColor( mnValue );   break;
+    }
+
+    // color tint
+    OSL_ENSURE( (rHelper.getFilterType() == FILTER_OOX) || (mfTint == 0.0),
+        "Color::getColor - color tint only supported in OOX filter" );
+    if( (mnValue >= 0) && (rHelper.getFilterType() == FILTER_OOX) && (mfTint != 0.0) )
+    {
+        ::oox::drawingml::Color aTransformColor;
+        aTransformColor.setSrgbClr( mnValue );
+        aTransformColor.addExcelTintTransformation( mfTint );
+        mnValue = aTransformColor.getColor( rHelper.getOoxFilter() );
+    }
+
+    meMode = COLOR_FINAL;
+    return mnValue;
+}
+
+RecordInputStream& operator>>( RecordInputStream& rStrm, Color& orColor )
 {
     orColor.importColor( rStrm );
     return rStrm;
@@ -476,8 +500,8 @@ static const sal_Int32 spnDefColors8[] =
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mnWindowColor( ThemeBuffer::getSystemWindowColor() ),
-    mnWinTextColor( ThemeBuffer::getSystemWindowTextColor() )
+    mnWindowColor( ::oox::drawingml::Color::getSystemColor( XML_window ) ),
+    mnWinTextColor( ::oox::drawingml::Color::getSystemColor( XML_windowText ) )
 {
     // default colors
     switch( getFilterType() )
@@ -509,9 +533,9 @@ void ColorPalette::importPaletteColor( const AttributeList& rAttribs )
 
 void ColorPalette::importPaletteColor( RecordInputStream& rStrm )
 {
-    OoxColor aColor;
+    Color aColor;
     aColor.importColorRgb( rStrm );
-    appendColor( aColor.mnValue );
+    appendColor( aColor.getColor( *this ) );
 }
 
 void ColorPalette::importPalette( BiffInputStream& rStrm )
@@ -523,22 +547,22 @@ void ColorPalette::importPalette( BiffInputStream& rStrm )
 
     // fill palette from BIFF_COLOR_USEROFFSET
     mnAppendIndex = BIFF_COLOR_USEROFFSET;
-    OoxColor aColor;
+    Color aColor;
     for( sal_uInt16 nIndex = 0; rStrm.isValid() && (nIndex < nCount); ++nIndex )
     {
         aColor.importColorRgb( rStrm );
-        appendColor( aColor.mnValue );
+        appendColor( aColor.getColor( *this ) );
     }
 }
 
-sal_Int32 ColorPalette::getColor( sal_Int32 nIndex ) const
+sal_Int32 ColorPalette::getColor( sal_Int32 nPaletteIdx ) const
 {
     sal_Int32 nColor = API_RGB_TRANSPARENT;
-    if( (0 <= nIndex) && (static_cast< size_t >( nIndex ) < maColors.size()) )
+    if( (0 <= nPaletteIdx) && (static_cast< size_t >( nPaletteIdx ) < maColors.size()) )
     {
-        nColor = maColors[ nIndex ];
+        nColor = maColors[ nPaletteIdx ];
     }
-    else switch( nIndex )
+    else switch( nPaletteIdx )
     {
         case OOX_COLOR_WINDOWTEXT3:
         case OOX_COLOR_WINDOWTEXT:
@@ -896,7 +920,7 @@ void Font::importCfRule( BiffInputStream& rStrm )
     rStrm.skip( 18 );
 
     if( (maUsedFlags.mbColorUsed = (0 <= nColor) && (nColor <= 0x7FFF)) == true )
-        maOoxData.maColor.set( XML_indexed, nColor );
+        maOoxData.maColor.setIndexed( nColor );
     if( (maUsedFlags.mbHeightUsed = (0 < nHeight) && (nHeight <= 0x7FFF)) == true )
         maOoxData.setBiffHeight( static_cast< sal_uInt16 >( nHeight ) );
     if( (maUsedFlags.mbUnderlineUsed = !getFlag( nFontFlags3, BIFF_CFRULE_FONT_UNDERL )) == true )
@@ -951,7 +975,7 @@ void Font::finalizeImport()
             rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maOoxData.mnCharSet ) ) );
 
     // color, height, weight, slant, strikeout, outline, shadow
-    maApiData.mnColor          = getStyles().getColor( maOoxData.maColor, API_RGB_TRANSPARENT );
+    maApiData.mnColor          = maOoxData.maColor.getColor( *this, API_RGB_TRANSPARENT );
     maApiData.maDesc.Height    = static_cast< sal_Int16 >( maOoxData.mfHeight * 20.0 );
     maApiData.maDesc.Weight    = maOoxData.mbBold ? cssawt::FontWeight::BOLD : cssawt::FontWeight::NORMAL;
     maApiData.maDesc.Slant     = maOoxData.mbItalic ? cssawt::FontSlant_ITALIC : cssawt::FontSlant_NONE;
@@ -1315,10 +1339,10 @@ void Protection::writeToPropertySet( PropertySet& rPropSet ) const
 // ============================================================================
 
 OoxBorderLineData::OoxBorderLineData( bool bDxf ) :
-    maColor( XML_indexed, OOX_COLOR_WINDOWTEXT ),
     mnStyle( XML_none ),
     mbUsed( !bDxf )
 {
+    maColor.setIndexed( OOX_COLOR_WINDOWTEXT );
 }
 
 void OoxBorderLineData::setBiffStyle( sal_Int32 nLineStyle )
@@ -1333,7 +1357,7 @@ void OoxBorderLineData::setBiffStyle( sal_Int32 nLineStyle )
 
 void OoxBorderLineData::setBiffData( sal_uInt8 nLineStyle, sal_uInt16 nLineColor )
 {
-    maColor.set( XML_indexed, nLineColor );
+    maColor.setIndexed( nLineColor );
     setBiffStyle( nLineStyle );
 }
 
@@ -1567,7 +1591,7 @@ OoxBorderLineData* Border::getBorderLine( sal_Int32 nElement )
 
 bool Border::convertBorderLine( BorderLine& rBorderLine, const OoxBorderLineData& rLineData )
 {
-    rBorderLine.Color = getStyles().getColor( rLineData.maColor, API_RGB_BLACK );
+    rBorderLine.Color = rLineData.maColor.getColor( *this, API_RGB_BLACK );
     switch( rLineData.mnStyle )
     {
         case XML_dashDot:           lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;
@@ -1593,13 +1617,13 @@ bool Border::convertBorderLine( BorderLine& rBorderLine, const OoxBorderLineData
 // ============================================================================
 
 OoxPatternFillData::OoxPatternFillData( bool bDxf ) :
-    maPatternColor( XML_indexed, OOX_COLOR_WINDOWTEXT ),
-    maFillColor( XML_indexed, OOX_COLOR_WINDOWBACK ),
     mnPattern( XML_none ),
     mbPattColorUsed( !bDxf ),
     mbFillColorUsed( !bDxf ),
     mbPatternUsed( !bDxf )
 {
+    maPatternColor.setIndexed( OOX_COLOR_WINDOWTEXT );
+    maFillColor.setIndexed( OOX_COLOR_WINDOWBACK );
 }
 
 void OoxPatternFillData::setBinPattern( sal_Int32 nPattern )
@@ -1615,8 +1639,8 @@ void OoxPatternFillData::setBinPattern( sal_Int32 nPattern )
 
 void OoxPatternFillData::setBiffData( sal_uInt16 nPatternColor, sal_uInt16 nFillColor, sal_uInt8 nPattern )
 {
-    maPatternColor.set( XML_indexed, static_cast< sal_Int32 >( nPatternColor ) );
-    maFillColor.set( XML_indexed, static_cast< sal_Int32 >( nFillColor ) );
+    maPatternColor.setIndexed( nPatternColor );
+    maFillColor.setIndexed( nFillColor );
     // patterns equal in BIFF and OOBIN
     setBinPattern( nPattern );
 }
@@ -1643,7 +1667,7 @@ void OoxGradientFillData::readGradient( RecordInputStream& rStrm )
 
 void OoxGradientFillData::readGradientStop( RecordInputStream& rStrm, bool bDxf )
 {
-    OoxColor aColor;
+    Color aColor;
     double fPosition;
     if( bDxf )
     {
@@ -1923,14 +1947,14 @@ void Fill::finalizeImport()
             }
 
             if( !rOoxData.mbPattColorUsed )
-                rOoxData.maPatternColor.set( XML_auto, 0 );
-            sal_Int32 nPattColor = getStyles().getColor(
-                rOoxData.maPatternColor, ThemeBuffer::getSystemWindowTextColor() );
+                rOoxData.maPatternColor.setAuto();
+            sal_Int32 nPattColor = rOoxData.maPatternColor.getColor(
+                *this, ::oox::drawingml::Color::getSystemColor( XML_windowText ) );
 
             if( !rOoxData.mbFillColorUsed )
-                rOoxData.maFillColor.set( XML_auto, 0 );
-            sal_Int32 nFillColor = getStyles().getColor(
-                rOoxData.maFillColor, ThemeBuffer::getSystemWindowColor() );
+                rOoxData.maFillColor.setAuto();
+            sal_Int32 nFillColor = rOoxData.maFillColor.getColor(
+                *this, ::oox::drawingml::Color::getSystemColor( XML_window ) );
 
             maApiData.mnColor = lclGetMixedColor( nPattColor, nFillColor, nAlpha );
             maApiData.mbTransparent = false;
@@ -1940,13 +1964,13 @@ void Fill::finalizeImport()
     {
         OoxGradientFillData& rOoxData = *mxOoxGradData;
         maApiData.mbUsed = true;    // no support for differential attributes
-        OoxGradientFillData::OoxColorMap::const_iterator aIt = rOoxData.maColors.begin();
+        OoxGradientFillData::ColorMap::const_iterator aIt = rOoxData.maColors.begin();
         OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-        maApiData.mnColor = getStyles().getColor( aIt->second, API_RGB_TRANSPARENT );
+        maApiData.mnColor = aIt->second.getColor( *this );
         if( ++aIt != rOoxData.maColors.end() )
         {
             OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
-            sal_Int32 nEndColor = getStyles().getColor( aIt->second, API_RGB_TRANSPARENT );
+            sal_Int32 nEndColor = aIt->second.getColor( *this );
             maApiData.mnColor = lclGetMixedColor( maApiData.mnColor, nEndColor, 0x40 );
             maApiData.mbTransparent = false;
         }
@@ -2743,71 +2767,6 @@ const OUString& CellStyle::createCellStyle( sal_Int32 nXfId, bool bSkipDefaultBu
 
 // ============================================================================
 
-namespace {
-
-sal_Int32 lclTintToColor( sal_Int32 nColor, double fTint )
-{
-    if( nColor == 0x000000 )
-        return 0x010101 * static_cast< sal_Int32 >( ::std::max( fTint, 0.0 ) * 255.0 );
-    if( nColor == 0xFFFFFF )
-        return 0x010101 * static_cast< sal_Int32 >( ::std::min( fTint + 1.0, 1.0 ) * 255.0 );
-
-    sal_Int32 nR = (nColor >> 16) & 0xFF;
-    sal_Int32 nG = (nColor >> 8) & 0xFF;
-    sal_Int32 nB = nColor & 0xFF;
-
-    double fMean = (::std::min( ::std::min( nR, nG ), nB ) + ::std::max( ::std::max( nR, nG ), nB )) / 2.0;
-    double fTintTh = (fMean <= 127.5) ? ((127.5 - fMean) / (255.0 - fMean)) : (127.5 / fMean - 1.0);
-    if( (fTintTh < 0.0) || ((fTintTh == 0.0) && (fTint <= 0.0)) )
-    {
-        double fTintMax = 255.0 / fMean - 1.0;
-        double fRTh = fTintTh / fTintMax * (255.0 - nR) + nR;
-        double fGTh = fTintTh / fTintMax * (255.0 - nG) + nG;
-        double fBTh = fTintTh / fTintMax * (255.0 - nB) + nB;
-        if( fTint <= fTintTh )
-        {
-            double fFactor = (fTint + 1.0) / (fTintTh + 1.0);
-            nR = static_cast< sal_Int32 >( fFactor * fRTh + 0.5 );
-            nG = static_cast< sal_Int32 >( fFactor * fGTh + 0.5 );
-            nB = static_cast< sal_Int32 >( fFactor * fBTh + 0.5 );
-        }
-        else
-        {
-            double fFactor = (fTint > 0.0) ? (fTint * fTintMax / fTintTh) : (fTint / fTintTh);
-            nR = static_cast< sal_Int32 >( fFactor * fRTh + (1.0 - fFactor) * nR + 0.5 );
-            nG = static_cast< sal_Int32 >( fFactor * fGTh + (1.0 - fFactor) * nG + 0.5 );
-            nB = static_cast< sal_Int32 >( fFactor * fBTh + (1.0 - fFactor) * nB + 0.5 );
-        }
-    }
-    else
-    {
-        double fTintMin = fMean / (fMean - 255.0);
-        double fRTh = (1.0 - fTintTh / fTintMin) * nR;
-        double fGTh = (1.0 - fTintTh / fTintMin) * nG;
-        double fBTh = (1.0 - fTintTh / fTintMin) * nB;
-        if( fTint <= fTintTh )
-        {
-            double fFactor = (fTint < 0.0) ? (fTint * -fTintMin / fTintTh) : (fTint / fTintTh);
-            nR = static_cast< sal_Int32 >( fFactor * fRTh + (1.0 - fFactor) * nR + 0.5 );
-            nG = static_cast< sal_Int32 >( fFactor * fGTh + (1.0 - fFactor) * nG + 0.5 );
-            nB = static_cast< sal_Int32 >( fFactor * fBTh + (1.0 - fFactor) * nB + 0.5 );
-        }
-        else
-        {
-            double fFactor = (1.0 - fTint) / (1.0 - fTintTh);
-            nR = static_cast< sal_Int32 >( 255.5 - fFactor * (255.0 - fRTh) );
-            nG = static_cast< sal_Int32 >( 255.5 - fFactor * (255.0 - fGTh) );
-            nB = static_cast< sal_Int32 >( 255.5 - fFactor * (255.0 - fBTh) );
-        }
-    }
-
-    return (nR << 16) | (nG << 8) | nB;
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
-
 StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maPalette( rHelper ),
@@ -3064,29 +3023,9 @@ void StylesBuffer::finalizeImport()
         aIt->second->createCellStyle( aIt->first, true );
 }
 
-sal_Int32 StylesBuffer::getColor( const OoxColor& rColor, sal_Int32 nAuto ) const
+sal_Int32 StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const
 {
-    sal_Int32 nColor = API_RGB_TRANSPARENT;
-    switch( rColor.mnType )
-    {
-        case XML_auto:
-            nColor = nAuto;
-        break;
-        case XML_rgb:
-            nColor = rColor.mnValue & 0xFFFFFF;
-        break;
-        case XML_theme:
-            nColor = getTheme().getColorByIndex( rColor.mnValue );
-        break;
-        case XML_indexed:
-            nColor = maPalette.getColor( rColor.mnValue );
-        break;
-        default:
-            OSL_ENSURE( false, "StylesBuffer::getColor - unknown color type" );
-    }
-    if( (rColor.mnType != XML_auto) && (nColor != API_RGB_TRANSPARENT) && (rColor.mfTint >= -1.0) && (rColor.mfTint != 0.0) && (rColor.mfTint <= 1.0) )
-        nColor = lclTintToColor( nColor, rColor.mfTint );
-    return nColor;
+    return maPalette.getColor( nPaletteIdx );
 }
 
 FontRef StylesBuffer::getFont( sal_Int32 nFontId ) const

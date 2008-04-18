@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsettings.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,7 +206,6 @@ OoxSheetSelectionData::OoxSheetSelectionData() :
 // ----------------------------------------------------------------------------
 
 OoxSheetViewData::OoxSheetViewData() :
-    maGridColor( XML_indexed, OOX_COLOR_WINDOWTEXT ),
     mnWorkbookViewId( 0 ),
     mnViewType( XML_normal ),
     mnActivePaneId( XML_topLeft ),
@@ -227,6 +226,7 @@ OoxSheetViewData::OoxSheetViewData() :
     mbShowOutline( true ),
     mbZoomToFit( false )
 {
+    maGridColor.setIndexed( OOX_COLOR_WINDOWTEXT );
 }
 
 bool OoxSheetViewData::isPageBreakPreview() const
@@ -276,7 +276,7 @@ SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
 void SheetViewSettings::importSheetView( const AttributeList& rAttribs )
 {
     OoxSheetViewData& rData = *createSheetViewData();
-    rData.maGridColor.set( XML_indexed, rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
+    rData.maGridColor.setIndexed( rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
     rData.maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell ), getSheetIndex(), false );
     rData.mnWorkbookViewId  = rAttribs.getToken( XML_workbookViewId, 0 );
     rData.mnViewType        = rAttribs.getToken( XML_view, XML_normal );
@@ -604,7 +604,7 @@ void SheetViewSettings::finalizeImport()
 
     // automatic grid color
     if( bChartSheet || xData->mbDefGridColor )
-        xData->maGridColor.set( XML_auto, 0 );
+        xData->maGridColor.setAuto();
 
     // write the sheet view settings into the property sequence
     PropertySequence aSheetProps( sppcSheetNames, sppcGlobalSheetNames );
@@ -621,7 +621,7 @@ void SheetViewSettings::finalizeImport()
         << aFirstPos.Row
         << xData->maSecondPos.Column
         << ((nVSplitPos > 0) ? xData->maSecondPos.Row : xData->maFirstPos.Row)
-        << getStyles().getColor( xData->maGridColor, API_RGB_TRANSPARENT )
+        << xData->maGridColor.getColor( *this )
         << API_ZOOMTYPE_PERCENT
         << static_cast< sal_Int16 >( xData->getNormalZoom() )
         << static_cast< sal_Int16 >( xData->getPageBreakZoom() )
@@ -774,7 +774,7 @@ void ViewSettings::finalizeImport()
         << rData.mbShowTabBar
         << double( rData.mnTabBarWidth / 1000.0 )
         << nShowMode << nShowMode << nShowMode
-        << getStyles().getColor( rxActiveSheetData->maGridColor, API_RGB_TRANSPARENT )
+        << rxActiveSheetData->maGridColor.getColor( *this )
         << API_ZOOMTYPE_PERCENT
         << static_cast< sal_Int16 >( rxActiveSheetData->getNormalZoom() )
         << static_cast< sal_Int16 >( rxActiveSheetData->getPageBreakZoom() )
