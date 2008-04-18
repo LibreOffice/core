@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj.hxx,v $
- * $Revision: 1.46 $
+ *
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +69,7 @@
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
+#include <com/sun/star/text/XRedline.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -75,9 +77,10 @@
 #include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/implbase6.hxx> // helper for implementations
 #include <cppuhelper/implbase7.hxx> // helper for implementations
+#include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <cppuhelper/implbase10.hxx>
-#include <cppuhelper/implbase11.hxx>    // helper for implementations
+#include <cppuhelper/implbase12.hxx>    // helper for implementations
 #include "TextCursorHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -315,10 +318,11 @@ enum SwGetPropertyStatesCaller
 #define CRSR_ATTR_MODE_TABLE        1   //attributes should be applied to a table selection
 #define CRSR_ATTR_MODE_DONTREPLACE  2   //attributes should be added, not replaced
 
-typedef cppu::WeakImplHelper11<
+typedef cppu::WeakImplHelper12<
                                 ::com::sun::star::text::XSentenceCursor,
                                 ::com::sun::star::text::XWordCursor,
                                 ::com::sun::star::text::XParagraphCursor,
+                                ::com::sun::star::text::XRedline,
                                 ::com::sun::star::beans::XPropertySet,
                                 ::com::sun::star::beans::XPropertyState,
                                 ::com::sun::star::document::XDocumentInsertable,
@@ -421,6 +425,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    //XRedline
+    virtual void SAL_CALL makeRedline( const ::rtl::OUString& RedlineType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     static void SetPropertyValue(
                         SwPaM& rPaM,
@@ -674,7 +681,7 @@ public:
 /*-----------------23.02.98 12:05-------------------
 
 --------------------------------------------------*/
-class SwXTextRange : public cppu::WeakImplHelper7
+class SwXTextRange : public cppu::WeakImplHelper8
 <
     ::com::sun::star::text::XTextRange,
     ::com::sun::star::lang::XUnoTunnel,
@@ -682,7 +689,8 @@ class SwXTextRange : public cppu::WeakImplHelper7
     ::com::sun::star::container::XContentEnumerationAccess,
     ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::beans::XPropertyState,
-    ::com::sun::star::container::XEnumerationAccess
+    ::com::sun::star::container::XEnumerationAccess,
+    ::com::sun::star::text::XRedline
 >,  public SwClient
 {
     friend class SwXText;
@@ -741,6 +749,9 @@ public:
     //XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XRedline
+    virtual void SAL_CALL makeRedline( const ::rtl::OUString& RedlineType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
