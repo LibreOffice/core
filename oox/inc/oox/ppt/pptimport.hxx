@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,8 @@ public:
 
     virtual const oox::vml::DrawingPtr getDrawings();
 
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
     std::map< rtl::OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
@@ -76,6 +78,8 @@ private:
     std::vector< SlidePersistPtr > maDrawPages;
     std::vector< SlidePersistPtr > maMasterPages;
     std::vector< SlidePersistPtr > maNotesPages;
+
+    ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 
 } }
