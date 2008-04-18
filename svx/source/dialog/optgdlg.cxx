@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -708,24 +708,6 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     {
         aRenderingFL.Hide();
         aUseHardwareAccell.Hide();
-    }
-
-    sal_Int32 nOpenSourceContext = 0;
-
-    try
-    {
-        ::utl::ConfigManager::GetDirectConfigProperty(
-          ::utl::ConfigManager::OPENSOURCECONTEXT ) >>= nOpenSourceContext;
-    }
-    catch( ... )
-    {
-    }
-
-    if( nOpenSourceContext < 1 )
-    {
-        aIconStyleLB.Disable();
-        aIconStyleLB.Hide();
-        aIconSizeStyleFT.SetText( String( SVX_RES( STR_ICONSIZE ) ) );
     }
 
 #if defined( UNX )
