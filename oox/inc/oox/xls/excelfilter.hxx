@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@ public:
 
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const;
     virtual const ::oox::vml::DrawingPtr getDrawings();
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
 
 private:
     virtual ::rtl::OUString implGetImplementationName() const;
