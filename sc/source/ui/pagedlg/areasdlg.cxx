@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: areasdlg.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -412,7 +412,7 @@ void ScPrintAreasDlg::Impl_FillLists()
     BOOL bSimple = TRUE;
 
     if ( pViewData )
-        bSimple = pViewData->GetSimpleArea( aRange );
+        bSimple = (pViewData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE);
 
     if ( bSimple )
         aRange.Format( aStrRange, SCR_ABS, pDoc );
