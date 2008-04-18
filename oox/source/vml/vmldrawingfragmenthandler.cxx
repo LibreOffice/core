@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vmldrawingfragmenthandler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,12 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "oox/core/contexthandler.hxx"
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 
@@ -48,29 +50,78 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace vml {
 
-//--------------------------------------------------------------------------------------------------------------
-
-class BasicShapeContext : public ContextHandler
+static sal_Int32 getMeasure( const rtl::OUString& rVal )
 {
-public:
-    BasicShapeContext( ContextHandler& rParent,
-        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
-        const Reference< XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, RuntimeException);
-private:
-    ShapePtr mpShapePtr;
-};
+    double fVal = rVal.toDouble();
+    const sal_Int32 nLen = rVal.getLength();
+    if ( nLen >= 2 )
+    {
+        switch( static_cast< sal_Int8 >( rVal[ nLen - 1 ] ) )
+        {
+            case 'n' : fVal *= 2540; break;
+            case 'm' : rVal[ nLen - 2 ] == 'm' ? fVal *= 100.0 : fVal *= 1000.0; break;
+            case 't' : fVal *= 2540.0 / 72.0; break;
+            case 'c' : fVal *= ( 2540.0 / 72.0 ) * 12.0; break;
+        }
+    }
+    return static_cast< sal_Int32 >( fVal );
+}
 
-BasicShapeContext::BasicShapeContext( ContextHandler& rParent,
-    sal_Int32 /* aElement */, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: ContextHandler( rParent )
-, mpShapePtr( pShapePtr )
+// AG_CoreAttributes
+static void ApplyCoreAttributes( const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
 {
-    mpShapePtr->msId = xAttribs->getOptionalValue( XML_id );
-    mpShapePtr->msType = xAttribs->getOptionalValue( XML_type );
-    rtl::OUString aShapeType( xAttribs->getOptionalValue( NMSP_OFFICE|XML_spt ) );
-    if ( aShapeType.getLength() )
-        mpShapePtr->mnShapeType = aShapeType.toInt32();
+    // AG_Id
+    rShape.msId = xAttribs->getOptionalValue( XML_id );
+
+    // AG_Style
+    if ( xAttribs->hasAttribute( XML_style ) )
+    {
+        rtl::OUString sStyle( xAttribs->getOptionalValue( XML_style ) );
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aStyleToken( sStyle.getToken( 0, ';', nIndex ) );
+            if ( aStyleToken.getLength() )
+            {
+                sal_Int32 nIndex2 = 0;
+                OUString aName( aStyleToken.getToken( 0, ':', nIndex2 ) );
+                OUString aVal ( aStyleToken.getToken( 0, ':', nIndex2 ) );
+                if ( aName.getLength() && aVal.getLength() )
+                {
+                    static const ::rtl::OUString sPosition( RTL_CONSTASCII_USTRINGPARAM( "position" ) );
+                    static const ::rtl::OUString sLeft( RTL_CONSTASCII_USTRINGPARAM( "left" ) );
+                    static const ::rtl::OUString sTop( RTL_CONSTASCII_USTRINGPARAM( "top" ) );
+                    static const ::rtl::OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "width" ) );
+                    static const ::rtl::OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "height" ) );
+                    static const ::rtl::OUString sMarginLeft( RTL_CONSTASCII_USTRINGPARAM( "margin-left" ) );
+                    static const ::rtl::OUString sMarginTop( RTL_CONSTASCII_USTRINGPARAM( "margin-top" ) );
+                    if ( aName == sPosition )
+                        rShape.msPosition = aVal;
+                    else if ( aName == sLeft )
+                        rShape.maPosition.X = getMeasure( aVal );
+                    else if ( aName == sTop )
+                        rShape.maPosition.Y = getMeasure( aVal );
+                    else if ( aName == sWidth )
+                        rShape.maSize.Width = getMeasure( aVal );
+                    else if ( aName == sHeight )
+                        rShape.maSize.Height = getMeasure( aVal );
+                    else if ( aName == sMarginLeft )
+                        rShape.maPosition.X = getMeasure( aVal );
+                    else if ( aName == sMarginTop )
+                        rShape.maPosition.Y = getMeasure( aVal );
+                }
+            }
+        }
+        while ( nIndex >= 0 );
+    }
+
+    // href
+    // target
+    // class
+    // title
+    // alt
+
+    // coordsize
     rtl::OUString aCoordSize( xAttribs->getOptionalValue( XML_coordsize ) );
     if ( aCoordSize.getLength() )
     {
@@ -78,13 +129,47 @@ BasicShapeContext::BasicShapeContext( ContextHandler& rParent,
         rtl::OUString aCoordWidth ( aCoordSize.getToken( 0, ',', nIndex ) );
         rtl::OUString aCoordHeight( aCoordSize.getToken( 0, ',', nIndex ) );
         if ( aCoordWidth.getLength() )
-            mpShapePtr->mnCoordWidth = aCoordWidth.toInt32();
+            rShape.mnCoordWidth = aCoordWidth.toInt32();
         if ( aCoordHeight.getLength() )
-            mpShapePtr->mnCoordHeight = aCoordHeight.toInt32();
+            rShape.mnCoordHeight = aCoordHeight.toInt32();
     }
-    mpShapePtr->msPath = xAttribs->getOptionalValue( XML_path );
-    mpShapePtr->mnStroked = xAttribs->getOptionalValueToken( XML_stroked, 0 );
-    mpShapePtr->mnFilled = xAttribs->getOptionalValueToken( XML_filled, 0 );
+
+    // coordorigin
+    // wrapcoords
+    // print
+}
+
+// AG_ShapeAttributes
+static void ApplyShapeAttributes( const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
+{
+    AttributeList aAttributeList( xAttribs );
+    rShape.mnStroked = xAttribs->getOptionalValueToken( XML_stroked, 0 );
+    if ( xAttribs->hasAttribute( XML_filled ) )
+        rShape.moFilled = ::boost::optional< sal_Bool >( aAttributeList.getBool( XML_filled, sal_False ) );
+    if ( xAttribs->hasAttribute( XML_fillcolor ) )
+        rShape.moFillColor = ::boost::optional< rtl::OUString >( xAttribs->getOptionalValue( XML_fillcolor ) );
+}
+
+//--------------------------------------------------------------------------------------------------------------
+// EG_ShapeElements
+class BasicShapeContext : public ContextHandler
+{
+public:
+    BasicShapeContext( ContextHandler& rParent,
+        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
+        const Reference< XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, RuntimeException);
+private:
+    Shape& mrShape;
+};
+
+BasicShapeContext::BasicShapeContext( ContextHandler& rParent,
+    sal_Int32 /* aElement */, const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
+: ContextHandler( rParent )
+, mrShape( rShape )
+{
+    mrShape.msType = xAttribs->getOptionalValue( XML_type );
+    mrShape.msShapeType = xAttribs->getOptionalValue( NMSP_OFFICE|XML_spt );
 }
 Reference< XFastContextHandler > BasicShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
@@ -95,8 +180,8 @@ Reference< XFastContextHandler > BasicShapeContext::createFastChildContext( sal_
         case NMSP_VML|XML_imagedata:
             {
                 OUString aRelId( xAttribs->getOptionalValue( NMSP_OFFICE|XML_relid ) );
-                mpShapePtr->msGraphicURL = getFragmentPathFromRelId( aRelId );
-                mpShapePtr->msImageTitle = xAttribs->getOptionalValue( NMSP_OFFICE|XML_title );
+                mrShape.msGraphicURL = getFragmentPathFromRelId( aRelId );
+                mrShape.msImageTitle = xAttribs->getOptionalValue( NMSP_OFFICE|XML_title );
             }
             break;
         default:
@@ -113,18 +198,100 @@ class ShapeTypeContext : public BasicShapeContext
 {
 public:
     ShapeTypeContext( ContextHandler& rParent,
-        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
+        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape );
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
         const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
 };
 
 ShapeTypeContext::ShapeTypeContext( ContextHandler& rParent,
-    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: BasicShapeContext( rParent, aElement, xAttribs, pShapePtr )
+    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
+: BasicShapeContext( rParent, aElement, xAttribs, rShape )
 {
 }
 
 Reference< XFastContextHandler > ShapeTypeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+    throw (SAXException, RuntimeException)
+{
+    Reference< XFastContextHandler > xRet;
+//  switch( aElementToken )
+//  {
+//      default:
+            xRet = BasicShapeContext::createFastChildContext( aElementToken, xAttribs );
+//      break;
+//  }
+    if( !xRet.is() )
+        xRet.set( this );
+    return xRet;
+}
+//--------------------------------------------------------------------------------------------------------------
+// CT_PolyLine
+class PolyLineContext : public BasicShapeContext
+{
+public:
+    PolyLineContext( ContextHandler& rParent,
+        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
+        const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+};
+
+PolyLineContext::PolyLineContext( ContextHandler& rParent,
+    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
+: BasicShapeContext( rParent, aElement, xAttribs, rShape )
+{
+    ApplyShapeAttributes( xAttribs, rShape );
+    ApplyCoreAttributes( xAttribs, rShape );
+
+    rtl::OUString aPoints( xAttribs->getOptionalValue( XML_points ) );
+    if ( aPoints.getLength() )
+    {
+        std::vector< awt::Point > vPoints;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aX( aPoints.getToken( 0, ',', nIndex ) );
+            OUString aY( aPoints.getToken( 0, ',', nIndex ) );
+            awt::Point aPt( getMeasure( aX ), getMeasure( aY ) );
+            vPoints.push_back( aPt );
+        }
+        while ( nIndex >= 0 );
+
+        drawing::PointSequenceSequence aPointSeq( 1 );
+        aPointSeq[ 0 ] = drawing::PointSequence( &vPoints.front(), vPoints.size() );
+        static const ::rtl::OUString sPolyPolygon( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" ) );
+        rShape.maPath.Name = sPolyPolygon;
+        rShape.maPath.Value <<= aPointSeq;
+
+/* not sure if the following is needed
+
+        // calculating the bounding box
+        sal_Int32 nGlobalLeft  = SAL_MAX_INT32;
+        sal_Int32 nGlobalRight = SAL_MIN_INT32;
+        sal_Int32 nGlobalTop   = SAL_MAX_INT32;
+        sal_Int32 nGlobalBottom= SAL_MIN_INT32;
+        std::vector< awt::Point >::const_iterator aIter( vPoints.begin() );
+        while( aIter != vPoints.end() )
+        {
+            sal_Int32 x = (*aIter).X;
+            sal_Int32 y = (*aIter).Y;
+            if ( nGlobalLeft > x )
+                nGlobalLeft = x;
+            if ( nGlobalRight < x )
+                nGlobalRight = x;
+            if ( nGlobalTop > y )
+                nGlobalTop = y;
+            if ( nGlobalBottom < y )
+                nGlobalBottom = y;
+            aIter++;
+        }
+        rShape.maPosition.X = nGlobalLeft;
+        rShape.maPosition.Y = nGlobalTop;
+        rShape.maSize.Width = nGlobalRight - nGlobalLeft;
+        rShape.maSize.Height = nGlobalBottom - nGlobalTop;
+*/
+    }
+}
+
+Reference< XFastContextHandler > PolyLineContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
     Reference< XFastContextHandler > xRet;
@@ -145,15 +312,18 @@ class ShapeContext : public BasicShapeContext
 {
 public:
     ShapeContext( ContextHandler& rParent,
-        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr );
+        sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape );
     virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
         const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
 };
 
 ShapeContext::ShapeContext( ContextHandler& rParent,
-    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, const ShapePtr pShapePtr )
-: BasicShapeContext( rParent, aElement, xAttribs, pShapePtr )
+    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs, Shape& rShape )
+: BasicShapeContext( rParent, aElement, xAttribs, rShape )
 {
+    ApplyShapeAttributes( xAttribs, rShape );
+    ApplyCoreAttributes( xAttribs, rShape );
+//  rShape.msPath = xAttribs->getOptionalValue( XML_path );
 }
 
 Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
@@ -173,44 +343,165 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 
 //--------------------------------------------------------------------------------------------------------------
 
-DrawingFragmentHandler::DrawingFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, const DrawingPtr pDrawingPtr )
+class GroupShapeContext : public BasicShapeContext
+{
+public:
+    GroupShapeContext( ContextHandler& rParent, sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs,
+        Shape& rShape, std::vector< ShapePtr >& rShapeTypes );
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element,
+        const Reference< XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, RuntimeException);
+private:
+    Shape& mrShape;
+    std::vector< ShapePtr >& mrShapeTypes;
+};
+
+GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
+    sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs,
+        Shape& rShape, std::vector< ShapePtr >& rShapeTypes )
+: BasicShapeContext( rParent, aElement, xAttribs, rShape )
+, mrShape( rShape )
+, mrShapeTypes( rShapeTypes )
+{
+    AttributeList aAttributeList( xAttribs );
+    if ( xAttribs->hasAttribute( XML_filled ) )
+        rShape.moFilled = ::boost::optional< sal_Bool >( aAttributeList.getBool( XML_filled, sal_False ) );
+    if ( xAttribs->hasAttribute( XML_fillcolor ) )
+        rShape.moFillColor = ::boost::optional< rtl::OUString >( xAttribs->getOptionalValue( XML_fillcolor ) );
+    ApplyCoreAttributes( xAttribs, rShape );
+}
+Reference< XFastContextHandler > GroupShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+    throw (SAXException, RuntimeException)
+{
+    return DrawingFragmentHandler::StaticCreateContext( *this, aElementToken, xAttribs, mrShape.getChilds(), mrShapeTypes );
+}
+
+//--------------------------------------------------------------------------------------------------------------
+
+DrawingFragmentHandler::DrawingFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                                                std::vector< ShapePtr >& rShapes, std::vector< ShapePtr >& rShapeTypes )
     throw()
 : FragmentHandler( rFilter, rFragmentPath )
-, mpDrawingPtr( pDrawingPtr )
+, mrShapes( rShapes )
+, mrShapeTypes( rShapeTypes )
+, maFragmentPath( rFragmentPath )
 {
 }
 DrawingFragmentHandler::~DrawingFragmentHandler()
     throw()
 {
 }
-Reference< XFastContextHandler > DrawingFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+
+::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > DrawingFragmentHandler::StaticCreateContext( oox::core::ContextHandler& rParent,
+    sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
+        std::vector< ShapePtr >& rShapes, std::vector< ShapePtr >& rShapeTypes )
+        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
+    static const ::rtl::OUString sCustomShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.CustomShape" ) );
+
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case XML_xml:
-        break;
-        case NMSP_OFFICE|XML_shapelayout:
-        break;
-        case NMSP_VML|XML_shapetype:
+        case NMSP_VML|XML_group :
             {
-                ShapePtr pShapePtr( new Shape );
-                xRet = new ShapeTypeContext( *this, aElementToken, xAttribs, pShapePtr );
-                mpDrawingPtr->getShapeTypes().push_back( pShapePtr );
+                static const ::rtl::OUString sGroupShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
+                ShapePtr pShapePtr( new Shape( sGroupShape ) );
+                xRet = new GroupShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get(), rShapeTypes );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_shapetype :
+            {
+                ShapePtr pShapePtr( new Shape( OUString() ) );
+                xRet = new ShapeTypeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapeTypes.push_back( pShapePtr );
             }
         break;
         case NMSP_VML|XML_shape:
             {
-                ShapePtr pShapePtr( new Shape );
-                xRet = new ShapeContext( *this, aElementToken, xAttribs, pShapePtr );
-                mpDrawingPtr->getShapes().push_back( pShapePtr );
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_oval:
+            {
+                static const ::rtl::OUString sEllipseShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EllipseShape" ) );
+                ShapePtr pShapePtr( new Shape( sEllipseShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_polyline:
+            {
+                static const ::rtl::OUString sPolyLineShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PolyLineShape" ) );
+                ShapePtr pShapePtr( new Shape( sPolyLineShape ) );
+                xRet = new PolyLineContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_rect:
+            {
+                static const ::rtl::OUString sRectangleShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.RectangleShape" ) );
+                ShapePtr pShapePtr( new Shape( sRectangleShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_roundrect:
+            {
+                static const ::rtl::OUString sRectangleShape( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.RectangleShape" ) );
+                ShapePtr pShapePtr( new Shape( sRectangleShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+
+        // TODO:
+        case NMSP_VML|XML_arc:
+            {
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_curve:
+            {
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_line:
+            {
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_OFFICE|XML_diagram:
+            {
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
+            }
+        break;
+        case NMSP_VML|XML_image:
+            {
+                ShapePtr pShapePtr( new Shape( sCustomShape ) );
+                xRet = new ShapeContext( rParent, aElementToken, xAttribs, *pShapePtr.get() );
+                rShapes.push_back( pShapePtr );
             }
         break;
     }
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
     return xRet;
+}
+
+
+// CT_GROUP
+Reference< XFastContextHandler > DrawingFragmentHandler::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
+    throw (SAXException, RuntimeException)
+{
+    return StaticCreateContext( *this, aElementToken, xAttribs, mrShapes, mrShapeTypes );
 }
 
 void SAL_CALL DrawingFragmentHandler::endDocument()
