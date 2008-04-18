@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XChartDocument.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,23 +33,10 @@
 #include <com/sun/star/chart2/XDiagram.idl>
 #include <com/sun/star/chart2/XChartTypeManager.idl>
 #include <com/sun/star/chart2/data/XDataProvider.idl>
-
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-#ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
-#include <com/sun/star/embed/XEmbeddedObject.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_util_CloseVetoException_idl__
 #include <com/sun/star/util/CloseVetoException.idl>
-#endif
 
 module com
 {
