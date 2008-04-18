@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocrsrhelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,9 @@ namespace SwUnoCursorHelper
 
     sal_Bool    DocInsertStringSplitCR(  SwDoc &rDoc,
                                     const SwPaM &rNewCursor, const String &rText );
+    void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 } // namespace SwUnoCursorHelper
 
