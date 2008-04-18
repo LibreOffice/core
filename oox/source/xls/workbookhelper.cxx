@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookhelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
+#include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
@@ -156,6 +157,10 @@ public:
     inline FilterType   getFilterType() const { return meFilterType; }
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     inline bool         isWorkbookFile() const { return mbWorkbook; }
+    /** Returns the index of the current sheet in the Calc document. */
+    inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
+    /** Sets the index of the current sheet in the Calc document. */
+    inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
 
     // document model ---------------------------------------------------------
 
@@ -211,6 +216,11 @@ public:
     inline UnitConverter& getUnitConverter() const { return *mxUnitConverter; }
     /** Returns the converter for string to cell address/range conversion. */
     inline AddressConverter& getAddressConverter() const { return *mxAddrConverter; }
+    /** Returns the chart object converter. */
+    inline ExcelChartConverter& getChartConverter() const { return *mxChartConverter; }
+
+    // property helpers -------------------------------------------------------
+
     /** Returns the converter for properties related to cell styles. */
     inline StylesPropertyHelper& getStylesPropertyHelper() const { return *mxStylesPropHlp; }
     /** Returns the converter for properties related to page/print settings. */
@@ -265,6 +275,7 @@ private:
     typedef ::std::auto_ptr< PivotTableBuffer >             PivotTableBfrPtr;
     typedef ::std::auto_ptr< UnitConverter >                UnitConvPtr;
     typedef ::std::auto_ptr< AddressConverter >             AddressConvPtr;
+    typedef ::std::auto_ptr< ExcelChartConverter >          ExcelChartConvPtr;
     typedef ::std::auto_ptr< StylesPropertyHelper >         StylesPropHlpPtr;
     typedef ::std::auto_ptr< PageSettingsPropertyHelper >   PageSettPropHlpPtr;
     typedef ::std::auto_ptr< ValidationPropertyHelper >     ValidationPropHlpPtr;
@@ -282,6 +293,7 @@ private:
     FilterBase&         mrBaseFilter;           /// Base filter object.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
+    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc dcument.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
     // buffers
@@ -297,10 +309,13 @@ private:
     WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
     PivotTableBfrPtr    mxPivotTables;          /// Pivot tables buffer.
 
-    // converters/helpers
+    // converters
     FormulaParserPtr    mxFmlaParser;           /// Import formula parser.
     UnitConvPtr         mxUnitConverter;        /// General unit converter.
     AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
+    ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
+
+    // property helpers
     StylesPropHlpPtr    mxStylesPropHlp;        /// Helper for all styles properties.
     PageSettPropHlpPtr  mxPageSettPropHlp;      /// Helper for page/print properties.
     ValidationPropHlpPtr mxValidationPropHlp;   /// Helper for data validation properties.
@@ -505,6 +520,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     maPageStylesProp = CREATE_OUSTRING( "PageStyles" );
     maCellStyleServ = CREATE_OUSTRING( "com.sun.star.style.CellStyle" );
     maPageStyleServ = CREATE_OUSTRING( "com.sun.star.style.PageStyle" );
+    mnCurrSheet = -1;
     mbWorkbook = bWorkbookFile;
     meTextEnc = osl_getThreadTextEncoding();
     mbHasCodePage = false;
@@ -528,6 +544,8 @@ void WorkbookData::initialize( bool bWorkbookFile )
 
     mxUnitConverter.reset( new UnitConverter( *this ) );
     mxAddrConverter.reset( new AddressConverter( *this ) );
+    mxChartConverter.reset( new ExcelChartConverter( *this ) );
+
     mxStylesPropHlp.reset( new StylesPropertyHelper( *this ) );
     mxPageSettPropHlp.reset( new PageSettingsPropertyHelper( *this ) );
     mxValidationPropHlp.reset( new ValidationPropertyHelper( *this ) );
@@ -617,6 +635,16 @@ SegmentProgressBar& WorkbookHelper::getProgressBar() const
 bool WorkbookHelper::isWorkbookFile() const
 {
     return mrBookData.isWorkbookFile();
+}
+
+sal_Int16 WorkbookHelper::getCurrentSheetIndex() const
+{
+    return mrBookData.getCurrentSheetIndex();
+}
+
+void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
+{
+    mrBookData.setCurrentSheetIndex( nSheet );
 }
 
 void WorkbookHelper::finalizeWorkbookImport()
@@ -762,6 +790,13 @@ AddressConverter& WorkbookHelper::getAddressConverter() const
 {
     return mrBookData.getAddressConverter();
 }
+
+ExcelChartConverter& WorkbookHelper::getChartConverter() const
+{
+    return mrBookData.getChartConverter();
+}
+
+// property helpers -----------------------------------------------------------
 
 StylesPropertyHelper& WorkbookHelper::getStylesPropertyHelper() const
 {
