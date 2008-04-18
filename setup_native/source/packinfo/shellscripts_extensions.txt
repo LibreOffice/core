@@ -1,5 +1,7 @@
 %system linux
 
+%format rpm
+
 # As remove does not need the oxt file, this could potentially 
 # be done in the postinstall script as well.
 %preinstall << END
@@ -103,6 +105,139 @@ if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
 fi
 
 if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+END
+
+%format deb
+
+# As remove does not need the oxt file, this could potentially 
+# be done in the postinstall script as well.
+%preinstall << END
+# if this is an update, remove the old package instance first
+if [ "$$1" != "upgrade" ]
+then
+  exit 0
+fi
+ 
+#Find the temp dir
+if [ -n "$$TMPDIR" ]
+then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]
+then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]
+then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
+then
+  "PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]
+then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+END
+
+%postinstall << END
+#Find the temp dir
+if [ -n "$$TMPDIR" ]
+then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]
+then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]
+then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]; then
+  "PRODUCTDIRECTORYNAME/program/unopkg" add --shared "PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]
+then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+
+
+END
+
+%preremove << END
+# if this is an update, just do nothing
+
+if [ "$$1" = "upgrade" ]
+then
+  exit 0
+fi
+ 
+#Find the temp dir
+if [ -n "$$TMPDIR" ]
+then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]
+then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]
+then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
+then
+  "PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]
+then
   rm -rf "$$INSTDIR"
 fi
 
