@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transobj.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,6 +156,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
     SCCOL nDummy;
     pDoc->GetClipArea( nDummy, nNonFiltered, FALSE );
+    bHasFiltered = (nNonFiltered < (nRow2 - nRow1));
     ++nNonFiltered;     // to get count instead of diff
 
     SCTAB nTab1=0;
