@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -710,7 +710,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             //! use database ranges (select before type dialog?)
                             ScRange aRange;
-                            if ( GetViewData()->GetSimpleArea( aRange ) )
+                            if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                             {
                                 BOOL bOK = TRUE;
                                 if ( pDoc->HasSubTotalCells( aRange ) )
@@ -1118,7 +1118,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_FILTER:
             case SID_SPECIAL_FILTER:
                 {
-                    if (GetViewData()->IsMultiMarked())
+                    ScRange aDummy;
+                    ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
+                    if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1183,7 +1185,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                     if ( nWhich == SID_AUTO_FILTER )
                     {
-                        if (GetViewData()->IsMultiMarked())
+                        ScRange aDummy;
+                        ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
+                        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
                         {
                             rSet.DisableItem( nWhich );
                         }
@@ -1203,8 +1207,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     SCTAB  nStartTab, nEndTab;
                     BOOL bAnyQuery = FALSE;
 
-                    BOOL bSelected = GetViewData()->GetSimpleArea(
-                            nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
+                    BOOL bSelected = (GetViewData()->GetSimpleArea(
+                                nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab )
+                            == SC_MARK_SIMPLE);
 
                     if ( bSelected )
                     {
