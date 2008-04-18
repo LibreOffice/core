@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc3.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ using namespace com::sun::star;
 void ScDBFunc::MakeOutline( BOOL bColumns, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
@@ -106,7 +106,7 @@ void ScDBFunc::MakeOutline( BOOL bColumns, BOOL bRecord )
 void ScDBFunc::RemoveOutline( BOOL bColumns, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
@@ -126,7 +126,7 @@ void ScDBFunc::TestRemoveOutline( BOOL& rCol, BOOL& rRow )
     SCCOL nStartCol, nEndCol;
     SCROW nStartRow, nEndRow;
     SCTAB nStartTab, nEndTab;
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         SCTAB nTab = nStartTab;
         ScDocument* pDoc = GetViewData()->GetDocument();
@@ -269,7 +269,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
     SCROW nEndRow;
     SCTAB nEndTab;
 
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         ScDocument* pDoc = GetViewData()->GetDocument();
         SCTAB nTab = GetViewData()->GetTabNo();
@@ -335,7 +335,7 @@ BOOL ScDBFunc::OutlinePossible(BOOL bHide)
 void ScDBFunc::ShowMarkedOutlines( BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
@@ -354,7 +354,7 @@ void ScDBFunc::ShowMarkedOutlines( BOOL bRecord )
 void ScDBFunc::HideMarkedOutlines( BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
@@ -835,7 +835,8 @@ BOOL ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                 // in a normal dimension with date content
 
                 ScRange aSelRange;
-                if ( GetViewData()->GetSimpleArea( aSelRange ) && aSelRange.aStart == aSelRange.aEnd )
+                if ( (GetViewData()->GetSimpleArea( aSelRange ) == SC_MARK_SIMPLE) &&
+                        aSelRange.aStart == aSelRange.aEnd )
                 {
                     SCCOL nSelCol = aSelRange.aStart.Col();
                     SCROW nSelRow = aSelRange.aStart.Row();
@@ -910,7 +911,8 @@ BOOL ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
                 // in a normal dimension with numeric content
 
                 ScRange aSelRange;
-                if ( GetViewData()->GetSimpleArea( aSelRange ) && aSelRange.aStart == aSelRange.aEnd )
+                if ( (GetViewData()->GetSimpleArea( aSelRange ) == SC_MARK_SIMPLE) &&
+                        aSelRange.aStart == aSelRange.aEnd )
                 {
                     if ( pDoc->HasValueData( aSelRange.aStart.Col(), aSelRange.aStart.Row(),
                                              aSelRange.aStart.Tab() ) )
