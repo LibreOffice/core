@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,11 +82,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_C05_Exe_Suptool,
              gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Html_Thirdpartylicensereadme,
-             gid_Brand_File_ImagesCrystal_Zip,
-             gid_Brand_File_ImagesHicontrast_Zip,
-             gid_Brand_File_ImagesIndustrial_Zip,
-             gid_Brand_File_ImagesTango_Zip,
-             gid_Brand_File_Images_Zip,
+             gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Install_Me,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Msvcr80,
@@ -468,10 +464,10 @@ File gid_Brand_File_Bmp_IntroAbout
     Styles = (ARCHIVE);
 End
 
-File gid_Brand_File_Images_Zip
+File gid_Brand_File_Images_Brand_Zip
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Config;
-    Name = "images.zip";
+    Name = "images_brand.zip";
     Styles = (PACKED);
 End
 
