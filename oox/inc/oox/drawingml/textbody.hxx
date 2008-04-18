@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,33 +28,36 @@
  *
  ************************************************************************/
 
-
 #ifndef OOX_DRAWINGML_TEXTBODY_HXX
 #define OOX_DRAWINGML_TEXTBODY_HXX
-
-#include <vector>
-#include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 namespace oox { namespace drawingml {
 
+typedef RefVector< TextParagraph > TextParagraphVector;
+
 class TextBody
 {
 public:
-
     TextBody();
     ~TextBody();
 
-    const std::vector< TextParagraphPtr > & getParagraphs() const { return maParagraphs; }
-    ::oox::drawingml::TextListStylePtr      getTextListStyle() const { return mpTextListStyle; }
+    inline const TextParagraphVector&   getParagraphs() const { return maParagraphs; }
+    TextParagraph&                      addParagraph();
 
-    void                              addParagraph( const TextParagraphPtr & pPara ) { maParagraphs.push_back( pPara ); }
+    inline const TextListStyle& getTextListStyle() const { return maTextListStyle; }
+    inline TextListStyle&       getTextListStyle() { return maTextListStyle; }
+
+    inline const PropertyMap&   getTextProperties() const { return maTextProperties; }
+    inline PropertyMap&         getTextProperties() { return maTextProperties; }
+
     /** insert the text body at the text cursor */
     void                insertAt(
                             const ::oox::core::XmlFilterBase& rFilterBase,
@@ -62,8 +65,9 @@ public:
                             const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor > & xAt,
                             const TextListStylePtr& pMasterTextListStyle );
 protected:
-    std::vector< TextParagraphPtr > maParagraphs;
-    TextListStylePtr    mpTextListStyle;
+    TextParagraphVector maParagraphs;
+    PropertyMap         maTextProperties;
+    TextListStyle       maTextListStyle;
 };
 
 typedef boost::shared_ptr< TextBody > TextBodyPtr;
