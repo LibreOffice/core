@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyset.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 
 namespace oox {
+
+class PropertyMap;
 
 // ============================================================================
 
@@ -127,6 +129,10 @@ public:
     void                setProperties(
                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropNames,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues );
+
+    /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
+        @param rPropertyMap  The property map. */
+    void                setProperties( const PropertyMap& rPropertyMap );
 
     // ------------------------------------------------------------------------
 private:
