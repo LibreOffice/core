@@ -48,6 +48,7 @@ foreach( sort( keys( %tokens ) ) )
 
 print ( HXX "const sal_Int32 XML_TOKEN_COUNT = $i;\n" );
 print ( HXX "const sal_Int32 XML_TOKEN_INVALID = -1;\n\n" );
+print ( HXX "const sal_Int32 XML_ROOT_CONTEXT = SAL_MAX_INT32;\n\n" );
 print ( HXX "#endif\n" );
 
 print ( WORDS "    \"\"\n" );
