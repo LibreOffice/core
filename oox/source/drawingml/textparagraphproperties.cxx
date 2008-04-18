@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraphproperties.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,15 +357,12 @@ void TextParagraphProperties::apply( const TextParagraphPropertiesPtr& rSourceTe
 void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, sal_Bool bApplyBulletMap ) const
 {
-    PropertySet aPropSet( xPropSet );
-    Sequence< OUString > aNames;
-    Sequence< Any > aValues;
-
 //       maTextParagraphPropertyMap.dump_debug("TextParagraph paragraph props");
-    maTextParagraphPropertyMap.makeSequence( aNames, aValues );
-    aPropSet.setProperties( aNames, aValues );
 
-    maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, aPropSet.getXPropertySet() );
+    PropertySet aPropSet( xPropSet );
+    aPropSet.setProperties( maTextParagraphPropertyMap );
+
+    maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xPropSet );
     maBulletList.pushToPropMap( rFilterBase, rioBulletMap );
 
     if ( maParaTopMargin.bHasValue )
