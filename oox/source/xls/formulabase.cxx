@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
@@ -42,6 +43,7 @@
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -60,6 +62,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::table::XCellRange;
 using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::ComplexReference;
 using ::com::sun::star::sheet::FormulaToken;
@@ -1238,37 +1241,37 @@ void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
 
 namespace {
 
-bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nExpectedSheet )
+bool lclConvertToCellAddress( CellAddress& orAddress, const SingleReference& rSingleRef, sal_Int32 nFilterBySheet )
 {
     orAddress = CellAddress( static_cast< sal_Int16 >( rSingleRef.Sheet ),
         rSingleRef.Column, rSingleRef.Row );
     return
-        ((nExpectedSheet < 0) || (nExpectedSheet == rSingleRef.Sheet)) &&
+        ((nFilterBySheet < 0) || (nFilterBySheet == rSingleRef.Sheet)) &&
         !getFlag( rSingleRef.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED );
 }
 
-bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nExpectedSheet )
+bool lclConvertToCellRange( CellRangeAddress& orRange, const ComplexReference& rComplexRef, sal_Int32 nFilterBySheet )
 {
     orRange = CellRangeAddress( static_cast< sal_Int16 >( rComplexRef.Reference1.Sheet ),
         rComplexRef.Reference1.Column, rComplexRef.Reference1.Row,
         rComplexRef.Reference2.Column, rComplexRef.Reference2.Row );
     return
         (rComplexRef.Reference1.Sheet == rComplexRef.Reference2.Sheet) &&
-        ((nExpectedSheet < 0) || (nExpectedSheet == rComplexRef.Reference1.Sheet)) &&
+        ((nFilterBySheet < 0) || (nFilterBySheet == rComplexRef.Reference1.Sheet)) &&
         !getFlag( rComplexRef.Reference1.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED ) &&
         !getFlag( rComplexRef.Reference2.Flags, COLUMN_DELETED | ROW_DELETED | SHEET_DELETED );
 }
 
 enum TokenToRangeListState { STATE_REF, STATE_SEP, STATE_OPEN, STATE_CLOSE, STATE_ERROR };
 
-TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, sal_Int32 nExpectedSheet )
+TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rData, sal_Int32 nFilterBySheet )
 {
     SingleReference aSingleRef;
     if( rData >>= aSingleRef )
     {
         CellAddress aAddress;
         // ignore invalid addresses (with #REF! errors), but to not stop parsing
-        if( lclConvertToCellAddress( aAddress, aSingleRef, nExpectedSheet ) )
+        if( lclConvertToCellAddress( aAddress, aSingleRef, nFilterBySheet ) )
             orRanges.push_back( CellRangeAddress( aAddress.Sheet, aAddress.Column, aAddress.Row, aAddress.Column, aAddress.Row ) );
         return STATE_REF;
     }
@@ -1277,7 +1280,7 @@ TokenToRangeListState lclProcessRef( ApiCellRangeList& orRanges, const Any& rDat
     {
         CellRangeAddress aRange;
         // ignore invalid ranges (with #REF! errors), but to not stop parsing
-        if( lclConvertToCellRange( aRange, aComplexRef, nExpectedSheet ) )
+        if( lclConvertToCellRange( aRange, aComplexRef, nFilterBySheet ) )
             orRanges.push_back( aRange );
         return STATE_REF;
     }
@@ -1302,7 +1305,8 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maFuncProv( rHelper )
+    maFuncProv( rHelper ),
+    maAbsNameProp( CREATE_OUSTRING( "AbsoluteName" ) )
 {
 }
 
@@ -1358,6 +1362,56 @@ OUString FormulaProcessorBase::generateRangeList2dString( const ApiCellRangeList
 
 // ----------------------------------------------------------------------------
 
+OUString FormulaProcessorBase::generateApiAddressString( const CellAddress& rAddress ) const
+{
+    OUString aCellName;
+    try
+    {
+        Reference< XCellRange > xSheet( getSheet( rAddress.Sheet ), UNO_QUERY_THROW );
+        PropertySet aCellProp( xSheet->getCellByPosition( rAddress.Column, rAddress.Row ) );
+        aCellProp.getProperty( aCellName, maAbsNameProp );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( aCellName.getLength() > 0, "FormulaProcessorBase::generateApiAddressString - cannot create cell address string" );
+    return aCellName;
+}
+
+OUString FormulaProcessorBase::generateApiRangeString( const CellRangeAddress& rRange ) const
+{
+    OUString aRangeName;
+    try
+    {
+        Reference< XCellRange > xSheet( getSheet( rRange.Sheet ), UNO_QUERY_THROW );
+        PropertySet aRangeProp( xSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow ) );
+        aRangeProp.getProperty( aRangeName, maAbsNameProp );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( aRangeName.getLength() > 0, "FormulaProcessorBase::generateApiRangeString - cannot create cell range string" );
+    return aRangeName;
+}
+
+OUString FormulaProcessorBase::generateApiRangeListString( const ApiCellRangeList& rRanges, sal_Unicode cSeparator ) const
+{
+    OUStringBuffer aBuffer;
+    for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
+    {
+        OUString aRangeName = generateApiRangeString( *aIt );
+        if( aRangeName.getLength() > 0 )
+        {
+            if( aBuffer.getLength() > 0 )
+                aBuffer.append( cSeparator );
+            aBuffer.append( aRangeName );
+        }
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+// ----------------------------------------------------------------------------
+
 Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) const
 {
     ApiTokenIterator aTokenIt( rTokens, maFuncProv.OPCODE_SPACES, true );
@@ -1371,7 +1425,7 @@ Any FormulaProcessorBase::extractReference( const ApiTokenSequence& rTokens ) co
 }
 
 void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
-        const ApiTokenSequence& rTokens, sal_Int32 nExpectedSheet ) const
+        const ApiTokenSequence& rTokens, sal_Int32 nFilterBySheet ) const
 {
     orRanges.clear();
     TokenToRangeListState eState = STATE_OPEN;
@@ -1387,14 +1441,14 @@ void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
                 else                                            eState = STATE_ERROR;
             break;
             case STATE_SEP:
-                     if( nOpCode == maFuncProv.OPCODE_PUSH )    eState = lclProcessRef( orRanges, aIt->Data, nExpectedSheet );
+                     if( nOpCode == maFuncProv.OPCODE_PUSH )    eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
                 else if( nOpCode == maFuncProv.OPCODE_LIST )    eState = STATE_SEP;
                 else if( nOpCode == maFuncProv.OPCODE_OPEN )    eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == maFuncProv.OPCODE_CLOSE )   eState = lclProcessClose( nParenLevel );
                 else                                            eState = STATE_ERROR;
             break;
             case STATE_OPEN:
-                     if( nOpCode == maFuncProv.OPCODE_PUSH )    eState = lclProcessRef( orRanges, aIt->Data, nExpectedSheet );
+                     if( nOpCode == maFuncProv.OPCODE_PUSH )    eState = lclProcessRef( orRanges, aIt->Data, nFilterBySheet );
                 else if( nOpCode == maFuncProv.OPCODE_LIST )    eState = STATE_SEP;
                 else if( nOpCode == maFuncProv.OPCODE_OPEN )    eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == maFuncProv.OPCODE_CLOSE )   eState = lclProcessClose( nParenLevel );
