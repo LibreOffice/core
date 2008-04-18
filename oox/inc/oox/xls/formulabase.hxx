@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulabase.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -570,6 +570,34 @@ public:
 
     // ------------------------------------------------------------------------
 
+    /** Generates a cell address string in Calc's absolute $Sheet.$A$1 notation
+        from the passed cell address.
+
+        @param rAddress  The cell address to be converted to a string.
+     */
+    ::rtl::OUString     generateApiAddressString(
+                            const ::com::sun::star::table::CellAddress& rAddress ) const;
+
+    /** Generates a cell range string in Calc's absolute $Sheet.$A$1:$A$
+        notation from the passed cell range address.
+
+        @param rRange  The cell range address to be converted to a string.
+     */
+    ::rtl::OUString     generateApiRangeString(
+                            const ::com::sun::star::table::CellRangeAddress& rRange ) const;
+
+    /** Generates a cell range list string in Calc's absolute $Sheet.$A$1:$A$1
+        notation from the passed cell range addresses.
+
+        @param rRanges  The list of cell ranges to be converted to a string.
+        @param cSeparator  Separator character between ranges.
+     */
+    ::rtl::OUString     generateApiRangeListString(
+                            const ApiCellRangeList& rRanges,
+                            sal_Unicode cSeparator ) const;
+
+    // ------------------------------------------------------------------------
+
     /** Tries to extract a single cell reference from a formula token sequence.
 
         @param rTokens  The token sequence to be parsed. Should contain exactly
@@ -597,14 +625,14 @@ public:
             standard function parameter separator token. The token sequence may
             contain parentheses and whitespace tokens.
 
-        @param nExpectedSheet  If non-negative, this function returns only cell
+        @param nFilterBySheet  If non-negative, this function returns only cell
             ranges located in the specified sheet, otherwise returns all cell
             ranges contained in the token sequence.
      */
     void                extractCellRangeList(
                             ApiCellRangeList& orRanges,
                             const ApiTokenSequence& rTokens,
-                            sal_Int32 nExpectedSheet = -1 ) const;
+                            sal_Int32 nFilterBySheet = -1 ) const;
 
     /** Tries to extract a string from a formula token sequence.
 
@@ -620,6 +648,20 @@ public:
                             ::rtl::OUString& orString,
                             const ApiTokenSequence& rTokens ) const;
 
+    /** Converts a single string with separators in the passed formula token
+        sequence to a list of string tokens.
+
+        @param orTokens  (input/output parameter) Expects a single string token
+            in this token sequence (whitespace tokens are allowed). The string
+            is split into substrings. A list of string tokens separated with
+            parameter separator tokens is returned in this psrameter.
+
+        @param cStringSep  The separator character used to split the input
+            string.
+
+        @param bTrimLeadingSpaces  True = removes leading whitespace from all
+            substrings inserted into the formula token sequence.
+     */
     void                convertStringToStringList(
                             ApiTokenSequence& orTokens,
                             sal_Unicode cStringSep,
@@ -627,6 +669,7 @@ public:
 
 protected:
     FunctionProvider    maFuncProv;         /// Provides info structs for all functions.
+    const ::rtl::OUString maAbsNameProp;    /// Property name for absolute name of cells and ranges.
 };
 
 // ============================================================================
