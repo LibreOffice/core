@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotbl.cxx,v $
- * $Revision: 1.118 $
+ *
+ * $Revision: 1.119 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +74,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
@@ -790,9 +792,10 @@ const SfxItemPropertyMap* GetTableDescPropertyMap()
         { SW_PROP_NAME(UNO_NAME_CHART_ROW_AS_LABEL),        FN_UNO_RANGE_ROW_LABEL,         &::getBooleanCppuType(),            PROPERTY_NONE,  0},
         { SW_PROP_NAME(UNO_NAME_CHART_COLUMN_AS_LABEL),     FN_UNO_RANGE_COL_LABEL,         &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_TABLE_BORDER),          FN_UNO_TABLE_BORDER,            &::getCppuType((const table::TableBorder*)0),   beans::PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
+        { SW_PROP_NAME(UNO_NAME_TABLE_BORDER_DISTANCES), FN_UNO_TABLE_BORDER_DISTANCES, &::getCppuType((const table::TableBorderDistances*)0),   beans::PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
         {0,0,0,0,0,0}
     };
-    #define TABLE_PROP_COUNT 24
+    #define TABLE_PROP_COUNT 25
     return aTableDescPropertyMap_Impl;
 }
 /******************************************************************
@@ -3435,6 +3438,56 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     }
                 }
                 break;
+                case FN_UNO_TABLE_BORDER_DISTANCES:
+                {
+                    table::TableBorderDistances aTableBorderDistances;
+                    if( !(aValue >>= aTableBorderDistances) ||
+                        (!aTableBorderDistances.IsLeftDistanceValid &&
+                        !aTableBorderDistances.IsRightDistanceValid &&
+                        !aTableBorderDistances.IsTopDistanceValid &&
+                        !aTableBorderDistances.IsBottomDistanceValid ))
+                        break;
+
+                    USHORT nLeftDistance =     MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.LeftDistance);
+                    USHORT nRightDistance =    MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.RightDistance);
+                    USHORT nTopDistance =      MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.TopDistance);
+                    USHORT nBottomDistance =   MM100_TO_TWIP_UNSIGNED( aTableBorderDistances.BottomDistance);
+                    SwDoc* pDoc = pFmt->GetDoc();
+                    SwTable* pTable = SwTable::FindTable( pFmt );
+                    SwTableLines &rLines = pTable->GetTabLines();
+                    pDoc->StartUndo(UNDO_START, NULL);
+                    for(sal_uInt16 i = 0; i < rLines.Count(); i++)
+                    {
+                        SwTableLine* pLine = rLines.GetObject(i);
+                        SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+                        for(sal_uInt16 k = 0; k < rBoxes.Count(); k++)
+                        {
+                            SwTableBox* pBox = rBoxes.GetObject(k);
+                            const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+                            const SvxBoxItem& rBox = pBoxFmt->GetBox();
+                            if(
+                                aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( BOX_LINE_LEFT ) ||
+                                aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( BOX_LINE_RIGHT ) ||
+                                aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( BOX_LINE_TOP ) ||
+                                aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( BOX_LINE_BOTTOM ))
+                            {
+                                SvxBoxItem aSetBox( rBox );
+                                SwFrmFmt* pSetBoxFmt = pBox->ClaimFrmFmt();
+                                if( aTableBorderDistances.IsLeftDistanceValid )
+                                    aSetBox.SetDistance( nLeftDistance, BOX_LINE_LEFT );
+                                if( aTableBorderDistances.IsRightDistanceValid )
+                                    aSetBox.SetDistance( nRightDistance, BOX_LINE_RIGHT );
+                                if( aTableBorderDistances.IsTopDistanceValid )
+                                    aSetBox.SetDistance( nTopDistance, BOX_LINE_TOP );
+                                if( aTableBorderDistances.IsBottomDistanceValid )
+                                    aSetBox.SetDistance( nBottomDistance, BOX_LINE_BOTTOM );
+                                pDoc->SetAttr( aSetBox, *pSetBoxFmt );
+                            }
+                        }
+                    }
+                    pDoc->EndUndo(UNDO_END, NULL);
+                }
+                break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
                     UnoActionContext aContext(pFmt->GetDoc());
@@ -3560,6 +3613,69 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         aRet.setValue(&aTableBorder, ::getCppuType((const table::TableBorder*)0));
                         delete pUnoCrsr;
                     }
+                }
+                break;
+                case FN_UNO_TABLE_BORDER_DISTANCES :
+                {
+                    table::TableBorderDistances aTableBorderDistances( 0, sal_True, 0, sal_True, 0, sal_True, 0, sal_True ) ;
+                    SwTable* pTable = SwTable::FindTable( pFmt );
+                    const SwTableLines &rLines = pTable->GetTabLines();
+                    bool bFirst = true;
+                    USHORT nLeftDistance = 0;
+                    USHORT nRightDistance = 0;
+                    USHORT nTopDistance = 0;
+                    USHORT nBottomDistance = 0;
+
+                    for(sal_uInt16 i = 0; i < rLines.Count(); i++)
+                    {
+                        const SwTableLine* pLine = rLines.GetObject(i);
+                        const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
+                        for(sal_uInt16 k = 0; k < rBoxes.Count(); k++)
+                        {
+                            const SwTableBox* pBox = rBoxes.GetObject(k);
+                            SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+                            const SvxBoxItem& rBox = pBoxFmt->GetBox();
+                            if( bFirst )
+                            {
+                                nLeftDistance =     TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_LEFT   ));
+                                nRightDistance =    TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_RIGHT  ));
+                                nTopDistance =      TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_TOP    ));
+                                nBottomDistance =   TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_BOTTOM ));
+                                bFirst = false;
+                            }
+                            else
+                            {
+                                if( aTableBorderDistances.IsLeftDistanceValid &&
+                                    nLeftDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_LEFT   )))
+                                    aTableBorderDistances.IsLeftDistanceValid = sal_False;
+                                if( aTableBorderDistances.IsRightDistanceValid &&
+                                    nRightDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_RIGHT   )))
+                                    aTableBorderDistances.IsRightDistanceValid = sal_False;
+                                if( aTableBorderDistances.IsTopDistanceValid &&
+                                    nTopDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_TOP   )))
+                                    aTableBorderDistances.IsTopDistanceValid = sal_False;
+                                if( aTableBorderDistances.IsBottomDistanceValid &&
+                                    nBottomDistance != TWIP_TO_MM100_UNSIGNED( rBox.GetDistance( BOX_LINE_BOTTOM   )))
+                                    aTableBorderDistances.IsBottomDistanceValid = sal_False;
+                            }
+
+                        }
+                        if( !aTableBorderDistances.IsLeftDistanceValid &&
+                                !aTableBorderDistances.IsRightDistanceValid &&
+                                !aTableBorderDistances.IsTopDistanceValid &&
+                                !aTableBorderDistances.IsBottomDistanceValid )
+                            break;
+                    }
+                    if( aTableBorderDistances.IsLeftDistanceValid)
+                        aTableBorderDistances.LeftDistance = nLeftDistance;
+                    if( aTableBorderDistances.IsRightDistanceValid)
+                        aTableBorderDistances.RightDistance  = nRightDistance;
+                    if( aTableBorderDistances.IsTopDistanceValid)
+                        aTableBorderDistances.TopDistance    = nTopDistance;
+                    if( aTableBorderDistances.IsBottomDistanceValid)
+                        aTableBorderDistances.BottomDistance = nBottomDistance;
+
+                    aRet <<= aTableBorderDistances;
                 }
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
