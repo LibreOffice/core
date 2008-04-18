@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleSheetTable.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -913,152 +913,164 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
             std::vector< StyleSheetEntry >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
             while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
             {
-                bool bParaStyle = aIt->nStyleTypeCode == STYLE_TYPE_PARA;
-                bool bInsert = false;
-                uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
-                uno::Reference< style::XStyle > xStyle;
-                ::rtl::OUString sConvertedStyleName = ConvertStyleName( aIt->sStyleName );
-                if(xStyles->hasByName( sConvertedStyleName ))
-                    xStyles->getByName( sConvertedStyleName ) >>= xStyle;
-                else
+                if( aIt->nStyleTypeCode == STYLE_TYPE_CHAR || aIt->nStyleTypeCode == STYLE_TYPE_PARA )
                 {
-                    bInsert = true;
-                    xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
-                                bParaStyle ?
-                                    rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
-                                    rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )),
-                                    uno::UNO_QUERY_THROW);
-                }
-                if( aIt->sBaseStyleIdentifier.getLength() )
-                {
-                    try
+                    bool bParaStyle = aIt->nStyleTypeCode == STYLE_TYPE_PARA;
+                    bool bInsert = false;
+                    uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
+                    uno::Reference< style::XStyle > xStyle;
+                    ::rtl::OUString sConvertedStyleName = ConvertStyleName( aIt->sStyleName );
+                    if(xStyles->hasByName( sConvertedStyleName ))
+                        xStyles->getByName( sConvertedStyleName ) >>= xStyle;
+                    else
                     {
-                        //TODO: Handle cases where a paragraph <> character style relation is needed
-                        xStyle->setParentStyle(ConvertStyleName( aIt->sBaseStyleIdentifier ));
+                        bInsert = true;
+                        xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
+                                    bParaStyle ?
+                                        rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
+                                        rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )),
+                                        uno::UNO_QUERY_THROW);
                     }
-                    catch( const uno::RuntimeException& )
+                    if( aIt->sBaseStyleIdentifier.getLength() )
                     {
-                        OSL_ENSURE( false, "Styles parent could not be set");
-                    }
-                }
-                else if( bParaStyle )
-                {
-                    //now it's time to set the default parameters - for paragraph styles
-                    //Fonts: Western first entry in font table
-                    //CJK: second entry
-                    //CTL: third entry, if it exists
-
-                    sal_uInt32 nFontCount = rFontTable->size();
-                    if( !m_pImpl->m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
-                    {
-                        uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
-//                      font size to 240 twip (12 pts) for all if not set
-                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
-//                      western font not already set -> apply first font
-                        const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
-                        rtl::OUString sWesternFontName = pWesternFontEntry->sFontName;
-                        aIt->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
-
-//                      CJK  ... apply second font
-                        const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
-                        aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( pCJKFontEntry->sFontName ), false);
-                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, true, aTwoHundredFortyTwip, false);
-//                      CTL  ... apply third font, if available
-                        if( nFontCount > 3 )
+                        try
                         {
-                            const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
-                            aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( pCTLFontEntry->sFontName ), false);
-                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, true, aTwoHundredFortyTwip, false);
+                            //TODO: Handle cases where a paragraph <> character style relation is needed
+                            xStyle->setParentStyle(ConvertStyleName( aIt->sBaseStyleIdentifier ));
+                        }
+                        catch( const uno::RuntimeException& )
+                        {
+                            OSL_ENSURE( false, "Styles parent could not be set");
                         }
                     }
-//                  Widow/Orphan -> set both to two if not already set
-                    uno::Any aTwo = uno::makeAny(sal_Int8(2));
-                    aIt->pProperties->Insert(PROP_PARA_WIDOWS, true, aTwo, false);
-                    aIt->pProperties->Insert(PROP_PARA_ORPHANS, true, aTwo, false);
-//                  Left-to-right direction if not already set
-                    aIt->pProperties->Insert(PROP_WRITING_MODE, true, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-//                  font color COL_AUTO if not already set
-                    aIt->pProperties->Insert(PROP_CHAR_COLOR, true, uno::makeAny( sal_Int32(0xffffffff) ), false);
-                }
+                    else if( bParaStyle )
+                    {
+                        //now it's time to set the default parameters - for paragraph styles
+                        //Fonts: Western first entry in font table
+                        //CJK: second entry
+                        //CTL: third entry, if it exists
 
-                uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
-                bool bAddFollowStyle = false;
-                if(bParaStyle && !aIt->sNextStyleIdentifier.getLength() )
-                {
-                        bAddFollowStyle = true;
-                }
-                //remove Left/RightMargin values from TOX heading styles
-                if( bParaStyle )
-                {
-                    uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
-                    if( sConvertedStyleName.equalsAscii( "Contents Heading" ) ||
-                        sConvertedStyleName.equalsAscii( "User Index Heading" ) ||
-                        sConvertedStyleName.equalsAscii( "Index Heading" ))
-                    {
-                        //left margin is set to NULL by default
-                        uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
-                        xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
-                    }
-                    else if( sConvertedStyleName.equalsAscii( "Text body" ) )
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
-                    else if( sConvertedStyleName.equalsAscii( "Heading 1" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 2" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 3" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 4" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 5" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 6" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 7" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 8" ) ||
-                            sConvertedStyleName.equalsAscii( "Heading 9" ) )
-                    {
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_COMPLEX ));
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE ));
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_ASIAN ));
-                        xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_COMPLEX ));
-                    }
-                }
-
-                if(bAddFollowStyle || aPropValues.getLength())
-                {
-                    const beans::PropertyValue* pPropValues = aPropValues.getConstArray();
-                    PropValVector aSortedPropVals;
-                    for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
-                    {
-                        aSortedPropVals.Insert( pPropValues[nProp] );
-                    }
-                    if(bAddFollowStyle)
-                    {
-                        //find the name of the Next style
-                        std::vector< StyleSheetEntry >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
-                        for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
+                        sal_uInt32 nFontCount = rFontTable->size();
+                        if( !m_pImpl->m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
                         {
-                            if( aNextStyleIt->sStyleName.getLength() &&
-                                    aNextStyleIt->sStyleName == aIt->sNextStyleIdentifier)
+                            uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
+    //                      font size to 240 twip (12 pts) for all if not set
+                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
+    //                      western font not already set -> apply first font
+                            const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
+                            rtl::OUString sWesternFontName = pWesternFontEntry->sFontName;
+                            aIt->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
+
+    //                      CJK  ... apply second font
+                            const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
+                            aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( pCJKFontEntry->sFontName ), false);
+                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, true, aTwoHundredFortyTwip, false);
+    //                      CTL  ... apply third font, if available
+                            if( nFontCount > 3 )
                             {
-                                beans::PropertyValue aNew;
-                                aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
-                                aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleIdentifierD ));
-                                aSortedPropVals.Insert( aNew );
-                                break;
+                                const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
+                                aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( pCTLFontEntry->sFontName ), false);
+                                aIt->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, true, aTwoHundredFortyTwip, false);
                             }
                         }
+    //                  Widow/Orphan -> set both to two if not already set
+                        uno::Any aTwo = uno::makeAny(sal_Int8(2));
+                        aIt->pProperties->Insert(PROP_PARA_WIDOWS, true, aTwo, false);
+                        aIt->pProperties->Insert(PROP_PARA_ORPHANS, true, aTwo, false);
+    //                  Left-to-right direction if not already set
+                        aIt->pProperties->Insert(PROP_WRITING_MODE, true, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
+    //                  font color COL_AUTO if not already set
+                        aIt->pProperties->Insert(PROP_CHAR_COLOR, true, uno::makeAny( sal_Int32(0xffffffff) ), false);
                     }
 
-                    try
+                    uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
+                    bool bAddFollowStyle = false;
+                    if(bParaStyle && !aIt->sNextStyleIdentifier.getLength() )
                     {
-                        uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
-                        xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                            bAddFollowStyle = true;
                     }
-                    catch( const beans::UnknownPropertyException& rUnknown)
+                    //remove Left/RightMargin values from TOX heading styles
+                    if( bParaStyle )
                     {
-                        (void) rUnknown;
-                        OSL_ENSURE( false, "Some style properties could not be set");
+                        uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );
+                        if( sConvertedStyleName.equalsAscii( "Contents Heading" ) ||
+                            sConvertedStyleName.equalsAscii( "User Index Heading" ) ||
+                            sConvertedStyleName.equalsAscii( "Index Heading" ))
+                        {
+                            //left margin is set to NULL by default
+                            uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
+                            xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
+                        }
+                        else if( sConvertedStyleName.equalsAscii( "Text body" ) )
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
+                        else if( sConvertedStyleName.equalsAscii( "Heading 1" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 2" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 3" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 4" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 5" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 6" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 7" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 8" ) ||
+                                sConvertedStyleName.equalsAscii( "Heading 9" ) )
+                        {
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_COMPLEX ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_ASIAN ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_COMPLEX ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT        ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
+                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
+
+                        }
                     }
+
+                    if(bAddFollowStyle || aPropValues.getLength())
+                    {
+                        const beans::PropertyValue* pPropValues = aPropValues.getConstArray();
+                        PropValVector aSortedPropVals;
+                        for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
+                        {
+                            aSortedPropVals.Insert( pPropValues[nProp] );
+                        }
+                        if(bAddFollowStyle)
+                        {
+                            //find the name of the Next style
+                            std::vector< StyleSheetEntry >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
+                            for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
+                            {
+                                if( aNextStyleIt->sStyleName.getLength() &&
+                                        aNextStyleIt->sStyleName == aIt->sNextStyleIdentifier)
+                                {
+                                    beans::PropertyValue aNew;
+                                    aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
+                                    aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleIdentifierD ));
+                                    aSortedPropVals.Insert( aNew );
+                                    break;
+                                }
+                            }
+                        }
+
+                        try
+                        {
+                            uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
+                            xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                        }
+                        catch( const beans::UnknownPropertyException& rUnknown)
+                        {
+                            (void) rUnknown;
+                            OSL_ENSURE( false, "Some style properties could not be set");
+                        }
+                        catch( const lang::WrappedTargetException& rWrapped)
+                        {
+                            (void) rWrapped;
+                            OSL_ENSURE( false, "Some style properties could not be set");
+                        }
+                    }
+                    if(bInsert)
+                        xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
                 }
-                if(bInsert)
-                    xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
                 ++aIt;
             }
         }
