@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,6 +219,26 @@ struct BookmarkInsertPosition
         m_xTextRange( xTextRange )
      {}
 };
+
+/*-- 03.03.2008 11:01:38---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+struct LineNumberSettings
+{
+    bool        bIsOn;
+    sal_Int32   nDistance;
+    sal_Int32   nInterval;
+    sal_Int32   bRestartAtEachPage;
+    sal_Int32   nStartValue;
+    LineNumberSettings() :
+        bIsOn(false)
+        ,nDistance(0)
+        ,nInterval(0)
+        ,bRestartAtEachPage(true)
+        ,nStartValue(1)
+    {}
+
+};
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -227,7 +247,7 @@ class DomainMapper_Impl
 {
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
-    typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableDataHandler_t;
+    typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
     typedef std::map < ::rtl::OUString, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
@@ -248,6 +268,8 @@ private:
     bool                                                                            m_bIsFirstSection;
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
+
+    LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
 
@@ -276,6 +298,14 @@ private:
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
 
     bool                            m_bLineNumberingSet;
+    bool                            m_bIsInFootnoteProperties;
+    bool                            m_bIsCustomFtnMark;
+
+    //registered frame properties
+    ::com::sun::star::uno::Sequence< beans::PropertyValue >   m_aFrameProperties;
+    ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameStartRange;
+    ::com::sun::star::uno::Reference< text::XTextRange >      m_xFrameEndRange;
+
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -420,6 +450,22 @@ public:
     void InitPageMargins() { m_aPageMargins = _PageMar(); }
     void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );
     const _PageMar& GetPageMargins() const {return m_aPageMargins;}
+
+    const LineNumberSettings& GetLineNumberSettings() const { return m_aLineNumberSettings;}
+    void SetLineNumberSettings(const LineNumberSettings& rSet) { m_aLineNumberSettings = rSet;}
+
+    void SetInFootnoteProperties(bool bSet) { m_bIsInFootnoteProperties = bSet;}
+    bool IsInFootnoteProperties() const { return m_bIsInFootnoteProperties;}
+
+    void SetCustomFtnMark(bool bSet) { m_bIsCustomFtnMark = bSet; }
+    bool IsCustomFtnMark() const { return m_bIsCustomFtnMark;  }
+
+    void RegisterFrameConversion(
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameStartRange,
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xFrameEndRange,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFrameProperties
+        );
+    bool ExecuteFrameConversion();
 };
 } //namespace dmapper
 } //namespace writerfilter
