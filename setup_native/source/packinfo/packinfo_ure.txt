@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_ure.txt,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,6 +38,7 @@ solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
 description = "UNO Runtime Environment"
 destpath = "/opt"
+packageversion = "%UREPACKAGEVERSION"
 End
 
 Start
@@ -49,4 +50,5 @@ solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
 description = "UNO Runtime Environment"
 destpath = "/opt"
+packageversion = "%UREPACKAGEVERSION"
 End

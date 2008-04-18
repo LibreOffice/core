@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_sdkoo.txt,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,4 +39,5 @@ vendor = "OpenOffice.org"
 description = "OpenOffice.org %PRODUCTVERSION SDK"
 destpath = "/opt/openoffice.org%PRODUCTVERSION_sdk"
 relocatablepath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
