@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lineproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,20 +228,16 @@ void LineProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBas
     const Reference < XPropertySet >& xPropSet ) const
 {
     PropertySet aPropSet( xPropSet );
-    Sequence< OUString > aNames;
-    Sequence< Any > aValues;
-
-    maLineProperties.makeSequence( aNames, aValues );
-    aPropSet.setProperties( aNames, aValues );
+    aPropSet.setProperties( maLineProperties );
     if ( maLineColor->isUsed() )
     {
         const rtl::OUString sLineColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineColor" ) ) );
-        xPropSet->setPropertyValue( sLineColor, Any( maLineColor->getColor( rFilterBase ) ) );
+        aPropSet.setProperty( sLineColor, maLineColor->getColor( rFilterBase ) );
 
-        if ( maLineColor->hasAlpha() )
+        if ( maLineColor->hasTransparence() )
         {
             const rtl::OUString sLineTransparence( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LineTransparence" ) ) );
-            xPropSet->setPropertyValue( sLineTransparence, Any( static_cast< sal_Int16 >( ( 100000 - maLineColor->getAlpha() ) / 1000 ) ) );
+            aPropSet.setProperty( sLineTransparence, maLineColor->getTransparence() );
         }
     }
     if ( moLineWidth )
