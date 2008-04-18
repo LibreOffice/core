@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: customshapeproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include "oox/drawingml/customshapeproperties.hxx"
+#include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
@@ -68,7 +69,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::XmlFilterBase& /* 
     const OUString sType = CREATE_OUSTRING( "Type" );
     if ( maShapePresetType.getLength() )
     {
-        // XEnhancedCustomShapeDefaulter TODO
         //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
         Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
         if( xDefaulter.is() )
