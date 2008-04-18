@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewutil.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,14 +280,36 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
     rMark.MarkToSimple();
 }
 
-bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
+
+// static
+bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows )
+{
+    SCTAB nTab = rRange.aStart.Tab();
+    bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
+    // Always fit the range on its first sheet.
+    DBG_ASSERT( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
+    SCROW nStartRow = rRange.aStart.Row();
+    // FillArrayForCondition() usually is the fastest to determine such a set
+    // in one pass, even if the array isn't used but the last element.
+    SCROW* pArr = new SCROW[nRows];
+    size_t nCount = pDoc->GetRowFlagsArray( nTab).FillArrayForCondition(
+            nStartRow, MAXROW, CR_FILTERED, 0, pArr, nRows);
+    if (nCount)
+        rRange.aEnd.SetRow( pArr[nCount-1]);
+    delete [] pArr;
+    return nCount == nRows && bOneTabOnly;
+}
+
+
+// static
+bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
     for (SCTAB nTab=rRange.aStart.Tab(); nTab<=rRange.aEnd.Tab(); nTab++)
     {
-        if ( ValidRow( pDoc->GetRowFlagsArray(nTab).
-                GetFirstForCondition( nStartRow, nEndRow, CR_FILTERED, CR_FILTERED ) ) )
+        if ( pDoc->GetRowFlagsArray( nTab).HasCondition( nStartRow, nEndRow,
+                CR_FILTERED, CR_FILTERED ) )
             return true;
     }
 
