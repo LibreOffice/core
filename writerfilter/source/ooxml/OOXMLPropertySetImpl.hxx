@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLPropertySetImpl.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +176,8 @@ public:
 
     OOXMLProperties_t::iterator begin();
     OOXMLProperties_t::iterator end();
+    OOXMLProperties_t::const_iterator begin() const;
+    OOXMLProperties_t::const_iterator end() const;
 
     virtual void setType(const string & rsType);
 
