@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unattr.cxx,v $
- * $Revision: 1.19 $
+ *
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +58,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
+#include <swtblfmt.hxx>
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <ndnotxt.hxx>
@@ -201,6 +203,12 @@ void SwUndoFmtAttr::Init( const SfxItemSet& rAffectedItems )
         else if( USHRT_MAX !=
             pDoc->GetSections().GetPos( (const SwSectionFmtPtr)pFmt ))
             nNode = pFmt->GetCntnt().GetCntntIdx()->GetIndex();
+        else if( 0 != dynamic_cast< SwTableBoxFmt* >( pFmt ) )
+        {
+            SwClient* pTblBox = SwClientIter( *pFmt ).First( TYPE( SwTableBox ));
+            if( pTblBox )
+                nNode = static_cast< SwTableBox* >(pTblBox)->GetSttIdx();
+        }
     }
 
     // --> OD 2007-07-11 #i56253#
@@ -357,6 +365,21 @@ int SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
                 pFmt = ((SwSectionNode*)pNd)->GetSection().GetFmt();
                 nPos = 0;
                 break;
+            }
+            else if( pNd->IsStartNode() && SwTableBoxStartNode ==
+                static_cast< SwStartNode* >(pNd)->GetStartNodeType() )
+            {
+                SwTableNode* pTblNode = pNd->FindTableNode();
+                if( pTblNode )
+                {
+                    SwTableBox* pBox = pTblNode->GetTable().GetTblBox( nNode );
+                    if( pBox )
+                    {
+                        pFmt = pBox->GetFrmFmt();
+                        nPos = 0;
+                        break;
+                    }
+                }
             }
         }
         // kein break!
