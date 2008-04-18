@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txttab.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,6 +243,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             if( pPor )
                 nForced += pPor->Width();
         }
+
         // <--
         // --> OD 2008-02-07 #newlistlevelattrs#
         // In case that the proposed new tab stop position is the list tab stop
@@ -250,10 +251,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 //        if( nNextPos > 0 &&
 //             (  bRTL && nTabLeft - nForced < nCurrentAbsPos ||
 //               !bRTL && nTabLeft + nForced > nCurrentAbsPos ) )
-        const bool bIsListTabStopPosition( pTabStop &&
-                                aLineInf.IsListTabStopIncluded() &&
-                                nNextPos == aLineInf.GetListTabStopPosition() );
-        if ( !bIsListTabStopPosition &&
+        if (
              ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
                ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
              nNextPos > nForced )
