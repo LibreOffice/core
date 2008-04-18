@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.109 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2330,4 +2330,20 @@ Sequence< Any > SAL_CALL SwXTextCursor::getPropertyDefaults( const Sequence< OUS
             throw UnknownPropertyException();
     }
     return aRet;
+}
+
+/*-- 10.03.2008 09:58:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextCursor::makeRedline(
+    const ::rtl::OUString& rRedlineType,
+    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    if(pUnoCrsr)
+        SwUnoCursorHelper::makeRedline( *pUnoCrsr, rRedlineType, rRedlineProperties );
+    else
+        throw uno::RuntimeException();
 }
