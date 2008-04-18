@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workbookhelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,7 @@ class PivotTableBuffer;
 class FormulaParser;
 class UnitConverter;
 class AddressConverter;
+class ExcelChartConverter;
 class StylesPropertyHelper;
 class PageSettingsPropertyHelper;
 class ValidationPropertyHelper;
@@ -136,7 +137,11 @@ public:
     SegmentProgressBar& getProgressBar() const;
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     bool                isWorkbookFile() const;
+    /** Returns the index of the current sheet in the Calc document. */
+    sal_Int16           getCurrentSheetIndex() const;
 
+    /** Sets the index of the current sheet in the Calc document. */
+    void                setCurrentSheetIndex( sal_Int16 nSheet );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
 
@@ -208,6 +213,11 @@ public:
     UnitConverter&      getUnitConverter() const;
     /** Returns the converter for string to cell address/range conversion. */
     AddressConverter&   getAddressConverter() const;
+    /** Returns the chart object converter. */
+    ExcelChartConverter& getChartConverter() const;
+
+    // property helpers -------------------------------------------------------
+
     /** Returns the converter for properties related to cell styles. */
     StylesPropertyHelper& getStylesPropertyHelper() const;
     /** Returns the converter for properties related to page and print settings. */
