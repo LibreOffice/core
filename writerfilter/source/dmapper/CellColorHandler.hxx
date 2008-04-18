@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CellColorHandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 namespace writerfilter {
 namespace dmapper
 {
-class PropertyMap;
+class TablePropertyMap;
 class WRITERFILTER_DLLPRIVATE CellColorHandler : public Properties
 {
 public:
@@ -58,7 +58,7 @@ public:
     virtual void attribute(Id Name, Value & val);
     virtual void sprm(Sprm & sprm);
 
-    ::boost::shared_ptr<PropertyMap>            getProperties();
+    ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
     void setParagraph() { m_bParagraph = true; }
 };
