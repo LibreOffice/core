@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CellColorHandler.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,9 +120,9 @@ void CellColorHandler::sprm(Sprm & rSprm)
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-PropertyMapPtr  CellColorHandler::getProperties()
+TablePropertyMapPtr  CellColorHandler::getProperties()
 {
-    PropertyMapPtr pPropertyMap(new PropertyMap);
+    TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
     if( m_bOOXMLColor )
     {
         pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
