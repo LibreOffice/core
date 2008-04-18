@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapperTableManager.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <BorderHandler.hxx>
 #include <CellColorHandler.hxx>
+#include <CellMarginHandler.hxx>
 #include <ConversionHelper.hxx>
 #include <MeasureHandler.hxx>
 #include <TDefTableHandler.hxx>
@@ -46,7 +47,6 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::std;
-#define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 /*-- 23.04.2007 14:57:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -55,10 +55,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nCell(0),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
-    m_nGapHalf(DEFAULT_CELL_MARGIN),
-    m_nLeftMargin(0),
     m_nTableWidth(0),
-    m_bFullWidth(false),
     m_bOOXML( bOOXML )
 {
 }
@@ -86,12 +83,11 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
             case 0x5400: // sprmTJc
-            if( !m_bFullWidth )
             {
                 //table justification 0: left, 1: center, 2: right
                 sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
-                PropertyMapPtr pTableMap( new PropertyMap );
-                pTableMap->Insert( PROP_HORI_ORIENT, false, uno::makeAny( nOrient ) );
+                TablePropertyMapPtr pTableMap( new TablePropertyMap );
+                pTableMap->setValue( TablePropertyMap::HORI_ORIENT, nOrient );
                 insertTableProps( pTableMap );
             }
             break;
@@ -101,11 +97,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x9602: // sprmTDxaGapHalf
             {
-                m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
-                PropertyMapPtr pPropMap( new PropertyMap );
-                pPropMap->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
-                if( m_bFullWidth && m_nLeftMargin > 0 )
-                    pPropMap->Insert( PROP_HORI_ORIENT, false, uno::makeAny( text::HoriOrientation::RIGHT ) );
+                //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                pPropMap->setValue( TablePropertyMap::GAP_HALF, ConversionHelper::convertTwipToMM100( nIntValue ) );
                 insertTableProps(pPropMap);
             }
             break;
@@ -124,26 +118,16 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
-                    PropertyMapPtr pPropMap( new PropertyMap );
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
                     if( nSprmId == 0xf661 || nSprmId == sal_uInt32(NS_ooxml::LN_CT_TblPrBase_tblInd ))
                     {
-                        m_nLeftMargin = pMeasureHandler->getMeasureValue();
-                        pPropMap->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( m_nLeftMargin - m_nGapHalf ));
-                        if( m_bFullWidth && m_nLeftMargin > 0 )
-                            pPropMap->Insert( PROP_HORI_ORIENT, false, uno::makeAny( text::HoriOrientation::RIGHT ));
-
+                        pPropMap->setValue( TablePropertyMap::LEFT_MARGIN, pMeasureHandler->getMeasureValue() );
                     }
                     else
                     {
                         m_nTableWidth = pMeasureHandler->getMeasureValue();
                         if( m_nTableWidth )
-                            pPropMap->Insert( PROP_WIDTH, false, uno::makeAny( m_nTableWidth ));
-                        if( pMeasureHandler->isAutoWidth() )
-                        {
-                            pPropMap->Insert( PROP_HORI_ORIENT, false,
-                                uno::makeAny( m_nLeftMargin > 0 ? text::HoriOrientation::RIGHT : text::HoriOrientation::FULL ) );
-                            m_bFullWidth = true;
-                        }
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                     }
                     insertTableProps(pPropMap);
                 }
@@ -158,7 +142,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
-                    PropertyMapPtr pPropMap( new PropertyMap );
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
                     pPropMap->Insert( PROP_SIZE_TYPE, false, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ));
                     pPropMap->Insert( PROP_HEIGHT, false, uno::makeAny(pMeasureHandler->getMeasureValue() ));
                     insertRowProps(pPropMap);
@@ -170,7 +154,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_sprm::LN_TCantSplit: // 0x3644
             {
                 //row can't break across pages if nIntValue == 1
-                PropertyMapPtr pPropMap( new PropertyMap );
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_Bool( nIntValue == 1 ? sal_False : sal_True ) ));
                 insertRowProps(pPropMap);
             }
@@ -183,7 +167,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 if( nIntValue > 0 && m_nHeaderRepeat >= 0 )
                 {
                     ++m_nHeaderRepeat;
-                    PropertyMapPtr pPropMap( new PropertyMap );
+                    TablePropertyMapPtr pPropMap( new TablePropertyMap );
                     pPropMap->Insert( PROP_HEADER_ROW_COUNT, false, uno::makeAny( m_nHeaderRepeat ));
                     insertTableProps(pPropMap);
                 }
@@ -194,7 +178,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case 0x9407: // sprmTDyaRowHeight
             {
                 // table row height - negative values indicate 'exact height' - positive 'at least'
-                PropertyMapPtr pPropMap( new PropertyMap );
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 bool bMinHeight = true;
                 sal_Int16 nHeight = static_cast<sal_Int16>( nIntValue );
                 if( nHeight < 0 )
@@ -215,19 +199,26 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler(m_bOOXML) );
                     pProperties->resolve( *pTDefTableHandler );
-                    insertRowProps( pTDefTableHandler->getRowProperties() );
+
+                    TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
+                    pRowPropMap->insert( pTDefTableHandler->getRowProperties() );
+                    insertRowProps( pRowPropMap );
                     if( !m_nTableWidth )
                     {
                         m_nTableWidth= pTDefTableHandler->getTableWidth();
                         if( m_nTableWidth )
                         {
-                            PropertyMapPtr pPropMap( new PropertyMap );
-                            pPropMap->Insert( PROP_WIDTH, false, uno::makeAny( m_nTableWidth ));
+                            TablePropertyMapPtr pPropMap( new TablePropertyMap );
+                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                             insertTableProps(pPropMap);
                         }
                     }
                     for( size_t nCell = 0; nCell < pTDefTableHandler->getCellCount(); ++nCell )
-                        cellPropsByCell( nCell, pTDefTableHandler->getCellProperties( nCell ) );
+                    {
+                        TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
+                        pTDefTableHandler->fillCellProperties( nCell, pCellPropMap );
+                        cellPropsByCell( nCell, pCellPropMap );
+                    }
                 }
             }
             break;
@@ -241,10 +232,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     case 3: nVertOrient = text::VertOrientation::BOTTOM; break;
                     default:;
                 };
-                PropertyMapPtr pPropMap( new PropertyMap() );
-                pPropMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
+                TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
+                pCellPropMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
-                cellProps( pPropMap );
+                cellProps( pCellPropMap );
             }
             break;
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
@@ -255,7 +246,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
-                    cellPropsByCell( m_nCellBorderIndex, PropertyMapPtr( pBorderHandler->getProperties()) );
+                    TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
+                    pCellPropMap->insert( pBorderHandler->getProperties() );
+                    cellPropsByCell( m_nCellBorderIndex, pCellPropMap );
                     ++m_nCellBorderIndex;
                 }
             }
@@ -268,7 +261,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
-                    insertTableProps( pBorderHandler->getProperties() );
+                    TablePropertyMapPtr pTablePropMap( new TablePropertyMap() );
+                    pTablePropMap->insert( pBorderHandler->getProperties() );
+                    insertTableProps( pTablePropMap );
                 }
             }
             break;
@@ -282,7 +277,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     //in OOXML there's one set of borders at each cell (if there is any)
                     TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler( m_bOOXML ));
                     pProperties->resolve( *pTDefTableHandler );
-                    cellProps( pTDefTableHandler->getCellProperties( 0 ) );
+                    TablePropertyMapPtr pCellPropMap( new TablePropertyMap );
+                    pTDefTableHandler->fillCellProperties( 0, pCellPropMap );
+                    cellProps( pCellPropMap );
                 }
             }
             break;
@@ -349,12 +346,11 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
             {
                 m_sTableStyleName = pValue->getString();
-                PropertyMapPtr pPropMap( new PropertyMap );
+                TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, false, uno::makeAny( m_sTableStyleName ));
                 insertTableProps(pPropMap);
             }
             break;
-            //case NS_ooxml::LN_CT_TcPrBase_tcW: //90684 - column width values
             /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblGridBase_gridCol:
 
@@ -370,9 +366,18 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-//                    CellMarHandler pCellMarHandler( new CellMarHandler );
-//                    pProperties->resolve( *pCellMarHandler );
-//                    cellPropsByCell(0, PropertyMapPtr( pColorHandler->getProperties()) );
+                    CellMarginHandlerPtr pCellMarginHandler( new CellMarginHandler );
+                    pProperties->resolve( *pCellMarginHandler );
+                    TablePropertyMapPtr pMarginProps( new TablePropertyMap );
+                    if( pCellMarginHandler->m_bTopMarginValid )
+                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_TOP, pCellMarginHandler->m_nTopMargin );
+                    if( pCellMarginHandler->m_bBottomMarginValid )
+                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_BOTTOM, pCellMarginHandler->m_nBottomMargin );
+                    if( pCellMarginHandler->m_bLeftMarginValid )
+                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_LEFT, pCellMarginHandler->m_nLeftMargin );
+                    if( pCellMarginHandler->m_bRightMarginValid )
+                        pMarginProps->setValue( TablePropertyMap::CELL_MAR_RIGHT, pCellMarginHandler->m_nRightMargin );
+                    insertTableProps(pMarginProps);
                 }
             }
             break;
@@ -380,7 +385,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
             {
                 // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
-                PropertyMapPtr pMergeProps( new PropertyMap );
+                TablePropertyMapPtr pMergeProps( new TablePropertyMap );
                 pMergeProps->Insert( PROP_VERTICAL_MERGE, false, uno::makeAny( bool( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart )) );
                 cellProps( pMergeProps);
             }
@@ -400,6 +405,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblLook: break; //todo: table look specifier
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            case NS_ooxml::LN_CT_TcPrBase_tcW: break; //fixed column width is not supported
             default: bRet = false;
         }
     }
@@ -424,8 +431,9 @@ void DomainMapperTableManager::endOfRowAction()
              m_nTableWidth += *aCellIter++;
         if( m_nTableWidth > 0)
         {
-            PropertyMapPtr pPropMap( new PropertyMap );
-            pPropMap->Insert( PROP_WIDTH, false, uno::makeAny( m_nTableWidth ));
+            TablePropertyMapPtr pPropMap( new TablePropertyMap );
+//            pPropMap->Insert( PROP_WIDTH, false, uno::makeAny( m_nTableWidth ));
+            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
             insertTableProps(pPropMap);
         }
     }
@@ -466,7 +474,7 @@ void DomainMapperTableManager::endOfRowAction()
             pSeparators[nBorder].IsVisible = sal_True;
             nLastRelPos = nLastRelPos + nRelPos;
         }
-        PropertyMapPtr pPropMap( new PropertyMap );
+        TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
         insertRowProps(pPropMap);
     }
@@ -481,8 +489,7 @@ void DomainMapperTableManager::endOfRowAction()
   -----------------------------------------------------------------------*/
 void DomainMapperTableManager::clearData()
 {
-    m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nGapHalf = m_nLeftMargin = m_nTableWidth = 0;
-    m_bFullWidth = false;
+    m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_aTableGrid.clear();
     m_aGridSpans.clear();
     m_sTableStyleName = ::rtl::OUString();
