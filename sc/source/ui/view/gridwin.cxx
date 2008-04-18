@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1278,7 +1278,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
         //  Auto-Fill
 
         ScRange aMarkRange;
-        if (pViewData->GetSimpleArea( aMarkRange ))
+        if (pViewData->GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE)
         {
             if ( aMarkRange.aStart.Tab() == pViewData->GetTabNo() )
             {
@@ -3136,6 +3136,17 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
     const ScDragData& rData = SC_MOD()->GetDragData();
     if ( rData.pCellTransfer )
     {
+        // Don't move source that would include filtered rows.
+        if ((rEvt.mnAction & DND_ACTION_MOVE) && rData.pCellTransfer->HasFilteredRows())
+        {
+            if (bDragRect)
+            {
+                bDragRect = FALSE;
+                UpdateDragRectOverlay();
+            }
+            return DND_ACTION_NONE;
+        }
+
         Point aPos = rEvt.maPosPixel;
 
         ScDocument* pSourceDoc = rData.pCellTransfer->GetSourceDocument();
@@ -3194,11 +3205,12 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         if (nNewDragY+(nSizeY-1) > MAXROW)
             nNewDragY = MAXROW-(nSizeY-1);
 
-        //  don't break scenario ranges
+        //  don't break scenario ranges, don't drop on filtered
         SCTAB nTab = pViewData->GetTabNo();
         ScRange aDropRange = lcl_MakeDropRange( nNewDragX, nNewDragY, nTab, aSourceRange );
         if ( lcl_TestScenarioRedliningDrop( pThisDoc, aDropRange ) ||
-             lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) )
+             lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) ||
+             ScViewUtil::HasFiltered( aDropRange, pThisDoc) )
         {
             if (bDragRect)
             {
@@ -3673,13 +3685,39 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     aSource.aEnd.SetTab( nSourceTab );
 
     SCCOL nSizeX = aSource.aEnd.Col() - aSource.aStart.Col() + 1;
-    SCROW nSizeY = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
+    SCROW nSizeY = (bIsMove ? (aSource.aEnd.Row() - aSource.aStart.Row() + 1) :
+            pTransObj->GetNonFilteredRows());   // copy/link: no filtered rows
     ScRange aDest( nDestPosX, nDestPosY, nThisTab,
                    nDestPosX + nSizeX - 1, nDestPosY + nSizeY - 1, nThisTab );
 
+
+    /* NOTE: AcceptPrivateDrop() already checked for filtered conditions during
+     * dragging and adapted drawing of the selection frame. We check here
+     * (again) because this may actually also be called from PasteSelection(),
+     * we would have to duplicate determination of flags and destination range
+     * and would lose the context of the "filtered destination is OK" cases
+     * below, which is already awkward enough as is. */
+
+    // Don't move filtered source.
+    bool bFiltered = (bIsMove && pTransObj->HasFilteredRows());
+    if (!bFiltered)
+    {
+        if (pSourceDoc != pThisDoc && ((nFlags & SC_DROP_TABLE) ||
+                    (!bIsLink && meDragInsertMode == INS_NONE)))
+        {
+            // Nothing. Either entire sheet to be dropped, or the one case
+            // where PasteFromClip() is to be called that handles a filtered
+            // destination itself. Drag-copy from another document without
+            // inserting cells.
+        }
+        else
+            // Don't copy or move to filtered destination.
+            bFiltered = ScViewUtil::HasFiltered( aDest, pThisDoc);
+    }
+
     BOOL bDone = FALSE;
 
-    if (pSourceDoc == pThisDoc)
+    if (!bFiltered && pSourceDoc == pThisDoc)
     {
         if ( nFlags & SC_DROP_TABLE )           // whole sheet?
         {
@@ -3811,7 +3849,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         if (bDone)
             pTransObj->SetDragWasInternal();    // don't delete source in DragFinished
     }
-    else if ( pSourceDoc )                      // between documents
+    else if ( !bFiltered && pSourceDoc )                        // between documents
     {
         if ( nFlags & SC_DROP_TABLE )           // copy/link sheets between documents
         {
