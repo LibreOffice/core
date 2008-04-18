@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwshe.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,7 @@ String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
     {
         ScRange aRange;
 
-        if ( GetViewData()->GetSimpleArea( aRange ) )
+        if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
         {
             ScDocument* pDoc = GetViewData()->GetDocument();
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
