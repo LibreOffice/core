@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfunc.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,7 @@ void ScViewFunc::StartFormatArea()
 
     //  start only with single cell (marked or cursor position)
     ScRange aMarkRange;
-    BOOL bOk = GetViewData()->GetSimpleArea( aMarkRange );
+    BOOL bOk = (GetViewData()->GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
     if ( bOk && aMarkRange.aStart != aMarkRange.aEnd )
         bOk = FALSE;
 
@@ -880,7 +880,7 @@ void ScViewFunc::EnterMatrix( const String& rString )
     }
 
     ScRange aRange;
-    if (pData->GetSimpleArea(aRange))
+    if (pData->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = pData->GetDocShell();
         BOOL bSuccess = pDocSh->GetDocFunc().EnterMatrix( aRange, &rMark, NULL, rString, FALSE, FALSE, ScGrammar::GRAM_DEFAULT );
@@ -1149,11 +1149,13 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     SCROW nEndRow;
     SCTAB nEndTab;
 
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    ScMarkType eMarkType = GetViewData()->GetSimpleArea( nStartCol, nStartRow,
+            nStartTab, nEndCol, nEndRow, nEndTab);
+    if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
     {
         bool bChangeSelection = false;
         ScRange aMarkRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
-        if ( ScViewUtil::HasFiltered( aMarkRange, pDoc ) )
+        if ( eMarkType == SC_MARK_SIMPLE_FILTERED )
         {
             ScMarkData aVisibleMark( rMark );
             ScViewUtil::UnmarkFiltered( aVisibleMark, pDoc );
@@ -1550,7 +1552,7 @@ void ScViewFunc::UpdateStyleSheetInUse( SfxStyleSheet* pStyleSheet )
 BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         BOOL bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, eCmd, bRecord, FALSE, bPartOfPaste );
@@ -1573,8 +1575,7 @@ BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
 void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
 {
     ScRange aRange;
-    if ( GetViewData()->GetSimpleArea( aRange ) &&
-         !ScViewUtil::HasFiltered( aRange, GetViewData()->GetDocument() ) )
+    if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         pDocSh->GetDocFunc().DeleteCells( aRange, eCmd, bRecord, FALSE );
@@ -2755,7 +2756,7 @@ void ScViewFunc::CreateNames( USHORT nFlags )
 {
     BOOL bDone = FALSE;
     ScRange aRange;
-    if ( GetViewData()->GetSimpleArea(aRange) )
+    if ( GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE )
         bDone = GetViewData()->GetDocShell()->GetDocFunc().CreateNames( aRange, nFlags, FALSE );
 
     if (!bDone)
@@ -2769,7 +2770,7 @@ USHORT ScViewFunc::GetCreateNameFlags()
     SCCOL nStartCol, nEndCol;
     SCROW nStartRow, nEndRow;
     SCTAB nDummy;
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nDummy,nEndCol,nEndRow,nDummy))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nDummy,nEndCol,nEndRow,nDummy) == SC_MARK_SIMPLE)
     {
         ScDocument* pDoc = GetViewData()->GetDocument();
         SCTAB nTab = GetViewData()->GetTabNo();
