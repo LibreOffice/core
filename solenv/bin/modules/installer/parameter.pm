@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -331,6 +331,7 @@ sub setglobalvariables
             installer::logger::print_message( $message );
             push(@installer::globals::globallogfileinfo, $message);
             $installer::globals::islinuxrpmbuild = 0;
+            $installer::globals::islinuxdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
         }
     }
@@ -507,7 +508,7 @@ sub control_required_parameter
     # for Solaris packages and Linux
     #######################################
 
-    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::iswindowsbuild ))
+    if (( $installer::globals::patch ) && ( ! $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::islinuxdebbuild ) && ( ! $installer::globals::iswindowsbuild ))
     {
         installer::logger::print_error( "Sorry, Patch flag currently only available for Solaris pkg, Linux RPM and Windows builds!" );
         usage();
