@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,8 +297,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScRange aRange;
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         BOOL bTheFlag=GetViewData()->IsMultiMarked() ||
-                                    ( GetViewData()->GetSimpleArea(aRange) && ScViewUtil::HasFiltered(aRange, pDoc) ) ||
-                                    (pDoc->GetChangeTrack()!=NULL);
+                            (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
+                            (pDoc->GetChangeTrack() != NULL);
 
                         //CHINA001 ScDeleteCellDlg* pDlg = new ScDeleteCellDlg(
                         //CHINA001      pTabViewShell->GetDialogParent(),bTheFlag);
