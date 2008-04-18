@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
+#include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <svtools/itemprop.hxx>
@@ -56,12 +57,11 @@ const SfxItemPropertyMap* lcl_GetFormulaParserMap()
 {
     static SfxItemPropertyMap aFormulaParserMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_REFERENCEPOS),    0,  &getCppuType((table::CellAddress*)0),    0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_COMPILEENGLISH),  0,  &getBooleanCppuType(),                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_IGNORELEADING),   0,  &getBooleanCppuType(),                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_COMPATIBILITY3D), 0,  &getBooleanCppuType(),                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_R1C1NOTATION),    0,  &getBooleanCppuType(),                   0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_OPCODEMAP),       0,  &getCppuType((uno::Sequence< sheet::FormulaOpCodeMapEntry >*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_REFERENCEPOS),         0,  &getCppuType((table::CellAddress*)0),    0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_COMPILEENGLISH),       0,  &getBooleanCppuType(),                   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_IGNORELEADING),        0,  &getBooleanCppuType(),                   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FORMULACONVENTION),    0,  &getCppuType(&sheet::AddressConvention::UNSPECIFIED), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_OPCODEMAP),            0,  &getCppuType((uno::Sequence< sheet::FormulaOpCodeMapEntry >*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aFormulaParserMap_Impl;
@@ -73,9 +73,8 @@ SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),
+    mnConv( sheet::AddressConvention::UNSPECIFIED ),
     mbEnglish( false ),
-    mbR1C1( false ),
-    mbComp3D( false ),
     mbIgnoreSpaces( true )
 {
     mpDocShell->GetDocument()->AddUnoObject(*this);
@@ -97,6 +96,15 @@ void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 {
+    static const ScAddress::Convention aConvMap[] = {
+        ScAddress::CONV_OOO,        // <- AddressConvention::OOO
+        ScAddress::CONV_XL_A1,      // <- AddressConvention::XL_A1
+        ScAddress::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
+        ScAddress::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
+        ScAddress::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
+    };
+    static const sal_Int16 nConvMapCount = sizeof(aConvMap)/sizeof(aConvMap[0]);
+
     // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
     // don't need to initialize things twice.
     if (mxOpCodeMap.get())
@@ -111,18 +119,9 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     }
 
     ScAddress::Convention eConv = ScAddress::CONV_UNSPECIFIED;
-    if ( mbR1C1 )
-    {
-        // R1C1 is available only with '!' sheet separator
-        eConv = ScAddress::CONV_XL_R1C1;
-    }
-    else
-    {
-        if ( mbComp3D )
-            eConv = ScAddress::CONV_XL_A1;      // '!' and A1
-        else
-            eConv = ScAddress::CONV_OOO;        // '.' and A1
-    }
+    if (mnConv >= 0 && mnConv < nConvMapCount)
+        eConv = aConvMap[mnConv];
+
     rCompiler.SetRefConvention( eConv );
 }
 
@@ -204,13 +203,9 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         else
             throw lang::IllegalArgumentException();
     }
-    else if ( aString.EqualsAscii( SC_UNO_R1C1NOTATION ) )
+    else if ( aString.EqualsAscii( SC_UNO_FORMULACONVENTION ) )
     {
-        aValue >>= mbR1C1;
-    }
-    else if ( aString.EqualsAscii( SC_UNO_COMPATIBILITY3D ) )
-    {
-        aValue >>= mbComp3D;
+        aValue >>= mnConv;
     }
     else if ( aString.EqualsAscii( SC_UNO_IGNORELEADING ) )
     {
@@ -244,13 +239,9 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
     {
         aRet <<= mbEnglish;
     }
-    else if ( aString.EqualsAscii( SC_UNO_R1C1NOTATION ) )
+    else if ( aString.EqualsAscii( SC_UNO_FORMULACONVENTION ) )
     {
-        aRet <<= mbR1C1;
-    }
-    else if ( aString.EqualsAscii( SC_UNO_COMPATIBILITY3D ) )
-    {
-        aRet <<= mbComp3D;
+        aRet <<= mnConv;
     }
     else if ( aString.EqualsAscii( SC_UNO_IGNORELEADING ) )
     {
