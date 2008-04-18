@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\oox
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 
 ..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
+..\source\token\tokens.txt %_DEST%\inc%_EXT%\oox\token.txt
 
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
