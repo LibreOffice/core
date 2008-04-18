@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_brand.txt,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,104 +32,112 @@
 Start
 module = "gid_Module_Root_Brand"
 # script = "shellscripts_brand.txt"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-requires = "openoffice.org%OOOBASEVERSION-core01"
-solarisrequires = "openofficeorg%WITHOUTDOTOOOBASEVERSION-core01"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+requires = "ooobasis%OOOBASEVERSION-core01"
+solarisrequires = "ooobasis%WITHOUTDOTOOOBASEVERSION-core01"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Wrt"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-writer"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-writer"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-writer"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-writer"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Writer brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Calc"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-calc"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-calc"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-calc"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-calc"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Calc brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Impress"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-impress"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-impress"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-impress"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-impress"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Impress brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Draw"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-draw"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-draw"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-draw"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-draw"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Draw brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Math"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-math"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-math"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-math"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-math"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Math brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Brand_Prg_Base"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand-base"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand-base"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-base"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-base"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Base brand module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
 module = "gid_Module_Langpack_Brand"
-solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-%LANGUAGESTRING-brand"
-packagename = "%UNIXPRODUCTNAME%PRODUCTVERSION-%LANGUAGESTRING-brand"
-requires = "%UNIXPRODUCTNAME%PRODUCTVERSION-brand"
-solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%WITHOUTDOTPRODUCTVERSION-brand"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION-%LANGUAGESTRING"
+requires = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Brand language module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
+packageversion = "%PACKAGEVERSION"
 End
