@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -939,7 +939,7 @@ void ScViewFunc::SetPrintZoom(USHORT nScale, USHORT nPages)
 void ScViewFunc::AdjustPrintZoom()
 {
     ScRange aRange;
-    if ( !GetViewData()->GetSimpleArea( aRange ) )
+    if ( GetViewData()->GetSimpleArea( aRange ) != SC_MARK_SIMPLE )
         GetViewData()->GetMarkData().GetMultiMarkArea( aRange );
     GetViewData()->GetDocShell()->AdjustPrintZoom( aRange );
 }
@@ -990,7 +990,7 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
             }
             else    // NULL = use selection (print range is always set), use empty string to delete all ranges
             {
-                if ( GetViewData()->GetSimpleArea( aRange ) )
+                if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                 {
                     pDoc->AddPrintRange( nTab, aRange );
                 }
@@ -1062,17 +1062,16 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
 
 BOOL ScViewFunc::TestMergeCells()           // Vorab-Test (fuer Menue)
 {
-    //  simple test: TRUE if there's a selection but no multi selection
+    //  simple test: TRUE if there's a selection but no multi selection and not filtered
 
     const ScMarkData& rMark = GetViewData()->GetMarkData();
-    if ( rMark.IsMultiMarked() )
+    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
-        ScMarkData aNewMark( rMark );   // use local copy for MarkToSimple
-        aNewMark.MarkToSimple();
-        return aNewMark.IsMarked() && !aNewMark.IsMultiMarked();
+        ScRange aDummy;
+        return GetViewData()->GetSimpleArea( aDummy) == SC_MARK_SIMPLE;
     }
     else
-        return rMark.IsMarked();
+        return FALSE;
 }
 
 
@@ -1170,7 +1169,7 @@ BOOL ScViewFunc::TestRemoveMerge()
 {
     BOOL bMerged = FALSE;
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea( aRange ))
+    if (GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
         ScDocument* pDoc = GetViewData()->GetDocument();
         if ( pDoc->HasAttrib( aRange, HASATTR_MERGED ) )
@@ -1191,7 +1190,7 @@ BOOL ScViewFunc::RemoveMerge( BOOL bRecord )
         ErrorMessage(aTester.GetMessageId());
         return FALSE;
     }
-    else if (GetViewData()->GetSimpleArea( aRange ))
+    else if (GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE)
     {
         ScRange aExtended( aRange );
         GetViewData()->GetDocument()->ExtendMerge( aExtended );
@@ -1213,7 +1212,7 @@ BOOL ScViewFunc::RemoveMerge( BOOL bRecord )
 void ScViewFunc::FillSimple( FillDir eDir, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -1234,7 +1233,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                              double fStart, double fStep, double fMax, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -1449,7 +1448,7 @@ ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
     SCCOL nEndCol;
     SCROW nEndRow;
     SCTAB nEndTab;
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         if ( nEndCol-nStartCol >= 3 && nEndRow-nStartRow >= 3 )
         {
@@ -1469,7 +1468,7 @@ void ScViewFunc::AutoFormat( USHORT nFormatNo, BOOL bRecord )
 #if 1
 
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -1498,7 +1497,7 @@ void ScViewFunc::AutoFormat( USHORT nFormatNo, BOOL bRecord )
     SCROW nEndRow;
     SCTAB nEndTab;
 
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
+    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
@@ -1881,7 +1880,7 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
 void ScViewFunc::TabOp( const ScTabOpParam& rParam, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScMarkData& rMark = GetViewData()->GetMarkData();
