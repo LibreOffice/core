@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textliststyle.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +31,12 @@
 #ifndef OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 #define OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
-#include <boost/shared_ptr.hpp>
-#include <vector>
 
 namespace oox { namespace drawingml {
 
-class TextListStyle;
-
-typedef boost::shared_ptr< TextListStyle > TextListStylePtr;
+typedef RefVector< TextParagraphProperties > TextParagraphPropertiesVector;
 
 class TextListStyle
 {
@@ -48,16 +45,21 @@ public:
     TextListStyle();
     ~TextListStyle();
 
-    void apply( const oox::drawingml::TextListStylePtr& rTextListStylePtr );
+    void apply( const TextListStyle& rTextListStyle );
 
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >& getListStyle() { return maListStyle; };
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >& getAggregationListStyle() { return maAggregationListStyle; };
+    inline const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
+    inline TextParagraphPropertiesVector&       getListStyle() { return maListStyle; };
+
+    inline const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
+    inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
 protected:
 
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr > maListStyle;
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr > maAggregationListStyle;
+    TextParagraphPropertiesVector maListStyle;
+    TextParagraphPropertiesVector maAggregationListStyle;
 };
+
+typedef boost::shared_ptr< TextListStyle > TextListStylePtr;
 
 } }
 
