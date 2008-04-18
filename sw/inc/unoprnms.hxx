@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -790,7 +790,8 @@ enum SwPropNameIds
 /* 0724 */  UNO_NAME_GRID_BASE_WIDTH,
 /* 0725 */  UNO_NAME_GRID_SNAP_TO_CHARS,
 /* 0726 */  UNO_NAME_GRID_STANDARD_PAGE_MODE,
-/* 0727 */  SW_PROPNAME_END
+/* 0727 */  UNO_NAME_TABLE_BORDER_DISTANCES,
+/* 0728 */  SW_PROPNAME_END
 };
 
 
