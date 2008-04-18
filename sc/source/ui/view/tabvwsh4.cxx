@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh4.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1523,7 +1523,9 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         if ( eFunc == KEYFUNC_COPY || eFunc == KEYFUNC_CUT )
         {
             ScRange aDummy;
-            if ( !GetViewData()->GetSimpleArea( aDummy ) )
+            ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy );
+            if ( eMarkType != SC_MARK_SIMPLE &&
+                    !(eFunc == KEYFUNC_COPY && eMarkType == SC_MARK_SIMPLE_FILTERED) )
             {
                 ErrorMessage(STR_NOMULTISELECT);
                 bUsed = TRUE;
