@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "tokens.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
@@ -54,6 +55,14 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 
 namespace oox { namespace drawingml {
+
+// ============================================================================
+
+CreateShapeCallback::~CreateShapeCallback()
+{
+}
+
+// ============================================================================
 
 Shape::Shape( const sal_Char* pServiceName )
 : mpLinePropertiesPtr( new LineProperties() )
@@ -83,8 +92,8 @@ void Shape::setDefaults()
     const OUString sTextUpperDistance( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
     const OUString sTextRightDistance( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
     const OUString sTextLowerDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-    maShapeProperties[ sTextAutoGrowHeight ] <<= sal_False;
-    maShapeProperties[ sTextWordWrap ] <<= sal_True;
+    maShapeProperties[ sTextAutoGrowHeight ] <<= false;
+    maShapeProperties[ sTextWordWrap ] <<= true;
     maShapeProperties[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
     maShapeProperties[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
     maShapeProperties[ sTextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
@@ -128,7 +137,7 @@ void Shape::addShape(
     }
 }
 
-void Shape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
+void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
     mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     maShapeProperties = rReferencedShape.maShapeProperties;
@@ -203,40 +212,6 @@ void Shape::addChilds(
         (*aIter++)->addShape( rFilterBase, rxTheme, rxShapes, pShapeRect, pShapeMap );
     }
 }
-
-void applyPropertyMap( uno::Reference< drawing::XShape >& rxShape, PropertyMap& rPropertyMap )
-{
-    if( !rPropertyMap.empty() )
-    {
-        Reference< XMultiPropertySet > xMSet( rxShape, UNO_QUERY );
-        if( xMSet.is() )
-        {
-            try
-            {
-                Sequence< OUString > aNames;
-                Sequence< Any > aValues;
-                rPropertyMap.makeSequence( aNames, aValues );
-                xMSet->setPropertyValues( aNames,  aValues);
-            }
-            catch( Exception& )
-            {
-            }
-        }
-        else
-        {
-            uno::Reference< beans::XPropertySet > xSet( rxShape, uno::UNO_QUERY_THROW );
-            uno::Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-
-            for( PropertyMap::const_iterator aIter( rPropertyMap.begin() ); aIter != rPropertyMap.end(); aIter++ )
-            {
-                if ( xInfo->hasPropertyByName( (*aIter).first ) )
-                    xSet->setPropertyValue( (*aIter).first, (*aIter).second );
-            }
-        }
-    }
-}
-
-
 
 Reference< XShape > Shape::createAndInsert(
         const ::oox::core::XmlFilterBase& rFilterBase,
@@ -374,6 +349,10 @@ Reference< XShape > Shape::createAndInsert(
         aFillProperties.apply( getFillProperties() );
         aShapeProperties.insert( getShapeProperties().begin(), getShapeProperties().end() );
 
+        // add properties from textbody to shape properties
+        if( mpTextBody.get() )
+            aShapeProperties.insert( mpTextBody->getTextProperties().begin(), mpTextBody->getTextProperties().end() );
+
         // applying properties
         if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
             mpGraphicPropertiesPtr->pushToPropSet( rFilterBase, xSet, 0 );
@@ -389,10 +368,11 @@ Reference< XShape > Shape::createAndInsert(
         {
             const Any* pAutoGrowHeight = aShapeProperties.getPropertyValue( sTextAutoGrowHeight );
             if ( pAutoGrowHeight )
-                xSet->setPropertyValue( sTextAutoGrowHeight, Any( sal_False ) );
+                xSet->setPropertyValue( sTextAutoGrowHeight, Any( false ) );
         }
 
-        applyPropertyMap( xShape, aShapeProperties );
+        PropertySet aPropSet( xShape );
+        aPropSet.setProperties( aShapeProperties );
 
         if( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, xShape );
@@ -408,6 +388,11 @@ Reference< XShape > Shape::createAndInsert(
             }
         }
     }
+
+    // use a callback for further processing on the XShape (e.g. charts)
+    if( xShape.is() && mxCreateCallback.get() )
+        mxCreateCallback->onCreateXShape( xShape );
+
     return xShape;
 }
 
@@ -472,21 +457,21 @@ void Shape::setShapeStyleColors( const oox::core::XmlFilterBase& rFilterBase,
     {
         switch( (*aShapeStylesColorIter).first )
         {
-            case oox::drawingml::SHAPESTYLE_ln :
+            case SHAPESTYLE_ln :
             {
                 if ( ( !mpLinePropertiesPtr->getLineColor()->isUsed() ) && ( (*aShapeStylesColorIter).second)->isUsed() )
                     rLineProperties.getLineColor() = (*aShapeStylesColorIter).second;
 
             }
             break;
-            case oox::drawingml::SHAPESTYLE_fill :
+            case SHAPESTYLE_fill :
             {
                 if ( ( !mpFillPropertiesPtr->getFillColor()->isUsed() ) && ( (*aShapeStylesColorIter).second)->isUsed() )
                     rFillProperties.getFillColor() = (*aShapeStylesColorIter).second;
             }
-            case oox::drawingml::SHAPESTYLE_effect :
+            case SHAPESTYLE_effect :
             break;
-            case oox::drawingml::SHAPESTYLE_font :
+            case SHAPESTYLE_font :
             {
                 const rtl::OUString sCharColor( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ) );
                 if ( rShapeProperties.find( sCharColor ) == rShapeProperties.end() )
