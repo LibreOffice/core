@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapperTableManager.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +39,14 @@
 namespace writerfilter {
 namespace dmapper {
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
-typedef TableManager<Handle_t , PropertyMapPtr > DomainMapperTableManager_Base_t;
+typedef TableManager<Handle_t , TablePropertyMapPtr > DomainMapperTableManager_Base_t;
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
     sal_uInt32      m_nRow;
     sal_uInt32      m_nCell;
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
-    sal_Int32       m_nGapHalf; // necessary value to calculate width and columns
-    sal_Int32       m_nLeftMargin; // to-be-combined width m_nGapHalf
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
-    bool            m_bFullWidth; //width is set to full, disable setting of different orientation values
     bool            m_bOOXML;
     ::rtl::OUString m_sTableStyleName;
     PropertyMapPtr  m_pTableStyleTextProperies;
