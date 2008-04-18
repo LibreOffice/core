@@ -12,7 +12,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: gen_strings.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,7 @@ use strict 'vars';
 
 my $my_lang = 'en-US';
 my $plist = 'Info.plist';
-my $outfile;
+my $lines = 0;
 
 while ($_ = $ARGV[0], /^-/) {
   shift;
@@ -81,31 +81,40 @@ while (<SOURCE>) {
 
 close (SOURCE);
 
-# open input file (Info.plist)
-unless (open(SOURCE, $ARGV[0])) {
-  print STDERR "Can't open $ARGV[0] file: $!\n";
-  return;
-}
+print_lang($my_lang);
+print_lang('en-US') unless $lines > 0;
 
-my $last_section;
+sub print_lang
+{
+  my ($this_lang) = @_;
 
-while (<SOURCE>) {
+  # open input file (documents.ulf)
+  unless (open(SOURCE, $ARGV[0])) {
+    print STDERR "Can't open $ARGV[0] file: $!\n";
+    return;
+  }
 
-  if ( /\[(.*)\]/ ) {
-    $last_section = $1;
-  } else {
-    # split locale = "value" into 2 strings
-    my ($lang, $value) = split ' = ';
+  my $last_section;
 
-    if ( $lang ne $_ && $lang eq $my_lang && exists $documents{$last_section} ) {
-      # replacing product variable doesn't work inside zip files and also not for UTF-16
-      next if /%PRODUCTNAME/;
-#      s/%PRODUCTNAME/\${FILEFORMATNAME} \${FILEFORMATVERSION}/g;
-      s/$lang/"$documents{$last_section}"/;
-      s/\n/;\n/;
-      print;
+  while (<SOURCE>) {
+
+    if ( /\[(.*)\]/ ) {
+      $last_section = $1;
+    } else {
+      # split locale = "value" into 2 strings
+      my ($lang, $value) = split ' = ';
+
+      if ( $lang ne $_ && $lang eq $this_lang && exists $documents{$last_section} ) {
+        # replacing product variable doesn't work inside zip files and also not for UTF-16
+        next if /%PRODUCTNAME/;
+#        s/%PRODUCTNAME/\${FILEFORMATNAME} \${FILEFORMATVERSION}/g;
+        s/$lang/"$documents{$last_section}"/;
+        s/\n/;\n/;
+        print;
+        $lines += 1;
+      }
     }
   }
-}
 
-close (SOURCE);
+  close (SOURCE);
+}
