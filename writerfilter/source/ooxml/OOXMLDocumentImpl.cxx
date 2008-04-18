@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocumentImpl.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,7 @@ using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
 (OOXMLStream::Pointer_t pStream)
-: mpStream(pStream)
+: mpStream(pStream), mXNoteType(0)
 {
 }
 
@@ -112,17 +112,36 @@ const rtl::OUString & OOXMLDocumentImpl::getXNoteId() const
     return msXNoteId;
 }
 
+void OOXMLDocumentImpl::setXNoteType(const Id & nId)
+{
+    mXNoteType = nId;
+}
+
+const Id & OOXMLDocumentImpl::getXNoteType() const
+{
+    return mXNoteType;
+}
+
+const ::rtl::OUString & OOXMLDocumentImpl::getTarget() const
+{
+    return mpStream->getTarget();
+}
+
 writerfilter::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
 {
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
 
-    return writerfilter::Reference<Stream>::Pointer_t(new OOXMLDocumentImpl(pStream));
+    OOXMLDocumentImpl * pTemp;
+    writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
+    pTemp->setModel(mxModel);
+    return pRet;
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OUString & rId)
+OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rType,
+                                  const rtl::OUString & rId)
 {
 #ifdef DEBUG_ELEMENT
     string tmp = "<getXNoteStream id=\"";
@@ -135,33 +154,60 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const rtl::OU
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     OOXMLDocumentImpl * pDocument = new OOXMLDocumentImpl(pStream);
     pDocument->setXNoteId(rId);
+    pDocument->setXNoteType(rType);
 
     return writerfilter::Reference<Stream>::Pointer_t(pDocument);
 }
 
 void OOXMLDocumentImpl::resolveFootnote(Stream & rStream,
+                                        const Id & rType,
                                         const rtl::OUString & rNoteId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::FOOTNOTES, rNoteId);
+        getXNoteStream(OOXMLStream::FOOTNOTES, rType, rNoteId);
 
-    resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_footnote);
+    Id nId;
+    switch (rType)
+    {
+    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator:
+    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_continuationSeparator:
+        nId = rType;
+        break;
+    default:
+        nId = NS_rtf::LN_footnote;
+        break;
+    }
+
+    resolveFastSubStreamWithId(rStream, pStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveEndnote(Stream & rStream,
+                                       const Id & rType,
                                        const rtl::OUString & rNoteId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::ENDNOTES, rNoteId);
+        getXNoteStream(OOXMLStream::ENDNOTES, rType, rNoteId);
 
-    resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_endnote);
+    Id nId;
+    switch (rType)
+    {
+    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_separator:
+    case NS_ooxml::LN_Value_wordprocessingml_ST_FtnEdn_continuationSeparator:
+        nId = rType;
+        break;
+    default:
+        nId = NS_rtf::LN_endnote;
+        break;
+    }
+
+    resolveFastSubStreamWithId(rStream, pStream, nId);
 }
 
 void OOXMLDocumentImpl::resolveComment(Stream & rStream,
                                        const rtl::OUString & rId)
 {
     writerfilter::Reference<Stream>::Pointer_t pStream =
-        getXNoteStream(OOXMLStream::COMMENTS, rId);
+        getXNoteStream(OOXMLStream::COMMENTS, 0, rId);
 
     resolveFastSubStreamWithId(rStream, pStream, NS_rtf::LN_annotation);
 }
@@ -293,7 +339,7 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const ::
 {
     OOXMLStream::Pointer_t pStream(OOXMLDocumentFactory::createStream(mpStream, rId));
 
-    return pStream->getInputStream();
+    return pStream->getDocumentStream();
 }
 
 string OOXMLDocumentImpl::getType() const
@@ -323,7 +369,12 @@ uno::Reference<drawing::XShapes> OOXMLDocumentImpl::getShapes()
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStream()
 {
-    return mpStream->getInputStream();
+    return mpStream->getDocumentStream();
+}
+
+uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
+{
+    return mpStream->getStorageStream();
 }
 
 OOXMLDocument *
