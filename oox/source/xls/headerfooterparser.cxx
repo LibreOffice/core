@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: headerfooterparser.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -585,12 +585,12 @@ void HeaderFooterParserImpl::convertFontColor( const OUString& rColor )
     OSL_ENSURE( rColor.getLength() == 6, "HeaderFooterParserImpl::convertFontColor - invalid font color code" );
     if( (rColor[ 2 ] == '+') || (rColor[ 2 ] == '-') )
         // theme color: TTSNNN (TT = decimal theme index, S = +/-, NNN = decimal tint/shade in percent)
-        maFontData.maColor.set(
-            XML_theme, rColor.copy( 0, 2 ).toInt32(),
+        maFontData.maColor.setTheme(
+            rColor.copy( 0, 2 ).toInt32(),
             static_cast< double >( rColor.copy( 2 ).toInt32() ) / 100.0 );
     else
         // RGB color: RRGGBB
-        maFontData.maColor.set( XML_rgb, rColor.toInt32( 16 ) );
+        maFontData.maColor.setRgb( rColor.toInt32( 16 ) );
 }
 
 void HeaderFooterParserImpl::finalizePortion()
