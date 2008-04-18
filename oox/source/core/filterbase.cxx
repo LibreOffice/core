@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterbase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,17 +211,17 @@ StorageRef FilterBase::getStorage() const
     return mxImpl->mxStorage;
 }
 
-StorageRef FilterBase::openSubStorage( const OUString& rStorageName, bool bCreate )
+StorageRef FilterBase::openSubStorage( const OUString& rStorageName, bool bCreate ) const
 {
     return mxImpl->mxStorage->openSubStorage( rStorageName, bCreate );
 }
 
-Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName )
+Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName ) const
 {
     return mxImpl->mxStorage->openInputStream( rStreamName );
 }
 
-Reference< XOutputStream > FilterBase::openOutputStream( const OUString& rStreamName )
+Reference< XOutputStream > FilterBase::openOutputStream( const OUString& rStreamName ) const
 {
     return mxImpl->mxStorage->openOutputStream( rStreamName );
 }
