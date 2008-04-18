@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themebuffer.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,13 +57,6 @@ public:
     sal_Int32           getColorByToken( sal_Int32 nToken ) const;
     /** Returns the theme color with the specified index. */
     sal_Int32           getColorByIndex( sal_Int32 nIndex ) const;
-
-    /** Returns the system color referred by the specified token. */
-    static sal_Int32    getSystemColor( sal_Int32 nElement, sal_Int32 nDefaultColor );
-    /** Returns the system background color (window color). */
-    static sal_Int32    getSystemWindowColor();
-    /** Returns the system text color (window text color). */
-    static sal_Int32    getSystemWindowTextColor();
 
     /** Returns the default font data for the current file type. */
     inline const OoxFontData& getDefaultFontData() const { return *mxDefFontData; }
