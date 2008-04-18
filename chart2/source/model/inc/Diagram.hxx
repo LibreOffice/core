@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Diagram.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,6 +100,16 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XFastPropertySet ____
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    /// make original interface function visible again
+    using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
+
+    virtual void SAL_CALL getFastPropertyValue(
+        ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
 //  virtual sal_Bool SAL_CALL convertFastPropertyValue
 //         ( ::com::sun::star::uno::Any & rConvertedValue,
