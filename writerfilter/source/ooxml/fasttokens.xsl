@@ -9,7 +9,7 @@
  
   $RCSfile: fasttokens.xsl,v $
  
-  $Revision: 1.3 $
+  $Revision: 1.4 $
  
   This file is part of OpenOffice.org.
  
@@ -87,7 +87,6 @@ using namespace ::std;
 using namespace ::com::sun::star;
 </xsl:text>
 <xsl:call-template name="fasttokens"/>
-<xsl:call-template name="namespaceids"/>
 <xsl:text>
 string fastTokenToId(sal_uInt32 nToken);
 
