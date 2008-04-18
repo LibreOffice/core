@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodypropertiescontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,16 +48,16 @@ namespace oox { namespace drawingml {
 
 // CT_TextBodyProperties
 TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
-    const Reference< XFastAttributeList >& xAttributes, Shape& rShape )
+    const Reference< XFastAttributeList >& xAttributes, PropertyMap& rTextBodyProp )
 : ContextHandler( rParent )
-, mrShape( rShape )
+, mrTextBodyProp( rTextBodyProp )
 {
     AttributeList attribs(xAttributes);
 
     // ST_TextWrappingType
     sal_Int32 nWrappingType = xAttributes->getOptionalValueToken( XML_wrap, XML_square );
     const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
-    mrShape.getShapeProperties()[ sTextWordWrap ] <<= (nWrappingType == XML_square);
+    mrTextBodyProp[ sTextWordWrap ] <<= (nWrappingType == XML_square);
 
     // ST_Coordinate
     const OUString sTextLeftDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
@@ -67,19 +67,19 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     OUString sValue;
     sValue = xAttributes->getOptionalValue( XML_lIns );
     sal_Int32 nLeftInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrShape.getShapeProperties()[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
+    mrTextBodyProp[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( nLeftInset );
 
     sValue = xAttributes->getOptionalValue( XML_tIns );
     sal_Int32 nTopInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrShape.getShapeProperties()[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
+    mrTextBodyProp[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( nTopInset );
 
     sValue = xAttributes->getOptionalValue( XML_rIns );
     sal_Int32 nRightInset  = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 91440 / 360 );
-    mrShape.getShapeProperties()[ sTextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
+    mrTextBodyProp[ sTextRightDistance ] <<= static_cast< sal_Int32 >( nRightInset );
 
     sValue = xAttributes->getOptionalValue( XML_bIns );
     sal_Int32 nBottonInset = ( sValue.getLength() != 0 ? GetCoordinate(  sValue ) : 45720 / 360 );;
-    mrShape.getShapeProperties()[ sTextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
+    mrTextBodyProp[ sTextLowerDistance ] <<= static_cast< sal_Int32 >( nBottonInset );
 
 
     // ST_TextAnchoringType
@@ -131,11 +131,11 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
 
             // EG_TextAutofit
             case NMSP_DRAWINGML|XML_noAutofit:
-                mrShape.getShapeProperties()[ sTextAutoGrowHeight ] <<= sal_False;  // CT_TextNoAutofit
+                mrTextBodyProp[ sTextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
                 break;
             case NMSP_DRAWINGML|XML_normAutofit:    // CT_TextNormalAutofit
             case NMSP_DRAWINGML|XML_spAutoFit:
-                mrShape.getShapeProperties()[ sTextAutoGrowHeight ] <<= sal_True;
+                mrTextBodyProp[ sTextAutoGrowHeight ] <<= true;
                 break;
 
             case NMSP_DRAWINGML|XML_scene3d:        // CT_Scene3D
