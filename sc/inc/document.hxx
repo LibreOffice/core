@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,7 +185,7 @@ struct ScDocStat
     USHORT  nPageCount;
 };
 
-// nicht 11 Parameter bei CopyBlockFromClip, konstante Werte der Schleife hier
+// The constant parameters to CopyBlockFromClip
 struct ScCopyBlockFromClipParams
 {
     ScDocument* pRefUndoDoc;
@@ -950,13 +950,16 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                     const ScCopyBlockFromClipParams* pCBFCP );
     void            CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy,
-                                    const ScCopyBlockFromClipParams* pCBFCP );
+                                    const ScCopyBlockFromClipParams* pCBFCP,
+                                    SCROW & rClipStartRow );
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, USHORT nInsFlag );
     void            BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark, USHORT nInsFlag );
+    /** If pDestRanges is given it overrides rDestRange, rDestRange in this
+        case is the overall encompassing range. */
     void            CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                     USHORT nInsFlag,
                                     ScDocument* pRefUndoDoc = NULL,
@@ -964,7 +967,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                     BOOL bResetCut = TRUE,
                                     BOOL bAsLink = FALSE,
                                     BOOL bIncludeFiltered = TRUE,
-                                    BOOL bSkipAttrForEmpty = FALSE );
+                                    BOOL bSkipAttrForEmpty = FALSE,
+                                    const ScRangeList * pDestRanges = NULL );
 
     void            GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered);
     void            GetClipStart(SCCOL& nClipX, SCROW& nClipY);
