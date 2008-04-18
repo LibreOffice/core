@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docbm.cxx,v $
- * $Revision: 1.24 $
+ *
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +47,7 @@
 #include <crossrefbookmark.hxx>
 // <--
 #include <undobj.hxx>
+#include <rolbck.hxx>
 #include <pam.hxx>
 #include <mvsave.hxx>
 #include <swserv.hxx>
@@ -632,6 +634,9 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     }
 }
 
+
+
+
 /*  */
 
 
@@ -766,21 +771,37 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     const SwBookmarks& rBkmks = pDoc->getBookmarks();
     for( ; aSave.GetCount() < rBkmks.Count(); aSave.IncCount() )
     {
+        bool bEqual = false;
+        bool bLower = false;
         const SwBookmark* pBkmk = rBkmks[ aSave.GetCount() ];
         if( pBkmk->GetBookmarkPos().nNode.GetIndex() == nNode &&
-            pBkmk->GetBookmarkPos().nContent.GetIndex() < nCntnt )
+            pBkmk->GetBookmarkPos().nContent.GetIndex() <= nCntnt )
         {
-            aSave.SetContent( pBkmk->GetBookmarkPos().nContent.GetIndex() );
-            aSave.Add( rSaveArr );
+            if( pBkmk->GetBookmarkPos().nContent.GetIndex() < nCntnt )
+            {
+                bLower = true; // a hint for the other position...
+                aSave.SetContent( pBkmk->GetBookmarkPos().nContent.GetIndex() );
+                aSave.Add( rSaveArr );
+            }
+            else // if a bookmark position is equal nCntnt, the other position
+                bEqual = true; // has to decide if it is added to the array
         }
 
         if( pBkmk->GetOtherBookmarkPos() && pBkmk->GetOtherBookmarkPos()->nNode.GetIndex() ==
-            nNode && pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() < nCntnt )
+            nNode && pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() <= nCntnt )
         {
-            aSave.SetContent( pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() );
-            aSave.IncType();
-            aSave.Add( rSaveArr );
-            aSave.DecType();
+            if( bLower || pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() < nCntnt )
+            {
+                if( bEqual )
+                { // the other position is before, the (main) position is equal
+                    aSave.SetContent( pBkmk->GetBookmarkPos().nContent.GetIndex() );
+                    aSave.Add( rSaveArr );
+                }
+                aSave.SetContent( pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() );
+                aSave.IncType();
+                aSave.Add( rSaveArr );
+                aSave.DecType();
+            }
         }
     }
 
@@ -1120,12 +1141,12 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
     const SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
-    while( rSaveArr.Count() >= 2 )
+    USHORT n = 0;
+    while( n < rSaveArr.Count() )
     {
-        USHORT n = 0;
         _SwSaveTypeCountContent aSave( rSaveArr, n );
         if( aSave.GetContent() >= nChkLen )
-            rSaveArr[ 1 ] -= nChkLen;
+            rSaveArr[ n-1 ] -= nChkLen;
         else
         {
             SwPosition* pPos = 0;
@@ -1267,8 +1288,8 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                 pPos->nNode = rNd;
                 pPos->nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
             }
-
-            rSaveArr.Remove( 0, 2 );
+            n -= 2;
+            rSaveArr.Remove( n, 2 );
         }
     }
 }
