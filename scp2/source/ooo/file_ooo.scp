@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.239 $
+ * $Revision: 1.240 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2859,6 +2859,48 @@ End
 #endif
 #endif
 
+File gid_File_Images_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesCrystal_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_crystal.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesHicontrast_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_hicontrast.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesIndustrial_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_industrial.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesTango_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_tango.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesClassic8_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_classic8.zip";
+    Styles = (PACKED);
+End
+
 File gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Spellchecker_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2879,5 +2921,3 @@ File gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Thesaurus_Xcu
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic;
     Name = "/registry/data/org/openoffice/Office/Linguistic-lingucomponent-thesaurus.xcu";
 End
-
-
