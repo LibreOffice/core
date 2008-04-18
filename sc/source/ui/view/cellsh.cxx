@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,7 +120,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScRange aMarkRange;
-    BOOL bSimpleArea = GetViewData()->GetSimpleArea( aMarkRange );
+    ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange );
+    BOOL bSimpleArea = (eMarkType == SC_MARK_SIMPLE);
     BOOL bOnlyNotBecauseOfMatrix;
     BOOL bEditable = pTabViewShell->SelectionEditable( &bOnlyNotBecauseOfMatrix );
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -205,7 +206,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:                      // Kopieren
-                bDisable = (!bSimpleArea);
+                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED);
                 // nur wegen Matrix nicht editierbar? Matrix nicht zerreissen
                 //! schlaegt nicht zu, wenn geschuetzt UND Matrix, aber damit
                 //! muss man leben.. wird in Copy-Routine abgefangen, sonst
@@ -480,7 +481,9 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
         if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = TRUE;
-        if (GetViewData()->IsMultiMarked())
+        ScRange aDummy;
+        ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy);
+        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
             bDisable = TRUE;
     }
 
@@ -548,7 +551,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_ADDRESS:
                 {
                     ScRange aRange;
-                    if ( pData->GetSimpleArea( aRange ) )
+                    if ( pData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                     {
                         String aStr;
                         USHORT nFlags = SCA_VALID | SCA_TAB_3D;
@@ -567,7 +570,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     //  #43343# immer Cursorposition
 #if 0
                     ScRange aRange;
-                    if (GetViewData()->GetSimpleArea(aRange,TRUE))
+                    if (GetViewData()->GetSimpleArea(aRange,TRUE) == SC_MARK_SIMPLE)
                     {
                         nNoteCol = aRange.aStart.Col();
                         nNoteRow = aRange.aStart.Row();
@@ -984,9 +987,21 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 ScViewUtil::HideDisabledSlot( rSet, pData->GetBindings(), nWhich );
             break;
 
+            case FID_USE_NAME:
+                {
+                    if ( pDocSh && pDocSh->IsDocShared() )
+                        rSet.DisableItem( nWhich );
+                    else
+                    {
+                        ScRange aRange;
+                        if ( pData->GetSimpleArea( aRange ) != SC_MARK_SIMPLE )
+                            rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
             case FID_DEFINE_NAME:
             case FID_INSERT_NAME:
-            case FID_USE_NAME:
             case SID_DEFINE_COLROWNAMERANGES:
                 {
                     if ( pDocSh && pDocSh->IsDocShared() )
