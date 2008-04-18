@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textcharacterproperties.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,18 +76,14 @@ void TextCharacterProperties::apply( const TextCharacterPropertiesPtr& rSourceTe
 }
 void TextCharacterProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < XPropertySet > & xPropSet ) const
 {
-    PropertySet aPropSet( xPropSet );
-    Sequence< OUString > aNames;
-    Sequence< Any > aValues;
-
 //  maTextCharacterPropertyMap.dump_debug("TextCharacter props");
-    maTextCharacterPropertyMap.makeSequence( aNames, aValues );
-    aPropSet.setProperties( aNames, aValues );
+
+    PropertySet aPropSet( xPropSet );
+    aPropSet.setProperties( maTextCharacterPropertyMap );
     if ( maCharColorPtr->isUsed() )
     {
         const rtl::OUString sCharColor( CREATE_OUSTRING( "CharColor" ) );
         aPropSet.setProperty( sCharColor, maCharColorPtr->getColor( rFilterBase ) );
-
     }
 
     sal_Bool bHasUnderline = sal_False;
@@ -109,11 +105,7 @@ void TextCharacterProperties::pushToPropSet( const ::oox::core::XmlFilterBase& r
 void TextCharacterProperties::pushToUrlFieldPropSet( const Reference < XPropertySet > & xPropSet ) const
 {
     PropertySet aPropSet( xPropSet );
-    Sequence< OUString > aNames;
-    Sequence< Any > aValues;
-
-    maHyperlinkPropertyMap.makeSequence( aNames, aValues );
-    aPropSet.setProperties( aNames, aValues );
+    aPropSet.setProperties( maHyperlinkPropertyMap );
 }
 
 float TextCharacterProperties::getCharacterSize( float fDefault ) const
