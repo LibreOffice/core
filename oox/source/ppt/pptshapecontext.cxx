@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptshapecontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,7 +188,9 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
     case NMSP_PPT|XML_txBody:
     {
-        xRet = new oox::drawingml::TextBodyContext( *this, *mpShapePtr );
+        oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+        mpShapePtr->setTextBody( xTextBody );
+        xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
         break;
     }
     }
