@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: themebuffer.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #include "oox/xls/stylespropertyhelper.hxx"
 
 using ::oox::drawingml::ClrScheme;
+using ::oox::drawingml::Color;
 using ::oox::drawingml::Theme;
 using ::oox::drawingml::ThemePtr;
 
@@ -136,29 +137,7 @@ sal_Int32 ThemeBuffer::getColorByIndex( sal_Int32 nIndex ) const
     static const sal_Int32 spnColorTokens[] = {
         XML_lt1, XML_dk1, XML_lt2, XML_dk2, XML_accent1, XML_accent2,
         XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink, XML_folHlink };
-
-    sal_Int32 nColor = 0;
-    if( mxTheme.get() )
-        if( const ClrScheme* pClrScheme = mxTheme->getClrScheme().get() )
-            if( pClrScheme->getColor( STATIC_ARRAY_SELECT( spnColorTokens, nIndex, XML_TOKEN_INVALID ), nColor ) )
-                return nColor;
-    return API_RGB_TRANSPARENT;
-}
-
-sal_Int32 ThemeBuffer::getSystemColor( sal_Int32 nElement, sal_Int32 nDefaultColor )
-{
-    sal_Int32 nColor = 0;
-    return ClrScheme::getSystemColor( nColor, nElement ) ? nColor : nDefaultColor;
-}
-
-sal_Int32 ThemeBuffer::getSystemWindowColor()
-{
-    return getSystemColor( XML_window, 0xFFFFFF );
-}
-
-sal_Int32 ThemeBuffer::getSystemWindowTextColor()
-{
-    return getSystemColor( XML_windowText, 0x000000 );
+    return getColorByToken( STATIC_ARRAY_SELECT( spnColorTokens, nIndex, XML_TOKEN_INVALID ) );
 }
 
 // ============================================================================
