@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formulaparser.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
+#include <com/sun/star/sheet/AddressConvention.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
@@ -1108,8 +1109,7 @@ OoxFormulaParserImpl::OoxFormulaParserImpl( const WorkbookHelper& rHelper, const
     OSL_ENSURE( mxParser.is(), "OoxFormulaParserImpl::OoxFormulaParserImpl - cannot create formula parser" );
     maParserProps.set( mxParser );
     maParserProps.setProperty( CREATE_OUSTRING( "CompileEnglish" ), true );
-    maParserProps.setProperty( CREATE_OUSTRING( "R1C1Notation" ), false );
-    maParserProps.setProperty( CREATE_OUSTRING( "Compatibility3DNotation" ), true );
+    maParserProps.setProperty( CREATE_OUSTRING( "FormulaConvention" ), ::com::sun::star::sheet::AddressConvention::XL_A1 );
     maParserProps.setProperty( CREATE_OUSTRING( "IgnoreLeadingSpaces" ), false );
     maParserProps.setProperty( CREATE_OUSTRING( "OpCodeMap" ), mrFuncProv.getOoxParserMap() );
 }
