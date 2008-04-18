@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,8 @@ WindowsCustomAction gid_Customaction_Regmsdocmsidll1
 	Source = "reg4msdocmsi.dll";
 	Target = "InstallUiSequenceEntry";
 	Inbinarytable = 1;
-	Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "_IsSetupTypeMin = \"Typical\"", "1");
-	Assignment2 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "1", "1");
+	Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "(_IsSetupTypeMin = \"Typical\") AND (BETAPRODUCT <> 1)", "1");
+	Assignment2 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "BETAPRODUCT <> 1", "1");
 	Assignment3 = ("ControlCondition", "FileTypeDialog", "CheckBox1", "Disable", "(\!gm_p_Wrt_Bin=2 And \&gm_p_Wrt_Bin=-1) Or (\!gm_p_Wrt_Bin=3 And \&gm_p_Wrt_Bin=2)");
 	Assignment4 = ("ControlCondition", "FileTypeDialog", "CheckBox2", "Disable", "(\!gm_p_Calc_Bin=2 And \&gm_p_Calc_Bin=-1) Or (\!gm_p_Calc_Bin=3 And \&gm_p_Calc_Bin=2)");
 	Assignment5 = ("ControlCondition", "FileTypeDialog", "CheckBox3", "Disable", "(\!gm_p_Impress_Bin=2 And \&gm_p_Impress_Bin=-1) Or (\!gm_p_Impress_Bin=3 And \&gm_p_Impress_Bin=2)");
