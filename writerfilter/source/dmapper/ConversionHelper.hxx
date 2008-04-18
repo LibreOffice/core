@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConversionHelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,7 @@ namespace ConversionHelper{
     sal_Int32 SnapPageDimension( sal_Int32 nVal );
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
     ::com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString );
+    sal_Int16 ConvertNumberingType(sal_Int32 nNFC);
 
 } // namespace ConversionHelper
 } //namespace dmapper
