@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocumentImpl.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
     rtl::OUString msXNoteId;
+    Id mXNoteType;
 
     uno::Reference<frame::XModel> mxModel;
     uno::Reference<drawing::XShapes> mxShapes;
@@ -65,6 +66,7 @@ protected:
 
     writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType,
+                   const Id & rType,
                    const rtl::OUString & rNoteId);
 
 public:
@@ -76,8 +78,10 @@ public:
     virtual string getType() const;
 
     virtual void resolveFootnote(Stream & rStream,
+                                 const Id & rType,
                                  const rtl::OUString & rNoteId);
     virtual void resolveEndnote(Stream & rStream,
+                                const Id & rType,
                                 const rtl::OUString & rNoteId);
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
@@ -99,9 +103,13 @@ public:
     virtual void setShapes(uno::Reference<drawing::XShapes> xShapes);
     virtual uno::Reference<drawing::XShapes> getShapes();
     virtual uno::Reference<io::XInputStream> getInputStream();
+    virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);
     virtual void setXNoteId(const rtl::OUString & rId);
     virtual const ::rtl::OUString & getXNoteId() const;
+    virtual void setXNoteType(const Id & rId);
+    virtual const Id & getXNoteType() const;
+    virtual const ::rtl::OUString & getTarget() const;
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX
