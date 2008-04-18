@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textliststyle.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,24 +33,22 @@
 namespace oox { namespace drawingml {
 
 TextListStyle::TextListStyle()
-    : maListStyle()
-    , maAggregationListStyle()
 {
-    int i;
-    for ( i = 0; i < 9; i++ )
-        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
-    for ( i = 0; i < 9; i++ )
-        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
+    for ( int i = 0; i < 9; i++ )
+    {
+        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties ) );
+        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties ) );
+    }
 }
+
 TextListStyle::~TextListStyle()
 {
 }
 
-void applyStyleList( const std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >& rSourceListStyle,
-        std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >& rDestListStyle )
+void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, TextParagraphPropertiesVector& rDestListStyle )
 {
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >::const_iterator aSourceListStyleIter( rSourceListStyle.begin() );
-    std::vector< ::oox::drawingml::TextParagraphPropertiesPtr >::iterator aDestListStyleIter( rDestListStyle.begin() );
+    TextParagraphPropertiesVector::const_iterator aSourceListStyleIter( rSourceListStyle.begin() );
+    TextParagraphPropertiesVector::iterator aDestListStyleIter( rDestListStyle.begin() );
     while( aSourceListStyleIter != rSourceListStyle.end() )
     {
         if ( aDestListStyleIter != rDestListStyle.end() )
@@ -59,15 +57,15 @@ void applyStyleList( const std::vector< ::oox::drawingml::TextParagraphPropertie
             aDestListStyleIter++;
         }
         else
-            rDestListStyle.push_back( TextParagraphPropertiesPtr( new oox::drawingml::TextParagraphProperties( *(*aSourceListStyleIter).get() ) ) );
+            rDestListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties( **aSourceListStyleIter ) ) );
         aSourceListStyleIter++;
     }
 }
 
-void TextListStyle::apply( const TextListStylePtr& rTextListStylePtr )
+void TextListStyle::apply( const TextListStyle& rTextListStyle )
 {
-    applyStyleList( rTextListStylePtr->getAggregationListStyle(), getAggregationListStyle() );
-    applyStyleList( rTextListStylePtr->getListStyle(), getListStyle() );
+    applyStyleList( rTextListStyle.getAggregationListStyle(), getAggregationListStyle() );
+    applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
 }
 
 } }
