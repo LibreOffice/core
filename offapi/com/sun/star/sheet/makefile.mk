@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.28 $
+# $Revision: 1.29 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,6 +51,7 @@ IDLFILES=\
     AccessibleSpreadsheetDocumentView.idl\
     AccessibleSpreadsheetPageView.idl\
     ActivationEvent.idl\
+    AddressConvention.idl\
     AddIn.idl\
     Border.idl\
     CellAnnotation.idl\
