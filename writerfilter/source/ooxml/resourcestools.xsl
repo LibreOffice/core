@@ -9,7 +9,7 @@
  *
  * $RCSfile: resourcestools.xsl,v $
  *
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@
  *
  * $RCSfile: resourcestools.xsl,v $
  *
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -557,10 +557,12 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
     <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="ancestor::rng:define">
       <xsl:variable name="definename" select="@name"/>
-      <xsl:for-each select="ancestor::namespace/resource[@name=$definename]/attribute[@name=$name]">
-        <xsl:call-template name="idtoqname">
-          <xsl:with-param name="id" select="@tokenid"/>
-        </xsl:call-template>
+      <xsl:for-each select="ancestor::namespace/resource[@name=$definename]">
+        <xsl:for-each select="./attribute[@name=$name]">
+          <xsl:call-template name="idtoqname">
+            <xsl:with-param name="id" select="@tokenid"/>
+          </xsl:call-template>
+        </xsl:for-each>
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
@@ -569,10 +571,12 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
     <xsl:variable name="name" select="@name"/>
     <xsl:for-each select="ancestor::rng:define">
       <xsl:variable name="definename" select="@name"/>
-      <xsl:for-each select="ancestor::namespace/resource[@name=$definename]/element[@name=$name]">
-        <xsl:call-template name="idtoqname">
-          <xsl:with-param name="id" select="@tokenid"/>
-        </xsl:call-template>
+      <xsl:for-each select="ancestor::namespace/resource[@name=$definename]">
+        <xsl:for-each select="./element[@name=$name]">
+          <xsl:call-template name="idtoqname">
+            <xsl:with-param name="id" select="@tokenid"/>
+          </xsl:call-template>
+        </xsl:for-each>
       </xsl:for-each>
     </xsl:for-each>
   </xsl:template>
@@ -785,6 +789,14 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:when test="@action='propagateCharacterProperties'">
     propagateCharacterProperties();
         </xsl:when>
+        <xsl:when test="@action='propagateCharacterPropertiesAsSet'">
+          <xsl:text>
+    propagateCharacterPropertiesAsSet(</xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@tokenid"/>
+    </xsl:call-template>
+    <xsl:text>);</xsl:text>
+        </xsl:when>
         <xsl:when test="@action='propagateTableProperties'">
     propagateTableProperties();
         </xsl:when>
@@ -797,9 +809,32 @@ uno::Reference &lt; xml::sax::XFastContextHandler &gt;
         <xsl:when test="@action='setHandle'">
     setHandle();
         </xsl:when>
+
+        <xsl:when test="@action='footnoteSeparator'">
+    footnoteSeparator();
+        </xsl:when>
+        <xsl:when test="@action='footnoteCont'">
+    footnoteCont();
+        </xsl:when>
+        <xsl:when test="@action='endnoteSeparator'">
+    endnoteSeparator();
+        </xsl:when> 
+        <xsl:when test="@action='endnoteCont'">
+    endnoteCont();
+        </xsl:when>
         <xsl:when test="@action='newProperty'">
           <xsl:text>
     OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::newProperty(this, </xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="@tokenid"/>
+    </xsl:call-template>
+    <xsl:text>, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
+    <xsl:value-of select="@value"/>
+    <xsl:text>")));</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='mark'">
+          <xsl:text>
+    OOXMLFastHelper&lt;OOXMLIntegerValue&gt;::mark(this, </xsl:text>
     <xsl:call-template name="idtoqname">
       <xsl:with-param name="id" select="@tokenid"/>
     </xsl:call-template>
@@ -1324,27 +1359,7 @@ public:
   static struct token *in_word_set (const char *str, unsigned int len);
 };
 }
-  </xsl:text>
-<xsl:for-each select="//namespace-alias">
-    <xsl:text>
-static const string sNS_</xsl:text>
-<xsl:value-of select="@alias"/>
-<xsl:text> = "</xsl:text>
-<xsl:value-of select="@name"/>
-<xsl:text>:";</xsl:text>
-</xsl:for-each>
-<xsl:for-each select=".//rng:element[@localname]|.//rng:attribute[@localname]">
-  <xsl:variable name="localname" select="@localname"/>
-  <xsl:if test="generate-id(.) = generate-id(key('same-token-name', $localname)[1])">
-    <xsl:text>
-static const string sLN_</xsl:text>
-<xsl:value-of select="$localname"/>
-<xsl:text> = "</xsl:text>
-<xsl:value-of select="$localname"/>
-<xsl:text>";</xsl:text>
-  </xsl:if>
-</xsl:for-each>
-<xsl:text>
+
 string fastTokenToId(sal_uInt32 nToken)
 {
   </xsl:text>
@@ -1358,10 +1373,10 @@ string fastTokenToId(sal_uInt32 nToken)
     case NS_</xsl:text>
     <xsl:value-of select="@alias"/>
     <xsl:text>:
-      sResult += sNS_</xsl:text>
-      <xsl:value-of select="@alias"/>
-      <xsl:text>;
-      break;</xsl:text>
+        sResult += "</xsl:text>
+        <xsl:value-of select="@alias"/>
+        <xsl:text>:";
+        break;</xsl:text>
     </xsl:for-each>
     <xsl:text>
     }
@@ -1375,9 +1390,9 @@ string fastTokenToId(sal_uInt32 nToken)
     case </xsl:text>    
     <xsl:call-template name="fastlocalname"/>
     <xsl:text>:
-        sResult +=  sLN_</xsl:text>
+        sResult +=  "</xsl:text>
         <xsl:value-of select="$localname"/>
-        <xsl:text>;
+        <xsl:text>";
         break;</xsl:text>        
     </xsl:if>
   </xsl:for-each>
@@ -1512,7 +1527,7 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
       </xsl:variable>
       <xsl:variable name="attrid">
         <xsl:call-template name="idforattr"/>
-      </xsl:variable>
+      </xsl:variable>      
       <xsl:if test="string-length($contextname) > 0 and string-length($attrid) > 0">
         <xsl:text>
         </xsl:text>
@@ -1533,6 +1548,8 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
                  <xsl:when test="@action='checkId'">
                <xsl:text>
            checkId(aValue);</xsl:text>
+                 </xsl:when>
+                 <xsl:when test="@action='checkXNoteType'">
                  </xsl:when>
                  <xsl:when test="@action='setXNoteId'">
                <xsl:text>
@@ -1766,7 +1783,7 @@ void </xsl:text>
                   <xsl:value-of select="$id"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:text>OOXML_FAST_TOKENS_END</xsl:text>
+                  <xsl:text>0</xsl:text>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:for-each>
@@ -2073,9 +2090,15 @@ OOXMLFastContextHandler::createFromStart
 (::sal_Int32 Element,
  const uno::Reference &lt; xml::sax::XFastAttributeList &gt; &amp; Attribs) 
 {
+#ifdef DEBUG_CREATE
+    string tmp = "&lt;createfromstart element=\"";
+    tmp += fastTokenToId(Element);
+    tmp += "\"&gt;";
+    logger("DEBUG", tmp);
+#endif
     uno::Reference &lt; xml::sax::XFastContextHandler &gt; xResult;</xsl:text>
 
-    <xsl:for-each select="//start">
+    <xsl:for-each select="//namespace/start">
       <xsl:variable name="name" select="@name"/>
       <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
         <xsl:text>    
@@ -2088,6 +2111,10 @@ OOXMLFastContextHandler::createFromStart
       </xsl:for-each>
     </xsl:for-each>
     <xsl:text>
+
+#ifdef DEBUG_CREATE
+    logger("DEBUG", "&lt;/createfromstart&gt;");
+#endif
 
     return xResult;
 }
@@ -2143,5 +2170,101 @@ void dumpAttribs
     logger("DEBUG", "&lt;/attribs&gt;");
 }</xsl:text>
   </xsl:template>
+
+<xsl:template name="createfastchildcontextname">
+  <xsl:text>createFastContextHandler_</xsl:text>
+  <xsl:value-of select="@name"/>
+</xsl:template>
+
+<xsl:template name="caselabeldefine">
+  <xsl:text>case CLASS_</xsl:text>
+  <xsl:value-of select="translate(ancestor::namespace/@name, '-', '_')"/>
+  <xsl:text>_</xsl:text>
+  <xsl:value-of select="@name"/>
+  <xsl:text>:</xsl:text>
+</xsl:template>
+
+<xsl:template name="createfastchildcontextswitchbodyref">
+  <xsl:variable name="definename">
+    <xsl:call-template name="searchdefinenamespace">
+      <xsl:with-param name="name" select="@name"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:for-each select="/model/namespace[@name=substring-before($definename, ':')]">
+    <xsl:for-each select="./rng:grammar/rng:define[@name=substring-after($definename, ':')]">
+      <xsl:call-template name="createfastchildcontextswitchbody"/>
+    </xsl:for-each>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="createfastchildcontextswitchbody">
+  <xsl:for-each select=".//rng:element">
+    <xsl:text>
+        </xsl:text>
+        <xsl:call-template name="caselabelfasttoken"/>
+        <xsl:text>
+            xResult.set(</xsl:text>
+            <xsl:call-template name="fastelementcreatestatement"/>
+            <xsl:text>);
+            break;</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each 
+      select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
+    <xsl:call-template name="createfastchildcontextswitchbodyref"/>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="createfastchildcontextswitch">
+  <xsl:variable name="body">
+    <xsl:call-template name="createfastchildcontextswitchbody"/>
+  </xsl:variable>
+  <xsl:if test="string-length($body) > 0">
+    <xsl:text>
+        switch(Element)
+        {</xsl:text>
+        <xsl:value-of select="$body"/>
+        <xsl:text>
+        default:
+            ;
+        }</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="createfastchildcontextlookup">
+  <xsl:text>
+uno::Reference&lt;XFastContextHandler&gt; </xsl:text>
+<xsl:call-template name="createfastchildcontextname"/>
+<xsl:text>(Id parent, Token_t Element)
+{
+    uno::Reference&lt;XFastContextHandler&gt; xResult;
+    switch (parent)
+    {</xsl:text>
+<xsl:for-each select="./rng:grammar/rng:define">
+  <xsl:variable name="do">
+    <xsl:call-template name="classfordefine"/>
+  </xsl:variable>
+  <xsl:if test="$do='1'">
+    <xsl:variable name="casebody">
+      <xsl:call-template name="createfastchildcontextswitch"/>
+    </xsl:variable>
+    <xsl:if test="string-length($casebody) > 0">
+      <xsl:text>
+    </xsl:text>
+    <xsl:call-template name="caselabeldefine"/>
+    <xsl:value-of select="$casebody"/>
+    <xsl:text>
+        break;</xsl:text>
+    </xsl:if>
+  </xsl:if>
+</xsl:for-each>
+<xsl:text>
+    default:
+        ;
+    }
+
+    return xResult;
+}
+</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>
