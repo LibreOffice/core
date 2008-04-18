@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ThreeDHelper.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,15 @@ public:
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
             , double fXAngleRad, double fYAngleRad, double fZAngleRad );
 
+    static void getRotationFromDiagram(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+            , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree );
+    static void setRotationToDiagram(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties
+            , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree );
+
     static void switchRightAngledAxes( const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
             , sal_Bool bRightAngledAxes, bool bRotateLights=true );
@@ -90,6 +99,9 @@ public:
             , double fCameraDistance );
     static void ensureCameraDistanceRange( double& rfCameraDistance );
     static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
+
+    static double CameraDistanceToPerspective( double fCameraDistance );
+    static double PerspectiveToCameraDistance( double fPerspective );
 
     static ThreeDLookScheme detectScheme( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram );
