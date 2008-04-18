@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -835,10 +835,18 @@ sub set_productdir_tag
     if ( $allvariables->{"UNIXPRODUCTNAME"} )
     {
         $productdir = $allvariables->{"UNIXPRODUCTNAME"};
-        if ( $allvariables->{"PRODUCTVERSION"} )
+
+        if ( $allvariables->{"BRANDPACKAGEVERSION"} )
         {
-            $productdir = $productdir . $allvariables->{"PRODUCTVERSION"};
+            $productdir = $productdir . $allvariables->{"BRANDPACKAGEVERSION"};
 #           if ( $allvariables->{"LCPRODUCTEXTENSION"} ) { $productdir = $productdir . $allvariables->{"LCPRODUCTEXTENSION"}; }
+        }
+        else
+        {
+            if ( $allvariables->{"PRODUCTVERSION"} )
+            {
+                $productdir = $productdir . $allvariables->{"PRODUCTVERSION"};
+            }
         }
     }
     my $tag = $indent . "<productdir>" . $productdir . "</productdir>" . "\n";
@@ -1286,13 +1294,14 @@ sub create_xpd_file
 
     my $modulegid = $onepackage->{'module'};
 
-    my $solslanguage = "";
-    if ( $installer::globals::issolarispkgbuild )
+    my $onelanguage = "";   #
+    my $solslanguage = "";  #
+    my $islanguagemodule = 0;   #
+    if ( $onepackage->{'islanguagemodule'} ) { $islanguagemodule = $onepackage->{'islanguagemodule'}; } #
+    if ( $islanguagemodule )    #
     {
-        if ( $onepackage->{'specificlanguage'} )
-        {
-            $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onepackage->{'specificlanguage'});
-        }
+        $onelanguage = $onepackage->{'language'};   #
+        if ( $installer::globals::issolarispkgbuild ) { $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onelanguage); }  #
     }
 
     installer::logger::include_header_into_logfile("Creating xpd file ($modulegid):");
