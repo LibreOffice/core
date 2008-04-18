@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsettings.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ struct OoxSheetViewData
     typedef RefMap< sal_Int32, OoxSheetSelectionData > OoxSelectionDataMap;
 
     OoxSelectionDataMap maSelMap;                       /// Selections of all panes.
-    OoxColor            maGridColor;                    /// Grid color.
+    Color               maGridColor;                    /// Grid color.
     ::com::sun::star::table::CellAddress maFirstPos;    /// First visible cell.
     ::com::sun::star::table::CellAddress maSecondPos;   /// First visible cell in additional panes.
     sal_Int32           mnWorkbookViewId;               /// Index into list of workbookView elements.

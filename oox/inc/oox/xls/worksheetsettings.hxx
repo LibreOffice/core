@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheetsettings.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@ namespace xls {
 struct OoxSheetPrData
 {
     ::rtl::OUString     maCodeName;             /// VBA module codename.
-    OoxColor            maTabColor;             /// Sheet tab color.
+    Color               maTabColor;             /// Sheet tab color.
     bool                mbFilterMode;           /// True = sheet contains active filter.
     bool                mbApplyStyles;          /// True = automatic styles when creating outlines.
     bool                mbSummaryBelow;         /// True = row outline symbols below group.
