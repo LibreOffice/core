@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFilterBase.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +27,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "ShapeFilterBase.hxx"
+#include "oox/drawingml/chart/chartconverter.hxx"
 
 namespace oox {
 namespace shape {
@@ -38,6 +40,7 @@ ShapeFilterBase::ShapeFilterBase
 (const uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
  rxFactory)
 : XmlFilterBase(rxFactory)
+, mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
 }
 
@@ -53,6 +56,11 @@ sal_Int32 ShapeFilterBase::getSchemeClr(sal_Int32 /*nColorSchemeToken*/ ) const
 const vml::DrawingPtr ShapeFilterBase::getDrawings()
 {
     return vml::DrawingPtr();
+}
+
+::oox::drawingml::chart::ChartConverter& ShapeFilterBase::getChartConverter()
+{
+    return *mxChartConv;
 }
 
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const
