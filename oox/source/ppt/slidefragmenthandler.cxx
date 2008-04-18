@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidefragmenthandler.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,9 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #include "tokens.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
-#include <oox/ppt/backgroundproperties.hxx>
+#include "oox/ppt/backgroundproperties.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/slidetimingcontext.hxx"
 #include "oox/ppt/slidetransitioncontext.hxx"
@@ -66,7 +67,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
     if( aVMLDrawingFragmentPath.getLength() > 0 )
     {
         getFilter().importFragment( new oox::vml::DrawingFragmentHandler(
-            getFilter(), aVMLDrawingFragmentPath, pPersistPtr->getDrawing() ) );
+            getFilter(), aVMLDrawingFragmentPath, pPersistPtr->getDrawing()->getShapes(), pPersistPtr->getDrawing()->getShapeTypes() ) );
     }
 }
 
@@ -145,28 +146,8 @@ void SAL_CALL SlideFragmentHandler::endDocument(  ) throw (::com::sun::star::xml
     try
     {
         Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
-        if( !maSlideProperties.empty() )
-        {
-            uno::Reference< beans::XMultiPropertySet > xMSet( xSlide, uno::UNO_QUERY );
-            if( xMSet.is() )
-            {
-                uno::Sequence< OUString > aNames;
-                uno::Sequence< uno::Any > aValues;
-                maSlideProperties.makeSequence( aNames, aValues );
-                xMSet->setPropertyValues( aNames,  aValues);
-            }
-            else
-            {
-                uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
-                uno::Reference< beans::XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-
-                for( PropertyMap::const_iterator aIter( maSlideProperties.begin() ); aIter != maSlideProperties.end(); aIter++ )
-                {
-                    if ( xInfo->hasPropertyByName( (*aIter).first ) )
-                        xSet->setPropertyValue( (*aIter).first, (*aIter).second );
-                }
-            }
-        }
+        PropertySet aSlideProp( xSlide );
+        aSlideProp.setProperties( maSlideProperties );
         if ( maSlideName.getLength() )
         {
             Reference< XNamed > xNamed( xSlide, UNO_QUERY );
