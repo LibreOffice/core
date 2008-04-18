@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: worksheethelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -830,6 +830,10 @@ void WorksheetData::initializeWorksheetImport()
     PropertySet aPropSet( mxSheet );
     aPropSet.setProperty( CREATE_OUSTRING( "CellStyle" ), getStyles().getDefaultStyleName() );
 #endif
+
+    /*  remember current sheet index in global data, needed by some global
+        objects, e.g. the chart converter. */
+    setCurrentSheetIndex( mnSheet );
 }
 
 void WorksheetData::finalizeWorksheetImport()
@@ -844,6 +848,9 @@ void WorksheetData::finalizeWorksheetImport()
     convertColumns();
     convertRows();
     finalizeDrawing();
+
+    // reset current sheet index in global data
+    setCurrentSheetIndex( -1 );
 }
 
 // private --------------------------------------------------------------------
