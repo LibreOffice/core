@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +122,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         if ( !rMark.IsMarked() )
             pViewData->GetView()->MarkDataArea( TRUE );
 
-        if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) )
+        if ( pViewData->GetSimpleArea( nCol1,nRow1,nTab1, nCol2,nRow2,nTab2 ) == SC_MARK_SIMPLE )
         {
             PutInOrder( nCol1, nCol2 );
             PutInOrder( nRow1, nRow2 );
