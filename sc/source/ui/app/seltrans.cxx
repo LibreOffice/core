@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seltrans.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,7 +133,11 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             const ScMarkData& rMark = pViewData->GetMarkData();
             //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
             //  (GetSimpleArea modifies a local copy of MarkData)
-            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) && pViewData->GetSimpleArea( aRange ) )
+            // Also allow simple filtered area.
+            ScMarkType eMarkType;
+            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
+                    (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
+                     (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
             {
                 //  only for "real" selection, cursor alone isn't used
                 if ( aRange.aStart == aRange.aEnd )
