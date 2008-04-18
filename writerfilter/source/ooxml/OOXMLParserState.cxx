@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLParserState.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,21 @@ const rtl::OUString & OOXMLParserState::getXNoteId() const
     return mpDocument->getXNoteId();
 }
 
+void OOXMLParserState::setXNoteType(const Id & rId)
+{
+    mpDocument->setXNoteType(rId);
+}
+
+const Id & OOXMLParserState::getXNoteType() const
+{
+    return mpDocument->getXNoteType();
+}
+
+const ::rtl::OUString & OOXMLParserState::getTarget() const
+{
+    return mpDocument->getTarget();
+}
+
 void OOXMLParserState::newCharacterProperty(const Id & rId,
                                             OOXMLValue::Pointer_t pVal)
 {
@@ -213,37 +228,43 @@ void OOXMLParserState::setTableProperties
         mpTableProps->add(pProps);
 }
 
-string OOXMLParserState::toString() const
+XMLTag::Pointer_t OOXMLParserState::toTag() const
 {
-    string sResult = "(";
+    XMLTag::Pointer_t pTag(new XMLTag("parserstate"));
+
+    string sTmp;
 
     if (isInSectionGroup())
-        sResult += "s";
+        sTmp += "s";
     else
-        sResult += "-";
+        sTmp += "-";
 
     if (isInParagraphGroup())
-        sResult += "p";
+        sTmp += "p";
     else
-        sResult += "-";
+        sTmp += "-";
 
     if (isInCharacterGroup())
-        sResult += "c";
+        sTmp += "c";
     else
-        sResult += "-";
+        sTmp += "-";
 
     if (isForwardEvents())
-        sResult += "f";
+        sTmp += "f";
     else
-        sResult += "-";
+        sTmp += "-";
 
-    sResult += ", \"";
-    sResult += OUStringToOString(getXNoteId(),
-                                 RTL_TEXTENCODING_ASCII_US).getStr();
+    pTag->addAttr("state", sTmp);
+    pTag->addAttr("XNoteId",
+                  OUStringToOString(getXNoteId(),
+                                    RTL_TEXTENCODING_ASCII_US).getStr());
 
-    sResult += "\")";
+    return pTag;
+ }
 
-    return sResult;
+string OOXMLParserState::toString() const
+{
+    return toTag()->toString();
 }
 
 }}

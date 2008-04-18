@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLParserState.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define INCLUDE_OOXML_PARSER_STATE_HXX
 
 #include <ooxml/OOXMLDocument.hxx>
+#include <resourcemodel/QNameToString.hxx>
 #include "OOXMLPropertySetImpl.hxx"
 
 namespace writerfilter {
@@ -48,6 +49,7 @@ class OOXMLParserState
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
     rtl::OUString msXNoteId;
+    rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     OOXMLPropertySet::Pointer_t mpTableProps;
 
@@ -82,6 +84,10 @@ public:
 
     void setXNoteId(const rtl::OUString & rId);
     const rtl::OUString & getXNoteId() const;
+    void setXNoteType(const Id & rId);
+    const Id & getXNoteType() const;
+
+    const rtl::OUString & getTarget() const;
 
     void newCharacterProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     void resolveCharacterProperties(Stream & rStream);
@@ -90,6 +96,7 @@ public:
     void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
 
     string toString() const;
+    XMLTag::Pointer_t toTag() const;
 };
 
 }}
