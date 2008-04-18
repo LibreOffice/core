@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastContextHandler.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 
 #include <string>
+#include <set>
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/implbase1.hxx"
@@ -60,6 +61,7 @@ class OOXMLFastContextHandler:
 public:
     typedef RefAndPointer<XFastContextHandler, OOXMLFastContextHandler>
     RefAndPointer_t;
+    typedef boost::shared_ptr<OOXMLFastContextHandler> Pointer_t;
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
 
@@ -133,6 +135,7 @@ public:
 
     virtual ResourceEnum_t getResource() const { return UNKNOWN; }
 
+    virtual XMLTag::Pointer_t toTag() const;
     virtual string toString() const;
 
     virtual void attributes
@@ -141,10 +144,12 @@ public:
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
-    virtual OOXMLPropertySet::Pointer_t getPropertySet();
+    virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
-    void setToken(Token_t nToken);
-    Token_t getToken() const;
+    virtual void setToken(Token_t nToken);
+    virtual Token_t getToken() const;
+
+    void mark(const Id & rId, OOXMLValue::Pointer_t pVal);
 
     void resolveFootnote(const rtl::OUString & rId);
     void resolveEndnote(const rtl::OUString & rId);
@@ -187,7 +192,7 @@ public:
 
 protected:
     OOXMLFastContextHandler * mpParent;
-    Token_t mId;
+    Id mId;
     Token_t mnToken;
 
     // the stream to send the stream events to.
@@ -252,6 +257,7 @@ protected:
     void endOfParagraph();
     void text(const ::rtl::OUString & sText);
     virtual void propagateCharacterProperties();
+    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
     virtual bool propagatesProperties() const;
     void propagateTableProperties();
     void clearProps();
@@ -291,9 +297,9 @@ public:
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
     virtual void sendProperty(Id nId);
-    virtual OOXMLPropertySet::Pointer_t getPropertySet();
+    virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
-    virtual string toString() const;
+    virtual XMLTag::Pointer_t toTag() const;
 
     void handleHyperlink();
 
@@ -315,7 +321,7 @@ public:
     virtual OOXMLValue::Pointer_t getValue() const;
     virtual ResourceEnum_t getResource() const { return PROPERTIES; }
 
-    virtual string toString() const;
+    virtual XMLTag::Pointer_t toTag() const;
 
     virtual void newProperty(const Id & nId, OOXMLValue::Pointer_t pVal);
 
@@ -327,7 +333,7 @@ public:
     void handleOLE();
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
-    virtual OOXMLPropertySet::Pointer_t getPropertySet();
+    virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
 protected:
     /// the properties
@@ -349,9 +355,7 @@ public:
     OOXMLFastContextHandlerPropertyTable(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerPropertyTable();
 
-    virtual void setId(Id nId);
 protected:
-    Token_t mId;
     OOXMLTableImpl mTable;
 
     virtual void lcl_endFastElement(Token_t Element)
@@ -467,10 +471,8 @@ public:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void setId(Id nId);
     virtual void newPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
 protected:
-    Token_t mId;
     OOXMLTableImpl mTable;
 
     RefAndPointer_t mCurrentChild;
@@ -593,6 +595,82 @@ protected:
     virtual void lcl_characters(const ::rtl::OUString & aChars)
                 throw (uno::RuntimeException, xml::sax::SAXException);
 
+};
+
+/**
+   OOXMLFastContextHandlerWrapper wraps an OOXMLFastContextHandler.
+
+   The method calls for the interface
+   ::com::sun::star::xml::sax::XFastContextHandler are forwarded to the wrapped
+   OOXMLFastContextHandler.
+ */
+class OOXMLFastContextHandlerWrapper : public OOXMLFastContextHandler
+{
+public:
+    explicit OOXMLFastContextHandlerWrapper
+    (OOXMLFastContextHandler * pParent,
+     uno::Reference<XFastContextHandler>  xContext);
+    virtual ~OOXMLFastContextHandlerWrapper();
+
+    // ::com::sun::star::xml::sax::XFastContextHandler:
+    virtual void SAL_CALL startUnknownElement
+    (const ::rtl::OUString & Namespace,
+     const ::rtl::OUString & Name,
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void SAL_CALL endUnknownElement
+    (const ::rtl::OUString & Namespace,
+     const ::rtl::OUString & Name)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    createUnknownChildContext
+    (const ::rtl::OUString & Namespace,
+     const ::rtl::OUString & Name,
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual ResourceEnum_t getResource() const;
+
+    void addNamespace(const Id & nId);
+
+    virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal);
+    virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
+    virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
+
+    virtual string getType() const;
+
+protected:
+    virtual void lcl_startFastElement
+    (Token_t Element,
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void lcl_endFastElement(Token_t Element)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual uno::Reference< xml::sax::XFastContextHandler >
+    lcl_createFastChildContext
+    (Token_t Element,
+     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+        throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void lcl_characters(const ::rtl::OUString & aChars)
+                throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual void setId(Id nId);
+    virtual Id getId() const;
+
+    virtual void setToken(Token_t nToken);
+    virtual Token_t getToken() const;
+
+private:
+    uno::Reference<XFastContextHandler> mxContext;
+    set<Id> mMyNamespaces;
+    OOXMLPropertySet::Pointer_t mpPropertySet;
+
+    OOXMLFastContextHandler * getFastContextHandler() const;
 };
 }}
 #endif // INCLUDED_OOXML_FAST_CONTEXT_HANDLER_HXX
