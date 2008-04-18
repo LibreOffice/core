@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj2.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1944,6 +1944,21 @@ Any SAL_CALL SwXTextRange::getPropertyDefault( const OUString& rPropertyName )
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
     return SwXTextCursor::GetPropertyDefault(aPaM, aPropSet, rPropertyName);
+}
+/*-- 10.03.2008 09:58:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextRange::makeRedline(
+    const ::rtl::OUString& rRedlineType,
+    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!GetDoc() || !GetBookmark())
+        throw RuntimeException();
+    SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
+    SwXTextRange::GetPositions(aPaM);
+    SwUnoCursorHelper::makeRedline( aPaM, rRedlineType, rRedlineProperties );
 }
 
 /******************************************************************
