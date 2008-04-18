@@ -308,6 +308,20 @@ destpath = "/opt"
 End
 
 Start
+module = "gid_Module_Root_Files_Images"
+solarispackagename = "openofficeorg-images"
+solarisrequires = "openofficeorg-core01"
+packagename = "openoffice.org-images"
+freebsdrequires = "openoffice.org-core01"
+requires = "openoffice.org-core01"
+copyright = "1999-2007 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Images module for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
+End
+
+Start
 module = "gid_Module_Root_Fonts_OOo_Hidden"
 solarispackagename = "openofficeorg%WITHOUTDOTOOOBASEVERSION-ooofonts"
 solarisrequires = "openofficeorg%WITHOUTDOTOOOBASEVERSION-core01"
