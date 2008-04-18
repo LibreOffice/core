@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.80 $
+# $Revision: 1.81 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -266,7 +266,10 @@ sub create_epm_header
     # Determining the release version
     # This release version has to be listed in the line %version : %version versionnumber releasenumber
 
-    if ( $variableshashref->{'PACKAGEVERSION'} ) { $installer::globals::packageversion = $variableshashref->{'PACKAGEVERSION'}; }
+    # if ( $variableshashref->{'PACKAGEVERSION'} ) { $installer::globals::packageversion = $variableshashref->{'PACKAGEVERSION'}; }
+    if ( ! $onepackage->{'packageversion'} ) { installer::exiter::exit_program("ERROR: No packageversion defined for package: $onepackage->{'module'}!", "create_epm_header"); }
+    $installer::globals::packageversion = $onepackage->{'packageversion'};
+    installer::packagelist::resolve_packagevariables(\$installer::globals::packageversion, $variableshashref, 0);
     if ( $variableshashref->{'PACKAGEREVISION'} ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
 
     $line = "%version" . " " . $installer::globals::packageversion . "\n";
@@ -2803,6 +2806,13 @@ sub analyze_rootpath
         $staticpath =~ s/\/\s*$//;
         $$staticpathref = $staticpath;
     }
+
+    if ( $installer::globals::islinuxdebbuild )
+    {
+        $$relocatablepathref = "";
+        $$staticpathref = $rootpath . $installer::globals::separator . $$staticpathref;  # no relocatibility for Debian
+    }
+
 }
 
 ######################################################
