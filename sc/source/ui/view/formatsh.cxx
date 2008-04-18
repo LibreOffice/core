@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatsh.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2146,7 +2146,7 @@ void ScFormatShell::ExecFormatPaintbrush( SfxRequest& rReq )
 
         // in case of multi selection, deselect all and use the cursor position
         ScRange aDummy;
-        if ( !pViewData->GetSimpleArea(aDummy) )
+        if ( pViewData->GetSimpleArea(aDummy) != SC_MARK_SIMPLE )
             pView->Unmark();
 
         ScDocument* pBrushDoc = new ScDocument( SCDOCMODE_CLIP );
