@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomap.cxx,v $
- * $Revision: 1.207 $
+ * $Revision: 1.208 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1012,6 +1012,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHART_ROW_AS_LABEL), FN_UNO_RANGE_ROW_LABEL,            CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE,  0},
                     { SW_PROP_NMID(UNO_NAME_CHART_COLUMN_AS_LABEL), FN_UNO_RANGE_COL_LABEL,         CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_TABLE_BORDER), FN_UNO_TABLE_BORDER,         CPPU_E2T(CPPUTYPE_TABLEBORDER), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
+                    { SW_PROP_NMID(UNO_NAME_TABLE_BORDER_DISTANCES), FN_UNO_TABLE_BORDER_DISTANCES,         CPPU_E2T(CPPUTYPE_TABLEBORDERDISTANCES), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS },
                     { SW_PROP_NMID(UNO_NAME_TABLE_COLUMN_SEPARATORS), FN_UNO_TABLE_COLUMN_SEPARATORS,   CPPU_E2T(CPPUTYPE_TBLCOLSEP),   PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_TABLE_COLUMN_RELATIVE_SUM), FN_UNO_TABLE_COLUMN_RELATIVE_SUM,       CPPU_E2T(CPPUTYPE_INT16),       PropertyAttribute::READONLY, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
