@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyIds.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,10 +262,20 @@ enum PropertyIds
 /*223*/ ,PROP_SERVICE_PARA_STYLE
 /*224*/ ,PROP_CHARACTER_STYLES
 /*225*/ ,PROP_PARAGRAPH_STYLES
-//*226*/ ,PROP_
-//*227*/ ,PROP_
-//*228*/ ,PROP_
-//*229*/ ,PROP_
+/*226*/ ,PROP_TABLE_BORDER_DISTANCES
+/*227*/ ,META_PROP_CELL_MAR_TOP
+/*228*/ ,META_PROP_CELL_MAR_BOTTOM
+/*229*/ ,META_PROP_CELL_MAR_LEFT
+/*230*/ ,META_PROP_CELL_MAR_RIGHT
+/*231*/ ,PROP_START_AT
+/*232*/ ,PROP_ADD_PARA_TABLE_SPACING
+/*233*/ ,PROP_CHAR_PROP_HEIGHT
+/*234*/ ,PROP_CHAR_PROP_HEIGHT_ASIAN
+/*235*/ ,PROP_CHAR_PROP_HEIGHT_COMPLEX
+//*236*/ ,PROP_
+//*237*/ ,PROP_
+//*238*/ ,PROP_
+//*239*/ ,PROP_
 //*230*/ ,PROP_
 
 };
