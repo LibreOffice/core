@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodycontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,6 @@
 
 #include <com/sun/star/text/XText.hpp>
 
-#include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textrun.hxx"
 #include "oox/core/contexthandler.hxx"
@@ -43,14 +42,13 @@ namespace oox { namespace drawingml {
 class TextBodyContext : public ::oox::core::ContextHandler
 {
 public:
-    TextBodyContext( ::oox::core::ContextHandler& rParent, Shape& rShape );
+    TextBodyContext( ::oox::core::ContextHandler& rParent, TextBody& rTextBody );
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    Shape&              mrShape;
-    TextBodyPtr         mpBodyPtr;
+    TextBody&           mrTextBody;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxText;
 };
 
