@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMap.cxx,v $
- * $Revision: 1.24 $
+ *
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +37,10 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 using namespace ::com::sun::star;
 
@@ -151,6 +154,7 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
         if( bOverwrite )
             ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
+        insertTableProperties(pMap.get());
     }
 }
 /*-- 06.06.2007 15:49:09---------------------------------------------------
@@ -159,6 +163,12 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
 const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 {
     return m_xFootnote;
+}
+/*-- 18.02.2008 11:23:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void PropertyMap::insertTableProperties( const PropertyMap* )
+{
 }
 /*-- 24.07.2006 08:29:01---------------------------------------------------
 
@@ -766,7 +776,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 //            if( m_xStartingRange.is() )
             {
                 //now apply this break at the first paragraph of this section
-                uno::Reference< beans::XPropertySet > xRangeProperties( m_xStartingRange, uno::UNO_QUERY_THROW );
+                uno::Reference< beans::XPropertySet > xRangeProperties;
+                if( m_bIsFirstSection )
+                    xRangeProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetBodyText()->getStart(), uno::UNO_QUERY_THROW );
+                else
+                    xRangeProperties = uno::Reference< beans::XPropertySet >( m_xStartingRange, uno::UNO_QUERY_THROW );
             /* break type
             0 - No break 1 - New Colunn 2 - New page 3 - Even page 4 - odd page */
                 if( m_nBreakType == 2 || m_nBreakType == 3)
@@ -881,7 +895,7 @@ ParagraphProperties::ParagraphProperties() :
     m_h(-1),
     m_nWrap(-1),
     m_hAnchor(-1),
-    m_vAnchor(-1),
+    m_vAnchor(text::RelOrientation::FRAME),
     m_x(-1),
     m_bxValid( false ),
     m_y(-1),
@@ -965,6 +979,67 @@ ParagraphPropertyMap::ParagraphPropertyMap()
   -----------------------------------------------------------------------*/
 ParagraphPropertyMap::~ParagraphPropertyMap()
 {
+}
+/*-- 15.02.2008 16:10:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TablePropertyMap::TablePropertyMap()
+{
+}
+/*-- 15.02.2008 16:10:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TablePropertyMap::~TablePropertyMap()
+{
+}
+/*-- 18.02.2008 10:06:30---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool TablePropertyMap::getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill )
+{
+    if( eWhich < TablePropertyMapTarget_MAX )
+    {
+        if(m_aValidValues[eWhich].bValid)
+            nFill = m_aValidValues[eWhich].nValue;
+        return m_aValidValues[eWhich].bValid;
+    }
+    else
+    {
+        OSL_ENSURE( false, "invalid TablePropertyMapTarget");
+        return false;
+    }
+}
+/*-- 18.02.2008 10:07:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
+{
+    if( eWhich < TablePropertyMapTarget_MAX )
+    {
+        m_aValidValues[eWhich].bValid = true;
+        m_aValidValues[eWhich].nValue = nSet;
+    }
+    else
+        OSL_ENSURE( false, "invalid TablePropertyMapTarget");
+}
+/*-- 18.02.2008 11:23:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
+{
+    const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
+    if( pSource )
+    {
+        for( sal_Int32 eTarget = TablePropertyMapTarget_START;
+            eTarget < TablePropertyMapTarget_MAX; ++eTarget )
+        {
+            if( pSource->m_aValidValues[eTarget].bValid )
+            {
+                m_aValidValues[eTarget].bValid = true;
+                m_aValidValues[eTarget].nValue = pSource->m_aValidValues[eTarget].nValue;
+            }
+        }
+    }
 }
 
 
