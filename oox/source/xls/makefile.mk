@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,6 +59,7 @@ SLOFILES =										\
         $(SLO)$/connectionsfragment.obj			\
         $(SLO)$/defnamesbuffer.obj				\
         $(SLO)$/drawingfragment.obj				\
+        $(SLO)$/excelchartconverter.obj			\
         $(SLO)$/excelfilter.obj					\
         $(SLO)$/excelhandlers.obj				\
         $(SLO)$/externallinkbuffer.obj			\
