@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocrsrhelper.cxx,v $
- * $Revision: 1.32 $
+ *
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +43,7 @@
 #include <unosett.hxx>
 #include <unoframe.hxx>
 #include <doc.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <charfmt.hxx>
@@ -75,9 +77,11 @@
 #include <svtools/stritem.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <SwStyleNameMapper.hxx>
+#include <redline.hxx>
 #include <numrule.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
@@ -871,6 +875,59 @@ sal_Bool DocInsertStringSplitCR(
     }
 
     return bOK;
+}
+/*-- 10.03.2008 09:58:47---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void makeRedline( SwPaM& rPaM,
+    const ::rtl::OUString& rRedlineType,
+    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    IDocumentRedlineAccess* pRedlineAccess = rPaM.GetDoc();
+
+    RedlineType_t eType = nsRedlineType_t::REDLINE_INSERT;
+    if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Delete" ) ))
+        eType = nsRedlineType_t::REDLINE_DELETE;
+    else if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Format" ) ))
+        eType = nsRedlineType_t::REDLINE_FORMAT;
+    else if( rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "TextTable" ) ))
+        eType = nsRedlineType_t::REDLINE_TABLE;
+    else if( !rRedlineType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Insert" ) ))
+        throw lang::IllegalArgumentException();
+
+    //todo: what about REDLINE_FMTCOLL?
+    comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
+    uno::Any aAuthorValue;
+    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineAuthor"), aAuthorValue);
+    USHORT nAuthor = 0;
+    ::rtl::OUString sAuthor;
+    if( aAuthorValue >>= sAuthor )
+        nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
+
+    ::rtl::OUString sComment;
+    uno::Any aCommentValue;
+    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineComment"), aCommentValue);
+
+    SwRedlineData aRedlineData( eType, nAuthor );
+    if( aCommentValue >>= sComment )
+        aRedlineData.SetComment( sComment );
+
+    ::util::DateTime aStamp;
+    uno::Any aDateTimeValue;
+    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineDateTime"), aDateTimeValue);
+    if( aDateTimeValue >>= aStamp )
+    {
+       aRedlineData.SetTimeStamp(
+        DateTime( Date( aStamp.Day, aStamp.Month, aStamp.Year ), Time( aStamp.Hours, aStamp.Minutes, aStamp.Seconds ) ) );
+    }
+
+    SwRedline* pRedline = new SwRedline( aRedlineData, rPaM );
+    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
+    bool bRet = pRedlineAccess->AppendRedline( pRedline, false );
+    pRedlineAccess->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
+    if( !bRet )
+        throw lang::IllegalArgumentException();
 }
 
 }//namespace SwUnoCursorHelper
