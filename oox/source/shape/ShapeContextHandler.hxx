@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeContextHandler.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,24 +161,29 @@ public:
     (const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException);
 
+
 private:
     ShapeContextHandler(ShapeContextHandler &); // not defined
     void operator =(ShapeContextHandler &); // not defined
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;
+    vml::DrawingPtr mpDrawing;
 
     typedef boost::shared_ptr<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
-    css::uno::Reference< ::oox::vml::DrawingFragmentHandler> mxDrawingFragmentHandler;
+    css::uno::Reference<XFastContextHandler> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
 
     core::XmlFilterRef mxFilterBase;
-    oox::vml::DrawingPtr mpDrawing;
     drawingml::ThemePtr mpThemePtr;
     css::uno::Reference<css::drawing::XShapes> mxShapes;
     css::uno::Reference<css::io::XInputStream> mxInputStream;
     ::rtl::OUString msRelationFragmentPath;
+
+    css::uno::Reference<XFastContextHandler> getGraphicShapeContext();
+    css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
+    css::uno::Reference<XFastContextHandler> getContextHandler();
 };
 
 }}
