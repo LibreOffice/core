@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingfragmenthandler.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +33,15 @@
 
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/vml/drawing.hxx"
+#include "oox/vml/shape.hxx"
 
 namespace oox { namespace vml {
 
 class DrawingFragmentHandler : public ::oox::core::FragmentHandler
 {
 public:
-    DrawingFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DrawingPtr pDrawingPtr ) throw();
+    DrawingFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath,
+        std::vector< ShapePtr >& rShapes, std::vector< ShapePtr >& rShapeTypes ) throw();
     virtual ~DrawingFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -47,9 +49,17 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > StaticCreateContext( oox::core::ContextHandler& rParent,
+        sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs,
+            std::vector< ShapePtr >& rShapes, std::vector< ShapePtr >& rShapeTypes)
+            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+
+
 private:
 
-    DrawingPtr mpDrawingPtr;
+    std::vector< ShapePtr >&        mrShapes;
+    std::vector< ShapePtr >&        mrShapeTypes;
+    rtl::OUString                   maFragmentPath;
 };
 
 } }
