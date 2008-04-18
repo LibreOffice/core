@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLPropertySetImpl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -440,6 +440,18 @@ OOXMLPropertySetImpl::OOXMLProperties_t::iterator OOXMLPropertySetImpl::end()
     return mProperties.end();
 }
 
+OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
+OOXMLPropertySetImpl::begin() const
+{
+    return mProperties.begin();
+}
+
+OOXMLPropertySetImpl::OOXMLProperties_t::const_iterator
+OOXMLPropertySetImpl::end() const
+{
+    return mProperties.end();
+}
+
 string OOXMLPropertySetImpl::getType() const
 {
     return msType;
@@ -539,7 +551,7 @@ string OOXMLPropertySetValue::toString() const
 {
     char sBuffer[256];
 
-    snprintf(sBuffer, sizeof(sBuffer), "%p", this);
+    snprintf(sBuffer, sizeof(sBuffer), "t:%p, m:%p", this, mpPropertySet.get());
 
     return "OOXMLPropertySetValue(" + string(sBuffer) + ")";
 }
