@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TypeGeneration.cxx,v $
- * $Revision: 1.15 $
+ *
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +122,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -231,6 +233,7 @@ namespace comphelper
             // <--
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
             case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
+            case CPPUTYPE_TABLEBORDERDISTANCES:     pType = &::getCppuType( (table::TableBorderDistances*)0 ); break;
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
         }
