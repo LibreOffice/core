@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtbl.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -701,9 +701,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         DoUndo( FALSE );
     }
 
-    // die Bookmarks loeschen und die Cursor der CrsrShell verschieben
-    _DelBookmarks( pStt->nNode, pEnd->nNode, 0,
-                    &pStt->nContent, &pEnd->nContent );
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // sorge dafuer, das der Bereich auf Node-Grenzen liegt
@@ -1155,9 +1152,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         DoUndo( FALSE );
     }
 
-    // die Bookmarks loeschen und die Cursor der CrsrShell verschieben
-    _DelBookmarks( pStt->nNode, pEnd->nNode, 0,
-                    &pStt->nContent, &pEnd->nContent );
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // sorge dafuer, das der Bereich auf Node-Grenzen liegt
