@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapepropertiescontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,13 +61,6 @@ ShapePropertiesContext::ShapePropertiesContext( ContextHandler& rParent, Shape& 
 : ContextHandler( rParent )
 , mrShape( rShape )
 {
-}
-
-// --------------------------------------------------------------------
-
-void ShapePropertiesContext::endFastElement( sal_Int32 aElementToken ) throw( SAXException, RuntimeException )
-{
-    getParentHandler()->endFastElement( aElementToken );
 }
 
 // --------------------------------------------------------------------
