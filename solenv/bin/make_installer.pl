@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.107 $
+# $Revision: 1.108 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -395,6 +395,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 
 if (( ! $installer::globals::iswindowsbuild ) &&
     ( ! $installer::globals::islinuxrpmbuild ) &&
+    ( ! $installer::globals::islinuxdebbuild ) &&
     ( ! $installer::globals::issolarispkgbuild ) &&
     ( $installer::globals::packageformat ne "installed" ) &&
     ( $installer::globals::packageformat ne "dmg" ) &&
@@ -1305,8 +1306,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # nothing to do for Linux patches, if no file has flag PATCH
             #################################################################
 
-            # Linux Patch: The complete RPM has to be built, if one file in the RPM has the flag PATCH
-            if (( $installer::globals::patch ) && ( $installer::globals::islinuxrpmbuild ))
+            # Linux Patch: The complete RPM has to be built, if one file in the RPM has the flag PATCH (also for DEBs)
+            if (( $installer::globals::patch ) && (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::islinuxdebbuild )))
             {
                 my $patchfiles = installer::worker::collect_all_items_with_special_flag($filesinpackage ,"PATCH");
                 if ( ! ( $#{$patchfiles} > -1 ))
@@ -1917,6 +1918,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding language specific properties for multilingual installation sets
 
             installer::windows::property::set_languages_in_property_table($languageidtdir, $languagesarrayref);
+
+            # adding settings into CheckBox.idt
+            installer::windows::property::update_checkbox_table($languageidtdir, $allvariableshashref);
 
             # adding the files from the binary directory into the binary table
             installer::windows::binary::update_binary_table($languageidtdir, $filesinproductlanguageresolvedarrayref, $binarytablefiles);
