@@ -8,7 +8,7 @@
 #
 # $RCSfile: registry.pm,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -78,6 +78,11 @@ sub get_registry_component_name
     $addon =~ s/\.//g;
 
     $componentname = $componentname . $addon;
+
+    my $styles = "";
+    if ( $registryref->{'Styles'} ) { $styles = $registryref->{'Styles'}; }
+
+    if ( $styles =~ /\bALWAYS_REQUIRED\b/ ) { $componentname = $componentname . "_forced"; }
 
     return $componentname;
 }
@@ -296,6 +301,15 @@ sub create_registry_table
             my $style = "";
             if ( $oneregistry->{'Styles'} ) { $style = $oneregistry->{'Styles'}; }
             if ( $style =~ /\bDONT_DELETE\b/ ) { $installer::globals::dontdeletecomponents{$registry{'Component_'}} = 1; }
+
+            # Collecting all registry components with ALWAYS_REQUIRED style
+            if ( ! ( $style =~ /\bALWAYS_REQUIRED\b/ ))
+            {
+                # Setting a component condition for unforced registry components!
+                # Only write into registry, if WRITE_REGISTRY is set.
+                if ( $oneregistry->{'ComponentCondition'} ) { $oneregistry->{'ComponentCondition'} = "(" . $oneregistry->{'ComponentCondition'} . ") AND (WRITE_REGISTRY=1)"; }
+                else { $oneregistry->{'ComponentCondition'} = "WRITE_REGISTRY=1"; }
+            }
 
             # Collecting all component conditions
             if ( $oneregistry->{'ComponentCondition'} )
