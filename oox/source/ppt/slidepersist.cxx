@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slidepersist.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include <boost/bind.hpp>
+#include "oox/helper/propertyset.hxx"
 #include "oox/ppt/timenode.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/slidepersist.hxx"
@@ -193,18 +193,10 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet,
         // no properties. return
         return;
     }
-    PropertyMap& rParagraphProperties( pTextParagraphPropertiesPtr->getTextParagraphPropertyMap() );
-    PropertyMap& rCharacterProperties( pTextCharacterPropertiesPtr->getTextCharacterPropertyMap() );
 
-    int i;
-    Sequence< rtl::OUString > aNames;
-    Sequence< Any > aValues;
-    rParagraphProperties.makeSequence( aNames, aValues );
-    for( i = 0; i < aNames.getLength(); i++ )
-        rxPropSet->setPropertyValue( aNames[ i ], aValues[ i ] );
-    rCharacterProperties.makeSequence( aNames, aValues );
-    for( i = 0; i < aNames.getLength(); i++ )
-        rxPropSet->setPropertyValue( aNames[ i ], aValues[ i ] );
+    PropertySet aPropSet( rxPropSet );
+    aPropSet.setProperties( pTextParagraphPropertiesPtr->getTextParagraphPropertyMap() );
+    aPropSet.setProperties( pTextCharacterPropertiesPtr->getTextCharacterPropertyMap() );
 }
 
 void SlidePersist::applyTextStyles( const oox::core::XmlFilterBase& rFilterBase )
