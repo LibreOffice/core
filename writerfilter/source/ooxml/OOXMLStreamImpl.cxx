@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLStreamImpl.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +46,12 @@ using namespace ::std;
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<embed::XStorage> xStorage, StreamType_t nType)
-: mxContext(xContext), mxStorage(xStorage), mnStreamType(nType)
+ uno::Reference<io::XInputStream> xStorageStream, StreamType_t nType)
+: mxContext(xContext), mxStorageStream(xStorageStream), mnStreamType(nType)
 {
+    mxStorage.set
+        (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
+         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream));
     mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
 
     init();
@@ -57,6 +60,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, StreamType_t nStreamType)
 : mxContext(rOOXMLStream.mxContext),
+  mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
   mnStreamType(nStreamType),
   msPath(rOOXMLStream.msPath)
@@ -68,12 +72,15 @@ OOXMLStreamImpl::OOXMLStreamImpl
 
 OOXMLStreamImpl::OOXMLStreamImpl
 (uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<embed::XStorage> xStorage, const rtl::OUString & rId)
+ uno::Reference<io::XInputStream> xStorageStream, const rtl::OUString & rId)
 : mxContext(xContext),
-  mxStorage(xStorage),
+  mxStorageStream(xStorageStream),
   mnStreamType(UNKNOWN),
   msId(rId)
 {
+    mxStorage.set
+        (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
+         (OFOPXML_STORAGE_FORMAT_STRING, mxStorageStream));
     mxRelationshipAccess.set(mxStorage, uno::UNO_QUERY_THROW);
 
     init();
@@ -82,6 +89,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 OOXMLStreamImpl::OOXMLStreamImpl
 (OOXMLStreamImpl & rOOXMLStream, const rtl::OUString & rId)
 : mxContext(rOOXMLStream.mxContext),
+  mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
   mnStreamType(UNKNOWN),
   msId(rId),
@@ -99,11 +107,16 @@ OOXMLStreamImpl::~OOXMLStreamImpl()
 #endif
 }
 
-bool OOXMLStreamImpl::getTarget(uno::Reference<embed::XRelationshipAccess>
-                                xRelationshipAccess,
-                                StreamType_t nStreamType,
-                                const ::rtl::OUString & rId,
-                                ::rtl::OUString & rDocumentTarget)
+const ::rtl::OUString & OOXMLStreamImpl::getTarget() const
+{
+    return msTarget;
+}
+
+bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
+                                    xRelationshipAccess,
+                                    StreamType_t nStreamType,
+                                    const ::rtl::OUString & rId,
+                                    ::rtl::OUString & rDocumentTarget)
 {
     bool bFound = false;
 
@@ -207,7 +220,7 @@ bool OOXMLStreamImpl::getTarget(uno::Reference<embed::XRelationshipAccess>
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess
         (mxDocumentStream, uno::UNO_QUERY_THROW);
 
-    if (getTarget(xRelationshipAccess, UNKNOWN, rId, sTarget))
+    if (lcl_getTarget(xRelationshipAccess, UNKNOWN, rId, sTarget))
         return sTarget;
 
     return ::rtl::OUString();
@@ -215,21 +228,19 @@ bool OOXMLStreamImpl::getTarget(uno::Reference<embed::XRelationshipAccess>
 
 void OOXMLStreamImpl::init()
 {
-    ::rtl::OUString sDocumentTarget;
-
-    bool bFound = getTarget(mxRelationshipAccess,
-                            mnStreamType, msId, sDocumentTarget);
+    bool bFound = lcl_getTarget(mxRelationshipAccess,
+                                mnStreamType, msId, msTarget);
 #ifdef DEBUG_STREAM
     logger("DEBUG", string("<stream>")
-           + OUStringToOString(sDocumentTarget,
+           + OUStringToOString(msTarget,
                                RTL_TEXTENCODING_ASCII_US).getStr());
 #endif
 
     if (bFound)
     {
-        sal_Int32 nLastIndex = sDocumentTarget.lastIndexOf('/');
+        sal_Int32 nLastIndex = msTarget.lastIndexOf('/');
         if (nLastIndex >= 0)
-            msPath = sDocumentTarget.copy(0, nLastIndex + 1);
+            msPath = msTarget.copy(0, nLastIndex + 1);
 
         uno::Reference<embed::XHierarchicalStorageAccess>
             xHierarchicalStorageAccess(mxStorage, uno::UNO_QUERY);
@@ -238,7 +249,7 @@ void OOXMLStreamImpl::init()
         {
             uno::Any aAny(xHierarchicalStorageAccess->
                           openStreamElementByHierarchicalName
-                          (sDocumentTarget, embed::ElementModes::READ));
+                          (msTarget, embed::ElementModes::SEEKABLEREAD));
             aAny >>= mxDocumentStream;
         }
     }
@@ -254,15 +265,9 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
     return xResult;
 }
 
-uno::Reference<io::XInputStream> OOXMLStreamImpl::getInputStream()
+uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
 {
-    return mxInputStream;
-}
-
-void OOXMLStreamImpl::setInputStream
-(uno::Reference<io::XInputStream> rxInputStream)
-{
-    mxInputStream = rxInputStream;
+    return mxStorageStream;
 }
 
 uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
@@ -301,14 +306,8 @@ OOXMLDocumentFactory::createStream
  uno::Reference<io::XInputStream> rStream,
  OOXMLStream::StreamType_t nStreamType)
 {
-    uno::Reference<embed::XStorage> xStorage =
-        comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
-        (OFOPXML_STORAGE_FORMAT_STRING, rStream);
-
-    OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, xStorage,
+    OOXMLStreamImpl * pStream = new OOXMLStreamImpl(xContext, rStream,
                                                     nStreamType);
-    pStream->setInputStream(rStream);
-
     return OOXMLStream::Pointer_t(pStream);
 }
 
