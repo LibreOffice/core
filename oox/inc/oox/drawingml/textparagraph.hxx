@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,22 +28,21 @@
  *
  ************************************************************************/
 
-
 #ifndef OOX_DRAWINGML_TEXTPARAGRAPH_HXX
 #define OOX_DRAWINGML_TEXTPARAGRAPH_HXX
-
-#include <vector>
-#include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/textrun.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
 
 namespace oox { namespace drawingml {
+
+typedef RefVector< TextRun > TextRunVector;
 
 class TextParagraph
 {
@@ -52,7 +51,8 @@ public:
     TextParagraph();
     ~TextParagraph();
 
-    std::vector< TextRunPtr > & getRuns() { return maRuns; }
+    TextRunVector&              getRuns() { return maRuns; }
+    const TextRunVector&        getRuns() const { return maRuns; }
     void                        addRun( const TextRunPtr & pRun ) { maRuns.push_back( pRun ); }
     TextParagraphPropertiesPtr  getProperties() { return mpProperties; }
     TextParagraphPropertiesPtr  getEndProperties() { return mpEndProperties; }
@@ -66,9 +66,9 @@ public:
                                     bool bFirst = false );
 
 protected:
-    TextParagraphPropertiesPtr mpProperties;
-    TextParagraphPropertiesPtr mpEndProperties;
-    std::vector< TextRunPtr >  maRuns;
+    TextParagraphPropertiesPtr  mpProperties;
+    TextParagraphPropertiesPtr  mpEndProperties;
+    TextRunVector               maRuns;
 };
 
 typedef boost::shared_ptr< TextParagraph > TextParagraphPtr;

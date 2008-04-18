@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textrun.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,8 +48,8 @@ public:
     virtual ~TextRun();
 
     TextCharacterPropertiesPtr  getTextCharacterProperties(){ return maTextCharacterPropertiesPtr; };
-    ::rtl::OUString & text() { return msText; }
-    const ::rtl::OUString & text() const { return msText; }
+    ::rtl::OUString & getText() { return msText; }
+    const ::rtl::OUString & getText() const { return msText; }
 
     virtual void                insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
