@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,13 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "com/sun/star/drawing/XShape.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+#include "com/sun/star/awt/Rectangle.hpp"
+#include "com/sun/star/awt/Point.hpp"
+#include "com/sun/star/awt/Size.hpp"
 #include <boost/shared_ptr.hpp>
+#include <boost/optional.hpp>
+#include <vector>
 #include <map>
 #include <rtl/ustring.hxx>
 
@@ -44,33 +50,63 @@ namespace oox { namespace core {
 
 namespace oox { namespace vml {
 
-struct Shape
+class Shape;
+class Drawing;
+typedef boost::shared_ptr< Shape > ShapePtr;
+
+class Shape
 {
-    Shape();
+    public :
+
+    Shape( const rtl::OUString& rServiceName );
     ~Shape();
 
     void applyAttributes( const Shape& rSource );
 
+    rtl::OUString   msServiceName;
     rtl::OUString   msId;
     rtl::OUString   msType;
-    sal_Int32       mnShapeType;
+    rtl::OUString   msShapeType;
 
     sal_Int32       mnCoordWidth;
     sal_Int32       mnCoordHeight;
     sal_Int32       mnStroked;
-    sal_Int32       mnFilled;
+
+    ::boost::optional< sal_Int32 >      moFilled;
+    ::boost::optional< rtl::OUString >  moFillColor;
 
     rtl::OUString   msGraphicURL;
     rtl::OUString   msImageTitle;
-    rtl::OUString   msPath;
+
+    com::sun::star::beans::NamedValue   maPath;
+
+    rtl::OUString                       msPosition;             // absolute/relativ
+    com::sun::star::awt::Point          maPosition;
+    com::sun::star::awt::Size           maSize;
+
+    std::vector< ShapePtr >& getChilds() { return maChilds; };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& getXShape() const { return mxShape; };
 
     // addShape is creating and inserting the corresponding XShape.
-    void addShape( const ::oox::core::XmlFilterBase& rFilterBase,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+    void addShape( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Drawing& rDrawing,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+            const ::com::sun::star::awt::Rectangle* pShapeRect );
+
+    private :
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createAndInsert( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Shape& rShape,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                const ::com::sun::star::awt::Rectangle* pShapeRect );
+
+    void addChilds( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::vml::Drawing& rDrawing,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+            const ::com::sun::star::awt::Rectangle& rClientRect );
+
+    std::vector< ShapePtr > maChilds;
 
 };
 
