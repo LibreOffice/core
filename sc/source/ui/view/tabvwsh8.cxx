@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh8.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,10 +80,11 @@ BOOL __EXPORT ScTabViewShell::HasSelection( BOOL bText ) const
     else
     {
         ScRange aRange;
-        if ( pData->GetSimpleArea( aRange ) )
-            bHas = ( aRange.aStart != aRange.aEnd );    // mehr als 1 Zelle
+        ScMarkType eMarkType = pData->GetSimpleArea( aRange );
+        if ( eMarkType == SC_MARK_SIMPLE )
+            bHas = ( aRange.aStart != aRange.aEnd );    // more than 1 cell
         else
-            bHas = TRUE;    // Mehrfachselektion
+            bHas = TRUE;                                // multiple selection or filtered
     }
     return bHas;
 }
