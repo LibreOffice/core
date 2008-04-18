@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vmldrawing.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +56,7 @@ ShapePtr Drawing::createShapeById( const rtl::OUString sId ) const
     }
     if ( pRef )
     {
-        pRet = ShapePtr( new Shape() );
+        pRet = ShapePtr( new Shape( pRef->msServiceName ) );
         if ( pRef->msType.getLength() )
         {
             std::vector< ShapePtr >::const_iterator aShapeTypeIter( maShapeTypes.begin() );
