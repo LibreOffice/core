@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,6 +129,9 @@ class PropertyMap : public _PropertyMap
 
     const ::rtl::OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
     void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
+
+    virtual void insertTableProperties( const PropertyMap* );
+
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
@@ -485,7 +488,46 @@ public:
     ~ParagraphPropertyMap();
 
 };
+/*-- 15.02.2008 16:06:52---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+class TablePropertyMap : public PropertyMap
+{
+public:
+    enum TablePropertyMapTarget
+    {
+        TablePropertyMapTarget_START,
+        CELL_MAR_LEFT = TablePropertyMapTarget_START,
+        CELL_MAR_RIGHT,
+        CELL_MAR_TOP,
+        CELL_MAR_BOTTOM,
+        TABLE_WIDTH,
+        GAP_HALF,
+        LEFT_MARGIN,
+        HORI_ORIENT,
+        TablePropertyMapTarget_MAX
+    };
+private:
+    struct ValidValue
+    {
+        sal_Int32   nValue;
+        bool        bValid;
+        ValidValue() :
+            nValue( 0 ),
+            bValid( false ){}
+    };
+    ValidValue m_aValidValues[TablePropertyMapTarget_MAX];
+
+public:
+    explicit TablePropertyMap();
+    ~TablePropertyMap();
+
+    bool    getValue( TablePropertyMapTarget eWhich, sal_Int32& nFill );
+    void    setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet );
+
+    virtual void insertTableProperties( const PropertyMap* );
+};
+typedef boost::shared_ptr<TablePropertyMap>  TablePropertyMapPtr;
 } //namespace dmapper
 } //namespace writerfilter
 #endif
