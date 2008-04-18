@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodycontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
+#include "oox/drawingml/textbodypropertiescontext.hxx"
 #include "oox/drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
@@ -150,7 +150,7 @@ void RegularTextRunContext::characters( const OUString& aChars ) throw (SAXExcep
 {
     if( mbIsInText )
     {
-        mpRunPtr->text() += aChars;
+        mpRunPtr->getText() += aChars;
     }
 }
 
@@ -175,12 +175,10 @@ Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( 
 
 // --------------------------------------------------------------------
 
-TextBodyContext::TextBodyContext( ContextHandler& rParent, Shape& rShape )
+TextBodyContext::TextBodyContext( ContextHandler& rParent, TextBody& rTextBody )
 : ContextHandler( rParent )
-, mrShape( rShape )
-, mpBodyPtr( new TextBody() )
+, mrTextBody( rTextBody )
 {
-    rShape.setTextBody( mpBodyPtr );
 }
 
 // --------------------------------------------------------------------
@@ -198,15 +196,13 @@ Reference< XFastContextHandler > TextBodyContext::createFastChildContext( sal_In
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_bodyPr:     // CT_TextBodyPropertyBag
-        xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrShape ) );
+        xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrTextBody.getTextProperties() ) );
         break;
     case NMSP_DRAWINGML|XML_lstStyle:   // CT_TextListStyle
-        xRet.set( new TextListStyleContext( *this, *mpBodyPtr->getTextListStyle() ) );
+        xRet.set( new TextListStyleContext( *this, mrTextBody.getTextListStyle() ) );
         break;
     case NMSP_DRAWINGML|XML_p:          // CT_TextParagraph
-        TextParagraphPtr pPara( new TextParagraph() );
-        mpBodyPtr->addParagraph( pPara );
-        xRet.set( new TextParagraphContext( *this, *pPara ) );
+        xRet.set( new TextParagraphContext( *this, mrTextBody.addParagraph() ) );
         break;
     }
 
