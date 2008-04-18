@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textparagraph.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,17 +28,13 @@
  *
  ************************************************************************/
 
-
-#include <algorithm>
-#include <boost/bind.hpp>
+#include "oox/drawingml/textparagraph.hxx"
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <comphelper/processfactory.hxx>
-
-#include "oox/drawingml/textparagraph.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::text;
@@ -48,77 +44,75 @@ using namespace ::com::sun::star::frame;
 
 namespace oox { namespace drawingml {
 
-    TextParagraph::TextParagraph()
-        : mpProperties( new TextParagraphProperties( ) )
-        , mpEndProperties( new TextParagraphProperties( ) )
-    {
-    }
+TextParagraph::TextParagraph()
+    : mpProperties( new TextParagraphProperties )
+    , mpEndProperties( new TextParagraphProperties )
+{
+}
 
+TextParagraph::~TextParagraph()
+{
+}
 
-    TextParagraph::~TextParagraph()
-    {
-    }
+void TextParagraph::insertAt(
+        const ::oox::core::XmlFilterBase& rFilterBase,
+        const Reference < XText > &xText,
+        const Reference < XTextCursor > &xAt,
+        const TextListStylePtr& rTextStyleList, bool bFirst)
+{
+    try {
+        sal_Int32 nParagraphSize = 0;
+        Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
+        sal_Int16 nLevel = mpProperties->getLevel();
+        TextParagraphPropertiesVector& rListStyle = rTextStyleList->getListStyle();
+        if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
+            nLevel = 0;
+        TextParagraphPropertiesPtr pTextParagraphStyle;
+        TextCharacterPropertiesPtr pTextCharacterStyle;
+        if ( rListStyle.size() )
+            pTextParagraphStyle = rListStyle[ nLevel ];
+        if ( pTextParagraphStyle.get() )
+            pTextCharacterStyle = pTextParagraphStyle->getTextCharacterProperties();
 
-    void TextParagraph::insertAt(
-            const ::oox::core::XmlFilterBase& rFilterBase,
-            const Reference < XText > &xText,
-            const Reference < XTextCursor > &xAt,
-            const TextListStylePtr& rTextStyleList, bool bFirst)
-    {
-        try {
-            sal_Int32 nParagraphSize = 0;
-            Reference< XTextRange > xStart( xAt, UNO_QUERY );
-
-            sal_Int16 nLevel = mpProperties->getLevel();
-            std::vector< TextParagraphPropertiesPtr >& rListStyle = rTextStyleList->getListStyle();
-            if ( nLevel >= static_cast< sal_Int16 >( rListStyle.size() ) )
-                nLevel = 0;
-            TextParagraphPropertiesPtr pTextParagraphStyle;
-            TextCharacterPropertiesPtr pTextCharacterStyle;
-            if ( rListStyle.size() )
-                pTextParagraphStyle = rListStyle[ nLevel ];
-            if ( pTextParagraphStyle.get() )
-                pTextCharacterStyle = pTextParagraphStyle->getTextCharacterProperties();
-
-            if( !bFirst )
-            {
-                xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
-                xAt->gotoEnd(true);
-            }
-
-            std::vector< TextRunPtr >::iterator begin( maRuns.begin() );
-            while( begin != maRuns.end() )
-            {
-                (*begin)->insertAt( rFilterBase, xText, xAt, pTextCharacterStyle );
-                nParagraphSize += (*begin++)->text().getLength();
-            }
+        if( !bFirst )
+        {
+            xText->insertControlCharacter( xStart, ControlCharacter::APPEND_PARAGRAPH, sal_False );
             xAt->gotoEnd(true);
+        }
 
-            PropertyMap aioBulletList;
-            Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-            if ( pTextParagraphStyle.get() )
-                pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_False );
+        TextRunVector::iterator begin( maRuns.begin() );
+        while( begin != maRuns.end() )
+        {
+            (*begin)->insertAt( rFilterBase, xText, xAt, pTextCharacterStyle );
+            nParagraphSize += (*begin++)->getText().getLength();
+        }
+        xAt->gotoEnd(true);
 
-            mpProperties->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_True );
+        PropertyMap aioBulletList;
+        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        if ( pTextParagraphStyle.get() )
+            pTextParagraphStyle->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_False );
 
-            // empty paragraphs do not have bullets in ppt
-            if ( !nParagraphSize )
-            {
-                const rtl::OUString sIsNumbering( CREATE_OUSTRING( "IsNumbering" ) );
-                xProps->setPropertyValue( sIsNumbering, Any( sal_False ) );
-            }
+        mpProperties->pushToPropSet( rFilterBase, xProps, aioBulletList, sal_True );
+
+        // empty paragraphs do not have bullets in ppt
+        if ( !nParagraphSize )
+        {
+            const rtl::OUString sIsNumbering( CREATE_OUSTRING( "IsNumbering" ) );
+            xProps->setPropertyValue( sIsNumbering, Any( sal_False ) );
+        }
 
 // FIXME this is causing a lot of dispruption (ie does not work). I wonder what to do -- Hub
 //          Reference< XTextRange > xEnd( xAt, UNO_QUERY );
 //      Reference< XPropertySet > xProps2( xEnd, UNO_QUERY );
 //          mpEndProperties->pushToPropSet( xProps2 );
-        }
-        catch( Exception & )
-        {
-            OSL_TRACE("OOX: exception in TextParagraph::insertAt");
-        }
     }
+    catch( Exception & )
+    {
+        OSL_TRACE("OOX: exception in TextParagraph::insertAt");
+    }
+}
 
 
 } }
