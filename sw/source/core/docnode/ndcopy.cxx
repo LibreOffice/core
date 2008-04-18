@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndcopy.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -523,23 +523,32 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
     // We have to count the "non-copied" nodes..
     ULONG nDelCount = 0;
     SwNodeIndex aCorrIdx( rStt.nNode );
+    std::vector< const SwBookmark* > aNewBookmarks;
     for( USHORT nCnt = pSrcDoc->getBookmarks().Count(); nCnt; )
     {
         // liegt auf der Position ??
         if( ( pBkmk = pSrcDoc->getBookmarks()[ --nCnt ])->GetBookmarkPos() < rStt
-            || pBkmk->GetBookmarkPos() >= rEnd )
+            || pBkmk->GetBookmarkPos() > rEnd )
             continue;
 
-        int bHasOtherPos = 0 != pBkmk->GetOtherBookmarkPos();
-        if( bHasOtherPos && ( *pBkmk->GetOtherBookmarkPos() < rStt ||
-            *pBkmk->GetOtherBookmarkPos() >= rEnd ) )
+        if( pBkmk->GetOtherBookmarkPos() && ( *pBkmk->GetOtherBookmarkPos() < rStt ||
+            *pBkmk->GetOtherBookmarkPos() > rEnd ) )
             continue;
 
+        if( pBkmk->GetBookmarkPos() == rEnd &&
+            ( !pBkmk->GetOtherBookmarkPos() || *pBkmk->GetOtherBookmarkPos() == rEnd ) )
+            continue;
+
+        aNewBookmarks.push_back( pBkmk );
+    }
+    std::vector< const SwBookmark* >::iterator pBookmark = aNewBookmarks.begin();
+    while( pBookmark != aNewBookmarks.end() )
+    {
         SwPaM aTmpPam( *pCpyStt );
-
+        pBkmk = *pBookmark;
         lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetBookmarkPos().nNode.GetIndex(), nDelCount );
         lcl_SetCpyPos( pBkmk->GetBookmarkPos(), rStt, *pCpyStt, *aTmpPam.GetPoint(), nDelCount );
-        if( bHasOtherPos )
+        if( pBkmk->GetOtherBookmarkPos() )
         {
             aTmpPam.SetMark();
             lcl_NonCopyCount( rPam, aCorrIdx, pBkmk->GetOtherBookmarkPos()->nNode.GetIndex(), nDelCount );
@@ -553,6 +562,7 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
             pDestDoc->makeUniqueBookmarkName( sNewNm );
         pDestDoc->makeBookmark( aTmpPam, pBkmk->GetKeyCode(), sNewNm,
                                 pBkmk->GetShortName(), pBkmk->GetType() );
+        ++pBookmark;
     }
     pDestDoc->DoUndo( bDoesUndo );
 }
