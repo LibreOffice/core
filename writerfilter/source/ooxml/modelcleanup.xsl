@@ -9,7 +9,7 @@
  
   $RCSfile: modelcleanup.xsl,v $
  
-  $Revision: 1.5 $
+  $Revision: 1.6 $
  
   This file is part of OpenOffice.org.
  
@@ -77,7 +77,7 @@
           </xsl:attribute>
           <xsl:attribute name="tokenid">
             <xsl:text>ooxml:Value_</xsl:text>
-            <xsl:value-of select="$namespace"/>
+            <xsl:value-of select="translate($namespace, '-', '_')"/>
             <xsl:text>_</xsl:text>
             <xsl:value-of select="$definename"/>
             <xsl:text>_</xsl:text>
@@ -189,7 +189,9 @@
 
   <xsl:template match="/">
     <model>
-      <xsl:apply-templates select=".//namespace-alias"/>
+      <xsl:apply-templates select=".//namespace-alias">
+        <xsl:sort select="@id" data-type="number"/>
+      </xsl:apply-templates>
       <xsl:apply-templates select=".//token"/>
       <xsl:apply-templates select=".//fasttoken"/>
       <xsl:apply-templates select=".//namespace"/>
