@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,9 +73,8 @@ private:
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     ScAddress           maRefPos;
+    sal_Int16           mnConv;
     bool                mbEnglish;
-    bool                mbR1C1;
-    bool                mbComp3D;
     bool                mbIgnoreSpaces;
 
     void                    SetCompilerFlags( ScCompiler& rCompiler ) const;
