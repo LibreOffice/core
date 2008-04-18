@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -228,6 +228,7 @@ IDLFILES=\
       XPageCursor.idl\
       XPagePrintable.idl\
       XParagraphCursor.idl\
+    XRedline.idl\
       XReferenceMarksSupplier.idl\
       XRelativeTextContentInsert.idl\
       XRelativeTextContentRemove.idl\
