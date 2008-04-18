@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Diagram.idl,v $
- * $Revision: 1.5 $
+ *
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +102,18 @@ service Diagram
     /** Starting angle in degrees for pie charts and doughnut charts.
      */
     [optional, property] long                       StartingAngle;
+
+    /** Perspective of 3D charts ( [0,100] ).
+     */
+    [optional, property] long                       Perspective;
+
+    /** Horizontal rotation of 3D charts in degrees ( ]-180,180] ).
+     */
+    [optional, property] long                       RotationHorizontal;
+
+    /** Vertical rotation of 3D charts in degrees ( ]-180,180] ).
+     */
+    [optional, property] long                       RotationVertical;
 };
 
 } ; // chart2
