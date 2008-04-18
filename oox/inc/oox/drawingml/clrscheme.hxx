@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clrscheme.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include <map>
 #include <vector>
 #include "oox/core/namespaces.hxx"
+#include "oox/drawingml/color.hxx"
 
 namespace oox { namespace drawingml {
 
@@ -61,8 +62,6 @@ public:
 
     sal_Bool getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const;
     void     setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor );
-
-    static bool getSystemColor( const sal_Int32 nSysClrToken, sal_Int32& rColor );
 };
 
 typedef boost::shared_ptr< ClrScheme > ClrSchemePtr;
