@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -681,10 +681,15 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     if ( pType && pType->getLength() )
     {
+        sal_Int32 nType = pType->toInt32();
+        if ( nType )
+            sShapeType = EnhancedCustomShapeTypeNames::Get( static_cast< MSO_SPT >( nType ) );
+        else
+            sShapeType = *pType;
+
         aPropVal.Name = sType;
-        aPropVal.Value <<= *pType;
+        aPropVal.Value <<= sShapeType;
         aGeometryItem.SetPropertyValue( aPropVal );
-        sShapeType = *pType;
     }
     else
     {
