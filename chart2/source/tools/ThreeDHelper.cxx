@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ThreeDHelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -363,6 +363,15 @@ double lcl_shiftAngleToIntervalMinusPiToPi( double fAngleRad )
     return fAngleRad;
 }
 
+void lcl_shiftAngleToIntervalMinus180To180( sal_Int32& rnAngleDegree )
+{
+    //valid range:  ]-180,180]
+    while( rnAngleDegree<=-180 )
+        rnAngleDegree+=360;
+    while( rnAngleDegree>180 )
+        rnAngleDegree-=360;
+}
+
 }
 
 double ThreeDHelper::getValueClippedToRange( double fAngle, const double& fPositivLimit )
@@ -522,6 +531,37 @@ void ThreeDHelper::setRotationAngleToDiagram(
     }
 }
 
+void ThreeDHelper::getRotationFromDiagram( const uno::Reference< beans::XPropertySet >& xSceneProperties
+            , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree )
+{
+    //todo: x and y is not equal to horz and vert in case of RightAngledAxes==false
+
+    double fXAngle, fYAngle, fZAngle;
+    ThreeDHelper::getRotationAngleFromDiagram( xSceneProperties, fXAngle, fYAngle, fZAngle );
+
+    fXAngle = BaseGFXHelper::Rad2Deg( fXAngle );
+    fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
+    fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
+
+    rnHorizontalAngleDegree = ::basegfx::fround(fXAngle);
+    rnVerticalAngleDegree = ::basegfx::fround(-1.0*fYAngle);
+    //nZRotation = ::basegfx::fround(-1.0*fZAngle);
+
+    lcl_shiftAngleToIntervalMinus180To180( rnHorizontalAngleDegree );
+    lcl_shiftAngleToIntervalMinus180To180( rnVerticalAngleDegree );
+}
+
+void ThreeDHelper::setRotationToDiagram( const uno::Reference< beans::XPropertySet >& xSceneProperties
+            , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree )
+{
+    //todo: x and y is not equal to horz and vert in case of RightAngledAxes==false
+    double fXAngle = BaseGFXHelper::Deg2Rad( nHorizontalAngleDegree );
+    double fYAngle = BaseGFXHelper::Deg2Rad( -1*nVerticalYAngleDegree );
+    double fZAngle = 0.0;
+
+    ThreeDHelper::setRotationAngleToDiagram( xSceneProperties, fXAngle, fYAngle, fZAngle );
+}
+
 void ThreeDHelper::getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance )
 {
     rfMinimumDistance = 3.0/4.0*FIXED_SIZE_FOR_3D_CHART_VOLUME;//empiric value
@@ -587,6 +627,38 @@ void ThreeDHelper::setCameraDistance(
     {
         ASSERT_EXCEPTION( ex );
     }
+}
+
+//static
+double ThreeDHelper::CameraDistanceToPerspective( double fCameraDistance )
+{
+    double fRet = fCameraDistance;
+    double fMin, fMax;
+    ThreeDHelper::getCameraDistanceRange( fMin, fMax );
+    //fMax <-> 0; fMin <->100
+    //a/x + b = y
+    double a = 100.0*fMax*fMin/(fMax-fMin);
+    double b = -a/fMax;
+
+    fRet = a/fCameraDistance + b;
+
+    return fRet;
+}
+
+//static
+double ThreeDHelper::PerspectiveToCameraDistance( double fPerspective )
+{
+    double fRet = fPerspective;
+    double fMin, fMax;
+    ThreeDHelper::getCameraDistanceRange( fMin, fMax );
+    //fMax <-> 0; fMin <->100
+    //a/x + b = y
+    double a = 100.0*fMax*fMin/(fMax-fMin);
+    double b = -a/fMax;
+
+    fRet = a/(fPerspective - b);
+
+    return fRet;
 }
 
 //static
