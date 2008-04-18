@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylesbuffer.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,21 +60,19 @@ const sal_Int32 OOX_COLOR_FONTAUTO          = 0x7FFF;   /// Font auto color (sys
 
 // ============================================================================
 
-/** Generic helper struct for a style color. */
-struct OoxColor
+class Color
 {
-    double              mfTint;             /// Color tint (darken/lighten).
-    sal_Int32           mnType;             /// Color type (XML token identifier).
-    sal_Int32           mnValue;            /// RGB color value or palette index.
+public:
+    explicit            Color();
 
-    explicit            OoxColor();
-    explicit            OoxColor( sal_Int32 nType, sal_Int32 nValue, double fTint = 0.0 );
-
-    /** Returns true, if the color is set to automatic. */
-    bool                isAuto() const;
-
-    /** Sets the color to the passed values. */
-    void                set( sal_Int32 nType, sal_Int32 nValue, double fTint = 0.0 );
+    /** Sets the color to automatic. */
+    void                setAuto();
+    /** Sets the color to the passed RGB value. */
+    void                setRgb( sal_Int32 nRgbValue, double fTint = 0.0 );
+    /** Sets the color to the passed theme index. */
+    void                setTheme( sal_Int32 nThemeIdx, double fTint = 0.0 );
+    /** Sets the color to the passed palette index. */
+    void                setIndexed( sal_Int32 nPaletteIdx, double fTint = 0.0 );
 
     /** Imports the color from the passed attribute list. */
     void                importColor( const AttributeList& rAttribs );
@@ -90,11 +88,30 @@ struct OoxColor
     void                importColorId( BiffInputStream& rStrm, bool b16Bit = true );
     /** Imports a 32-bit RGBA color value from the passed BIFF stream. */
     void                importColorRgb( BiffInputStream& rStrm );
+
+    /** Returns true, if the color is set to automatic. */
+    bool                isAuto() const;
+    /** Returns the RGB value of the color, or nAuto for automatic colors. */
+    sal_Int32           getColor( const WorkbookHelper& rHelper, sal_Int32 nAuto = API_RGB_TRANSPARENT ) const;
+
+private:
+    enum ColorMode
+    {
+        COLOR_AUTO,         /// Automatic color (dependent on context).
+        COLOR_RGB,          /// Hexadecimal RGB color.
+        COLOR_THEME,        /// Indexed theme color.
+        COLOR_INDEXED,      /// Indexed palette color.
+        COLOR_FINAL         /// Finalized RGB color (resolved theme, applied tint).
+    };
+
+    mutable ColorMode   meMode;             /// Current color mode.
+    mutable sal_Int32   mnValue;            /// RGB value, palette index, scheme index.
+    double              mfTint;             /// Color tint (darken/lighten).
 };
 
 // ----------------------------------------------------------------------------
 
-RecordInputStream& operator>>( RecordInputStream& rStrm, OoxColor& orColor );
+RecordInputStream& operator>>( RecordInputStream& rStrm, Color& orColor );
 
 // ============================================================================
 
@@ -113,7 +130,7 @@ public:
     void                importPalette( BiffInputStream& rStrm );
 
     /** Rturns the RGB value of the color with the passed index. */
-    sal_Int32           getColor( sal_Int32 nColorId ) const;
+    sal_Int32           getColor( sal_Int32 nPaletteIdx ) const;
 
 private:
     /** Appends the passed color. */
@@ -132,7 +149,7 @@ private:
 struct OoxFontData
 {
     ::rtl::OUString     maName;             /// Font name.
-    OoxColor            maColor;            /// Font color.
+    Color               maColor;            /// Font color.
     sal_Int32           mnScheme;           /// Major/minor scheme font.
     sal_Int32           mnFamily;           /// Font family.
     sal_Int32           mnCharSet;          /// Windows font character set.
@@ -351,7 +368,7 @@ typedef ::boost::shared_ptr< Protection > ProtectionRef;
 /** Contains XML attributes of a single border line. */
 struct OoxBorderLineData
 {
-    OoxColor            maColor;            /// Borderline color.
+    Color               maColor;            /// Borderline color.
     sal_Int32           mnStyle;            /// Border line style.
     bool                mbUsed;             /// True = line format used.
 
@@ -439,8 +456,8 @@ typedef ::boost::shared_ptr< Border > BorderRef;
 /** Contains XML pattern fill attributes from the patternFill element. */
 struct OoxPatternFillData
 {
-    OoxColor            maPatternColor;     /// Pattern foreground color.
-    OoxColor            maFillColor;        /// Background fill color.
+    Color               maPatternColor;     /// Pattern foreground color.
+    Color               maFillColor;        /// Background fill color.
     sal_Int32           mnPattern;          /// Pattern identifier (e.g. solid).
     bool                mbPattColorUsed;    /// True = pattern foreground color used.
     bool                mbFillColorUsed;    /// True = background fill color used.
@@ -459,7 +476,7 @@ struct OoxPatternFillData
 /** Contains XML gradient fill attributes from the gradientFill element. */
 struct OoxGradientFillData
 {
-    typedef ::std::map< double, OoxColor > OoxColorMap;
+    typedef ::std::map< double, Color > ColorMap;
 
     sal_Int32           mnType;             /// Gradient type, linear or path.
     double              mfAngle;            /// Rotation angle for type linear.
@@ -467,7 +484,7 @@ struct OoxGradientFillData
     double              mfRight;            /// Right convergence for type path.
     double              mfTop;              /// Top convergence for type path.
     double              mfBottom;           /// Bottom convergence for type path.
-    OoxColorMap         maColors;           /// Gradient colors.
+    ColorMap            maColors;           /// Gradient colors.
 
     explicit            OoxGradientFillData();
 
@@ -799,8 +816,8 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the RGB value of the passed color object, or nAuto for automatic colors. */
-    sal_Int32           getColor( const OoxColor& rColor, sal_Int32 nAuto ) const;
+    /** Returns the palette color with the specified index. */
+    sal_Int32           getPaletteColor( sal_Int32 nIndex ) const;
     /** Returns the specified font object. */
     FontRef             getFont( sal_Int32 nFontId ) const;
     /** Returns the specified cell format object. */
