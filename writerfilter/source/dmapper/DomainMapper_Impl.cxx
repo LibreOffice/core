@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -389,14 +389,16 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
-        m_bLineNumberingSet( false )
+        m_bLineNumberingSet( false ),
+        m_bIsInFootnoteProperties( true ),
+        m_bIsCustomFtnMark( false )
 {
     GetBodyText();
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert = uno::Reference< text::XTextAppendAndConvert >( m_xBodyText, uno::UNO_QUERY );
     m_aTextAppendStack.push(xBodyTextAppendAndConvert);
 
     TableDataHandler_t::Pointer_t pTableHandler
-        (new DomainMapperTableHandler(xBodyTextAppendAndConvert));
+        (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
     m_TableManager.setHandler(pTableHandler);
 
     m_TableManager.startLevel();
@@ -988,7 +990,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                                     rAppendContext.pLastParagraphProperties->GetStartingRange(),
                                     rAppendContext.pLastParagraphProperties->GetEndingRange());
                             }
-                            xTextAppendAndConvert->convertToTextFrame(
+                            //frame conversion has to be executed after table conversion
+                            RegisterFrameConversion(
                             rAppendContext.pLastParagraphProperties->GetStartingRange(),
                             rAppendContext.pLastParagraphProperties->GetEndingRange(),
                             aFrameProperties );
@@ -3402,6 +3405,49 @@ _PageMar::_PageMar()
     header = footer = top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1800));
     gutter = 0;
+}
+
+/*-- 07.03.2008 12:07:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::RegisterFrameConversion(
+        uno::Reference< text::XTextRange >      xFrameStartRange,
+        uno::Reference< text::XTextRange >      xFrameEndRange,
+        uno::Sequence< beans::PropertyValue >   aFrameProperties
+        )
+{
+    OSL_ENSURE(
+        !m_aFrameProperties.getLength() && !m_xFrameStartRange.is() && !m_xFrameEndRange.is(),
+        "frame properties not removed");
+    m_aFrameProperties = aFrameProperties;
+    m_xFrameStartRange = xFrameStartRange;
+    m_xFrameEndRange   = xFrameEndRange;
+}
+/*-- 07.03.2008 12:07:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool DomainMapper_Impl::ExecuteFrameConversion()
+{
+    bool bRet = false;
+    if( m_xFrameStartRange.is() && m_xFrameEndRange.is() )
+    {
+        bRet = true;
+        try
+        {
+            GetTopTextAppendAndConvert()->convertToTextFrame(
+            m_xFrameStartRange,
+            m_xFrameEndRange,
+            m_aFrameProperties );
+        }
+        catch( const uno::Exception& )
+        {
+            bRet = false;
+        }
+        m_xFrameStartRange = 0;
+        m_xFrameEndRange = 0;
+        m_aFrameProperties.realloc( 0 );
+    }
+    return bRet;
 }
 
 }}
