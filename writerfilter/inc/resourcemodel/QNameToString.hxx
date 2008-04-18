@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QNameToString.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +88,40 @@ string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
 
 string WRITERFILTER_DLLPUBLIC propertysetToString
 (uno::Reference<beans::XPropertySet> const & rProps);
+
+struct XMLAttribute
+{
+    string mName;
+    string mValue;
+public:
+    XMLAttribute(string sName, string sValue)
+    : mName(sName), mValue(sValue)
+    {
+    }
+
+};
+
+class WRITERFILTER_DLLPUBLIC XMLTag
+{
+public:
+    enum eMode { START, END, COMPLETE };
+    typedef boost::shared_ptr<XMLTag> Pointer_t;
+
+private:
+    string mTag;
+    string mChars;
+    vector<XMLAttribute> mAttrs;
+    vector<XMLTag::Pointer_t> mTags;
+    eMode mMode;
+
+public:
+    XMLTag(string sTag, eMode mode = COMPLETE) : mTag(sTag), mMode(mode) {}
+
+    void addAttr(string name, string value);
+    void addTag(Pointer_t pTag);
+    void chars(const string & rChars);
+    string toString() const;
+};
 
 }
 
