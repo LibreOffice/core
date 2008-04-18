@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: clrscheme.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,20 +80,6 @@ sal_Bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) con
 void ClrScheme::setColor( sal_Int32 nSchemeClrToken, sal_Int32 nColor )
 {
     maClrScheme[ nSchemeClrToken ] = nColor;
-}
-
-// static
-bool ClrScheme::getSystemColor( const sal_Int32 nSysClrToken, sal_Int32& rColor )
-{
-    //! TODO: get colors from system
-    switch( nSysClrToken )
-    {
-        case XML_window:        rColor = 0xFFFFFF;  break;
-        case XML_windowText:    rColor = 0x000000;  break;
-        //! TODO: more colors to follow... (chapter 5.1.12.58)
-        default:    return false;
-    }
-    return true;
 }
 
 } }
