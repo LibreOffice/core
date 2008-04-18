@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: graphicshapecontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,13 +76,14 @@ private:
     sal_Int32       mnFollowColorSchemeToken;
 };
 
+// ====================================================================
 
 class DiagramGraphicDataContext
     : public ShapeContext
 {
 public:
     DiagramGraphicDataContext( ::oox::core::ContextHandler& rParent, ShapePtr pShapePtr );
-    ~DiagramGraphicDataContext();
+    virtual ~DiagramGraphicDataContext();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 private:
@@ -94,7 +95,23 @@ private:
     ::rtl::OUString msCs;
 };
 
+// ====================================================================
 
+class ChartGraphicDataContext : public ShapeContext
+{
+public:
+    explicit            ChartGraphicDataContext(
+                            ::oox::core::ContextHandler& rParent,
+                            ShapePtr pShapePtr );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
+                        createFastChildContext(
+                            sal_Int32 nElement,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
+                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+};
+
+// ====================================================================
 
 } }
 
