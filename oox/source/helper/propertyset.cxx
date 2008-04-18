@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyset.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #include "oox/helper/propertyset.hxx"
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include "oox/helper/propertymap.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OStringBuffer;
@@ -143,6 +144,17 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
     catch( Exception& )
     {
         OSL_ENSURE( false, "PropertySet::setAnyProperty - cannot set all property values" );
+    }
+}
+
+void PropertySet::setProperties( const PropertyMap& rPropertyMap )
+{
+    if( !rPropertyMap.empty() )
+    {
+        Sequence< OUString > aPropNames;
+        Sequence< Any > aValues;
+        rPropertyMap.makeSequence( aPropNames, aValues );
+        setProperties( aPropNames, aValues );
     }
 }
 
