@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transobj.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,7 @@ private:
     USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
     BOOL                            bUsedForLink;
+    bool                            bHasFiltered;       // if has filtered rows
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
@@ -94,6 +95,7 @@ public:
     SCROW               GetDragHandleY() const  { return nDragHandleY; }
     SCTAB               GetVisibleTab() const   { return nVisibleTab; }
     USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
+    bool                HasFilteredRows() const { return bHasFiltered; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
