@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ShapeFilterBase.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@ namespace shape {
 
 // ============================================================================
 
-
 class ShapeFilterBase : public core::XmlFilterBase
 {
 public:
@@ -58,10 +57,15 @@ public:
     /** Has to be implemented by each filter to return drawings collection. */
     virtual const ::oox::vml::DrawingPtr getDrawings();
 
+    virtual ::oox::drawingml::chart::ChartConverter& getChartConverter();
+
     virtual rtl::OUString implGetImplementationName() const;
 
     virtual bool importDocument() { return true; }
     virtual bool exportDocument() { return true; }
+
+private:
+    ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 
 // ============================================================================
