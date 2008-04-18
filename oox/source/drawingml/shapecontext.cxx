@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapecontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,9 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 
     case XML_txBody:
     {
-        xRet = new TextBodyContext( *this, *mpShapePtr );
+        TextBodyPtr xTextBody( new TextBody );
+        mpShapePtr->setTextBody( xTextBody );
+        xRet = new TextBodyContext( *this, *xTextBody );
         break;
     }
     }

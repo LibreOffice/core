@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spdefcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,9 @@ Reference< XFastContextHandler > spDefContext::createFastChildContext( sal_Int32
         }
         case NMSP_DRAWINGML|XML_bodyPr:
         {
-            xRet = new TextBodyPropertiesContext( *this, xAttribs, mrDefaultObject );
+            TextBodyPtr xTextBody( new TextBody );
+            mrDefaultObject.setTextBody( xTextBody );
+            xRet = new TextBodyPropertiesContext( *this, xAttribs, xTextBody->getTextProperties() );
             break;
         }
         case NMSP_DRAWINGML|XML_lstStyle:
