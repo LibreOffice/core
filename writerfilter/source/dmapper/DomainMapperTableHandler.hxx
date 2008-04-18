@@ -7,7 +7,8 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapperTableHandler.hxx,v $
- * $Revision: 1.7 $
+ *
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +32,7 @@
 #define INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
 
 #include <resourcemodel/TableManager.hxx>
-#include "PropertyMap.hxx"
+#include <PropertyMap.hxx>
 
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
@@ -56,9 +57,11 @@ typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellProperty
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
-class DomainMapperTableHandler : public TableDataHandler<Handle_t , PropertyMapPtr >
+class DomainMapper_Impl;
+class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
+    DomainMapper_Impl&      m_rDMapper_Impl;
     CellSequencePointer_t   m_pCellSeq;
     RowSequencePointer_t    m_pRowSeq;
     TableSequencePointer_t  m_pTableSeq;
@@ -66,7 +69,7 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , PropertyMapP
     // properties
     PropertyMapVector2      m_aCellProperties;
     PropertyMapVector1      m_aRowProperties;
-    PropertyMapPtr          m_aTableProperties;
+    TablePropertyMapPtr     m_aTableProperties;
 
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
@@ -74,20 +77,15 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , PropertyMapP
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
 
-    DomainMapperTableHandler(TextReference_t xText)
-    : m_xText(xText),
-        m_nCellIndex(0),
-        m_nRowIndex(0)
-    {
-    }
-    virtual ~DomainMapperTableHandler() {}
+    DomainMapperTableHandler(TextReference_t xText, DomainMapper_Impl& rDMapper_Impl);
+    virtual ~DomainMapperTableHandler();
 
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
-                            PropertyMapPtr pProps);
+                            TablePropertyMapPtr pProps);
     virtual void endTable();
-    virtual void startRow(unsigned int nCells, PropertyMapPtr pProps);
+    virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps);
     virtual void endRow();
-    virtual void startCell(const Handle_t & start, PropertyMapPtr pProps);
+    virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps);
     virtual void endCell(const Handle_t & end);
 };
 
