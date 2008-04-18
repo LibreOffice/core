@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textrun.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,71 +48,71 @@ using namespace ::com::sun::star::lang;
 
 namespace oox { namespace drawingml {
 
-    TextRun::TextRun()
-        : mbIsLineBreak( false )
-        , maTextCharacterPropertiesPtr( new TextCharacterProperties() )
-    {
-    }
+TextRun::TextRun()
+    : mbIsLineBreak( false )
+    , maTextCharacterPropertiesPtr( new TextCharacterProperties() )
+{
+}
 
 
-    TextRun::~TextRun()
-    {
-    }
+TextRun::~TextRun()
+{
+}
 
-    void TextRun::insertAt(
-            const ::oox::core::XmlFilterBase& rFilterBase,
-            const Reference < XText > & xText,
-            const Reference < XTextCursor > &xAt,
-            const TextCharacterPropertiesPtr& rTextCharacterStyle )
-    {
-        try {
-            Reference< XTextRange > xStart( xAt, UNO_QUERY );
+void TextRun::insertAt(
+        const ::oox::core::XmlFilterBase& rFilterBase,
+        const Reference < XText > & xText,
+        const Reference < XTextCursor > &xAt,
+        const TextCharacterPropertiesPtr& rTextCharacterStyle )
+{
+    try {
+        Reference< XTextRange > xStart( xAt, UNO_QUERY );
 
-            Reference< XPropertySet > xProps( xStart, UNO_QUERY);
-            if ( rTextCharacterStyle.get() )
-                rTextCharacterStyle->pushToPropSet( rFilterBase, xProps );
+        Reference< XPropertySet > xProps( xStart, UNO_QUERY);
+        if ( rTextCharacterStyle.get() )
+            rTextCharacterStyle->pushToPropSet( rFilterBase, xProps );
 
-            maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xProps );
+        maTextCharacterPropertiesPtr->pushToPropSet( rFilterBase, xProps );
 
-            if( maTextCharacterPropertiesPtr->getHyperlinkPropertyMap().empty() )
+        if( maTextCharacterPropertiesPtr->getHyperlinkPropertyMap().empty() )
+        {
+            if( mbIsLineBreak )
             {
-                 if( mbIsLineBreak )
-                {
-                    OSL_TRACE( "OOX: TextRun::insertAt() insert line break" );
-                    xText->insertControlCharacter( xStart, ControlCharacter::LINE_BREAK, sal_False );
-                }
-                else
-                {
-                    xText->insertString( xStart, text(), sal_False );
-                }
+                OSL_TRACE( "OOX: TextRun::insertAt() insert line break" );
+                xText->insertControlCharacter( xStart, ControlCharacter::LINE_BREAK, sal_False );
             }
             else
             {
-                OSL_TRACE( "OOX: URL field" );
-                Reference< XMultiServiceFactory > xFactory( rFilterBase.getModel(), UNO_QUERY );
-                Reference< XTextField > xField( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ), UNO_QUERY );
-                if( xField.is() )
-                {
-                    const rtl::OUString sRepresentation( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Representation" ) ) );
-                    maTextCharacterPropertiesPtr->getHyperlinkPropertyMap()[ sRepresentation ] <<= text();
-
-                    Reference< XPropertySet > xFieldProps( xField, UNO_QUERY);
-                    maTextCharacterPropertiesPtr->pushToUrlFieldPropSet( xFieldProps );
-                    Reference< XTextContent > xContent( xField, UNO_QUERY);
-                    xText->insertTextContent( xStart, xContent, sal_False );
-                }
-                else
-                {
-                    OSL_TRACE( "OOX: URL field couldn't be created" );
-                    xText->insertString( xStart, text(), sal_False );
-                }
+                xText->insertString( xStart, getText(), sal_False );
             }
         }
-        catch( const Exception&  )
+        else
         {
-            OSL_TRACE("OOX:  TextRun::insertAt() exception");
+            OSL_TRACE( "OOX: URL field" );
+            Reference< XMultiServiceFactory > xFactory( rFilterBase.getModel(), UNO_QUERY );
+            Reference< XTextField > xField( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ), UNO_QUERY );
+            if( xField.is() )
+            {
+                const rtl::OUString sRepresentation( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Representation" ) ) );
+                maTextCharacterPropertiesPtr->getHyperlinkPropertyMap()[ sRepresentation ] <<= getText();
+
+                Reference< XPropertySet > xFieldProps( xField, UNO_QUERY);
+                maTextCharacterPropertiesPtr->pushToUrlFieldPropSet( xFieldProps );
+                Reference< XTextContent > xContent( xField, UNO_QUERY);
+                xText->insertTextContent( xStart, xContent, sal_False );
+            }
+            else
+            {
+                OSL_TRACE( "OOX: URL field couldn't be created" );
+                xText->insertString( xStart, getText(), sal_False );
+            }
         }
     }
+    catch( const Exception&  )
+    {
+        OSL_TRACE("OOX:  TextRun::insertAt() exception");
+    }
+}
 
 
 } }

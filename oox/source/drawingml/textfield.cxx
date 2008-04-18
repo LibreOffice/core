@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfield.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,7 +179,7 @@ namespace oox { namespace drawingml {
             }
             else
             {
-                xText->insertString( xStart, text(), sal_False );
+                xText->insertString( xStart, getText(), sal_False );
             }
         }
         catch( const Exception&  )

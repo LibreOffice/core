@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textfieldcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ namespace oox { namespace drawingml {
     {
         if( mbIsInText )
         {
-            mpTextField->text() += aChars;
+            mpTextField->getText() += aChars;
         }
     }
 
