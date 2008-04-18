@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1641,17 +1641,66 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
         bool bIllegalException = false;
         bool bRuntimeException = false;
         ::rtl::OUString sMessage;
-        SwNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
+        SwStartNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
         while(pStartStartNode && pStartStartNode->IsSectionNode())
         {
+            pStartStartNode = pStartStartNode->StartOfSectionNode();
         }
-        SwNode* pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
+        SwStartNode* pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
         while(pEndStartNode && pEndStartNode->IsSectionNode())
         {
             pEndStartNode = pEndStartNode->StartOfSectionNode();
         }
+        bool bParaAfterInserted = false;
+        bool bParaBeforeInserted = false;
         if(pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
-            throw lang::IllegalArgumentException();
+        {
+            //todo: if the start/end is in a table then insert a paragraph before/after, move
+            //the start/end nodes, then convert and remove the addtional paragraphs in the end
+            if( pStartStartNode->GetStartNodeType() == SwTableBoxStartNode )
+            {
+                SwTableNode* pSartTableNode = pStartStartNode->FindTableNode();
+                SwNodeIndex aTblIdx(  *pSartTableNode, -1 );
+                SwPosition aBefore(aTblIdx);
+                bParaBeforeInserted = GetDoc()->AppendTxtNode( aBefore );
+                aStartPam.DeleteMark();
+                *aStartPam.GetPoint() = aBefore;
+                pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
+            }
+            if( pEndStartNode->GetStartNodeType() == SwTableBoxStartNode )
+            {
+                SwTableNode* pEndTableNode = pEndStartNode->FindTableNode();
+                SwEndNode* pTableEnd = pEndTableNode->EndOfSectionNode();
+                SwPosition aTableEnd(*pTableEnd);
+                bParaAfterInserted = GetDoc()->AppendTxtNode( aTableEnd );
+                pEndPam->DeleteMark();
+                *pEndPam->GetPoint() = aTableEnd;
+                pEndStartNode  = pEndPam->GetNode()->StartOfSectionNode();
+            }
+            //now we should have the positions in the same hierarchy
+            if(pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
+            {
+                //if not - remove the additional paragraphs and throw
+                if( bParaBeforeInserted )
+                {
+                    SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
+                    aDelete.MovePara(fnParaCurr, fnParaStart);
+                    aDelete.SetMark();
+                    aDelete.MovePara(fnParaCurr, fnParaEnd);
+                    GetDoc()->DelFullPara(aDelete);
+                }
+                if( bParaAfterInserted )
+                {
+                    SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
+                    aDelete.MovePara(fnParaCurr, fnParaStart);
+                    aDelete.SetMark();
+                    aDelete.MovePara(fnParaCurr, fnParaEnd);
+                    GetDoc()->DelFullPara(aDelete);
+                }
+                throw lang::IllegalArgumentException();
+            }
+        }
+
         //make a selection from aStartPam to a EndPam
         SwSelBoxes aBoxes;
         SfxItemSet aFrameItemSet(pDoc->GetAttrPool(),
@@ -1711,6 +1760,28 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
             bRuntimeException = true;
         }
         xRet = pNewFrame;
+        uno::Reference<text::XTextCursor> xFrameTextCursor;
+        if( bParaBeforeInserted )
+        {
+            //todo: remove paragraph before frame
+            xFrameTextCursor = pNewFrame->createTextCursor();
+            uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor, uno::UNO_QUERY);
+            SwXTextCursor* pFrameCursor = reinterpret_cast< SwXTextCursor* >(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextCursor::getUnoTunnelId()) ));
+            pDoc->DelFullPara(*pFrameCursor->GetPaM());
+        }
+        if( bParaAfterInserted )
+        {
+            //todo: remove paragraph after frame
+            if( xFrameTextCursor.is() )
+                xFrameTextCursor = pNewFrame->createTextCursor();
+            xFrameTextCursor->gotoEnd( false );
+            uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor, uno::UNO_QUERY);
+            SwXTextCursor* pFrameCursor = reinterpret_cast< SwXTextCursor* >(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXTextCursor::getUnoTunnelId()) ));
+            pDoc->DelFullPara(*pFrameCursor->GetPaM());
+        }
+
         pDoc->EndUndo(UNDO_END, NULL);
         if( bIllegalException || bRuntimeException )
         {
