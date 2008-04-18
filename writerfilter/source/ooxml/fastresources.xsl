@@ -9,7 +9,7 @@
  
   $RCSfile: fastresources.xsl,v $
  
-  $Revision: 1.3 $
+  $Revision: 1.4 $
  
   This file is part of OpenOffice.org.
  
@@ -80,6 +80,7 @@
 #include &lt;resourcemodel/WW8ResourceModel.hxx&gt;
 #include &lt;doctok/resourceids.hxx&gt;
 #include &lt;ooxml/resourceids.hxx&gt;
+#include &lt;ooxml/OOXMLnamespaceids.hxx&gt;
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFastTokens.hxx"
 #include "OOXMLStreamImpl.hxx"</xsl:text>
