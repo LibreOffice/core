@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: redline.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,6 +136,8 @@ public:
     inline const SwRedlineData* Next() const{ return pNext; }
 
     void SetComment( const String& rS )     { sComment = rS; }
+    void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
+
     void SetAutoFmtFlag()
   { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     int CanCombine( const SwRedlineData& rCmp ) const
