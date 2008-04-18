@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbody.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +28,6 @@
  *
  ************************************************************************/
 
-#include <algorithm>
-#include <boost/bind.hpp>
-
 #include "oox/drawingml/textbody.hxx"
 
 using ::rtl::OUString;
@@ -41,34 +38,38 @@ using namespace ::com::sun::star::frame;
 namespace oox { namespace drawingml {
 
 
-    TextBody::TextBody()
-        : mpTextListStyle( new TextListStyle() )
+TextBody::TextBody()
+{
+}
+
+TextBody::~TextBody()
+{
+}
+
+TextParagraph& TextBody::addParagraph()
+{
+    TextParagraphPtr xPara( new TextParagraph );
+    maParagraphs.push_back( xPara );
+    return *xPara;
+}
+
+void TextBody::insertAt(
+        const ::oox::core::XmlFilterBase& rFilterBase,
+        const Reference < XText > & xText,
+        const Reference < XTextCursor > & xAt,
+        const TextListStylePtr& pMasterTextListStylePtr )
+{
+    TextListStylePtr aCombinedTextStyle( new TextListStyle( *pMasterTextListStylePtr ) );
+    aCombinedTextStyle->apply( maTextListStyle );
+
+    TextParagraphVector::iterator begin( maParagraphs.begin() );
+    TextParagraphVector::iterator end( maParagraphs.end() );
+    // apparently if there is no paragraph, it crashes. this is sort of the
+    // expected behavior.
+    while( begin != end )
     {
-    }
-
-    TextBody::~TextBody()
-    {
-    }
-
-
-
-    void TextBody::insertAt(
-            const ::oox::core::XmlFilterBase& rFilterBase,
-            const Reference < XText > & xText,
-            const Reference < XTextCursor > & xAt,
-            const TextListStylePtr& pMasterTextListStylePtr )
-    {
-        TextListStylePtr aCombinedTextStyle( new TextListStyle( *(pMasterTextListStylePtr.get()) ) );
-        aCombinedTextStyle->apply( mpTextListStyle );
-
-        std::vector< TextParagraphPtr >::iterator begin( maParagraphs.begin() );
-        std::vector< TextParagraphPtr >::iterator end( maParagraphs.end() );
-        // apparently if there is no paragraph, it crashes. this is sort of the
-        // expected behavior.
-        while( begin != end )
-        {
-            (*begin)->insertAt( rFilterBase, xText, xAt, aCombinedTextStyle, begin == maParagraphs.begin() );
-            begin++;
+        (*begin)->insertAt( rFilterBase, xText, xAt, aCombinedTextStyle, begin == maParagraphs.begin() );
+        begin++;
 /*
             std::for_each( begin, end,
                                          boost::bind( &TextParagraph::insertAt, _1,
@@ -77,8 +78,8 @@ namespace oox { namespace drawingml {
                                                                     boost::bind( std::equal_to<TextParagraphPtr>(), _1,
                                                                                              *maParagraphs.begin() ) ) );
 */
-        }
     }
+}
 
 
 } }
