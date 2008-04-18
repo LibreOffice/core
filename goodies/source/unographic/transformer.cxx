@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transformer.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,8 +103,8 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     const uno::Reference< uno::XInterface > xIFace( rxGraphic, uno::UNO_QUERY );
     ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
 
-    BitmapColor aColorFrom( static_cast< sal_uInt8 >( nColorFrom ), static_cast< sal_uInt8 >( nColorFrom >> 16 ), static_cast< sal_uInt8 >( nColorFrom >> 24 ) );
-    BitmapColor aColorTo( static_cast< sal_uInt8 >( nColorTo ), static_cast< sal_uInt8 >( nColorTo >> 16 ), static_cast< sal_uInt8 >( nColorTo  >> 24 ) );
+    BitmapColor aColorFrom( static_cast< sal_uInt8 >( nColorFrom ), static_cast< sal_uInt8 >( nColorFrom >> 8 ), static_cast< sal_uInt8 >( nColorFrom >> 16 ) );
+    BitmapColor aColorTo( static_cast< sal_uInt8 >( nColorTo ), static_cast< sal_uInt8 >( nColorTo >> 8 ), static_cast< sal_uInt8 >( nColorTo  >> 16 ) );
 
     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -141,7 +141,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             if ( ( nAlphaTo == 0 ) || ( nAlphaTo == sal::static_int_cast<sal_Int8>(0xff) ) )
             {
                 Bitmap aMask( aBitmap.CreateMask( aColorFrom, nTolerance ) );
-                aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
+                    aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
                 aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
             }
             else
