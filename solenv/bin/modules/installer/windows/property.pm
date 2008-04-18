@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -278,6 +278,19 @@ sub set_important_properties
     my $languagesline = "PRODUCTALLLANGUAGES" . "\t" . $$languagestringref . "\n";
     push(@{$propertyfile}, $languagesline);
 
+    if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'}  eq "Beta" ))
+    {
+        my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
+        push(@{$propertyfile}, $registryline);
+        my $betainfoline = "BETAPRODUCT" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $betainfoline);
+    }
+    else
+    {
+        my $registryline = "WRITE_REGISTRY" . "\t" . "1" . "\n";    # Default: Write complete registry
+        push(@{$propertyfile}, $registryline);
+    }
+
     # Adding also used tree conditions for multilayer products.
     # These are saved in %installer::globals::usedtreeconditions
     foreach my $treecondition (keys %installer::globals::usedtreeconditions)
@@ -447,6 +460,38 @@ sub set_regkeyprodpath_in_property_table
     my $infoline = "Added language content into idt file: $properyfilename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
+}
+
+############################################################
+# Changing default for MS file type registration
+# in Beta products.
+############################################################
+
+sub update_checkbox_table
+{
+    my ($basedir, $allvariables) = @_;
+
+    if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'}  eq "Beta" ))
+    {
+        my $checkboxfilename = $basedir . $installer::globals::separator . "CheckBox.idt";
+
+        if ( -f $checkboxfilename )
+        {
+            my $checkboxfile = installer::files::read_file($checkboxfilename);
+
+            my $checkboxline = "SELECT_WORD" . "\t" . "0" . "\n";
+            push(@{$checkboxfile}, $checkboxline);
+            $checkboxline = "SELECT_EXCEL" . "\t" . "0" . "\n";
+            push(@{$checkboxfile}, $checkboxline);
+            $checkboxline = "SELECT_POWERPOINT" . "\t" . "0" . "\n";
+            push(@{$checkboxfile}, $checkboxline);
+
+            # Saving the property file
+            installer::files::save_file($checkboxfilename ,$checkboxfile);
+            my $infoline = "Added ms file type defaults into idt file: $checkboxfilename\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+    }
 }
 
 1;
