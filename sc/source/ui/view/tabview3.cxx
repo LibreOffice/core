@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview3.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -233,8 +233,9 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl )
 
 void ScTabView::UpdateAutoFillMark()
 {
+    // single selection or cursor
     ScRange aMarkRange;
-    BOOL bMarked = aViewData.GetSimpleArea( aMarkRange );       // single selection or cursor
+    BOOL bMarked = (aViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
 
     USHORT i;
     for (i=0; i<4; i++)
