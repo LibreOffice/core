@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLDocument.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,12 +105,9 @@ public:
      */
     virtual uno::Reference<xml::sax::XFastParser> getFastParser() = 0;
 
-    /**
-       Returns input stream for this stream.
-     */
-    virtual uno::Reference<io::XInputStream> getInputStream() = 0;
-
     virtual uno::Reference<io::XInputStream> getDocumentStream() = 0;
+
+    virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
 
     /**
        Returns component context for this stream.
@@ -125,6 +122,8 @@ public:
        @return the URL found or an empty string
      */
     virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId) = 0;
+
+    virtual const ::rtl::OUString & getTarget() const = 0;
 
     virtual uno::Reference<xml::sax::XFastTokenHandler>
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext) = 0;
@@ -158,19 +157,28 @@ public:
     /**
        Resolves a footnote to a stream handler.
 
+       A footnote is resolved if either the note type or
+       note id matches.
+
        @param rStream       stream handler to resolve to
+       @param rNoteType     type of footnote to resolve
        @param rNoteId       id of the footnote to resolve
      */
     virtual void resolveFootnote(Stream & rStream,
+                                 const Id & rNoteType,
                                  const rtl::OUString & rNoteId) = 0;
-
     /**
        Resolves an endnote to a stream handler.
 
+       An endnote is resolved if either the note type or
+       note id matches.
+
        @param rStream       stream handler to resolve to
+       @param rNoteType     type of footnote to resolve
        @param rNoteId       id of the endnote to resolve
      */
     virtual void resolveEndnote(Stream & rStream,
+                                const Id & rNoteType,
                                 const rtl::OUString & rNoteId) = 0;
 
     /**
@@ -236,10 +244,14 @@ public:
     virtual void setShapes(uno::Reference<drawing::XShapes> xShapes) = 0;
     virtual uno::Reference<drawing::XShapes> getShapes() = 0;
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
+    virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
     virtual uno::Reference<io::XInputStream> getInputStreamForId
     (const ::rtl::OUString & rId) = 0;
     virtual void setXNoteId(const rtl::OUString & rId) = 0;
     virtual const ::rtl::OUString & getXNoteId() const = 0;
+    virtual void setXNoteType(const Id & nId) = 0;
+    virtual const Id & getXNoteType() const = 0;
+    virtual const ::rtl::OUString & getTarget() const = 0;
 };
 
 
