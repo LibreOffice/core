@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colorchoicecontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/helper/attributelist.hxx"
 #include "tokens.hxx"
 
 using namespace ::oox::core;
@@ -49,106 +50,78 @@ colorChoiceContext::colorChoiceContext( ContextHandler& rParent, Color& rColor )
 void colorChoiceContext::startFastElement( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
     throw (SAXException, RuntimeException)
 {
+    AttributeList aAttribs( xAttribs );
+
     switch( aElementToken )
     {
-    case NMSP_DRAWINGML|XML_scrgbClr:   // CT_ScRgbColor
-    {
-        sal_Int32 r = ((xAttribs->getOptionalValue( XML_r ).toInt32() * 256) / 1000) & 0xff;
-        sal_Int32 g = ((xAttribs->getOptionalValue( XML_g ).toInt32() * 256) / 1000) & 0xff;
-        sal_Int32 b = ((xAttribs->getOptionalValue( XML_b ).toInt32() * 256) / 1000) & 0xff;
-        mrColor.mnColor = (r << 16) | (g << 8) | b;
-        mrColor.mbUsed = sal_True;
-        break;
-    }
-    case NMSP_DRAWINGML|XML_srgbClr:    // CT_SRgbColor
-    {
-        mrColor.mnColor = xAttribs->getOptionalValue( XML_val ).toInt32( 16 );
-        mrColor.mbUsed = sal_True;
-        break;
-    }
-    case NMSP_DRAWINGML|XML_hslClr: // CT_HslColor
-        {
-        sal_uInt8 r = 0;
-        sal_uInt8 g = 0;
-        sal_uInt8 b = 0;
-        double fH = xAttribs->getOptionalValue( XML_hue ).toInt32() / ( 60000.0 * 360.0 );
-        double fL = xAttribs->getOptionalValue( XML_lum ).toInt32() / 100000.0;
-        double fS = xAttribs->getOptionalValue( XML_sat ).toInt32() / 100000.0;
-        oox::drawingml::Color::HSLtoRGB( fH, fS, fL, r, g, b );
-        mrColor.mnColor = (r << 16) | (g << 8) | b;
-        mrColor.mbUsed = sal_True;
-        break;
-        }
-    case NMSP_DRAWINGML|XML_sysClr: // CT_SystemColor
-        sal_Int32 nColor;
-        if( !ClrScheme::getSystemColor( xAttribs->getOptionalValueToken( XML_val, XML_TOKEN_INVALID ), nColor ) )
-            nColor = xAttribs->getOptionalValue( XML_lastClr ).toInt32( 16 );
-        mrColor.mnColor = nColor;
-        mrColor.mbUsed = sal_True;
-        break;
-    case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
-    {
-        mrColor.mnColor = xAttribs->getOptionalValueToken( XML_val, XML_nothing );
-        mrColor.mbUsed = sal_True;
-        mrColor.mbSchemeColor = sal_True;
-        break;
-    }
-    case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
-        // todo
+        case NMSP_DRAWINGML|XML_scrgbClr:   // CT_ScRgbColor
+            mrColor.setScrgbClr(
+                aAttribs.getInteger( XML_r, 0 ),
+                aAttribs.getInteger( XML_g, 0 ),
+                aAttribs.getInteger( XML_b, 0 ) );
         break;
 
+        case NMSP_DRAWINGML|XML_srgbClr:    // CT_SRgbColor
+            mrColor.setSrgbClr( aAttribs.getHex( XML_val, 0 ) );
+        break;
+
+        case NMSP_DRAWINGML|XML_hslClr: // CT_HslColor
+            mrColor.setHslClr(
+                aAttribs.getInteger( XML_hue, 0 ),
+                aAttribs.getInteger( XML_sat, 0 ),
+                aAttribs.getInteger( XML_lum, 0 ) );
+        break;
+
+        case NMSP_DRAWINGML|XML_sysClr: // CT_SystemColor
+            mrColor.setSysClr( aAttribs.getToken( XML_val ), aAttribs.getHex( XML_lastClr, -1 ) );
+        break;
+
+        case NMSP_DRAWINGML|XML_schemeClr:  // CT_SchemeColor
+            mrColor.setSchemeClr( aAttribs.getToken( XML_val ) );
+        break;
+
+        case NMSP_DRAWINGML|XML_prstClr:    // CT_PresetColor
+            mrColor.setPrstClr( aAttribs.getToken( XML_val ) );
+        break;
     }
 }
 
 Reference< XFastContextHandler > colorChoiceContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
 {
     // colorTransformGroup
-
-    // color should be available as rgb in member mnColor already, now modify it depending on
-    // the transformation elements
-
     switch( aElementToken )
     {
-/* TODO
-    case NMSP_DRAWINGML|XML_tint:       // CT_PositiveFixedPercentage
-    case NMSP_DRAWINGML|XML_shade:      // CT_PositiveFixedPercentage
-    case NMSP_DRAWINGML|XML_comp:       // CT_ComplementTransform
-    case NMSP_DRAWINGML|XML_inv:        // CT_InverseTransform
-    case NMSP_DRAWINGML|XML_gray:       // CT_GrayscaleTransform
-    case NMSP_DRAWINGML|XML_alphaOff:   // CT_FixedPercentage
-    case NMSP_DRAWINGML|XML_alphaMod:   // CT_PositivePercentage
-    break;
-*/
-    case NMSP_DRAWINGML|XML_alpha:      // CT_PositiveFixedPercentage
-        {
-            mrColor.mbUsed = sal_True;
-            mrColor.mbAlphaColor = sal_True;
-            mrColor.mnAlpha = GetPercent( rxAttribs->getOptionalValue( XML_val ) );
-        }
-    break;
-    case NMSP_DRAWINGML|XML_hue:        // CT_PositiveFixedAngle
-    case NMSP_DRAWINGML|XML_hueOff: // CT_Angle
-    case NMSP_DRAWINGML|XML_hueMod: // CT_PositivePercentage
-    case NMSP_DRAWINGML|XML_sat:        // CT_Percentage
-    case NMSP_DRAWINGML|XML_satOff: // CT_Percentage
-    case NMSP_DRAWINGML|XML_satMod: // CT_Percentage
-    case NMSP_DRAWINGML|XML_lum:        // CT_Percentage
-    case NMSP_DRAWINGML|XML_lumOff: // CT_Percentage
-    case NMSP_DRAWINGML|XML_lumMod: // CT_Percentage
-    case NMSP_DRAWINGML|XML_red:        // CT_Percentage
-    case NMSP_DRAWINGML|XML_redOff: // CT_Percentage
-    case NMSP_DRAWINGML|XML_redMod: // CT_Percentage
-    case NMSP_DRAWINGML|XML_green:      // CT_Percentage
-    case NMSP_DRAWINGML|XML_greenOff:   // CT_Percentage
-    case NMSP_DRAWINGML|XML_greenMod:   // CT_Percentage
-    case NMSP_DRAWINGML|XML_blue:       // CT_Percentage
-    case NMSP_DRAWINGML|XML_blueOff:    // CT_Percentage
-    case NMSP_DRAWINGML|XML_blueMod:    // CT_Percentage
-        {
-            sal_Int32 nToken = aElementToken&(~NMSP_MASK);
-            ColorTransformation aColorTransformation( nToken, rxAttribs->getOptionalValue( XML_val ).toInt32() );
-            mrColor.maColorTransformation.push_back( aColorTransformation );
-        }
+        case NMSP_DRAWINGML|XML_alpha:
+        case NMSP_DRAWINGML|XML_alphaMod:
+        case NMSP_DRAWINGML|XML_alphaOff:
+        case NMSP_DRAWINGML|XML_blue:
+        case NMSP_DRAWINGML|XML_blueMod:
+        case NMSP_DRAWINGML|XML_blueOff:
+        case NMSP_DRAWINGML|XML_hue:
+        case NMSP_DRAWINGML|XML_hueMod:
+        case NMSP_DRAWINGML|XML_hueOff:
+        case NMSP_DRAWINGML|XML_lum:
+        case NMSP_DRAWINGML|XML_lumMod:
+        case NMSP_DRAWINGML|XML_lumOff:
+        case NMSP_DRAWINGML|XML_green:
+        case NMSP_DRAWINGML|XML_greenMod:
+        case NMSP_DRAWINGML|XML_greenOff:
+        case NMSP_DRAWINGML|XML_red:
+        case NMSP_DRAWINGML|XML_redMod:
+        case NMSP_DRAWINGML|XML_redOff:
+        case NMSP_DRAWINGML|XML_sat:
+        case NMSP_DRAWINGML|XML_satMod:
+        case NMSP_DRAWINGML|XML_satOff:
+        case NMSP_DRAWINGML|XML_shade:
+        case NMSP_DRAWINGML|XML_tint:
+            mrColor.addTransformation( aElementToken, rxAttribs->getOptionalValue( XML_val ).toInt32() );
+        break;
+        case NMSP_DRAWINGML|XML_comp:
+        case NMSP_DRAWINGML|XML_gamma:
+        case NMSP_DRAWINGML|XML_gray:
+        case NMSP_DRAWINGML|XML_inv:
+        case NMSP_DRAWINGML|XML_invGamma:
+            mrColor.addTransformation( aElementToken );
         break;
     }
     return this;
