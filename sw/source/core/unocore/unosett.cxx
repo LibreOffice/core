@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosett.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1021,7 +1021,8 @@ void SwXLineNumberingProperties::setPropertyValue(
                 {
                     INT16 nTmp = 0;
                     aValue >>= nTmp;
-                    aInfo.SetCountBy(nTmp);
+                    if( nTmp > 0)
+                        aInfo.SetCountBy(nTmp);
                 }
                 break;
                 case WID_SEPARATOR_TEXT  :
@@ -1035,7 +1036,8 @@ void SwXLineNumberingProperties::setPropertyValue(
                 {
                     INT16 nTmp = 0;
                     aValue >>= nTmp;
-                    aInfo.SetDividerCountBy(nTmp);
+                    if( nTmp >= 0)
+                        aInfo.SetDividerCountBy(nTmp);
                 }
                 break;
                 case WID_COUNT_EMPTY_LINES :
