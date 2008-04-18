@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impimagetree.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,12 +58,201 @@
 #include <vector>
 #include <hash_map>
 
-#define DEFAULT_PROJECTNAME "res"
+#define DEFAULT_PROJECTNAME         "res"
 #define IMAGES_ZIPFILENAME_PREFIX   "images"
+#define IMAGES_ZIPFILENAME_BRAND    "_brand"
 #define IMAGES_ZIPFILENAME_SUFFIX   ".zip"
-#define IMAGES_CACHEDIR     "imagecache"
+#define IMAGES_CACHEDIR             "imagecache"
 
 using namespace ::com::sun::star;
+
+ImplZipAccessor::ImplZipAccessor()
+{
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+    mxFileAccess.set( xFactory->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+        uno::UNO_QUERY );
+}
+
+// -----------------------------------------------------------------------
+
+ImplZipAccessor::~ImplZipAccessor()
+{
+    Clear();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplZipAccessor::Update( const ::rtl::OUString& rSymbolsStyle )
+{
+#ifdef DEBUG
+    fprintf( stderr, "\nUpdating symbols for style: %s\n", ByteString( String( rSymbolsStyle ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
+
+    Clear();
+
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+    const ::rtl::OUString               aZipFileName( ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_PREFIX ) );
+    rtl::OUString                       aBrandPath( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR/share/config" ) );
+    rtl::OUString                       aOOOPath( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR/share/config" ) );
+    ::std::vector< ::rtl::OUString >    aTmpURLVector;
+
+    rtl::Bootstrap::expandMacros( aBrandPath );
+    rtl::Bootstrap::expandMacros( aOOOPath );
+
+    // Theme Branding Zip
+    if( rSymbolsStyle.getLength() )
+    {
+        INetURLObject   aThemeBrandURL( aBrandPath );
+        ::rtl::OUString aThemeBrandZip( aZipFileName );
+
+        ( aThemeBrandZip += ::rtl::OUString::createFromAscii( "_" ) ) += rSymbolsStyle;
+        aThemeBrandZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_BRAND );
+        aThemeBrandZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
+        aThemeBrandURL.Append( aThemeBrandZip );
+
+        if( mxFileAccess->exists( aThemeBrandURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            aTmpURLVector.push_back( aThemeBrandURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
+
+    // Branding Zip
+    INetURLObject   aBrandURL( aBrandPath );
+    ::rtl::OUString aBrandZip( aZipFileName );
+
+    aBrandZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_BRAND );
+    aBrandZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
+    aBrandURL.Append( aBrandZip );
+
+    if( mxFileAccess->exists( aBrandURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        aTmpURLVector.push_back( aBrandURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+    // Theme Zip
+    if( rSymbolsStyle.getLength() )
+    {
+        INetURLObject   aThemeURL( aOOOPath );
+        ::rtl::OUString aThemeZip( aZipFileName );
+
+        ( aThemeZip += ::rtl::OUString::createFromAscii( "_" ) ) += rSymbolsStyle;
+        aThemeZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
+        aThemeURL.Append( aThemeZip );
+
+        if( mxFileAccess->exists( aThemeURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            aTmpURLVector.push_back( aThemeURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
+
+    // Default Zip
+    if( rSymbolsStyle.getLength() )
+    {
+        INetURLObject   aDefaultURL( aOOOPath );
+        ::rtl::OUString aDefaultZip( aZipFileName );
+
+        aDefaultZip += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
+        aDefaultURL.Append( aDefaultZip );
+
+        if( mxFileAccess->exists( aDefaultURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            aTmpURLVector.push_back( aDefaultURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
+
+    if( xFactory.is() )
+    {
+        for( unsigned int i = 0; i < aTmpURLVector.size(); ++i )
+        {
+            try
+            {
+                uno::Reference< packages::zip::XZipFileAccess > xZipAcc( xFactory->createInstance(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.packages.zip.ZipFileAccess" ) ),
+                    uno::UNO_QUERY );
+
+                if( xZipAcc.is() )
+                {
+                    uno::Reference< lang::XInitialization > xInit( xZipAcc, uno::UNO_QUERY );
+
+                    if( xInit.is() )
+                    {
+                        uno::Sequence< uno::Any >   aInitSeq( 1 );
+                        const ::rtl::OUString&      rZipURL = aTmpURLVector[ i ];
+
+                        if( rZipURL.getLength() )
+                        {
+                            uno::Reference< container::XNameAccess > xNameAcc;
+
+                            aInitSeq[ 0 ] <<= rZipURL;
+                            xInit->initialize( aInitSeq );
+                            xNameAcc.set( xZipAcc, uno::UNO_QUERY );
+
+                            if( xNameAcc.is() && xNameAcc->getElementNames().getLength() )
+                            {
+                                maURLVector.push_back( rZipURL );
+                                maZipAccVector.push_back( xZipAcc );
+                                maNameAccVector.push_back( xNameAcc );
+#ifdef DEBUG
+                                fprintf( stderr, "Current set has symbols from archive: %s\n", ByteString( String( rZipURL ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
+                            }
+                        }
+                    }
+                }
+            }
+            catch( const uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplZipAccessor::Clear()
+{
+    maURLVector.clear();
+    maZipAccVector.clear();
+    maNameAccVector.clear();
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplZipAccessor::HasEntries() const
+{
+    return( maNameAccVector.size() > 0 );
+}
+
+// -----------------------------------------------------------------------
+
+uno::Reference< io::XInputStream > ImplZipAccessor::GetByName( const ::rtl::OUString& rName ) const
+{
+    uno::Reference< io::XInputStream > xRet;
+
+#ifdef DEBUG
+    fprintf( stderr, "Looking for file: %s\n", ByteString( String( rName ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
+
+    for( unsigned int i = 0; ( i < maNameAccVector.size() ) && !xRet.is(); ++i )
+    {
+        if( maNameAccVector[ i ]->hasByName( rName ) )
+        {
+            try
+            {
+                if( maNameAccVector[ i ]->getByName( rName ) >>= xRet )
+                {
+#ifdef DEBUG
+                    fprintf( stderr, "Found in archive: %s\n\n", ByteString( String( maURLVector[ i ] ), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
+
+
+                    break;
+                }
+            }
+            catch( const uno::Exception & )
+            {
+            }
+        }
+    }
+
+    return( xRet );
+}
+
 
 // -----------------
 // - ImplImageTree -
@@ -92,8 +281,7 @@ void ImplImageTree::cleanup()
 {
     ImplImageTreeSingletonRef aCleaner;
 
-    aCleaner->mxNameAcc.clear();
-    aCleaner->mxZipAcc.clear();
+    aCleaner->maZipAcc.Clear();
     aCleaner->mxFileAccess.clear();
     aCleaner->mxPathSettings.clear();
 
@@ -114,100 +302,29 @@ bool ImplImageTree::implInit()
             // #137795# protect against exceptions in service instantiation
             try
             {
-                mxZipAcc.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.packages.zip.ZipFileAccess" ) ), uno::UNO_QUERY ) ;
-                mxPathSettings.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ), uno::UNO_QUERY );
-                mxFileAccess.set( xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
+                mxPathSettings.set( xFactory->createInstance(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ),
+                    uno::UNO_QUERY );
+                mxFileAccess.set( xFactory->createInstance(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                    uno::UNO_QUERY );
 
-                if( mxZipAcc.is() && mxPathSettings.is() && mxFileAccess.is() )
+                if( mxPathSettings.is() && mxFileAccess.is() )
                 {
-                    uno::Reference< lang::XInitialization > xInit( mxZipAcc, uno::UNO_QUERY );
-
-                    if( xInit.is() )
-                    {
-                        uno::Sequence< uno::Any > aInitSeq( 1 );
-
-                        try
-                        {
-                            const ::rtl::OUString& rZipURL = implGetZipFileURL();
-
-                            if( rZipURL.getLength() )
-                            {
-                                aInitSeq[ 0 ] <<= rZipURL;
-                                xInit->initialize( aInitSeq );
-                                mxNameAcc.set( mxZipAcc, uno::UNO_QUERY );
-                                implCheckUserCache();
-                            }
-                            else
-                                mxZipAcc.clear();
-                        }
-                        catch( const uno::Exception& )
-                        {
-                            mxZipAcc.clear();
-                        }
-                    }
-                }
-                else
-                {
-                    mxZipAcc.clear();
+                    maZipAcc.Update( maSymbolsStyle );
+                    // implCheckUserCache();
                 }
             }
             catch( const uno::Exception& )
             {
-                mxZipAcc.clear();
+                maZipAcc.Clear();
                 mxPathSettings.clear();
                 mxFileAccess.clear();
             }
         }
     }
 
-    return( mbInit = mxNameAcc.is() );
-}
-
-// -----------------------------------------------------------------------
-
-::rtl::OUString ImplImageTree::implGetZipFileURL( bool bWithStyle ) const
-{
-    ::rtl::OUString aRet;
-
-    if( !aRet.getLength() && mxPathSettings.is() && mxFileAccess.is() )
-    {
-        ::rtl::OUString aZipFileName( ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_PREFIX ) );
-        if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
-        {
-            aZipFileName += ::rtl::OUString::createFromAscii( "_" );
-            aZipFileName += maSymbolsStyle;
-        }
-        aZipFileName += ::rtl::OUString::createFromAscii( IMAGES_ZIPFILENAME_SUFFIX );
-
-        uno::Any                aUserAny( mxPathSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "UserConfig" ) ) );
-        INetURLObject           aZipURL;
-
-        if( ( aUserAny >>= aRet ) && aRet.getLength() )
-        {
-            aZipURL = INetURLObject( aRet );
-            aZipURL.Append( aZipFileName );
-
-            if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
-            {
-                rtl::OUString aPath(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "$BRAND_BASE_DIR/share/config" ) );
-                rtl::Bootstrap::expandMacros( aPath );
-                aZipURL = INetURLObject( aPath );
-                aZipURL.Append( aZipFileName );
-
-                if( !mxFileAccess->exists( aRet = aZipURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
-                {
-                    if ( bWithStyle && maSymbolsStyle.getLength() > 0 )
-                        aRet = implGetZipFileURL( false ); // Try without style
-                    else
-                        aRet = ::rtl::OUString();
-                }
-            }
-        }
-    }
-
-    return aRet;
+    return( mbInit = maZipAcc.HasEntries() );
 }
 
 // -----------------------------------------------------------------------
@@ -258,6 +375,7 @@ const ::rtl::OUString& ImplImageTree::implGetUserDirURL() const
 
 void ImplImageTree::implCheckUserCache()
 {
+/*
     const ::rtl::OUString& rZipURL = implGetZipFileURL();
     const ::rtl::OUString& rUserDirURL = implGetUserDirURL();
 
@@ -296,6 +414,7 @@ void ImplImageTree::implCheckUserCache()
         {
         }
     }
+*/
 }
 
 // ------------------------------------------------------------------------------
@@ -364,8 +483,7 @@ void ImplImageTree::implUpdateSymbolsStyle( const ::rtl::OUString& rSymbolsStyle
         maSymbolsStyle = rSymbolsStyle;
         if ( mbInit )
         {
-            mxNameAcc.clear();
-            mxZipAcc.clear();
+            maZipAcc.Clear();
             mxFileAccess.clear();
             mxPathSettings.clear();
 
@@ -395,7 +513,7 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName,
         if( !rReturn.IsEmpty() )
             rReturn.SetEmpty();
 
-        if( mxNameAcc.is() || ( implInit() && mxNameAcc.is() ) )
+        if( maZipAcc.HasEntries() || ( implInit() && maZipAcc.HasEntries() ) )
         {
             if( bSearchLanguageDependent )
             {
@@ -434,36 +552,33 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName,
                             aLocaleName += ::rtl::OUString::createFromAscii( "/" );
                             aLocaleName += rName.copy( nPos + 1 );
 
-                            if( mxNameAcc->hasByName( aLocaleName ) )
+                            try
                             {
-                                try
-                                {
-                                    uno::Reference< io::XInputStream > xIStm;
+                                uno::Reference< io::XInputStream > xIStm( maZipAcc.GetByName( aLocaleName ) );
 
-                                    if( mxNameAcc->getByName( aLocaleName ) >>= xIStm )
-                                    {
-                                        ::std::auto_ptr< SvStream > apRet( implGetStream( xIStm ) );
-
-                                        if( apRet.get() )
-                                            implLoadFromStream( *apRet, aLocaleName, rReturn );
-                                    }
-                                }
-                                catch( const uno::Exception & )
+                                if( xIStm.is() )
                                 {
+                                    ::std::auto_ptr< SvStream > apRet( implGetStream( xIStm ) );
+
+                                    if( apRet.get() )
+                                        implLoadFromStream( *apRet, aLocaleName, rReturn );
                                 }
+                            }
+                            catch( const uno::Exception & )
+                            {
                             }
                         }
                     }
                 }
             }
 
-            if( rReturn.IsEmpty() && mxNameAcc->hasByName( rName ) )
+            if( rReturn.IsEmpty() )
             {
                 try
                 {
-                    uno::Reference< io::XInputStream > xIStm;
+                    uno::Reference< io::XInputStream > xIStm( maZipAcc.GetByName( rName ) );
 
-                    if( mxNameAcc->getByName( rName ) >>= xIStm )
+                    if( xIStm.is() )
                     {
                         ::std::auto_ptr< SvStream > apRet( implGetStream( xIStm ) );
 
