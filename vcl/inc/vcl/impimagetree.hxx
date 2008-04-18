@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impimagetree.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,35 @@ namespace com { namespace sun { namespace star { namespace beans { class XProper
 namespace com { namespace sun { namespace star { namespace ucb { class XSimpleFileAccess; } } } }
 namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
 
+// -------------------
+// - ImplZipAccessor -
+// -------------------
+
+class ImplZipAccessor
+{
+private:
+
+    ::std::vector< ::rtl::OUString >                                                                     maURLVector;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >                         mxFileAccess;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::packages::zip::XZipFileAccess > > maZipAccVector;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > >        maNameAccVector;
+
+public:
+
+                                ImplZipAccessor();
+                                ~ImplZipAccessor();
+
+    void                        Update( const ::rtl::OUString& rSymbolsStyle );
+    void                        Clear();
+    bool                        HasEntries() const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetByName( const ::rtl::OUString& rName ) const;
+};
+
+// -----------------
+// - ImplImageTree -
+// -----------------
+
 class ImplImageTree
 {
 public:
@@ -66,15 +95,13 @@ public:
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::packages::zip::XZipFileAccess > mxZipAcc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        mxNameAcc;
+    ImplZipAccessor                                                                     maZipAcc;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mxPathSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >        mxFileAccess;
     bool                                                                                mbInit;
     ::rtl::OUString                                                                     maSymbolsStyle;
 
     bool                    implInit();
-    ::rtl::OUString         implGetZipFileURL( bool bWithStyle = true ) const;
     const ::rtl::OUString&  implGetUserDirURL() const;
     ::rtl::OUString         implGetUserFileURL( const ::rtl::OUString& rName ) const;
     void                    implCheckUserCache();
