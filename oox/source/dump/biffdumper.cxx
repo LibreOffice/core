@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: biffdumper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -555,10 +555,11 @@ sal_uInt8 BiffObjectBase::dumpErrorCode( const sal_Char* pcName )
 
 sal_Int32 BiffObjectBase::dumpRgbColor( const sal_Char* pcName )
 {
-    OoxColor aColor;
-    aColor.importColorRgb( *mxStrm );
-    writeColorItem( pcName ? pcName : "color-rgb", aColor.mnValue );
-    return aColor.mnValue;
+    sal_uInt8 nR, nG, nB, nA;
+    *mxStrm >> nR >> nG >> nB >> nA;
+    sal_Int32 nValue = (nA << 24) | (nR << 16) | (nG << 8) | nB;
+    writeColorItem( pcName ? pcName : "color-rgb", nValue );
+    return nValue;
 }
 
 rtl_TextEncoding BiffObjectBase::dumpCodePage( const sal_Char* pcName )
