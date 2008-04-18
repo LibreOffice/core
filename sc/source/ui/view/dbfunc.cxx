@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,7 @@ ScDBData* ScDBFunc::GetDBData( BOOL bMark, ScGetDBMode eMode )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDBData* pData = NULL;
     ScRange aRange;
-    if ( GetViewData()->GetSimpleArea(aRange) )
+    if ( GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE )
         pData = pDocSh->GetDBData( aRange, eMode, FALSE );
     else if ( eMode != SC_DB_OLD )
         pData = pDocSh->GetDBData(
