@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datamodelcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,9 +177,13 @@ public:
                 xRet = new ShapePropertiesContext( *this, *mpPoint->getShape() );
                 break;
             case NMSP_DIAGRAM|XML_t:
+            {
                 OSL_TRACE( "shape text body for point");
-                xRet = new TextBodyContext( *this, *mpPoint->getShape() );
+                TextBodyPtr xTextBody( new TextBody );
+                mpPoint->getShape()->setTextBody( xTextBody );
+                xRet = new TextBodyContext( *this, *xTextBody );
                 break;
+            }
             default:
                 break;
             }
