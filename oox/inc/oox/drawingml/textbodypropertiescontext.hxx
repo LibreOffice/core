@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textbodypropertiescontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,9 @@
 #ifndef OOX_DRAWINGML_TEXTBODYPROPERTIESCONTEXT_HXX
 #define OOX_DRAWINGML_TEXTBODYPROPERTIESCONTEXT_HXX
 
-#include "oox/drawingml/shape.hxx"
 #include "oox/core/contexthandler.hxx"
+
+namespace oox { class PropertyMap; }
 
 namespace oox { namespace drawingml {
 
@@ -41,13 +42,13 @@ class TextBodyPropertiesContext : public ::oox::core::ContextHandler
 public:
     TextBodyPropertiesContext( ::oox::core::ContextHandler& rParent,
              const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
-             Shape& rShape );
+             PropertyMap& rTextBodyProp );
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    Shape&              mrShape;
+    PropertyMap&        mrTextBodyProp;
 };
 
 } }
