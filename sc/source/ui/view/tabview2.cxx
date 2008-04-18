@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabview2.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -675,7 +675,7 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                 {
                     SCTAB   nTab = aViewData.GetTabNo();
                     ScRange aMarkRange;
-                    if ( !aViewData.GetSimpleArea( aMarkRange ) )
+                    if ( aViewData.GetSimpleArea( aMarkRange ) != SC_MARK_SIMPLE )
                         rMark.GetMultiMarkArea( aMarkRange );
 
                     SCCOL   nStartCol = aMarkRange.aStart.Col();
