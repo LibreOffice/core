@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filterbase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,7 +120,7 @@ public:
      */
     StorageRef          openSubStorage(
                             const ::rtl::OUString& rStorageName,
-                            bool bCreate );
+                            bool bCreate ) const;
 
     /** Opens and returns the specified input stream from the base storage.
 
@@ -131,7 +131,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        openInputStream( const ::rtl::OUString& rStreamName );
+                        openInputStream( const ::rtl::OUString& rStreamName ) const;
 
     /** Opens and returns the specified output stream from the base storage.
 
@@ -142,7 +142,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        openOutputStream( const ::rtl::OUString& rStreamName );
+                        openOutputStream( const ::rtl::OUString& rStreamName ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
