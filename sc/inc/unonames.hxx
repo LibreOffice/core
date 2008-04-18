@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unonames.hxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -593,8 +593,7 @@
 // FormulaParser
 #define SC_UNO_REFERENCEPOS         "ReferencePosition"
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
-#define SC_UNO_R1C1NOTATION         "R1C1Notation"
-#define SC_UNO_COMPATIBILITY3D      "Compatibility3DNotation"
+#define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
 #define SC_UNO_OPCODEMAP            "OpCodeMap"
 
