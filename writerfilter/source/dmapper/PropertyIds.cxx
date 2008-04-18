@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyIds.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,6 +299,25 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SERVICE_PARA_STYLE       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.ParagraphStyle")); break;
             case PROP_CHARACTER_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharacterStyles")); break;
             case PROP_PARAGRAPH_STYLES :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles")); break;
+            case PROP_TABLE_BORDER_DISTANCES:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableBorderDistances")); break;
+            case META_PROP_CELL_MAR_TOP    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarTop")); break;
+            case META_PROP_CELL_MAR_BOTTOM :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarBottom")); break;
+            case META_PROP_CELL_MAR_LEFT   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarLeft")); break;
+            case META_PROP_CELL_MAR_RIGHT  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MetaPropCellMarRight")); break;
+            case PROP_START_AT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartAt")); break;
+            case PROP_ADD_PARA_TABLE_SPACING :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddParaTableSpacing")); break;
+            case PROP_CHAR_PROP_HEIGHT        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeight")); break;
+            case PROP_CHAR_PROP_HEIGHT_ASIAN  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeightAsian")); break;
+            case PROP_CHAR_PROP_HEIGHT_COMPLEX:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPropHeightComplex")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
