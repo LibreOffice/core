@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TDefTableHandler.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
+class TablePropertyMap;
 class WRITERFILTER_DLLPRIVATE TDefTableHandler : public Properties
 {
 public:
@@ -74,7 +75,7 @@ public:
     virtual void sprm(Sprm & sprm);
 
     size_t                                      getCellCount() const;
-    ::boost::shared_ptr<PropertyMap>            getCellProperties( size_t nCell ) const;
+    void                                        fillCellProperties( size_t nCell, ::boost::shared_ptr< TablePropertyMap > pCellProperties) const;
     ::boost::shared_ptr<PropertyMap>            getRowProperties() const;
     sal_Int32                                   getTableWidth() const;
 };
