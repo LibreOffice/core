@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfilterbase.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,10 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
 
+namespace oox { namespace drawingml { namespace chart {
+    class ChartConverter;
+} } }
+
 namespace oox {
 namespace core {
 
@@ -63,7 +67,13 @@ public:
     virtual sal_Int32   getSchemeClr( sal_Int32 nColorSchemeToken ) const = 0;
 
     /** Has to be implemented by each filter to return drawings collection. */
-    virtual const ::oox::vml::DrawingPtr getDrawings() = 0;
+    virtual const ::oox::vml::DrawingPtr
+                        getDrawings() = 0;
+
+    /** Has to be implemented by each filter, returns a filter-specific chart
+        converter object, that should be global per imported document. */
+    virtual ::oox::drawingml::chart::ChartConverter&
+                        getChartConverter() = 0;
 
     // ------------------------------------------------------------------------
 
