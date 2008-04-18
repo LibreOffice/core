@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +45,7 @@ TARGET=docnode
 EXCEPTIONSFILES=        \
         $(SLO)$/cancellablejob.obj \
         $(SLO)$/finalthreadmanager.obj \
+        $(SLO)$/ndcopy.obj \
         $(SLO)$/ndtbl.obj \
         $(SLO)$/node.obj \
         $(SLO)$/observablethread.obj \
