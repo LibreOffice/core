@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.93 $
+ * $Revision: 1.94 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -871,6 +871,22 @@ End
 
 #endif
 #endif
+
+Module gid_Module_Root_Files_Images
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Name = "gid_Module_Root_Files_Images";
+	Description = "gid_Module_Root_Files_Images";
+	Sortkey = "2050";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Images_Zip,
+             gid_File_ImagesCrystal_Zip,
+             gid_File_ImagesHicontrast_Zip,
+             gid_File_ImagesIndustrial_Zip,
+             gid_File_ImagesTango_Zip,
+             gid_File_ImagesClassic8_Zip);
+End
 
 #ifndef WITHOUT_FONTS
 Module gid_Module_Root_Fonts_OOo_Hidden
