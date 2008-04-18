@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelfilter.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
+#include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/workbookfragment.hxx"
 #include "oox/dump/biffdumper.hxx"
@@ -116,12 +117,18 @@ bool ExcelFilter::exportDocument() throw()
 sal_Int32 ExcelFilter::getSchemeClr( sal_Int32 nColorSchemeToken ) const
 {
     OSL_ENSURE( mpHelper, "ExcelFilter::getSchemeClr - no workbook helper" );
-    return mpHelper ? mpHelper->getTheme().getColorByToken( nColorSchemeToken ) : -1;
+    return mpHelper->getTheme().getColorByToken( nColorSchemeToken );
 }
 
 const DrawingPtr ExcelFilter::getDrawings()
 {
     return DrawingPtr();
+}
+
+::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
+{
+    OSL_ENSURE( mpHelper, "ExcelFilter::getChartConverter - no workbook helper" );
+    return mpHelper->getChartConverter();
 }
 
 OUString ExcelFilter::implGetImplementationName() const
