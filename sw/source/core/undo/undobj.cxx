@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -712,12 +712,6 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
         if( rBkmkTbl.Count() )
         {
-            // --> OD 2007-10-17 #i81002#
-            const bool bDifferentTxtNodesAtMarkAndPoint(
-                                        rMark.nNode != rPoint.nNode &&
-                                        rMark.nNode.GetNode().GetTxtNode() &&
-                                        rPoint.nNode.GetNode().GetTxtNode() );
-            // <--
             const SwBookmark* pBkmk( 0 );
 
             for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
@@ -727,46 +721,61 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 pBkmk = rBkmkTbl[ n ];
                 const SwPosition& rBkmkPos( pBkmk->GetBookmarkPos() );
                 const SwPosition* pOtherBkmkPos( pBkmk->GetOtherBookmarkPos() );
-                const bool bNoCntntCheckForCrossRefBkmk(
-                        bDifferentTxtNodesAtMarkAndPoint &&
-                        pBkmk->IsCrossRefMark() );
-                if ( ( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
-                     ? ( pStt->nNode <= rBkmkPos.nNode &&
-                         rBkmkPos.nNode < pEnd->nNode )
-                     : ( *pStt <= rBkmkPos &&
-                         rBkmkPos < *pEnd ) )
+                if( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                 {
-                    nTyp = SwHstryBookmark::BKMK_POS;
-                }
-                // delete cross-reference bookmark at <pStt>, if only part of
-                // <pEnd> text node content is deleted.
-                else if ( bNoCntntCheckForCrossRefBkmk &&
-                          ( pStt->nNode == rBkmkPos.nNode &&
-                            pEnd->nContent.GetIndex() !=
-                                pEnd->nNode.GetNode().GetTxtNode()->Len() ) )
-                {
-                    nTyp = SwHstryBookmark::BKMK_POS;
-                }
-                // delete cross-reference bookmark at <pEnd>, if only part of
-                // <pStt> text node content is deleted.
-                else if ( bNoCntntCheckForCrossRefBkmk &&
-                          ( pEnd->nNode == rBkmkPos.nNode &&
-                            pStt->nContent.GetIndex() != 0 ) )
-                {
-                    nTyp = SwHstryBookmark::BKMK_POS;
-                }
-
-                if ( pOtherBkmkPos &&
-                     ( ( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
-                       ? ( pStt->nNode <= pOtherBkmkPos->nNode &&
-                           pOtherBkmkPos->nNode < pEnd->nNode )
-                       : ( *pStt <= *pOtherBkmkPos &&
-                           *pOtherBkmkPos < *pEnd ) ) )
-                {
+                    if( pStt->nNode <= pBkmk->GetBookmarkPos().nNode &&
+                        pBkmk->GetBookmarkPos().nNode < pEnd->nNode )
+                        nTyp = SwHstryBookmark::BKMK_POS;
+                    if( pBkmk->GetOtherBookmarkPos() &&
+                        pStt->nNode <= pBkmk->GetOtherBookmarkPos()->nNode &&
+                        pBkmk->GetOtherBookmarkPos()->nNode < pEnd->nNode )
                     nTyp |= SwHstryBookmark::BKMK_OTHERPOS;
                 }
-                // <--
-
+                else
+                {
+                    bool bMayBe = false;
+                    if( *pStt <= pBkmk->GetBookmarkPos() && pBkmk->GetBookmarkPos() <= *pEnd )
+                    {
+                        if( pBkmk->GetBookmarkPos() == *pEnd )
+                            bMayBe = true;
+                        else
+                            nTyp = SwHstryBookmark::BKMK_POS;
+                    }
+                    if( pBkmk->GetOtherBookmarkPos() &&
+                        *pStt <= *pBkmk->GetOtherBookmarkPos() )
+                    {
+                        if( nTyp || *pBkmk->GetOtherBookmarkPos() < *pEnd )
+                        {
+                            if( bMayBe )
+                                nTyp = SwHstryBookmark::BKMK_POS;
+                            nTyp |= SwHstryBookmark::BKMK_OTHERPOS;
+                        }
+                    }
+                    // delete cross-reference bookmark at <pStt>, if only part of
+                    // <pEnd> text node content is deleted.
+                    // --> OD 2007-10-17 #i81002#
+                    const bool bDifferentTxtNodesAtMarkAndPoint(
+                                        rMark.nNode != rPoint.nNode &&
+                                        rMark.nNode.GetNode().GetTxtNode() &&
+                                        rPoint.nNode.GetNode().GetTxtNode() );
+                    // <--
+                    if( !nTyp && bDifferentTxtNodesAtMarkAndPoint && pBkmk->IsCrossRefMark() )
+                    {
+                        if( pStt->nNode == rBkmkPos.nNode &&
+                            pEnd->nContent.GetIndex() !=
+                                pEnd->nNode.GetNode().GetTxtNode()->Len() )
+                        {
+                            nTyp = SwHstryBookmark::BKMK_POS;
+                        }
+                        // delete cross-reference bookmark at <pEnd>, if only part of
+                        // <pStt> text node content is deleted.
+                        else if( pEnd->nNode == rBkmkPos.nNode &&
+                            pStt->nContent.GetIndex() != 0 )
+                        {
+                            nTyp = SwHstryBookmark::BKMK_POS;
+                        }
+                    }
+                }
                 if( nTyp )
                 {
                     if( !pHistory )
