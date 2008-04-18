@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,15 +45,13 @@ namespace core {
 // ============================================================================
 
 ContextHandler::ContextHandler( ContextHandler& rParent ) :
-    ContextHandlerImplBase( rParent ),
-    mxBaseData( rParent.mxBaseData ),
-    mpParentHandler( &rParent )
+    ContextHandlerImplBase(),
+    mxBaseData( rParent.mxBaseData )
 {
 }
 
 ContextHandler::ContextHandler( const FragmentBaseDataRef& rxBaseData ) :
-    mxBaseData( rxBaseData ),
-    mpParentHandler( 0 )
+    mxBaseData( rxBaseData )
 {
 }
 
@@ -64,11 +62,6 @@ ContextHandler::~ContextHandler()
 XmlFilterBase& ContextHandler::getFilter() const
 {
     return mxBaseData->mrFilter;
-}
-
-ContextHandler* ContextHandler::getParentHandler() const
-{
-    return mpParentHandler;
 }
 
 const Relations& ContextHandler::getRelations() const

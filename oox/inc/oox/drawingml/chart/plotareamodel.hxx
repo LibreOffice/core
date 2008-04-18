@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareamodel.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,10 @@
 #ifndef OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
 #define OOX_DRAWINGML_CHART_PLOTAREAMODEL_HXX
 
-#include "oox/helper/containerhelper.hxx"
-#include "oox/drawingml/chart/modelbase.hxx"
+#include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/chart/axismodel.hxx"
+#include "oox/drawingml/chart/titlemodel.hxx"
+#include "oox/drawingml/chart/typegroupmodel.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -40,37 +42,35 @@ namespace chart {
 
 // ============================================================================
 
-class TypeGroupModel;
-class AxisModel;
-class LayoutModel;
-
-class PlotAreaModel
+struct View3DModel
 {
-public:
+    sal_Int32           mnDepthPercent;     /// Depth of the 3D view, relative to chart width.
+    sal_Int32           mnHeightPercent;    /// Height of the 3D view, relative to chart width.
+    sal_Int32           mnPerspective;      /// Eye distance to the §D objects.
+    sal_Int32           mnRotationX;        /// Horizontal rotation in degrees.
+    sal_Int32           mnRotationY;        /// Vertical rotation in degrees.
+    bool                mbRightAngled;      /// True = right-angled axes in 3D view.
+
+    explicit            View3DModel();
+                        ~View3DModel();
+};
+
+// ============================================================================
+
+struct PlotAreaModel
+{
+    typedef ModelVector< TypeGroupModel >   TypeGroupVector;
+    typedef ModelVector< AxisModel >        AxisVector;
+    typedef ModelRef< Shape >               ShapeRef;
+    typedef ModelRef< LayoutModel >         LayoutRef;
+
+    TypeGroupVector     maTypeGroups;       /// All chart type groups contained in the chart.
+    AxisVector          maAxes;             /// All axes contained in the chart.
+    ShapeRef            mxShapeProp;        /// Plot area frame formatting.
+    LayoutRef           mxLayout;           /// Layout/position of the plot area.
+
     explicit            PlotAreaModel();
-    virtual             ~PlotAreaModel();
-
-    /** Creates and returns a new chart type model object. */
-    TypeGroupModel&     createTypeGroup( sal_Int32 nTypeId );
-
-    /** Creates and returns a new axis model object. */
-    AxisModel&          createAxis( sal_Int32 nTypeId );
-
-    /** Returns true, if this chart model contains a layout object. */
-    inline bool         hasLayout() const { return mxLayout.get() != 0; }
-    /** Returns a pointer to an existing layout object, or null if not present. */
-    inline LayoutModel* getLayout() const { return mxLayout.get(); }
-    /** Creates and returns a new layout model object. */
-    LayoutModel&        createLayout();
-
-private:
-    typedef RefVector< TypeGroupModel >         TypeGroupVector;
-    typedef RefVector< AxisModel >              AxisVector;
-    typedef ::boost::shared_ptr< LayoutModel >  LayoutRef;
-
-    TypeGroupVector     maTypeGroups;       /// List of all chart types.
-    AxisVector          maAxes;             /// All axes used in the chart.
-    LayoutRef           mxLayout;           /// Plot area position.
+                        ~PlotAreaModel();
 };
 
 // ============================================================================

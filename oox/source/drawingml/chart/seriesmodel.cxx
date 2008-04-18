@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriesmodel.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriesmodel.hxx"
-#include "oox/drawingml/chart/seriessourcemodel.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -37,44 +36,91 @@ namespace chart {
 
 // ============================================================================
 
-SeriesData::SeriesData() :
-    mnIndex( -1 ),
-    mnOrder( -1 )
+DataLabelModelBase::DataLabelModelBase() :
+    mbDeleted( false )
 {
 }
 
-// ----------------------------------------------------------------------------
+DataLabelModelBase::~DataLabelModelBase()
+{
+}
 
-SeriesModel::SeriesModel()
+// ============================================================================
+
+DataLabelModel::DataLabelModel() :
+    mnIndex( -1 )
+{
+}
+
+DataLabelModel::~DataLabelModel()
+{
+}
+
+// ============================================================================
+
+DataLabelsModel::DataLabelsModel()
+{
+}
+
+DataLabelsModel::~DataLabelsModel()
+{
+}
+
+// ============================================================================
+
+ErrorBarModel::ErrorBarModel() :
+    mfValue( 0.0 ),
+    mnDirection( XML_TOKEN_INVALID ),
+    mnTypeId( XML_both ),
+    mnValueType( XML_fixedVal ),
+    mbNoEndCap( false )
+{
+}
+
+ErrorBarModel::~ErrorBarModel()
+{
+}
+
+// ============================================================================
+
+TrendlineModel::TrendlineModel() :
+    mnOrder( 2 ),
+    mnPeriod( 2 ),
+    mnTypeId( XML_linear ),
+    mbDispEquation( false ),
+    mbDispRSquared( false )
+{
+}
+
+TrendlineModel::~TrendlineModel()
+{
+}
+
+// ============================================================================
+
+DataPointModel::DataPointModel() :
+    mnIndex( -1 )
+{
+}
+
+DataPointModel::~DataPointModel()
+{
+}
+
+// ============================================================================
+
+SeriesModel::SeriesModel() :
+    mnExplosion( 0 ),
+    mnIndex( -1 ),
+    mnMarkerSize( 5 ),
+    mnMarkerSymbol( XML_auto ),
+    mnOrder( -1 ),
+    mbInvertNeg( false )
 {
 }
 
 SeriesModel::~SeriesModel()
 {
-}
-
-SeriesSourceModel& SeriesModel::createTitleSource()
-{
-    mxTitleSource.reset( new SeriesSourceModel );
-    return *mxTitleSource;
-}
-
-SeriesSourceModel& SeriesModel::createCategorySource()
-{
-    mxCategSource.reset( new SeriesSourceModel );
-    return *mxCategSource;
-}
-
-SeriesSourceModel& SeriesModel::createValueSource()
-{
-    mxValueSource.reset( new SeriesSourceModel );
-    return *mxValueSource;
-}
-
-SeriesSourceModel& SeriesModel::createPointSource()
-{
-    mxPointSource.reset( new SeriesSourceModel );
-    return *mxPointSource;
 }
 
 // ============================================================================

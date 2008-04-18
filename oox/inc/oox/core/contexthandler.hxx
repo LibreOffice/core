@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,8 +67,6 @@ public:
 
     /** Returns the filter instance. */
     XmlFilterBase&      getFilter() const;
-    /** Returns the parent context handler of this context handler. */
-    ContextHandler*     getParentHandler() const;
     /** Returns the relations of the current fragment. */
     const Relations&    getRelations() const;
     /** Returns the full path of the current fragment. */
@@ -110,7 +108,6 @@ private:
 
 private:
     FragmentBaseDataRef mxBaseData;         /// Base data of the fragment.
-    ContextHandler*     mpParentHandler;    /// Pointer to parent context handler.
 };
 
 // ============================================================================

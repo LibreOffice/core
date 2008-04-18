@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareamodel.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,13 +29,26 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareamodel.hxx"
-#include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/layoutmodel.hxx"
-#include "oox/drawingml/chart/typegroupmodel.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+View3DModel::View3DModel() :
+    mnDepthPercent( 100 ),
+    mnHeightPercent( 100 ),
+    mnPerspective( 30 ),
+    mnRotationX( 0 ),
+    mnRotationY( 0 ),
+    mbRightAngled( false )
+{
+}
+
+View3DModel::~View3DModel()
+{
+}
 
 // ============================================================================
 
@@ -45,26 +58,6 @@ PlotAreaModel::PlotAreaModel()
 
 PlotAreaModel::~PlotAreaModel()
 {
-}
-
-TypeGroupModel& PlotAreaModel::createTypeGroup( sal_Int32 nTypeId )
-{
-    TypeGroupVector::value_type xTypeGroup( new TypeGroupModel( nTypeId ) );
-    maTypeGroups.push_back( xTypeGroup );
-    return *xTypeGroup;
-}
-
-AxisModel& PlotAreaModel::createAxis( sal_Int32 nTypeId )
-{
-    AxisVector::value_type xAxis( new AxisModel( nTypeId ) );
-    maAxes.push_back( xAxis );
-    return *xAxis;
-}
-
-LayoutModel& PlotAreaModel::createLayout()
-{
-    mxLayout.reset( new LayoutModel );
-    return *mxLayout;
 }
 
 // ============================================================================

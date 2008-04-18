@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axiscontext.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,10 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axiscontext.hxx"
+#include "oox/drawingml/shapepropertiescontext.hxx"
+#include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/layoutcontext.hxx"
+#include "oox/drawingml/chart/titlecontext.hxx"
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextWrapper;
@@ -41,8 +43,54 @@ namespace chart {
 
 // ============================================================================
 
+AxisDispUnitsContext::AxisDispUnitsContext( ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel ) :
+    ContextBase< AxisDispUnitsModel >( rParent, rModel )
+{
+}
+
+AxisDispUnitsContext::~AxisDispUnitsContext()
+{
+}
+
+ContextWrapper AxisDispUnitsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( dispUnits ):
+            switch( nElement )
+            {
+                case C_TOKEN( builtInUnit ):
+                    mrModel.mnBuiltInUnit = rAttribs.getToken( XML_val, XML_thousands );
+                    return false;
+                case C_TOKEN( custUnit ):
+                    mrModel.mfCustomUnit = rAttribs.getDouble( XML_val, 0.0 );
+                    return false;
+                case C_TOKEN( dispUnitsLbl ):
+                    return true;
+            }
+        break;
+
+        case C_TOKEN( dispUnitsLbl ):
+            switch( nElement )
+            {
+                case C_TOKEN( layout ):
+                    return new LayoutContext( *this, mrModel.mxLayout.create() );
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                case C_TOKEN( tx ):
+                    return new TextContext( *this, mrModel.mxText.create() );
+                case C_TOKEN( txPr ):
+                    return new TextBodyContext( *this, mrModel.mxTextProp.create() );
+            }
+        break;
+    }
+    return false;
+}
+
+// ============================================================================
+
 AxisContextBase::AxisContextBase( ContextHandler2Helper& rParent, AxisModel& rModel ) :
-    ChartContextBase< AxisModel >( rParent, rModel )
+    ContextBase< AxisModel >( rParent, rModel )
 {
 }
 
@@ -50,62 +98,73 @@ AxisContextBase::~AxisContextBase()
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
 ContextWrapper AxisContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == getModel().getData().mnTypeId )
+    switch( getCurrentElement() )
     {
-        switch( nElement )
-        {
-            case C_TOKEN( axId ):
-                getModel().getData().mnAxisId = rAttribs.getInteger( XML_val, -1 );
-                return false;
-            case C_TOKEN( crossAx ):
-                getModel().getData().mnCrossAxisId = rAttribs.getInteger( XML_val, -1 );
-                return false;
-            case C_TOKEN( crosses ):
-                getModel().getData().mnCrossMode = rAttribs.getToken( XML_val, XML_autoZero );
-                return false;
-            case C_TOKEN( crossesAt ):
-                getModel().getData().mfCrossesAt = rAttribs.getDouble( XML_val, 0.0 );
-                return false;
-            case C_TOKEN( delete ):
-                getModel().getData().mbDeleted = rAttribs.getBool( XML_val, true );
-                return false;
-            case C_TOKEN( majorTickMark ):
-                getModel().getData().mnMajorTickMark = rAttribs.getToken( XML_val, XML_cross );
-                return false;
-            case C_TOKEN( minorTickMark ):
-                getModel().getData().mnMinorTickMark = rAttribs.getToken( XML_val, XML_cross );
-                return false;
-            case C_TOKEN( numFmt ):
-                getModel().getData().maFormatCode = rAttribs.getString( XML_formatCode );
-                getModel().getData().mbSourceLinked = rAttribs.getBool( XML_sourceLinked, true );
-                return false;
-            case C_TOKEN( scaling ):
-                return true;
-            case C_TOKEN( tickLblPos ):
-                getModel().getData().mnTickLabelPos = rAttribs.getToken( XML_val, XML_nextTo );
-                return false;
-        }
-    }
-    else switch( getCurrentElement() )
-    {
+        case C_TOKEN( catAx ):
+        case C_TOKEN( dateAx ):
+        case C_TOKEN( serAx ):
+        case C_TOKEN( valAx ):
+            switch( nElement )
+            {
+                case C_TOKEN( axId ):
+                    mrModel.mnAxisId = rAttribs.getInteger( XML_val, -1 );
+                    return false;
+                case C_TOKEN( crossAx ):
+                    mrModel.mnCrossAxisId = rAttribs.getInteger( XML_val, -1 );
+                    return false;
+                case C_TOKEN( crosses ):
+                    mrModel.mnCrossMode = rAttribs.getToken( XML_val, XML_autoZero );
+                    return false;
+                case C_TOKEN( crossesAt ):
+                    mrModel.mofCrossesAt = rAttribs.getDouble( XML_val, 0.0 );
+                    return false;
+                case C_TOKEN( delete ):
+                    mrModel.mbDeleted = rAttribs.getBool( XML_val, true );
+                    return false;
+                case C_TOKEN( majorGridlines ):
+                    return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
+                case C_TOKEN( majorTickMark ):
+                    mrModel.mnMajorTickMark = rAttribs.getToken( XML_val, XML_cross );
+                    return false;
+                case C_TOKEN( minorGridlines ):
+                    return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
+                case C_TOKEN( minorTickMark ):
+                    mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, XML_cross );
+                    return false;
+                case C_TOKEN( numFmt ):
+                    mrModel.maFormatCode = rAttribs.getString( XML_formatCode );
+                    mrModel.mbSourceLinked = rAttribs.getBool( XML_sourceLinked, true );
+                    return false;
+                case C_TOKEN( scaling ):
+                    return true;
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
+                case C_TOKEN( tickLblPos ):
+                    mrModel.mnTickLabelPos = rAttribs.getToken( XML_val, XML_nextTo );
+                    return false;
+                case C_TOKEN( title ):
+                    return new TitleContext( *this, mrModel.mxTitle.create() );
+                case C_TOKEN( txPr ):
+                    return new TextBodyContext( *this, mrModel.mxTextProp.create() );
+            }
+        break;
+
         case C_TOKEN( scaling ):
             switch( nElement )
             {
                 case C_TOKEN( logBase ):
-                    getModel().getData().mfLogBase = rAttribs.getDouble( XML_val, 0.0 );
+                    mrModel.mofLogBase = rAttribs.getDouble( XML_val, 0.0 );
                     return false;
                 case C_TOKEN( max ):
-                    getModel().getData().mfMax = rAttribs.getDouble( XML_val, 0.0 );
+                    mrModel.mofMax = rAttribs.getDouble( XML_val, 0.0 );
                     return false;
                 case C_TOKEN( min ):
-                    getModel().getData().mfMin = rAttribs.getDouble( XML_val, 0.0 );
+                    mrModel.mofMin = rAttribs.getDouble( XML_val, 0.0 );
                     return false;
                 case C_TOKEN( orientation ):
-                    getModel().getData().mnOrientation = rAttribs.getToken( XML_val, XML_minMax );
+                    mrModel.mnOrientation = rAttribs.getToken( XML_val, XML_minMax );
                     return false;
             }
         break;
@@ -124,36 +183,31 @@ CatAxisContext::~CatAxisContext()
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
 ContextWrapper CatAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == getModel().getData().mnTypeId )
+    if( isRootElement() ) switch( nElement )
     {
-        switch( nElement )
-        {
-            case C_TOKEN( auto ):
-                getModel().getData().mbAuto = rAttribs.getBool( XML_val, true );
-                return false;
-            case C_TOKEN( axPos ):
-                getModel().getData().mnAxisPos = rAttribs.getToken( XML_val );
-                return false;
-            case C_TOKEN( lblAlgn ):
-                getModel().getData().mnLabelAlign = rAttribs.getToken( XML_val, XML_ctr );
-                return false;
-            case C_TOKEN( lblOffset ):
-                getModel().getData().mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
-                return false;
-            case C_TOKEN( noMultiLvlLbl ):
-                getModel().getData().mbNoMultiLevel = rAttribs.getBool( XML_val, true );
-                return false;
-            case C_TOKEN( tickLblSkip ):
-                getModel().getData().mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
-                return false;
-            case C_TOKEN( tickMarkSkip ):
-                getModel().getData().mnTickMarkSkip = rAttribs.getInteger( XML_val, 0 );
-                return false;
-        }
+        case C_TOKEN( auto ):
+            mrModel.mbAuto = rAttribs.getBool( XML_val, true );
+            return false;
+        case C_TOKEN( axPos ):
+            mrModel.mnAxisPos = rAttribs.getToken( XML_val );
+            return false;
+        case C_TOKEN( lblAlgn ):
+            mrModel.mnLabelAlign = rAttribs.getToken( XML_val, XML_ctr );
+            return false;
+        case C_TOKEN( lblOffset ):
+            mrModel.mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
+            return false;
+        case C_TOKEN( noMultiLvlLbl ):
+            mrModel.mbNoMultiLevel = rAttribs.getBool( XML_val, true );
+            return false;
+        case C_TOKEN( tickLblSkip ):
+            mrModel.mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
+            return false;
+        case C_TOKEN( tickMarkSkip ):
+            mrModel.mnTickMarkSkip = rAttribs.getInteger( XML_val, 0 );
+            return false;
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
@@ -169,36 +223,31 @@ DateAxisContext::~DateAxisContext()
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
 ContextWrapper DateAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == getModel().getData().mnTypeId )
+    if( isRootElement() ) switch( nElement )
     {
-        switch( nElement )
-        {
-            case C_TOKEN( auto ):
-                getModel().getData().mbAuto = rAttribs.getBool( XML_val, true );
-                return false;
-            case C_TOKEN( baseTimeUnit ):
-                getModel().getData().mnBaseTimeUnit = rAttribs.getToken( XML_val, XML_days );
-                return false;
-            case C_TOKEN( lblOffset ):
-                getModel().getData().mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
-                return false;
-            case C_TOKEN( majorTimeUnit ):
-                getModel().getData().mnMajorTimeUnit = rAttribs.getToken( XML_val, XML_days );
-                return false;
-            case C_TOKEN( majorUnit ):
-                getModel().getData().mfMajorUnit = rAttribs.getDouble( XML_val, 0.0 );
-                return false;
-            case C_TOKEN( minorTimeUnit ):
-                getModel().getData().mnMinorTimeUnit = rAttribs.getToken( XML_val, XML_days );
-                return false;
-            case C_TOKEN( minorUnit ):
-                getModel().getData().mfMinorUnit = rAttribs.getDouble( XML_val, 0.0 );
-                return false;
-        }
+        case C_TOKEN( auto ):
+            mrModel.mbAuto = rAttribs.getBool( XML_val, true );
+            return false;
+        case C_TOKEN( baseTimeUnit ):
+            mrModel.mnBaseTimeUnit = rAttribs.getToken( XML_val, XML_days );
+            return false;
+        case C_TOKEN( lblOffset ):
+            mrModel.mnLabelOffset = rAttribs.getInteger( XML_val, 100 );
+            return false;
+        case C_TOKEN( majorTimeUnit ):
+            mrModel.mnMajorTimeUnit = rAttribs.getToken( XML_val, XML_days );
+            return false;
+        case C_TOKEN( majorUnit ):
+            mrModel.mofMajorUnit = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+        case C_TOKEN( minorTimeUnit ):
+            mrModel.mnMinorTimeUnit = rAttribs.getToken( XML_val, XML_days );
+            return false;
+        case C_TOKEN( minorUnit ):
+            mrModel.mofMinorUnit = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
@@ -214,21 +263,16 @@ SerAxisContext::~SerAxisContext()
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
 ContextWrapper SerAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == getModel().getData().mnTypeId )
+    if( isRootElement() ) switch( nElement )
     {
-        switch( nElement )
-        {
-            case C_TOKEN( tickLblSkip ):
-                getModel().getData().mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
-                return false;
-            case C_TOKEN( tickMarkSkip ):
-                getModel().getData().mnTickMarkSkip = rAttribs.getInteger( XML_val, 0 );
-                return false;
-        }
+        case C_TOKEN( tickLblSkip ):
+            mrModel.mnTickLabelSkip = rAttribs.getInteger( XML_val, 0 );
+            return false;
+        case C_TOKEN( tickMarkSkip ):
+            mrModel.mnTickMarkSkip = rAttribs.getInteger( XML_val, 0 );
+            return false;
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );
 }
@@ -244,47 +288,20 @@ ValAxisContext::~ValAxisContext()
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
 ContextWrapper ValAxisContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == getModel().getData().mnTypeId )
+    if( isRootElement() ) switch( nElement )
     {
-        switch( nElement )
-        {
-            case C_TOKEN( crossBetween ):
-                getModel().getData().mnCrossBetween = rAttribs.getToken( XML_val, XML_between );
-                return false;
-            case C_TOKEN( dispUnits ):
-                return true;
-            case C_TOKEN( majorUnit ):
-                getModel().getData().mfMajorUnit = rAttribs.getDouble( XML_val, 0.0 );
-                return false;
-            case C_TOKEN( minorUnit ):
-                getModel().getData().mfMinorUnit = rAttribs.getDouble( XML_val, 0.0 );
-                return false;
-        }
-    }
-    else switch( getCurrentElement() )
-    {
+        case C_TOKEN( crossBetween ):
+            mrModel.mnCrossBetween = rAttribs.getToken( XML_val, XML_between );
+            return false;
         case C_TOKEN( dispUnits ):
-            switch( nElement )
-            {
-                case C_TOKEN( builtInUnit ):
-                    getModel().getData().mnBuiltInUnit = rAttribs.getToken( XML_val, XML_thousands );
-                    return false;
-                case C_TOKEN( custUnit ):
-                    getModel().getData().mfCustomUnit = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
-            }
-            return  (nElement == C_TOKEN( dispUnitsLbl ));
-
-        case C_TOKEN( dispUnitsLbl ):
-            switch( nElement )
-            {
-                case C_TOKEN( layout ):
-                    return new LayoutContext( *this, getModel().createUnitLabelsLayout() );
-            }
+            return new AxisDispUnitsContext( *this, mrModel.mxDispUnits.create() );
+        case C_TOKEN( majorUnit ):
+            mrModel.mofMajorUnit = rAttribs.getDouble( XML_val, 0.0 );
+            return false;
+        case C_TOKEN( minorUnit ):
+            mrModel.mofMinorUnit = rAttribs.getDouble( XML_val, 0.0 );
             return false;
     }
     return AxisContextBase::onCreateContext( nElement, rAttribs );

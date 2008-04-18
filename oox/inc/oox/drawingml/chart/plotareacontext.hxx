@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareacontext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,19 +39,30 @@ namespace chart {
 
 // ============================================================================
 
-class PlotAreaModel;
+struct View3DModel;
 
 /** Handler for a chart plot area context (c:plotArea element).
  */
-class PlotAreaContext : public ChartContextBase< PlotAreaModel >
+class View3DContext : public ContextBase< View3DModel >
 {
 public:
-    explicit            PlotAreaContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            PlotAreaModel& rModel );
-    virtual             ~PlotAreaContext();
+    explicit            View3DContext( ::oox::core::ContextHandler2Helper& rParent, View3DModel& rModel );
+    virtual             ~View3DContext();
 
-    // oox.core.ContextHandler2Helper interface -------------------------------
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct PlotAreaModel;
+
+/** Handler for a chart plot area context (c:plotArea element).
+ */
+class PlotAreaContext : public ContextBase< PlotAreaModel >
+{
+public:
+    explicit            PlotAreaContext( ::oox::core::ContextHandler2Helper& rParent, PlotAreaModel& rModel );
+    virtual             ~PlotAreaContext();
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };

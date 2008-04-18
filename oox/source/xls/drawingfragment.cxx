@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawingfragment.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,9 +325,12 @@ Rectangle ShapeAnchor::calcEmuLocation( const OoxAnchorSize& rEmuSheetSize ) con
         break;
     }
 
-    // add 1 mm (36K EMUs) in X direction to correct display error
+    // add 0.75 mm (27,000 EMUs) in X direction to correct display error
     if( aLoc.X >= 0 )
-        aLoc.X += 36000;
+        aLoc.X += 27000;
+    // remove 0.25 mm (9,000 EMUs) in Y direction to correct display error
+    if( aLoc.Y >= 9000 )
+        aLoc.Y -= 9000;
 
     return aLoc;
 }

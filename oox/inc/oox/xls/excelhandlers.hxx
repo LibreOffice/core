@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excelhandlers.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,6 @@
 
 namespace oox {
 namespace xls {
-
-const sal_Int32 XML_ROOT_CONTEXT    = ::oox::core::XML_ROOT_CONTEXT;
 
 typedef ::oox::core::ContextWrapper ContextWrapper;
 

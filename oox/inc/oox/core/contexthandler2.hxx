@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler2.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +41,6 @@
 
 namespace oox {
 namespace core {
-
-// Constants ==================================================================
-
-const sal_Int32 XML_ROOT_CONTEXT            = SAL_MAX_INT32;
 
 // ============================================================================
 
@@ -105,6 +101,7 @@ class ContextHandler2Helper
 {
 public:
     explicit            ContextHandler2Helper();
+    explicit            ContextHandler2Helper( const ContextHandler2Helper& rParent );
     virtual             ~ContextHandler2Helper();
 
     virtual void SAL_CALL acquire() throw() = 0;
@@ -178,6 +175,9 @@ public:
     inline sal_Int32    isPreviousElement( sal_Int32 nElement, sal_Int32 nCountBack = 1 ) const
                             { return getPreviousElement( nCountBack ) == nElement; }
 
+    /** Returns true, if the current element is the root element. */
+    bool                isRootElement() const;
+
     // implementation ---------------------------------------------------------
 
 protected:
@@ -219,6 +219,7 @@ private:
     typedef ::boost::shared_ptr< ContextStack > ContextStackRef;
 
     ContextStackRef     mxContextStack;     /// Stack of processed contexts.
+    size_t              mnRootStackSize;    /// Stack size on construction time.
 };
 
 // ============================================================================

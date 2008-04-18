@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axismodel.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,8 @@
 #ifndef OOX_DRAWINGML_CHART_AXISMODEL_HXX
 #define OOX_DRAWINGML_CHART_AXISMODEL_HXX
 
-#include "oox/drawingml/chart/modelbase.hxx"
+#include "oox/drawingml/shape.hxx"
+#include "oox/drawingml/chart/titlemodel.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -39,20 +40,49 @@ namespace chart {
 
 // ============================================================================
 
-struct AxisData
+struct AxisDispUnitsModel
 {
-    ::rtl::OUString     maFormatCode;       /// Number format code for tick mark labels.
-    double              mfCrossesAt;        /// Position on this axis where another axis crosses.
+    typedef ModelRef< Shape >       ShapeRef;
+    typedef ModelRef< TextBody >    TextBodyRef;
+    typedef ModelRef< LayoutModel > LayoutRef;
+    typedef ModelRef< TextModel >   TextRef;
+
+    ShapeRef            mxShapeProp;        /// Label frame formatting.
+    TextBodyRef         mxTextProp;         /// Label text formatting.
+    LayoutRef           mxLayout;           /// Layout/position of the axis units label.
+    TextRef             mxText;             /// Text source of the axis units label.
     double              mfCustomUnit;       /// Custom unit size on value axis.
-    double              mfMajorUnit;        /// Unit for major tick marks on date/value axis.
-    double              mfMinorUnit;        /// Unit for minor tick marks on date/value axis.
-    double              mfLogBase;          /// Logarithmic base for logarithmic axes.
-    double              mfMax;              /// Maximum axis value.
-    double              mfMin;              /// Minimum axis value.
+    sal_Int32           mnBuiltInUnit;      /// Built-in unit on value axis.
+
+    explicit            AxisDispUnitsModel();
+                        ~AxisDispUnitsModel();
+};
+
+// ============================================================================
+
+struct AxisModel
+{
+    typedef ModelRef< Shape >               ShapeRef;
+    typedef ModelRef< TextBody >            TextBodyRef;
+    typedef ModelRef< TitleModel >          TitleRef;
+    typedef ModelRef< AxisDispUnitsModel >  AxisDispUnitsRef;
+
+    ShapeRef            mxShapeProp;        /// Axis line formatting.
+    TextBodyRef         mxTextProp;         /// Axis label text formatting.
+    TitleRef            mxTitle;            /// Axis title.
+    AxisDispUnitsRef    mxDispUnits;        /// Axis units label.
+    ShapeRef            mxMajorGridLines;   /// Major grid lines formatting.
+    ShapeRef            mxMinorGridLines;   /// Minor grid lines formatting.
+    ::rtl::OUString     maFormatCode;       /// Number format code for tick mark labels.
+    OptDouble           mofCrossesAt;       /// Position on this axis where another axis crosses.
+    OptDouble           mofMajorUnit;       /// Unit for major tick marks on date/value axis.
+    OptDouble           mofMinorUnit;       /// Unit for minor tick marks on date/value axis.
+    OptDouble           mofLogBase;         /// Logarithmic base for logarithmic axes.
+    OptDouble           mofMax;             /// Maximum axis value.
+    OptDouble           mofMin;             /// Minimum axis value.
     sal_Int32           mnAxisId;           /// Unique axis identifier.
     sal_Int32           mnAxisPos;          /// Position of the axis (top/bottom/left/right).
     sal_Int32           mnBaseTimeUnit;     /// Base time unit shown on a date axis.
-    sal_Int32           mnBuiltInUnit;      /// Built-in unit on value axis.
     sal_Int32           mnCrossAxisId;      /// Identifier of a crossing axis.
     sal_Int32           mnCrossBetween;     /// This value axis crosses between or inside category.
     sal_Int32           mnCrossMode;        /// Mode this axis crosses another axis (min, max, auto).
@@ -67,35 +97,13 @@ struct AxisData
     sal_Int32           mnTickLabelSkip;    /// Number of tick mark labels to skip.
     sal_Int32           mnTickMarkSkip;     /// Number of tick marks to skip.
     sal_Int32           mnTypeId;           /// Type identifier of this axis.
-    bool                mbAuto;             /// Automatic axis settings.
+    bool                mbAuto;             /// True = automatic axis settings.
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.
     bool                mbSourceLinked;     /// True = number format linked to source data.
 
-    explicit            AxisData( sal_Int32 nTypeId );
-};
-
-// ----------------------------------------------------------------------------
-
-class LayoutModel;
-
-class AxisModel : public ModelData< AxisData >
-{
-public:
     explicit            AxisModel( sal_Int32 nTypeId );
-    virtual             ~AxisModel();
-
-    /** Returns true, if this chart model contains a layout object for unit labels. */
-    inline bool         hasUnitLabelsLayout() const { return mxLayout.get() != 0; }
-    /** Returns a pointer to an existing unit labels layout object, or null if not present. */
-    inline LayoutModel* getUnitLabelsLayout() const { return mxLayout.get(); }
-    /** Creates and returns a new layout model object for unit labels. */
-    LayoutModel&        createUnitLabelsLayout();
-
-private:
-    typedef ::boost::shared_ptr< LayoutModel > LayoutRef;
-
-    LayoutRef           mxLayout;
+                        ~AxisModel();
 };
 
 // ============================================================================

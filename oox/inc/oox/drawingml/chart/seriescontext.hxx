@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: seriescontext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,28 +39,201 @@ namespace chart {
 
 // ============================================================================
 
-class SeriesModel;
+struct DataLabelModel;
 
-/** Handler for a data series context (c:ser element).
+/** Handler for a chart data point label context (c:dLbl element).
  */
-class SeriesContext : public ChartContextBase< SeriesModel >
+class DataLabelContext : public ContextBase< DataLabelModel >
 {
 public:
-    explicit            SeriesContext(
-                            ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel,
-                            sal_Int32 nTitleSrcId, sal_Int32 nCategSrcId,
-                            sal_Int32 nValueSrcId, sal_Int32 nPointSrcId = XML_TOKEN_INVALID );
-    virtual             ~SeriesContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
+    explicit            DataLabelContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelModel& rModel );
+    virtual             ~DataLabelContext();
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+};
 
-private:
-    sal_Int32           mnTitleSrcId;       /// XML element identifier for title source values.
-    sal_Int32           mnCategSrcId;       /// XML element identifier for category source values.
-    sal_Int32           mnValueSrcId;       /// XML element identifier for series source values.
-    sal_Int32           mnPointSrcId;       /// XML element identifier for point source values (e.g. bubble sizes).
+// ============================================================================
+
+struct DataLabelsModel;
+
+/** Handler for a chart data point label context (c:dLbl element).
+ */
+class DataLabelsContext : public ContextBase< DataLabelsModel >
+{
+public:
+    explicit            DataLabelsContext( ::oox::core::ContextHandler2Helper& rParent, DataLabelsModel& rModel );
+    virtual             ~DataLabelsContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+};
+
+// ============================================================================
+
+struct ErrorBarModel;
+
+/** Handler for a series error bar context (c:errBars element).
+ */
+class ErrorBarContext : public ContextBase< ErrorBarModel >
+{
+public:
+    explicit            ErrorBarContext( ::oox::core::ContextHandler2Helper& rParent, ErrorBarModel& rModel );
+    virtual             ~ErrorBarContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct TrendlineModel;
+
+/** Handler for a series trendline context (c:trendline element).
+ */
+class TrendlineContext : public ContextBase< TrendlineModel >
+{
+public:
+    explicit            TrendlineContext( ::oox::core::ContextHandler2Helper& rParent, TrendlineModel& rModel );
+    virtual             ~TrendlineContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onEndElement( const ::rtl::OUString& rChars );
+};
+
+// ============================================================================
+
+struct DataPointModel;
+
+/** Handler for a chart data point context (c:dPt element).
+ */
+class DataPointContext : public ContextBase< DataPointModel >
+{
+public:
+    explicit            DataPointContext( ::oox::core::ContextHandler2Helper& rParent, DataPointModel& rModel );
+    virtual             ~DataPointContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct SeriesModel;
+
+/** Handler base class for chart data series contexts (c:ser element).
+ */
+class SeriesContextBase : public ContextBase< SeriesModel >
+{
+public:
+    explicit            SeriesContextBase( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~SeriesContextBase();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for area chart types (c:ser element).
+ */
+class AreaSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            AreaSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~AreaSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for bar chart types (c:ser element).
+ */
+class BarSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            BarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~BarSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for bubble chart types (c:ser element).
+ */
+class BubbleSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            BubbleSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~BubbleSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for line and stock chart types (c:ser
+    element).
+ */
+class LineSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            LineSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~LineSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for pie and doughnut chart types (c:ser
+    element).
+ */
+class PieSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            PieSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~PieSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for radar chart types (c:ser element).
+ */
+class RadarSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            RadarSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~RadarSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for scatter chart types (c:ser element).
+ */
+class ScatterSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            ScatterSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~ScatterSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+/** Handler for a data series context for scatter chart types (c:ser element).
+ */
+class SurfaceSeriesContext : public SeriesContextBase
+{
+public:
+    explicit            SurfaceSeriesContext( ::oox::core::ContextHandler2Helper& rParent, SeriesModel& rModel );
+    virtual             ~SurfaceSeriesContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
 // ============================================================================

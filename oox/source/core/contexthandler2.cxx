@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contexthandler2.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,15 @@ ContextInfo::ContextInfo() :
 // ============================================================================
 
 ContextHandler2Helper::ContextHandler2Helper() :
-    mxContextStack( new ContextStack )
+    mxContextStack( new ContextStack ),
+    mnRootStackSize( 0 )
+{
+    pushContextInfo( XML_ROOT_CONTEXT );
+}
+
+ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rParent ) :
+    mxContextStack( rParent.mxContextStack ),
+    mnRootStackSize( rParent.mxContextStack->size() )
 {
 }
 
@@ -92,10 +100,14 @@ sal_Int32 ContextHandler2Helper::getPreviousElement( sal_Int32 nCountBack ) cons
         XML_ROOT_CONTEXT : (*mxContextStack)[ mxContextStack->size() - nCountBack - 1 ].mnElement;
 }
 
+bool ContextHandler2Helper::isRootElement() const
+{
+    return mxContextStack->size() == mnRootStackSize + 1;
+}
+
 Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
-    if( !mxContextStack->empty() )
-        appendCollectedChars();
+    appendCollectedChars();
     ContextWrapper aWrapper = onCreateContext( nElement, AttributeList( rxAttribs ) );
     return aWrapper.getContextHandler( *this );
 }

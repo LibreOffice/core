@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typegroupcontext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,23 @@ namespace chart {
 
 // ============================================================================
 
-class TypeGroupModel;
-typedef ChartContextBase< TypeGroupModel > TypeGroupContextBase;
+struct UpDownBarsModel;
+
+/** Handler for an up/down bars context (c:upDownBars element).
+ */
+class UpDownBarsContext : public ContextBase< UpDownBarsModel >
+{
+public:
+    explicit            UpDownBarsContext( ::oox::core::ContextHandler2Helper& rParent, UpDownBarsModel& rModel );
+    virtual             ~UpDownBarsContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct TypeGroupModel;
+typedef ContextBase< TypeGroupModel > TypeGroupContextBase;
 
 // ============================================================================
 
@@ -49,12 +64,8 @@ typedef ChartContextBase< TypeGroupModel > TypeGroupContextBase;
 class AreaTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            AreaTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            AreaTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~AreaTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -66,12 +77,8 @@ public:
 class BarTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            BarTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            BarTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~BarTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -83,12 +90,8 @@ public:
 class BubbleTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            BubbleTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            BubbleTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~BubbleTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -101,12 +104,8 @@ public:
 class LineTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            LineTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            LineTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~LineTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -119,12 +118,8 @@ public:
 class PieTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            PieTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            PieTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~PieTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -136,12 +131,8 @@ public:
 class RadarTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            RadarTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            RadarTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~RadarTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -153,12 +144,8 @@ public:
 class ScatterTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            ScatterTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            ScatterTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~ScatterTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -171,12 +158,8 @@ public:
 class SurfaceTypeGroupContext : public TypeGroupContextBase
 {
 public:
-    explicit            SurfaceTypeGroupContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            TypeGroupModel& rModel );
+    explicit            SurfaceTypeGroupContext( ::oox::core::ContextHandler2Helper& rParent, TypeGroupModel& rModel );
     virtual             ~SurfaceTypeGroupContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };

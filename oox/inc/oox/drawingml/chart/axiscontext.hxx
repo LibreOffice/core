@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axiscontext.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +39,31 @@ namespace chart {
 
 // ============================================================================
 
-class AxisModel;
+struct AxisDispUnitsModel;
 
-class AxisContextBase : public ChartContextBase< AxisModel >
+/** Handler for a value axis display units context (c:dispUnits element).
+ */
+class AxisDispUnitsContext : public ContextBase< AxisDispUnitsModel >
 {
 public:
-    explicit            AxisContextBase(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            AxisModel& rModel );
-    virtual             ~AxisContextBase();
+    explicit            AxisDispUnitsContext( ::oox::core::ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel );
+    virtual             ~AxisDispUnitsContext();
 
-    // oox.core.ContextHandler2Helper interface -------------------------------
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+};
+
+// ============================================================================
+
+struct AxisModel;
+
+/** Base class for axis context handlers (c:catAx, c:dateAx, c:serAx, c:valAx
+    elements).
+ */
+class AxisContextBase : public ContextBase< AxisModel >
+{
+public:
+    explicit            AxisContextBase( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
+    virtual             ~AxisContextBase();
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -61,12 +75,8 @@ public:
 class CatAxisContext : public AxisContextBase
 {
 public:
-    explicit            CatAxisContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            AxisModel& rModel );
+    explicit            CatAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
     virtual             ~CatAxisContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -78,12 +88,8 @@ public:
 class DateAxisContext : public AxisContextBase
 {
 public:
-    explicit            DateAxisContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            AxisModel& rModel );
+    explicit            DateAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
     virtual             ~DateAxisContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -95,12 +101,8 @@ public:
 class SerAxisContext : public AxisContextBase
 {
 public:
-    explicit            SerAxisContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            AxisModel& rModel );
+    explicit            SerAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
     virtual             ~SerAxisContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
@@ -112,12 +114,8 @@ public:
 class ValAxisContext : public AxisContextBase
 {
 public:
-    explicit            ValAxisContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
-                            AxisModel& rModel );
+    explicit            ValAxisContext( ::oox::core::ContextHandler2Helper& rParent, AxisModel& rModel );
     virtual             ~ValAxisContext();
-
-    // oox.core.ContextHandler2Helper interface -------------------------------
 
     virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };

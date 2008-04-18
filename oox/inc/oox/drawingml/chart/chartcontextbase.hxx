@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chartcontextbase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 
 #define C_TOKEN( token )    (::oox::NMSP_CHART | XML_##token)
 
+namespace oox { namespace drawingml { class Shape; } }
+
 namespace oox {
 namespace drawingml {
 namespace chart {
@@ -42,39 +44,42 @@ namespace chart {
 // ============================================================================
 
 template< typename ModelType >
-class ModelAccess
+class ContextBase : public ::oox::core::ContextHandler2
 {
 public:
-    inline explicit     ModelAccess( ModelType& rModel ) : mrModel( rModel ) {}
-    virtual             ~ModelAccess() {}
+    inline explicit     ContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
+                            ::oox::core::ContextHandler2( rParent ), mrModel( rModel ) {}
+    virtual             ~ContextBase() {}
 
-    inline ModelType&   getModel() { return mrModel; }
-    inline const ModelType& getModel() const { return mrModel; }
-
-private:
+protected:
     ModelType&          mrModel;
 };
 
 // ============================================================================
 
 template< typename ModelType >
-class ChartContextBase : public ::oox::core::ContextHandler2, public ModelAccess< ModelType >
+class FragmentBase : public ::oox::core::FragmentHandler2
 {
 public:
-    inline explicit     ChartContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
-                            ::oox::core::ContextHandler2( rParent ), ModelAccess< ModelType >( rModel ) {}
-    virtual             ~ChartContextBase() {}
+    explicit            FragmentBase( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, ModelType& rModel ) :
+                            ::oox::core::FragmentHandler2( rFilter, rFragmentPath ), mrModel( rModel ) {}
+    virtual             ~FragmentBase() {}
+
+protected:
+    ModelType&          mrModel;
 };
 
 // ============================================================================
 
-template< typename ModelType >
-class ChartFragmentBase : public ::oox::core::FragmentHandler2, public ModelAccess< ModelType >
+/** Help class for all contexts that have only the c:spPr child element.
+ */
+class ShapePrWrapperContext : public ContextBase< Shape >
 {
 public:
-    explicit            ChartFragmentBase( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, ModelType& rModel ) :
-                            ::oox::core::FragmentHandler2( rFilter, rFragmentPath ), ModelAccess< ModelType >( rModel ) {}
-    virtual             ~ChartFragmentBase() {}
+    explicit            ShapePrWrapperContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rModel );
+    virtual             ~ShapePrWrapperContext();
+
+    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 };
 
 // ============================================================================

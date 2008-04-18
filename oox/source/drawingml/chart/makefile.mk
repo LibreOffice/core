@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,23 +46,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES =								\
     $(SLO)$/axiscontext.obj				\
+    $(SLO)$/axisconverter.obj			\
     $(SLO)$/axismodel.obj				\
+    $(SLO)$/chartcontextbase.obj		\
+    $(SLO)$/chartconverter.obj			\
     $(SLO)$/chartformatinfo.obj			\
-    $(SLO)$/chartfragment.obj			\
-    $(SLO)$/chartmodel.obj				\
     $(SLO)$/chartobjecttable.obj		\
-    $(SLO)$/charttypeinfo.obj			\
-    $(SLO)$/layoutcontext.obj			\
-    $(SLO)$/layoutmodel.obj				\
-    $(SLO)$/legendcontext.obj			\
-    $(SLO)$/legendmodel.obj				\
+    $(SLO)$/chartspaceconverter.obj		\
+    $(SLO)$/chartspacefragment.obj		\
+    $(SLO)$/chartspacemodel.obj			\
+    $(SLO)$/converterbase.obj			\
+    $(SLO)$/datasourcecontext.obj		\
+    $(SLO)$/datasourceconverter.obj		\
+    $(SLO)$/datasourcemodel.obj			\
     $(SLO)$/plotareacontext.obj			\
+    $(SLO)$/plotareaconverter.obj		\
     $(SLO)$/plotareamodel.obj			\
     $(SLO)$/seriescontext.obj			\
+    $(SLO)$/seriesconverter.obj			\
     $(SLO)$/seriesmodel.obj				\
-    $(SLO)$/seriessourcecontext.obj		\
-    $(SLO)$/seriessourcemodel.obj		\
+    $(SLO)$/titlecontext.obj			\
+    $(SLO)$/titleconverter.obj			\
+    $(SLO)$/titlemodel.obj				\
     $(SLO)$/typegroupcontext.obj		\
+    $(SLO)$/typegroupconverter.obj		\
     $(SLO)$/typegroupmodel.obj
 
 # --- Targets -------------------------------------------------------

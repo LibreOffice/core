@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modelbase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,7 @@
 #ifndef OOX_DRAWINGML_CHART_MODELBASE_HXX
 #define OOX_DRAWINGML_CHART_MODELBASE_HXX
 
-#include <boost/shared_ptr.hpp>
-#include "oox/helper/helper.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "tokens.hxx"
 
 namespace oox {
@@ -41,42 +40,93 @@ namespace chart {
 
 // ============================================================================
 
-/** Inserts a data struct into a model class and provides accessor functions to the data.
- */
-template< typename DataStruct >
-class ModelData
+template< typename Type >
+class OptValue
 {
 public:
-    inline explicit     ModelData() {}
-    inline explicit     ModelData( const DataStruct& rData ) : maData( rData ) {}
-    template< typename Param1 >
-    inline explicit     ModelData( const Param1& rParam1 ) : maData( rParam1 ) {}
-    template< typename Param1, typename Param2 >
-    inline explicit     ModelData( const Param1& rParam1, const Param2& rParam2 ) : maData( rParam1, rParam2 ) {}
-    virtual             ~ModelData() {}
+    inline explicit     OptValue() : mbHasValue( false ) {}
+    inline explicit     OptValue( const Type& rValue ) : maValue( rValue ), mbHasValue( true ) {}
 
-    /** Provides read access to the data struct of this model. */
-    inline const DataStruct& getData() const { return maData; }
-    /** Provides read/write access to the data struct of this model. */
-    inline DataStruct&  getData() { return maData; }
+    inline bool         has() const { return mbHasValue; }
+    inline bool         operator!() const { return !mbHasValue; }
 
-    /** Sets the passed data struct for this model. */
-    inline void         setData( const DataStruct& rData ) { maData = rData; }
+    inline const Type&  get() const { return maValue; }
+    inline const Type&  get( const Type& rDefValue ) const { return mbHasValue ? maValue : rDefValue; }
+
+    inline void         reset() { mbHasValue = false; }
+    inline void         set( const Type& rValue ) { maValue = rValue; mbHasValue = true; }
+    inline OptValue&    operator=( const Type& rValue ) { set( rValue ); return *this; }
 
 private:
-    DataStruct          maData;
+    Type                maValue;
+    bool                mbHasValue;
+};
+
+typedef OptValue< bool >            OptBool;
+typedef OptValue< sal_Int32 >       OptInt32;
+typedef OptValue< double >          OptDouble;
+typedef OptValue< ::rtl::OUString > OptString;
+
+// ============================================================================
+
+template< typename ModelType >
+class ModelRef : public ::boost::shared_ptr< ModelType >
+{
+public:
+    inline explicit     ModelRef() {}
+    inline              ~ModelRef() {}
+
+    inline bool         is() const { return this->get() != 0; }
+
+    inline ModelType&   create() { reset( new ModelType ); return **this; }
+    template< typename Param1Type >
+    inline ModelType&   create( const Param1Type& rParam1 ) { reset( new ModelType( rParam1 ) ); return **this; }
+
+    inline ModelType&   getOrCreate() { if( !*this ) reset( new ModelType ); return **this; }
+    template< typename Param1Type >
+    inline ModelType&   getOrCreate( const Param1Type& rParam1 ) { if( !*this ) reset( new ModelType( rParam1 ) ); return **this; }
 };
 
 // ============================================================================
 
-#define IMPL_MODEL_MEMBER( ClassName, MemberName ) \
-public: \
-    inline bool         has##MemberName() const { return mx##MemberName.get() != 0; } \
-    inline const ClassName* get##MemberName() const { return mx##MemberName.get(); } \
-    inline ClassName&   create##MemberName() const { mx##MemberName.rset( new ClassName ); return *mx##MemberName; } \
-private: \
-    ::boost::shared_ptr< ClassName > mx##MemberName
+template< typename ModelType >
+class ModelVector : public RefVector< ModelType >
+{
+public:
+    typedef typename RefVector< ModelType >::value_type value_type;
+    typedef typename RefVector< ModelType >::size_type  size_type;
 
+    inline explicit     ModelVector() {}
+    inline              ~ModelVector() {}
+
+    inline ModelType&   create() { return append( new ModelType ); }
+    template< typename Param1Type >
+    inline ModelType&   create( const Param1Type& rParam1 ) { return append( new ModelType( rParam1 ) ); }
+
+private:
+    inline ModelType&   append( ModelType* pModel ) { this->push_back( value_type( pModel ) ); return *pModel; }
+};
+
+// ============================================================================
+
+template< typename KeyType, typename ModelType >
+class ModelMap : public RefMap< KeyType, ModelType >
+{
+public:
+    typedef typename RefMap< KeyType, ModelType >::key_type     key_type;
+    typedef typename RefMap< KeyType, ModelType >::mapped_type  mapped_type;
+    typedef typename RefMap< KeyType, ModelType >::value_type   value_type;
+
+    inline explicit     ModelMap() {}
+    inline              ~ModelMap() {}
+
+    inline ModelType&   create( KeyType eKey ) { return insert( eKey, new ModelType ); }
+    template< typename Param1Type >
+    inline ModelType&   create( KeyType eKey, const Param1Type& rParam1 ) { return insert( eKey, new ModelType( rParam1 ) ); }
+
+private:
+    inline ModelType&   insert( KeyType eKey, ModelType* pModel ) { (*this)[ eKey ].reset( pModel ); return *pModel; }
+};
 
 // ============================================================================
 

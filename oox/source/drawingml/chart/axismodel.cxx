@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: axismodel.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/axismodel.hxx"
-#include "oox/drawingml/chart/layoutmodel.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -37,18 +36,22 @@ namespace chart {
 
 // ============================================================================
 
-AxisData::AxisData( sal_Int32 nTypeId ) :
-    mfCrossesAt( 0.0 ),
+AxisDispUnitsModel::AxisDispUnitsModel() :
     mfCustomUnit( 0.0 ),
-    mfMajorUnit( 0.0 ),
-    mfMinorUnit( 0.0 ),
-    mfLogBase( 0.0 ),
-    mfMax( 0.0 ),
-    mfMin( 0.0 ),
+    mnBuiltInUnit( XML_TOKEN_INVALID )
+{
+}
+
+AxisDispUnitsModel::~AxisDispUnitsModel()
+{
+}
+
+// ============================================================================
+
+AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
     mnBaseTimeUnit( XML_days ),
-    mnBuiltInUnit( XML_TOKEN_INVALID ),
     mnCrossAxisId( -1 ),
     mnCrossBetween( XML_between ),
     mnCrossMode( XML_autoZero ),
@@ -70,21 +73,8 @@ AxisData::AxisData( sal_Int32 nTypeId ) :
 {
 }
 
-// ----------------------------------------------------------------------------
-
-AxisModel::AxisModel( sal_Int32 nTypeId ) :
-    ModelData< AxisData >( nTypeId )
-{
-}
-
 AxisModel::~AxisModel()
 {
-}
-
-LayoutModel& AxisModel::createUnitLabelsLayout()
-{
-    mxLayout.reset( new LayoutModel );
-    return *mxLayout;
 }
 
 // ============================================================================

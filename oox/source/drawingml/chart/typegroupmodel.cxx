@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typegroupmodel.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/typegroupmodel.hxx"
-#include "oox/drawingml/chart/seriesmodel.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -37,7 +36,18 @@ namespace chart {
 
 // ============================================================================
 
-TypeGroupData::TypeGroupData( sal_Int32 nTypeId ) :
+UpDownBarsModel::UpDownBarsModel() :
+    mnGapWidth( 150 )
+{
+}
+
+UpDownBarsModel::~UpDownBarsModel()
+{
+}
+
+// ============================================================================
+
+TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId ) :
     mfSplitPos( 0.0 ),
     mnBarDir( XML_col ),
     mnBubbleScale( 100 ),
@@ -64,22 +74,8 @@ TypeGroupData::TypeGroupData( sal_Int32 nTypeId ) :
 {
 }
 
-// ----------------------------------------------------------------------------
-
-TypeGroupModel::TypeGroupModel( sal_Int32 nTypeId ) :
-    ModelData< TypeGroupData >( nTypeId )
-{
-}
-
 TypeGroupModel::~TypeGroupModel()
 {
-}
-
-SeriesModel& TypeGroupModel::createSeries()
-{
-    SeriesVector::value_type xSeries( new SeriesModel );
-    maSeries.push_back( xSeries );
-    return *xSeries;
 }
 
 // ============================================================================

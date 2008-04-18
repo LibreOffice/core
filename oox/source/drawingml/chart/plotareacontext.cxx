@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plotareacontext.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +29,10 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareacontext.hxx"
+#include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/chart/axiscontext.hxx"
-#include "oox/drawingml/chart/layoutcontext.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
+#include "oox/drawingml/chart/titlecontext.hxx"
 #include "oox/drawingml/chart/typegroupcontext.hxx"
 
 using ::oox::core::ContextHandler2Helper;
@@ -43,16 +44,56 @@ namespace chart {
 
 // ============================================================================
 
+View3DContext::View3DContext( ContextHandler2Helper& rParent, View3DModel& rModel ) :
+    ContextBase< View3DModel >( rParent, rModel )
+{
+}
+
+View3DContext::~View3DContext()
+{
+}
+
+ContextWrapper View3DContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    switch( getCurrentElement() )
+    {
+        case C_TOKEN( view3D ):
+            switch( nElement )
+            {
+                case C_TOKEN( depthPercent ):
+                    mrModel.mnDepthPercent = rAttribs.getInteger( XML_val, 100 );
+                    return false;
+                case C_TOKEN( hPercent ):
+                    mrModel.mnHeightPercent = rAttribs.getInteger( XML_val, 100 );
+                    return false;
+                case C_TOKEN( perspective ):
+                    mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
+                    return false;
+                case C_TOKEN( rAngAx ):
+                    mrModel.mbRightAngled = rAttribs.getBool( XML_val, true );
+                    return false;
+                case C_TOKEN( rotX ):
+                    mrModel.mnRotationX = rAttribs.getInteger( XML_val, 0 );
+                    return false;
+                case C_TOKEN( rotY ):
+                    mrModel.mnRotationY = rAttribs.getInteger( XML_val, 0 );
+                    return false;
+            }
+        break;
+    }
+    return false;
+}
+
+// ============================================================================
+
 PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
-    ChartContextBase< PlotAreaModel >( rParent, rModel )
+    ContextBase< PlotAreaModel >( rParent, rModel )
 {
 }
 
 PlotAreaContext::~PlotAreaContext()
 {
 }
-
-// oox.core.ContextHandler2Helper interface -----------------------------------
 
 ContextWrapper PlotAreaContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
@@ -63,40 +104,42 @@ ContextWrapper PlotAreaContext::onCreateContext( sal_Int32 nElement, const Attri
             {
                 case C_TOKEN( area3DChart ):
                 case C_TOKEN( areaChart ):
-                    return new AreaTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new AreaTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( bar3DChart ):
                 case C_TOKEN( barChart ):
-                    return new BarTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new BarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( bubbleChart ):
-                    return new BubbleTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new BubbleTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( line3DChart ):
                 case C_TOKEN( lineChart ):
                 case C_TOKEN( stockChart ):
-                    return new LineTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new LineTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( doughnutChart ):
                 case C_TOKEN( ofPieChart ):
                 case C_TOKEN( pie3DChart ):
                 case C_TOKEN( pieChart ):
-                    return new PieTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new PieTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( radarChart ):
-                    return new RadarTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new RadarTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( scatterChart ):
-                    return new ScatterTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new ScatterTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
                 case C_TOKEN( surface3DChart ):
                 case C_TOKEN( surfaceChart ):
-                    return new SurfaceTypeGroupContext( *this, getModel().createTypeGroup( nElement ) );
+                    return new SurfaceTypeGroupContext( *this, mrModel.maTypeGroups.create( nElement ) );
 
                 case C_TOKEN( catAx ):
-                    return new CatAxisContext( *this, getModel().createAxis( nElement ) );
+                    return new CatAxisContext( *this, mrModel.maAxes.create( nElement ) );
                 case C_TOKEN( dateAx ):
-                    return new DateAxisContext( *this, getModel().createAxis( nElement ) );
+                    return new DateAxisContext( *this, mrModel.maAxes.create( nElement ) );
                 case C_TOKEN( serAx ):
-                    return new SerAxisContext( *this, getModel().createAxis( nElement ) );
+                    return new SerAxisContext( *this, mrModel.maAxes.create( nElement ) );
                 case C_TOKEN( valAx ):
-                    return new ValAxisContext( *this, getModel().createAxis( nElement ) );
+                    return new ValAxisContext( *this, mrModel.maAxes.create( nElement ) );
 
                 case C_TOKEN( layout ):
-                    return new LayoutContext( *this, getModel().createLayout() );
+                    return new LayoutContext( *this, mrModel.mxLayout.create() );
+                case C_TOKEN( spPr ):
+                    return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }
         break;
     }
