@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pptimport.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "oox/ppt/pptimport.hxx"
+#include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"
 
 using ::rtl::OUString;
@@ -58,6 +59,7 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance(const
 
 PowerPointImport::PowerPointImport( const uno::Reference< lang::XMultiServiceFactory > & rSMgr  )
     : XmlFilterBase( rSMgr )
+    , mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
 }
 
@@ -126,6 +128,11 @@ const oox::vml::DrawingPtr PowerPointImport::getDrawings()
     if ( mpActualSlidePersist )
         xRet = mpActualSlidePersist->getDrawing();
     return xRet;
+}
+
+::oox::drawingml::chart::ChartConverter& PowerPointImport::getChartConverter()
+{
+    return *mxChartConv;
 }
 
 OUString PowerPointImport::implGetImplementationName() const
