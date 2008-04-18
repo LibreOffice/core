@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewuno.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -887,12 +887,40 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         SCTAB nTabs = rMark.GetSelectCount();
 
         ScRange aRange;
-        if ( nTabs == 1 && pViewData->GetSimpleArea(aRange) )
+        ScMarkType eMarkType = pViewData->GetSimpleArea(aRange);
+        if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE) )
         {
             if (aRange.aStart == aRange.aEnd)
                 pObj = new ScCellObj( pDocSh, aRange.aStart );
             else
                 pObj = new ScCellRangeObj( pDocSh, aRange );
+        }
+        else if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE_FILTERED) )
+        {
+            ScMarkData aFilteredMark( rMark );
+            ScViewUtil::UnmarkFiltered( aFilteredMark, pDocSh->GetDocument());
+            ScRangeList aRangeList;
+            aFilteredMark.FillRangeListWithMarks( &aRangeList, FALSE);
+            // Theoretically a selection may start and end on a filtered row.
+            switch (aRangeList.Count())
+            {
+                case 0:
+                    // No unfiltered row, we have to return some object, so
+                    // here is one with no ranges.
+                    pObj = new ScCellRangesObj( pDocSh, aRangeList );
+                    break;
+                case 1:
+                    {
+                        const ScRange& rRange = *(aRangeList.GetObject(0));
+                        if (rRange.aStart == rRange.aEnd)
+                            pObj = new ScCellObj( pDocSh, rRange.aStart );
+                        else
+                            pObj = new ScCellRangeObj( pDocSh, rRange );
+                    }
+                    break;
+                default:
+                    pObj = new ScCellRangesObj( pDocSh, aRangeList );
+            }
         }
         else            //  Mehrfachselektion
         {
