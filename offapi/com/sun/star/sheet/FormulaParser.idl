@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormulaParser.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,11 +76,11 @@ service FormulaParser
 
     // ------------------------------------------------------------------------
 
-    [property] boolean R1C1Notation;
+    /** Specifies which convention to use when parsing a formula string.
 
-    // ------------------------------------------------------------------------
-
-    [property] boolean Compatibility3DNotation;
+        @see com::sun::star::sheet::FormulaConvention
+      */
+    [property] short FormulaConvention;
 
     // ------------------------------------------------------------------------
 
