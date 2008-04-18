@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shape.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,26 @@ enum ShapeStyle
 typedef std::map< ShapeStyle, ColorPtr > ShapeStylesColorMap;
 typedef std::map< ShapeStyle, rtl::OUString > ShapeStylesIndexMap;
 
+// ============================================================================
+
+/** A callback that will be called after the ::com::sun::drawing::XShape has been
+    created from the imported shape and it has been inserted into the draw page.
+
+    An instance of a derived class of this callback can be set at every
+    ::oox::drawingml::Shape instance to implement anything that needs a created
+    and inserted XShape.
+ */
+class CreateShapeCallback
+{
+public:
+    virtual             ~CreateShapeCallback();
+    virtual void        onCreateXShape(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) = 0;
+};
+typedef ::boost::shared_ptr< CreateShapeCallback > CreateShapeCallbackRef;
+
+// ============================================================================
+
 class Shape
     : public boost::enable_shared_from_this< Shape >
 {
@@ -72,27 +92,27 @@ public:
     Shape( const sal_Char* pServiceType = NULL );
     virtual ~Shape();
 
-    rtl::OUString&                  getServiceName(){ return msServiceName; };
+    rtl::OUString&                  getServiceName(){ return msServiceName; }
     void                            setServiceName( const sal_Char* pServiceName );
-    PropertyMap&                    getShapeProperties(){ return maShapeProperties; };
-    LinePropertiesPtr               getLineProperties(){ return mpLinePropertiesPtr; };
-    FillPropertiesPtr               getFillProperties(){ return mpFillPropertiesPtr; };
-    FillPropertiesPtr               getGraphicProperties() { return mpGraphicPropertiesPtr; };
-    CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; };
+    PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
+    LinePropertiesPtr               getLineProperties(){ return mpLinePropertiesPtr; }
+    FillPropertiesPtr               getFillProperties(){ return mpFillPropertiesPtr; }
+    FillPropertiesPtr               getGraphicProperties() { return mpGraphicPropertiesPtr; }
+    CustomShapePropertiesPtr        getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
 
-    void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; };
-    void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; };
-    void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; };
-    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; };
-    void                            addChild( const ShapePtr pChildPtr ) { maChilds.push_back( pChildPtr ); };
-    std::vector< ShapePtr >&        getChilds() { return maChilds; };
+    void                            setPosition( com::sun::star::awt::Point nPosition ){ maPosition = nPosition; }
+    void                            setSize( com::sun::star::awt::Size aSize ){ maSize = aSize; }
+    void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
+    void                            setFlip( sal_Bool bFlipH, sal_Bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    void                            addChild( const ShapePtr pChildPtr ) { maChilds.push_back( pChildPtr ); }
+    std::vector< ShapePtr >&        getChilds() { return maChilds; }
 
-    void                            setName( const rtl::OUString& rName ) { msName = rName; };
+    void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
-    void                            setId( const rtl::OUString& rId ) { msId = rId; };
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; };
-    sal_Int32                       getSubType() const { return mnSubType; };
-    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; };
+    void                            setId( const rtl::OUString& rId ) { msId = rId; }
+    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
+    sal_Int32                       getSubType() const { return mnSubType; }
+    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -100,11 +120,13 @@ public:
     void                setTextBody(const TextBodyPtr & pTextBody);
     TextBodyPtr         getTextBody();
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
-    TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; };
+    TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; }
 
 
-    ShapeStylesColorMap&    getShapeStylesColor(){ return maShapeStylesColorMap; };
-    ShapeStylesIndexMap&    getShapeStylesIndex(){ return maShapeStylesIndexMap; };
+    ShapeStylesColorMap&    getShapeStylesColor(){ return maShapeStylesColorMap; }
+    ShapeStylesIndexMap&    getShapeStylesIndex(){ return maShapeStylesIndexMap; }
+
+    inline void         setCreateShapeCallback( CreateShapeCallbackRef xCallback ) { mxCreateCallback = xCallback; }
 
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
@@ -117,7 +139,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
-    virtual void        applyShapeReference( const oox::drawingml::Shape& rReferencedShape );
+    virtual void        applyShapeReference( const Shape& rReferencedShape );
 
 protected:
 
@@ -148,8 +170,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
     rtl::OUString   msServiceName;
-    rtl::OUString   msName;
-    rtl::OUString   msId;
+    rtl::OUString    msName;
+    rtl::OUString    msId;
     sal_uInt32      mnSubType;      // if this type is not zero, then the shape is a placeholder
     sal_uInt32      mnIndex;
 
@@ -165,6 +187,7 @@ private:
     void setShapeStyleColors( const ::oox::core::XmlFilterBase& rFilterBase,
             LineProperties& rLineProperties, FillProperties& rFillProperties, PropertyMap& rShapeProperties );
 
+    CreateShapeCallbackRef          mxCreateCallback;
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
