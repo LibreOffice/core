@@ -9,7 +9,7 @@
 
   $RCSfile: build.xml,v $
 
-  $Revision: 1.16 $
+  $Revision: 1.17 $
 
   This file is part of OpenOffice.org.
 
@@ -130,7 +130,7 @@
                 <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
                 <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
             </filterset>
-            <mapper type="regexp" from="^(.*)/com.sun.sun-mediawiki/(.*)" to="\1/com.sun.wiki-publisher/\2"/>
+            <mapper type="regexp" from="^(.*[/\\])com.sun.sun-mediawiki([/\\].*)" to="\1com.sun.wiki-publisher\2"/>
         </copy>
     </target>
 
