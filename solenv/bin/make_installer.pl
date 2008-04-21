@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.108 $
+# $Revision: 1.109 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1642,7 +1642,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $create_jds = 0;
 
             if ( $allvariableshashref->{'JDSBUILD'} ) { $create_jds = 1; }
-            if (( ! $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::issolarispkgbuild )) { $create_jds = 0; }
+            if (! $installer::globals::issolarispkgbuild ) { $create_jds = 0; }
 
             if (( $is_success ) && ( $create_jds ))
             {
