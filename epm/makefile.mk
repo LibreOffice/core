@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,9 @@ PATCH_FILE_NAME=epm-3.7.patch
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-fltk
 .IF "$(OS)"=="MACOSX"
-CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LINKFLAGS)"
+.IF "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LINKFLAGS)" CPP="gcc -E $(EXTRA_CFLAGS)"
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF
 BUILD_ACTION=make
 OUT2BIN=epm epminstall mkepmlist
