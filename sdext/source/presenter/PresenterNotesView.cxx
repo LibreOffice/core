@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterNotesView.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -519,7 +519,7 @@ void PresenterNotesView::UpdateScrollBar (void)
     {
         try
         {
-            double nHeight;
+            double nHeight = 0;
             if (mxTextView->getPropertyValue(OUString::createFromAscii("TotalHeight")) >>= nHeight)
                 mpScrollBar->SetTotalSize(nHeight);
         }
@@ -531,7 +531,7 @@ void PresenterNotesView::UpdateScrollBar (void)
         try
         {
 
-            double nTop;
+            double nTop = 0;
             if (mxTextView->getPropertyValue(OUString::createFromAscii("Top")) >>= nTop)
                 mpScrollBar->SetThumbPosition(nTop);
         }
