@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unocrsr.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,9 @@ SwUnoCrsr::~SwUnoCrsr()
 
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
-        else
+        else {
             ASSERT( !this, "UNO Cursor nicht mehr im Array" );
+        }
     }
 
     // den gesamten Ring loeschen!
