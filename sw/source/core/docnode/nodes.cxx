@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodes.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -918,8 +918,9 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         aIdx--; // ueberspringen
                 }
             }
-            else
+            else {
                 ASSERT( FALSE, "wie kommt diser Node ins Nodes-Array??" );
+            }
             aRg.aEnd--;
             break;
 
@@ -2191,8 +2192,9 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                     pTmpNd->StartOfSectionNode()->IsSectionNode() )
                     aInsPos++;  // ueberspringen
             }
-            else
+            else {
                 ASSERT( FALSE, "wie kommt diser Node ins Nodes-Array??" );
+            }
             break;
 
         default:
