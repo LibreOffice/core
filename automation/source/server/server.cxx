@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: server.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -809,8 +809,9 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
         }
         if( !pIn->IsEof() )
             pCmdStream->Read( nId );
-        else
+        else {
             DBG_ERROR( "truncated input stream" );
+        }
     }
 
     StatementList::bReadingCommands = FALSE;
