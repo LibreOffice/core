@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fefly1.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1567,8 +1567,9 @@ void SwFEShell::SetFlyName( const String& rName )
     SwLayoutFrm *pFly = FindFlyFrm();
     if( pFly )
         GetDoc()->SetFlyName( *(SwFlyFrmFmt*)pFly->GetFmt(), rName );
-    else
+    else {
         ASSERT( !this, "kein FlyFrame selektiert" )
+    }
 }
 
 const String& SwFEShell::GetFlyName() const
