@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrfrm.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1183,9 +1183,10 @@ BOOL SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
                 SetValue( static_cast<USHORT>(eVal) );
-            else
+            else {
                 //exception
                 ;
+            }
         }
         break;
 
