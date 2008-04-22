@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.125 $
+ * $Revision: 1.126 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3085,8 +3085,9 @@ namespace xmloff { namespace token {
     {
         if (nRescheduleCount > 0)
             --nRescheduleCount;
-        else
+        else {
             DBG_ERROR("RescheduleCount not increased");
+        }
     }
 
 }
