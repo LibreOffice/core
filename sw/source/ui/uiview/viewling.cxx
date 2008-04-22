@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewling.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -725,8 +725,9 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                             &pWrtShell->GetCrsr()->GetPoint()->nNode.GetNode() );
                 if (pNode)
                     aParaText = pNode->GetTxt();    // this may include hidden text but that should be Ok
-                else
+                else {
                     DBG_ERROR( "text node expected but not found" );
+                }
 
                 bRet = sal_True;
                 pWrtShell->SttSelect();
