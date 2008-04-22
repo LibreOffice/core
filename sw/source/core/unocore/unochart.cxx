@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unochart.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2001,8 +2001,9 @@ SwChartDataSequence::SwChartDataSequence(
             pDataProvider->AddDataSequence( *pTable, xRef );
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
-        else
+        else {
             DBG_ERROR( "table missing" );
+        }
     }
     catch (uno::RuntimeException &)
     {
@@ -2051,8 +2052,9 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
             pDataProvider->AddDataSequence( *pTable, xRef );
             pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
-        else
+        else {
             DBG_ERROR( "table missing" );
+        }
     }
     catch (uno::RuntimeException &)
     {
@@ -2203,8 +2205,9 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                 bUseCol = nColSpan > nRowSpan;
                 bReturnEmptyTxt = nColSpan == nRowSpan;
             }
-            else
+            else {
                 DBG_ERROR( "unexpected case" );
+            }
 
             // build label sequence
             //
@@ -2552,8 +2555,9 @@ void SAL_CALL SwChartDataSequence::dispose(  )
                 uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
                 pDataProvider->RemoveDataSequence( *pTable, xRef );
             }
-            else
+            else {
                 DBG_ERROR( "table missing" );
+            }
         }
 
         // require listeners to release references to this object
@@ -2641,8 +2645,9 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             else    // move mark
                 bMoveLeft = nMarkCol > nPointCol;
         }
-        else
+        else {
             DBG_ERROR( "neither vertical nor horizontal movement" );
+        }
 
         // get new box (position) to use...
         sal_Int32 nRow = (pPointStartNode == rBox.GetSttNd()) ? nPointRow : nMarkRow;
@@ -2679,11 +2684,13 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
                 pPos->nNode     = aNewPos.nNode;
                 pPos->nContent  = aNewPos.nContent;
             }
-            else
+            else {
                 DBG_ERROR( "neither point nor mark available for change" );
+            }
         }
-        else
+        else {
             DBG_ERROR( "failed to get position" );
+        }
     }
 
     return bNowEmpty;
