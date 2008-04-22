@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndole.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -868,8 +868,9 @@ BOOL SwOLEObj::UnloadObject( uno::Reference< embed::XEmbeddedObject > xObj, cons
                         uno::Reference < embed::XEmbedPersist > xPers( xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                             xPers->storeOwn();
-                        else
+                        else {
                             DBG_ERROR("Modified object without persistance in cache!");
+                        }
                     }
 
                     // setting object to loaded state will remove it from cache
