@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DbAdminImpl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -978,13 +978,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rValue >>= sValue;
                 _rSet.Put(SfxStringItem(nId, sValue.getStr()));
             }
-            else
+            else {
                 DBG_ERROR(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string)!" )
                     ).getStr()
                 );
+            }
             break;
 
         case TypeClass_BOOLEAN:
@@ -994,13 +995,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rValue >>= bVal;
                 _rSet.Put(SfxBoolItem(nId, bVal));
             }
-            else
+            else {
                 DBG_ERROR(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no boolean)!" )
                     ).getStr()
                 );
+            }
             break;
 
         case TypeClass_LONG:
@@ -1010,13 +1012,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rValue >>= nValue;
                 _rSet.Put( SfxInt32Item( nId, nValue ) );
             }
-            else
+            else {
                 DBG_ERROR(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no int)!" )
                     ).getStr()
                 );
+            }
             break;
 
         case TypeClass_SEQUENCE:
@@ -1042,13 +1045,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                         DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
                 }
             }
-            else
+            else {
                 DBG_ERROR(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string sequence)!" )
                     ).getStr()
                 );
+            }
             break;
 
         case TypeClass_VOID:
