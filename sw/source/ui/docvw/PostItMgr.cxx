@@ -8,7 +8,7 @@
  *
  * $RCSfile: PostItMgr.cxx,v $
  *
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -316,8 +316,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (bEmpty && !mvPostItFlds.empty())
                         PrepareView(true);
                 }
-                else
+                else {
                     DBG_ERROR( "Inserted field not in document!" );
+                }
                 break;
             }
             case SWFMTFLD_REMOVED:
