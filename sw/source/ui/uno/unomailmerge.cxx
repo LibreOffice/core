@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomailmerge.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,8 +265,9 @@ namespace
                 // successfully added -> keep ourself alive
                 acquire();
             }
-            else
+            else {
                 DBG_ERROR( "DelayedFileDeletion::DelayedFileDeletion: model is no component!" );
+            }
         }
         catch( const Exception& )
         {
@@ -1026,8 +1027,9 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 bOK = rValue >>= sInServerPassword;
             else if(pData == &sOutServerPassword)
                 bOK = rValue >>= sInServerPassword;
-            else
+            else {
                 DBG_ERROR( "invalid pointer" );
+            }
             DBG_ASSERT( bOK, "set value failed" );
             bChanged = sal_True;
         }
