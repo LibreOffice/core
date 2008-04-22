@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.138 $
+ * $Revision: 1.139 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1906,8 +1906,9 @@ ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
                     uno::Any aAny = mxExportInfo->getPropertyValue(sRepeat);
                     if (aAny.getValueType() == getBooleanCppuType())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
-                    else
+                    else {
                         DBG_ERRORFILE("why is it no boolean?");
+                    }
                 }
             }
         }
