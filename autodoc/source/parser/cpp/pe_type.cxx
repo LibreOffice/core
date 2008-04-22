@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pe_type.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -396,12 +396,15 @@ void
 PE_Type::On_start_TypeSpecializer(const char * i_sText)
 {
     SetTokenResult(done,stay);
-    if (*i_sText == 'u')
+    if (*i_sText == 'u') {
         pType->Set_Unsigned();
-    else if (*i_sText == 's')
+    }
+    else if (*i_sText == 's') {
         pType->Set_Signed();
-    else
+    }
+    else {
         csv_assert(false);
+    }
 }
 
 void
