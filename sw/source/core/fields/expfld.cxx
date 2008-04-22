@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expfld.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1255,9 +1255,10 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             rAny >>= nTmp16;
             if(nTmp16 <= SVX_NUMBER_NONE )
                 SetFormat(nTmp16);
-            else
+            else {
                 //exception(wrong_value)
                 ;
+            }
         }
         break;
     case FIELD_PROP_USHORT1:
