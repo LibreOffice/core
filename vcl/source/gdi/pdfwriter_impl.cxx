@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -10384,11 +10384,13 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
                 m_nCurrentStructElement = nNewCurElement;
                 DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
             }
-            else
+            else {
                 DBG_ERROR( "document structure in disorder !" );
+            }
         }
-        else
+        else {
             DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
+        }
     }
 
     sal_Int32 nNewId = sal_Int32(m_aStructure.size());
