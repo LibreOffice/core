@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lngsvcmgr.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,8 +144,9 @@ static Sequence< Locale > GetAvailLocales(
                         aLanguages.Insert( nLang );
                 }
             }
-            else
+            else {
                 DBG_ERROR( "interface not supported by service" );
+            }
         }
 
         // build return sequence
@@ -775,8 +776,9 @@ void LngSvcMgr::Notify( const Sequence< OUString > &rPropertyNames )
                 pThesDsp->SetServiceList( CreateLocale(nLang), aSvcImplNames );
             }
         }
-        else
+        else {
             DBG_ERROR( "nofified for unexpected property" );
+        }
     }
 }
 
@@ -1511,8 +1513,9 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             pNodeName = "ServiceManager/ThesaurusList";
         else if (pDsp == pHyphDsp)
             pNodeName = "ServiceManager/HyphenatorList";
-        else
+        else {
             DBG_ERROR( "node name missing" );
+        }
         OUString aNodeName( A2OU(pNodeName) );
 
         for (INT32 i = 0;  i < nLen;  ++i)
@@ -1603,8 +1606,9 @@ static Sequence< OUString > GetLangSvc( const Any &rVal )
             aRes.realloc(1);
             aRes.getArray()[0] = aImplName;
         }
-        else
+        else {
             DBG_ERROR( "GetLangSvc: unexpected type encountered" );
+        }
     }
 
     return aRes;
