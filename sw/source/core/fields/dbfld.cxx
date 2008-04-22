@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfld.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1057,9 +1057,10 @@ BOOL SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             rAny >>= nSet;
             if(nSet < (INT16) SVX_NUMBER_NONE )
                 SetFormat(nSet);
-            else
+            else {
                 //exception(wrong_value)
                 ;
+            }
         }
         break;
     case FIELD_PROP_FORMAT:
