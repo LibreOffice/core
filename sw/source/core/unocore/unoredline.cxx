@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoredline.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,8 +299,9 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
                 uno::Reference<text::XText> xRet = new SwXRedlineText(pUnoCrsr->GetDoc(), *pNodeIdx);
                 aRet <<= xRet;
             }
-            else
+            else {
                 DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+            }
         }
     }
     else
@@ -430,8 +431,9 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
             pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_TEXT));
             pRet[nPropIdx++].Value <<= xRet;
         }
-        else
+        else {
             DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+        }
     }
     if(pNext)
     {
@@ -605,8 +607,9 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 uno::Reference<text::XText> xRet = new SwXRedlineText(pDoc, *pNodeIdx);
                 aRet <<= xRet;
             }
-            else
+            else {
                 DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
+            }
         }
     }
     else
