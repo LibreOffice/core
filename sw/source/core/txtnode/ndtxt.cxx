@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -748,8 +748,9 @@ SwCntntNode *SwTxtNode::JoinNext()
         SetSmartTags( pList2, false ); // SMARTTAGS
         InvalidateNumRule();
     }
-    else
+    else {
         ASSERT( FALSE, "kein TxtNode." );
+    }
 
     return this;
 }
@@ -842,8 +843,9 @@ SwCntntNode *SwTxtNode::JoinPrev()
         SetSmartTags( pList2, false );
         InvalidateNumRule();
     }
-    else
+    else {
         ASSERT( FALSE, "kein TxtNode." );
+    }
 
     return this;
 }
