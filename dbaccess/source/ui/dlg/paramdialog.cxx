@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paramdialog.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,8 +123,9 @@ DBG_NAME(OParameterDialog)
         if (_rxORB.is())
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-        else
+        else {
             DBG_ERROR("OParameterDialog::OParameterDialog: need a service factory!");
+        }
 
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);
         if (!xNumberFormats.is())
