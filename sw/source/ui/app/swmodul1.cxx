@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swmodul1.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,8 +357,9 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAva
             aSelection[daCommandType]   <<= rData.nCommandType;
             xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
         }
-        else
+        else {
             DBG_ERROR("no selection supplier in the beamer!");
+        }
     }
 }
 /*--------------------------------------------------------------------
