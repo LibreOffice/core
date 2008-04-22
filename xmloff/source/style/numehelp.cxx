@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numehelp.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,8 +539,9 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue);
     }
-    else
+    else {
         DBG_ERROR("no SvXMLExport given");
+    }
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
@@ -554,6 +555,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
         if (bExportValue && rValue.getLength() && (rValue != rCharacters))
             pExport->AddAttribute(sAttrStringValue, rValue);
     }
-    else
+    else {
         DBG_ERROR("no SvXMLExport given");
+    }
 }
