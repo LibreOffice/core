@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menu.cxx,v $
- * $Revision: 1.161 $
+ * $Revision: 1.162 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5258,8 +5258,9 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
                     if( !bNoSaveFocus )
                         nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
                 }
-                else
+                else {
                     ; // do nothing: we 're activated again from taskpanelist, focus was already saved
+                }
             }
             else
             {
