@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.143 $
+ * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2058,8 +2058,9 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportSoftPageBreak(xPropSet,   bAutoStyles);
             }
-            else
+            else {
                 DBG_ERROR("unknown text portion type");
+            }
         }
         else
         {
