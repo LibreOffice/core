@@ -72,16 +72,16 @@ struct SvxSwFrameValidation
         bMirror(false),
         bFollowTextFlow( false ),
         nHPos(0),
-        nMaxHPos(LONG_MAX),
+        nMaxHPos(SAL_MAX_INT32),
         nMinHPos(0),
         nVPos(0),
-        nMaxVPos(LONG_MAX),
+        nMaxVPos(SAL_MAX_INT32),
         nMinVPos(0),
         nWidth( 283 * 4 ), //2.0 cm
         nMinWidth(0),
-        nMaxWidth(LONG_MAX),
+        nMaxWidth(SAL_MAX_INT32),
         nHeight( 283 ), //0.5 cm
-        nMaxHeight(LONG_MAX)
+        nMaxHeight(SAL_MAX_INT32)
     {
     }
 };
