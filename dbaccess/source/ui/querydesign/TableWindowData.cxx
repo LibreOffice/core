@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowData.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,8 +123,9 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
         m_xTable.set( xQueries->getByName( m_sComposedName ), UNO_QUERY_THROW );
     else if ( bIsKnownTable )
         m_xTable.set( xTables->getByName( m_sComposedName ), UNO_QUERY_THROW );
-    else
+    else {
         DBG_ERROR( "OTableWindow::Init: this is neither a query (or no queries are allowed) nor a table!" );
+    }
 
     // if we survived so far, we know whether it's a query
     m_bIsQuery = bIsKnownQuery;
