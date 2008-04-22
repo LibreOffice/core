@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adc_cmd_parse.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,14 +82,18 @@ S_LanguageInfo::do_Init( opt_iter &          it,
               "language",
               C_opt_LangAll );
 
-    if ( *it == C_arg_Cplusplus )
+    if ( *it == C_arg_Cplusplus ) {
         eLanguage = cpp;
-    else if ( *it == C_arg_Idl )
+    }
+    else if ( *it == C_arg_Idl ) {
         eLanguage = idl;
-    else if ( *it == C_arg_Java )
+    }
+    else if ( *it == C_arg_Java ) {
         eLanguage = java;
-    else
+    }
+    else {
          csv_assert(false);
+    }
 
     switch (eLanguage)
     {
