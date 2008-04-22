@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thints.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1001,8 +1001,9 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
             Insert( GetCharOfTxtAttr(*pAttr), aIdx );
         }
     }
-    else
+    else {
         ASSERT( *pAttr->GetEnd() <= Len(), "EndIdx hinter Len!" );
+    }
 
     if ( !pSwpHints )
         pSwpHints = new SwpHints();
