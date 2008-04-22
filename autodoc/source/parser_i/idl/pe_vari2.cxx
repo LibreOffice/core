@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pe_vari2.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,8 +86,9 @@ PE_Variable::Process_Default()
     {
         SetResult( not_done, push_sure, pPE_Type.Ptr() );
     }
-    else
+    else{
         csv_assert(false);
+    }
 }
 
 void
@@ -103,8 +104,9 @@ PE_Variable::Process_Identifier( const TokIdentifier & i_rToken )
         SetResult( done, stay );
         eState = expect_finish;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 void
@@ -120,8 +122,9 @@ PE_Variable::Process_Punctuation( const TokPunctuation & )
         SetResult( not_done, pop_success );
         eState = e_none;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 void
@@ -136,8 +139,9 @@ PE_Variable::Process_BuiltInType( const TokBuiltInType & i_rToken )
         SetResult( not_done, pop_success );
         eState = e_none;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 void
