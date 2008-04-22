@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KResultSet.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,8 +356,9 @@ DateTime SAL_CALL KabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLExc
                 return nRet;
             }
         }
-        else
+        else {
             ;
+        }
 // trigger an exception here
     }
 // Trigger an exception ?
