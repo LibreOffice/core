@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: workwin.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1085,8 +1085,9 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
         pChild->aSize = rNewSize;
         pChild->bResize = TRUE;
     }
-    else
+    else {
         DBG_ERROR( "aligning unregistered child" );
+    }
 }
 
 //--------------------------------------------------------------------
@@ -1113,8 +1114,9 @@ void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
         pChilds->Remove(nPos);
         delete pChild;
     }
-    else
+    else {
         DBG_ERROR( "releasing unregistered child" );
+    }
 }
 
 //--------------------------------------------------------------------
