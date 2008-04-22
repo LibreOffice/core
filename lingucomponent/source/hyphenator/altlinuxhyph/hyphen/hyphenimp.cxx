@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hyphenimp.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -784,8 +784,9 @@ void SAL_CALL
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else
+        else {
             DBG_ERROR( "wrong number of arguments in sequence" );
+        }
 
     }
 }
