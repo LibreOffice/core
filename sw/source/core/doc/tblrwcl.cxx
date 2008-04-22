@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tblrwcl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1722,8 +1722,9 @@ BOOL lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
                                         pRMBox );
             lcl_CalcWidth( pRMBox );        // bereche die Breite der Box
         }
-        else
+        else {
             ASSERT( FALSE , "Was denn nun" );
+        }
     }
     // Left/Right
     else
