@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: luxenum.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,8 +78,8 @@ class Enum // : public Template_Base
                                                 { nValue = i_nValue; return *this; }
     self &              operator=(
                             intt                i_nValue )
-                                                { if ( CheckIntt(i_nValue) ) nValue = DIFF(i_nValue);
-                                                  else csv_assert(false); return *this; }
+                                                { if ( CheckIntt(i_nValue) ) {nValue = DIFF(i_nValue);}
+                                                  else {csv_assert(false);} return *this; }
     self &              operator=(
                             const self &        i_rEnum )
                                                 { nValue = i_rEnum.nValue; return *this; }
