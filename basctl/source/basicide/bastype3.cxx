@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastype3.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,8 +134,9 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
         }
     }
-    else
+    else {
         DBG_ERROR( "BasicTreeListBox::RequestingChilds: Unknown Type!" );
+    }
 }
 
 void __EXPORT BasicTreeListBox::ExpandedHdl()
