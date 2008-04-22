@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedatawrapper.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2004,6 +2004,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
             nLocaleDataChecking = nCheck;
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 }
