@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paratr.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,9 +231,10 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nChars      = pDrop->Count;
                 nDistance   = MM100_TO_TWIP(pDrop->Distance);
             }
-            else
+            else {
                 //exception( wrong_type)
                 ;
+            }
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:
