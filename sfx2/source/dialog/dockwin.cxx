@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dockwin.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -704,8 +704,9 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
                 }
             }
         }
-        else
+        else {
             DBG_ERROR( "Information is missing!" );
+        }
     }
 
     if ( !bVertHorzRead )
