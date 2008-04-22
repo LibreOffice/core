@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsEntriesNoExp.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,8 +132,9 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
         static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
-    else
+    else {
         DBG_ERROR("SbaTableQueryBrowser::select: invalid entry!");
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -151,8 +152,9 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
-    else
+    else {
         DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
+    }
     return sal_False;
 }
 //------------------------------------------------------------------------------
