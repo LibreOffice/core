@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sectfrm.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2708,8 +2708,9 @@ void SwRootFrm::_DeleteEmptySct()
                 }
             }
         }
-        else
+        else {
             ASSERT( pSect->GetSection(), "DeleteEmptySct: Halbtoter SectionFrm?!" );
+        }
     }
 }
 
