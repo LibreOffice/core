@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsFontProvider.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,8 +62,9 @@ FontProvider& FontProvider::Instance (void)
             mpInstance = pInstance;
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
     // We throw an exception when for some strange reason no instance of
     // this class exists.
