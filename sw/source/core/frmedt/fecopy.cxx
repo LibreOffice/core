@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fecopy.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -555,8 +555,9 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             if ( pPg )
                 aNewAnch = pPg->Frm().Pos();
         }
-        else
+        else {
             ASSERT( !this, "was fuer ein Anchor ist es denn?" );
+        }
 
         if( bRet )
         {
