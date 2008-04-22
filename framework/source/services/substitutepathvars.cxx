@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: substitutepathvars.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1157,16 +1157,20 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     ::rtl::OUString              sVal  ;
 
     aState = utl::Bootstrap::locateBaseInstallation( sVal );
-    if( aState==::utl::Bootstrap::PATH_EXISTS )
+    if( aState==::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] = ConvertOSLtoUCBURL( sVal );
-    else
+    }
+    else {
         LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for instpath!");
+    }
 
     aState = utl::Bootstrap::locateUserData( sVal );
-    if( aState == ::utl::Bootstrap::PATH_EXISTS )
+    if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
-    else
+    }
+    else {
         LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for userpath");
+    }
 
     // Set $(inst), $(instpath), $(insturl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
