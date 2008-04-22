@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1144,8 +1144,9 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             m_pBundle = pBundle;
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
     return *pBundle;
 }
 
