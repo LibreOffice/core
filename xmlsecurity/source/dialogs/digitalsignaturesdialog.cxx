@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -409,7 +409,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //First we try to get the certificate which is embedded in the XML Signature
             if (rInfo.ouX509Certificate.getLength())
                 xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
-            else
+            else {
                 //There must be an embedded certificate because we use it to get the
                 //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
                 //because it could be modified by an attacker. The issuer is displayed
@@ -417,6 +417,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 //Comparing the X509IssuerName with the one from the X509Certificate in order
                 //to find out if the X509IssuerName was modified does not work. See #i62684
                 DBG_ASSERT(sal_False, "Could not find embedded certificate!");
+            }
 
             //In case there is no embedded certificate we try to get it from a local store
             //Todo: This probably could be removed, see above.
