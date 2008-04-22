@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltble.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -739,8 +739,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                             xText, rTblInfo.GetBaseSection(), IsShowProgress() );
                     }
                 }
-                else
+                else {
                     DBG_ERROR("here should be a XCell");
+                }
             }
             else
             {
