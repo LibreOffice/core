@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hierarchydatasource.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -730,8 +730,9 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                 pReadOnlyTypes = pCollection;
             }
         }
-        else
+        else {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
     }
     else
     {
@@ -759,8 +760,9 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                 pReadWriteTypes = pCollection;
             }
         }
-        else
+        else {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
     }
 
     return (*pCollection).getTypes();
