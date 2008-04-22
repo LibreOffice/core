@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KDEInit.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +68,7 @@ namespace connectivity
             {
                 OSL_ENSURE(s_pKApplication == NULL, "KDEInit::Init: inconsistency in the application pointers!");
 
-                char *kabargs[1] = {"libkab1"};
+                char *kabargs[1] = {(char*)"libkab1"};
                 KCmdLineArgs::init(1, kabargs, "KAddressBook", *kabargs, "Address Book driver", KAB_DRIVER_VERSION);
 
                 s_pKApplication = new KApplication(false, false);
