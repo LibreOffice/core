@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmtool.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2644,8 +2644,9 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
                         } while ( pCnt && ((SwLayoutFrm*)pFloat)->IsAnLower( pCnt ) );
                     }
                 }
-                else
+                else {
                     ASSERT( !pFloat, "Neuer Float-Frame?" );
+                }
             }
             if ( pFloat->GetNext()  )
             {
