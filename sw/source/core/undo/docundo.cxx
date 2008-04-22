@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docundo.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,9 +169,10 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
     default:
         if( pUndos->Count() != nUndoPos && UNDO_END != pUndo->GetId() )
             ClearRedo();
-        else
+        else {
             ASSERT( pUndos->Count() == nUndoPos || UNDO_END == pUndo->GetId(),
                     "Redo history not deleted!" );
+        }
         if( !nUndoSttEnd )
             ++nUndoCnt;
         break;
