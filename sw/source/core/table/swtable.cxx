@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swtable.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -407,8 +407,9 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
                 pFmt->UnlockModify();
             }
         }
-        else
+        else {
             ASSERT( false, "Rounding error" );
+        }
         nSum += nBox;
     }
 }
