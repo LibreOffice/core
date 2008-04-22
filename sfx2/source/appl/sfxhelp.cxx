@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxhelp.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,8 +283,9 @@ SfxHelpOptions_Impl::SfxHelpOptions_Impl()
                             for ( USHORT n=0; n<nCount; n++ )
                                 m_pIds->Insert( (ULONG) aTmp.GetToken( n, ',' ).ToInt64() );
                         }
-                        else
+                        else {
                             DBG_ERRORFILE( "Wrong property type!" );
+                        }
 
                         break;
                     }
