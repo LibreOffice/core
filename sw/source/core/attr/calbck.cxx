@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calbck.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -367,8 +367,9 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
         pDepend->pLeft = 0;
         pDepend->pRight = 0;
     }
-    else
+    else {
         ASSERT( FALSE, "SwModify::Remove(): pDepend nicht gefunden");
+    }
     pDepend->pRegisteredIn = 0;
     return pDepend;
 }
