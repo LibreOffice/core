@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj1.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -332,8 +332,9 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
         aAnchor.SetPageNum( pDoc->GetRootFrm()->GetCurrPage(
                                         rUndoIter.pAktPam ));
     }
-    else
+    else {
         ASSERT( FALSE, "was fuer ein Anker ist es denn nun?" );
+    }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     rUndoIter.pSelFmt = pFlyFmt;
