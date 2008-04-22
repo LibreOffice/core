@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlnumfe.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1761,8 +1761,9 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 
     if (pFormatter->GetEntry(nKey))
         pUsedList->SetUsed( nKey );
-    else
+    else {
         DBG_ERROR("no existing Numberformat found with this key");
+    }
 }
 
 void SvXMLNumFmtExport::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
