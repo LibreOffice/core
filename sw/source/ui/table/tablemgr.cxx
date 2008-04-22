@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablemgr.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -316,8 +316,9 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
                 eDataRowSource = chart::ChartDataRowSource_ROWS;
             else if (nColLen > 1)
                 eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-            else
+            else {
                 DBG_ERROR( "unexpected state" );
+            }
         }
 
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
