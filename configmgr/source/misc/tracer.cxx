@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tracer.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,7 +502,7 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 
         if (s_pImpl->isTracing(OTracerSetup::TIME))
         {
-            fprintf(s_pImpl->m_pOutputMedium, "(%06lu)", getGlobalTimer());
+            fprintf(s_pImpl->m_pOutputMedium, "(%06u)", getGlobalTimer());
         }
     }
     fprintf(s_pImpl->m_pOutputMedium, ": ");
