@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +41,18 @@ NO_BSYMBOLIC=TRUE
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
+
+# GCC versions 4.2.x introduced a warning "allocating zero-element array"
+# Allocating zero-element arrays is an allowed if not somewhat dubious 
+# technique though, so this warning is plain wrong and has been fixed 
+# in gcc 4.3. Unfortunately there is no way at all to suppress this warning.
+# Some files in this directory use zero allocated arrays, we need to
+# diable the WaE mechanism for the GCC 4.2.x series.
+.IF "$(COM)"=="GCC"
+.IF "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
+CFLAGSWERRCXX:=
+.ENDIF # "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
+.ENDIF # "$(COM)"=="GCC"
 
 CFLAGS +=  -DHAVE_EXPAT_H
 
