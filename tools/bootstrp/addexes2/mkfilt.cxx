@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mkfilt.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,8 +192,9 @@ void MkFilter::Filter()
             if ( bInTnrList )
                 pTnrLst->Insert( pMkLine, LIST_APPEND );
         }
-        else
+        else {
             /* Zeilen ignorieren */;
+        }
     }   // End Of File
     fprintf( stderr, "\n" );
 
