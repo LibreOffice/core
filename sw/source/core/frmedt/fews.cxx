@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fews.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,14 +160,16 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION_PRT:
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
-                                    else
+                                    else {
                                         ASSERT( FALSE, "Missing Table" );
+                                    }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
-                                    else
+                                    else {
                                         ASSERT( FALSE, "Missing section" );
+                                    }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
                                         RECT_SECTION_PRT == eType )
