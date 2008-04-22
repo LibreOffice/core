@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -459,8 +459,9 @@ void SAL_CALL
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else
+        else {
             DBG_ERROR( "wrong number of arguments in sequence" );
+        }
     }
 }
 
