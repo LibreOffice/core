@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hfi_globalindex.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,6 @@ enum E_Types
 };
 
 String  G_sDummy;
-uintt   G_nDummy;
 
 
 /*  RC-Ids for IDL types (see reposy.cxx):
