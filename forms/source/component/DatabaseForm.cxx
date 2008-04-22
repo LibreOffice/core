@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DatabaseForm.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2248,8 +2248,9 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             xDisp->dispatch(aURL, aArgs);
         }
     }
-    else
+    else {
         DBG_ERROR("ODatabaseForm::submit_Impl : wrong encoding !");
+    }
 
 }
 
