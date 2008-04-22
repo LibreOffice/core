@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbinsdlg.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1091,8 +1091,9 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( n ), 0 );
             if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
                 aColFlds.Insert( aDBColumns[ nFndPos ], n );
-            else
+            else {
                 ASSERT( !this, "Datenbankspalte nicht mehr gefunden" );
+            }
         }
 
         if( nCols != aColFlds.Count() )
