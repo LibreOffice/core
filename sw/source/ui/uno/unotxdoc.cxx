@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.130 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2562,8 +2562,9 @@ SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rS
                     rpView = pDoc->GetDocShell()->GetView();
                 }
             }
-            else
+            else {
                 DBG_ERROR( "unexpected ViewShell" );
+            }
         }
     }
     return pDoc;
