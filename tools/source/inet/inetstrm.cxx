@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inetstrm.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1710,8 +1710,9 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, ULONG nSize)
                                 if( status != INETSTREAM_STATUS_OK )
                                     return status;
                             }
-                            else
+                            else {
                                 DBG_ERRORFILE( "Die Boundary nicht gefunden" );
+                            }
                             status = INetMessageIOStream::PutMsgLine(
                                 pOldPos, pChar - pOldPos + 1 );
                             if( status != INETSTREAM_STATUS_OK )
