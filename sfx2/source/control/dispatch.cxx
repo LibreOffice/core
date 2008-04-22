@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatch.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -892,8 +892,9 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
             }
         }
     }
-    else
+    else {
         DBG_TRACE( ByteString ("Non-MDI-DeActivate Dispatcher").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer() );
+    }
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
         return;
