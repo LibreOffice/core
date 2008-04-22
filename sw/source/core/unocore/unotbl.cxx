@@ -8,7 +8,7 @@
  *
  * $RCSfile: unotbl.cxx,v $
  *
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4480,8 +4480,9 @@ void SwXCellRange::GetDataSequence(
                         }
                         pDblData[nDtaCnt++] = fVal;
                     }
-                    else
+                    else {
                         DBG_ERROR( "output sequence missing" );
+                    }
                 }
             }
         }
