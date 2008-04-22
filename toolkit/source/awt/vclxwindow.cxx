@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindow.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -458,8 +458,9 @@ void VCLXWindowImpl::processEvent( const ::comphelper::AnyEvent& _rEvent )
             break;
         }
     }
-    else
+    else {
         DBG_ERROR( "VCLXWindowImpl::processEvent: what kind of event *is* this (3)?" );
+    }
 }
 
 //--------------------------------------------------------------------
