@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ucblockbytes.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1560,8 +1560,9 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
             xTrunc->truncate();
             nSize = 0;
         }
-        else
+        else {
             DBG_WARNING("Not truncatable!");
+        }
     }
 
     if ( nSize < nNewSize )
