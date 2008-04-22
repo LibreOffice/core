@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawController.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@ class SdXImpressDocument;
 
 namespace css = ::com::sun::star;
 
-namespace {
+namespace sd {
 
 typedef ::cppu::ImplInheritanceHelper7 <
     SfxBaseController,
@@ -76,12 +76,6 @@ public:
     BroadcastHelperOwner (::osl::Mutex& rMutex) : maBroadcastHelper(rMutex) {};
     ::cppu::OBroadcastHelper maBroadcastHelper;
 };
-
-
-} // end of anonymous namespace.
-
-
-namespace sd {
 
 class DrawSubController;
 class ViewShellBase;
