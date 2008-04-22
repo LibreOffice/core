@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkaction.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ action_wrapper_get_name (AtkAction *action,
             std::pair< const rtl::OUString, const gchar * > aNewVal( aDesc,
                 g_strdup( OUStringToConstGChar(aDesc) ) );
 
-            if( aNameMap.insert( aNewVal ).second );
+            if( aNameMap.insert( aNewVal ).second )
                 return aNewVal.second;
         }
     }
