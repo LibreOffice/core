@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inunx.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,8 +130,9 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
             rSystemLanguage = nLang;
 #endif  /* MACOSX */
         }
-        else
+        else {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        }
     }
 }
 
