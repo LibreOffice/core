@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basicmanagerrepository.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -351,8 +351,9 @@ namespace basic
         CreationListeners::iterator pos = ::std::find( m_aCreationListeners.begin(), m_aCreationListeners.end(), &_rListener );
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
-        else
+        else {
             DBG_ERROR( "ImplRepository::revokeCreationListener: listener is not registered!" );
+        }
     }
 
     //--------------------------------------------------------------------
