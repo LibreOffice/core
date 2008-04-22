@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: partwnd.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,8 +185,9 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
         if ( xSupp.is() )
             xSupp->getFrames()->append( xFrame );
     }
-    else
+    else {
         DBG_ERROR("Bindings without Dispatcher!");
+    }
 }
 
 //****************************************************************************
