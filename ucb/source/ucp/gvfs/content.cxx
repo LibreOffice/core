@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,8 +241,9 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
     if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
         return pFolderCollection->getTypes();
