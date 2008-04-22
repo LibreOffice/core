@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: errinf.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -371,10 +371,12 @@ USHORT ErrorHandler::HandleError_Impl(
     }
     DBG_ERROR("Error nicht behandelt");
     // Error 1 ist General Error im Sfx
-    if(pInfo->GetErrorCode()!=1)
+    if(pInfo->GetErrorCode()!=1) {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
-    else
+    }
+    else {
         DBG_ERROR("Error 1 nicht gehandeled");
+    }
     delete pInfo;
     return 0;
 }
