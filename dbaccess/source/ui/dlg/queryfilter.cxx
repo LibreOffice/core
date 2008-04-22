@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queryfilter.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -479,8 +479,9 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
     {
         sField = aLB_WHEREFIELD3.GetSelectEntry();
     }
-    else
+    else {
         DBG_ERROR( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
+    }
 
     // the field itself
     return getColumn( sField );
