@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RecentlyUsedMasterPages.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,8 +140,9 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
             mpInstance = pInstance;
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
     return *mpInstance;
 }
