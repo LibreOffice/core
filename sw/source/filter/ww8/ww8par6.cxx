@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.182 $
+ * $Revision: 1.183 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1283,9 +1283,10 @@ BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
             for( int i = 0; i < 5; ++i, ++pIds )
                 nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
         }
-        else
+        else {
             ASSERT( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
                                "and WW8PLCFx_SEPX is 0" );
+        }
     }
 
     return nBorder;
