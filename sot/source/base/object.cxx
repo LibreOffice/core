@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: object.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,8 +464,9 @@ void SotObject::RemoveOwnerLock()
         --nOwnerLockCount;
         ReleaseRef();
     }
-    else
+    else {
         DBG_ERROR("OwnerLockCount underflow!");
+    }
 }
 
 //=========================================================================
