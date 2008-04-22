@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.109 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1391,8 +1391,9 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
                     uno::Any aAny = mxImportInfo->getPropertyValue(sRepeat);
                     if (aAny.getValueType() == getBooleanCppuType())
                         mpProgressBarHelper->SetRepeat(::cppu::any2bool(aAny));
-                    else
+                    else {
                         DBG_ERRORFILE("why is it no boolean?");
+                    }
                 }
             }
         }
@@ -1417,8 +1418,9 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
             DBG_ERROR("Numberformat could not be inserted");
         }
     }
-    else
+    else {
         DBG_ERROR("not possible to create NameContainer");
+    }
 }
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
