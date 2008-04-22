@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guisaveas.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,8 +124,9 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
         nResult = SID_DIRECTEXPORTDOCASPDF;
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
-    else
+    else {
         DBG_ASSERT( sal_False, "Unacceptable slot name is provided!\n" );
+    }
 
     return nResult;
 }
