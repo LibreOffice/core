@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2185,8 +2185,9 @@ void SalDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent
 
         osl_releaseMutex( hEventGuard_ );
     }
-    else
+    else {
         DBG_ASSERT( 1, "SalDisplay::SendInternalEvent !acquireMutex\n" );
+    }
 }
 
 void SalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent )
@@ -2211,8 +2212,9 @@ void SalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEve
 
         osl_releaseMutex( hEventGuard_ );
     }
-    else
+    else {
         DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
+    }
 }
 
 BOOL SalX11Display::IsEvent()
@@ -2251,8 +2253,9 @@ bool SalDisplay::DispatchInternalEvent()
         }
         osl_releaseMutex( hEventGuard_ );
     }
-    else
+    else {
         DBG_ASSERT( 1, "SalDisplay::Yield !acquireMutex\n" );
+    }
 
     if( pFrame )
         pFrame->CallCallback( nEvent, pData );
@@ -2731,8 +2734,9 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
         }
         osl_releaseMutex( hEventGuard_ );
     }
-    else
+    else {
         DBG_ERROR( "SalDisplay::deregisterFrame !acquireMutex\n" );
+    }
 
     m_aFrames.remove( pFrame );
 }
