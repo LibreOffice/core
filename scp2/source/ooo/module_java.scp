@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_java.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,11 @@ Module gid_Module_Optional_Java
     Styles = (JAVAMODULE,DONTUNINSTALL,NOTRELOCATABLE,DONTSHOWINUSERINSTALL);
   #endif
   #ifdef LINUX
+    #ifdef X86_64
+    PackageName = "${LINUXX64JAVAFILENAME}";
+    #else
     PackageName = "${LINUXJAVAFILENAME}";
+    #endif
   #else
     PackageName = "";
   #endif
