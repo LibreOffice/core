@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bindings.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1660,8 +1660,9 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     aReq.AppendItem( *pNewItem );
                     delete pNewItem;
                 }
-                else
+                else {
                     DBG_ERROR( "Toggle only for Enums and Bools allowed" );
+                }
             }
             else if ( SFX_ITEM_DONTCARE == eState )
             {
@@ -1683,12 +1684,14 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     ((SfxEnumItemInterface*)pNewItem)->SetBoolValue(sal_True);
                     aReq.AppendItem( *pNewItem );
                 }
-                else
+                else {
                     DBG_ERROR( "Toggle only for Enums and Bools allowed" );
+                }
                 delete pNewItem;
             }
-            else
+            else {
                 DBG_ERROR( "suspicious Toggle-Slot" );
+            }
         }
 
         pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
