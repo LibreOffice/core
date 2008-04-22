@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pe_iface.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,8 +292,9 @@ PE_Interface::On_need_curlbr_open_Punctuation(const char * i_sText)
         SetResult(done, stay);
         eState = e_std;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 
