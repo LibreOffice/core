@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ucbstorage.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -650,12 +650,15 @@ String UCBStorageElement_Impl::GetContentType()
 
 void UCBStorageElement_Impl::SetContentType( const String& rType )
 {
-    if ( m_xStream.Is() )
+    if ( m_xStream.Is() ) {
         m_xStream->m_aContentType = m_xStream->m_aOriginalContentType = rType;
-    else if ( m_xStorage.Is() )
+    }
+    else if ( m_xStorage.Is() ) {
         m_xStorage->m_aContentType = m_xStorage->m_aOriginalContentType = rType;
-    else
+    }
+    else {
         DBG_ERROR("Element not loaded!");
+    }
 }
 
 String UCBStorageElement_Impl::GetOriginalContentType()
