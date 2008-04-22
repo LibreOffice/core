@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: evntconf.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -798,8 +798,9 @@ void SfxEventConfiguration::PropagateEvent_Impl( SfxObjectShell *pDoc,
             catch( ::com::sun::star::container::NoSuchElementException )
             { DBG_ERRORFILE( "PropagateEvents_Impl: caught NoSuchElementException" ) }
         }
-        else
+        else {
             DBG_WARNING( "PropagateEvents_Impl: Got unkown event" );
+        }
 
         bIgnoreConfigure = sal_False;
     }
