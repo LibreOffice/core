@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sspellimp.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -568,8 +568,9 @@ void SAL_CALL
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else
+        else {
             DBG_ERROR( "wrong number of arguments in sequence" );
+        }
 
     }
 }
