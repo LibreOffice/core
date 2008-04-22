@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventsupplier.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,8 +224,9 @@ static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
                 aProperties[ nIndex ].Value >>= aLibrary;
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
                 aProperties[ nIndex ].Value >>= aMacroName;
-            else
+            else {
                 DBG_ERROR("Unknown property value!");
+            }
             nIndex += 1;
         }
 
@@ -402,8 +403,9 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
                 aProperties[ nIndex ].Value >>= aLibrary;
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
                 aProperties[ nIndex ].Value >>= aMacroName;
-            else
+            else {
                 DBG_ERROR("Unknown propery value!");
+            }
             nIndex += 1;
         }
 
@@ -415,8 +417,9 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             eType = EXTENDED_STYPE;
         else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == COMPARE_EQUAL )
             eType = JAVASCRIPT;
-        else
+        else {
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
+        }
 
         if ( aMacroName.getLength() )
         {
