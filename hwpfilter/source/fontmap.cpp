@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontmap.cpp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,7 +135,7 @@ const struct FontEntry FontMapTab[] =
 #define FONTCOUNT 4
 #ifndef WIN32
 #if defined(LINUX)
-char* RepFontTab[] =
+const char* RepFontTab[] =
 {
     "\xb9\xe9\xb9\xac \xb9\xd9\xc5\xc1",                                     /* 0 */
     "\xb9\xe9\xb9\xac \xb5\xb8\xbf\xf2",                                      /* 1 */
