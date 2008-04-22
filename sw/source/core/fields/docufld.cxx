@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -306,9 +306,10 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         // TODO: woher kommen die defines?
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
-        else
+        else {
             //exception(wrong_value)
             ;
+        }
         break;
     case FIELD_PROP_USHORT1:
         rAny >>= nSet;
@@ -2489,9 +2490,10 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             rAny >>= nSet;
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
-            else
+            else {
                 //exception(wrong_value)
                 ;
+            }
         }
         break;
         case FIELD_PROP_PAR1:
