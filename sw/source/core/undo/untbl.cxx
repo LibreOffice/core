@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: untbl.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -746,8 +746,9 @@ void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
             SwTableBox* pBox = rTbl.GetTblBox( (*pDelBoxes)[ --n ] );
             if( pBox )
                 ::_DeleteBox( rTbl, pBox, 0, FALSE, FALSE );
-            else
+            else {
                 ASSERT( !this, "Wo ist die Box geblieben?" );
+            }
         }
     }
 
