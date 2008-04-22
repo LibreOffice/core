@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doclay.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1193,11 +1193,13 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
                 if (*pOldItem != *pNewItem)
                     rNewSet.Put( *pOldItem );
             }
-            else
+            else {
                 ASSERT(0, "What am I doing here?");
+            }
         }
-        else
+        else {
             ASSERT(0, "What am I doing here?");
+        }
     }
 
 }
