@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pe_selem.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,8 +108,9 @@ PE_StructElement::Process_Default()
         SetResult( not_done, push_sure, pPE_Type.Ptr() );
         eState = expect_name;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 void
@@ -137,8 +138,9 @@ PE_StructElement::Process_Identifier( const TokIdentifier & i_rToken )
         SetResult( done, stay );
         eState = expect_finish;
     }
-    else
+    else {
         csv_assert(false);
+    }
 }
 
 void
