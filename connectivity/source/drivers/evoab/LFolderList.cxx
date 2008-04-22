@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LFolderList.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -510,9 +510,10 @@ const ORowSetValue& OEvoabFolderList::getValue(sal_Int32 _nColumnIndex ) throw(:
 // -----------------------------------------------------------------------------
 void OEvoabFolderList::checkIndex(sal_Int32 _nColumnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
-    if (   _nColumnIndex <= 0 || _nColumnIndex >= (sal_Int32)m_aRow->size() )
+    if (   _nColumnIndex <= 0 || _nColumnIndex >= (sal_Int32)m_aRow->size() ) {
 //        ::dbtools::throwInvalidIndexException();
             ;
+    }
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabFolderList::getString( sal_Int32 _nColumnIndex ) throw(SQLException, RuntimeException)
