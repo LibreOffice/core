@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,8 +473,9 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     {
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
-    else
+    else {
         OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: don't know this data source!s" );
+    }
 }
 
 //------------------------------------------------------------------------------
