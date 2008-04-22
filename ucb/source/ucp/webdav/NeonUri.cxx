@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonUri.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,16 @@ using namespace webdav_ucp;
 // the string fields of ne_uri are char*, not const char*
 # pragma disable_warn
 # endif
+
+#if defined __GNUC__
+#define GCC_VERSION (__GNUC__ * 10000 \
+                     + __GNUC_MINOR__ * 100 \
+                     + __GNUC_PATCHLEVEL__)
+/* Diagnostics pragma was introduced with gcc-4.2.1 */
+#if GCC_VERSION > 40201
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
+#endif
 
 namespace {
 
