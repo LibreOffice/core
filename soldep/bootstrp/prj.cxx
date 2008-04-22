@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prj.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2858,7 +2858,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
 }
 
 /*****************************************************************************/
-BOOL StarWriter::InsertProject ( Prj* pNewPrj )
+BOOL StarWriter::InsertProject ( Prj* /*pNewPrj*/ )
 /*****************************************************************************/
 {
     return FALSE;
