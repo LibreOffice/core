@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.cxx,v $
- * $Revision: 1.200 $
+ * $Revision: 1.201 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2521,8 +2521,9 @@ void SfxMedium::Init_Impl()
             // physical name may be set if the logical name is changed after construction
             if ( !aName.Len() )
                 ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aName );
-            else
+            else {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
+            }
         }
     }
 
