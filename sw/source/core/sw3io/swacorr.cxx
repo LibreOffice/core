@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swacorr.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,8 +64,9 @@ BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
         SwXMLTextBlocks aBlk( rStg, rFileName );
         nRet = aBlk.GetText( rShort, rLong );
     }
-    else
+    else {
         ASSERT ( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
+    }
     return !IsError( nRet ) && rLong.Len();
 }
 
