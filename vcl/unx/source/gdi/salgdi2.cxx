@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi2.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -614,8 +614,9 @@ void X11SalGraphics::copyBits( const SalTwoRect *pPosAry,
 
         delete pDDB;
     }
-    else
+    else {
         stderr0( "X11SalGraphics::CopyBits from Printer not yet implemented\n" );
+    }
 }
 
 // --------------------------------------------------------------------------
