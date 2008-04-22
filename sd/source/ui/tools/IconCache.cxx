@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: IconCache.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +99,9 @@ IconCache& IconCache::Instance (void)
             Implementation::mpInstance = pCache;
         }
     }
-    else
+    else {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
 
     DBG_ASSERT(Implementation::mpInstance!=NULL,
         "IconCache::Instance(): instance is NULL");
