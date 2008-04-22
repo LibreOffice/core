@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crstrvl.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1020,7 +1020,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
         SwCrsrMoveState aTmpState;
         aTmpState.bFieldInfo = TRUE;
         aTmpState.bExactOnly = !( SwContentAtPos::SW_OUTLINE & rCntntAtPos.eCntntAtPos );
-        aTmpState.bCntntCheck = SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos;
+        aTmpState.bCntntCheck = (SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos) ?  TRUE : FALSE;
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
         SwSpecialPos aSpecialPos;
@@ -1762,8 +1762,9 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
 
                     GetDoc()->Insert( *pCurCrsr, aSet, 0 );
                 }
-                else
+                else {
                     ASSERT( !this, "wo ist mein CntntNode?" );
+                }
                 break;
 
             case FILL_TAB:
