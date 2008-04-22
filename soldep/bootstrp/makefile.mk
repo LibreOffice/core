@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +40,12 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  $(PRJ)$/util$/perl.mk
 .INCLUDE :  settings.mk
+
+# fixme, code is not yet 64 bit clean
+.IF "$(OS)$(CPU)"=="LINUXX"
+all:
+    @echo nothing to do
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
