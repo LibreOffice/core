@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docdraw.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -579,8 +579,9 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
         if( aIter.First( TYPE(SwDrawContact) ) )
             nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
     }
-    else
+    else {
         ASSERT( !this, "was ist das fuer ein Format?" );
+    }
 }
 
 /*************************************************************************/
