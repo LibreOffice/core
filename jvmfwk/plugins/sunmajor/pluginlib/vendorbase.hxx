@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vendorbase.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,8 @@ namespace jfw_plugin
 //Used by subclasses of VendorBase to build paths to Java runtime
 #if defined SPARC
 #define JFW_PLUGIN_ARCH "sparc"
+#elif defined X86_64
+#define JFW_PLUGIN_ARCH "amd64"
 #elif defined INTEL
 #define JFW_PLUGIN_ARCH "i386"
 #elif defined POWERPC64
@@ -60,8 +62,6 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "s390x"
 #elif defined S390
 #define JFW_PLUGIN_ARCH "s390"
-#elif defined X86_64
-#define JFW_PLUGIN_ARCH "amd64"
 #elif defined ARM
 #define JFW_PLUGIN_ARCH "arm"
 #elif defined IA64
