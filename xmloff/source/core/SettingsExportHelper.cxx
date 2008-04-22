@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SettingsExportHelper.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,8 +186,9 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 aAny >>= aProps;
                 exportSymbolDescriptors(aProps, rName);
             }
-            else
+            else {
                 DBG_ERROR("this type is not implemented now");
+            }
         }
         break;
     }
