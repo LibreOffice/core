@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.117 $
+ * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1294,8 +1294,9 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[0].Value <<= nMinLeading;
         pVal[1].Value <<= nMinTrailing;
     }
-    else
+    else {
         DBG_ERROR( "unxpected size of sequence" );
+    }
 }
 
 /*************************************************************************
