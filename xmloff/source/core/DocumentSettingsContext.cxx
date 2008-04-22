@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentSettingsContext.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -640,15 +640,17 @@ void XMLConfigItemContext::EndElement()
         {
             mrAny <<= maDecoded;
         }
-        else
+        else {
             DBG_ERROR("wrong type");
+        }
 
         ManipulateConfigItem();
 
         mpBaseContext->AddPropertyValue();
     }
-    else
+    else {
         DBG_ERROR("no BaseContext");
+    }
 }
 
 /** There are some instances where there is a mismatch between API and
@@ -735,8 +737,9 @@ void XMLConfigItemMapNamedContext::EndElement()
         mrAny <<= maProps.GetNameContainer();
         mpBaseContext->AddPropertyValue();
     }
-    else
+    else {
         DBG_ERROR("no BaseContext");
+    }
 }
 
 //=============================================================================
@@ -956,7 +959,8 @@ void XMLConfigItemMapIndexedContext::EndElement()
         }
         mpBaseContext->AddPropertyValue();
     }
-    else
+    else {
         DBG_ERROR("no BaseContext");
+    }
 }
 
