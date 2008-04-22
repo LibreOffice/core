@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlStyleImport.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,8 +156,9 @@ void OTableStyleContext::FillPropertySet(
                     if ( pMyStyles )
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
-                    else
+                    else {
                         DBG_ERROR("not possible to get style");
+                    }
                 }
                 if ( pStyle )
                 {
