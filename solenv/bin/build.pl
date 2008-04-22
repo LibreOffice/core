@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.166 $
+# $Revision: 1.167 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,9 +45,11 @@
 
     use lib ("$ENV{SOLARENV}/bin/modules");
 
+    my $in_so_env = 0;
     if (defined $ENV{COMMON_ENV_TOOLS}) {
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
         require CopyPrj; import CopyPrj;
+        $in_so_env++;
     };
     if (defined $ENV{CWS_WORK_STAMP}) {
         require Cws; import Cws;
@@ -74,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.166 $ ';
+    $id_str = ' $Revision: 1.167 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1822,8 +1824,7 @@ sub checkout_module {
         return;
     };
     $cvs_module->checkout($path, $master_milestone_tag, '');
-    # Quick hack, should not be there
-    # if Heiner's Cws module had error handling
+    # Check if the module is there
     if (!-d CorrectPath($path.'/'.$prj_name)) {
         $cvs_module->checkout($path, '', '');
         if (!-d CorrectPath($path.'/'.$prj_name)) {
@@ -1930,12 +1931,12 @@ sub get_cvs_module
 
     $cvs_module->module($module);
     $cvs_module->cvs_method($method);
-    if ($ENV{VCSID}) {
+    if (defined $ENV{VCSID}) {
         $cvs_module->vcsid($ENV{VCSID});
     } elsif (!$cvs_module->vcsid()) {
         $cvs_module->vcsid($vcsid);
     };
-    if ($cvs_module->cvs_remote()) {
+    if ($cvs_module->cvs_remote() && (!$in_so_env)) {
         # default: use information from user config files:
         $cvs_module->cvs_server($cvs_module->cvs_remote());
     } else {
