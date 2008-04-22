@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.cxx,v $
- * $Revision: 1.198 $
+ * $Revision: 1.199 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,8 +352,9 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         Reference< XContainer > xDatasourceContainer(m_xDatabaseContext, UNO_QUERY);
         if (xDatasourceContainer.is())
             xDatasourceContainer->addContainerListener(this);
-        else
+        else {
             DBG_ERROR("SbaTableQueryBrowser::Construct: the DatabaseContext should allow us to be a listener!");
+        }
 
         // the collator for the string compares
         m_xCollator = Reference< XCollator >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.Collator")), UNO_QUERY);
@@ -2089,8 +2090,9 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
                     pEntryData->xContainer = xQueryDefs;
                     bSuccess = pEntryData->xContainer.is();
                 }
-                else
+                else {
                     DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                }
             }
             catch(Exception&)
             {
@@ -2614,8 +2616,9 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             delete pData;
             m_pTreeModel->Remove(pDSLoop);
         }
-        else
+        else {
             DBG_ERROR("SbaTableQueryBrowser::elementRemoved: unknown datasource name!");
+        }
 
         // maybe the object which is part of the document data source has been removed
         checkDocumentDataSource();
