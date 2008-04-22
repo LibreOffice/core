@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.137 $
+ * $Revision: 1.138 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1182,8 +1182,9 @@ WW8PLCFx& WW8PLCFx_PCD::operator ++( int )
 {
     if (pPcdI)
         (*pPcdI)++;
-    else
+    else {
         ASSERT( !this, "pPcdI fehlt");
+    }
     return *this;
 }
 
@@ -1555,8 +1556,9 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         {
             if( pTestFlag )
                 *pTestFlag = false;
-            else
+            else {
                 ASSERT( !this, "Falscher CP an WW8Cp2Fc() uebergeben" );
+            }
             return WW8_FC_MAX;
         }
         WW8_CP nCpStart, nCpEnd;
@@ -1565,8 +1567,9 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         {
             if( pTestFlag )
                 *pTestFlag = false;
-            else
+            else {
                 ASSERT( !this, "PLCFfpcd-Get ging schief" );
+            }
             return WW8_FC_MAX;
         }
         if( pNextPieceCp )
