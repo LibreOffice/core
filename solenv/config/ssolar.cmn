@@ -138,7 +138,7 @@ common
         PKGCONFIG_ROOT
         PKGFORMAT
 		PRE
-	PREBUILD_MOZAB
+	    PREBUILD_MOZAB
         PRODUCTENVCACHE
 		PRODUCTNAME
 		PROEXT
@@ -146,6 +146,7 @@ common
 		PROFILE
 		profile
         PROSWITCH
+        PTHREAD_CFLAGS
 		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM
@@ -213,10 +214,12 @@ common
 		USE_NEW_SDK
         USE_PCH
 		USE_SHELL
+        USE_SYSTEM_STL
 		use_cygcp
 		use_shl_versions
         VCL
 		VISTA_MANIFEST
+        XAU_LIBS
 		WINDOWS_VISTA_PSDK
         WITH_LDAP
 		WST
