@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: configvaluecontainer.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,8 +162,9 @@ namespace utl
                     DBG_ASSERT( bSuccess, aBuf.getStr() );
                     #endif
                 }
-                else
+                else {
                     DBG_WARNING( "::utl::lcl_copyData: NULL value lost!" );
+                }
             }
             break;
             case ltAnyInstance:
