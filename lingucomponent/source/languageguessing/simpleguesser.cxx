@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleguesser.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,11 +100,6 @@ SimpleGuesser::SimpleGuesser()
     h = NULL;
 }
 
-SimpleGuesser::SimpleGuesser(const char* confFile, const char* prefix)
-{
-    h = special_textcat_Init(confFile, prefix);
-}
-
 void SimpleGuesser::operator=(SimpleGuesser& sg){
     if(h){textcat_Done(h);}
     h = sg.h;
@@ -145,7 +140,7 @@ vector<Guess> SimpleGuesser::GuessLanguage(char* text)
             }
             if(guess_list[current_pointer] != '\0')
             {
-                Guess g((char*)(guess_list + current_pointer),i);
+                Guess g((char*)(guess_list + current_pointer));
 
                 guesses.push_back(g);
 
@@ -187,7 +182,7 @@ vector<Guess> SimpleGuesser::GetManagedLanguages(const char mask)
         if(tables->fprint_disable[i] & mask){
             string langStr = "[";
             langStr += (char*)fp_Name(tables->fprint[i]);
-            Guess g( (char *)langStr.c_str() , i);
+            Guess g( (char *)langStr.c_str());
             lang.push_back(g);
         }
     }
