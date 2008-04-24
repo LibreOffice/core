@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2367,6 +2367,11 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     if (IsBold( GetFont() ))
         Attributes() |= ATTR_BOLD;
 
+    // special handling for ':' where it is a token on it's own and is likely
+    // to be used for mathematical notations. (E.g. a:b = 2:3)
+    // In that case it should not be displayed in italic.
+    if (GetToken().aText.Len() == 1 && GetToken().aText.GetChar(0) == ':')
+        Attributes() &= ~ATTR_ITALIC;
 };
 
 
@@ -2674,6 +2679,10 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
 void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
+
+    GetFont() = rFormat.GetFont(GetFontDesc());
+    // use same font size as is used for variables
+    GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetSize() );
 
     DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
