@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolygon.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,16 +43,39 @@
 
 class CoordinateData3D
 {
-    ::basegfx::B3DPoint                             maPoint;
+    basegfx::B3DPoint                               maPoint;
 
 public:
-    CoordinateData3D() : maPoint() {}
-    explicit CoordinateData3D(const ::basegfx::B3DPoint& rData) : maPoint(rData) {}
+    CoordinateData3D()
+    :   maPoint()
+    {
+    }
 
-    const ::basegfx::B3DPoint& getCoordinate() const { return maPoint; }
-    void setCoordinate(const ::basegfx::B3DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
-    bool operator==(const CoordinateData3D& rData ) const { return (maPoint == rData.getCoordinate()); }
-    void transform(const ::basegfx::B3DHomMatrix& rMatrix) { maPoint *= rMatrix; }
+    explicit CoordinateData3D(const basegfx::B3DPoint& rData)
+    :   maPoint(rData)
+    {
+    }
+
+    const basegfx::B3DPoint& getCoordinate() const
+    {
+        return maPoint;
+    }
+
+    void setCoordinate(const basegfx::B3DPoint& rValue)
+    {
+        if(rValue != maPoint)
+            maPoint = rValue;
+    }
+
+    bool operator==(const CoordinateData3D& rData) const
+    {
+        return (maPoint == rData.getCoordinate());
+    }
+
+    void transform(const basegfx::B3DHomMatrix& rMatrix)
+    {
+        maPoint *= rMatrix;
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -84,17 +107,17 @@ public:
         return maVector.size();
     }
 
-    bool isEqual(const CoordinateDataArray3D& rCandidate) const
+    bool operator==(const CoordinateDataArray3D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
 
-    const ::basegfx::B3DPoint& getCoordinate(sal_uInt32 nIndex) const
+    const basegfx::B3DPoint& getCoordinate(sal_uInt32 nIndex) const
     {
         return maVector[nIndex].getCoordinate();
     }
 
-    void setCoordinate(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue)
+    void setCoordinate(sal_uInt32 nIndex, const basegfx::B3DPoint& rValue)
     {
         maVector[nIndex].setCoordinate(rValue);
     }
@@ -185,7 +208,7 @@ public:
         }
     }
 
-    void transform(const ::basegfx::B3DHomMatrix& rMatrix)
+    void transform(const basegfx::B3DHomMatrix& rMatrix)
     {
         CoordinateData3DVector::iterator aStart(maVector.begin());
         CoordinateData3DVector::iterator aEnd(maVector.end());
@@ -240,11 +263,11 @@ public:
         }
     }
 
-    bool isEqual(const ImplB3DPolygon& rCandidate) const
+    bool operator==(const ImplB3DPolygon& rCandidate) const
     {
         if(mbIsClosed == rCandidate.mbIsClosed)
         {
-            if(maPoints.isEqual(rCandidate.maPoints))
+            if(maPoints == rCandidate.maPoints)
             {
                 return true;
             }
@@ -253,17 +276,17 @@ public:
         return false;
     }
 
-    const ::basegfx::B3DPoint& getPoint(sal_uInt32 nIndex) const
+    const basegfx::B3DPoint& getPoint(sal_uInt32 nIndex) const
     {
         return maPoints.getCoordinate(nIndex);
     }
 
-    void setPoint(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue)
+    void setPoint(sal_uInt32 nIndex, const basegfx::B3DPoint& rValue)
     {
         maPoints.setCoordinate(nIndex, rValue);
     }
 
-    void insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
         {
@@ -337,7 +360,7 @@ public:
         maPoints.removeDoublePointsWholeTrack();
     }
 
-    void transform(const ::basegfx::B3DHomMatrix& rMatrix)
+    void transform(const basegfx::B3DHomMatrix& rMatrix)
     {
         maPoints.transform(rMatrix);
     }
@@ -388,7 +411,7 @@ namespace basegfx
         if(mpPolygon.same_object(rPolygon.mpPolygon))
             return true;
 
-        return mpPolygon->isEqual(*(rPolygon.mpPolygon));
+        return ((*mpPolygon) == (*rPolygon.mpPolygon));
     }
 
     bool B3DPolygon::operator!=(const B3DPolygon& rPolygon) const
@@ -401,14 +424,14 @@ namespace basegfx
         return mpPolygon->count();
     }
 
-    ::basegfx::B3DPoint B3DPolygon::getB3DPoint(sal_uInt32 nIndex) const
+    basegfx::B3DPoint B3DPolygon::getB3DPoint(sal_uInt32 nIndex) const
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
         return mpPolygon->getPoint(nIndex);
     }
 
-    void B3DPolygon::setB3DPoint(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue)
+    void B3DPolygon::setB3DPoint(sal_uInt32 nIndex, const basegfx::B3DPoint& rValue)
     {
         OSL_ENSURE(nIndex < mpPolygon->count(), "B3DPolygon access outside range (!)");
 
@@ -416,7 +439,7 @@ namespace basegfx
             mpPolygon->setPoint(nIndex, rValue);
     }
 
-    void B3DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
+    void B3DPolygon::insert(sal_uInt32 nIndex, const basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         OSL_ENSURE(nIndex <= mpPolygon->count(), "B3DPolygon Insert outside range (!)");
 
@@ -424,7 +447,7 @@ namespace basegfx
             mpPolygon->insert(nIndex, rPoint, nCount);
     }
 
-    void B3DPolygon::append(const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
+    void B3DPolygon::append(const basegfx::B3DPoint& rPoint, sal_uInt32 nCount)
     {
         if(nCount)
             mpPolygon->insert(mpPolygon->count(), rPoint, nCount);
@@ -520,7 +543,7 @@ namespace basegfx
         }
     }
 
-    void B3DPolygon::transform(const ::basegfx::B3DHomMatrix& rMatrix)
+    void B3DPolygon::transform(const basegfx::B3DHomMatrix& rMatrix)
     {
         if(mpPolygon->count() && !rMatrix.isIdentity())
         {
