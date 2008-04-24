@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1689,11 +1689,13 @@ void SmEditAccessible::Init()
     }
 }
 
+#ifdef TL_NOT_YET_USED
 SmDocShell * SmEditAccessible::GetDoc_Impl()
 {
     SmViewShell *pView = pWin ? pWin->GetView() : 0;
     return pView ? pView->GetDoc() : 0;
 }
+#endif // TL_NOT_YET_USED
 
 void SmEditAccessible::ClearWin()
 {
