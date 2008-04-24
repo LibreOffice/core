@@ -40,13 +40,17 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msvcp71\msvcp71*.dll %_DEST%\bin%_EXT%
 ..\msvcp71\msvcr71*.dll %_DEST%\bin%_EXT%
 
-..\msvcp80\msvcp80.dll %_DEST%\bin%_EXT%\msvcp80.dll
-..\msvcp80\msvcr80.dll %_DEST%\bin%_EXT%\msvcr80.dll
+..\msvcp80\msvcm80*.dll %_DEST%\bin%_EXT%
+..\msvcp80\msvcp80*.dll %_DEST%\bin%_EXT%
+..\msvcp80\msvcr80*.dll %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%
 
-..\msvcp90\msvcm90.dll %_DEST%\bin%_EXT%\msvcm90.dll
-..\msvcp90\msvcp90.dll %_DEST%\bin%_EXT%\msvcp90.dll
-..\msvcp90\msvcr90.dll %_DEST%\bin%_EXT%\msvcr90.dll
-..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.CRT.manifest
+..\msvcp90\msvcm90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\msvcp90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\msvcr90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin%_EXT%
 
 ..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
 
