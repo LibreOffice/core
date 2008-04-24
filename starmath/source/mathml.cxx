@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mathml.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -427,6 +427,7 @@ SmXMLImport::SmXMLImport(
 {
 }
 
+#ifdef TL_NOT_USED_YET
 SmXMLImport::SmXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
@@ -444,6 +445,7 @@ SmXMLImport::SmXMLImport(
     bSuccess(sal_False)
 {
 }
+#endif //TL_NOT_USED_YET
 
 const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
 {
@@ -471,6 +473,7 @@ SmXMLExport::SmXMLExport(
 {
 }
 
+#ifdef TL_NOT_USED_YET
 // #110680#
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -482,6 +485,7 @@ SmXMLExport::SmXMLExport(
     bSuccess(sal_False)
 {
 }
+#endif //TL_NOT_USED_YET
 
 const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
 {
