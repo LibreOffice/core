@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optionsdrawinglayer.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,8 +74,8 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_PAINTBUFFER_DRAWIMPRESS     sal_True
 
 // #i4219#
-#define DEFAULT_MAXIMUMPAPERWIDTH           30000
-#define DEFAULT_MAXIMUMPAPERHEIGHT          30000
+#define DEFAULT_MAXIMUMPAPERWIDTH           300
+#define DEFAULT_MAXIMUMPAPERHEIGHT          300
 #define DEFAULT_MAXIMUMPAPERLEFTMARGIN      9999
 #define DEFAULT_MAXIMUMPAPERRIGHTMARGIN     9999
 #define DEFAULT_MAXIMUMPAPERTOPMARGIN       9999
