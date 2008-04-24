@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 # hand coded assembler
 CHECKFORPIC=
 
-.IF "$(COM)$(CPU)" == "C50S" || "$(COM)$(CPU)" == "C52S"  
+.IF "$(COM)" == "C52" && "$(CPUNAME)" == "SPARC"
 
 #CFLAGS += -O5 -xO5
 
