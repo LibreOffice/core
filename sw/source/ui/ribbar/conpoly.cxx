@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conpoly.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,10 +42,6 @@
 #include "drawbase.hxx"
 #include "conpoly.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
-
-/************************************************************************/
-
-#define CLOSE_PIXDIST   5   // Pixelabstand, ab dem geschlossen wird
 
 /*************************************************************************
 |*
@@ -124,42 +120,9 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
             Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
             bReturn = SwDrawBase::MouseButtonUp(rMEvt);
 
-            if (!(bReturn && (aPnt == m_aStartPos || rMEvt.IsRight())))
-            {
-                SdrView *pSdrView = m_pSh->GetDrawView();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-
-                if (rMarkList.GetMark(0))
-                {
-                    SdrObject* pMarkedObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    // #127440# - crash report shows that the marked object is not always an SdrPathObj
-                    SdrPathObj* pPathObj = dynamic_cast< SdrPathObj*>(pMarkedObject);
-                    DBG_ASSERT(pPathObj, "issue #127440# SdrPathObj expected");
-
-                    if( pPathObj )
-                    {
-                        const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPathObj->GetPathPoly();
-
-                        if(1L == rPolyPolygon.count())
-                        {
-                            const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(0L));
-
-                            if(aPolygon.count())
-                            {
-                                const ::basegfx::B2DPoint aFirst(aPolygon.getB2DPoint(0L));
-                                const ::basegfx::B2DPoint aLast(aPolygon.getB2DPoint(aPolygon.count() - 1L));
-                                const ::basegfx::B2DVector aDiff(aLast - aFirst);
-
-                                const long nCloseDist(m_pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width());
-                                if(aDiff.getLength() < (double)nCloseDist)
-                                {
-                                    pPathObj->ToggleClosed();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            // #i85045# removed double mechanism to check for AutoClose polygon
+            // after construction; the method here did not check for already closed and
+            // also worked only for a single polygon. Removing.
         }
     }
     else
