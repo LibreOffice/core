@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macro.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,8 @@ this is inserted for the case that the preprocessor ignores error
 #define THIS_ARCH "S390"
 #elif defined SPARC
 #define THIS_ARCH "SPARC"
+#elif defined SPARC64
+#define THIS_ARCH "SPARC64"
 #elif defined IRIX
 #define THIS_ARCH "MIPS"
 #elif defined X86_64
