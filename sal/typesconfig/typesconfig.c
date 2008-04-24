@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typesconfig.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,6 +207,8 @@ int check( TestFunc func, Type eT, void* p )
 |*  Letzte Aenderung
 |*
 *************************************************************************/
+static int dummy(void* unused);
+
 int GetAtAddress( Type eT, void* p )
 {
 #if defined(IA64) || defined(ARM32)
@@ -221,14 +223,20 @@ int GetAtAddress( Type eT, void* p )
 #else
   switch ( eT )
   {
-  case t_char:      return *((char*)p);
-  case t_short:     return *((short*)p);
-  case t_int:       return *((int*)p);
-  case t_long:      return *((long*)p);
-  case t_double:    return *((double*)p);
+  case t_char: { char x = *(char*)p; return dummy(&x); }
+  case t_short: { short x = *(short*)p; return dummy(&x); }
+  case t_int: { int x = *(int*)p; return dummy(&x); }
+  case t_long: { long x = *(long*)p; return dummy(&x); }
+  case t_double: { double x = *(double*)p; return dummy(&x); }
   }
 #endif
   abort();
+}
+
+int dummy(void* unused)
+{
+    (void)unused;
+    return 0;
 }
 
 /*************************************************************************
