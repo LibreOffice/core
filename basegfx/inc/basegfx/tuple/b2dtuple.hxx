@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dtuple.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,10 @@
 #define _BGFX_TUPLE_B2DTUPLE_HXX
 
 #include <sal/types.h>
+
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
 
 namespace basegfx
 {
@@ -142,13 +146,31 @@ namespace basegfx
         // comparators with tolerance
         //////////////////////////////////////////////////////////////////////
 
-        bool equalZero() const;
+        bool equalZero() const
+        {
+            return (this == &getEmptyTuple() ||
+                    (fTools::equalZero(mfX) && fTools::equalZero(mfY)));
+        }
 
-        bool equalZero(const double& rfSmallValue) const;
+        bool equalZero(const double& rfSmallValue) const
+        {
+            return (this == &getEmptyTuple() ||
+                    (fTools::equalZero(mfX, rfSmallValue) && fTools::equalZero(mfY, rfSmallValue)));
+        }
 
-        bool equal(const B2DTuple& rTup) const;
+        bool equal(const B2DTuple& rTup) const
+        {
+            return (
+                fTools::equal(mfX, rTup.mfX) &&
+                fTools::equal(mfY, rTup.mfY));
+        }
 
-        bool equal(const B2DTuple& rTup, const double& rfSmallValue) const;
+        bool equal(const B2DTuple& rTup, const double& rfSmallValue) const
+        {
+            return (
+                fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
+                fTools::equal(mfY, rTup.mfY, rfSmallValue));
+        }
 
         // operators
         //////////////////////////////////////////////////////////////////////
