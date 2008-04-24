@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygon.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,7 @@
 
 class ImplB2DPolyPolygon
 {
-    typedef ::std::vector< ::basegfx::B2DPolygon >  PolygonVector;
+    typedef ::std::vector< basegfx::B2DPolygon >    PolygonVector;
 
     PolygonVector                                   maPolygons;
 
@@ -54,39 +54,35 @@ public:
     {
     }
 
-    ImplB2DPolyPolygon(const ::basegfx::B2DPolygon& rToBeCopied) :
+    ImplB2DPolyPolygon(const basegfx::B2DPolygon& rToBeCopied) :
         maPolygons(1,rToBeCopied)
     {
     }
 
-    bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
+    bool operator==(const ImplB2DPolyPolygon& rPolygonList) const
     {
         // same polygon count?
         if(maPolygons.size() != rPolygonList.maPolygons.size())
             return false;
 
-        // if zero polygons the polys are equal
-        if(!maPolygons.size())
-            return true;
-
         // compare polygon content
-        if(maPolygons != rPolygonList.maPolygons)
+        if(!(maPolygons == rPolygonList.maPolygons))
             return false;
 
         return true;
     }
 
-    const ::basegfx::B2DPolygon& getB2DPolygon(sal_uInt32 nIndex) const
+    const basegfx::B2DPolygon& getB2DPolygon(sal_uInt32 nIndex) const
     {
         return maPolygons[nIndex];
     }
 
-    void setB2DPolygon(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rPolygon)
+    void setB2DPolygon(sal_uInt32 nIndex, const basegfx::B2DPolygon& rPolygon)
     {
         maPolygons[nIndex] = rPolygon;
     }
 
-    void insert(sal_uInt32 nIndex, const ::basegfx::B2DPolygon& rPolygon, sal_uInt32 nCount)
+    void insert(sal_uInt32 nIndex, const basegfx::B2DPolygon& rPolygon, sal_uInt32 nCount)
     {
         if(nCount)
         {
@@ -97,7 +93,7 @@ public:
         }
     }
 
-    void insert(sal_uInt32 nIndex, const ::basegfx::B2DPolyPolygon& rPolyPolygon)
+    void insert(sal_uInt32 nIndex, const basegfx::B2DPolyPolygon& rPolyPolygon)
     {
         const sal_uInt32 nCount = rPolyPolygon.count();
 
@@ -146,17 +142,17 @@ public:
     {
         std::for_each( maPolygons.begin(),
                        maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B2DPolygon::flip ));
+                       std::mem_fun_ref( &basegfx::B2DPolygon::flip ));
     }
 
     void removeDoublePoints()
     {
         std::for_each( maPolygons.begin(),
                        maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B2DPolygon::removeDoublePoints ));
+                       std::mem_fun_ref( &basegfx::B2DPolygon::removeDoublePoints ));
     }
 
-    void transform(const ::basegfx::B2DHomMatrix& rMatrix)
+    void transform(const basegfx::B2DHomMatrix& rMatrix)
     {
         for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
         {
@@ -168,7 +164,7 @@ public:
     {
         std::for_each( maPolygons.begin(),
                        maPolygons.end(),
-                       std::mem_fun_ref( &::basegfx::B2DPolygon::makeUnique ));
+                       std::mem_fun_ref( &basegfx::B2DPolygon::makeUnique ));
     }
 };
 
@@ -215,12 +211,12 @@ namespace basegfx
         if(mpPolyPolygon.same_object(rPolyPolygon.mpPolyPolygon))
             return true;
 
-        return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
+        return ((*mpPolyPolygon) == (*rPolyPolygon.mpPolyPolygon));
     }
 
     bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
     {
-        return !(*this == rPolyPolygon);
+        return !((*this) == rPolyPolygon);
     }
 
     sal_uInt32 B2DPolyPolygon::count() const
@@ -247,7 +243,7 @@ namespace basegfx
     {
         for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
         {
-            const ::basegfx::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
+            const basegfx::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
             if(rPolygon.areControlPointsUsed())
             {
@@ -348,7 +344,7 @@ namespace basegfx
             mpPolyPolygon->removeDoublePoints();
     }
 
-    void B2DPolyPolygon::transform(const ::basegfx::B2DHomMatrix& rMatrix)
+    void B2DPolyPolygon::transform(const basegfx::B2DHomMatrix& rMatrix)
     {
         if(mpPolyPolygon->count() && !rMatrix.isIdentity())
         {
