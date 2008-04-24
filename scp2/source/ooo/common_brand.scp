@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1109,6 +1109,14 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
     Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_BIN_DIR}";
+End
+
+ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Lib_Dir
+    ModuleID = gid_Module_Root_Brand;
+    ProfileID = gid_Brand_Profile_Fundamental_Ini;
+    Section = "Bootstrap";
+    Key = "URE_LIB_DIR";
+    Value = "${${OOO_BASE_DIR}/program/" PROFILENAME(fundamentalbasis) ":URE_LIB_DIR}";
 End
 
 #if !defined MACOSX
