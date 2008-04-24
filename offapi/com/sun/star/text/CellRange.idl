@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CellRange.idl,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,20 +153,6 @@ published service CellRange
     /** contains the number format.
     */
     [property] long NumberFormat;
-
-    //-----------------------------------------------------------------------------
-
-    /** determins the top margin of the cell.
-     */
-    [property] long TopMargin;
-
-    //-----------------------------------------------------------------------------
-
-    /** determins the bottom margin of the cell.
-     */
-    [property] long BottomMargin;
-
-    //-----------------------------------------------------------------------------
 
 };
 
