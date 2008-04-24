@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guess.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,21 +53,15 @@ class Guess{
         Guess();
 
         /**
-         * Init from 3 strings (language, country and encoding) and 1 int witch represents the rank
-         */
-        Guess(string& lang, string& country, string& enc, int order);
-
-        /**
          * Init from a string like [en-UK-utf8] and the rank
          */
-        Guess(char * guess_str, int order);
+        Guess(char * guess_str);
 
         ~Guess();
 
         string GetLanguage();
         string GetCountry();
         string GetEncoding();
-        int GetOrder();
 
         bool operator==(string lang);
 
@@ -75,7 +69,6 @@ class Guess{
         string language_str;
         string country_str;
         string encoding_str;
-        int order;
 };
 
 #endif
