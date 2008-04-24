@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpleguesser.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,12 +47,6 @@ class SimpleGuesser{
 public:
     /**inits the object with conf file "./conf.txt"*/
     SimpleGuesser();
-
-    /** inits the object with conFile config file
-     * @param const char* confFile the string representing the config file
-     * @param const char* prefix the path where fingerprints files are stored
-     */
-    SimpleGuesser(const char* confFile, const char* prefix);
 
     /** Compares the current Simpleguesser with an other
      * @param SimpleGuesser& sg the other guesser to compare
