@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: except.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
