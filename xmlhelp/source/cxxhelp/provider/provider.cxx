@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: provider.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/bootstrap.hxx>
 
 #include "databases.hxx"
 #include "provider.hxx"
@@ -349,8 +350,8 @@ void ContentProvider::init()
     subst( aPath );
     aImagesZipPaths[ 0 ] = aPath;
 
-    aPath = getKey( xHierAccess, "Path/Current/Config" );
-    subst( aPath );
+    aPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/config"));
+    rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
     uno::Reference< uno::XComponentContext > xContext;
