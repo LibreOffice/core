@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mathml.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,11 +113,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags=IMPORT_ALL);
 
+#ifdef TL_NOT_USED_YET
     // #110680#
     SmXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
         const rtl::OUString &rFileName);
+#endif //TL_NOT_USED_YET
 
     // XServiceInfo (override parent method)
     ::rtl::OUString SAL_CALL getImplementationName()
@@ -381,12 +383,14 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags=EXPORT_ALL);
 
+#ifdef TL_NOT_USED_YET
     // #110680#
     SmXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const SmNode *pIn,
         const rtl::OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+#endif //TL_NOT_USED_YET
 
     virtual ~SmXMLExport() {};
 
