@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: symbol.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,7 +138,6 @@ public:
     SmSymSet&   operator = (const SmSymSet& rSymbolSet);
 
     const String&   GetName() const { return Name; }
-    void            SetName(String& rName);
     USHORT          GetCount() const { return (USHORT) SymbolList.Count(); }
 
     const SmSym&    GetSymbol(USHORT SymbolNo) const
