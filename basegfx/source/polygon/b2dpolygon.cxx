@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygon.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ public:
         return maVector.size();
     }
 
-    bool isEqual(const CoordinateDataArray2D& rCandidate) const
+    bool operator==(const CoordinateDataArray2D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
@@ -252,7 +252,7 @@ public:
             maNextVector = rValue;
     }
 
-    bool operator==(const ControlVectorPair2D& rData ) const
+    bool operator==(const ControlVectorPair2D& rData) const
     {
         return (maPrevVector == rData.getPrevVector() && maNextVector == rData.getNextVector());
     }
@@ -305,7 +305,7 @@ public:
         return maVector.size();
     }
 
-    bool isEqual(const ControlVectorArray2D& rCandidate) const
+    bool operator==(const ControlVectorArray2D& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
     }
@@ -558,11 +558,11 @@ public:
         }
     }
 
-    bool isEqual(const ImplB2DPolygon& rCandidate) const
+    bool operator==(const ImplB2DPolygon& rCandidate) const
     {
         if(mbIsClosed == rCandidate.mbIsClosed)
         {
-            if(maPoints.isEqual(rCandidate.maPoints))
+            if(maPoints == rCandidate.maPoints)
             {
                 bool bControlVectorsAreEqual(true);
 
@@ -570,7 +570,7 @@ public:
                 {
                     if(rCandidate.mpControlVector)
                     {
-                        bControlVectorsAreEqual = mpControlVector->isEqual(*rCandidate.mpControlVector);
+                        bControlVectorsAreEqual = ((*mpControlVector) == (*rCandidate.mpControlVector));
                     }
                     else
                     {
@@ -1008,7 +1008,7 @@ namespace basegfx
         if(mpPolygon.same_object(rPolygon.mpPolygon))
             return true;
 
-        return mpPolygon->isEqual(*(rPolygon.mpPolygon));
+        return ((*mpPolygon) == (*rPolygon.mpPolygon));
     }
 
     bool B2DPolygon::operator!=(const B2DPolygon& rPolygon) const
