@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: guess.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,16 +45,6 @@ Guess::Guess()
     language_str = DEFAULT_LANGUAGE;
     country_str = DEFAULT_COUNTRY;
     encoding_str = DEFAULT_ENCODING;
-    order = 0;
-}
-
-Guess::Guess(string& lang, string& country, string& enc, int p_order)
-{
-    Guess();
-    language_str=lang;
-    country_str=country;
-    encoding_str=enc;
-    order = p_order;
 }
 
 /*
@@ -63,10 +53,9 @@ Guess::Guess(string& lang, string& country, string& enc, int p_order)
 *
 */
 
-Guess::Guess(char * guess_str, int p_order)
+Guess::Guess(char * guess_str)
 {
     Guess();
-    order = p_order;
 
     string lang;
     string country;
@@ -142,11 +131,6 @@ string Guess::GetCountry()
 string Guess::GetEncoding()
 {
     return encoding_str;
-}
-
-int Guess::GetOrder()
-{
-    return order;
 }
 
 bool Guess::operator==(string lang)
