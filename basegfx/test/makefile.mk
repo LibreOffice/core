@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,7 @@ SHL1LIBS=\
     $(SLB)$/tools.lib	\
     $(SLB)$/vector.lib
 
-SHL1TARGET= tests
+SHL1TARGET= basegfx_tests
 SHL1STDLIBS= \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
