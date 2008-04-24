@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,6 +124,7 @@
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/msgpool.hxx>
+#include <sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 // const
@@ -3567,7 +3568,11 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     if ( impl_isDisposed() )
         return ::rtl::OUString();
 
-    return impl_getTitleHelper()->getTitle ();
+    ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
+    if ( m_pData->m_pObjectShell && m_pData->m_pObjectShell->IsDocShared() )
+        aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
+
+    return aResult;
 }
 
 //=============================================================================
