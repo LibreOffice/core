@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,6 +391,11 @@ namespace basegfx
         // polygon will be rotated. This is only valid for closed polygons, for non-closed ones
         // an assertion will be triggered
         B2DPolygon makeStartPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndexOfNewStatPoint);
+
+        //////////////////////////////////////////////////////////////////////
+        // comparators with tolerance for 2D Polygons
+        bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue);
+        bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB);
 
     } // end of namespace tools
 } // end of namespace basegfx
