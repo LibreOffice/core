@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -220,9 +220,6 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void SmGraphicWindow::GetFocus()
 {
-    SmEditWindow *pEditWin = pViewShell ? pViewShell->GetEditWindow() : 0;
-    if (pEditWin)
-        pEditWin->GrabFocus();
 /*
     if (xAccessible.is())
     {
@@ -516,11 +513,15 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
     bExiting    (FALSE)
 {
     Hide ();
+
+    aInitialFocusTimer.SetTimeoutHdl(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
+    aInitialFocusTimer.SetTimeout(100);
 }
 
 
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
+    aInitialFocusTimer.Stop();
     bExiting = TRUE;
 }
 
@@ -642,11 +643,23 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
         if (TRUE == IsFloatingMode())
             AdjustPosition();   //! don't change pos in docking-mode !
 
-        // make sure the formula can be edited right away
-        aEdit.GrabFocus();
+//        // make sure the formula can be edited right away
+//        aEdit.GrabFocus();
+
+        // grab focus as above does not work...
+        // Thus we implement a timer based solution to get the inital
+        // focus in the Edit window.
+        aInitialFocusTimer.Start();
     }
 
     SfxDockingWindow::StateChanged( nStateChange );
+}
+
+
+IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
+{
+    aEdit.GrabFocus();
+    return 0;
 }
 
 
