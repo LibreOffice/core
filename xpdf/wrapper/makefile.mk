@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.2 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +42,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 .INCLUDE: settings.mk
 
 # --- Files --------------------------------------------------------
-
+UWINAPILIB:=
 APP1TARGET=$(TARGET)
 APP1LIBSALCPPRT=
 APP1OBJS= \
