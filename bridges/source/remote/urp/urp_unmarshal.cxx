@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: urp_unmarshal.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,34 +253,38 @@ sal_Bool Unmarshal::unpack( void *pDestination ,
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
         {
-            sal_uInt64 *p = ( sal_uInt64 * ) pDest;
-            *p = 0;
+            sal_Int8 * p = static_cast<  sal_Int8 * >(pDest);
             bReturn = ! checkOverflow( 8 );
             if( bReturn )
             {
                 if( isSystemLittleEndian() )
                 {
-                    ((sal_Int8*) p )[7] = m_pos[0];
-                    ((sal_Int8*) p )[6] = m_pos[1];
-                    ((sal_Int8*) p )[5] = m_pos[2];
-                    ((sal_Int8*) p )[4] = m_pos[3];
-                    ((sal_Int8*) p )[3] = m_pos[4];
-                    ((sal_Int8*) p )[2] = m_pos[5];
-                    ((sal_Int8*) p )[1] = m_pos[6];
-                    ((sal_Int8*) p )[0] = m_pos[7];
+                    p[7] = m_pos[0];
+                    p[6] = m_pos[1];
+                    p[5] = m_pos[2];
+                    p[4] = m_pos[3];
+                    p[3] = m_pos[4];
+                    p[2] = m_pos[5];
+                    p[1] = m_pos[6];
+                    p[0] = m_pos[7];
                 }
                 else
                 {
-                    ((sal_Int8*) p )[0] = m_pos[0];
-                    ((sal_Int8*) p )[1] = m_pos[1];
-                    ((sal_Int8*) p )[2] = m_pos[2];
-                    ((sal_Int8*) p )[3] = m_pos[3];
-                    ((sal_Int8*) p )[4] = m_pos[4];
-                    ((sal_Int8*) p )[5] = m_pos[5];
-                    ((sal_Int8*) p )[6] = m_pos[6];
-                    ((sal_Int8*) p )[7] = m_pos[7];
+                    p[0] = m_pos[0];
+                    p[1] = m_pos[1];
+                    p[2] = m_pos[2];
+                    p[3] = m_pos[3];
+                    p[4] = m_pos[4];
+                    p[5] = m_pos[5];
+                    p[6] = m_pos[6];
+                    p[7] = m_pos[7];
                 }
                 m_pos += 8;
+            }
+            else
+            {
+                // Do not trigger alignment errors:
+                p[0] = p[1] = p[2] = p[3] = p[4] = p[5] = p[6] = p[7] = 0;
             }
             break;
         }
