@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rect.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,11 +145,6 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
                        const XubString &rText, USHORT nBorder)
 {
-#ifndef PRODUCT
-    if (rDev.GetOutDevType() != OUTDEV_PRINTER)
-        DBG_WARNING("Sm :  Referenz-Device ist kein Drucker");
-#endif
-
     DBG_ASSERT(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
@@ -623,6 +618,7 @@ SmRect SmRect::AsGlyphRect() const
     return aRect;
 }
 
+#ifdef SM_RECT_DEBUG
 
 // forward declaration
 void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
@@ -685,12 +681,6 @@ void SmRect::Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const
 }
 
 
-
-////////////////////////////////////////
-// misc functions
-//
-
-
 void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
                  const Color aCol)
 {
@@ -705,6 +695,8 @@ void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
 
     rDev.Pop();
 }
+
+#endif //SM_RECT_DEBUG
 
 
 BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
