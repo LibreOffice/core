@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +49,10 @@ CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXSLTINCDIR)
 
 .IF "$(SYSTEM_DB)" == "YES"
 CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
+.ENDIF
+
+.IF "$(SYSTEM_EXPAT)" == "YES"
+CFLAGS+=-DSYSTEM_EXPAT
 .ENDIF
 
 OBJFILES=\
