@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_calc.scp,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +32,12 @@
 
 STD_UNO_LIB_FILE( gid_File_Lib_Solver, solver)
 
+#ifndef SYSTEM_LPSOLVE
 File gid_File_Lib_Lpsolve
     Name = SPECIAL_NAME(lpsolve55);
     PACKED_LIB_FILE_BODY;
 End
+#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Analysis, analysis)
 
