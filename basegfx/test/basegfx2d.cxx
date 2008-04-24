@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basegfx2d.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -465,6 +465,25 @@ public:
         aExport = tools::exportToSvgD( aPoly );
         CPPUNIT_ASSERT_MESSAGE("exporting complex polygon to SVG-D (round-trip)",
                                !aExport.compareToAscii(sExportString2));
+
+        const B2DPolygon aCircle(
+            tools::createPolygonFromEllipse( B2DPoint(4000,4000),
+                                             1000.0, 2000.0 ));
+        aExport = tools::exportToSvgD( B2DPolyPolygon(aCircle), false, false);
+
+        // count number of spaces, in lieu of a better way - no real
+        // point in comparing with a gold standard, as fractional
+        // parts of the coordinates will differ between systems.
+        sal_Int32 nIndex=0, nCount=0;
+        do
+        {
+            rtl::OUString aToken = aExport.getToken( 0, ' ', nIndex );
+            ++nCount;
+        }
+        while ( nIndex >= 0 );
+
+        CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates",
+                               nCount==18);
     }
 
     // Change the following lines only, if you add, remove or rename
