@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dtuple.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,6 +185,14 @@ namespace basegfx
                 ::basegfx::fTools::equal(mfX, rTup.mfX) &&
                 ::basegfx::fTools::equal(mfY, rTup.mfY) &&
                 ::basegfx::fTools::equal(mfZ, rTup.mfZ));
+        }
+
+        bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
+        {
+            return (
+                ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
+                ::basegfx::fTools::equal(mfY, rTup.mfY, rfSmallValue) &&
+                ::basegfx::fTools::equal(mfZ, rTup.mfZ, rfSmallValue));
         }
 
         // operators
