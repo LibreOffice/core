@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.149 $
+ * $Revision: 1.150 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1050,18 +1050,18 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 			<prop oor:name="MaximumPaperWidth" oor:type="xs:int">
 				<info>
 					<author>AW</author>
-					<desc>Specifies the maximum allowed Paper Width for page definitions in 1/100th cm. Default is 3m. When this is changed to higher values, it is done on own risk.</desc>
+					<desc>Specifies the maximum allowed Paper Width for page definitions in cm. Default is 3m, i.e. 300 cm. When this is changed to higher values, it is done on own risk.</desc>
 					<label>Maximum allowed Paper Width for page definitions</label>
 				</info>
-				<value>30000</value>
+				<value>300</value>
 			</prop>
 			<prop oor:name="MaximumPaperHeight" oor:type="xs:int">
 				<info>
 					<author>AW</author>
-					<desc>Specifies the maximum allowed Paper Height for page definitions in 1/100th cm. Default is 3m. When this is changed to higher values, it is done on own risk.</desc>
+					<desc>Specifies the maximum allowed Paper Height for page definitions in cm. Default is 3m, i.e. 300 cm. When this is changed to higher values, it is done on own risk.</desc>
 					<label>Maximum allowed Paper Height for page definitions</label>
 				</info>
-				<value>30000</value>
+				<value>300</value>
 			</prop>
 			<prop oor:name="MaximumPaperLeftMargin" oor:type="xs:int">
 				<info>
