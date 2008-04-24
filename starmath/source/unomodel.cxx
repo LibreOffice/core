@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomodel.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1009,15 +1009,6 @@ void SAL_CALL SmModel::render(
             }
         }
     }
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SmModel_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ ) throw( uno::Exception )
-{
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    SmDLL::Init();
-    SfxObjectShell* pShell = new SmDocShell( SFX_CREATE_MODE_STANDARD );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
 void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xParent)
