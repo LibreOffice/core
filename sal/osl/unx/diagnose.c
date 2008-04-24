@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: diagnose.c,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,12 +154,13 @@ static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
 
 #define FRAME_PTR_OFFSET 1
 #define FRAME_OFFSET     0
+#define STACK_BIAS       0
 
-#if defined(__sparcv9)
-#define STACK_BIAS 0x7ff
-#else
-#define STACK_BIAS 0
-#endif
+#elif defined(SPARC64)
+
+#define FRAME_PTR_OFFSET 1
+#define FRAME_OFFSET     0
+#define STACK_BIAS       0x7ff
 
 #elif defined(INTEL)
 
