@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: page.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,10 +423,10 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     // #i4219# take Maximum now from configuration (1/100th cm)
     // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
-    aPaperWidthEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperWidth());
-    aPaperWidthEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperWidth());
-    aPaperHeightEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperHeight());
-    aPaperHeightEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperHeight());
+    aPaperWidthEdit.SetMax(aPaperWidthEdit.Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
+    aPaperWidthEdit.SetLast(aPaperWidthEdit.Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
+    aPaperHeightEdit.SetMax(aPaperHeightEdit.Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+    aPaperHeightEdit.SetLast(aPaperHeightEdit.Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
 
     // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
     aLeftMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
