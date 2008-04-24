@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dsvgpolypolygon.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basegfx.hxx"
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/ustring.hxx>
@@ -286,9 +287,16 @@ namespace basegfx
                             // new polygon start, finish old one
                             if(aCurrPoly.count())
                             {
-                                aCurrPoly.setClosed(bIsClosed);
-                                bIsClosed = false;
+                                // add current polygon
+                                if(bIsClosed)
+                                {
+                                    closeWithGeometryChange(aCurrPoly);
+                                }
+
                                 o_rPolyPolygon.append(aCurrPoly);
+
+                                // reset import values
+                                bIsClosed = false;
                                 aCurrPoly.clear();
                             }
                         }
@@ -648,7 +656,11 @@ namespace basegfx
             if(aCurrPoly.count())
             {
                 // end-process last poly
-                aCurrPoly.setClosed(bIsClosed);
+                if(bIsClosed)
+                {
+                    closeWithGeometryChange(aCurrPoly);
+                }
+
                 o_rPolyPolygon.append(aCurrPoly);
             }
 
@@ -662,42 +674,59 @@ namespace basegfx
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
             ::rtl::OUString aResult;
-            B2DPoint aLastPoint(0.0, 0.0); // SVG assumes (0,0) as the initial current point
+            B2DPoint aCurrentSVGPosition(0.0, 0.0); // SVG assumes (0,0) as the initial current point
 
             for(sal_uInt32 i(0); i < nCount; i++)
             {
                 const B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(i));
                 const sal_uInt32 nPointCount(aPolygon.count());
-                const bool bPolyUsesControlPoints(aPolygon.areControlPointsUsed());
-                sal_Unicode aLastSVGCommand(' '); // last SVG command char
-                B2DPoint aLeft, aRight; // for quadratic bezier test
 
-                for(sal_uInt32 j(0); j < nPointCount; j++)
+                if(nPointCount)
                 {
-                    const B2DPoint aCurrent(aPolygon.getB2DPoint(j));
+                    const bool bPolyUsesControlPoints(aPolygon.areControlPointsUsed());
+                    const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount : nPointCount - 1);
+                    sal_Unicode aLastSVGCommand(' '); // last SVG command char
+                    B2DPoint aLeft, aRight; // for quadratic bezier test
 
-                    if(0 == j)
+                    // handle polygon start point
+                    B2DPoint aEdgeStart(aPolygon.getB2DPoint(0));
+                    aResult += ::rtl::OUString::valueOf(lcl_getCommand('M', 'm', bUseRelativeCoordinates));
+                    lcl_putNumberCharWithSpace(aResult, aEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                    lcl_putNumberCharWithSpace(aResult, aEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                    aLastSVGCommand =  lcl_getCommand('L', 'l', bUseRelativeCoordinates);
+                    aCurrentSVGPosition = aEdgeStart;
+
+                    for(sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
                     {
-                        // handle first polygon point
-                        aResult += ::rtl::OUString::valueOf(lcl_getCommand('M', 'm', bUseRelativeCoordinates));
-                        lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                        lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                        aLastSVGCommand =  lcl_getCommand('L', 'l', bUseRelativeCoordinates);
-                    }
-                    else
-                    {
-                        // handle edge from j-1 to j
+                        // prepare access to next point
+                        const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+                        const B2DPoint aEdgeEnd(aPolygon.getB2DPoint(nNextIndex));
+
+                        // handle edge from (aEdgeStart, aEdgeEnd) using indices (nIndex, nNextIndex)
                         const bool bEdgeIsBezier(bPolyUsesControlPoints
-                            && (aPolygon.isNextControlPointUsed(j - 1) || aPolygon.isPrevControlPointUsed(j)));
+                            && (aPolygon.isNextControlPointUsed(nIndex) || aPolygon.isPrevControlPointUsed(nNextIndex)));
 
                         if(bEdgeIsBezier)
                         {
                             // handle bezier edge
-                            const B2DPoint aControl0(aPolygon.getNextControlPoint(j - 1));
-                            const B2DPoint aControl1(aPolygon.getPrevControlPoint(j));
-                            const B2VectorContinuity aPrevCont(aPolygon.getContinuityInPoint(j - 1));
-                            const bool bSymmetricControlVector(CONTINUITY_C2 == aPrevCont);
+                            const B2DPoint aControlEdgeStart(aPolygon.getNextControlPoint(nIndex));
+                            const B2DPoint aControlEdgeEnd(aPolygon.getPrevControlPoint(nNextIndex));
                             bool bIsQuadraticBezier(false);
+
+                            // check continuity at current edge's start point. For SVG, do NOT use an
+                            // existing continuity since no 'S' or 's' statement should be written. At
+                            // import, that 'previous' control vector is not available. SVG documentation
+                            // says for interpretation:
+                            //
+                            // "(If there is no previous command or if the previous command was
+                            // not an C, c, S or s, assume the first control point is coincident
+                            // with the current point.)"
+                            //
+                            // That's what is done from our import, so avoid exporting it as first statement
+                            // is necessary.
+                            const bool bSymmetricAtEdgeStart(
+                                0 != nIndex
+                                && CONTINUITY_C2 == aPolygon.getContinuityInPoint(nIndex));
 
                             if(bDetectQuadraticBeziers)
                             {
@@ -708,15 +737,15 @@ namespace basegfx
                                 //
                                 // Left: P = (3P1 - P0) / 2
                                 // Right: P = (3P2 - P3) / 2
-                                aLeft = B2DPoint((3.0 * aControl0 - aLastPoint) / 2.0);
-                                aRight= B2DPoint((3.0 * aControl1 - aCurrent) / 2.0);
+                                aLeft = B2DPoint((3.0 * aControlEdgeStart - aEdgeStart) / 2.0);
+                                aRight= B2DPoint((3.0 * aControlEdgeEnd - aEdgeEnd) / 2.0);
                                 bIsQuadraticBezier = aLeft.equal(aRight);
                             }
 
                             if(bIsQuadraticBezier)
                             {
                                 // approximately equal, export as quadratic bezier
-                                if(bSymmetricControlVector)
+                                if(bSymmetricAtEdgeStart)
                                 {
                                     const sal_Unicode aCommand(lcl_getCommand('T', 't', bUseRelativeCoordinates));
 
@@ -726,9 +755,10 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
+                                    aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
@@ -740,17 +770,18 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aLeft.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aLeft.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
+                                    aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
                             else
                             {
                                 // export as cubic bezier
-                                if(bSymmetricControlVector)
+                                if(bSymmetricAtEdgeStart)
                                 {
                                     const sal_Unicode aCommand(lcl_getCommand('S', 's', bUseRelativeCoordinates));
 
@@ -760,11 +791,12 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aControl1.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControl1.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
+                                    aCurrentSVGPosition = aEdgeEnd;
                                 }
                                 else
                                 {
@@ -776,70 +808,89 @@ namespace basegfx
                                         aLastSVGCommand = aCommand;
                                     }
 
-                                    lcl_putNumberCharWithSpace(aResult, aControl0.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControl0.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControl1.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aControl1.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                    lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeStart.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aControlEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
                                     aLastSVGCommand = aCommand;
+                                    aCurrentSVGPosition = aEdgeEnd;
                                 }
                             }
                         }
                         else
                         {
-                            // normal straight line points
-                            if(aLastPoint.getX() == aCurrent.getX())
+                            // straight edge
+                            if(0 == nNextIndex)
                             {
-                                // export as vertical line
-                                const sal_Unicode aCommand(lcl_getCommand('V', 'v', bUseRelativeCoordinates));
-
-                                if(aLastSVGCommand != aCommand)
-                                {
-                                    aResult += ::rtl::OUString::valueOf(aCommand);
-                                    aLastSVGCommand = aCommand;
-                                }
-
-                                lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
-                            }
-                            else if(aLastPoint.getY() == aCurrent.getY())
-                            {
-                                // export as horizontal line
-                                const sal_Unicode aCommand(lcl_getCommand('H', 'h', bUseRelativeCoordinates));
-
-                                if(aLastSVGCommand != aCommand)
-                                {
-                                    aResult += ::rtl::OUString::valueOf(aCommand);
-                                    aLastSVGCommand = aCommand;
-                                }
-
-                                lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
+                                // it's a closed polygon's last edge and it's not a bezier edge, so there is
+                                // no need to write it
                             }
                             else
                             {
-                                // export as line
-                                const sal_Unicode aCommand(lcl_getCommand('L', 'l', bUseRelativeCoordinates));
+                                const bool bXEqual(aEdgeStart.getX() == aEdgeEnd.getX());
+                                const bool bYEqual(aEdgeStart.getY() == aEdgeEnd.getY());
 
-                                if(aLastSVGCommand != aCommand)
+                                if(bXEqual && bYEqual)
                                 {
-                                    aResult += ::rtl::OUString::valueOf(aCommand);
-                                    aLastSVGCommand = aCommand;
+                                    // point is a double point; do not export at all
                                 }
+                                else if(bXEqual)
+                                {
+                                    // export as vertical line
+                                    const sal_Unicode aCommand(lcl_getCommand('V', 'v', bUseRelativeCoordinates));
 
-                                lcl_putNumberCharWithSpace(aResult, aCurrent.getX(), aLastPoint.getX(), bUseRelativeCoordinates);
-                                lcl_putNumberCharWithSpace(aResult, aCurrent.getY(), aLastPoint.getY(), bUseRelativeCoordinates);
+                                    if(aLastSVGCommand != aCommand)
+                                    {
+                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aLastSVGCommand = aCommand;
+                                    }
+
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    aCurrentSVGPosition = aEdgeEnd;
+                                }
+                                else if(bYEqual)
+                                {
+                                    // export as horizontal line
+                                    const sal_Unicode aCommand(lcl_getCommand('H', 'h', bUseRelativeCoordinates));
+
+                                    if(aLastSVGCommand != aCommand)
+                                    {
+                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aLastSVGCommand = aCommand;
+                                    }
+
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    aCurrentSVGPosition = aEdgeEnd;
+                                }
+                                else
+                                {
+                                    // export as line
+                                    const sal_Unicode aCommand(lcl_getCommand('L', 'l', bUseRelativeCoordinates));
+
+                                    if(aLastSVGCommand != aCommand)
+                                    {
+                                        aResult += ::rtl::OUString::valueOf(aCommand);
+                                        aLastSVGCommand = aCommand;
+                                    }
+
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getX(), aCurrentSVGPosition.getX(), bUseRelativeCoordinates);
+                                    lcl_putNumberCharWithSpace(aResult, aEdgeEnd.getY(), aCurrentSVGPosition.getY(), bUseRelativeCoordinates);
+                                    aCurrentSVGPosition = aEdgeEnd;
+                                }
                             }
                         }
+
+                        // prepare edge start for next loop step
+                        aEdgeStart = aEdgeEnd;
                     }
 
-                    aLastPoint = aCurrent;
-                }
-
-                // close path if closed poly (Z and z are equivalent here, but looks nicer
-                // when case is matched)
-                if(aPolygon.isClosed())
-                {
-                    aResult += ::rtl::OUString::valueOf(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                    // close path if closed poly (Z and z are equivalent here, but looks nicer when case is matched)
+                    if(aPolygon.isClosed())
+                    {
+                        aResult += ::rtl::OUString::valueOf(lcl_getCommand('Z', 'z', bUseRelativeCoordinates));
+                    }
                 }
             }
 
