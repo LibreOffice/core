@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: types.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,6 +173,7 @@ sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar )
     return cRes;
 }
 
+#ifdef TL_NOT_YET_USED
 sal_Unicode ConvertUnicodeToMathPrivateUseArea( sal_Unicode cChar )
 {
     sal_Unicode cRes = 0;
@@ -200,6 +201,7 @@ sal_Unicode ConvertMathToMathType( sal_Unicode cChar )
     }
     return cRes;
 }
+#endif //TL_NOT_YET_USED
 
 sal_Unicode ConvertMathTypeToMath( sal_Unicode cChar )
 {
@@ -228,6 +230,7 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
     return cRes;
 }
 
+#ifdef TL_NOT_YET_USED
 sal_Unicode ConvertMathMLToMath( sal_Unicode cChar )
 {
     sal_Unicode cRes = 0;
@@ -252,5 +255,6 @@ sal_Unicode GetTokenChar( sal_Unicode cChar, sal_Bool bConvertForExport )
     }
     return cRes;
 }
+#endif //TL_NOT_YET_USED
 
 
