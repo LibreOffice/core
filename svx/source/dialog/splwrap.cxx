@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: splwrap.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,7 +180,8 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bHyphen     ( sal_False ),
     bAuto       ( sal_False ),
     bStartChk   ( bOther ),
-    bRevAllowed ( bRevAllow )
+    bRevAllowed ( bRevAllow ),
+    bAllRight   ( bIsAllRight )
 {
     Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
     sal_Bool bWrapReverse = xProp.is() ?
@@ -188,7 +189,6 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
             ::rtl::OUString::createFromAscii(UPN_IS_WRAP_REVERSE) ).getValue()
         : sal_False;
     bReverse = bRevAllow && bWrapReverse;
-    bAllRight = bIsAllRight;
     bStartDone = bOther || ( !bReverse && bStart );
     bEndDone   = bReverse && bStart && !bOther;
 }
@@ -208,7 +208,8 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     bStartDone  ( bOther || ( !bReverse && bStart ) ),
     bEndDone    ( bReverse && bStart && !bOther ),
     bStartChk   ( bOther ),
-    bRevAllowed ( sal_False )
+    bRevAllowed ( sal_False ),
+    bAllRight   ( sal_True )
 {
 }
 
