@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,18 +59,10 @@ SHL1RPATH = URELIB
 SHL1VERSIONMAP = msvc_win32_intel.map
 .ELIF "$(COMNAME)" == "sunpro5"
 SHL1VERSIONMAP = cc5_solaris_sparc.map
-.ELIF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
-SHL1VERSIONMAP = gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)" == "FREEBSDIgcc3"
-SHL1VERSIONMAP = gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)" == "LINUXSgcc3"
-SHL1VERSIONMAP = gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)" == "OS2Igcc3"
-SHL1VERSIONMAP = gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="MACOSXIgcc3"
-SHL1VERSIONMAP = gcc3_linux_intel.map
 .ELIF "$(GUI)$(COM)" == "WNTGCC"
 SHL1VERSIONMAP = mingw.map
+.ELIF "$(COMNAME)" == "gcc3"
+SHL1VERSIONMAP = gcc3.map
 .ENDIF
 
 DEF1NAME = $(SHL1TARGET)
