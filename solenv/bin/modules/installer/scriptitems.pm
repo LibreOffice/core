@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.46 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -495,6 +495,38 @@ sub changing_name_of_language_dependent_keys
                     my $itemvalue = $oneitem->{$itemkey};
                     $oneitem->{$newitemkey} = $itemvalue;
                     delete($oneitem->{$itemkey});
+                }
+            }
+        }
+    }
+}
+
+################################################################################
+# Collecting language specific names for language packs
+################################################################################
+
+sub collect_language_specific_names
+{
+    my ($itemsarrayref) = @_;
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bUSELANGUAGENAME\b/ )
+        {
+            my $language = "";
+            if ( $oneitem->{'Language'} ) { $language = $oneitem->{'Language'}; }
+            my $specificlanguage = "";
+            if ( $oneitem->{'specificlanguage'} ) { $specificlanguage = $oneitem->{'specificlanguage'}; }
+
+            if (( $language ne "" ) && ( $language eq $specificlanguage ))
+            {
+                if (! installer::existence::exists_in_array($oneitem->{'Name'}, \@installer::globals::languagenames ))
+                {
+                    push(@installer::globals::languagenames, $oneitem->{'Name'});
                 }
             }
         }
