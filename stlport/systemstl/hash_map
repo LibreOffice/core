@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hash_map,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,9 @@
 #ifndef SYSTEM_STL_HASHMAP
 #define SYSTEM_STL_HASHMAP
 
+#define _BACKWARD_BACKWARD_WARNING_H 1
 #include <ext/hash_map>
+#undef _BACKWARD_BACKWARD_WARNING_H
 
 #ifdef GCC
 namespace __gnu_cxx
