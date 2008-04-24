@@ -8,7 +8,7 @@
  *
  * $RCSfile: titlehelper.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,7 +208,8 @@ void SAL_CALL TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEv
 void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     throw (css::uno::RuntimeException)
 {
-    if ( ! aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnSaveAsDone"))
+    if ( ! aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnSaveAsDone")
+      && ! aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged"))
         return;
 
     // SYNCHRONIZED ->
@@ -219,7 +220,8 @@ void SAL_CALL TitleHelper::notifyEvent(const css::document::EventObject& aEvent)
     aLock.clear ();
     // <- SYNCHRONIZED
 
-    if (aEvent.Source != xOwner)
+    if (aEvent.Source != xOwner
+      || aEvent.EventName.equalsIgnoreAsciiCaseAscii ("OnTitleChanged") && !xOwner.is())
         return;
 
     impl_updateTitle ();
@@ -407,7 +409,10 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
     // SYNCHRONIZED ->
     aLock.reset ();
 
-    sal_Bool bChanged        = (! m_sTitle.equals(sTitle));
+    // WORKAROUND: the notification is currently sent always,
+    //             can be changed after shared mode is supported per UNO API
+    sal_Bool bChanged        = sal_True; // (! m_sTitle.equals(sTitle));
+
              m_sTitle        = sTitle;
              m_nLeasedNumber = nLeasedNumber;
 
