@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxvw.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,8 +165,10 @@ void SwXTextView::Invalidate()
         ((SwXTextViewCursor*)pCrsr)->Invalidate();
         DELETEZ(pxTextViewCursor);
     }
-    sal_uInt16 nCount = aSelChangedListeners.Count();
+
     m_refCount++; //prevent second d'tor call
+
+    sal_uInt16 nCount = aSelChangedListeners.Count();
     if(nCount)
     {
         uno::Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
@@ -177,6 +179,14 @@ void SwXTextView::Invalidate()
             (*pObj)->disposing(aEvent);
         }
     }
+
+    // #i85580: now clean up any possibly remaining entries in the array...
+    // (i.e. listeners that did not call removeSelectionChangeListener in their disposing.)
+    while ((nCount = aSelChangedListeners.Count()) != 0)
+    {
+        removeSelectionChangeListener( *aSelChangedListeners[0] );
+    }
+
     m_refCount--;
     pView = 0;
 }
