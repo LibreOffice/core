@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dtuple.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,25 +48,6 @@ namespace basegfx
     :   mfX( rTup.getX() ),
         mfY( rTup.getY() )
     {}
-
-    bool B2DTuple::equalZero() const
-    {
-        return (this == &getEmptyTuple() ||
-                (::basegfx::fTools::equalZero(mfX) && ::basegfx::fTools::equalZero(mfY)));
-    }
-
-    bool B2DTuple::equalZero(const double& rfSmallValue) const
-    {
-        return (this == &getEmptyTuple() ||
-                (::basegfx::fTools::equalZero(mfX, rfSmallValue) && ::basegfx::fTools::equalZero(mfY, rfSmallValue)));
-    }
-
-    bool B2DTuple::equal(const B2DTuple& rTup) const
-    {
-        return (
-            ::basegfx::fTools::equal(mfX, rTup.mfX) &&
-            ::basegfx::fTools::equal(mfY, rTup.mfY));
-    }
 
     void B2DTuple::correctValues(const double fCompareValue)
     {
