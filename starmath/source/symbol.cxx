@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: symbol.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,14 +206,6 @@ SmSymSet& SmSymSet::operator = (const SmSymSet& rSymbolSet)
         pSymSetManager->SetModified(TRUE);
 
     return *this;
-}
-
-void SmSymSet::SetName(String& rName)
-{
-    Name = rName;
-
-    if (pSymSetManager)
-        pSymSetManager->SetModified(TRUE);
 }
 
 USHORT SmSymSet::AddSymbol(SmSym* pSymbol)
