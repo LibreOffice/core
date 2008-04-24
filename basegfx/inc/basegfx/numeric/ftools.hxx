@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftools.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,11 +145,15 @@ namespace basegfx
             return (fabs(rfVal) <= rfSmallValue);
         }
 
-
         static bool equal(const double& rfValA, const double& rfValB)
         {
             // changed to approxEqual usage for better numerical correctness
             return rtl::math::approxEqual(rfValA, rfValB);
+        }
+
+        static bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+        {
+            return (fabs(rfValA) - fabs(rfValB) <= rfSmallValue);
         }
 
         static bool less(const double& rfValA, const double& rfValB)
