@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saxwriter.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -441,7 +441,7 @@ inline sal_Bool SaxWriterHelper::convertToXML( const sal_Unicode * pStr,
                                       sal_Int8(0x80 | ((nSurrogate >>  6) & 0x3F)),
                                       sal_Int8(0x80 | ((nSurrogate >>  0) & 0x3F)) };
                 if ((rPos + 4) > SEQUENCESIZE)
-                    AddBytes(pTarget, rPos, aBytes, 3);
+                    AddBytes(pTarget, rPos, aBytes, 4);
                 else
                 {
                     pTarget[rPos] = aBytes[0];
@@ -576,22 +576,20 @@ inline void SaxWriterHelper::startDocument() throw( SAXException )
 {
     const char pc[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     const int nLen = strlen( pc );
-    if ((nCurrentPos + nLen + 1) <= SEQUENCESIZE)
+    if ((nCurrentPos + nLen) <= SEQUENCESIZE)
     {
         memcpy( mp_Sequence, pc , nLen );
         nCurrentPos += nLen;
-        mp_Sequence[nCurrentPos] = LINEFEED;
-        nCurrentPos++;
     }
     else
     {
         AddBytes(mp_Sequence, nCurrentPos, (sal_Int8*)pc, nLen);
-        OSL_ENSURE(nCurrentPos <= SEQUENCESIZE, "not reset current position");
-        if (nCurrentPos == SEQUENCESIZE)
-            nCurrentPos = writeSequence();
-        mp_Sequence[nCurrentPos] = LINEFEED;
-        nCurrentPos++;
     }
+    OSL_ENSURE(nCurrentPos <= SEQUENCESIZE, "not reset current position");
+    if (nCurrentPos == SEQUENCESIZE)
+        nCurrentPos = writeSequence();
+    mp_Sequence[nCurrentPos] = LINEFEED;
+    nCurrentPos++;
     if (nCurrentPos == SEQUENCESIZE)
         nCurrentPos = writeSequence();
 }
