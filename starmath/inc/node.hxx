@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,9 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
     virtual void    GetAccessibleText( String &rText ) const;
@@ -268,8 +270,12 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
     void CreateTextFromNode(String &rText);
 };
 
@@ -292,7 +298,10 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -328,7 +337,9 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
     virtual void  GetAccessibleText( String &rText ) const;
@@ -352,7 +363,10 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
+
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
@@ -412,7 +426,9 @@ public:
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
+#ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
+#endif
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
 
