@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -431,5 +431,17 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Bin_Dir
     Value = "${.link:$ORIGIN/../ure-link}/bin";
 #else
     Value = "$ORIGIN/../ure-link/bin";
+#endif
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Lib_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_LIB_DIR";
+#if defined WNT
+    Value = "${.link:$ORIGIN/../ure-link}/bin";
+#else
+    Value = "$ORIGIN/../ure-link/lib";
 #endif
 End
