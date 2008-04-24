@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: respintest.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,9 +91,9 @@ namespace
 
 extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 {
-    string sBasisInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
+    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
 
-    // MessageBox(NULL, sBasisInstallPath.c_str(), "DEBUG", MB_OK);
+    // MessageBox(NULL, sOfficeInstallPath.c_str(), "DEBUG", MB_OK);
 
     // unsetting all properties
 
@@ -104,7 +104,7 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     // 1. Searching for "ProductCode" in setup.ini
 
-    string sSetupiniPath = sBasisInstallPath + TEXT("program\\setup.ini");
+    string sSetupiniPath = sOfficeInstallPath + TEXT("program\\setup.ini");
 
     TCHAR szValue[32767];
 
