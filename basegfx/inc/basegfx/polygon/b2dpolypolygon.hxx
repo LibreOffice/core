@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygon.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,7 @@ namespace basegfx
         void removeDoublePoints();
 
         // apply transformation given in matrix form to the polygon
-        void transform(const ::basegfx::B2DHomMatrix& rMatrix);
+        void transform(const basegfx::B2DHomMatrix& rMatrix);
     };
 } // end of namespace basegfx
 
