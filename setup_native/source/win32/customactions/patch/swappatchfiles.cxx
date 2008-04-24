@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swappatchfiles.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -726,7 +726,7 @@ extern "C" UINT __stdcall SetFeatureState( MSIHANDLE handle )
 
     // 1. Reading Product Code from setup.ini of installed Office
 
-    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("BASISINSTALLLOCATION"));
+    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
     // MessageBox(NULL, sInstallPath.c_str(), "BASISINSTALLLOCATION", MB_OK);
     std::_tstring sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
 
