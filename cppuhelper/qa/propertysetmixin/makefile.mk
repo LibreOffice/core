@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,8 +58,8 @@ SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
-.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
-SHL1VERSIONMAP = test.LINUXIgcc3.map
+.IF "$(COMNAME)" == "gcc3"
+SHL1VERSIONMAP = test.gcc3.map
 .ELSE
 SHL1VERSIONMAP = test.map
 .ENDIF
