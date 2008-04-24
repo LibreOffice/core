@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: types.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,15 +54,19 @@ inline sal_Bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar
 inline sal_Bool IsGreekChar( sal_Unicode cChar ) { return 0x0370 <= cChar  &&  cChar <= 0x03FF; }
 
 sal_Unicode ConvertMathPrivateUseAreaToUnicode( sal_Unicode cChar );
+#ifdef TL_NOT_YET_USED
 sal_Unicode ConvertUnicodeToMathPrivateUseArea( sal_Unicode cChar );
 
 sal_Unicode ConvertMathToMathType( sal_Unicode cChar );
 sal_Unicode ConvertMathTypeToMath( sal_Unicode cChar );
+#endif //TL_NOT_YET_USED
 
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar );
+#ifdef TL_NOT_YET_USED
 sal_Unicode ConvertMathMLToMath( sal_Unicode cChar );
 
 sal_Unicode GetTokenChar( sal_Unicode cChar, sal_Bool bConvertForExport );
+#endif //TL_NOT_YET_USED
 
 /////////////////////////////////////////////////////////////////
 // enum definitions for characters from the 'StarSymbol' font
