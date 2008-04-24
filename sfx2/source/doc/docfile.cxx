@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfile.cxx,v $
- * $Revision: 1.201 $
+ * $Revision: 1.202 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -993,9 +993,9 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
 
         SFX_ITEMSET_ARG( GetItemSet(), pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
 
-        // no locking is necessary if the document is explicitly opened as copy
+        // no locking is necessary on loading if the document is explicitly opened as copy
         SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        bResult = ( pTemplateItem && pTemplateItem->GetValue() );
+        bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
 
         try
         {
