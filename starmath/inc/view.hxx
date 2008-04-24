@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,6 +151,10 @@ class SmCmdBoxWindow : public SfxDockingWindow
     SmEditWindow        aEdit;
     SmEditController    aController;
     BOOL                bExiting;
+
+    Timer               aInitialFocusTimer;
+
+    DECL_LINK(InitialFocusTimerHdl, Timer *);
 
 protected :
 
