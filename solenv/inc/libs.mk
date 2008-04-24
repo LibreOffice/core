@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.131 $
+# $Revision: 1.132 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.131 $$"
+LIBSMKREV!:="$$Revision: 1.132 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -329,7 +329,7 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) \
 SABLOT3RDLIB=-lsablot
 APP3RDLIB=-lapp
 SAMPLE3RDLIB=-lsample
-HNJLIB=-lhnj
+HNJLIB*=-lhnj
 MYSPELLLIB=-lmyspell
 COSVLIB=-lcosv
 UDMLIB=-ludm
@@ -489,7 +489,7 @@ BFSVTOOLLIB=bf_svt.lib
 SABLOT3RDLIB= $(LIBPRE) sablot.lib
 APP3RDLIB= $(LIBPRE) app.lib
 SAMPLE3RDLIB= $(LIBPRE) sample.lib
-HNJLIB= libhnj.lib
+HNJLIB*=libhnj.lib
 MYSPELLLIB= $(LIBPRE) myspell.lib
 COSVLIB= $(LIBPRE) cosv.lib
 UDMLIB= $(LIBPRE) udm.lib
