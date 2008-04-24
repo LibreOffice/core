@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: utility.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,11 +199,9 @@ public:
     using   SfxPtrArr::operator [];
     void       *operator [] (USHORT nPos) const { return GetPtr(nPos); }
 
-    void        SetSize(USHORT nNewSize);
     USHORT      GetSize() const { return nSize; }
     USHORT      Count() const { return SfxPtrArr::Count(); }
 
-    BOOL        Contains(const void *pItem) const;
     void        Clear();
 };
 
@@ -369,7 +367,6 @@ protected:
     DECL_LINK(SelectHdl, ListBox *);
 
 public:
-    SmFontPickListBox(Window* pParent, WinBits nWinStyle = 0, USHORT nMax = 4);
     SmFontPickListBox(Window* pParent, const ResId& rResId, USHORT nMax = 4);
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
