@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.109 $
+# $Revision: 1.110 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1007,6 +1007,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::scriptitems::changing_name_of_language_dependent_keys($modulesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3.log", $modulesinproductlanguageresolvedarrayref); }
+
+        installer::scriptitems::collect_language_specific_names($modulesinproductlanguageresolvedarrayref);
     }
 
     # Copy-only projects can now start to copy all items File and ScpAction
