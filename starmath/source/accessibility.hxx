@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,7 +349,9 @@ class SmEditAccessible :
     SmEditAccessible & operator = ( const SmEditAccessible & );
 
 protected:
+#ifdef TL_NOT_YET_USED
     SmDocShell *    GetDoc_Impl();
+#endif //TL_NOT_YET_USED
 
 public:
     SmEditAccessible( SmEditWindow *pEditWin );
