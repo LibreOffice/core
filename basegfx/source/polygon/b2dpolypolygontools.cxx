@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -511,6 +511,34 @@ namespace basegfx
             {
                 return rCandidate;
             }
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        // comparators with tolerance for 2D PolyPolygons
+
+        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue)
+        {
+            const sal_uInt32 nPolygonCount(rCandidateA.count());
+
+            if(nPolygonCount != rCandidateB.count())
+                return false;
+
+            for(sal_uInt32 a(0); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidateA.getB2DPolygon(a));
+
+                if(!equal(aCandidate, rCandidateB.getB2DPolygon(a), rfSmallValue))
+                    return false;
+            }
+
+            return true;
+        }
+
+        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB)
+        {
+            const double fSmallValue(fTools::getSmallValue());
+
+            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
     } // end of namespace tools
