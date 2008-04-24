@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cpp2uno.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,14 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 #include "share.hxx"
 
+#include <stdio.h>
+#include <string.h>
+
 using namespace com::sun::star::uno;
 
 //#define BRDEBUG
 
 #ifdef BRDEBUG
-#include <stdio.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
