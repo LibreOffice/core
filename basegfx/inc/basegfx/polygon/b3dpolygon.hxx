@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolygon.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,12 +78,12 @@ namespace basegfx
         sal_uInt32 count() const;
 
         // Coordinate interface
-        ::basegfx::B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
-        void setB3DPoint(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rValue);
+        basegfx::B3DPoint getB3DPoint(sal_uInt32 nIndex) const;
+        void setB3DPoint(sal_uInt32 nIndex, const basegfx::B3DPoint& rValue);
 
         // Coordinate insert/append
-        void insert(sal_uInt32 nIndex, const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
-        void append(const ::basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
+        void insert(sal_uInt32 nIndex, const basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
+        void append(const basegfx::B3DPoint& rPoint, sal_uInt32 nCount = 1);
 
         // insert/append other 2D polygons
         void insert(sal_uInt32 nIndex, const B3DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
@@ -109,7 +109,7 @@ namespace basegfx
         void removeDoublePoints();
 
         // apply transformation given in matrix form to the polygon
-        void transform(const ::basegfx::B3DHomMatrix& rMatrix);
+        void transform(const basegfx::B3DHomMatrix& rMatrix);
     };
 } // end of namespace basegfx
 
