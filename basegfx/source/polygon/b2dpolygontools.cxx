@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolygontools.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2743,6 +2743,57 @@ namespace basegfx
             }
 
             return rCandidate;
+        }
+
+        //////////////////////////////////////////////////////////////////////
+        // comparators with tolerance for 2D Polygons
+
+        bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, const double& rfSmallValue)
+        {
+            const sal_uInt32 nPointCount(rCandidateA.count());
+
+            if(nPointCount != rCandidateB.count())
+                return false;
+
+            const bool bClosed(rCandidateA.isClosed());
+
+            if(bClosed != rCandidateB.isClosed())
+                return false;
+
+            const bool bAreControlPointsUsed(rCandidateA.areControlPointsUsed());
+
+            if(bAreControlPointsUsed != rCandidateB.areControlPointsUsed())
+                return false;
+
+            for(sal_uInt32 a(0); a < nPointCount; a++)
+            {
+                const B2DPoint aPoint(rCandidateA.getB2DPoint(a));
+
+                if(!aPoint.equal(rCandidateB.getB2DPoint(a), rfSmallValue))
+                    return false;
+
+                if(bAreControlPointsUsed)
+                {
+                    const basegfx::B2DPoint aPrev(rCandidateA.getPrevControlPoint(a));
+
+                    if(!aPrev.equal(rCandidateB.getPrevControlPoint(a), rfSmallValue))
+                        return false;
+
+                    const basegfx::B2DPoint aNext(rCandidateA.getNextControlPoint(a));
+
+                    if(!aNext.equal(rCandidateB.getNextControlPoint(a), rfSmallValue))
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool equal(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB)
+        {
+            const double fSmallValue(fTools::getSmallValue());
+
+            return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
     } // end of namespace tools
