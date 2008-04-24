@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,8 +48,8 @@ SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL1IMPLIB = itesttdmanager
 DEF1NAME = $(SHL1TARGET)
 
-.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
-SHL1VERSIONMAP = testtdmanager.LINUXIgcc3.map
+.IF "$(COMNAME)" == "gcc3"
+SHL1VERSIONMAP = testtdmanager.gcc3.map
 .ELSE
 SHL1VERSIONMAP = testtdmanager.map
 .ENDIF
