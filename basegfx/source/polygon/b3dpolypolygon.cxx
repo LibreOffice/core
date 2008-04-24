@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygon.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,15 +58,11 @@ public:
     {
     }
 
-    bool isEqual(const ImplB3DPolyPolygon& rPolygonList) const
+    bool operator==(const ImplB3DPolyPolygon& rPolygonList) const
     {
         // same polygon count?
         if(maPolygons.size() != rPolygonList.maPolygons.size())
             return false;
-
-        // if zero polygons the polys are equal
-        if(!maPolygons.size())
-            return true;
 
         // compare polygon content
         if(maPolygons != rPolygonList.maPolygons)
@@ -214,7 +210,7 @@ namespace basegfx
         if(mpPolyPolygon.same_object(rPolyPolygon.mpPolyPolygon))
             return true;
 
-        return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
+        return ((*mpPolyPolygon) == (*rPolyPolygon.mpPolyPolygon));
     }
 
     bool B3DPolyPolygon::operator!=(const B3DPolyPolygon& rPolyPolygon) const
