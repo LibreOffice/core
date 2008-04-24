@@ -120,3 +120,7 @@
 09/26/07 (JSC): TaskID=i80473
   update reference type library with the rleased version of OO.org 2.3. The new
   reference type library is taken from the release source tree OOG680 m5.
+
+03/17/08 (TL, JSC): TaskID=i85576
+  remove two never implemented properties 'TopMargin' and 'ButtomMargin' from
+  com.sun.star.text.CellRange. 
