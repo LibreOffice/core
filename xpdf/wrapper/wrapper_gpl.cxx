@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrapper_gpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2007-12-05 14:16:44 $
+ *  last change: $Author: ihi $ $Date: 2008-04-24 18:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include "pdfioutdev_gpl.hxx"
+#include "SecurityHandler.h"
 #ifdef WNT
 # include <io.h>
 # include <fcntl.h>  /*_O_BINARY*/
@@ -93,8 +94,20 @@ int main(int argc, char **argv)
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
+    // Check various permissions.
+   if ( !aDoc.okToPrint() ||
+        !aDoc.okToChange()||
+        !aDoc.okToCopy()||
+        !aDoc.okToAddNotes() )
+   {
+       return 1;
+   }
+
+
 
     if( !aDoc.isOk() )
+        return 1;
+    if ((userPassword[0] != '\001')||(ownerPassword[0] != '\001'))
         return 1;
 
     pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
