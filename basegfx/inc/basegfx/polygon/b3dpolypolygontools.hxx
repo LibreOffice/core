@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b3dpolypolygontools.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,11 @@ namespace basegfx
         // If fFullDashDotLen is not given it will be calculated from the given
         // raDashDotArray.
         ::basegfx::B3DPolyPolygon applyLineDashing(const ::basegfx::B3DPolyPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+
+        //////////////////////////////////////////////////////////////////////
+        // comparators with tolerance for 3D PolyPolygons
+        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue);
+        bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB);
 
     } // end of namespace tools
 } // end of namespace basegfx
