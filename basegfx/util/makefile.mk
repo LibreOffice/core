@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,6 +72,10 @@ DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
 
 DEF1DES		=BaseGFX
 DEFLIB1NAME	=basegfx
+
+LIB2TARGET=$(LB)$/$(TARGET)_s.lib
+LIB2ARCHIV=$(LB)$/lib$(TARGET)_s.a
+LIB2FILES=$(LIB1FILES)
 
 # --- Targets -----------------------------------------------------------
 
