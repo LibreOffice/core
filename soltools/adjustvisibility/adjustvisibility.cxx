@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adjustvisibility.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <limits>
+#include <stdio.h>
 
 // Note: There is no GELF_ST_VISIBILITY macro in gelf.h, we roll our own.
 #define GELF_ST_VISIBILITY(o)   ((o)&0x3) // See "Linker and Libraries Guide".
