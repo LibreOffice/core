@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.185 $
-# Date:        $Date: 2008-04-08 15:16:24 $
+# Version:     $Revision: 1.186 $
+# Date:        $Date: 2008-04-24 17:04:50 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -2008,6 +2008,7 @@ ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
+ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
