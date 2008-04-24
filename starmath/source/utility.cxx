@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: utility.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,30 +129,6 @@ void SmPickList::Remove(const void *pItem)
         }
 }
 
-void SmPickList::SetSize(USHORT nNewSize)
-{
-    nSize = nNewSize;
-
-    while (Count() > nSize)
-    {
-        DestroyItem(GetPtr(Count() - 1));
-        RemovePtr(Count() - 1, 1);
-    }
-}
-
-
-BOOL SmPickList::Contains(const void *pItem) const
-{
-    USHORT  nPos;
-
-    for (nPos = 0; nPos < Count(); nPos++)
-        if (CompareItem(GetPtr(nPos), pItem))
-            return TRUE;
-
-    return FALSE;
-}
-
-
 void SmPickList::Clear()
 {
     USHORT  nPos;
@@ -273,14 +249,6 @@ IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
     SelectEntryPos(0);
 
     return 0;
-}
-
-
-SmFontPickListBox::SmFontPickListBox(Window* pParent, WinBits nWinStyle, USHORT nMax) :
-    SmFontPickList(nMax, nMax),
-    ListBox(pParent, nWinStyle)
-{
-    SetSelectHdl(LINK(this, SmFontPickListBox, SelectHdl));
 }
 
 
