@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,8 +79,8 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
-SHL1VERSIONMAP = component.LINUXIgcc3.map
+.IF "$(COMNAME)" == "gcc3"
+SHL1VERSIONMAP = component.gcc3.map
 .ELSE
 SHL1VERSIONMAP = component.map
 .ENDIF
@@ -102,8 +102,8 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
-SHL2VERSIONMAP = component.LINUXIgcc3.map
+.IF "$(COMNAME)" == "gcc3"
+SHL2VERSIONMAP = component.gcc3.map
 .ELSE
 SHL2VERSIONMAP = component.map
 .ENDIF
