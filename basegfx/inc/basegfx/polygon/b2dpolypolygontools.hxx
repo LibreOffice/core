@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: b2dpolypolygontools.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -194,6 +194,11 @@ namespace basegfx
 
         // #i76891# Try to remove existing curve segments if they are simply edges
         B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
+
+        //////////////////////////////////////////////////////////////////////
+        // comparators with tolerance for 2D PolyPolygons
+        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
+        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
     } // end of namespace tools
 } // end of namespace basegfx
