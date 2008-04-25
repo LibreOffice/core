@@ -173,7 +173,7 @@ OpenOffice_Dev
 			USE_FILEVERSION 0
 			JAVAPRODUCT 1
 			LIBRARYVERSION 9.0.0
-			PATCHCODEFILE ooo_patchcodes.txt
+			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp

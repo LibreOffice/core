@@ -1,0 +1,3 @@
+# OpenOffice Dev UpgradeCode
+
+{E54FAE36-AEA4-4964-B4BB-CE9D4CEB4B3E}	# OOo Dev UpgradeCode
