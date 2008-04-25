@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shellexec.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,7 +215,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( m_aDesktopEnvironment.getLength() > 0 )
         {
             OString aDesktopEnvironment(m_aDesktopEnvironment.toAsciiLowerCase());
-            OStringBuffer aCopy(aBuffer);
+            OStringBuffer aCopy(aTmp);
 
             aCopy.append(aDesktopEnvironment);
             aCopy.append("-open-url");
