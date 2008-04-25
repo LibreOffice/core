@@ -219,7 +219,7 @@ endif
 # Linux specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "linux-gnu"
+ifneq (,$(findstring linux,$(PLATFORM)))
 # Settings for Linux using gcc compiler
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1 | sed -e 's/^i.86$$/i386/')
