@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,8 +354,10 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
             }
         }
         else
+        {
             /* should be removed by optimizer in product version */
             PERROR( "osl_openDirectory", path );
+        }
     }
 
     rtl_uString_release( ustrSystemPath );
@@ -755,7 +757,9 @@ oslFileError osl_closeFile( oslFileHandle Handle )
 
                 /* release the file share lock on this file */
                 if( -1 == fcntl( pHandleImpl->fd, F_SETLK, &aflock ) )
+                {
                     PERROR( "osl_closeFile", "unlock failed" );
+                }
             }
         }
 
@@ -2695,7 +2699,7 @@ static oslFileError osl_mountFloppy(oslVolumeDeviceHandle hFloppy)
     oslVolumeDeviceHandleImpl* pItem=0;
     int nRet;
     sal_Char  pszCmd[PATH_MAX];
-    sal_Char* pszMountProg = "mount";
+    const sal_Char* pszMountProg = "mount";
     sal_Char* pszSuDo = 0;
     sal_Char* pszTmp = 0;
 
@@ -2830,7 +2834,7 @@ static oslFileError osl_unmountFloppy(oslVolumeDeviceHandle hFloppy)
     sal_Char pszCmd[PATH_MAX];
     sal_Char* pszTmp = 0;
     sal_Char* pszSuDo = 0;
-    sal_Char* pszUmountProg = "umount";
+    const sal_Char* pszUmountProg = "umount";
 
     pszCmd[0] = '\0';
 
