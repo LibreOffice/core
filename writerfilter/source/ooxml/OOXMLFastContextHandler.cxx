@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OOXMLFastContextHandler.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,7 +150,8 @@ void OOXMLPropertySetToTagHandler::sprm(Sprm & rSprm)
     pTag->addAttr("name", sName);
 
     static char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "0x%lx, %ld", rSprm.getId(),
+    snprintf(sBuffer, sizeof(sBuffer),
+             "0x%" SAL_PRIxUINT32 "x, %" SAL_PRIxUINT32 "d", rSprm.getId(),
              rSprm.getId());
     pTag->addAttr("id", sBuffer);
     pTag->addAttr("value", rSprm.getValue()->toString());
