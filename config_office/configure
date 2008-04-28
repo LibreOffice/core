@@ -25814,6 +25814,7 @@ fi
 done
 
    WITH_ANT_HOME=$with_ant_home
+   ANT_HOME=$with_ant_home
 fi
 
 if test -z "$ANT"; then
