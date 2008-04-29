@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opropertybag.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,19 +58,16 @@ namespace comphelper
 {
 //........................................................................
 
-    namespace
+    struct SAL_DLLPRIVATE UnoTypeLess : public ::std::unary_function< ::com::sun::star::uno::Type, bool >
     {
-        struct SAL_DLLPRIVATE UnoTypeLess : public ::std::unary_function< ::com::sun::star::uno::Type, bool >
+        inline bool operator()( const ::com::sun::star::uno::Type& _rLHS, const ::com::sun::star::uno::Type& _rRHS ) const
         {
-            inline bool operator()( const ::com::sun::star::uno::Type& _rLHS, const ::com::sun::star::uno::Type& _rRHS ) const
-            {
-                return rtl_ustr_compare(
-                    _rLHS.getTypeLibType()->pTypeName->buffer,
-                    _rRHS.getTypeLibType()->pTypeName->buffer
-                ) < 0;
-            }
-        };
-    }
+            return rtl_ustr_compare(
+                _rLHS.getTypeLibType()->pTypeName->buffer,
+                _rRHS.getTypeLibType()->pTypeName->buffer
+            ) < 0;
+        }
+    };
 
     typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any >     MapInt2Any;
     typedef ::std::set< ::com::sun::star::uno::Type, UnoTypeLess >  TypeBag;
