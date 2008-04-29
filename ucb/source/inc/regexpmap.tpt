@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: regexpmap.tpt,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +47,9 @@
 
 using namespace ucb_impl;
 
+namespace ucb_impl {
+
 //============================================================================
-namespace {
 
 template< typename Val >
 struct Entry
@@ -63,15 +64,11 @@ struct Entry
 //============================================================================
 template< typename Val > class List: public std::list< Entry< Val > > {};
 
-}
-
 //============================================================================
 //
 //  RegexpMapIterImpl
 //
 //============================================================================
-
-namespace ucb_impl {
 
 template< typename Val >
 class RegexpMapIterImpl
