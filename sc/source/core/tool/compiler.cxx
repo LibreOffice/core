@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -460,7 +460,9 @@ ScCompiler::OpCodeMapPtr ScCompiler::CreateOpCodeMap(
             if (pArr->Token.Data >>= aExternalName)
                 xMap->putExternal( pArr->Name, aExternalName);
             else
+            {
                 DBG_ERRORFILE( "ScCompiler::CreateOpCodeMap: no Token.Data external name");
+            }
         }
     }
     return xMap;
