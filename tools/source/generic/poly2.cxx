@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poly2.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +45,10 @@ extern "C"
 #endif // HAVE_GPC_H
 }
 
+/*
 #include <cstring>
 #include <cmath>
+*/
 #include <poly.h>
 #ifndef _POLY_HXX
 #include <tools/poly.hxx>
