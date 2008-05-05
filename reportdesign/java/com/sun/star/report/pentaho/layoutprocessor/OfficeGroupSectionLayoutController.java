@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeGroupSectionLayoutController.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@ import org.jfree.report.ReportProcessingException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.layouting.util.AttributeMap;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.OfficeGroupSection;
 
 /**
@@ -65,18 +66,18 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
       throws DataSourceException, ReportProcessingException, ReportDataFactoryException
   {
     final OfficeGroupSection section = (OfficeGroupSection) getElement();
-    if (section.isRepeatSection() == false)
+    if (!section.isRepeatSection())
     {
       return super.startElement(target);
     }
 
     final LayoutController controller = getParent();
-    if (controller instanceof OfficeGroupLayoutController == false)
+    if (!(controller instanceof OfficeGroupLayoutController))
     {
       return super.startElement(target);
     }
     final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
-    if (oglc.isNormalFlowProcessing() == false)
+    if (!oglc.isNormalFlowProcessing())
     {
       return super.startElement(target);
     }
@@ -94,7 +95,7 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
   {
     final AttributeMap attrs = super.computeAttributes(fc, element, target);
     final LayoutController controller = getParent();
-    if (controller instanceof OfficeGroupLayoutController == false)
+    if (!(controller instanceof OfficeGroupLayoutController))
     {
       return attrs;
     }
@@ -104,7 +105,7 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
       return attrs;
     }
 
-    attrs.setAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section", "true");
+    attrs.setAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section", OfficeToken.TRUE);
     return attrs;
   }
 

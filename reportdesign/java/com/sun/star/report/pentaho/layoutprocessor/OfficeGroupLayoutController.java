@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeGroupLayoutController.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ public class OfficeGroupLayoutController extends SectionLayoutController
       controller.state =
           OfficeGroupLayoutController.STATE_PROCESS_REPEATING_FOOTER;
 
-      if (repeatHeader == false)
+      if (!repeatHeader)
       {
         return controller;
       }
@@ -136,7 +136,7 @@ public class OfficeGroupLayoutController extends SectionLayoutController
           (OfficeGroupLayoutController) clone();
       controller.state = OfficeGroupLayoutController.STATE_PROCESS_NORMAL_FLOW;
 
-      if (repeatFooter == false)
+      if (!repeatFooter)
       {
         return controller;
       }
@@ -148,11 +148,6 @@ public class OfficeGroupLayoutController extends SectionLayoutController
     }
 
     return super.processContent(target);
-  }
-
-  protected void resetSectionForRepeat()
-  {
-    super.resetSectionForRepeat();
   }
 
   /**
