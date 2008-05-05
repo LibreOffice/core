@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: enumeration.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,8 +52,6 @@ class Enumeration
     sal_Int32 mnIndex;
 
 public:
-    Enumeration( const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& );
-
     Enumeration( com::sun::star::container::XIndexAccess* );
 
     virtual sal_Bool SAL_CALL hasMoreElements()
