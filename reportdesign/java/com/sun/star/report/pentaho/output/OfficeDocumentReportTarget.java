@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDocumentReportTarget.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +47,9 @@ import java.util.zip.InflaterInputStream;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.OutputRepository;
+import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.layoutprocessor.ImageElementContext;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeStyle;
@@ -55,7 +57,7 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
 import com.sun.star.report.pentaho.styles.StyleMapper;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.jfree.io.IOUtils;
 import org.jfree.layouting.input.style.parser.CSSValueFactory;
 import org.jfree.layouting.input.style.parser.StyleSheetParserUtil;
@@ -98,6 +100,7 @@ import org.w3c.css.sac.LexicalUnit;
  */
 public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 {
+    public static final String HORIZONTAL_POS = "horizontal-pos";
 
     public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
     public static final int ROLE_NONE = 0;
@@ -114,7 +117,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final int ROLE_TEMPLATE = 11;
     public static final int ROLE_SPREADSHEET_PAGE_HEADER = 12;
     public static final int ROLE_SPREADSHEET_PAGE_FOOTER = 13;
-    public static final int ROLE_P_BODY = 14;
+
     public static final int STATE_IN_DOCUMENT = 0;
     public static final int STATE_IN_BODY = 1;
     public static final int STATE_IN_CONTENT = 2;
@@ -124,20 +127,16 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final int STATE_IN_OTHER = 6;
     public static final int STATE_IN_GROUP_INSTANCE = 7;
     public static final String FAILED = "Failed";
-    public static final String GRAPHIC = "graphic";
-    public static final String GRAPHICS = "Graphics";
-    public static final String GRAPHIC_PROPERTIES = "graphic-properties";
-    public static final String PARAGRAPH = "paragraph";
-    public static final String TRUE = "true";
-    public static final String STYLE_NAME = "style-name";
-    public static final String BACKGROUND_COLOR = "background-color";
+    public static final String VERTICAL_POS = "vertical-pos";
+    private static final String ZERO_CM = "0cm";
+
 
     protected static class BufferState
     {
 
-        private XmlWriter xmlWriter;
-        private MemoryByteArrayOutputStream xmlBuffer;
-        private OfficeStylesCollection stylesCollection;
+        private final XmlWriter xmlWriter;
+        private final MemoryByteArrayOutputStream xmlBuffer;
+        private final OfficeStylesCollection stylesCollection;
 
         protected BufferState(final XmlWriter xmlWriter,
                 final MemoryByteArrayOutputStream xmlBuffer,
@@ -191,7 +190,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected static class GroupContext
     {
 
-        private GroupContext parent;
+        private final GroupContext parent;
         private int iterationCount;
         private boolean groupWithRepeatingSection;
 
@@ -234,9 +233,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     '}';
         }
     }
-    private FastStack states;
+    private final FastStack states;
     private int currentRole;
-    private FastStack xmlWriters;
+    private final FastStack xmlWriters;
     private XmlWriter rootXmlWriter;
     /**
      * This styles-collection contains all styles that were predefined in the report definition file. The common styles
@@ -252,16 +251,17 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
      * The content styles collection contains all automatic styles that have been generated for the normal-flow content.
      */
     private OfficeStylesCollection contentStylesCollection;
-    private OutputRepository outputRepository;
-    private AttributeNameGenerator tableNameGenerator;
-    private AttributeNameGenerator autoStyleNameGenerator;
-    private String target;
+    private final OutputRepository outputRepository;
+    private final AttributeNameGenerator tableNameGenerator;
+    private final AttributeNameGenerator frameNameGenerator;
+    private final AttributeNameGenerator autoStyleNameGenerator;
+    private final String target;
     private static final int INITIAL_BUFFER_SIZE = 40960;
     private StyleMapper styleMapper;
     private StyleSheetParserUtil styleSheetParserUtil;
-    private AttributeNameGenerator imageNames;
-    private ImageProducer imageProducer;
-    private OleProducer oleProducer;
+    private final AttributeNameGenerator imageNames;
+    private final ImageProducer imageProducer;
+    private final OleProducer oleProducer;
     private GroupContext groupContext;
     private static final boolean DEBUG_ELEMENTS =
             JFreeReportBoot.getInstance().getExtendedConfig().getBoolProperty("com.sun.star.report.pentaho.output.DebugElements");
@@ -289,6 +289,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         this.target = target;
 
         this.tableNameGenerator = new AttributeNameGenerator();
+        this.frameNameGenerator = new AttributeNameGenerator();
         this.autoStyleNameGenerator = new AttributeNameGenerator();
         this.outputRepository = outputRepository;
         this.states = new FastStack();
@@ -372,27 +373,28 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             autoStyleNameGenerator.reset();
             tableNameGenerator.reset();
+            frameNameGenerator.reset();
 
             final OfficeDocument reportDoc = (OfficeDocument) report;
             predefinedStylesCollection = reportDoc.getStylesCollection();
 
             final OfficeStyles commonStyles = predefinedStylesCollection.getCommonStyles();
-            if (commonStyles.containsStyle(GRAPHIC,GRAPHICS) == false)
+            if (!commonStyles.containsStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS))
             {
                 final OfficeStyle graphicsDefaultStyle = new OfficeStyle();
-                graphicsDefaultStyle.setStyleFamily(GRAPHIC);
-                graphicsDefaultStyle.setStyleName(GRAPHICS);
-                final Element graphicProperties = produceFirstChild(graphicsDefaultStyle, OfficeNamespaces.STYLE_NS,GRAPHIC_PROPERTIES);
-                graphicProperties.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",PARAGRAPH);
-                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "x", "0cm");
-                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "y", "0cm");
+                graphicsDefaultStyle.setStyleFamily(OfficeToken.GRAPHIC);
+                graphicsDefaultStyle.setStyleName(OfficeToken.GRAPHICS);
+                final Element graphicProperties = produceFirstChild(graphicsDefaultStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
+                graphicProperties.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",OfficeToken.PARAGRAPH);
+                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "x",ZERO_CM);
+                graphicProperties.setAttribute(OfficeNamespaces.SVG_NS, "y",ZERO_CM);
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "wrap", "dynamic");
                 graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "number-wrapped-paragraphs", "no-limit");
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "wrap-contour", "false");
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-pos", "top");
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-rel",PARAGRAPH);
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "horizontal-pos", "center");
-                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "horizontal-rel",PARAGRAPH);
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "wrap-contour", OfficeToken.FALSE);
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, VERTICAL_POS, "from-top"); // changed for chart
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-rel",OfficeToken.PARAGRAPH);
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS,HORIZONTAL_POS, "from-left"); // changed for chart
+                graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "horizontal-rel",OfficeToken.PARAGRAPH);
                 commonStyles.addStyle(graphicsDefaultStyle);
             }
 
@@ -511,12 +513,12 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     else
                     {
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_OTHER));
-                        if (isFilteredNamespace(ReportTargetUtil.getNamespaceFromAttribute(attrs)) == false)
+                        if (!isFilteredNamespace(ReportTargetUtil.getNamespaceFromAttribute(attrs)))
                         {
                             startOther(attrs);
                         }
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_BODY:
                 {
@@ -529,7 +531,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     {
                         throw new IllegalStateException("The 'office:body' element must have exactly one child of type 'report'");
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_CONTENT:
                 {
@@ -545,15 +547,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         // Either a template-section, page-header, page-footer, report-header, report-footer
                         // or variables-section
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
-                        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "report-pre-body", attrs))
-                        {
-                            currentRole = OfficeDocumentReportTarget.ROLE_P_BODY;
-                        }
-                        else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "report-post-body", attrs))
-                        {
-                            currentRole = OfficeDocumentReportTarget.ROLE_P_BODY;
-                        }
-                        else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "template", attrs))
+                        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "template", attrs))
                         {
                             currentRole = OfficeDocumentReportTarget.ROLE_TEMPLATE;
                         }
@@ -598,7 +592,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         startReportSection(attrs, currentRole);
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
                 {
@@ -628,7 +622,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         startReportSection(attrs, currentRole);
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP:
                 {
@@ -643,12 +637,12 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         // repeating group header/footer, but *no* variables section
                         states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
                         if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs) &&
-                                TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
+                                OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
                         {
                             currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER;
                         }
                         else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs) &&
-                                TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
+                                OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
                         {
                             currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER;
                         }
@@ -659,7 +653,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         startReportSection(attrs, currentRole);
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE:
                 {
@@ -690,19 +684,19 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         startReportSection(attrs, currentRole);
                     }
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_SECTION:
                 {
                     states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_OTHER));
                     startOther(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_OTHER:
                 {
                     states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_OTHER));
                     startOther(attrs);
-                    return;
+                    break;
                 }
                 default:
                     throw new IllegalStateException("Failure: " + getCurrentState());
@@ -710,7 +704,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException ioe)
         {
-            ioe.printStackTrace();
+            Log.error("ReportProcessing failed", ioe);
             throw new ReportProcessingException("Failed to write content", ioe);
         }
 //    finally
@@ -784,7 +778,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
         return (role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER ||
                 role == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_P_BODY ||
                 role == OfficeDocumentReportTarget.ROLE_TEMPLATE);
     }
 
@@ -804,7 +797,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             throws IOException, DataSourceException, ReportProcessingException
     {
         final Object repeatingHeaderOrFooter = attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeating-header-or-footer");
-        if (TRUE.equals(repeatingHeaderOrFooter))
+        if (OfficeToken.TRUE.equals(repeatingHeaderOrFooter))
         {
             getGroupContext().setGroupWithRepeatingSection(true);
         }
@@ -930,39 +923,39 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                 case OfficeDocumentReportTarget.STATE_IN_OTHER:
                 {
                     endOther(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_SECTION:
                 {
                     endReportSection(attrs, currentRole);
                     currentRole = OfficeDocumentReportTarget.ROLE_NONE;
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP:
                 {
                     endGroup(attrs);
                     groupContext = groupContext.getParent();
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE:
                 {
                     endGroupInstance(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
                 {
                     endGroupBody(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_CONTENT:
                 {
                     endContent(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_BODY:
                 {
                     endBody(attrs);
-                    return;
+                    break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_DOCUMENT:
                 {
@@ -1132,7 +1125,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            Log.error("ReportProcessing failed", e);
         }
         return state;
     }
@@ -1175,6 +1168,13 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     final String saneName = sanitizeName(tableName);
                     attrList.setAttribute(attrNamespace, key,
                             tableNameGenerator.generateName(saneName));
+                }
+                else if (OfficeNamespaces.DRAWING_NS.equals(attrNamespace) &&
+                        "name".equals(key))
+                {
+                    final String objectName = String.valueOf(entry.getValue());
+                    attrList.setAttribute(attrNamespace, key,
+                            frameNameGenerator.generateName(objectName));
                 }
                 else
                 {
@@ -1253,8 +1253,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected void startImageProcessing(final AttributeMap attrs)
             throws ReportProcessingException
     {
-        final Object imageData = attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "image-data");
-        final boolean preserveIRI = TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "preserve-IRI"));
+        final Object imageData = attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, OfficeToken.IMAGE_DATA);
+        final boolean preserveIRI = OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, OfficeToken.PRESERVE_IRI));
 
         // for the first shot, do nothing fancy ..
         final ImageProducer.OfficeImage image = imageProducer.produceImage(imageData, preserveIRI);
@@ -1293,29 +1293,29 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     final CSSNumericValue normalizedImageHeight =
                             CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
 
-                    final boolean scale = TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "scale"));
-                    if (scale == false && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
+                    final boolean scale = OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, OfficeToken.SCALE));
+                    if (!scale  && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
                     {
                         final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
                         final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
                         if (clipWidth > 0 && clipHeight > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(GRAPHIC,GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(");
                             buffer.append(clipHeight / 2);
                             buffer.append(imageAreaHeightVal.getType().getType());
-                            buffer.append(" ");
+                            buffer.append(' ');
                             buffer.append(clipWidth / 2);
                             buffer.append(imageAreaWidthVal.getType().getType());
-                            buffer.append(" ");
+                            buffer.append(' ');
                             buffer.append(clipHeight / 2);
                             buffer.append(imageAreaHeightVal.getType().getType());
-                            buffer.append(" ");
+                            buffer.append(' ');
                             buffer.append(clipWidth / 2);
                             buffer.append(imageAreaWidthVal.getType().getType());
-                            buffer.append(")");
+                            buffer.append(')');
                             graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
 
                             styleName = imageStyle.getStyleName();
@@ -1323,8 +1323,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         else if (clipWidth > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(GRAPHIC,GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(0cm ");
                             buffer.append(clipWidth / 2);
@@ -1332,7 +1332,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                             buffer.append(" 0cm ");
                             buffer.append(clipWidth / 2);
                             buffer.append(imageAreaWidthVal.getType().getType());
-                            buffer.append(")");
+                            buffer.append(')');
                             graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
 
                             styleName = imageStyle.getStyleName();
@@ -1341,8 +1341,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                         }
                         else if (clipHeight > 0)
                         {
-                            final OfficeStyle imageStyle = deriveStyle(GRAPHIC,GRAPHICS);
-                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,GRAPHIC_PROPERTIES);
+                            final OfficeStyle imageStyle = deriveStyle(OfficeToken.GRAPHIC,OfficeToken.GRAPHICS);
+                            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS,OfficeToken.GRAPHIC_PROPERTIES);
                             final StringBuffer buffer = new StringBuffer();
                             buffer.append("rect(");
                             buffer.append(clipHeight / 2);
@@ -1379,25 +1379,25 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             frameList.setAttribute(OfficeNamespaces.DRAWING_NS, "name", imageNames.generateName("Image"));
             if (styleName != null)
             {
-                frameList.setAttribute(OfficeNamespaces.DRAWING_NS, "style-name", styleName);
+                frameList.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, styleName);
             }
-            frameList.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",PARAGRAPH);
+            frameList.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type",OfficeToken.PARAGRAPH);
             frameList.setAttribute(OfficeNamespaces.SVG_NS, "z-index", "0");
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x", "0cm");
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", "0cm");
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x",ZERO_CM);
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y",ZERO_CM);
 
             Log.debug("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
 
             if (imageAreaWidthVal != null)
             {
                 frameList.setAttribute(OfficeNamespaces.SVG_NS,
-                        "width", String.valueOf(imageAreaWidthVal.getValue()) + imageAreaWidthVal.getType().getType());
+                        "width", imageAreaWidthVal.getValue() + imageAreaWidthVal.getType().getType());
             }
 
             if (imageAreaHeightVal != null)
             {
                 frameList.setAttribute(OfficeNamespaces.SVG_NS,
-                        "height", String.valueOf(imageAreaHeightVal.getValue()) + imageAreaHeightVal.getType().getType());
+                        "height", imageAreaHeightVal.getValue() + imageAreaHeightVal.getType().getType());
             }
 
 
@@ -1411,7 +1411,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             try
             {
                 getXmlWriter().writeTag(OfficeNamespaces.DRAWING_NS, "frame", frameList, XmlWriterSupport.OPEN);
-                getXmlWriter().writeTag(OfficeNamespaces.DRAWING_NS, "image", imageList, XmlWriterSupport.CLOSE);
+                getXmlWriter().writeTag(OfficeNamespaces.DRAWING_NS, OfficeToken.IMAGE, imageList, XmlWriterSupport.CLOSE);
                 getXmlWriter().writeCloseTag();
             }
             catch (IOException ioe)
@@ -1456,7 +1456,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected CSSNumericValue computeRowHeight(final String rowStyle)
     {
         final OfficeStylesCollection contentStyles = getContentStylesCollection();
-        final OfficeStyle style = contentStyles.getStyle("table-row", rowStyle);
+        final OfficeStyle style = contentStyles.getStyle(OfficeToken.TABLE_ROW, rowStyle);
         if (style != null)
         {
             final Element element = style.getTableRowProperties();
@@ -1477,7 +1477,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
 
         final OfficeStylesCollection globalStyles = getGlobalStylesCollection();
-        final OfficeStyle globalStyle = globalStyles.getStyle("table-row", rowStyle);
+        final OfficeStyle globalStyle = globalStyles.getStyle(OfficeToken.TABLE_ROW, rowStyle);
         if (globalStyle != null)
         {
             final Element element = globalStyle.getTableRowProperties();
@@ -1497,7 +1497,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
 
         final OfficeStylesCollection predefStyles = getPredefinedStylesCollection();
-        final OfficeStyle predefStyle = predefStyles.getStyle("table-row", rowStyle);
+        final OfficeStyle predefStyle = predefStyles.getStyle(OfficeToken.TABLE_ROW, rowStyle);
         if (predefStyle != null)
         {
             final Element element = predefStyle.getTableRowProperties();
@@ -1522,7 +1522,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     protected CSSNumericValue computeColumnWidth(final String colStyle)
     {
         final OfficeStylesCollection contentStyles = getContentStylesCollection();
-        final OfficeStyle style = contentStyles.getStyle("table-column", colStyle);
+        final OfficeStyle style = contentStyles.getStyle(OfficeToken.TABLE_COLUMN, colStyle);
         if (style != null)
         {
             final Element element = style.getTableColumnProperties();
@@ -1543,7 +1543,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
 
         final OfficeStylesCollection globalStyles = getGlobalStylesCollection();
-        final OfficeStyle globalStyle = globalStyles.getStyle("table-column", colStyle);
+        final OfficeStyle globalStyle = globalStyles.getStyle(OfficeToken.TABLE_COLUMN, colStyle);
         if (globalStyle != null)
         {
             final Element element = globalStyle.getTableColumnProperties();
@@ -1563,7 +1563,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
 
         final OfficeStylesCollection predefStyles = getPredefinedStylesCollection();
-        final OfficeStyle predefStyle = predefStyles.getStyle("table-column", colStyle);
+        final OfficeStyle predefStyle = predefStyles.getStyle(OfficeToken.TABLE_COLUMN, colStyle);
         if (predefStyle != null)
         {
             final Element element = predefStyle.getTableColumnProperties();
@@ -1605,9 +1605,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     {
         final String classId = (String) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "class-id");
         final String chartUrl = (String) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "href");
-        final Vector masterColumns = (Vector) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "master-columns");
-        final Vector masterValues = (Vector) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "master-values");
-        final Vector detailColumns = (Vector) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "detail-columns");
+        final ArrayList masterColumns = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "master-columns");
+        final ArrayList masterValues = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_VALUES);
+        final ArrayList detailColumns = (ArrayList) attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.DETAIL_COLUMNS);
         final String href = oleProducer.produceOle(chartUrl, masterColumns, masterValues, detailColumns);
 
         final AttributeList oleList = new AttributeList();
@@ -1619,7 +1619,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
         try
         {
-            getXmlWriter().writeTag(OfficeNamespaces.DRAWING_NS, "object-ole", oleList, XmlWriterSupport.CLOSE);
+            getXmlWriter().writeTag(OfficeNamespaces.DRAWING_NS, OfficeToken.OBJECT_OLE, oleList, XmlWriterSupport.CLOSE);
         }
         catch (IOException ioe)
         {
