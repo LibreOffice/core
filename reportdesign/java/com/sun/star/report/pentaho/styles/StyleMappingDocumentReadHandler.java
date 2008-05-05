@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleMappingDocumentReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,12 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import java.util.ArrayList;
 
+import java.util.List;
 import org.jfree.xmlns.parser.AbstractXmlReadHandler;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.SAXException;
@@ -46,69 +45,64 @@ import org.xml.sax.Attributes;
  */
 public class StyleMappingDocumentReadHandler extends AbstractXmlReadHandler
 {
-  private StyleMapper styleMapper;
-  private ArrayList mappings;
 
-  public StyleMappingDocumentReadHandler()
-  {
-    this.mappings = new ArrayList();
-    this.styleMapper = new StyleMapper();
-  }
+    private final StyleMapper styleMapper;
+    private final List mappings;
 
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (isSameNamespace(uri) == false)
+    public StyleMappingDocumentReadHandler()
     {
-      return null;
+        this.mappings = new ArrayList();
+        this.styleMapper = new StyleMapper();
     }
-    if ("mapping".equals(tagName))
+
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      final StyleMappingReadHandler smr = new StyleMappingReadHandler();
-      mappings.add(smr);
-      return smr;
+        if (isSameNamespace(uri) && "mapping".equals(tagName))
+        {
+            final StyleMappingReadHandler smr = new StyleMappingReadHandler();
+            mappings.add(smr);
+            return smr;
+        }
+        return null;
     }
-    return null;
-  }
 
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    for (int i = 0; i < mappings.size(); i++)
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
     {
-      final StyleMappingReadHandler handler =
-          (StyleMappingReadHandler) mappings.get(i);
-      styleMapper.addMapping(handler.getRule());
+        for (int i = 0; i < mappings.size(); i++)
+        {
+            final StyleMappingReadHandler handler =
+                    (StyleMappingReadHandler) mappings.get(i);
+            styleMapper.addMapping(handler.getRule());
+        }
     }
-  }
 
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject()
-      throws SAXException
-  {
-    return styleMapper;
-  }
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject()
+            throws SAXException
+    {
+        return styleMapper;
+    }
 }

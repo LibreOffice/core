@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleMapperXmlFactoryModule.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import org.jfree.xmlns.parser.XmlDocumentInfo;
@@ -43,36 +41,34 @@ import org.jfree.xmlns.parser.XmlReadHandler;
  */
 public class StyleMapperXmlFactoryModule implements XmlFactoryModule
 {
-  public static final String NAMESPACE =
-      "http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper";
 
-  public StyleMapperXmlFactoryModule()
-  {
-  }
+    public static final String NAMESPACE =
+            "http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper";
 
-  public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
-  {
-    return new StyleMappingDocumentReadHandler();
-  }
-
-  public int getDocumentSupport(final XmlDocumentInfo documentInfo)
-  {
-    final String rootNamespace = documentInfo.getRootElementNameSpace();
-    if (StyleMapperXmlFactoryModule.NAMESPACE.equals(rootNamespace) == false)
+    public StyleMapperXmlFactoryModule()
     {
-      return XmlFactoryModule.NOT_RECOGNIZED;
     }
 
-    if ("style-mapper-definition".equals(documentInfo.getRootElement()))
+    public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
     {
-      return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
+        return new StyleMappingDocumentReadHandler();
     }
-    return XmlFactoryModule.NOT_RECOGNIZED;
-  }
 
-  public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
-  {
-    return null;
-  }
+    public int getDocumentSupport(final XmlDocumentInfo documentInfo)
+    {
+        final String rootNamespace = documentInfo.getRootElementNameSpace();
+        if (StyleMapperXmlFactoryModule.NAMESPACE.equals(rootNamespace) &&
+                "style-mapper-definition".equals(documentInfo.getRootElement()))
+        {
+
+            return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
+        }
+        return XmlFactoryModule.NOT_RECOGNIZED;
+    }
+
+    public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
+    {
+        return null;
+    }
 }
 

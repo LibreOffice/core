@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleMappingRule.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +39,9 @@ package com.sun.star.report.pentaho.styles;
  */
 public class StyleMappingRule
 {
-  private StyleMapperKey key;
-  private String family;
-  private boolean listOfValues;
+  private final StyleMapperKey key;
+  private final String family;
+  private final boolean listOfValues;
 
 
   public StyleMappingRule(final StyleMapperKey key, final String family,

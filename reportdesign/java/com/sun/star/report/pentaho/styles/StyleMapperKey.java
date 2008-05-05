@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleMapperKey.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 /**
@@ -39,100 +37,87 @@ package com.sun.star.report.pentaho.styles;
  */
 public final class StyleMapperKey
 {
-  private String elementNamespace;
-  private String elementName;
-  private String attributeNamespace;
-  private String attributeName;
-  private int hashCode;
 
-  public StyleMapperKey(final String elementNamespace,
-                        final String elementName,
-                        final String attributeNamespace,
-                        final String attributeName)
-  {
-    if (elementNamespace == null)
+    private final String elementNamespace;
+    private final String elementName;
+    private final String attributeNamespace;
+    private final String attributeName;
+    private final int hashCode;
+
+    public StyleMapperKey(final String elementNamespace,
+            final String elementName,
+            final String attributeNamespace,
+            final String attributeName)
     {
-      throw new NullPointerException();
-    }
-    if (elementName == null)
-    {
-      throw new NullPointerException();
-    }
+        if (elementNamespace == null)
+        {
+            throw new NullPointerException();
+        }
+        if (elementName == null)
+        {
+            throw new NullPointerException();
+        }
 
-    this.elementNamespace = elementNamespace;
-    this.elementName = elementName;
-    this.attributeNamespace = attributeNamespace;
-    this.attributeName = attributeName;
-    this.hashCode = computeHashCode();
-  }
-
-  public String getElementNamespace()
-  {
-    return elementNamespace;
-  }
-
-  public String getElementName()
-  {
-    return elementName;
-  }
-
-  public String getAttributeNamespace()
-  {
-    return attributeNamespace;
-  }
-
-  public String getAttributeName()
-  {
-    return attributeName;
-  }
-
-  public boolean equals(final Object o)
-  {
-    if (this == o)
-    {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass())
-    {
-      return false;
+        this.elementNamespace = elementNamespace;
+        this.elementName = elementName;
+        this.attributeNamespace = attributeNamespace;
+        this.attributeName = attributeName;
+        this.hashCode = computeHashCode();
     }
 
-    final StyleMapperKey that = (StyleMapperKey) o;
-
-    if (attributeName != null ? !attributeName.equals(
-        that.attributeName) : that.attributeName != null)
+    public String getElementNamespace()
     {
-      return false;
-    }
-    if (attributeNamespace != null ? !attributeNamespace.equals(
-        that.attributeNamespace) : that.attributeNamespace != null)
-    {
-      return false;
-    }
-    if (!elementName.equals(that.elementName))
-    {
-      return false;
-    }
-    if (!elementNamespace.equals(that.elementNamespace))
-    {
-      return false;
+        return elementNamespace;
     }
 
-    return true;
-  }
+    public String getElementName()
+    {
+        return elementName;
+    }
 
-  private int computeHashCode()
-  {
-    int result;
-    result = elementNamespace.hashCode();
-    result = 31 * result + elementName.hashCode();
-    result = 31 * result + (attributeNamespace != null ? attributeNamespace.hashCode() : 0);
-    result = 31 * result + (attributeName != null ? attributeName.hashCode() : 0);
-    return result;
-  }
+    public String getAttributeNamespace()
+    {
+        return attributeNamespace;
+    }
 
-  public int hashCode()
-  {
-    return hashCode;
-  }
+    public String getAttributeName()
+    {
+        return attributeName;
+    }
+
+    public boolean equals(final Object o)
+    {
+        if (this != o)
+        {
+            if (o == null || getClass() != o.getClass())
+            {
+                return false;
+            }
+
+            final StyleMapperKey that = (StyleMapperKey) o;
+
+            if ((attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null) ||
+                    (attributeNamespace != null ? !attributeNamespace.equals(that.attributeNamespace) : that.attributeNamespace != null) ||
+                    !elementName.equals(that.elementName) || !elementNamespace.equals(that.elementNamespace))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private int computeHashCode()
+    {
+        int result = elementNamespace.hashCode();
+        result = 31 * result + elementName.hashCode();
+        result = 31 * result + (attributeNamespace != null ? attributeNamespace.hashCode() : 0);
+        result = 31 * result + (attributeName != null ? attributeName.hashCode() : 0);
+        return result;
+    }
+
+    public int hashCode()
+    {
+        return hashCode;
+    }
 }

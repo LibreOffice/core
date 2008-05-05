@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DefaultJobProperties.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +36,12 @@ import java.util.HashMap;
 import com.sun.star.report.JobProperties;
 import com.sun.star.report.ReportEngineMetaData;
 import com.sun.star.report.JobDefinitionException;
+import java.util.Map;
 
 public class DefaultJobProperties implements JobProperties
 {
-  private ReportEngineMetaData metaData;
-  private HashMap properties;
+  private final ReportEngineMetaData metaData;
+  private final Map properties;
 
   public DefaultJobProperties (final ReportEngineMetaData metaData)
   {
@@ -65,7 +66,7 @@ public class DefaultJobProperties implements JobProperties
     {
       throw new JobDefinitionException("The parameter name is not known: " + key);
     }
-    if (type.isInstance(value) == false)
+    if (!type.isInstance(value))
     {
       throw new JobDefinitionException("The parameter value is not understood");
     }

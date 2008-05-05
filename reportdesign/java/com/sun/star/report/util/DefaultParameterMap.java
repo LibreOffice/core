@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DefaultParameterMap.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,11 @@ package com.sun.star.report.util;
 import java.util.HashMap;
 
 import com.sun.star.report.ParameterMap;
+import java.util.Map;
 
 public class DefaultParameterMap implements ParameterMap
 {
-  private HashMap backend;
+  private final Map backend;
 
   public DefaultParameterMap ()
   {
