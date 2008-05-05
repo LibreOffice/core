@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppView.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
 #include "IAppElementNotification.hxx"
@@ -612,9 +615,9 @@ void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
             if ( xNameAccess.is() && xNameAccess->hasByName(_sName) )
                 m_xObject.set(xNameAccess->getByName(_sName),UNO_QUERY);
         }
-        catch(Exception)
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception caught!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         if ( m_xObject.is() )
             startComponentListening(m_xObject);
