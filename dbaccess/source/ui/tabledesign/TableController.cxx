@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableController.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -521,10 +521,10 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         aDlg.Execute();
         bError = sal_True;
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
         bError = sal_True;
-        OSL_ENSURE(sal_False, "OTableController::doSaveDoc: table could not be inserted (caught a generic exception)!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if ( aInfo.isValid() )
@@ -585,9 +585,9 @@ void OTableController::doEditIndexes()
                 aFieldNames = xCols->getElementNames();
         }
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "OTableController::doEditIndexes: caught an exception while retrieving the indexes/columns!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if (!xIndexes.is())
@@ -615,9 +615,9 @@ void OTableController::impl_initialize()
 
         assignTable();
     }
-    catch(const SQLException&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "OTableController::initialize: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     try
@@ -637,9 +637,9 @@ void OTableController::impl_initialize()
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
     }
-    catch(const SQLException&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "OTableController::initialize: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -845,13 +845,13 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
             }
         }
     }
-    catch(SQLException& e)
+    catch(const SQLException& )
     {
-        showError(SQLExceptionInfo(e));
+        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "OTableController::appendColumns: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1251,7 +1251,7 @@ void OTableController::alterColumns()
                         throw;
                     }
                 }
-                // exceptions are catched outside
+                // exceptions are caught outside
                 xNewColumn = NULL;
                 if(xColumns->hasByName(pField->GetName()))
                     xColumns->getByName(pField->GetName()) >>= xColumn;
@@ -1483,9 +1483,9 @@ void OTableController::dropPrimaryKey()
             }
         }
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -1631,9 +1631,9 @@ void OTableController::reSyncRows()
             sTitle += ::rtl::OUString::valueOf(getCurrentStartNumber());
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while setting the title!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return sTitle;
 }
