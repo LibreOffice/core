@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeStylesReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,14 +41,15 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.data.DataStyleReadHandler;
+import java.util.List;
 
 public class OfficeStylesReadHandler extends ElementReadHandler
 {
-  private ArrayList textStyleChilds;
-  private ArrayList dataStyleChilds;
-  private ArrayList otherStyleChilds;
-  private ArrayList pageLayoutChilds;
-  private OfficeStyles officeStyles;
+  private final List textStyleChilds;
+  private final List dataStyleChilds;
+  private final List otherStyleChilds;
+  private final List pageLayoutChilds;
+  private final OfficeStyles officeStyles;
 
   public OfficeStylesReadHandler(final OfficeStyles officeStyles)
   {

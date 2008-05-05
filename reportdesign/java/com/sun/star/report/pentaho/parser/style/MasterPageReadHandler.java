@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterPageReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
@@ -48,8 +49,8 @@ import org.xml.sax.SAXException;
  */
 public class MasterPageReadHandler extends ElementReadHandler
 {
-  private OfficeMasterPage masterPage;
-  private ArrayList otherHandlers;
+  private final OfficeMasterPage masterPage;
+  private final List otherHandlers;
 
   public MasterPageReadHandler()
   {

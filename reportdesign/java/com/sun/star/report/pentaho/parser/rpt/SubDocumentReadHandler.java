@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SubDocumentReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,9 @@ package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.ObjectOleElement;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.parser.draw.ObjectOleReadHandler;
 import com.sun.star.report.pentaho.parser.text.NoCDATATextContentReadHandler;
-import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.jfree.xmlns.parser.IgnoreAnyChildReadHandler;
@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
 public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
 {
 
-    private ObjectOleElement element = null;
+    private final ObjectOleElement element;
     private boolean ignore = false;
 
     public SubDocumentReadHandler(final ObjectOleElement element)
@@ -63,8 +63,7 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
 
     public SubDocumentReadHandler(final Section section)
     {
-        super(section);
-        this.element = new ObjectOleElement();
+        this(section, new ObjectOleElement());
         ignore = true;
     }
 
@@ -114,14 +113,18 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
         }
         if (OfficeNamespaces.DRAWING_NS.equals(uri))
         {
-            XmlReadHandler readHandler = null;
-            if ("object-ole".equals(tagName))
+            final XmlReadHandler readHandler;
+            if (OfficeToken.OBJECT_OLE.equals(tagName))
             {
                 readHandler = new ObjectOleReadHandler(element);
             }
             else if ("frame".equals(tagName))
             {
                 readHandler = new SubDocumentReadHandler(new Section(), element);
+            }
+            else
+            {
+                readHandler = null;
             }
             if (readHandler != null)
             {
@@ -130,11 +133,5 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
             }
         }
         return super.getHandlerForChild(uri, tagName, atts);
-    }
-
-    public Element getElement()
-    {
-
-        return super.getElement();
     }
 }

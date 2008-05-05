@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StyleDefinitionReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ package com.sun.star.report.pentaho.parser.style;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -47,8 +48,8 @@ import org.xml.sax.SAXException;
  */
 public class StyleDefinitionReadHandler extends ElementReadHandler
 {
-  private Section rawSection;
-  private ArrayList childs;
+  private final Section rawSection;
+  private final List childs;
 
   public StyleDefinitionReadHandler()
   {

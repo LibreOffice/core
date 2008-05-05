@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterDetailReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +44,8 @@ import org.xml.sax.SAXException;
 public class MasterDetailReadHandler extends ElementReadHandler
 {
 
-    private ObjectOleElement element;
-    private boolean parseMasterDetail;
+    private final ObjectOleElement element;
+    private final boolean parseMasterDetail;
 
     public MasterDetailReadHandler(final ObjectOleElement element)
     {
@@ -71,8 +71,11 @@ public class MasterDetailReadHandler extends ElementReadHandler
         if (parseMasterDetail)
         {
             final String master = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "master");
-            final String detail = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "detail");
-            element.addMasterDetailFields(master, detail);
+            if (master != null && master.length() > 0 )
+            {
+                final String detail = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "detail");
+                element.addMasterDetailFields(master, detail);
+            }
         }
     }
 
@@ -89,14 +92,11 @@ public class MasterDetailReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri) && "master-detail-field".equals(tagName))
         {
             // expect a report control. The control will modifiy the current
             // element (as we do not separate the elements that strictly ..)
-            if ("master-detail-field".equals(tagName))
-            {
-                return new MasterDetailReadHandler(element, true);
-            }
+            return new MasterDetailReadHandler(element, true);
         }
 
         return null;
