@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentcontroller.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
 #include "documentcontroller.hxx"
-#endif
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
 
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace dbaui
@@ -125,7 +122,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ModelControllerConnector::impl_connect: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -140,7 +137,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ModelControllerConnector::impl_disconnect: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
