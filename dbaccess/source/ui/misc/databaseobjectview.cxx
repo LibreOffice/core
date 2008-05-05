@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databaseobjectview.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
@@ -148,7 +151,11 @@ namespace dbaui
     {
         Sequence< PropertyValue > aDispatchArgs;
         fillDispatchArgs( aDispatchArgs, _rDataSource, _rObjectName );
-        return doDispatch( ::comphelper::concatSequences( aDispatchArgs, _rCreationArgs ) );
+
+        ::comphelper::NamedValueCollection aDispArgs( aDispatchArgs );
+        aDispArgs.merge( _rCreationArgs, true );
+
+        return doDispatch( aDispArgs.getPropertyValues() );
     }
 
     //----------------------------------------------------------------------
@@ -189,9 +196,9 @@ namespace dbaui
                 if ( xReturn.is() )
                     xReturn.set(m_xFrameLoader,UNO_QUERY);
             }
-            catch(Exception&)
+            catch( const Exception& )
             {
-                OSL_ENSURE(sal_False, "DatabaseObjectView::getDispatcher: caught an exception while loading the component!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         return xReturn;
