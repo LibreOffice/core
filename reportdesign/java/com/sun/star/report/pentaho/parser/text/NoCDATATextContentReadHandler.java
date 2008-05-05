@@ -10,7 +10,9 @@ import com.sun.star.report.pentaho.parser.rpt.FixedContentReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.FormattedTextReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ImageReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.parser.rpt.SubDocumentReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Section;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.StaticText;
@@ -28,7 +30,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
 {
 
     private Section section;
-    private ArrayList children;
+    private List children;
     private boolean copyType;
 
     public NoCDATATextContentReadHandler(final Section section,
@@ -93,7 +95,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
                 children.add(formattedTextReadHandler);
                 return formattedTextReadHandler;
             }
-            if ("image".equals(tagName))
+            if (OfficeToken.IMAGE.equals(tagName))
             {
                 final ImageReadHandler imageReadHandler = new ImageReadHandler();
                 children.add(imageReadHandler);
@@ -108,8 +110,8 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
         }
         if (OfficeNamespaces.DRAWING_NS.equals(uri))
         {
-            XmlReadHandler readHandler = null;
-            if ("image".equals(tagName))
+            final XmlReadHandler readHandler;
+            if (OfficeToken.IMAGE.equals(tagName))
             {
                 readHandler = new ImageReadHandler();
             }
@@ -128,7 +130,7 @@ public class NoCDATATextContentReadHandler extends ElementReadHandler
         }
     }
 
-    public ArrayList getChildren()
+    public List getChildren()
     {
         return children;
     }
