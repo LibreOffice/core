@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarReportModule.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ public class StarReportModule extends AbstractModule
    * @throws org.jfree.base.modules.ModuleInitializeException
    *          if an error ocurred while initializing the module.
    */
-  public void initialize (SubSystem subSystem)
+  public void initialize (final SubSystem subSystem)
           throws ModuleInitializeException
   {
 

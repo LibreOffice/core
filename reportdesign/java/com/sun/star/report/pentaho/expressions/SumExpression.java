@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SumExpression.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,13 +47,13 @@ public class SumExpression implements ReportExpression
     return parameters;
   }
 
-  public Object getValue (DataRow row)
+  public Object getValue (final DataRow row)
   {
 
     return null;
   }
 
-  public void setParameters (Object[] parameters)
+  public void setParameters (final Object[] parameters)
   {
     this.parameters = parameters;
   }

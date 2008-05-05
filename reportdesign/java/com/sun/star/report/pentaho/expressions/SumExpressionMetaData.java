@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SumExpressionMetaData.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +37,13 @@ import com.sun.star.report.ReportExpressionMetaData;
 
 public class SumExpressionMetaData implements ReportExpressionMetaData
 {
-  public String getDescription (Locale l)
+  public String getDescription (final Locale l)
   {
     // todo implement me
     return null;
   }
 
-  public String getDisplayName (Locale l)
+  public String getDisplayName (final Locale l)
   {
     // todo implement me
     return null;
@@ -61,19 +61,19 @@ public class SumExpressionMetaData implements ReportExpressionMetaData
     return 0;
   }
 
-  public String getParameterDescription (int param, Locale locale)
+  public String getParameterDescription (final int param,final  Locale locale)
   {
     // todo implement me
     return null;
   }
 
-  public String getParameterDisplayName (int param, Locale locale)
+  public String getParameterDisplayName (final int param,final  Locale locale)
   {
     // todo implement me
     return null;
   }
 
-  public String getParameterName (int param)
+  public String getParameterName (final int param)
   {
     // todo implement me
     return null;

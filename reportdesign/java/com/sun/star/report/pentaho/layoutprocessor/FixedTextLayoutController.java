@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedTextLayoutController.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,11 +68,7 @@ public class FixedTextLayoutController
     final FlowController controller = getFlowController();
     final GlobalMasterRow masterRow = controller.getMasterRow();
     final ReportDataRow reportDataRow = masterRow.getReportDataRow();
-    if (reportDataRow.getCursor() == 0)
-    {
-      return true;
-    }
-    return false;
+    return reportDataRow.getCursor() == 0;
   }
 
   protected LayoutController delegateContentGeneration

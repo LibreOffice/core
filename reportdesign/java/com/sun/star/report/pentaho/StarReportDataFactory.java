@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarReportDataFactory.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ import com.sun.star.report.DataSourceFactory;
 
 public class StarReportDataFactory implements ReportDataFactory, Cloneable
 {
-  private DataSourceFactory backend;
+  private final DataSourceFactory backend;
 
   public StarReportDataFactory (DataSourceFactory backend)
   {
