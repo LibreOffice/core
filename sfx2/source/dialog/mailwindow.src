@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailwindow.src,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,120 +30,7 @@
 
 #include "dialog.hrc"
 #include "helpid.hrc"
-/*#include "mailwindow.hrc"*/
-/*
-Window RID_MAIL_WINDOW
-{
-    HelpId = SID_MAIL_CHILDWIN ;
-    Pos = MAP_APPFONT( 0, 0 );
-    Size = MAP_APPFONT( 323, 87 );
-    DialogControl = TRUE ;
-    PushButton PB_MAILWIN_SEND
-    {
-        HelpId = HID_MAILWIN_SEND_BUTTON;
-        Pos = MAP_APPFONT( 6, 6 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-        Text [ en-US ] = "Send";
-    };
-    PushButton PB_MAILWIN_CLOSE
-    {
-        HelpId = HID_MAILWIN_CLOSE_BUTTON;
-        Pos = MAP_APPFONT( 6, 23 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-        Text [ en-US ] = "Close";
-    };
-    ListBox LB_MAILWIN_ROLE
-    {
-        HelpId = HID_MAILWIN_ROLE_BOX;
-        Border = TRUE ;
-        Pos = MAP_APPFONT( 62, 6 );
-        Size = MAP_APPFONT( 42, 30 );
-        DropDown = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "To" ; 1 ; > ;
-            < "Copy" ; 2 ; > ;
-            < "Blind Copy" ; 3 ; > ;
-        };
-    };
-    Edit ED_MAILWIN_ROLE
-    {
-        HelpId = HID_MAILWIN_ADDRESS_EDIT;
-        Border = TRUE;
-        Pos = MAP_APPFONT( 107, 6 );
-        Size = MAP_APPFONT( 210, 12 );
-    };
-    ListBox LB_MAILWIN_ADDRESS
-    {
-        HelpId = HID_MAILWIN_ADDRESS_BOX;
-        Border = TRUE ;
-        Pos = MAP_APPFONT( 107, 21 );
-        Size = MAP_APPFONT( 210, 30 );
-        AutoHScroll = TRUE ;
-    };
-    FixedText FT_MAILWIN_SUBJECT
-    {
-        Pos = MAP_APPFONT( 62, 55 );
-        Size = MAP_APPFONT( 42, 10 );
-        Text [ en-US ] = "Subject:";
-    };
-    Edit ED_MAILWIN_SUBJECT
-    {
-        HelpId = HID_MAILWIN_SUBJECT_EDIT;
-        Border = TRUE;
-        Pos = MAP_APPFONT( 107, 54 );
-        Size = MAP_APPFONT( 210, 12 );
-    };
-    FixedText FT_MAILWIN_FROM
-    {
-        Pos = MAP_APPFONT( 62, 70 );
-        Size = MAP_APPFONT( 42, 10 );
-        Text [ en-US ] = "From:";
-    };
-    Edit ED_MAILWIN_FROM
-    {
-        HelpId = HID_MAILWIN_FROM_EDIT;
-        Border = TRUE;
-        Pos = MAP_APPFONT( 107, 69 );
-        Size = MAP_APPFONT( 120, 12 );
-    };
-    FixedText FT_MAILWIN_PRIO
-    {
-        Pos = MAP_APPFONT( 230, 70 );
-        Size = MAP_APPFONT( 33, 10 );
-        Right = TRUE;
-        Text [ en-US ] = "Priority:";
-    };
-    ListBox LB_MAILWIN_PRIO
-    {
-        HelpId = HID_MAILWIN_PRIO_BOX;
-        Border = TRUE;
-        Pos = MAP_APPFONT( 266, 69 );
-        Size = MAP_APPFONT( 51, 48 );
-        DropDown = TRUE;
-        StringList [ en-US ] =
-        {
-            < "Urgent" ; 1 ; > ;
-            < "Important" ; 2 ; > ;
-            < "Normal" ; 3 ; > ;
-            < "Low" ; 4 ; > ;
-            < "Lowest" ; 5 ; > ;
-        };
-    };
-    Image IMG_MAILWIN_SEND
-    {
-        ImageBitmap = Bitmap { File = "sc05364.bmp" ; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-    };
-    Image IMG_MAILWIN_CLOSE
-    {
-        ImageBitmap = Bitmap { File = "sc05503.bmp" ; };
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-    };
-};
-*/
+
 // RID_ERRBOX_MAIL_CONFIG ---------------------------------------------------
 
 ErrorBox RID_ERRBOX_MAIL_CONFIG
