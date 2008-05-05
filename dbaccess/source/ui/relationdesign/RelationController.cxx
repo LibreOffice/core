@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationController.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,6 +150,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -328,9 +331,9 @@ void ORelationController::impl_initialize()
         if(m_vTableData.empty())
             Execute(ID_BROWSER_ADDTABLE,Sequence<PropertyValue>());
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "ORelationController::initialize: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -404,9 +407,9 @@ void ORelationController::loadData()
     {
         showError(SQLExceptionInfo(e));
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
