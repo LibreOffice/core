@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationControl.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_TABLECONNECTIONDATA_HXX
 #include "TableConnectionData.hxx"
@@ -425,9 +428,9 @@ namespace dbaui
                 m_pListCell->InsertEntry(String(), 0);
             }
         }
-        catch(SQLException&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception caught while compose tablename!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     // -----------------------------------------------------------------------------
