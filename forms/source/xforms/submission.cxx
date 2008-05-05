@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: submission.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -353,13 +353,6 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 
     return ( aResult == CSubmission::SUCCESS );
 }
-
-
-void Submission::releaseModel()
-{
-    mxModel = NULL;
-}
-
 
 Sequence<sal_Int8> Submission::getUnoTunnelID()
 {
