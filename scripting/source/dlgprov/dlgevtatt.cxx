@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgevtatt.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,9 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-
+#ifdef FAKE_VBA_EVENT_SUPPORT
+#include <org/openoffice/vba/XVBAToOOEventDescGen.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -68,15 +70,111 @@ using namespace ::com::sun::star::reflection;
 //.........................................................................
 namespace dlgprov
 {
+
+  class DialogSFScriptListenerImpl : public DialogScriptListenerImpl
+    {
+        protected:
+        Reference< frame::XModel >  m_xModel;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
+        public:
+        DialogSFScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel ) : DialogScriptListenerImpl( rxContext ), m_xModel( rxModel ) {}
+    };
+
+  class DialogLegacyScriptListenerImpl : public DialogSFScriptListenerImpl
+    {
+        protected:
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
+        public:
+        DialogLegacyScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel ) : DialogSFScriptListenerImpl( rxContext, rxModel ){}
+    };
+
+  class DialogUnoScriptListenerImpl : public DialogSFScriptListenerImpl
+    {
+    Reference< awt::XControl > m_xControl;
+        Reference< XInterface > m_xHandler;
+    Reference< beans::XIntrospectionAccess > m_xIntrospectionAccess;
+    bool m_bDialogProviderMode;
+
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
+
+    public:
+        DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
+            const Reference< frame::XModel >& rxModel,
+            const Reference< awt::XControl >& rxControl,
+            const Reference< XInterface >& rxHandler,
+            const Reference< beans::XIntrospectionAccess >& rxIntrospectionAccess,
+            bool bDialogProviderMode );     // false: ContainerWindowProvider mode
+
+    };
+
+#ifdef FAKE_VBA_EVENT_SUPPORT
+  class DialogVBAScriptListenerImpl : public DialogScriptListenerImpl
+    {
+        protected:
+        rtl::OUString msDialogCodeName;
+        Reference<  script::XScriptListener > mxListener;
+        virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet );
+        public:
+        DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel );
+    };
+
+    DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel ) : DialogScriptListenerImpl( rxContext )
+    {
+        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+        if ( xSMgr.is() )
+        {
+            Sequence< Any > args(1);
+            args[0] <<= xModel;
+            mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.EventListener" ) ), args, m_xContext ), UNO_QUERY );
+        }
+        if ( rxControl.is() )
+        {
+            Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY );
+            try
+            {
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= msDialogCodeName;
+            }
+            catch ( Exception&  ) {}
+        }
+
+    }
+
+    void DialogVBAScriptListenerImpl::firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* )
+    {
+        if ( aScriptEvent.ScriptType.equals( rtl::OUString::createFromAscii("VBAInterop") ) && mxListener.is() )
+        {
+            ScriptEvent aScriptEventCopy( aScriptEvent );
+            aScriptEventCopy.ScriptCode = msDialogCodeName;
+            try
+            {
+                mxListener->firing( aScriptEventCopy );
+            }
+            catch( Exception& ) {}
+        }
+    }
+#endif
+
 //.........................................................................
 
     // =============================================================================
     // DialogEventsAttacherImpl
     // =============================================================================
 
-    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext )
+    DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener   )
         :m_xContext( rxContext )
     {
+        // key listeners by protocol when ScriptType = 'Script'
+        // otherwise key is the ScriptType e.g. StarBasic
+        if ( rxRTLListener.is() ) // set up handler for RTL_BASIC
+            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = rxRTLListener;
+        else
+            listernersForTypes[ rtl::OUString::createFromAscii("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
+        // handler for Script & ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" )
+        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
+        listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
+#ifdef FAKE_VBA_EVENT_SUPPORT
+        listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );
+#endif
     }
 
     // -----------------------------------------------------------------------------
@@ -86,11 +184,117 @@ namespace dlgprov
     }
 
     // -----------------------------------------------------------------------------
+    Reference< script::XScriptListener >
+    DialogEventsAttacherImpl::getScriptListenerForKey( const rtl::OUString& sKey ) throw ( RuntimeException )
+    {
+        ListenerHash::iterator it = listernersForTypes.find( sKey );
+        if ( it == listernersForTypes.end() )
+            throw RuntimeException(); // more text info here please
+        return it->second;
+    }
+#ifdef FAKE_VBA_EVENT_SUPPORT
+    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl )
+    {
+        Reference< XScriptEventsSupplier > xEventsSupplier;
+        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+        if ( xSMgr.is() )
+        {
+            Reference< org::openoffice::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
+            if ( xVBAToOOEvtDesc.is() )
+                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl ), UNO_QUERY );
+
+        }
+        return xEventsSupplier;
+    }
+#endif
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
+    {
+        if ( xEventsSupplier.is() )
+        {
+            Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
+
+            Reference< XControlModel > xControlModel = xControl->getModel();
+            if ( xEventCont.is() )
+            {
+                Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
+                const ::rtl::OUString* pNames = aNames.getConstArray();
+                sal_Int32 nNameCount = aNames.getLength();
+
+                for ( sal_Int32 j = 0; j < nNameCount; ++j )
+                {
+                    ScriptEventDescriptor aDesc;
+
+                    Any aElement = xEventCont->getByName( pNames[ j ] );
+                    aElement >>= aDesc;
+                    rtl::OUString sKey = aDesc.ScriptType;
+                    if ( aDesc.ScriptType.equals( rtl::OUString::createFromAscii("Script" ) ) || aDesc.ScriptType.equals( rtl::OUString::createFromAscii("UNO" ) ) )
+                    {
+                        sal_Int32 nIndex = aDesc.ScriptCode.indexOf( ':' );
+                        sKey = aDesc.ScriptCode.copy( 0, nIndex );
+                    }
+                    Reference< XAllListener > xAllListener =
+                        new DialogAllListenerImpl( getScriptListenerForKey( sKey ), aDesc.ScriptType, aDesc.ScriptCode );
+
+                    // try first to attach event to the ControlModel
+                    bool bSuccess = false;
+                    try
+                    {
+                        Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
+                            xControlModel, xAllListener, Helper, aDesc.ListenerType,
+                            aDesc.AddListenerParam, aDesc.EventMethod );
+
+                        if ( xListener_.is() )
+                            bSuccess = true;
+                    }
+                    catch ( IllegalArgumentException& )
+                    {
+                    }
+                    catch ( IntrospectionException& )
+                    {
+                    }
+                    catch ( CannotCreateAdapterException& )
+                    {
+                    }
+                    catch ( ServiceNotRegisteredException& )
+                    {
+                    }
+
+                    try
+                    {
+                        // if we had no success, try to attach to the control
+                        if ( !bSuccess )
+                        {
+                            Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
+                                xControl, xAllListener, Helper, aDesc.ListenerType,
+                                aDesc.AddListenerParam, aDesc.EventMethod );
+                        }
+                    }
+                    catch( IllegalArgumentException& )
+                    {
+                    }
+                    catch( IntrospectionException& )
+                    {
+                    }
+                    catch( CannotCreateAdapterException& )
+                    {
+                    }
+                    catch( ServiceNotRegisteredException& )
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------------
     // XScriptEventsAttacher
     // -----------------------------------------------------------------------------
 
     void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
-        const Reference< XScriptListener >& xListener, const Any& Helper )
+        const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>&,
+        const Any& Helper )
         throw (IllegalArgumentException, IntrospectionException, CannotCreateAdapterException,
                ServiceNotRegisteredException, RuntimeException)
     {
@@ -132,73 +336,11 @@ namespace dlgprov
             // get XEventsSupplier from control model
             Reference< XControlModel > xControlModel = xControl->getModel();
             Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
-            if ( xEventsSupplier.is() )
-            {
-                Reference< container::XNameContainer > xEventCont = xEventsSupplier->getEvents();
-                if ( xEventCont.is() )
-                {
-                    Sequence< ::rtl::OUString > aNames = xEventCont->getElementNames();
-                    const ::rtl::OUString* pNames = aNames.getConstArray();
-                    sal_Int32 nNameCount = aNames.getLength();
-
-                    for ( sal_Int32 j = 0; j < nNameCount; ++j )
-                    {
-                        ScriptEventDescriptor aDesc;
-
-                        Any aElement = xEventCont->getByName( pNames[ j ] );
-                        aElement >>= aDesc;
-                        Reference< XAllListener > xAllListener =
-                            new DialogAllListenerImpl( xListener, aDesc.ScriptType, aDesc.ScriptCode );
-
-                        // try first to attach event to the ControlModel
-                        bool bSuccess = false;
-                        try
-                        {
-                            Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
-                                xControlModel, xAllListener, Helper, aDesc.ListenerType,
-                                aDesc.AddListenerParam, aDesc.EventMethod );
-
-                            if ( xListener_.is() )
-                                bSuccess = true;
-                        }
-                        catch ( IllegalArgumentException& )
-                        {
-                        }
-                        catch ( IntrospectionException& )
-                        {
-                        }
-                        catch ( CannotCreateAdapterException& )
-                        {
-                        }
-                        catch ( ServiceNotRegisteredException& )
-                        {
-                        }
-
-                        try
-                        {
-                            // if we had no success, try to attach to the control
-                            if ( !bSuccess )
-                            {
-                                Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
-                                    xControl, xAllListener, Helper, aDesc.ListenerType,
-                                    aDesc.AddListenerParam, aDesc.EventMethod );
-                            }
-                        }
-                        catch( IllegalArgumentException& )
-                        {
-                        }
-                        catch( IntrospectionException& )
-                        {
-                        }
-                        catch( CannotCreateAdapterException& )
-                        {
-                        }
-                        catch( ServiceNotRegisteredException& )
-                        {
-                        }
-                    }
-                }
-            }
+            attachEventsToControl( xControl, xEventsSupplier, Helper );
+#ifdef FAKE_VBA_EVENT_SUPPORT
+            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl ) );
+            attachEventsToControl( xControl, xEventsSupplier, Helper );
+#endif
         }
     }
 
@@ -279,14 +421,13 @@ namespace dlgprov
     // DialogScriptListenerImpl
     // =============================================================================
 
-    DialogScriptListenerImpl::DialogScriptListenerImpl( const Reference< XComponentContext >& rxContext,
+    DialogUnoScriptListenerImpl::DialogUnoScriptListenerImpl( const Reference< XComponentContext >& rxContext,
             const Reference< ::com::sun::star::frame::XModel >& rxModel,
             const Reference< ::com::sun::star::awt::XControl >& rxControl,
             const Reference< ::com::sun::star::uno::XInterface >& rxHandler,
             const Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
             bool bDialogProviderMode )
-        :m_xContext( rxContext )
-        ,m_xModel( rxModel )
+        : DialogSFScriptListenerImpl( rxContext, rxModel )
         ,m_xControl( rxControl )
         ,m_xHandler( rxHandler )
         ,m_xIntrospectionAccess( rxIntrospectionAccess )
@@ -301,42 +442,8 @@ namespace dlgprov
     }
 
     // -----------------------------------------------------------------------------
-
-    void DialogScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
+    void DialogSFScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
-        static ::rtl::OUString aVndSunStarUNO =
-            ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
-
-        ::rtl::OUString sScriptURL;
-        ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
-
-        bool bUNO = (sScriptCode.indexOf( aVndSunStarUNO ) == 0);
-        if( bUNO )
-        {
-            handleUnoScript( aScriptEvent, pRet );
-            return;
-        }
-        else
-        {
-            if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
-            {
-                // StarBasic script: convert ScriptCode to scriptURL
-                sal_Int32 nIndex = sScriptCode.indexOf( ':' );
-                if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
-                {
-                    sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
-                    sScriptURL += sScriptCode.copy( nIndex + 1 );
-                    sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
-                    sScriptURL += sScriptCode.copy( 0, nIndex );
-                }
-            }
-            else
-            {
-                // scripting framework script: ScriptCode contains scriptURL
-                sScriptURL = sScriptCode;
-            }
-        }
-
         try
         {
             Reference< provider::XScriptProvider > xScriptProvider;
@@ -370,7 +477,7 @@ namespace dlgprov
 
             if ( xScriptProvider.is() )
             {
-                Reference< provider::XScript > xScript = xScriptProvider->getScript( sScriptURL );
+                Reference< provider::XScript > xScript = xScriptProvider->getScript( aScriptEvent.ScriptCode );
                 OSL_ENSURE( xScript.is(), "DialogScriptListenerImpl::firing_impl: failed to get script" );
 
                 if ( xScript.is() )
@@ -400,7 +507,29 @@ namespace dlgprov
         }
     }
 
-    void DialogScriptListenerImpl::handleUnoScript( const ScriptEvent& aScriptEvent, Any* pRet )
+    void DialogLegacyScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
+    {
+        ::rtl::OUString sScriptURL;
+        ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
+
+    if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
+    {
+        // StarBasic script: convert ScriptCode to scriptURL
+        sal_Int32 nIndex = sScriptCode.indexOf( ':' );
+        if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
+        {
+            sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+            sScriptURL += sScriptCode.copy( nIndex + 1 );
+            sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+            sScriptURL += sScriptCode.copy( 0, nIndex );
+        }
+        ScriptEvent aSFScriptEvent( aScriptEvent );
+        aSFScriptEvent.ScriptCode = sScriptURL;
+        DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
+    }
+    }
+
+    void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
     {
         static ::rtl::OUString sUnoURLScheme = ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
 
