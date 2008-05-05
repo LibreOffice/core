@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,8 @@
 
 #ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
 #define _DBAUI_LINKEDDOCUMENTS_HXX_
+
+#include "AppElementType.hxx"
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -58,6 +60,9 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 
 class Window;
@@ -96,47 +101,42 @@ namespace dbaui
             );
         ~OLinkedDocumentsAccess();
 
-        enum EOpenMode
-        {
-            OPEN_NORMAL,
-            OPEN_DESIGN,
-            OPEN_FORMAIL
-        };
-
         inline sal_Bool isConnected() const { return m_xConnection.is(); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       open(const ::rtl::OUString& _rLinkName
-                                                                                    ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                                                                                    , EOpenMode _eOpenMode = OPEN_NORMAL);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
+                open(
+                    const ::rtl::OUString& _rLinkName,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                    ElementOpenMode _eOpenMode,
+                    const ::comphelper::NamedValueCollection& _rAdditionalArgs
+                );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newDocument(sal_Int32 _nNewFormId
-                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                                ,const sal_Int32 _nCommandType
-                                ,const ::rtl::OUString& _sObjectName);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                newDocument(
+                    sal_Int32 _nNewFormId,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                    const sal_Int32 _nCommandType,
+                    const ::rtl::OUString& _sObjectName
+                );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newWithPilot(
-                            const char* _pWizardService
-                            ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                            ,const sal_Int32 _nCommandType = -1
-                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
-                        );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                newFormWithPilot(
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                    const sal_Int32 _nCommandType = -1,
+                    const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newFormWithPilot(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                            ,const sal_Int32 _nCommandType = -1
-                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
-                        );
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newReportWithPilot(
-                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                            ,const sal_Int32 _nCommandType = -1
-                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
-                        );
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newQueryWithPilot(
-                            const sal_Int32 _nCommandType = -1
-                            ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
-                        );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                newReportWithPilot(
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                    const sal_Int32 _nCommandType = -1,
+                    const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                newQueryWithPilot();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newTableWithPilot();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                newTableWithPilot();
 
         enum RESULT
         {
@@ -144,9 +144,23 @@ namespace dbaui
             SUCCESS,
             CANCEL
         };
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   implOpen(const ::rtl::OUString& _rLinkName
-                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
-                                , EOpenMode _eOpenMode);
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            impl_open(
+                const ::rtl::OUString& _rLinkName,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                ElementOpenMode _eOpenMode,
+                const ::comphelper::NamedValueCollection& _rAdditionalArgs
+            );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            impl_newWithPilot(
+                const char* _pWizardService,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition,
+                const sal_Int32 _nCommandType,
+                const ::rtl::OUString& _rObjectName
+            );
+
     };
 
 //......................................................................
