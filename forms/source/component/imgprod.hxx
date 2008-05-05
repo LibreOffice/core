@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imgprod.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +94,6 @@ public:
 
     void            SetImage( const ::rtl::OUString& rPath );
     void            SetImage( SvStream& rStm );
-    void            SetImage( const Graphic& rGraphic );
 
     void            SetErrorHandler( const Link& rErrorHdl ) { maErrorHdl = rErrorHdl; }
     const Link&     GetErrorHandler() const { return maErrorHdl; }
