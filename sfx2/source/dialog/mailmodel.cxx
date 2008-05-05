@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmodel.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,6 @@
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
-#include "mailwindow.hrc"
 #include "dialog.hrc"
 
 #include <unotools/tempfile.hxx>
