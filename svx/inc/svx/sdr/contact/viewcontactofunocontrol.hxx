@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofunocontrol.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,11 +69,6 @@ namespace sdr { namespace contact {
         /** access control to selected members
         */
         struct SdrUnoObjAccessControl { friend class ::SdrUnoObj; private: SdrUnoObjAccessControl() { } };
-
-        /** retrieves the XControl asscociated with the ViewContact and the given device
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-            getUnoControlForDevice( const OutputDevice* _pDevice, const SdrUnoObjAccessControl& ) const;
 
         /** retrieves a temporary XControl instance, whose parent is the given window
             @seealso SdrUnoObj::GetTemporaryControlForWindow
