@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directsql.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,9 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 //........................................................................
@@ -267,9 +270,9 @@ DBG_NAME(DirectSQLDialog)
         {
             sStatus = e.Message;
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "DirectSQLDialog::implExecuteStatement: caught an (unknown) exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         // add the status text
