@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FieldDescriptions.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
@@ -185,9 +188,9 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
                     SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
-                OSL_ENSURE(0,"Exception catched while getting the props");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -260,9 +263,9 @@ void OFieldDescription::SetName(const ::rtl::OUString& _rName)
         else
             m_sName = _rName;
     }
-    catch(Exception)
+    catch(const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -275,9 +278,9 @@ void OFieldDescription::SetDescription(const ::rtl::OUString& _rDescription)
         else
             m_sDescription = _rDescription;
     }
-    catch(Exception)
+    catch(const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -290,9 +293,9 @@ void OFieldDescription::SetDefaultValue(const Any& _rDefaultValue)
         else
             m_aDefaultValue = _rDefaultValue;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -305,9 +308,9 @@ void OFieldDescription::SetControlDefault(const Any& _rControlDefault)
         else
             m_aControlDefault = _rControlDefault;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -320,9 +323,9 @@ void OFieldDescription::SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncVa
         else
             m_sAutoIncrementValue = _sAutoIncValue;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -338,9 +341,9 @@ void OFieldDescription::SetType(TOTypeInfoSP _pType)
             else
                 m_nType = m_pType->nType;
         }
-        catch(Exception)
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception catched while set a value!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -357,9 +360,9 @@ void OFieldDescription::SetTypeValue(sal_Int32 _nType)
             OSL_ENSURE(!m_pType.get(),"Invalid call here!");
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -372,9 +375,9 @@ void OFieldDescription::SetPrecision(const sal_Int32& _rPrecision)
         else
             m_nPrecision = _rPrecision;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -387,9 +390,9 @@ void OFieldDescription::SetScale(const sal_Int32& _rScale)
         else
             m_nScale = _rScale;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -402,9 +405,9 @@ void OFieldDescription::SetIsNullable(const sal_Int32& _rIsNullable)
         else
             m_nIsNullable = _rIsNullable;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -417,9 +420,9 @@ void OFieldDescription::SetFormatKey(const sal_Int32& _rFormatKey)
         else
             m_nFormatKey = _rFormatKey;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -432,9 +435,9 @@ void OFieldDescription::SetHorJustify(const SvxCellHorJustify& _rHorJustify)
         else
             m_eHorJustify = _rHorJustify;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -447,9 +450,9 @@ void OFieldDescription::SetAutoIncrement(sal_Bool _bAuto)
         else
             m_bIsAutoIncrement = _bAuto;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -594,9 +597,9 @@ void OFieldDescription::SetTypeName(const ::rtl::OUString& _sTypeName)
         else
             m_sTypeName = _sTypeName;
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception catched while set a value!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
