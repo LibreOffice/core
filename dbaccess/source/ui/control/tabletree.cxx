@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabletree.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -496,7 +496,7 @@ SvLBoxEntry* OTableTreeListBox::addedTable( const ::rtl::OUString& _rName )
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OTableTreeListBox::addedTable: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     return NULL;
 }
@@ -582,7 +582,7 @@ SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& 
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OTableTreeListBox::removedTable: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     return NULL;
 }
@@ -597,7 +597,7 @@ void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OTableTreeListBox::removedTable: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
