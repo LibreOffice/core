@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dsbrowserDnD.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,52 +31,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _SBA_UNODATBR_HXX_
-#include "unodatbr.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
-#include "dbtreemodel.hxx"
-#endif
-#ifndef DBACCESS_UI_DBTREEVIEW_HXX
-#include "dbtreeview.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBU_BRW_HRC_
-#include "dbu_brw.hrc"
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
-#include "QEnumTypes.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include "dbtreemodel.hxx"
+#include "dbtreeview.hxx"
+#include "dbu_brw.hrc"
+#include "dbustrings.hrc"
+#include "QEnumTypes.hxx"
+#include "UITools.hxx"
+#include "unodatbr.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+/** === end UNO includes === **/
+
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+#include <tools/diagnose_ex.h>
+
 #include <functional>
 // .........................................................................
 namespace dbaui
@@ -124,13 +100,13 @@ namespace dbaui
             // the owner ship goes to ODataClipboards
             return pData;
         }
-        catch(SQLException& e)
+        catch(const SQLException& )
         {
-            showError(SQLExceptionInfo(e));
+            showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            DBG_ERROR("SbaTableQueryBrowser::implCopyObject: caught a generic exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         return NULL;
     }
