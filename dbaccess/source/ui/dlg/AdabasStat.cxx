@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasStat.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _DBAUI_ADASTAT_HXX_
 #include "AdabasStat.hxx"
@@ -156,21 +163,21 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             else
                 showError();
         }
-        catch(const SQLException& e)
+        catch(const SQLException& )
         {
-            ::dbaui::showError(SQLExceptionInfo(e),pParent,_xFactory);
+            ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ), pParent, _xFactory );
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         try
         {
             ::comphelper::disposeComponent(xStmt);
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         // now fill the datadev spaces
@@ -204,17 +211,17 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             {
                 ::dbaui::showError(SQLExceptionInfo(e),pParent,_xFactory);
             }
-            catch(const Exception&)
+            catch( const Exception& )
             {
-                OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                DBG_UNHANDLED_EXCEPTION();
             }
             try
             {
                 ::comphelper::disposeComponent(xStmt);
             }
-            catch(const Exception&)
+            catch( const Exception& )
             {
-                OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             // now fill the sysdatadev spaces
@@ -258,17 +265,17 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                 {
                     ::dbaui::showError(SQLExceptionInfo(e),pParent,_xFactory);
                 }
-                catch(const Exception&)
+                catch( const Exception& )
                 {
-                    OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
                 try
                 {
                     ::comphelper::disposeComponent(xStmt);
                 }
-                catch(const Exception&)
+                catch( const Exception& )
                 {
-                    OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
         }
