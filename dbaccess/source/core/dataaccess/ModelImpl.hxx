@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,6 +159,7 @@ private:
     ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
     TStorages                                                                   m_aStorages;
     ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
+    sal_Int16                                                                   m_nImposedMacroExecMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
@@ -446,10 +447,21 @@ public:
                 const ::rtl::OUString& _rDocumentURL
             );
 
+    /** returns the macro mode imposed by an external instance, by passing it to attachResource
+    */
+    sal_Int16       getImposedMacroExecMode() const
+    {
+        return m_nImposedMacroExecMode;
+    }
+    void            setImposedMacroExecMode( const sal_Int16 _nMacroMode )
+    {
+        m_nImposedMacroExecMode = _nMacroMode;
+    }
+
 public:
     // IMacroDocumentAccess overridables
-    virtual sal_Int16 getImposedMacroExecMode() const;
-    virtual sal_Bool setImposedMacroExecMode( sal_uInt16 );
+    virtual sal_Int16 getCurrentMacroExecMode() const;
+    virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 );
     virtual ::rtl::OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
     virtual sal_Bool documentStorageHasMacros() const;
