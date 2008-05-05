@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeParserUtil.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,14 +57,14 @@ public class OfficeParserUtil
         }
         return instance;
     }
-    private DefaultConfiguration props;
-    private NamespaceDefinition[] namespaces;
+    private final DefaultConfiguration props;
+    private final NamespaceDefinition[] namespaces;
 
     private OfficeParserUtil()
     {
         props = new DefaultConfiguration();
 
-        ResourceManager resourceManager = new ResourceManager();
+        final ResourceManager resourceManager = new ResourceManager();
         resourceManager.registerDefaults();
         try
         {
@@ -81,7 +81,7 @@ public class OfficeParserUtil
                 "org.jfree.report.namespaces.", resourceManager);
     }
 
-    public NamespaceDefinition getNamespaceDeclaration(String uri)
+    public NamespaceDefinition getNamespaceDeclaration(final String uri)
     {
         if (uri == null)
         {
@@ -99,41 +99,41 @@ public class OfficeParserUtil
         return null;
     }
 
-    public String getGenericFont(String officeFont)
+    public String getGenericFont(final String officeFont)
     {
         return props.getProperty("font-family." + officeFont.toLowerCase(), officeFont);
     }
 
-    public String getNamespaceURI(String namespacePrefix)
+    public String getNamespaceURI(final String namespacePrefix)
     {
         return props.getProperty(NAMESPACES_PREFIX + namespacePrefix);
     }
 
-    public String getNamespaceForStyleFamily(String styleFamily)
+    public String getNamespaceForStyleFamily(final String styleFamily)
     {
         return props.getProperty("style-family." + styleFamily);
     }
 
     public Map getNamespaces()
     {
-        Map map = new HashMap();
-        Iterator keys = props.findPropertyKeys(NAMESPACES_PREFIX);
+        final Map map = new HashMap();
+        final Iterator keys = props.findPropertyKeys(NAMESPACES_PREFIX);
         while (keys.hasNext())
         {
-            String key = (String) keys.next();
-            String value = props.getConfigProperty(key);
+            final String key = (String) keys.next();
+            final String value = props.getConfigProperty(key);
             map.put(key.substring(NAMESPACES_PREFIX.length()), value);
         }
         return map;
     }
 
-    public String getNamespacePrefix(String namespaceURI)
+    public String getNamespacePrefix(final String namespaceURI)
     {
-        Iterator keys = props.findPropertyKeys(NAMESPACES_PREFIX);
+        final Iterator keys = props.findPropertyKeys(NAMESPACES_PREFIX);
         while (keys.hasNext())
         {
-            String key = (String) keys.next();
-            String value = props.getConfigProperty(key);
+            final String key = (String) keys.next();
+            final String value = props.getConfigProperty(key);
             if (namespaceURI.equals(value))
             {
                 return key.substring(NAMESPACES_PREFIX.length());
@@ -164,7 +164,7 @@ public class OfficeParserUtil
         return props.findPropertyKeys(configPrefix);
     }
 
-    public boolean isValidStyleElement(String uri, String tagName)
+    public boolean isValidStyleElement(final String uri, final String tagName)
     {
         final String prefix = getNamespacePrefix(uri);
         if (prefix == null)
@@ -181,7 +181,7 @@ public class OfficeParserUtil
         return props.getConfigProperty("style-selector.pattern");
     }
 
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
         JFreeReportBoot.getInstance().start();
         System.out.print(OfficeParserUtil.getInstance().getNamespaces());
