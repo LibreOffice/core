@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: convert.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,11 +63,6 @@ Convert::Convert()
 {
     init();
 }
-
-Convert::~Convert()
-{
-}
-
 
 #define ADD_ENTRY(XCONVERT,TYPE) XCONVERT->maMap[ getCppuType( static_cast<TYPE*>( NULL ) ) ] = Convert_t( &lcl_toXSD_##TYPE, &lcl_toAny_##TYPE )
 
