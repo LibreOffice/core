@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -221,13 +221,13 @@ private:
 
     /** loads the embedded object, if not already loaded. No new object can be created with this method.
     */
-    void    loadEmbeddedObject()
+    void    loadEmbeddedObject( bool _bSuppressMacros = false )
     {
         loadEmbeddedObject(
             NULL,
             ::com::sun::star::uno::Sequence< sal_Int8 >(),
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >(),
-            false,
+            _bSuppressMacros,
             false
         );
     }
