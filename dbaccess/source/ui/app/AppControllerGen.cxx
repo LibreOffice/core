@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerGen.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,12 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
@@ -71,6 +77,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -147,11 +156,13 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#include <cppuhelper/exc_hlp.hxx>
 
 //........................................................................
 namespace dbaui
 {
 using namespace ::dbtools;
+using namespace ::connectivity;
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -166,6 +177,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 using ::com::sun::star::util::XCloseable;
+
+namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
+namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
+
 //........................................................................
 // -----------------------------------------------------------------------------
 
@@ -229,12 +244,13 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
-    catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-    catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-    catch(Exception& )
+    catch(const SQLException& )
     {
-        OSL_ENSURE(sal_False, "OApplicationController::convertToView: caught a generic exception!");
+        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -254,9 +270,9 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
                 paste( eType, ODataAccessObjectTransferable::extractObjectDescriptor( rClipboard ) );
 
         }
-        catch(Exception& )
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception catched!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -320,9 +336,9 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         if (xAdminDialog.is())
             xAdminDialog->execute();
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR("OApplicationController::implAdministrate: caught an exception while creating/executing the dialog!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
@@ -549,6 +565,98 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    ElementType lcl_objectType2ElementType( const sal_Int32 _nObjectType )
+    {
+        ElementType eType( E_NONE );
+        switch ( _nObjectType )
+        {
+        case DatabaseObject::TABLE:  eType = E_TABLE;   break;
+        case DatabaseObject::QUERY:  eType = E_QUERY;   break;
+        case DatabaseObject::FORM:   eType = E_FORM;    break;
+        case DatabaseObject::REPORT: eType = E_REPORT;  break;
+        default:
+            OSL_ENSURE( false, "lcl_objectType2ElementType: unsupported object type!" );
+                // this should have been caught earlier
+        }
+        return eType;
+    }
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName )
+{
+    // ensure we're connected
+    if ( !isConnected() )
+    {
+        SQLError aError( getORB() );
+        aError.raiseException( ErrorCondition::DB_NOT_CONNECTED, *this );
+    }
+
+    // ensure a proper object type
+    if  (   ( _nObjectType != DatabaseObject::TABLE )
+        &&  ( _nObjectType != DatabaseObject::QUERY )
+        &&  ( _nObjectType != DatabaseObject::FORM )
+        &&  ( _nObjectType != DatabaseObject::REPORT )
+        )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    // ensure an existing object
+    Reference< XNameAccess > xContainer( getElements( lcl_objectType2ElementType( _nObjectType ) ) );
+    if ( !xContainer.is() )
+        // all possible reasons for this (e.g. not being connected currently) should
+        // have been handled before
+        throw RuntimeException( ::rtl::OUString(), *this );
+
+    bool bExistentObject = false;
+    switch ( _nObjectType )
+    {
+    case DatabaseObject::TABLE:
+    case DatabaseObject::QUERY:
+        bExistentObject = xContainer->hasByName( _rObjectName );
+        break;
+    case DatabaseObject::FORM:
+    case DatabaseObject::REPORT:
+    {
+        Reference< XHierarchicalNameAccess > xHierarchy( xContainer, UNO_QUERY_THROW );
+        bExistentObject = xHierarchy->hasByHierarchicalName( _rObjectName );
+    }
+    break;
+    }
+
+    if ( !bExistentObject )
+        throw NoSuchElementException( _rObjectName, *this );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::loadComponent( ::sal_Int32 _ObjectType,
+    const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+{
+    return loadComponentWithArguments( _ObjectType, _ObjectName, _ForEditing, Sequence< PropertyValue >() );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArguments( ::sal_Int32 _ObjectType,
+    const ::rtl::OUString& _ObjectName, ::sal_Bool _ForEditing, const Sequence< PropertyValue >& _Arguments ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    impl_validateObjectTypeAndName_throw( _ObjectType, _ObjectName );
+
+    Reference< XComponent > xComponent( openElementWithArguments(
+        _ObjectName,
+        lcl_objectType2ElementType( _ObjectType ),
+        _ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
+        _ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
+        ::comphelper::NamedValueCollection( _Arguments )
+    ) );
+
+    return xComponent;
+}
+
+// -----------------------------------------------------------------------------
 void OApplicationController::previewChanged( sal_Int32 _nMode )
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -731,7 +839,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode)
+void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode)
 {
     ::std::vector< ::rtl::OUString> aList;
     getSelectionElementNames(aList);
@@ -751,7 +859,7 @@ void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::E
     }
 
     // special handling for mail, if more than one document is selected attach them all
-    if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_FORMAIL )
+    if ( _eOpenMode == E_OPEN_FOR_MAIL )
     {
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentIter = aCompoments.begin();
         ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator componentEnd = aCompoments.end();
@@ -787,8 +895,7 @@ ElementType OApplicationController::getElementType(const Reference< XContainer >
     }
     return eRet;
 }
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
-
-
