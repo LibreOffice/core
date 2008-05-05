@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
@@ -263,9 +266,9 @@ namespace dbaui
                     }
                 }
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
-                OSL_ENSURE(0,"Exception catched while filling popup menu!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         else
