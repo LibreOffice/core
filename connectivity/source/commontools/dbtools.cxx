@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtools.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -768,88 +768,115 @@ SQLException prependErrorInfo( const SQLException& _rChainedException, const Ref
 }
 
 //--------------------------------------------------------------------------
+namespace
+{
+    struct NameComponentSupport
+    {
+        const bool  bCatalogs;
+        const bool  bSchemas;
+
+        NameComponentSupport( )
+            :bCatalogs( true )
+            ,bSchemas( true )
+        {
+        }
+
+        NameComponentSupport( const bool _bCatalogs, const bool _bSchemas )
+            :bCatalogs( _bCatalogs )
+            ,bSchemas( _bSchemas )
+        {
+        }
+    };
+
+    NameComponentSupport lcl_getNameComponentSupport( const Reference< XDatabaseMetaData >& _rxMetaData, EComposeRule _eComposeRule )
+    {
+        OSL_PRECOND( _rxMetaData.is(), "lcl_getNameComponentSupport: invalid meta data!" );
+
+        FMetaDataSupport pCatalogCall = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
+        FMetaDataSupport pSchemaCall = &XDatabaseMetaData::supportsSchemasInDataManipulation;
+        bool bIgnoreMetaData = false;
+
+        switch ( _eComposeRule )
+        {
+            case eInTableDefinitions:
+                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
+                pSchemaCall = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
+                break;
+            case eInIndexDefinitions:
+                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
+                pSchemaCall = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
+                break;
+            case eInProcedureCalls:
+                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
+                pSchemaCall = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
+                break;
+            case eInPrivilegeDefinitions:
+                pCatalogCall = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
+                pSchemaCall = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
+                break;
+            case eComplete:
+                bIgnoreMetaData = true;
+                break;
+            case eInDataManipulation:
+                // already properly set above
+                break;
+        }
+        return NameComponentSupport(
+            bIgnoreMetaData ? true : (_rxMetaData.get()->*pCatalogCall)(),
+            bIgnoreMetaData ? true : (_rxMetaData.get()->*pSchemaCall)()
+        );
+    }
+}
+
+//--------------------------------------------------------------------------
 static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _rxMetaData,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 sal_Bool _bQuote, EComposeRule _eComposeRule )
 {
-    ::rtl::OUString sComposedName;
-
     OSL_ENSURE(_rxMetaData.is(), "impl_doComposeTableName : invalid meta data !");
     if ( !_rxMetaData.is() )
-        return sComposedName;
+        return ::rtl::OUString();
     OSL_ENSURE(_rName.getLength(), "impl_doComposeTableName : at least the name should be non-empty !");
 
-    FMetaDataSupport pCatalogCall = &XDatabaseMetaData::supportsCatalogsInDataManipulation;
-    FMetaDataSupport pSchemaCall = &XDatabaseMetaData::supportsSchemasInDataManipulation;
-    bool bIgnoreMetaData = false;
-
-    switch ( _eComposeRule )
-    {
-        case eInTableDefinitions:
-            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInTableDefinitions;
-            pSchemaCall = &XDatabaseMetaData::supportsSchemasInTableDefinitions;
-            break;
-        case eInIndexDefinitions:
-            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInIndexDefinitions;
-            pSchemaCall = &XDatabaseMetaData::supportsSchemasInIndexDefinitions;
-            break;
-        case eInProcedureCalls:
-            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInProcedureCalls;
-            pSchemaCall = &XDatabaseMetaData::supportsSchemasInProcedureCalls;
-            break;
-        case eInPrivilegeDefinitions:
-            pCatalogCall = &XDatabaseMetaData::supportsCatalogsInPrivilegeDefinitions;
-            pSchemaCall = &XDatabaseMetaData::supportsSchemasInPrivilegeDefinitions;
-            break;
-        case eComplete:
-            bIgnoreMetaData = true;
-            break;
-        case eInDataManipulation:
-            // already properly set above
-            break;
-    }
-
-
     ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
-#define QUOTE(s,s2) if (_bQuote) s += quoteName(sQuoteString,s2); else s += s2
 
-    static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
+    NameComponentSupport aNameComps( lcl_getNameComponentSupport( _rxMetaData, _eComposeRule ) );
+
+    ::rtl::OUStringBuffer aComposedName;
 
     ::rtl::OUString sCatalogSep;
     sal_Bool bCatlogAtStart = sal_True;
-    if ( _rCatalog.getLength() && ( bIgnoreMetaData || (_rxMetaData.get()->*pCatalogCall)() ) )
+    if ( _rCatalog.getLength() && aNameComps.bCatalogs )
     {
         sCatalogSep     = _rxMetaData->getCatalogSeparator();
         bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
 
         if ( bCatlogAtStart && sCatalogSep.getLength())
         {
-            QUOTE(sComposedName,_rCatalog);
-            sComposedName += sCatalogSep;
+            aComposedName.append( _bQuote ? quoteName( sQuoteString, _rCatalog ) : _rCatalog );
+            aComposedName.append( sCatalogSep );
         }
     }
 
-    if ( _rSchema.getLength() && ( bIgnoreMetaData || (_rxMetaData.get()->*pSchemaCall)() ) )
+    if ( _rSchema.getLength() && aNameComps.bSchemas )
     {
-        QUOTE(sComposedName,_rSchema);
-        sComposedName += sSeparator;
+        aComposedName.append( _bQuote ? quoteName( sQuoteString, _rSchema ) : _rSchema );
+        aComposedName.appendAscii( "." );
     }
 
-    QUOTE(sComposedName,_rName);
+    aComposedName.append( _bQuote ? quoteName( sQuoteString, _rName ) : _rName );
 
     if  (   _rCatalog.getLength()
         &&  !bCatlogAtStart
         &&  sCatalogSep.getLength()
-        &&  (   bIgnoreMetaData
-            ||  (_rxMetaData.get()->*pCatalogCall)()
-            )
+        &&  aNameComps.bCatalogs
         )
     {
-        sComposedName += sCatalogSep;
-        QUOTE(sComposedName,_rCatalog);
+        aComposedName.append( sCatalogSep );
+        aComposedName.append( _bQuote ? quoteName( sQuoteString, _rCatalog ) : _rCatalog );
     }
 
-    return sComposedName;
+    return aComposedName.makeStringAndClear();
 }
 
 //------------------------------------------------------------------------------
@@ -866,13 +893,14 @@ static ::rtl::OUString impl_doComposeTableName( const Reference< XDatabaseMetaDa
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule)
 {
     OSL_ENSURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
-    OSL_ENSURE( ( _eComposeRule == eInDataManipulation ) || ( _eComposeRule == eComplete ), "qualifiedNameComponents: un-implemented case!" );
-    bool bComplete = ( _eComposeRule == eComplete );
+
+    NameComponentSupport aNameComps( lcl_getNameComponentSupport( _rxConnMetaData, _eComposeRule ) );
+
     ::rtl::OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
 
     ::rtl::OUString sName(_rQualifiedName);
     // do we have catalogs ?
-    if ( bComplete || _rxConnMetaData->supportsCatalogsInDataManipulation() )
+    if ( aNameComps.bCatalogs )
     {
         if (_rxConnMetaData->isCatalogAtStart())
         {
@@ -896,7 +924,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
         }
     }
 
-    if ( bComplete || _rxConnMetaData->supportsSchemasInDataManipulation() )
+    if ( aNameComps.bSchemas )
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
         //  OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
