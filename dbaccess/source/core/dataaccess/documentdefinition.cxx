@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,6 +280,10 @@ namespace css = ::com::sun::star;
 //........................................................................
 namespace dbaccess
 {
+//........................................................................
+
+    typedef ::boost::optional< bool > optional_bool;
+
     //==================================================================
     // OEmbedObjectHolder
     //==================================================================
@@ -894,20 +898,17 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         }
     }
 
-    // our database document's macro execution mode
-    sal_Int16 nImposedMacroExecMode( m_pImpl->m_pDataSource->getImposedMacroExecMode() );
-        // (caching it, since adjustMacroMode will overwrite it)
     bool bExecuteDBDocMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
         // Note that we don't pass an interaction handler here. If the user has not been asked/notified
         // by now (i.e. during loading the whole DB document), then this won't happen anymore.
 
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
-    if  (   ( nImposedMacroExecMode == MacroExecMode::USE_CONFIG )
+    if  (   ( m_pImpl->m_pDataSource->getImposedMacroExecMode() == MacroExecMode::USE_CONFIG )
         &&  bExecuteDBDocMacros
         )
     {
-        // while loading the whole database document, USE_CONFIG, or *no* macro exec mode was passed.
+        // while loading the whole database document, USE_CONFIG, was passed.
         // Additionally, *by now* executing macros from the DB doc is allowed (this is what bExecuteDBDocMacros
         // indicates). This means either one of:
         // 1. The DB doc or one of the sub docs contained macros and
@@ -967,51 +968,56 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         DBG_ERROR( "unreachable" );
       }
 
-    Reference<XModel> xModel;
-    if ( m_pImpl->m_aProps.sPersistentName.getLength() )
+    OSL_ENSURE( m_pImpl->m_aProps.sPersistentName.getLength(),
+        "ODocumentDefinition::onCommandOpenSomething: no persistent name - cannot load!" );
+    if ( !m_pImpl->m_aProps.sPersistentName.getLength() )
+        return;
+
+    // embedded objects themself do not support the hidden flag. We implement support for
+    // it by changing the STATE to RUNNING only, instead of ACTIVE.
+    bool bOpenHidden = aDocumentArgs.getOrDefault( "Hidden", false );
+    aDocumentArgs.remove( "Hidden" );
+
+    loadEmbeddedObject( xConnection, Sequence< sal_Int8 >(), aDocumentArgs.getPropertyValues(), false, !m_bOpenInDesign );
+    OSL_ENSURE( m_xEmbeddedObject.is(), "ODocumentDefinition::onCommandOpenSomething: what's this?" );
+    if ( !m_xEmbeddedObject.is() )
+        return;
+
+    Reference< XModel > xModel( getComponent(), UNO_QUERY );
+    Reference< report::XReportDefinition > xReportDefinition(xModel,UNO_QUERY);
+
+    Reference< XModule > xModule( xModel, UNO_QUERY );
+    if ( xModule.is() )
     {
-        Sequence< PropertyValue > aLoadArgs;
-        aDocumentArgs >>= aLoadArgs;
-        loadEmbeddedObject( xConnection, Sequence< sal_Int8 >(), aLoadArgs, false, !m_bOpenInDesign );
-        if ( m_xEmbeddedObject.is() )
-        {
-            xModel.set(getComponent(),UNO_QUERY);
-            Reference< report::XReportDefinition > xReportDefinition(xModel,UNO_QUERY);
+        if ( m_bForm )
+            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.FormDesign" ) ) );
+        else if ( !xReportDefinition.is() )
+            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TextReportDesign" ) ) );
 
-            Reference< XModule> xModule(xModel,UNO_QUERY);
-            if ( xModule.is() )
-            {
-                if ( m_bForm )
-                    xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
-                else if ( !xReportDefinition.is() )
-                    xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
-
-                updateDocumentTitle();
-            }
-
-            bool bIsAliveNewStyleReport = ( !m_bOpenInDesign && xReportDefinition.is() );
-            if ( bIsAliveNewStyleReport )
-            {
-                // we are in ReadOnly mode
-                // we would like to open the Writer or Calc with the report direct, without design it.
-                Reference< report::XReportEngine > xReportEngine( m_aContext.createComponent( "com.sun.star.comp.report.OReportEngineJFree" ), UNO_QUERY_THROW );
-
-                xReportEngine->setReportDefinition(xReportDefinition);
-                xReportEngine->setActiveConnection(m_xLastKnownConnection);
-                _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
-                return;
-            }
-
-            if ( _bActivate )
-            {
-                m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-                impl_onActivateEmbeddedObject();
-            }
-
-            fillReportData();
-            _out_rComponent <<= xModel;
-        }
+        updateDocumentTitle();
     }
+
+    bool bIsAliveNewStyleReport = ( !m_bOpenInDesign && xReportDefinition.is() );
+    if ( bIsAliveNewStyleReport )
+    {
+        // we are in ReadOnly mode
+        // we would like to open the Writer or Calc with the report direct, without design it.
+        Reference< report::XReportEngine > xReportEngine( m_aContext.createComponent( "com.sun.star.comp.report.OReportEngineJFree" ), UNO_QUERY_THROW );
+
+        xReportEngine->setReportDefinition(xReportDefinition);
+        xReportEngine->setActiveConnection(m_xLastKnownConnection);
+        _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
+        return;
+    }
+
+    if ( _bActivate && !bOpenHidden )
+    {
+        m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
+        impl_onActivateEmbeddedObject();
+    }
+
+    fillReportData();
+    _out_rComponent <<= xModel;
 }
 
 // -----------------------------------------------------------------------------
@@ -1026,8 +1032,15 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
         if ( bOpen || bOpenInDesign || bOpenForMail )
         {
-            m_bOpenInDesign = bOpenInDesign;
-            onCommandOpenSomething( aCommand.Argument, !bOpenForMail, Environment, aRet );
+            bool bActivateObject = true;
+            if ( bOpenForMail )
+            {
+                OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
+                bActivateObject = false;
+            }
+
+            m_bOpenInDesign = bOpenInDesign || bOpenForMail;
+            onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment, aRet );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
         {
@@ -1047,7 +1060,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
             ::rtl::OUString sPersistentName;
             aIni[1] >>= sPersistentName;
-            loadEmbeddedObject();
+            loadEmbeddedObject( true );
             Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
             if ( xPersist.is() )
             {
@@ -1081,7 +1094,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             aIni[0] >>= sURL;
             onCommandInsert( sURL, Environment );
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) ) )
+        else if (   aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) )   // compatibility
+                ||  aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getDocumentInfo" ) )
+                )
         {
             onCommandGetDocumentProperties( aRet );
         }
@@ -1106,12 +1121,17 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 notifyDataSourceModified();
             }
         }
-        else if ( aCommand.Name.compareToAscii( "shutdown" ) == 0 )
+        else if (   ( aCommand.Name.compareToAscii( "shutdown" ) == 0 ) // compatibility
+                ||  ( aCommand.Name.compareToAscii( "close" ) == 0 )
+                )
         {
-            bool bClose = prepareClose();
-            if ( bClose && m_xEmbeddedObject.is() )
-                m_xEmbeddedObject->changeState(EmbedStates::LOADED);
-            aRet <<= bClose;
+            bool bSuccess = prepareClose();
+            if ( bSuccess && m_xEmbeddedObject.is() )
+            {
+                m_xEmbeddedObject->changeState( EmbedStates::LOADED );
+                bSuccess = m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED;
+            }
+            aRet <<= bSuccess;
         }
         else
             aRet = OContentHelper::execute(aCommand,CommandId,Environment);
@@ -1431,23 +1451,27 @@ sal_Bool ODocumentDefinition::saveAs()
 namespace
 {
     // .........................................................................
-    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const bool _bSuppressMacros, const bool _bReadOnly)
+    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const optional_bool _bSuppressMacros, const optional_bool _bReadOnly )
     {
-        if ( _bSuppressMacros )
+        if ( !!_bSuppressMacros )
         {
-            // if we're to suppress macros, do exactly this
-            _io_rArgs.put( "MacroExecutionMode", MacroExecMode::NEVER_EXECUTE );
-        }
-        else
-        {
-            // otherwise, put the setting only if not already present
-            if ( !_io_rArgs.has( "MacroExecutionMode" ) )
+            if ( *_bSuppressMacros )
             {
-                _io_rArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+                // if we're to suppress macros, do exactly this
+                _io_rArgs.put( "MacroExecutionMode", MacroExecMode::NEVER_EXECUTE );
+            }
+            else
+            {
+                // otherwise, put the setting only if not already present
+                if ( !_io_rArgs.has( "MacroExecutionMode" ) )
+                {
+                    _io_rArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+                }
             }
         }
 
-        _io_rArgs.put( "ReadOnly", _bReadOnly );
+        if ( !!_bReadOnly )
+            _io_rArgs.put( "ReadOnly", *_bReadOnly );
     }
 }
 
@@ -1541,7 +1565,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     // .........................................................................
     // put the common load arguments into the document's media descriptor
-    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly );
+    lcl_putLoadArgs( aMediaDesc, optional_bool( _bSuppressMacros ), optional_bool( _bReadOnly ) );
 
     return aMediaDesc.getPropertyValues();
 }
@@ -1631,31 +1655,60 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
               }
         }
     }
-    else if ( m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED )
+    else
     {
-        if ( !m_pClientHelper )
+        sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
+        if ( nCurrentState == EmbedStates::LOADED )
         {
-            m_pClientHelper = new OEmbeddedClientHelper(this);
-            m_pClientHelper->acquire();
+            if ( !m_pClientHelper )
+            {
+                m_pClientHelper = new OEmbeddedClientHelper(this);
+                m_pClientHelper->acquire();
+            }
+            Reference<XEmbeddedClient> xClient = m_pClientHelper;
+            m_xEmbeddedObject->setClientSite(xClient);
+
+            Sequence< PropertyValue > aEmbeddedObjectDescriptor;
+            Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
+                _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+
+            Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
+            OSL_ENSURE(xCommon.is(),"unsupported interface!");
+            if ( xCommon.is() )
+                xCommon->reload( aLoadArgs, aEmbeddedObjectDescriptor );
+            m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
         }
-        Reference<XEmbeddedClient> xClient = m_pClientHelper;
-        m_xEmbeddedObject->setClientSite(xClient);
+        else
+        {
+            OSL_ENSURE( ( nCurrentState == EmbedStates::RUNNING ) || ( nCurrentState == EmbedStates::ACTIVE ),
+                "ODocumentDefinition::loadEmbeddedObject: unexpected state!" );
 
-        Sequence< PropertyValue > aEmbeddedObjectDescriptor;
-        Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-            _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+            // if the document was already loaded (which means the embedded object is in state RUNNING or ACTIVE),
+            // then just re-set some model parameters
+            try
+            {
+                Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
+                Sequence< PropertyValue > aArgs = xModel->getArgs();
 
-        Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
-        OSL_ENSURE(xCommon.is(),"unsupported interface!");
-        if ( xCommon.is() )
-            xCommon->reload( aLoadArgs, aEmbeddedObjectDescriptor );
-        m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
+                ::comphelper::NamedValueCollection aMediaDesc( aArgs );
+                lcl_putLoadArgs( aMediaDesc, optional_bool(), optional_bool() );
+                    // don't put _bSuppressMacros and _bReadOnly here - if the document was already
+                    // loaded, we should not tamper with its settings.
+                    // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
+
+                aMediaDesc >>= aArgs;
+                xModel->attachResource( xModel->getURL(), aArgs );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
     }
 
-    Reference<XModel> xModel(getComponent(),UNO_QUERY);
     // set the OfficeDatabaseDocument instance as parent of the embedded document
     // #i40358# / 2005-01-19 / frank.schoenheit@sun.com
-    Reference< XChild > xDepdendDocAsChild( xModel, UNO_QUERY );
+    Reference< XChild > xDepdendDocAsChild( getComponent(), UNO_QUERY );
     if ( xDepdendDocAsChild.is() )
     {
         try
@@ -1670,18 +1723,8 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-
-    if ( xModel.is() )
-    {
-        Sequence<PropertyValue> aArgs = xModel->getArgs();
-
-        ::comphelper::NamedValueCollection aMediaDesc( aArgs );
-        lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly);
-
-        aMediaDesc >>= aArgs;
-        xModel->attachResource( xModel->getURL(), aArgs );
-    }
 }
+
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::onCommandPreview(Any& _rImage)
 {
@@ -1816,8 +1859,8 @@ bool ODocumentDefinition::prepareClose()
 
     try
     {
-        // suspend the controller. Embedded objects are not allowed to rais
-        // own UI on their own decision, instead, this has always to be triggered
+        // suspend the controller. Embedded objects are not allowed to raise
+        // own UI at their own discretion, instead, this has always to be triggered
         // by the embedding component. Thus, we do the suspend call here.
         // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
 
@@ -1825,9 +1868,12 @@ bool ODocumentDefinition::prepareClose()
         Reference< XController > xController;
         if ( xModel.is() )
             xController = xModel->getCurrentController();
-        OSL_ENSURE( xController.is(), "ODocumentDefinition::prepareClose: no controller!" );
+
+        OSL_ENSURE( xController.is() || ( m_xEmbeddedObject->getCurrentState() < EmbedStates::ACTIVE ),
+            "ODocumentDefinition::prepareClose: no controller!" );
         if ( !xController.is() )
-            return sal_False;
+            // document has not yet been activated, i.e. has no UI, yet
+            return true;
 
         sal_Bool bCouldSuspend = xController->suspend( sal_True );
         if ( !bCouldSuspend )
