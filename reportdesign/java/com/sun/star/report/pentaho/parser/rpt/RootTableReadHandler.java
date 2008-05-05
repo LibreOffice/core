@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RootTableReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ public class RootTableReadHandler extends ElementReadHandler
 {
 
     private TableReadHandler sectionTableReadHandler;
-    private Section section;
+    private final Section section;
 
     public RootTableReadHandler()
     {
@@ -72,20 +72,14 @@ public class RootTableReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.TABLE_NS.equals(uri))
+        if (OfficeNamespaces.TABLE_NS.equals(uri) && "table".equals(tagName))
         {
-            if ("table".equals(tagName))
-            {
-                sectionTableReadHandler = new TableReadHandler();
-                return sectionTableReadHandler;
-            }
+            sectionTableReadHandler = new TableReadHandler();
+            return sectionTableReadHandler;
         }
-        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri) && "conditional-print-expression".equals(tagName))
         {
-            if ("conditional-print-expression".equals(tagName))
-            {
-                return new ConditionalPrintExpressionReadHandler(section);
-            }
+            return new ConditionalPrintExpressionReadHandler(section);
         }
         return null;
     }

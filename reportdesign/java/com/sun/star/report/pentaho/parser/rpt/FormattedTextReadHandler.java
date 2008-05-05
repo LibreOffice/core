@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedTextReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,8 @@ package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import org.jfree.report.expressions.FormulaExpression;
-import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.jfree.xmlns.parser.IgnoreAnyChildReadHandler;
@@ -49,7 +47,7 @@ import org.xml.sax.SAXException;
 public class FormattedTextReadHandler extends ElementReadHandler
 {
 
-    private FormattedTextElement element;
+    private final FormattedTextElement element;
 
     public FormattedTextReadHandler()
     {
@@ -66,7 +64,7 @@ public class FormattedTextReadHandler extends ElementReadHandler
     {
         super.startParsing(attrs);
 
-        String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
+        final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
         if (formula != null)
         {
             final FormulaExpression valueExpression = new FormulaExpression();

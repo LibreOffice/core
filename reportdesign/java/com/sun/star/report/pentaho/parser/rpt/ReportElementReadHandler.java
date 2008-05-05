@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportElementReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@ package com.sun.star.report.pentaho.parser.rpt;
 import com.sun.star.report.pentaho.model.ReportElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.jfree.xmlns.parser.IgnoreAnyChildReadHandler;
@@ -41,7 +42,7 @@ import org.xml.sax.SAXException;
 public class ReportElementReadHandler extends ElementReadHandler
 {
 
-    private ReportElement element;
+    private final ReportElement element;
 
     public ReportElementReadHandler(final ReportElement element)
     {
@@ -69,9 +70,9 @@ public class ReportElementReadHandler extends ElementReadHandler
     {
         super.startParsing(attrs);
         final String printWhenGroupChanges = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-when-group-changes");
-        element.setPrintWhenGroupChanges("true".equals(printWhenGroupChanges));
+        element.setPrintWhenGroupChanges(OfficeToken.TRUE.equals(printWhenGroupChanges));
         final String printRepeatingValues = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "print-repeated-values");
-        element.setPrintRepeatedValues(printRepeatingValues == null || "true".equals(printRepeatingValues));
+        element.setPrintRepeatedValues(printRepeatingValues == null || OfficeToken.TRUE.equals(printRepeatingValues));
     }
 
     /**

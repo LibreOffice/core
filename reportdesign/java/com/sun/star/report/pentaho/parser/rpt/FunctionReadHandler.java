@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FunctionReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@ import org.jfree.report.expressions.FormulaExpression;
 import org.xml.sax.SAXException;
 import org.xml.sax.Attributes;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 
 /**
  * Parses a named expression. These expressions are encountered on reports and
@@ -67,13 +68,13 @@ public class FunctionReadHandler extends AbstractXmlReadHandler
         {
             throw new ParseException("Required attribute 'formula' is missing", getLocator());
         }
-        final String initialFormula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "initial-formula");
+
         final String name = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "name");
         if (name == null)
         {
             throw new ParseException("Required attribute 'name' is missing", getLocator());
         }
-        final String preEvaluated = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "pre-evaluated");
+        final String initialFormula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "initial-formula");
         final String deepTraversing = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "deep-traversing");
 
         if (initialFormula != null)
@@ -91,8 +92,9 @@ public class FunctionReadHandler extends AbstractXmlReadHandler
         }
 
         expression.setName(name);
-        expression.setDeepTraversing("true".equals(deepTraversing));
-        expression.setPrecompute("true".equals(preEvaluated));
+        expression.setDeepTraversing(OfficeToken.TRUE.equals(deepTraversing));
+        final String preEvaluated = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "pre-evaluated");
+        expression.setPrecompute(OfficeToken.TRUE.equals(preEvaluated));
     }
 
     /**

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormatConditionReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@ package com.sun.star.report.pentaho.parser.rpt;
 import com.sun.star.report.pentaho.model.FormatCondition;
 import com.sun.star.report.pentaho.model.ReportElement;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.xmlns.parser.AbstractXmlReadHandler;
 import org.jfree.xmlns.parser.ParseException;
@@ -46,7 +47,7 @@ import org.xml.sax.SAXException;
 public class FormatConditionReadHandler extends AbstractXmlReadHandler
 {
 
-    private ReportElement element;
+    private final ReportElement element;
 
     public FormatConditionReadHandler(final ReportElement element)
     {
@@ -60,8 +61,7 @@ public class FormatConditionReadHandler extends AbstractXmlReadHandler
     protected void startParsing(final Attributes attrs) throws SAXException
     {
         super.startParsing(attrs);
-        final String enabledText = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "enabled");
-        final boolean enabled = (enabledText == null || "true".equals(enabledText));
+
 
         final String formula =
                 attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
@@ -70,7 +70,7 @@ public class FormatConditionReadHandler extends AbstractXmlReadHandler
             throw new ParseException("Required attribute 'formula' is missing.", getLocator());
         }
         final String stylename =
-                attrs.getValue(OfficeNamespaces.OOREPORT_NS, "style-name");
+                attrs.getValue(OfficeNamespaces.OOREPORT_NS, OfficeToken.STYLE_NAME);
         if (stylename == null)
         {
             throw new ParseException("Required attribute 'style-name' is missing.", getLocator());
@@ -78,6 +78,8 @@ public class FormatConditionReadHandler extends AbstractXmlReadHandler
         final FormulaExpression valueExpression = new FormulaExpression();
         valueExpression.setFormula(formula);
 
+        final String enabledText = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "enabled");
+        final boolean enabled = (enabledText == null || OfficeToken.TRUE.equals(enabledText));
         final FormatCondition formatCondition =
                 new FormatCondition(valueExpression, stylename, enabled);
         element.addFormatCondition(formatCondition);

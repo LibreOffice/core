@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeStyleReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@ import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.model.OfficeStyle;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
@@ -46,8 +47,8 @@ import org.xml.sax.SAXException;
  */
 public class OfficeStyleReadHandler extends ElementReadHandler
 {
-  private OfficeStyle officeStyle;
-  private ArrayList childs;
+  private final OfficeStyle officeStyle;
+  private final List childs;
 
   public OfficeStyleReadHandler()
   {

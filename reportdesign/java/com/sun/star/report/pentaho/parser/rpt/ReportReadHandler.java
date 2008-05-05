@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.chart.ChartReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -49,11 +50,16 @@ public class ReportReadHandler extends ElementReadHandler
     private RootTableReadHandler reportHeader;
     private RootTableReadHandler reportFooter;
     private RootTableReadHandler detail;
+
+    public void setDetail(final RootTableReadHandler detail)
+    {
+        this.detail = detail;
+    }
     private GroupReadHandler groups;
-    private OfficeReport rootSection;
-    private ArrayList functionHandlers;
-    private ArrayList preBodyHandlers;
-    private ArrayList postBodyHandlers;
+    private final OfficeReport rootSection;
+    private final List functionHandlers;
+    private final List preBodyHandlers;
+    private final List postBodyHandlers;
     private boolean pre = true;
 
     public ReportReadHandler()
@@ -78,9 +84,10 @@ public class ReportReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.CHART_NS.equals(uri) == true)
+        final XmlReadHandler erh;
+        if (OfficeNamespaces.CHART_NS.equals(uri))
         {
-            final ChartReadHandler erh = new ChartReadHandler();
+            erh = new ChartReadHandler(this);
             if (pre)
             {
                 preBodyHandlers.add(erh);
@@ -89,50 +96,55 @@ public class ReportReadHandler extends ElementReadHandler
             {
                 postBodyHandlers.add(erh);
             }
-            return erh;
         }
-        if (OfficeNamespaces.OOREPORT_NS.equals(uri) == false)
+        else if (OfficeNamespaces.OOREPORT_NS.equals(uri))
         {
-            return null;
+            if ("function".equals(tagName))
+            {
+                erh = new FunctionReadHandler();
+                functionHandlers.add(erh);
+            }
+            else if ("page-header".equals(tagName))
+            {
+                pageHeader = new RootTableReadHandler();
+                erh = pageHeader;
+            }
+            else if ("report-header".equals(tagName))
+            {
+                reportHeader = new RootTableReadHandler();
+                erh = reportHeader;
+            }
+            else if ("report-footer".equals(tagName))
+            {
+                reportFooter = new RootTableReadHandler();
+                erh = reportFooter;
+            }
+            else if ("page-footer".equals(tagName))
+            {
+                pageFooter = new RootTableReadHandler();
+                erh = pageFooter;
+            }
+            else if ("detail".equals(tagName))
+            {
+                pre = false;
+                detail = new DetailRootTableReadHandler();
+                erh = detail;
+            }
+            else if ("group".equals(tagName))
+            {
+                groups = new GroupReadHandler();
+                erh = groups;
+            }
+            else
+            {
+                erh = null;
+            }
         }
-        if ("function".equals(tagName))
+        else
         {
-            final FunctionReadHandler erh = new FunctionReadHandler();
-            functionHandlers.add(erh);
-            return erh;
+            erh = null;
         }
-        if ("page-header".equals(tagName))
-        {
-            pageHeader = new RootTableReadHandler();
-            return pageHeader;
-        }
-        if ("report-header".equals(tagName))
-        {
-            reportHeader = new RootTableReadHandler();
-            return reportHeader;
-        }
-        if ("report-footer".equals(tagName))
-        {
-            reportFooter = new RootTableReadHandler();
-            return reportFooter;
-        }
-        if ("page-footer".equals(tagName))
-        {
-            pageFooter = new RootTableReadHandler();
-            return pageFooter;
-        }
-        if ("detail".equals(tagName))
-        {
-            pre = false;
-            detail = new DetailRootTableReadHandler();
-            return detail;
-        }
-        if ("group".equals(tagName))
-        {
-            groups = new GroupReadHandler();
-            return groups;
-        }
-        return null;
+        return erh;
     }
 
     /**
@@ -200,7 +212,7 @@ public class ReportReadHandler extends ElementReadHandler
         return rootSection;
     }
 
-    private final Section createSection(final String name, final ArrayList handler)
+    private final Section createSection(final String name, final List handler)
     {
         if (!handler.isEmpty())
         {
