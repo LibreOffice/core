@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binding.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,11 +177,6 @@ void Binding::_setModel( const Model_t& xModel )
     _checkBindingID();
 }
 
-
-Reference< XValueBinding > lcl_asXValueBinding( Binding* pThis )
-{
-    return Reference<XValueBinding>( static_cast<XValueBinding*>( pThis ) );
-}
 
 OUString Binding::getModelID() const
 {
