@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 /** === end UNO includes === **/
 
 #include <basic/basmgr.hxx>
@@ -333,14 +334,15 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     {
         pExistent.set( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), this ) );
 
-        Sequence< PropertyValue > aArgs(1);
-        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-        aArgs[0].Value <<= _sURL;
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "FileName", _sURL );
+        aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ) );
 
         Reference< XModel > xModel = pExistent->createNewModel_deliverOwnership();
         DBG_ASSERT( xModel.is(), "ODatabaseContext::loadObjectFromURL: no model?" );
         // calls registerPrivate in attachResource
-        xModel->attachResource( _sURL, aArgs );
+        xModel->attachResource( _sURL, aArgs.getPropertyValues() );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
     }
@@ -473,8 +475,10 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     {
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
-    else {
-        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: don't know this data source!s" );
+    else
+    {
+        OSL_ENSURE( ( sDocumentURL.getLength() == 0 ) && ( _rModelImpl.m_sName.getLength() == 0 ),
+            "ODatabaseContext::storeTransientProperties: a non-empty data source which I do not know?!" );
     }
 }
 
@@ -691,9 +695,17 @@ Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
 {
-    // if it's a database document whose BasicManager has just been created, add the global
-    // DatabaseDocument variable to its scope.
+    // if it's a database document ...
     Reference< XOfficeDatabaseDocument > xDatabaseDocument( _rxForDocument, UNO_QUERY );
+    // ... or a sub document of a database document ...
+    if ( !xDatabaseDocument.is() )
+    {
+        Reference< XChild > xDocAsChild( _rxForDocument, UNO_QUERY );
+        if ( xDocAsChild.is() )
+            xDatabaseDocument.set( xDocAsChild->getParent(), UNO_QUERY );
+    }
+
+    // ... whose BasicManager has just been created, then add the global DatabaseDocument variable to its scope.
     if ( xDatabaseDocument.is() )
         _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
 }
