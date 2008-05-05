@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objectnames.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,10 +207,10 @@ namespace sdbtools
         {
             if  (   ( _rName.indexOf( (sal_Unicode)34  ) >= 0 )  // "
                 ||  ( _rName.indexOf( (sal_Unicode)39  ) >= 0 )  // '
-                ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )  // `
-                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  // ‘
-                ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  // ’
-                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // ´
+                ||  ( _rName.indexOf( (sal_Unicode)96  ) >= 0 )  //
+                ||  ( _rName.indexOf( (sal_Unicode)145 ) >= 0 )  //
+                ||  ( _rName.indexOf( (sal_Unicode)146 ) >= 0 )  //
+                ||  ( _rName.indexOf( (sal_Unicode)180 ) >= 0 )  // #86621# removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;
 
