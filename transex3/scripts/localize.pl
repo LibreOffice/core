@@ -13,7 +13,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: localize.pl,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -332,9 +332,11 @@ sub get_license_header{
 "#\n".
 "# OpenOffice.org - a multi-platform office productivity suite\n".
 "#\n".
-"# \$RCSfile: localize.pl,v $\n".
+"# \$RCSfile:".
+"localize.pl,v \$\n".
 "#\n".
-"# \$Revision: 1.17 $\n".
+"# \$Revision: ".
+"1.17.4.1 \$\n".
 "#\n".
 "# This file is part of OpenOffice.org.\n".
 "#\n".
