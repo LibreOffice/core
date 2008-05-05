@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1243,7 +1243,7 @@ namespace
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "lcl_getModuleHelpModuleName: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( !pReturn )
@@ -1299,9 +1299,9 @@ void OGenericUnoController::openHelpAgent( const URL& _rURL )
             xHelpDispatch->dispatch(aURL, Sequence< PropertyValue >());
         }
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::openHelpAgent: caught an exception while executing the dispatch!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 // -----------------------------------------------------------------------------
