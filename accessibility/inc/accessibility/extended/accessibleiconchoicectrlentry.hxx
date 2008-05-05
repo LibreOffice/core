@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibleiconchoicectrlentry.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,9 @@ namespace accessibility
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xParent;
 
     private:
+    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
+    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
+    // in the cxx)
         /** notifies all listeners that this object has changed
             @param  _nEventId
                 is the event id
@@ -96,6 +99,7 @@ namespace accessibility
         void    NotifyAccessibleEvent( sal_Int16 _nEventId,
                                        const ::com::sun::star::uno::Any& _aOldValue,
                                        const ::com::sun::star::uno::Any& _aNewValue );
+    #endif
 
         Rectangle               GetBoundingBox_Impl() const;
         Rectangle               GetBoundingBoxOnScreen_Impl() const;
