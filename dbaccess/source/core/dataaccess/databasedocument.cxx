@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,6 +403,12 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 
     ::comphelper::NamedValueCollection aResource( _aArguments );
     lcl_stripLoadArguments( aResource, m_pImpl->m_aArgs );
+
+    // now that somebody (perhaps) told us an macro execution mode, remember it as
+    // ImposedMacroExecMode
+    ::comphelper::NamedValueCollection aArgs( m_pImpl->m_aArgs );
+    m_pImpl->setImposedMacroExecMode(
+        aArgs.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
 
     ::rtl::OUString sDocumentURL( aResource.getOrDefault( "SalvagedFile", _rURL ) );
     if ( !sDocumentURL.getLength() )
