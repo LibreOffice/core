@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeStyle.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 
 package com.sun.star.report.pentaho.model;
 
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
@@ -128,6 +129,6 @@ public class OfficeStyle extends Section
 
   public Element getGraphicProperties ()
   {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "graphic-properties");
+    return findFirstChild(OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
   }
 }

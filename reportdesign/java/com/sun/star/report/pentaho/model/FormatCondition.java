@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormatCondition.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +41,9 @@ import org.jfree.report.expressions.FormulaExpression;
  */
 public class FormatCondition
 {
-  private FormulaExpression formula;
-  private String styleName;
-  private boolean enabled;
+  private final FormulaExpression formula;
+  private final String styleName;
+  private final boolean enabled;
 
   public FormatCondition(final FormulaExpression formula,
                          final String styleName,

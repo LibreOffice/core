@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedTextElement.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,7 @@ import org.jfree.report.structure.Section;
  */
 public class FixedTextElement extends ReportElement
 {
-  private Section content;
+  private final Section content;
 
   public FixedTextElement()
   {

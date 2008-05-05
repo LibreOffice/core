@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InputRepositoryLoader.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.loader;
 
 import java.net.URL;
@@ -46,133 +44,129 @@ import org.jfree.resourceloader.loader.LoaderUtils;
 
 public class InputRepositoryLoader implements ResourceLoader
 {
-  private InputRepository inputRepository;
-  private ResourceManager resourceManager;
 
-  public InputRepositoryLoader (final InputRepository inputRepository)
-  {
-    if (inputRepository == null)
-    {
-      throw new NullPointerException();
-    }
-    this.inputRepository = inputRepository;
-  }
+    private final InputRepository inputRepository;
+    private ResourceManager resourceManager;
 
-  /**
-   * Checks, whether this resource loader implementation was responsible for
-   * creating this key.
-   *
-   * @param key
-   * @return
-   */
-  public boolean isSupportedKey(final ResourceKey key)
-  {
-    if (InputRepositoryLoader.class.getName().equals(key.getSchema()))
+    public InputRepositoryLoader(final InputRepository inputRepository)
     {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Creates a new resource key from the given object and the factory keys.
-   *
-   * @param value
-   * @param factoryKeys
-   * @return the created key or null, if the format was not recognized.
-   * @throws org.jfree.resourceloader.ResourceKeyCreationException
-   *          if creating the key failed.
-   */
-  public ResourceKey createKey(final Object value,
-                               final Map factoryKeys)
-      throws ResourceKeyCreationException
-  {
-    if (value instanceof String == false)
-    {
-      return null;
-    }
-    final String strVal = (String) value;
-    if (strVal.startsWith("sun:oo://") == false)
-    {
-      return null;
-    }
-    return new ResourceKey(InputRepositoryLoader.class.getName(),
-        new InputResourceKey(inputRepository.getId(), strVal), factoryKeys);
-  }
-
-  /**
-   * Derives a new resource key from the given key. If neither a path nor new
-   * factory-keys are given, the parent key is returned.
-   *
-   * @param parent      the parent
-   * @param path        the derived path (can be null).
-   * @param factoryKeys the optional factory keys (can be null).
-   * @return the derived key.
-   * @throws org.jfree.resourceloader.ResourceKeyCreationException
-   *          if the key cannot be derived for any reason.
-   */
-  public ResourceKey deriveKey(final ResourceKey parent,
-                               final String path,
-                               final Map factoryKeys)
-      throws ResourceKeyCreationException
-  {
-    if (isSupportedKey(parent) == false)
-    {
-      throw new ResourceKeyCreationException("Assertation: Unsupported parent key type");
+        if (inputRepository == null)
+        {
+            throw new NullPointerException();
+        }
+        this.inputRepository = inputRepository;
     }
 
-    final InputResourceKey parentKey = (InputResourceKey) parent.getIdentifier();
-    final String resource;
-    if (path.startsWith("sun:oo://"))
+    /**
+     * Checks, whether this resource loader implementation was responsible for
+     * creating this key.
+     *
+     * @param key
+     * @return
+     */
+    public boolean isSupportedKey(final ResourceKey key)
     {
-      resource = path;
-    }
-    else if (path.startsWith("/"))
-    {
-      resource = "sun:oo:/" + path;
-    }
-    else
-    {
-      resource = LoaderUtils.mergePaths(parentKey.getPath(), path);
-    }
-    final Map map;
-    if (factoryKeys != null)
-    {
-      map = new HashMap();
-      map.putAll(parent.getFactoryParameters());
-      map.putAll(factoryKeys);
-    }
-    else
-    {
-      map = parent.getFactoryParameters();
-    }
-    return new ResourceKey(parent.getSchema(),
-        new InputResourceKey(parentKey.getInputRepositoryId(), resource), map);
-  }
-
-  public URL toURL(final ResourceKey key)
-  {
-    return null;
-  }
-
-  public ResourceData load (final ResourceKey key)
-          throws ResourceLoadingException
-  {
-    if (isSupportedKey(key) == false)
-    {
-      throw new ResourceLoadingException("None of my keys.");
+        return InputRepositoryLoader.class.getName().equals(key.getSchema());
     }
 
-    return new InputRepositoryResourceData(key, inputRepository);
-  }
+    /**
+     * Creates a new resource key from the given object and the factory keys.
+     *
+     * @param value
+     * @param factoryKeys
+     * @return the created key or null, if the format was not recognized.
+     * @throws org.jfree.resourceloader.ResourceKeyCreationException
+     *          if creating the key failed.
+     */
+    public ResourceKey createKey(final Object value,
+            final Map factoryKeys)
+            throws ResourceKeyCreationException
+    {
+        if (value instanceof String)
+        {
+            final String strVal = (String) value;
+            if (strVal.startsWith("sun:oo://"))
+            {
+                return new ResourceKey(InputRepositoryLoader.class.getName(),
+                        new InputResourceKey(inputRepository.getId(), strVal), factoryKeys);
+            }
+        }
+        return null;
+    }
 
-  public void setResourceManager (final ResourceManager manager)
-  {
-    this.resourceManager = manager;
-  }
+    /**
+     * Derives a new resource key from the given key. If neither a path nor new
+     * factory-keys are given, the parent key is returned.
+     *
+     * @param parent      the parent
+     * @param path        the derived path (can be null).
+     * @param factoryKeys the optional factory keys (can be null).
+     * @return the derived key.
+     * @throws org.jfree.resourceloader.ResourceKeyCreationException
+     *          if the key cannot be derived for any reason.
+     */
+    public ResourceKey deriveKey(final ResourceKey parent,
+            final String path,
+            final Map factoryKeys)
+            throws ResourceKeyCreationException
+    {
+        if (!isSupportedKey(parent))
+        {
+            throw new ResourceKeyCreationException("Assertation: Unsupported parent key type");
+        }
 
-  public ResourceManager getResourceManager ()
-  {
-    return resourceManager;
-  }
+        final InputResourceKey parentKey = (InputResourceKey) parent.getIdentifier();
+        final String resource;
+        if (path.startsWith("sun:oo://"))
+        {
+            resource = path;
+        }
+        else if (path.charAt(0) == '/')
+        {
+            resource = "sun:oo:/" + path;
+        }
+        else
+        {
+            resource = LoaderUtils.mergePaths(parentKey.getPath(), path);
+        }
+        final Map map;
+        if (factoryKeys != null)
+        {
+            map = new HashMap();
+            map.putAll(parent.getFactoryParameters());
+            map.putAll(factoryKeys);
+        }
+        else
+        {
+            map = parent.getFactoryParameters();
+        }
+        return new ResourceKey(parent.getSchema(),
+                new InputResourceKey(parentKey.getInputRepositoryId(), resource), map);
+    }
+
+    public URL toURL(final ResourceKey key)
+    {
+        return null;
+    }
+
+    public ResourceData load(final ResourceKey key)
+            throws ResourceLoadingException
+    {
+        if (!isSupportedKey(key))
+        {
+            throw new ResourceLoadingException("None of my keys.");
+        }
+
+        return new InputRepositoryResourceData(key, inputRepository);
+    }
+
+    public void setResourceManager(final ResourceManager manager)
+    {
+        this.resourceManager = manager;
+    }
+
+    public ResourceManager getResourceManager()
+    {
+        return resourceManager;
+    }
 }

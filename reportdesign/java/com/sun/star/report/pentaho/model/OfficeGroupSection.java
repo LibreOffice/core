@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeGroupSection.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,12 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 
 /**
  * A group header or footer. If such a section is marked as sticky, it will be
@@ -43,14 +42,15 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class OfficeGroupSection extends Section
 {
-  public OfficeGroupSection()
-  {
-  }
 
-  public boolean isRepeatSection ()
-  {
-    final Object repeatFlag =
-        getAttribute(OfficeNamespaces.OOREPORT_NS, "repeat-section");
-    return "true".equals(repeatFlag);
-  }
+    public OfficeGroupSection()
+    {
+    }
+
+    public boolean isRepeatSection()
+    {
+        final Object repeatFlag =
+                getAttribute(OfficeNamespaces.OOREPORT_NS, "repeat-section");
+        return OfficeToken.TRUE.equals(repeatFlag);
+    }
 }

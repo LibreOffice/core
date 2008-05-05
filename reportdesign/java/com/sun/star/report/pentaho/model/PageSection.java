@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PageSection.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -43,37 +41,22 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class PageSection extends Section
 {
-  public PageSection()
-  {
-  }
 
-  public static boolean isPrintWithReportHeader(final AttributeMap attrs)
-  {
-    final String pagePrintOption = (String) attrs.getAttribute
-        (OfficeNamespaces.OOREPORT_NS, "page-print-option");
-    if ("not-with-report-header".equals(pagePrintOption))
-    {
-      return false;
-    }
-    if ("not-with-report-header-nor-footer".equals(pagePrintOption))
-    {
-      return false;
-    }
-    return true;
-  }
+    private static final String NOT_WITH_REPORT_HEADER_NOR_FOOTER = "not-with-report-header-nor-footer";
 
-  public static boolean isPrintWithReportFooter(final AttributeMap attrs)
-  {
-    final String pagePrintOption = (String) attrs.getAttribute
-        (OfficeNamespaces.OOREPORT_NS, "page-print-option");
-    if ("not-with-report-footer".equals(pagePrintOption))
+    public PageSection()
     {
-      return false;
     }
-    if ("not-with-report-header-nor-footer".equals(pagePrintOption))
+
+    public static boolean isPrintWithReportHeader(final AttributeMap attrs)
     {
-      return false;
+        final String pagePrintOption = (String) attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, "page-print-option");
+        return !("not-with-report-header".equals(pagePrintOption) || NOT_WITH_REPORT_HEADER_NOR_FOOTER.equals(pagePrintOption));
     }
-    return true;
-  }
+
+    public static boolean isPrintWithReportFooter(final AttributeMap attrs)
+    {
+        final String pagePrintOption = (String) attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, "page-print-option");
+        return !("not-with-report-footer".equals(pagePrintOption) || NOT_WITH_REPORT_HEADER_NOR_FOOTER.equals(pagePrintOption));
+    }
 }

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InputRepositoryResourceData.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,9 @@ import org.jfree.resourceloader.loader.AbstractResourceData;
 
 public class InputRepositoryResourceData extends AbstractResourceData
 {
-  private InputRepository inputRepository;
-  private ResourceKey key;
-  private String resourceIdentifer;
+  private final InputRepository inputRepository;
+  private final ResourceKey key;
+  private final String resourceIdentifer;
 
   public InputRepositoryResourceData (final ResourceKey key,
                                       final InputRepository repository)
@@ -56,7 +56,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
     this.resourceIdentifer = identifier.substring("sun:oo://".length());
   }
 
-  public Object getAttribute (String key)
+  public Object getAttribute (final String key)
   {
     // we dont support attributes here ..
     return null;
@@ -67,7 +67,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
     return key;
   }
 
-  public InputStream getResourceAsStream (ResourceManager caller)
+  public InputStream getResourceAsStream (final ResourceManager caller)
           throws ResourceLoadingException
   {
     try
@@ -81,7 +81,7 @@ public class InputRepositoryResourceData extends AbstractResourceData
     }
   }
 
-  public long getVersion (ResourceManager caller)
+  public long getVersion (final ResourceManager caller)
   {
     return inputRepository.getVersion(resourceIdentifer);
   }

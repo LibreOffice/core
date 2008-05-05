@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImageElement.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@ package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.expressions.FormulaExpression;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 
 /**
  * Todo: Document me!
@@ -60,26 +61,26 @@ public class ImageElement extends ReportElement
 
   public boolean isScale()
   {
-    return "true".equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "scale"));
+    return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE));
   }
 
   public void setScale(final boolean scale)
   {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, "scale", String.valueOf(scale));
+    setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.SCALE, String.valueOf(scale));
   }
 
   public boolean isPreserveIRI()
   {
-    return "true".equals(getAttribute(OfficeNamespaces.OOREPORT_NS, "preserve-IRI"));
+    return OfficeToken.TRUE.equals(getAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI));
   }
 
   public void setPreserveIRI(final boolean preserveIRI)
   {
-    setAttribute(OfficeNamespaces.OOREPORT_NS, "preserve-IRI", String.valueOf(preserveIRI));
+    setAttribute(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIRI));
   }
 
   public String getImageData()
   {
-    return (String) getAttribute(OfficeNamespaces.FORM_NS, "image-data");
+    return (String) getAttribute(OfficeNamespaces.FORM_NS, OfficeToken.IMAGE_DATA);
   }
 }

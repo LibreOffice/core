@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportElement.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@ import java.util.ArrayList;
 
 import org.jfree.report.structure.Element;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
+import java.util.List;
 
 /**
  * A report element is the base class for all content generating elements in a
@@ -45,7 +47,7 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public abstract class ReportElement extends Element
 {
-  private ArrayList formatConditions;
+  private final List formatConditions;
 
   protected ReportElement()
   {
@@ -61,7 +63,7 @@ public abstract class ReportElement extends Element
    */
   public boolean isPrintWhenGroupChanges()
   {
-    return "true".equals(getAttribute
+    return OfficeToken.TRUE.equals(getAttribute
         (OfficeNamespaces.OOREPORT_NS, "print-when-group-changes"));
   }
 
@@ -80,7 +82,7 @@ public abstract class ReportElement extends Element
    */
   public boolean isPrintRepeatedValues()
   {
-    return "true".equals(getAttribute
+    return OfficeToken.TRUE.equals(getAttribute
         (OfficeNamespaces.OOREPORT_NS, "print-repeated-values"));
   }
 

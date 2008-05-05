@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeStylesCollection.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,10 +57,10 @@ public class OfficeStylesCollection extends Element
   // Font-face declarations are copied as is. We simply merge them by adding
   // them all in one set. This may result in duplicate entries, but as the
   // fileformat does not forbid that, it therefore must be ok.
-  private FontFaceDeclsSection fontFaceDecls;
-  private OfficeStyles automaticStyles;
-  private OfficeStyles commonStyles;
-  private OfficeMasterStyles masterStyles;
+  private final FontFaceDeclsSection fontFaceDecls;
+  private final OfficeStyles automaticStyles;
+  private final OfficeStyles commonStyles;
+  private final OfficeMasterStyles masterStyles;
 
   public OfficeStylesCollection()
   {

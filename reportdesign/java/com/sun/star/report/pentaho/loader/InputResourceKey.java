@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InputResourceKey.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +42,8 @@ public class InputResourceKey implements Serializable
 {
   private static final long serialVersionUID = 2819901838705793075L;
 
-  private Object inputRepositoryId;
-  private String path;
+  private final Object inputRepositoryId;
+  private final String path;
 
   public InputResourceKey(final Object inputRepositoryId, final String path)
   {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectOleElement.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,8 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -38,33 +39,33 @@ import java.util.Vector;
 public class ObjectOleElement extends ReportElement{
 
     private String url;
-    private Vector masterfields;
-    private Vector detailfields;
+    private final List masterfields;
+    private final List detailfields;
     private String classid;
 
     public String getClassid() {
         return classid;
     }
 
-    public Vector getDetailfields() {
+    public List getDetailfields() {
         return detailfields;
     }
 
-    public Vector getMasterfields() {
+    public List getMasterfields() {
         return masterfields;
     }
 
     public ObjectOleElement()
     {
-        masterfields = new Vector();
-        detailfields = new Vector();
+        masterfields = new ArrayList();
+        detailfields = new ArrayList();
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setClassId(String classid) {
+    public void setClassId(final String classid) {
         this.classid = classid;
     }
     public void setUrl(final String _url ){
