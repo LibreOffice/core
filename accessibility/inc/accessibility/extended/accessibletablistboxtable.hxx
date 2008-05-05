@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibletablistboxtable.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,9 +57,6 @@ private:
 
     /** Throws an exception, if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 _nIndex ) const
-        SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
-    /** Throws an exception, if the specified position is invalid. */
-    void ensureValidPosition( sal_Int32 _nRow, sal_Int32 _nColumn ) const
         SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
 
     /** Returns true, if the specified row is selected. */
