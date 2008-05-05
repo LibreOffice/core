@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docmacromode.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,14 +56,19 @@ namespace sfx2
     class SAL_NO_VTABLE IMacroDocumentAccess
     {
     public:
-        /** retrieves the MacroExecutionMode from the MediaDescriptor of the document
+        /** retrieves the current MacroExecutionMode.
 
-            If there was no such externally imposed macro execution mode, implementations
-            could return MacroExecMode::USE_CONFIG or MacroExecMode::NEVER_EXECUTE
+            Usually, this is initialized from the media descriptor used to load the document,
+            respectively the one passed into the document's XModel::attachResource call.
+
+            If no such mode was passed there, document implementations should return
+            MacroExecMode::NEVER_EXECUTE.
 
             @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
             @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
             @see ::com::sun::star::frame::XModel::attachResource
+
+            @see setCurrentMacroExecMode
 
             @todo
                 Effectively, this is the MacroExecutionMode of the MediaDescriptor of
@@ -72,16 +77,26 @@ namespace sfx2
                 can be used for this and other purposes.
         */
         virtual sal_Int16
-                    getImposedMacroExecMode() const = 0;
+                    getCurrentMacroExecMode() const = 0;
 
-        /** sets the MacroExecutionMode to the document MediaDescriptor
+        /** sets the MacroExecutionMode of the document, as calculated by the DocumentMacroMode
+            class.
+
+            Effectively, the existence of this method means that the responsibility
+            to store the current macro execution mode is not with the DocumentMacroMode
+            instance, but with the document instance itself.
+
+            Usually, a document implementation will simply put the macro execution mode
+            into its media descriptor, as returned by XModel::getArgs.
 
             @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
             @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
             @see ::com::sun::star::frame::XModel::attachResource
+
+            see getCurrentMacroExecMode
         */
         virtual sal_Bool
-                    setImposedMacroExecMode( sal_uInt16 ) = 0;
+                    setCurrentMacroExecMode( sal_uInt16 ) = 0;
 
         /** returns the origin of the document
 
