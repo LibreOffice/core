@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BodyReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.office;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -42,56 +40,52 @@ import org.xml.sax.SAXException;
 
 public class BodyReadHandler extends ElementReadHandler
 {
-  private ElementReadHandler reportReadHandler;
-  private Section body;
 
-  public BodyReadHandler ()
-  {
-    body = new Section();
-  }
+    private ElementReadHandler reportReadHandler;
+    private final Section body;
 
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild (final String uri, final String tagName,
-                                               final Attributes atts)
-          throws SAXException
-  {
-    if (OfficeNamespaces.OFFICE_NS.equals(uri) == false)
+    public BodyReadHandler()
     {
-      return null;
-    }
-    if ("report".equals(tagName))
-    {
-      reportReadHandler = new ReportReadHandler();
-      return reportReadHandler;
+        body = new Section();
     }
 
-    return null;
-  }
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    if (reportReadHandler != null)
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri, final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      body.addNode(reportReadHandler.getElement());
+        if (OfficeNamespaces.OFFICE_NS.equals(uri) && "report".equals(tagName))
+        {
+            reportReadHandler = new ReportReadHandler();
+            return reportReadHandler;
+        }
+
+        return null;
     }
-  }
 
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
+    {
+        if (reportReadHandler != null)
+        {
+            body.addNode(reportReadHandler.getElement());
+        }
+    }
 
-  public Element getElement()
-  {
-    return body;
-  }
+    public Element getElement()
+    {
+        return body;
+    }
 }
