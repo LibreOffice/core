@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventatt.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,7 @@
 
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/awt/XDialogProvider.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -72,36 +73,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::resource;
-
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::script::XScriptEventsAttacher > ScriptEventsAttacherHelper;
-
-
-// Attaches dialogs
-class DialogEventAttacher : public ScriptEventsAttacherHelper
-{
-    friend class DialogAllListener_Impl;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacher > mxEventAttacher;
-    ::osl::Mutex maMutex;
-
-public:
-    DialogEventAttacher( void ) {}
-
-    // Methods
-    virtual void SAL_CALL attachEvents( const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xListener,
-        const ::com::sun::star::uno::Any& Helper )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::beans::IntrospectionException,
-                  ::com::sun::star::script::CannotCreateAdapterException,
-                  ::com::sun::star::lang::ServiceNotRegisteredException,
-                  ::com::sun::star::uno::RuntimeException);
-};
-
-
-
-//===================================================================
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -435,264 +406,6 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 }
 
-
-//===================================================================
-
-// Function to map from NameContainer to sequence needed
-// to call XScriptEventsAttacher::attachEvents
-//void SAL_CALL attachDialogEvents( StarBASIC* pBasic,
-void SAL_CALL attachDialogEvents( StarBASIC* pBasic, const Reference< frame::XModel >& xModel,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xDialogControl )
-    //const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xListener )
-{
-    static Reference< XScriptEventsAttacher > xEventsAttacher;
-    Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
-    {
-        if( !xEventsAttacher.is() )
-            xEventsAttacher = new DialogEventAttacher();
-    }
-
-    if( !xDialogControl.is() )
-        return;
-
-    Reference< XControlContainer > xControlContainer( xDialogControl, UNO_QUERY );
-    if( !xControlContainer.is() )
-        return;
-    Sequence< Reference< XControl > > aControls = xControlContainer->getControls();
-    const Reference< XControl >* pControls = aControls.getConstArray();
-    sal_Int32 nControlCount = aControls.getLength();
-    sal_Int32 nObjectCount = nControlCount + 1;
-
-    Sequence< Reference< XInterface > > aObjectSeq( nObjectCount );
-    Reference< XInterface >* pObjects = aObjectSeq.getArray();
-    for( sal_Int32 i = 0 ; i < nControlCount ; i++ )
-    {
-        Reference< XInterface > xIface( pControls[i], UNO_QUERY );
-        pObjects[i] = xIface;
-    }
-
-    // Also take the DialogControl itself into the sequence
-    Reference< XInterface > xDialogIface( xDialogControl, UNO_QUERY );
-    pObjects[ nControlCount ] = xDialogIface;
-
-    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pBasic, xModel );
-    Any Helper;
-    xEventsAttacher->attachEvents( aObjectSeq, xScriptListener, Helper );
-}
-
-
-//===================================================================
-
-class DialogAllListener_Impl : public WeakImplHelper1< XAllListener >
-{
-    Reference< XScriptListener >    mxScriptListener;
-    OUString                        maScriptType;
-    OUString                        maScriptCode;
-    Mutex                           maMutex;
-
-    virtual void firing_impl(const AllEventObject& Event, Any* pRet);
-
-public:
-    DialogAllListener_Impl( const Reference< XScriptListener >& xListener,
-        const OUString &rScriptType, const OUString & rScriptCode );
-
-    // Methoden von XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event)
-        throw( RuntimeException );
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event)
-        throw( InvocationTargetException, RuntimeException );
-
-    // Methoden von XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source)
-        throw( RuntimeException );
-};
-
-//========================================================================
-
-DialogAllListener_Impl::DialogAllListener_Impl( const Reference< XScriptListener >& xListener,
-    const OUString &rScriptType, const OUString & rScriptCode )
-        : mxScriptListener( xListener )
-        , maScriptType( rScriptType )
-        , maScriptCode( rScriptCode )
-{
-}
-
-// Methods XAllListener
-void DialogAllListener_Impl::firing( const AllEventObject& Event ) throw ( RuntimeException )
-{
-    firing_impl( Event, NULL );
-}
-
-Any DialogAllListener_Impl::approveFiring( const AllEventObject& Event )
-    throw ( InvocationTargetException, RuntimeException )
-{
-    Any aRetAny;
-    firing_impl( Event, &aRetAny );
-    return aRetAny;
-}
-
-// Methods XEventListener
-void DialogAllListener_Impl::disposing(const EventObject& ) throw ( RuntimeException )
-{
-    // TODO: ???
-    //NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
-    //xSbxObj.Clear();
-}
-
-void DialogAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
-{
-    Guard< Mutex > aGuard( maMutex );
-
-    ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = (OWeakObject *)this;  // get correct XInterface
-    aScriptEvent.ListenerType   = Event.ListenerType;
-    aScriptEvent.MethodName     = Event.MethodName;
-    aScriptEvent.Arguments      = Event.Arguments;
-    aScriptEvent.Helper         = Event.Helper;
-    aScriptEvent.Arguments      = Event.Arguments;
-    aScriptEvent.ScriptType     = maScriptType;
-    aScriptEvent.ScriptCode     = maScriptCode;
-
-    if( pRet )
-        *pRet = mxScriptListener->approveFiring( aScriptEvent );
-    else
-        mxScriptListener->firing( aScriptEvent );
-}
-
-
-//===================================================================
-
-
-
-void SAL_CALL DialogEventAttacher::attachEvents
-(
-    const Sequence< Reference< XInterface > >& Objects,
-    const Reference< XScriptListener >& xListener,
-    const Any& Helper
-)
-    throw(  IllegalArgumentException,
-            IntrospectionException,
-            CannotCreateAdapterException,
-            ServiceNotRegisteredException,
-            RuntimeException )
-{
-    // Get EventAttacher and Introspection (Introspection???)
-    {
-        Guard< Mutex > aGuard( maMutex );
-        if( !mxEventAttacher.is() )
-        {
-            // AllListenerAdapterService holen
-            Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-            if( !xSMgr.is() )
-                throw RuntimeException();
-
-            Reference< XInterface > xIFace( xSMgr->createInstance(
-                OUString::createFromAscii("com.sun.star.script.EventAttacher") ) );
-            if ( xIFace.is() )
-            {
-                mxEventAttacher = Reference< XEventAttacher >::query( xIFace );
-            }
-            if( !mxEventAttacher.is() )
-                throw ServiceNotRegisteredException();
-        }
-    }
-
-    // Go over all objects
-    const Reference< XInterface >* pObjects = Objects.getConstArray();
-    sal_Int32 i, nObjCount = Objects.getLength();
-    for( i = 0 ; i < nObjCount ; i++ )
-    {
-        // We know that we have to do with instances of XControl
-        // Otherwise this is not the right implementation for
-        // XScriptEventsAttacher and we have to give up
-        Reference< XControl > xControl( pObjects[ i ], UNO_QUERY );
-        if( !xControl.is() )
-            throw IllegalArgumentException();
-
-        // Get XEventsSupplier from ControlModel
-        Reference< XControlModel > xControlModel = xControl->getModel();
-        Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
-        if( xEventsSupplier.is() )
-        {
-            Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
-            Sequence< OUString > aNames = xEventCont->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            sal_Int32 j, nNameCount = aNames.getLength();
-
-            for( j = 0 ; j < nNameCount ; j++ )
-            {
-                ScriptEventDescriptor aDesc;
-
-                Any aElement = xEventCont->getByName( pNames[ j ] );
-                aElement >>= aDesc;
-                Reference< XAllListener > xAllListener =
-                    new DialogAllListener_Impl( xListener, aDesc.ScriptType, aDesc.ScriptCode );
-
-                // Try first to attach event to the ControlModel
-                sal_Bool bSuccess = sal_False;
-                try
-                {
-                    Reference< XEventListener > xListener_ = mxEventAttacher->
-                        attachSingleEventListener( xControlModel, xAllListener, Helper,
-                        aDesc.ListenerType, aDesc.AddListenerParam, aDesc.EventMethod );
-
-                    if( xListener_.is() )
-                        bSuccess = sal_True;
-                }
-                catch( IllegalArgumentException& )
-                {}
-                catch( IntrospectionException& )
-                {}
-                catch( CannotCreateAdapterException& )
-                {}
-                catch( ServiceNotRegisteredException& )
-                {}
-                //{
-                    //throw IntrospectionException();
-                //}
-
-                try
-                {
-                // If we had no success, try to attach to the Control
-                if( !bSuccess )
-                {
-                    Reference< XEventListener > xListener_; // Do we need that?!?
-                    xListener_ = mxEventAttacher->attachSingleEventListener
-                        ( xControl, xAllListener, Helper, aDesc.ListenerType,
-                          aDesc.AddListenerParam, aDesc.EventMethod );
-                }
-                }
-                catch( IllegalArgumentException& )
-                {}
-                catch( IntrospectionException& )
-                {}
-                catch( CannotCreateAdapterException& )
-                {}
-                catch( ServiceNotRegisteredException& )
-                {}
-            }
-        }
-    }
-
-}
-
-Reference< XStringResourceManager > getStringResourceFromDialogLibrary( const Any& aDlgLibAny )
-{
-    Reference< resource::XStringResourceManager > xStringResourceManager;
-
-    Reference< resource::XStringResourceSupplier > xStringResourceSupplier;
-    aDlgLibAny >>= xStringResourceSupplier;
-    if( xStringResourceSupplier.is() )
-    {
-        Reference< resource::XStringResourceResolver >
-            xStringResourceResolver = xStringResourceSupplier->getStringResource();
-
-        xStringResourceManager =
-            Reference< resource::XStringResourceManager >( xStringResourceResolver, UNO_QUERY );
-    }
-    return xStringResourceManager;
-}
-
 Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 {
     Any aRetDlgLibAny;
@@ -800,7 +513,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
-    xmlscript::importDialogModel( xInput, xDialogModel, xContext );
 
     // i83963 Force decoration
     uno::Reference< beans::XPropertySet > xDlgModPropSet( xDialogModel, uno::UNO_QUERY );
@@ -847,39 +559,38 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
             aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
     }
 
-    // Get resource from dialog library and set at dialog
-    Reference< XStringResourceManager > xStringResourceManager
-        = getStringResourceFromDialogLibrary( aDlgLibAny );
-    if( xStringResourceManager.is() )
-    {
-        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-        Any aStringResourceManagerAny;
-        aStringResourceManagerAny <<= xStringResourceManager;
-        xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
-    }
-
-    // Add dialog model to dispose vector
-    Reference< XComponent > xDlgComponent( xDialogModel, UNO_QUERY );
-    pINST->getComponentVector().push_back( xDlgComponent );
-
-    // Create a "living" Dialog
-    Reference< XControl > xDlg( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
-    Reference< XControlModel > xDlgMod( xDialogModel, UNO_QUERY );
-    xDlg->setModel( xDlgMod );
-    Reference< XWindow > xW( xDlg, UNO_QUERY );
-    xW->setVisible( sal_False );
-    Reference< XToolkit > xToolkit( xMSF->createInstance(
-    OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
-    xDlg->createPeer( xToolkit, NULL );
-    // need ThisCompoent from calling script
 
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
-    attachDialogEvents( pStartedBasic, xModel, xDlg );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pBasic, xModel );
+
+    Sequence< Any > aArgs( 4 );
+    aArgs[ 0 ] <<= xModel;
+    aArgs[ 1 ] <<= xInput;
+    aArgs[ 2 ] = aDlgLibAny;
+    aArgs[ 3 ] <<= xScriptListener;
+    // Create a "living" Dialog
+        Reference< XControl > xCntrl;
+        try
+        {
+        Reference< XDialogProvider >  xDlgProv( xMSF->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.scripting.DialogProvider" ) ), aArgs ), UNO_QUERY );
+            xCntrl.set( xDlgProv->createDialog( rtl::OUString() ), UNO_QUERY_THROW );
+           // Add dialog model to dispose vector
+           Reference< XComponent > xDlgComponent( xCntrl->getModel(), UNO_QUERY );
+           pINST->getComponentVector().push_back( xDlgComponent );
+           // need ThisCompoent from calling script
+        }
+        // preserve existing bad behaviour, it's possible... but probably
+        // illegal to open 2 dialogs ( they ARE modal ) when this happens, sometimes
+        // create dialog fails.  So, in this case let's not throw, just leave basic
+        // detect the unset object.
+        catch( uno::Exception& )
+        {
+        }
 
     // Return dialog
     Any aRetVal;
-    aRetVal <<= xDlg;
+    aRetVal <<= xCntrl;
     SbxVariableRef refVar = rPar.Get(0);
     unoToSbxValue( (SbxVariable*)refVar, aRetVal );
 }
