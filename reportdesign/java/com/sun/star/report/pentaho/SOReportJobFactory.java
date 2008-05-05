@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SOReportJobFactory.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,12 +86,12 @@ public class SOReportJobFactory
          */
         private static final String __serviceName =
                 "com.sun.star.report.pentaho.SOReportJobFactory";
-        private PropertySetMixin m_prophlp;
+        private final PropertySetMixin m_prophlp;
         /**
          * The initial component contextr, that gives access to the service manager, supported singletons, ... It's
          * often later used
          */
-        private XComponentContext m_cmpCtx;
+        private final XComponentContext m_cmpCtx;
         private XConnection activeConnection;
         private XReportDefinition report;
 
@@ -233,9 +233,18 @@ public class SOReportJobFactory
                 }
                 mimetype = report.getMimeType();
             }
+            else
+            {
+                XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
+                if ( set == null )
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException();
+                }
+                activeConnection = (XConnection) UnoRuntime.queryInterface(XConnection.class,set.getPropertyValue("ActiveConnection"));
+            }
             if (mimetype == null)
             {
-                mimetype = "application/vnd.oasis.opendocument.text";
+                mimetype = PentahoReportEngineMetaData.OPENDOCUMENT_TEXT;
             }
 
             final DataSourceFactory dataFactory = new SDBCReportDataFactory(m_cmpCtx, activeConnection);

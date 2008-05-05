@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarReportData.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,9 @@ import org.jfree.report.ReportData;
 public class StarReportData implements ReportData
 {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
     private int currentRow;
-    private int rowCount;
+    private final int rowCount;
 
     public StarReportData(final DataSource dataSource)
             throws com.sun.star.report.DataSourceException
@@ -56,7 +56,7 @@ public class StarReportData implements ReportData
     {
         try
         {
-            boolean ret = dataSource.absolute(row);
+            final boolean ret = dataSource.absolute(row);
             if (ret)
             {
                 currentRow = row;
@@ -122,7 +122,7 @@ public class StarReportData implements ReportData
     public Object get(final int column)
             throws DataSourceException
     {
-        if (isReadable() == false)
+        if (!isReadable())
         {
             throw new DataSourceException("Failed to query column.");
         }
