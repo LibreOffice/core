@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VariablesDeclarations.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.output.text;
 
 import java.util.HashMap;
@@ -47,59 +45,60 @@ import org.jfree.report.util.AttributeNameGenerator;
  */
 public class VariablesDeclarations
 {
-  private AttributeNameGenerator nameGenerator;
-  private HashMap variables;
 
-  public VariablesDeclarations()
-  {
-    variables = new HashMap();
-    nameGenerator = new AttributeNameGenerator();
-  }
+    private final AttributeNameGenerator nameGenerator;
+    private final Map variables;
 
-  public String produceVariable(final String name,
-                                final String type)
-  {
-    HashMap holder = (HashMap) variables.get(name);
-    if (holder == null)
+    public VariablesDeclarations()
     {
-      holder = new HashMap();
-      variables.put(name, holder);
+        variables = new HashMap();
+        nameGenerator = new AttributeNameGenerator();
     }
 
-    final String mapping = (String) holder.get(type);
-    if (mapping != null)
+    public String produceVariable(final String name,
+            final String type)
     {
-      return mapping;
-    }
-    final String result = nameGenerator.generateName(name);
-    if (holder.isEmpty())
-    {
-      // create the default mapping as well..
-      holder.put (null, name);
-    }
-    holder.put (type, name);
-    return result;
-  }
-
-  public Map getDefinedMappings ()
-  {
-    final HashMap mappings = new HashMap();
-    final Iterator vars = variables.values().iterator();
-    while (vars.hasNext())
-    {
-      final HashMap types = (HashMap) vars.next();
-      final Iterator varsByType = types.entrySet().iterator();
-      while (varsByType.hasNext())
-      {
-        final Map.Entry entry = (Map.Entry) varsByType.next();
-        final String varName = (String) entry.getValue();
-        final String type = (String) entry.getKey();
-        if (type != null)
+        HashMap holder = (HashMap) variables.get(name);
+        if (holder == null)
         {
-          mappings.put (varName, type);
+            holder = new HashMap();
+            variables.put(name, holder);
         }
-      }
+
+        final String mapping = (String) holder.get(type);
+        if (mapping != null)
+        {
+            return mapping;
+        }
+        final String result = nameGenerator.generateName(name);
+        if (holder.isEmpty())
+        {
+            // create the default mapping as well..
+            holder.put(null, name);
+        }
+        holder.put(type, name);
+        return result;
     }
-    return mappings;
-  }
+
+    public Map getDefinedMappings()
+    {
+        final HashMap mappings = new HashMap();
+        final Iterator vars = variables.values().iterator();
+        while (vars.hasNext())
+        {
+            final HashMap types = (HashMap) vars.next();
+            final Iterator varsByType = types.entrySet().iterator();
+            while (varsByType.hasNext())
+            {
+                final Map.Entry entry = (Map.Entry) varsByType.next();
+                final String type = (String) entry.getKey();
+                if (type != null)
+                {
+                    final String varName = (String) entry.getValue();
+                    mappings.put(varName, type);
+                }
+            }
+        }
+        return mappings;
+    }
 }

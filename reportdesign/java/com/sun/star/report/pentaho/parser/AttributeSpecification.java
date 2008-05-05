@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AttributeSpecification.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,9 @@ package com.sun.star.report.pentaho.parser;
 
 public final class AttributeSpecification
 {
-  private String namespaceUrl;
-  private String attributName;
-  private String mapperImplementation;
+  private final String namespaceUrl;
+  private final String attributName;
+  private final String mapperImplementation;
 
   public AttributeSpecification (String namespaceUrl, String attributName, String mapperImplementation)
   {

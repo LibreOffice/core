@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarStyleXmlFactoryModule.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,11 +51,7 @@ public class StarStyleXmlFactoryModule implements XmlFactoryModule
   public int getDocumentSupport (final XmlDocumentInfo documentInfo)
   {
     final String rootNamespace = documentInfo.getRootElementNameSpace();
-    if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) == false)
-    {
-      return XmlFactoryModule.NOT_RECOGNIZED;
-    }
-    else if ("document-styles".equals(documentInfo.getRootElement()))
+    if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) && "document-styles".equals(documentInfo.getRootElement()) )
     {
       return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
     }

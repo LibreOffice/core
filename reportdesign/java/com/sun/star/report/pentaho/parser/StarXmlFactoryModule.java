@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StarXmlFactoryModule.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 import org.jfree.xmlns.parser.XmlDocumentInfo;
@@ -37,38 +35,31 @@ import org.jfree.xmlns.parser.XmlReadHandler;
 import com.sun.star.report.pentaho.parser.office.DocumentContentReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 
-public class StarXmlFactoryModule  implements XmlFactoryModule
+public class StarXmlFactoryModule implements XmlFactoryModule
 {
-  public StarXmlFactoryModule ()
-  {
-  }
 
-  public XmlReadHandler createReadHandler (final XmlDocumentInfo documentInfo)
-  {
-    return new DocumentContentReadHandler();
-  }
-
-  public int getDocumentSupport (final XmlDocumentInfo documentInfo)
-  {
-    final String rootNamespace = documentInfo.getRootElementNameSpace();
-    if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) == false)
+    public StarXmlFactoryModule()
     {
-      return XmlFactoryModule.NOT_RECOGNIZED;
     }
 
-    if ("document-content".equals(documentInfo.getRootElement()))
+    public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
     {
-      return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
+        return new DocumentContentReadHandler();
     }
-    if ("document".equals(documentInfo.getRootElement()))
-    {
-      return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
-    }
-    return XmlFactoryModule.NOT_RECOGNIZED;
-  }
 
-  public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
-  {
-    return null;
-  }
+    public int getDocumentSupport(final XmlDocumentInfo documentInfo)
+    {
+        final String rootNamespace = documentInfo.getRootElementNameSpace();
+        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) &&
+                ("document-content".equals(documentInfo.getRootElement()) || "document".equals(documentInfo.getRootElement())))
+        {
+            return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
+        }
+        return XmlFactoryModule.NOT_RECOGNIZED;
+    }
+
+    public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
+    {
+        return null;
+    }
 }

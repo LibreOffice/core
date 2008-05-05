@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,9 @@ package com.sun.star.report.pentaho.parser.chart;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+import com.sun.star.report.pentaho.parser.rpt.DetailRootTableReadHandler;
+import com.sun.star.report.pentaho.parser.rpt.ReportReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -42,45 +45,60 @@ import org.xml.sax.SAXException;
  *
  * @author Ocke Janssen
  */
-public class ChartReadHandler extends ElementReadHandler {
+public class ChartReadHandler extends ElementReadHandler
+{
 
-    private Section element;
-    private ArrayList children;
-    public ChartReadHandler() {
+    private final Section element;
+    private final List children;
+    private final ReportReadHandler reportHandler;
+
+    public ChartReadHandler(ReportReadHandler reportHandler)
+    {
+        this.reportHandler = reportHandler;
         children = new ArrayList();
         element = new Section();
     }
 
     /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-          throws SAXException
-  {
-      return new ChartReadHandler();
-  }
-/**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    for (int i = 0; i < children.size(); i++)
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      final ChartReadHandler handler = (ChartReadHandler) children.get(i);
-      element.addNode(handler.getElement());
+        if ("detail".equals(tagName))
+        {
+            final DetailRootTableReadHandler detail = new DetailRootTableReadHandler();
+            reportHandler.setDetail(detail);
+            return detail;
+        }
+        final ChartReadHandler erh = new ChartReadHandler(reportHandler);
+        children.add(erh);
+        return erh;
     }
-  }
 
-    public Element getElement() {
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
+    {
+        for (int i = 0; i < children.size(); i++)
+        {
+            final ChartReadHandler handler = (ChartReadHandler) children.get(i);
+            element.addNode(handler.getElement());
+        }
+    }
+
+    public Element getElement()
+    {
         return element;
     }
 }
