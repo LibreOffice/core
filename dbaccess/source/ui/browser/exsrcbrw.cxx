@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: exsrcbrw.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,9 @@
 #endif
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -412,9 +415,9 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         if (xMasterProps.is())
             xMasterProps->getPropertyValue(PROPERTY_ISNEW) >>= bWasInsertRow;
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::Attach: caught an exception in part 1 (analyzing)!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     stopListening();
