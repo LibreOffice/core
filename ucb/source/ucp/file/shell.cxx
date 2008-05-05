@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shell.cxx,v $
- * $Revision: 1.95 $
+ * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1126,6 +1126,12 @@ shell::move( sal_Int32 CommandId,
              const sal_Int32 NameClash )
     throw()
 {
+    // --> #i88446# Method notifyContentExchanged( getContentExchangedEventListeners( srcUnqPath,dstUnqPath,!isDocument ) ); crashes if
+    // srcUnqPath and dstUnqPathIn are equal
+    if( srcUnqPath == dstUnqPathIn )
+        return;
+    // <--
+
     osl::FileBase::RC nError;
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
