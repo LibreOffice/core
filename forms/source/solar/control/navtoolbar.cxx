@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navtoolbar.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,12 +160,6 @@ namespace frm
             pPositionWindow->setDispatcher( _pDispatcher );
 
         updateFeatureStates( );
-    }
-
-    //---------------------------------------------------------------------
-    const IFeatureDispatcher* NavigationToolBar::getDispatcher( )
-    {
-        return m_pDispatcher;
     }
 
     //---------------------------------------------------------------------
@@ -535,14 +529,14 @@ namespace frm
         else
             _pItemWindow->SetTextLineColor();
     }
-
+#if 0
     //---------------------------------------------------------------------
     void NavigationToolBar::setItemWindowZoom( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         _pItemWindow->SetZoom( GetZoom() );
         _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
     }
-
+#endif
     //---------------------------------------------------------------------
     void NavigationToolBar::setItemControlFont( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
