@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refvaluecomponent.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +73,6 @@ namespace frm
         void                   setReferenceValue( const ::rtl::OUString& _rRefValue );
 
         const ::rtl::OUString& getNoCheckReferenceValue() const { return m_sNoCheckReferenceValue; }
-        void                   setNoCheckReferenceValue( const ::rtl::OUString& _rNoCheckRefValue );
 
         CheckState             getDefaultChecked() const { return m_eDefaultChecked; }
         void                   setDefaultChecked( CheckState _eChecked ) { m_eDefaultChecked = _eChecked; }
