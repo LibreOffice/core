@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgprov.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@ namespace dlgprov
 {
 //.........................................................................
 
+static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
     // =============================================================================
     // component operations
     // =============================================================================
@@ -177,9 +178,41 @@ namespace dlgprov
         return xStringResourceManager;
     }
 
+    Reference< container::XNameContainer > DialogProviderImpl::createControlModel() throw ( Exception )
+    {
+        Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY_THROW );
+        return xControlModel;
+    }
+
+    Reference< container::XNameContainer > DialogProviderImpl::createDialogModel( const Reference< io::XInputStream >& xInput, const Reference< resource::XStringResourceManager >& xStringResourceManager ) throw ( Exception )
+    {
+        Reference< container::XNameContainer > xDialogModel(  createControlModel() );
+        ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
+        // Set resource property
+        if( xStringResourceManager.is() )
+        {
+            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+            Any aStringResourceManagerAny;
+            aStringResourceManagerAny <<= xStringResourceManager;
+            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+        }
+
+        return xDialogModel;
+    }
+
+    Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
+    {
+        if ( !m_BasicInfo.get() )
+            // shouln't get here
+            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("No information to create dialog" ) ), Reference< XInterface >() );
+        Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
+        Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager ), UNO_QUERY_THROW );
+        return xCtrlModel;
+    }
+
     Reference< XControlModel > DialogProviderImpl::createDialogModel( const ::rtl::OUString& sURL )
     {
-        static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
         ::rtl::OUString aURL( sURL );
 
@@ -371,71 +404,52 @@ namespace dlgprov
         Reference< XControlModel > xCtrlModel;
         if ( xInput.is() && m_xContext.is() )
         {
-            Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager() );
-            if ( xSMgr_.is() )
+            Reference< resource::XStringResourceManager > xStringResourceManager;
+            if( bSingleDialog )
             {
-                Reference< container::XNameContainer > xDialogModel( xSMgr_->createInstanceWithContext(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), m_xContext ), UNO_QUERY );
+                INetURLObject aInetObj( aURL );
+                ::rtl::OUString aDlgName = aInetObj.GetBase();
+                aInetObj.removeSegment();
+                ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                bool bReadOnly = true;
+                ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+                ::rtl::OUString aComment;
 
-                if ( xDialogModel.is() )
+                Sequence<Any> aArgs( 6 );
+                aArgs[0] <<= aDlgLocation;
+                aArgs[1] <<= bReadOnly;
+                aArgs[2] <<= aLocale;
+                aArgs[3] <<= aDlgName;
+                aArgs[4] <<= aComment;
+
+                Reference< task::XInteractionHandler > xDummyHandler;
+                aArgs[5] <<= xDummyHandler;
+                Reference< XMultiComponentFactory > xSMgr_( m_xContext->getServiceManager(), UNO_QUERY_THROW );
+                // TODO: Ctor
+                xStringResourceManager = Reference< resource::XStringResourceManager >( xSMgr_->createInstanceWithContext
+                    ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
+                        m_xContext ), UNO_QUERY );
+                if( xStringResourceManager.is() )
                 {
-                    Any aDialogSourceURLAny;
-                    aDialogSourceURLAny <<= aURL;
-                    ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
-                    Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
-                    xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURLAny );
-
-                    ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
-
-                    xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
-
-                    Reference< resource::XStringResourceManager > xStringResourceManager;
-                    if( bSingleDialog )
-                    {
-                        INetURLObject aInetObj( aURL );
-                        ::rtl::OUString aDlgName = aInetObj.GetBase();
-                        aInetObj.removeSegment();
-                        ::rtl::OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
-                        bool bReadOnly = true;
-                        ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-                        ::rtl::OUString aComment;
-
-                        Sequence<Any> aArgs( 6 );
-                        aArgs[0] <<= aDlgLocation;
-                        aArgs[1] <<= bReadOnly;
-                        aArgs[2] <<= aLocale;
-                        aArgs[3] <<= aDlgName;
-                        aArgs[4] <<= aComment;
-
-                        Reference< task::XInteractionHandler > xDummyHandler;
-                        aArgs[5] <<= xDummyHandler;
-
-                        // TODO: Ctor
-                        xStringResourceManager = Reference< resource::XStringResourceManager >( xSMgr_->createInstanceWithContext
-                            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResourceWithLocation" ),
-                                m_xContext ), UNO_QUERY );
-                        if( xStringResourceManager.is() )
-                        {
-                            Reference< XInitialization > xInit( xStringResourceManager, UNO_QUERY );
-                            if( xInit.is() )
-                                xInit->initialize( aArgs );
-                        }
-                    }
-                    else if( xDialogLib.is() )
-                    {
-                        xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
-                    }
-
-                    // Set resource property
-                    if( xStringResourceManager.is() )
-                    {
-                        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
-                        Any aStringResourceManagerAny;
-                        aStringResourceManagerAny <<= xStringResourceManager;
-                        xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
-                    }
+                    Reference< XInitialization > xInit( xStringResourceManager, UNO_QUERY );
+                    if( xInit.is() )
+                        xInit->initialize( aArgs );
                 }
             }
+            else if( xDialogLib.is() )
+            {
+                xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
+            }
+
+            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager ), UNO_QUERY_THROW );
+            Any aDialogSourceURLAny;
+            aDialogSourceURLAny <<= aURL;
+            ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
+            Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
+            xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURLAny );
+
+
+            xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
         }
         return xCtrlModel;
     }
@@ -526,19 +540,13 @@ namespace dlgprov
                 // also add the dialog control itself to the sequence
                 pObjects[nControlCount] = Reference< XInterface >( rxControl, UNO_QUERY );
 
-                Reference< XScriptListener > xScriptListener = new DialogScriptListenerImpl
-                    ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess, bDialogProviderMode );
+                if ( !m_xScriptEventsAttacher.is() )
+                    m_xScriptEventsAttacher = new DialogEventsAttacherImpl( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess, bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : NULL ) );
 
-                if ( xScriptListener.is() )
+                if ( m_xScriptEventsAttacher.is() )
                 {
-                    if ( !m_xScriptEventsAttacher.is() )
-                        m_xScriptEventsAttacher = new DialogEventsAttacherImpl( m_xContext );
-
-                    if ( m_xScriptEventsAttacher.is() )
-                    {
-                        Any aHelper;
-                        m_xScriptEventsAttacher->attachEvents( aObjects, xScriptListener, aHelper );
-                    }
+                    Any aHelper;
+                    m_xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
                 }
             }
         }
@@ -635,7 +643,19 @@ namespace dlgprov
                     Reference< XInterface >() );
             }
         }
-        else if ( aArguments.getLength() > 1 )
+        else if ( aArguments.getLength() == 4 )
+        {
+            // call from RTL_Impl_CreateUnoDialog
+            aArguments[0] >>= m_xModel;
+            m_BasicInfo.reset( new BasicRTLParams() );
+            m_BasicInfo->mxInput.set( aArguments[ 1 ], UNO_QUERY_THROW );
+            m_BasicInfo->mxDlgLib.set( aArguments[ 2 ], UNO_QUERY_THROW );
+            // leave the possibility to optionally allow the old dialog creation
+            // to use the new XScriptListener ( which converts the old style macro
+            // to a SF url )
+            m_BasicInfo->mxBasicRTLListener.set( aArguments[ 3 ], UNO_QUERY);
+        }
+        else if ( aArguments.getLength() > 4 )
         {
             throw RuntimeException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::initialize: invalid number of arguments!" ) ),
@@ -661,13 +681,20 @@ namespace dlgprov
 
         ::osl::MutexGuard aGuard( getMutex() );
 
-        OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
 
         // m_xHandler = xHandler;
 
         //Reference< XDialog > xDialog;
         Reference< XControl > xCtrl;
-        Reference< XControlModel > xCtrlMod( createDialogModel( URL ) );
+        Reference< XControlModel > xCtrlMod;
+        // add support for basic RTL_FUNCTION
+        if ( m_BasicInfo.get() )
+            xCtrlMod = createDialogModelForBasic();
+        else
+        {
+            OSL_ENSURE( URL.getLength(), "DialogProviderImpl::getDialog: no URL!" );
+            xCtrlMod = createDialogModel( URL );
+        }
         if ( xCtrlMod.is() )
         {
             // i83963 Force decoration
