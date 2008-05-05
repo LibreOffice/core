@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conn_error_message.src,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,4 +71,15 @@ String 256 + 2*302 + 0
 String 256 + 2*303 + 0
 {
     Text [ en-US ] = "The name '$1$' is already in use in the database.";
+};
+
+String 256 + 2*304 + 0
+{
+    Text = "No connection to the database exists.";
+    // TODO: localize
+};
+
+String 256 + 2*304 + 1
+{
+    Text = "08003";
 };
