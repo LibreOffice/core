@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartRawReportProcessor.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,11 +49,11 @@ import org.jfree.resourceloader.ResourceManager;
 public class ChartRawReportProcessor extends SinglePassReportProcessor
 {
 
-    private OutputRepository outputRepository;
-    private String targetName;
-    private InputRepository inputRepository;
-    private ImageService imageService;
-    private DataSourceFactory dataSourceFactory;
+    private final OutputRepository outputRepository;
+    private final String targetName;
+    private final InputRepository inputRepository;
+    private final ImageService imageService;
+    private final DataSourceFactory dataSourceFactory;
 
     public ChartRawReportProcessor(final InputRepository inputRepository,
             final OutputRepository outputRepository,
@@ -102,9 +102,6 @@ public class ChartRawReportProcessor extends SinglePassReportProcessor
             ReportProcessingException
     {
         final ReportTarget reportTarget = createReportTarget(job);
-        // first run: collect table cell sizes for all tables
-        processReportRun(job, reportTarget);
-        // second run: uses table cell data to output a single uniform table
         processReportRun(job, reportTarget);
     }
 }

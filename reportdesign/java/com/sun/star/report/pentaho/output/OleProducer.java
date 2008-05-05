@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OleProducer.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +39,10 @@ import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.ReportJobDefinition;
 import com.sun.star.report.pentaho.DefaultNameGenerator;
 import com.sun.star.report.pentaho.PentahoReportEngine;
+import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
+import org.jfree.util.Log;
 
 /**
  *
@@ -48,11 +50,11 @@ import java.util.Vector;
  */
 public class OleProducer {
 
-    private InputRepository inputRepository;
-    private OutputRepository outputRepository;
-    private DefaultNameGenerator nameGenerator;
-    private DataSourceFactory dataSourceFactory;
-    private ImageService imageService;
+    private final InputRepository inputRepository;
+    private final OutputRepository outputRepository;
+    private final DefaultNameGenerator nameGenerator;
+    private final DataSourceFactory dataSourceFactory;
+    private final ImageService imageService;
 
 
     public OleProducer(final InputRepository inputRepository,
@@ -71,14 +73,14 @@ public class OleProducer {
         this.imageService = imageService;
     }
 
-    String produceOle(final String source,final Vector masterColumns,final Vector masterValues,final Vector detailColumns) {
+    String produceOle(final String source,final List masterColumns,final List masterValues,final List detailColumns) {
         InputRepository subInputRepository = null;
         OutputRepository subOutputRepository = null;
         String output = "";
         try {
             subInputRepository = inputRepository.openInputRepository(source);
-            output = nameGenerator.generateStorageName("Object ", null);
-            subOutputRepository = outputRepository.openOutputRepository(output);
+            output = nameGenerator.generateStorageName("Object", null);
+            subOutputRepository = outputRepository.openOutputRepository(output, PentahoReportEngineMetaData.OPENDOCUMENT_CHART);
             try {
 
                 final PentahoReportEngine engine = new PentahoReportEngine();
@@ -89,7 +91,7 @@ public class OleProducer {
                 procParms.setProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY, subOutputRepository);
                 procParms.setProperty(ReportEngineParameterNames.INPUT_NAME, "content.xml");
                 procParms.setProperty(ReportEngineParameterNames.OUTPUT_NAME, "content.xml");
-                procParms.setProperty(ReportEngineParameterNames.CONTENT_TYPE, "application/vnd.oasis.opendocument.chart");
+                procParms.setProperty(ReportEngineParameterNames.CONTENT_TYPE, PentahoReportEngineMetaData.OPENDOCUMENT_CHART);
                 procParms.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataSourceFactory);
                 procParms.setProperty(ReportEngineParameterNames.INPUT_MASTER_COLUMNS, masterColumns);
                 procParms.setProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES, masterValues);
@@ -98,12 +100,12 @@ public class OleProducer {
 
                 engine.createJob(definition).execute();
             } catch (ReportExecutionException ex) {
-                ex.printStackTrace();
+                Log.error("ReportProcessing failed", ex);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Log.error("ReportProcessing failed", ex);
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Log.error("ReportProcessing failed", ex);
         } finally {
             if (subInputRepository != null) {
                 subInputRepository.closeInputRepository();

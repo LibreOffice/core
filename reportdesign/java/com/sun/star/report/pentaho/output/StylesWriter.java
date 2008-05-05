@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StylesWriter.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +70,8 @@ import org.jfree.xmlns.writer.XmlWriterSupport;
  */
 public class StylesWriter
 {
-  private XmlWriter xmlWriter;
-  private boolean writeOpeningTag;
+  private final XmlWriter xmlWriter;
+  private final boolean writeOpeningTag;
 
   public StylesWriter(final Writer writer)
   {
