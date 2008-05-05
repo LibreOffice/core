@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgprov.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,15 +40,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#endif
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/resource/XStringResourceManager.hpp>
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase4.hxx>
-#endif
 #include <osl/mutex.hxx>
-
+#include <memory>
 
 //.........................................................................
 namespace dlgprov
@@ -72,10 +71,16 @@ namespace dlgprov
         ::com::sun::star::awt::XDialogProvider2,
         ::com::sun::star::awt::XContainerWindowProvider > DialogProviderImpl_BASE;
 
-
     class DialogProviderImpl : public DialogProviderImpl_BASE
     {
     private:
+        struct BasicRTLParams
+        {
+             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxInput;
+             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > mxDlgLib;
+             ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > mxBasicRTLListener;
+        };
+        std::auto_ptr< BasicRTLParams > m_BasicInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsAttacher > m_xScriptEventsAttacher;
@@ -93,6 +98,10 @@ namespace dlgprov
             bool bDialogProviderMode );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
+    // helper methods
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createControlModel() throw ( ::com::sun::star::uno::Exception );
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput, const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager ) throw ( ::com::sun::star::uno::Exception );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModelForBasic() throw ( ::com::sun::star::uno::Exception );
 
         // XDialogProvider / XDialogProvider2 impl method
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(
