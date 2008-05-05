@@ -1,9 +1,40 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: FormatValueUtility.java,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
@@ -24,7 +55,7 @@ public class FormatValueUtility
     private static final String BOOLEAN_VALUE = "boolean-value";
     private static final String STRING_VALUE = "string-value";
 
-    private static final String VALUE_TYPE = "value-type";
+    public static final String VALUE_TYPE = "value-type";
     private static SimpleDateFormat dateFormat;
 
     private FormatValueUtility()
@@ -48,11 +79,11 @@ public class FormatValueUtility
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "boolean");
             if (Boolean.TRUE.equals(value))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, "true");
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.TRUE);
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, "false");
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.FALSE);
             }
         }
         else if (value != null)
@@ -81,11 +112,11 @@ public class FormatValueUtility
         {
             if (Boolean.TRUE.equals(value))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, "true");
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.TRUE);
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, "false");
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,BOOLEAN_VALUE, OfficeToken.FALSE);
             }
         }
         else if (value != null)
