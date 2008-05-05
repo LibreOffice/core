@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ConnectionHelper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -316,9 +316,9 @@ DBG_NAME(OConnectionHelper)
                     SetRoadmapStateValue(sal_True);
                     callModifiedHdl();
                 }
-                catch(const Exception&)
+                catch( const Exception& )
                 {
-                    DBG_ERROR("OConnectionHelper::OnBrowseConnections: caught an exception while browsing for the path!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             break;
