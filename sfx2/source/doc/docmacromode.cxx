@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docmacromode.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,21 +202,21 @@ namespace sfx2
     //--------------------------------------------------------------------
     sal_Bool DocumentMacroMode::allowMacroExecution()
     {
-        m_pData->rDocumentAccess.setImposedMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
+        m_pData->rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
         return sal_True;
     }
 
     //--------------------------------------------------------------------
     sal_Bool DocumentMacroMode::disallowMacroExecution()
     {
-        m_pData->rDocumentAccess.setImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE );
+        m_pData->rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
         return sal_False;
     }
 
     //--------------------------------------------------------------------
     sal_Bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& _rxInteraction )
     {
-        sal_uInt16 nMacroExecutionMode = m_pData->rDocumentAccess.getImposedMacroExecMode();
+        sal_uInt16 nMacroExecutionMode = m_pData->rDocumentAccess.getCurrentMacroExecMode();
 
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
@@ -398,7 +398,7 @@ namespace sfx2
     //--------------------------------------------------------------------
     sal_Bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
-        return m_pData->rDocumentAccess.getImposedMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
+        return m_pData->rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
     //--------------------------------------------------------------------
