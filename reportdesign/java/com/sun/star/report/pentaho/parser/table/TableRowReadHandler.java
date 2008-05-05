@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableRowReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.pentaho.parser.table;
 
 import java.util.ArrayList;
@@ -39,6 +38,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
+import java.util.List;
 
 /**
  * Creation-Date: 03.07.2006, 13:51:47
@@ -47,71 +48,78 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class TableRowReadHandler extends ElementReadHandler
 {
-  private ArrayList tableCells;
-  private Section tableRow;
 
-  public TableRowReadHandler()
-  {
-    tableCells = new ArrayList();
-    tableRow = new Section();
-  }
+    private final List tableCells;
+    private final Section tableRow;
 
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-          throws SAXException
-  {
-    if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
+    public TableRowReadHandler()
     {
-      return null;
+        tableCells = new ArrayList();
+        tableRow = new Section();
     }
 
-    if ("table-cell".equals(tagName))
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      final TableCellReadHandler readHandler = new TableCellReadHandler();
-      tableCells.add(readHandler);
-      return readHandler;
+        final XmlReadHandler rh;
+        if (OfficeNamespaces.TABLE_NS.equals(uri))
+        {
+            if (OfficeToken.TABLE_CELL.equals(tagName))
+            {
+                rh = new TableCellReadHandler();
+            }
+            else if (OfficeToken.COVERED_TABLE_CELL.equals(tagName))
+            {
+                rh = new CoveredCellReadHandler();
+            }
+            else
+            {
+                rh = null;
+            }
+            if (rh != null)
+            {
+                tableCells.add(rh);
+            }
+        }
+        else
+        {
+            rh = null;
+        }
+        return rh;
     }
-    if ("covered-table-cell".equals(tagName))
+
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
     {
-
-      final CoveredCellReadHandler readHandler = new CoveredCellReadHandler();
-      tableCells.add(readHandler);
-      return readHandler;
+        for (int i = 0; i < tableCells.size(); i++)
+        {
+            final ElementReadHandler handler = (ElementReadHandler) tableCells.get(i);
+            tableRow.addNode(handler.getElement());
+        }
     }
-    return null;
-  }
 
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    for (int i = 0; i < tableCells.size(); i++)
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Element getElement()
     {
-      final ElementReadHandler handler = (ElementReadHandler) tableCells.get(i);
-      tableRow.addNode(handler.getElement());
+        return tableRow;
     }
-  }
-
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Element getElement()
-  {
-    return tableRow;
-  }
 }

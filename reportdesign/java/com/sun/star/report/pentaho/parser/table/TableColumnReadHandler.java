@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableColumnReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +41,7 @@ import com.sun.star.report.pentaho.parser.ElementReadHandler;
 public class TableColumnReadHandler extends ElementReadHandler
 {
 
-    private Section tableColumn;
-
+    private final Section tableColumn;
     public TableColumnReadHandler()
     {
         tableColumn = new Section();

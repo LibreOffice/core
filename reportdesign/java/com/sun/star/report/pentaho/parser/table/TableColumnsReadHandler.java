@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableColumnsReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
+import java.util.List;
 
 /**
  * Creation-Date: 03.07.2006, 13:50:41
@@ -47,8 +49,8 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 public class TableColumnsReadHandler extends ElementReadHandler
 {
 
-    private ArrayList columns;
-    private Section tableColumns;
+    private final List columns;
+    private final Section tableColumns;
 
     public TableColumnsReadHandler()
     {
@@ -69,12 +71,7 @@ public class TableColumnsReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
-        {
-            return null;
-        }
-
-        if ("table-column".equals(tagName))
+        if (OfficeNamespaces.TABLE_NS.equals(uri) && OfficeToken.TABLE_COLUMN.equals(tagName) )
         {
             final TableColumnReadHandler readHandler = new TableColumnReadHandler();
             columns.add(readHandler);

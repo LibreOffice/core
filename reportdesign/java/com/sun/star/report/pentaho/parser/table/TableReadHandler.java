@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,11 @@ package com.sun.star.report.pentaho.parser.table;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.OfficeTableSection;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ConditionalPrintExpressionReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -49,13 +51,12 @@ import org.xml.sax.SAXException;
 public class TableReadHandler extends ElementReadHandler
 {
 
-    private TableColumnsReadHandler columns;
-    private ArrayList tableRows;
-    private Section table;
+    private final List children;
+    private final Section table;
 
     public TableReadHandler()
     {
-        tableRows = new ArrayList();
+        children = new ArrayList();
         table = new OfficeTableSection();
     }
 
@@ -70,7 +71,7 @@ public class TableReadHandler extends ElementReadHandler
     {
         super.startParsing(attrs);
         final String enabled = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "visible");
-        if (enabled == null || "true".equals(enabled))
+        if (enabled == null || OfficeToken.TRUE.equals(enabled))
         {
             table.setEnabled(true);
         }
@@ -94,35 +95,30 @@ public class TableReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.OOREPORT_NS.equals(uri))
+        if (OfficeNamespaces.OOREPORT_NS.equals(uri) && "conditional-print-expression".equals(tagName))
         {
-            if ("conditional-print-expression".equals(tagName))
+            return new ConditionalPrintExpressionReadHandler(table);
+        }
+        else if (OfficeNamespaces.TABLE_NS.equals(uri))
+        {
+            if (OfficeToken.TABLE_COLUMNS.equals(tagName) || OfficeToken.TABLE_HEADER_COLUMNS.equals(tagName))
             {
-                return new ConditionalPrintExpressionReadHandler(table);
+                final TableColumnsReadHandler columns = new TableColumnsReadHandler();
+                children.add(columns);
+                return columns;
             }
-            return null;
-        }
-
-        if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
-        {
-            return null;
-        }
-        if ("table-columns".equals(tagName) || "table-header-columns".equals(tagName))
-        {
-            columns = new TableColumnsReadHandler();
-            return columns;
-        }
-        if ("table-row".equals(tagName))
-        {
-            final TableRowReadHandler rowHandler = new TableRowReadHandler();
-            tableRows.add(rowHandler);
-            return rowHandler;
-        }
-        if ("table-rows".equals(tagName) || "table-header-rows".equals(tagName))
-        {
-            final TableRowsReadHandler rowsHandler = new TableRowsReadHandler();
-            tableRows.add(rowsHandler);
-            return rowsHandler;
+            else if (OfficeToken.TABLE_ROW.equals(tagName))
+            {
+                final TableRowReadHandler rowHandler = new TableRowReadHandler();
+                children.add(rowHandler);
+                return rowHandler;
+            }
+            else if (OfficeToken.TABLE_ROWS.equals(tagName) || OfficeToken.TABLE_HEADER_ROWS.equals(tagName))
+            {
+                final TableRowsReadHandler rowsHandler = new TableRowsReadHandler();
+                children.add(rowsHandler);
+                return rowsHandler;
+            }
         }
         return null;
     }
@@ -134,14 +130,9 @@ public class TableReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        if (columns != null)
+        for (int i = 0; i < children.size(); i++)
         {
-            table.addNode(columns.getElement());
-        }
-
-        for (int i = 0; i < tableRows.size(); i++)
-        {
-            final TableRowReadHandler handler = (TableRowReadHandler) tableRows.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
             table.addNode(handler.getElement());
         }
     }
