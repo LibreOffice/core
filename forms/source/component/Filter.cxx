@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Filter.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,35 +161,8 @@ namespace frm
 
         return aRet;
     }
+
     //------------------------------------------------------------------
-     // generate a uniqueId
-    const Sequence< sal_Int8 > & OFilterControl::getUnoTunnelId()
-    {
-        static Sequence< sal_Int8 > * pSeq = 0;
-        if( !pSeq )
-        {
-            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
-            if( !pSeq )
-            {
-                static Sequence< sal_Int8 > aSeq( 16 );
-                    rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,sal_True );
-                    pSeq = &aSeq;
-            }
-        }
-        return *pSeq;
-    }
-    // return implementation specific data
-    //------------------------------------------------------------------
-    sal_Int64 OFilterControl::getSomething( const Sequence< sal_Int8 > & rId )
-    {
-        if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
-            return reinterpret_cast< sal_Int64 >( this );
-
-        return 0;
-    }
-
-
-    //---------------------------------------------------------------------
     ::rtl::OUString OFilterControl::GetComponentServiceName()
     {
         ::rtl::OUString aServiceName;
