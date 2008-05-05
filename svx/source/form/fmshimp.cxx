@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3740,6 +3740,13 @@ void FmXFormShell::viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeacti
             }
             m_aLoadingPages = aNewEvents;
         }
+
+        // remove callbacks at the page
+        if ( pPage && pPage->GetImpl() )
+        {
+            pPage->GetImpl()->SetFormsCreationHdl( Link() );
+        }
+        UpdateForms( sal_True );
     }
 }
 
@@ -3763,15 +3770,23 @@ IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
 }
 
 //------------------------------------------------------------------------
+IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
+{
+    UpdateForms( sal_True );
+    return 0L;
+}
+
+//------------------------------------------------------------------------
 void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
+    SdrPageView* pCurPageView = _pCurrentView ? _pCurrentView->GetSdrPageView() : NULL;
+    FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+
     // activate our view if we are activated ourself
     // FS - 30.06.99 - 67308
     if ( _pCurrentView && _pCurrentView->GetImpl() && !_pCurrentView->IsDesignMode() )
     {
         // load forms for the page the current view belongs to
-        SdrPageView* pCurPageView = _pCurrentView->GetSdrPageView();
-        FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
         if ( pPage )
         {
             if ( !pPage->GetImpl()->hasEverBeenActivated() )
@@ -3789,6 +3804,13 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
         // activate the current view
         _pCurrentView->GetImpl()->Activate( _bSyncAction );
     }
+
+    // set callbacks at the page
+    if ( pPage && pPage->GetImpl() )
+    {
+        pPage->GetImpl()->SetFormsCreationHdl( LINK( this, FmXFormShell, OnFormsCreated ) );
+    }
+    UpdateForms( sal_True );
 
     if ( !hasEverBeenActivated() )
     {
