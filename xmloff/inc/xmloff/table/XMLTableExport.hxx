@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableExport.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,7 @@ private:
     rtl::Reference< SvXMLExportPropertyMapper >     mxRowExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxColumnExportPropertySetMapper;
     TableInfoMap                                    maTableInfoMap;
+    bool                                            mbExportTables;
 
 protected:
     SvXMLExport& GetExport() { return mrExport; }
