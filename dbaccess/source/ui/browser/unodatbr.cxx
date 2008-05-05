@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.cxx,v $
- * $Revision: 1.199 $
+ * $Revision: 1.200 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@
 #include "dlgsave.hxx"
 #include "HtmlReader.hxx"
 #include "imageprovider.hxx"
-#include "linkeddocuments.hxx"
 #include "listviewitems.hxx"
 #include "QEnumTypes.hxx"
 #include "RtfReader.hxx"
@@ -98,6 +97,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/extract.hxx>
@@ -767,9 +767,9 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
                         xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(::com::sun::star::awt::TextAlign::LEFT));
                 }
             }
-            catch(Exception&)
+            catch( const Exception& )
             {
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::propertyChange: caught an exception!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -815,9 +815,9 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
             transferChangedControlProperty(evt.PropertyName, evt.NewValue);
         }
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR("SbaTableQueryBrowser::propertyChange: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1140,9 +1140,9 @@ void SbaTableQueryBrowser::connectExternalDispatches()
                 {
                     feature->second.xDispatcher->addStatusListener( this, feature->second.aURL );
                 }
-                catch(Exception&)
+                catch( const Exception& )
                 {
-                    OSL_ENSURE( 0, "SbaTableQueryBrowser::connectExternalDispatches: caught an exception while attaching a status listener!!" );
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
@@ -1307,9 +1307,9 @@ Any SAL_CALL SbaTableQueryBrowser::getSelection(  ) throw (RuntimeException)
             aReturn <<= aDescriptor.createPropertyValueSequence();
         }
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::getSelection: caught an exception while retrieving the selection!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aReturn;
@@ -1593,9 +1593,9 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 {
                     OSL_ENSURE(sal_False, "SbaTableQueryBrowser::GetState: object already disposed!");
                 }
-                catch(Exception&)
+                catch( const Exception& )
                 {
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::GetState: caught a strange exception!!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
             }
@@ -1799,9 +1799,9 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 
                         xDispatch->dispatch(aParentUrl, aDescriptor.createPropertyValueSequence());
                     }
-                    catch(Exception&)
+                    catch( const Exception& )
                     {
-                        DBG_ERROR("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not dispatch the slot (caught an exception)!");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -2026,9 +2026,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 else
                     OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
             }
-            catch(const Exception&)
+            catch( const Exception& )
             {
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser, OnExpandEntry: caught an unknown exception while populating the tables!");
+                DBG_UNHANDLED_EXCEPTION();
             }
             if (aInfo.isValid())
                 showError(aInfo);
@@ -2094,9 +2094,9 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
                     DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
                 }
             }
-            catch(Exception&)
+            catch( const Exception& )
             {
-                DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: caught an exception while retrieving the queries container!");
+                DBG_UNHANDLED_EXCEPTION();
             }
             break;
 
@@ -3271,9 +3271,9 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             }
         }
     }
-    catch(::com::sun::star::uno::Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR("SbaTableQueryBrowser::implAdministrate: caught an exception while creating/executing the dialog!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -3471,7 +3471,7 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::implGetQuerySignature: caught an exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return sal_False;
