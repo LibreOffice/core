@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: componenttools.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,13 +91,6 @@ namespace frm
             const TypeSequence& _rTypes2,
             const TypeSequence& _rTypes3,
             const TypeSequence& _rTypes4
-        );
-        TypeBag(
-            const TypeSequence& _rTypes1,
-            const TypeSequence& _rTypes2,
-            const TypeSequence& _rTypes3,
-            const TypeSequence& _rTypes4,
-            const TypeSequence& _rTypes5
         );
 
         void addTypes( const TypeSequence& _rTypes );
