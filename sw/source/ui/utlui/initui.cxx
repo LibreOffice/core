@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: initui.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,6 +177,7 @@ ShellResource::ShellResource()
     aTOXTablesName(         SW_RES(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
     aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
+    pAutoFmtNameLst(0),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
