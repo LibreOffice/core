@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: richtextvclcontrol.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,44 +174,6 @@ namespace frm
                 return true;
         }
         return false;
-    }
-
-    //--------------------------------------------------------------------
-    void RichTextControl::convert( const SfxPoolItem& _rItem, FontDescriptor& _rUnoFont )
-    {
-        OSL_ENSURE( _rItem.ISA( SvxFontItem ), "RichTextControl::convert: invalid item type!" );
-
-        _rUnoFont.Name    = static_cast< const SvxFontItem& >( _rItem ).GetFamilyName();
-        _rUnoFont.Family  = sal::static_int_cast< sal_Int16 >( static_cast< const SvxFontItem& >( _rItem ).GetFamily() );
-        _rUnoFont.Pitch   = sal::static_int_cast< sal_Int16 >( static_cast< const SvxFontItem& >( _rItem ).GetPitch() );
-        _rUnoFont.CharSet = static_cast< const SvxFontItem& >( _rItem ).GetCharSet();
-    }
-
-    //--------------------------------------------------------------------
-    void RichTextControl::convert( const FontDescriptor& _rUnoFont, SfxPoolItem*& _rpFontItem )
-    {
-        SvxFontItem* pFontItem = new SvxFontItem( SID_ATTR_CHAR_FONT );
-        pFontItem->GetFamilyName() = _rUnoFont.Name;
-        pFontItem->GetFamily()     = (FontFamily)_rUnoFont.Family;
-        pFontItem->GetPitch()      = (FontPitch)_rUnoFont.Pitch;
-        pFontItem->GetCharSet()    = _rUnoFont.CharSet;
-
-        _rpFontItem = pFontItem;
-    }
-
-    //--------------------------------------------------------------------
-    sal_uInt32 RichTextControl::convertFontHeight( const SfxPoolItem& _rItem )
-    {
-        OSL_ENSURE( _rItem.ISA( SvxFontHeightItem ), "RichTextControl::convert: invalid item type!" );
-        return static_cast< const SvxFontHeightItem& >( _rItem ).GetHeight();
-    }
-
-    //--------------------------------------------------------------------
-    SfxPoolItem* RichTextControl::convertFontHeight( sal_uInt32 _nUnoFontHeight )
-    {
-        SvxFontHeightItem* pItem = new SvxFontHeightItem( _nUnoFontHeight, 100, EE_CHAR_FONTHEIGHT );
-        pItem->SetProp( 100, SFX_MAPUNIT_POINT );
-        return pItem;
     }
 
     //--------------------------------------------------------------------
