@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,6 +321,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
+            ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_bHasAnyObjectWithMacros( false )
             ,m_bModificationLock( false )
             ,m_aContext( _rxFactory )
@@ -357,6 +358,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aContainer(4)
             ,m_aStorages()
             ,m_aMacroMode( *this )
+            ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_bHasAnyObjectWithMacros( false )
             ,m_bModificationLock( false )
             ,m_aContext( _rxFactory )
@@ -1244,23 +1246,23 @@ bool ODatabaseModelImpl::isDatabaseStorage( const Reference< XStorage >& _rxStor
 }
 
 // -----------------------------------------------------------------------------
-sal_Int16 ODatabaseModelImpl::getImposedMacroExecMode() const
+sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
 {
-    sal_Int16 nMacroExecMode( MacroExecMode::USE_CONFIG );
+    sal_Int16 nCurrentMode = MacroExecMode::NEVER_EXECUTE;
     try
     {
         ::comphelper::NamedValueCollection aArgs( m_aArgs );
-        nMacroExecMode = aArgs.getOrDefault( "MacroExecutionMode", nMacroExecMode );
+        nCurrentMode = aArgs.getOrDefault( "MacroExecutionMode", nCurrentMode );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return nMacroExecMode;
+    return nCurrentMode;
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool ODatabaseModelImpl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
+sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     try
     {
