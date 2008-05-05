@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbwizsetup.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,9 +162,6 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
-#include "linkeddocuments.hxx"
-#endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
 #endif
@@ -1253,7 +1250,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     );
                 }
             }
-            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+            catch( const Exception& )
+            {
+                // do not assert.
+                // Such an exception happens for instance of the to-be-loaded document does not exist anymore.
+            }
 
             try
             {
