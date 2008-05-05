@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querydlg.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
@@ -320,9 +323,9 @@ IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
                     m_pConnData->AppendConnLine(*pIter,*pIter);
             }
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception caught while asking for column names in case of a natural join.");
+            DBG_UNHANDLED_EXCEPTION();
         }
         m_pTableControl->NotifyCellChange();
         m_pTableControl->Invalidate();
