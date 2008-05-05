@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objshimp.hxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,8 +172,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual ~SfxObjectShell_Impl();
 
     // IMacroDocumentAccess overridables
-    virtual sal_Int16 getImposedMacroExecMode() const;
-    virtual sal_Bool setImposedMacroExecMode( sal_uInt16 nMacroMode );
+    virtual sal_Int16 getCurrentMacroExecMode() const;
+    virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 nMacroMode );
     virtual ::rtl::OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
     virtual sal_Bool documentStorageHasMacros() const;
