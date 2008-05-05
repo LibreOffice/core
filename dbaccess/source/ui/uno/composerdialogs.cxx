@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: composerdialogs.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
@@ -151,7 +154,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ComposerDialog::createDialog: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
