@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableCopyHelper.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,9 +313,9 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         {
             m_pController->showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
         }
-        catch(Exception& )
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OTableCopyHelper::pasteTable: caught a generic exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     else
