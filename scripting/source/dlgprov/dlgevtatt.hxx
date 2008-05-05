@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgevtatt.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,9 @@
 #endif
 #include <cppuhelper/implbase1.hxx>
 
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
+#include <hash_map>
 //.........................................................................
 namespace dlgprov
 {
@@ -52,6 +54,10 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
+    typedef std::hash_map< rtl::OUString,
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
+        ::rtl::OUStringHash,
+        ::std::equal_to< ::rtl::OUString > > ListenerHash;
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::XScriptEventsAttacher > DialogEventsAttacherImpl_BASE;
@@ -60,17 +66,28 @@ namespace dlgprov
     class DialogEventsAttacherImpl : public DialogEventsAttacherImpl_BASE
     {
     private:
+        ListenerHash listernersForTypes;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacher > m_xEventAttacher;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > getScriptListenerForKey( const rtl::OUString& sScriptName ) throw ( ::com::sun::star::uno::RuntimeException );
+#ifdef FAKE_VBA_EVENT_SUPPORT
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl );
+#endif
+        void  SAL_CALL attachEventsToControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier >& events, const ::com::sun::star::uno::Any& Helper  );
     public:
-        DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+        DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xControl,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
+             bool bProviderMode,
+             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher
         virtual void SAL_CALL attachEvents( const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xListener,
+            const com::sun::star::uno::Reference<com::sun::star::script::XScriptListener>&,
             const ::com::sun::star::uno::Any& Helper )
             throw (::com::sun::star::lang::IllegalArgumentException,
                    ::com::sun::star::beans::IntrospectionException,
@@ -124,24 +141,11 @@ namespace dlgprov
 
     class DialogScriptListenerImpl : public DialogScriptListenerImpl_BASE
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xControl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xIntrospectionAccess;
-        bool                                                                                m_bDialogProviderMode;
-
-        virtual void firing_impl( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
-
-        void handleUnoScript( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet );
-
+    protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+        virtual void firing_impl( const ::com::sun::star::script::ScriptEvent& aScriptEvent, ::com::sun::star::uno::Any* pRet ) = 0;
     public:
-        DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxControl,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& rxIntrospectionAccess,
-            bool bDialogProviderMode );     // false: ContainerWindowProvider mode
+        DialogScriptListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext ) : m_xContext( rxContext ) {}
         virtual ~DialogScriptListenerImpl();
 
         // XEventListener
@@ -154,6 +158,7 @@ namespace dlgprov
         virtual ::com::sun::star::uno::Any SAL_CALL approveFiring( const ::com::sun::star::script::ScriptEvent& aScriptEvent )
             throw (::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
     };
+
 
 //.........................................................................
 }   // namespace dlgprov
