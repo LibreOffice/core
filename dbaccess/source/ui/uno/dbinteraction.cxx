@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbinteraction.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,9 +208,9 @@ namespace dbaui
                     break;
             }
         }
-        catch(RuntimeException&)
+        catch( const Exception& )
         {
-            DBG_ERROR("OInteractionHandler::implHandle(ParametersRequest): caught a RuntimeException while calling the continuation callback!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -344,9 +344,9 @@ namespace dbaui
                             break;
                     }
                 }
-                catch(RuntimeException&)
+                catch( const Exception& )
                 {
-                    DBG_ERROR("OInteractionHandler::implHandle(DocumentSaveRequest): caught a RuntimeException while calling the continuation callback!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             else if ( -1 != nApprovePos )
