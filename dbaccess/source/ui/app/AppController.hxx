@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/stl_types.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <sot/storage.hxx>
@@ -103,7 +104,7 @@ namespace dbaui
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >      TComponent;
         typedef ::std::map< TComponent, TComponent >                                        TDocuments;
 
-        typedef ::std::pair<sal_Int32,OLinkedDocumentsAccess::EOpenMode>                    TTypeOpenMode;
+        typedef ::std::pair< sal_Int32, ElementOpenMode >                                   TTypeOpenMode;
         typedef ::std::pair< TTypeOpenMode , TComponent >                                   TTypeFrame;
         typedef ::std::multimap< ::rtl::OUString, TTypeFrame >                              TFrames;
 
@@ -148,7 +149,7 @@ namespace dbaui
             @param  _sName  the name of the component
             @param  _nKind  the kind of the component
         */
-        bool impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const OLinkedDocumentsAccess::EOpenMode _eOpenMode) const;
+        bool impl_activateSubFrame_throw(const ::rtl::OUString& _sName,const sal_Int32 _nKind,const ElementOpenMode _eOpenMode) const;
         /** returns the database name
             @return
                 the database name
@@ -181,8 +182,18 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(
             const ::rtl::OUString& _sName,
             ElementType _eType,
-            OLinkedDocumentsAccess::EOpenMode _eOpenMode,
+            ElementOpenMode _eOpenMode,
             sal_uInt16 _nInstigatorCommand = 0
+        );
+
+        /** opens a new sub frame with a table/query/form/report/view, passing additional arguments
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElementWithArguments(
+            const ::rtl::OUString& _sName,
+            ElementType _eType,
+            ElementOpenMode _eOpenMode,
+            sal_uInt16 _nInstigatorCommand,
+            const ::comphelper::NamedValueCollection& _rAdditionalArguments
         );
 
         /** opens a new frame for creation or auto pilot
@@ -267,8 +278,6 @@ namespace dbaui
 
         /// returns the nameaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getElements(ElementType _eType);
-
-        ///
 
         /** returns the document access for the specific type
             @param  _eType
@@ -392,9 +401,9 @@ namespace dbaui
             @param  _nId
                 The slot which should be executed.
             @param  _eOpenMode
-                Defines the mode of opening. @see OLinkedDocumentsAccess::EOpenMode
+                Defines the mode of opening. @see ElementOpenMode
         */
-        void doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode);
+        void doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode);
 
         /** returns the currently selected table or query name.
         *
@@ -420,6 +429,11 @@ namespace dbaui
             to the database document itself.
         */
         void    impl_migrateScripts_nothrow();
+
+        /** verifies the object type denotes a valid DatabaseObject, and the object name denotes an existing
+            object of this type. Throws if not.
+        */
+        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName );
 
     protected:
         // ----------------------------------------------------------------
@@ -487,6 +501,8 @@ namespace dbaui
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL connect(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XSelectionSupplier
         virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
