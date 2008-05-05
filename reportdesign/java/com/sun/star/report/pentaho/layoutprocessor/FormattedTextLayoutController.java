@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedTextLayoutController.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +27,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeStyle;
@@ -57,161 +56,161 @@ import org.jfree.util.Log;
  * @since 05.03.2007
  */
 public class FormattedTextLayoutController
-    extends AbstractReportElementLayoutController
+        extends AbstractReportElementLayoutController
 {
-  public FormattedTextLayoutController()
-  {
-  }
 
-  private VariablesCollection getVariablesCollection()
-  {
-    LayoutController parent = getParent();
-    while (parent != null)
+    public FormattedTextLayoutController()
     {
-      if (parent instanceof OfficeRepeatingStructureLayoutController)
-      {
-        final OfficeRepeatingStructureLayoutController orslc =
-            (OfficeRepeatingStructureLayoutController) parent;
-        if (orslc.isNormalFlowProcessing())
+    }
+
+    private VariablesCollection getVariablesCollection()
+    {
+        LayoutController parent = getParent();
+        while (parent != null)
         {
-          return null;
+            if (parent instanceof OfficeRepeatingStructureLayoutController)
+            {
+                final OfficeRepeatingStructureLayoutController orslc =
+                        (OfficeRepeatingStructureLayoutController) parent;
+                if (orslc.isNormalFlowProcessing())
+                {
+                    return null;
+                }
+
+                return orslc.getVariablesCollection();
+            }
+            parent = parent.getParent();
+        }
+        return null;
+    }
+
+    protected boolean isValueChanged()
+    {
+        try
+        {
+            final FormattedTextElement element = (FormattedTextElement) getNode();
+            final FormulaExpression formulaExpression = element.getValueExpression();
+            final Formula formula = formulaExpression.getCompiledFormula();
+            final LValue lValue = formula.getRootReference();
+            return isReferenceChanged(lValue);
+        }
+        catch (final ParseException e)
+        {
+            Log.debug("Parse Exception", e);
+            return false;
+        }
+    }
+
+    protected LayoutController delegateContentGeneration(final ReportTarget target)
+            throws ReportProcessingException, ReportDataFactoryException,
+            DataSourceException
+    {
+        final FormattedTextElement element = (FormattedTextElement) getNode();
+        final VariablesCollection vc = getVariablesCollection();
+        if (vc != null)
+        {
+            final String name = vc.addVariable(element);
+            final AttributeMap variablesGet = new AttributeMap();
+            variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
+                    Element.TYPE_ATTRIBUTE, "variable-get");
+            variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
+                    Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
+            variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
+            //variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "display", "value");
+
+            final String dataStyleName = computeValueStyle();
+            if (dataStyleName != null)
+            {
+                variablesGet.setAttribute(OfficeNamespaces.STYLE_NS, "data-style-name", dataStyleName);
+            }
+
+            final String valueType = computeValueType();
+            variablesGet.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, valueType);
+            target.startElement(variablesGet);
+
+            target.endElement(variablesGet);
+        }
+        else
+        {
+
+            final DataFlags df = FormatValueUtility.computeDataFlag(element, getFlowController());
+            if (df != null)
+            {
+                target.processContent(df);
+            }
         }
 
-        return orslc.getVariablesCollection();
-      }
-      parent = parent.getParent();
+        return join(getFlowController());
     }
-    return null;
-  }
 
-  protected boolean isValueChanged()
-  {
-    try
+    private OfficeDocument getDocument()
     {
-      final FormattedTextElement element = (FormattedTextElement) getNode();
-      final FormulaExpression formulaExpression = element.getValueExpression();
-      final Formula formula = formulaExpression.getCompiledFormula();
-      final LValue lValue = formula.getRootReference();
-      return isReferenceChanged(lValue);
+        LayoutController parent = getParent();
+        while (parent != null)
+        {
+            final Object node = parent.getNode();
+            if (node instanceof OfficeDocument)
+            {
+                return (OfficeDocument) node;
+            }
+            parent = parent.getParent();
+        }
+        return null;
     }
-    catch (final ParseException e)
+
+    private Element getParentTableCell()
     {
-      Log.debug("Parse Exception", e);
-      return false;
+        LayoutController parent = getParent();
+        while (parent != null)
+        {
+            if (parent instanceof TableCellLayoutController)
+            {
+                final TableCellLayoutController cellController = (TableCellLayoutController) parent;
+                return cellController.getElement();
+            }
+            parent = parent.getParent();
+        }
+        return null;
     }
-  }
 
-  protected LayoutController delegateContentGeneration(final ReportTarget target)
-      throws ReportProcessingException, ReportDataFactoryException,
-      DataSourceException
-  {
-    final FormattedTextElement element = (FormattedTextElement) getNode();
-    final VariablesCollection vc = getVariablesCollection();
-    if (vc != null)
+    private String computeValueStyle()
     {
-      final String name = vc.addVariable(element);
-      final AttributeMap variablesGet = new AttributeMap();
-      variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
-          Element.TYPE_ATTRIBUTE, "variable-get");
-      variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
-          Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
-      variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
-      //variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "display", "value");
+        final Element tce = getParentTableCell();
+        if (tce == null)
+        {
+            return null;
+        }
 
-      final String dataStyleName = computeValueStyle();
-      if (dataStyleName != null)
-      {
-        variablesGet.setAttribute(OfficeNamespaces.STYLE_NS, "data-style-name", dataStyleName);
-      }
+        final String cellStyleName = (String) tce.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
+        if (cellStyleName == null)
+        {
+            return null;
+        }
+        final OfficeDocument document = getDocument();
+        if (document == null)
+        {
+            return null;
+        }
 
-      final String valueType = computeValueType();
-      variablesGet.setAttribute(OfficeNamespaces.OFFICE_NS, "value-type", valueType);
-      target.startElement(variablesGet);
-
-      target.endElement(variablesGet);
+        final OfficeStyle style = document.getStylesCollection().getStyle("table-cell", cellStyleName);
+        return (String) style.getAttribute(OfficeNamespaces.STYLE_NS, "data-style-name");
     }
-    else
+
+    private String computeValueType()
     {
+        final Element tce = getParentTableCell();
+        if (tce == null)
+        {
+            // NO particular format means: Fallback to string and hope and pray ..
+            throw new IllegalStateException("A formatted text element must be a child of a Table-Cell.");
+        }
 
-      final DataFlags df = FormatValueUtility.computeDataFlag(element, getFlowController());
-      if (df != null)
-      {
-        target.processContent(df);
-      }
+        final String type = (String) tce.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
+        if (type == null)
+        {
+            Log.error("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
+            return "string";
+        }
+        return type;
     }
-
-    return join(getFlowController());
-  }
-
-
-  private OfficeDocument getDocument()
-  {
-    LayoutController parent = getParent();
-    while (parent != null)
-    {
-      final Object node = parent.getNode();
-      if (node instanceof OfficeDocument)
-      {
-        return (OfficeDocument) node;
-      }
-      parent = parent.getParent();
-    }
-    return null;
-  }
-
-  private Element getParentTableCell()
-  {
-    LayoutController parent = getParent();
-    while (parent != null)
-    {
-      if (parent instanceof TableCellLayoutController)
-      {
-        final TableCellLayoutController cellController = (TableCellLayoutController) parent;
-        return cellController.getElement();
-      }
-      parent = parent.getParent();
-    }
-    return null;
-  }
-
-  private String computeValueStyle()
-  {
-    final Element tce = getParentTableCell();
-    if (tce == null)
-    {
-      return null;
-    }
-
-    final String cellStyleName = (String) tce.getAttribute(OfficeNamespaces.TABLE_NS, "style-name");
-    if (cellStyleName == null)
-    {
-      return null;
-    }
-    final OfficeDocument document = getDocument();
-    if (document == null)
-    {
-      return null;
-    }
-
-    final OfficeStyle style = document.getStylesCollection().getStyle("table-cell", cellStyleName);
-    return (String) style.getAttribute(OfficeNamespaces.STYLE_NS, "data-style-name");
-  }
-
-  private String computeValueType()
-  {
-    final Element tce = getParentTableCell();
-    if (tce == null)
-    {
-      // NO particular format means: Fallback to string and hope and pray ..
-      throw new IllegalStateException("A formatted text element must be a child of a Table-Cell.");
-    }
-
-    final String type = (String) tce.getAttribute(OfficeNamespaces.OFFICE_NS, "value-type");
-    if (type == null)
-    {
-      Log.error("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
-      return "string";
-    }
-    return type;
-  }
 }
