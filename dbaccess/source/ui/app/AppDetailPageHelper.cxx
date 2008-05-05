@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppDetailPageHelper.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -1060,7 +1063,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                 if ( m_ePreviewMode == E_DOCUMENT )
                     aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("preview"));
                 else
-                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getdocumentinfo"));
+                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getDocumentInfo"));
 
                 Any aPreview = xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
                 if ( m_ePreviewMode == E_DOCUMENT )
@@ -1101,9 +1104,9 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                     pTreeView->clearCurrentSelectionEntry();
             }
         }
-        catch(Exception)
+        catch( const Exception& )
         {
-            OSL_ENSURE(0,"Exception catched while extracting the preview!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
