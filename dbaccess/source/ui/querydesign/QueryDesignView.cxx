@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.91 $
+ * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,9 @@
 #endif
 #ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_QYDLGTAB_HXX
 #include "adtabdlg.hxx"
@@ -266,9 +269,9 @@ namespace
                             aInfoData->AppendConnLine(*pIter,*pIter);
                     }
                 }
-                catch(const Exception&)
+                catch( const Exception& )
                 {
-                    OSL_ENSURE(0,"Exception caught while asking for column names in case of a natural join.");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
@@ -569,9 +572,9 @@ namespace
                 }
                 aDBName = aTableListStr;
             }
-            catch(SQLException&)
+            catch(const SQLException&)
             {
-                OSL_ENSURE(0,"Exception catched while building table table for query!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         return aDBName;
