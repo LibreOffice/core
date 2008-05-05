@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localize.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,9 @@ const char *PositiveList[] = {
     "chart2/source/controller/dialogs/res_Titlesx_tmpl.hrc",
     "chart2/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
     "chart2/source/controller/menu/MenuItems_tmpl.hrc",
-      "svx.lnk/inc/globlmn_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_Trendline_tmpl.hrc",
+    "svx.lnk/inc/globlmn_tmpl.hrc",
     "sw.lnk/source/ui/inc/swmn_tmpl.hrc",
     "sw.lnk/source/ui/inc/swacc_tmpl.hrc",
     "sw.lnk/source/ui/inc/toolbox_tmpl.hrc",
@@ -107,6 +109,8 @@ const char *PositiveList[] = {
     "chart2.lnk/source/controller/dialogs/res_Titlesx_tmpl.hrc",
     "chart2.lnk/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
     "chart2.lnk/source/controller/menu/MenuItems_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_ErrorBar_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_Trendline_tmpl.hrc",
     "NULL"
 };
 
