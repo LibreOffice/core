@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImageReadHandler.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.ImageElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.xlink.XLinkReadHandler;
@@ -49,7 +50,7 @@ import org.xml.sax.SAXException;
 public class ImageReadHandler extends ElementReadHandler
 {
 
-    private ImageElement contentElement;
+    private final ImageElement contentElement;
     private XLinkReadHandler xLinkReadHandler;
 
     public ImageReadHandler()
@@ -67,7 +68,7 @@ public class ImageReadHandler extends ElementReadHandler
     {
         super.startParsing(attrs);
         final String formula = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "formula");
-//        final String preserveIRI = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "preserve-IRI");
+//        final String preserveIRI = attrs.getValue(OfficeNamespaces.OOREPORT_NS, OfficeToken.PRESERVE_IRI);
         if (formula != null && formula.length() != 0)
         {
             // now, the evaulated content ends up in the 'content' attribute of the
@@ -78,7 +79,7 @@ public class ImageReadHandler extends ElementReadHandler
         }
 
         contentElement.setNamespace(OfficeNamespaces.FORM_NS);
-        contentElement.setType("image");
+        contentElement.setType(OfficeToken.IMAGE);
     }
 
     /**
@@ -94,13 +95,10 @@ public class ImageReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.DRAWING_NS.equals(uri))
+        if (OfficeNamespaces.DRAWING_NS.equals(uri) && OfficeToken.IMAGE_DATA.equals(tagName))
         {
-            if ("image-data".equals(tagName))
-            {
-                xLinkReadHandler = new XLinkReadHandler();
-                return xLinkReadHandler;
-            }
+            xLinkReadHandler = new XLinkReadHandler();
+            return xLinkReadHandler;
         }
 
         if (OfficeNamespaces.OOREPORT_NS.equals(uri))

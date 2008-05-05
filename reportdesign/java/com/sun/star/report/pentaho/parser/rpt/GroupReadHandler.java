@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GroupReadHandler.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeGroupInstanceSection;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+import java.util.List;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
@@ -49,9 +50,9 @@ public class GroupReadHandler extends ElementReadHandler
     private GroupSectionReadHandler groupFooter;
     private GroupReadHandler childGroup;
     private RootTableReadHandler detailSection;
-    private OfficeGroup group;
-    private OfficeGroupInstanceSection groupInstanceSection;
-    private ArrayList functionHandlers;
+    private final OfficeGroup group;
+    private final OfficeGroupInstanceSection groupInstanceSection;
+    private final List functionHandlers;
 
     public GroupReadHandler()
     {
