@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablespage.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,9 +348,9 @@ DBG_NAME(OTableSubscriptionPage)
                     if (m_xCollator.is())
                         m_xCollator->loadDefaultCollator(Application::GetSettings().GetLocale(), 0);
                 }
-                catch(Exception&)
+                catch(const Exception&)
                 {
-                    OSL_ENSURE(0,"Exception catched!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
