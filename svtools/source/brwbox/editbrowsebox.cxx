@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editbrowsebox.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -704,11 +704,16 @@ namespace svt
                             case KEY_UP:            nId = BROWSER_SELECTUP; bLocalSelect = sal_True;break;
                             case KEY_HOME:          nId = BROWSER_SELECTHOME; bLocalSelect = sal_True;break;
                             case KEY_END:           nId = BROWSER_SELECTEND; bLocalSelect = sal_True;break;
-                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
                             case KEY_TAB:
                                 if (IsTabAllowed(sal_False))
                                     nId = BROWSER_CURSORLEFT;
                                 break;
+                        }
+
+                    if ( !bAlt && bCtrl && bShift )
+                        switch ( nCode )
+                        {
+                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bLocalSelect = sal_True; break;
                         }
 
 
@@ -733,7 +738,7 @@ namespace svt
                             )
                         )
                     {
-                        if (nId == BROWSER_SELECT)
+                        if (nId == BROWSER_SELECT || BROWSER_SELECTCOLUMN == nId )
                         {
                             // save the cell content (if necessary)
                             if (IsEditing() && aController->IsModified() && !((EditBrowseBox *) this)->SaveModified())
