@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeGroup.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.structure.Section;
 
@@ -50,13 +51,13 @@ public class OfficeGroup extends Section
 
   public boolean isStartNewColumn ()
   {
-    return "true".equals
+    return OfficeToken.TRUE.equals
         (getAttribute(OfficeNamespaces.OOREPORT_NS, "start-new-column"));
   }
 
   public boolean isResetPageNumber ()
   {
-    return "true".equals
+    return OfficeToken.TRUE.equals
         (getAttribute(OfficeNamespaces.OOREPORT_NS, "reset-page-number"));
   }
 
