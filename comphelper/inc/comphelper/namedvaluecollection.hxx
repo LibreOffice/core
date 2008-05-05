@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,8 @@ namespace comphelper
     public:
         NamedValueCollection();
 
+        NamedValueCollection( const NamedValueCollection& _rCopySource );
+
         /** constructs a collection
             @param  _rElements
                 the wrapped elements of the collection. The <code>Any</code> might contain a sequence of
@@ -109,6 +111,20 @@ namespace comphelper
 
         /// determines whether the collection is empty
         bool    empty() const;
+
+        /** merges the content of another collection into |this|
+            @param _rAdditionalValues
+                the collection whose values are to be merged
+            @param _bOverwriteExisting
+                defines whether or not elements which are already present in |this|
+                should be overwritten (<TRUE/>) or preserved (<FALSE/>).
+            @return |*this|
+        */
+        NamedValueCollection&
+                merge(
+                    const NamedValueCollection& _rAdditionalValues,
+                    bool _bOverwriteExisting
+                );
 
         /** retrieves a value with a given name from the collection, if it is present
 
