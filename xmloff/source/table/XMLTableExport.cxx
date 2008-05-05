@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableExport.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,28 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
+, mbExportTables( false )
 {
+    Reference< XMultiServiceFactory > xFac( rExp.GetModel(), UNO_QUERY );
+    if( xFac.is() ) try
+    {
+        Sequence< OUString > sSNS( xFac->getAvailableServiceNames() );
+        sal_Int32 n = sSNS.getLength();
+        const OUString* pSNS( sSNS.getConstArray() );
+        while( --n > 0 )
+        {
+            if( (*pSNS++).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TableShape") ) )
+            {
+                mbExportTables = true;
+                break;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+    }
+
     mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper( xCellPropertySetMapper.get() );
     mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 
@@ -205,6 +226,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
  void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)
  {
+     if( !mbExportTables )
+         return;
+
     boost::shared_ptr< XMLTableInfo > pTableInfo( new XMLTableInfo() );
     maTableInfoMap[xColumnRowRange] = pTableInfo;
 
@@ -307,6 +331,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
  void XMLTableExport::exportTable( const Reference < XColumnRowRange >& xColumnRowRange )
  {
+     if( !mbExportTables )
+         return;
+
      try
     {
         boost::shared_ptr< XMLTableInfo > pTableInfo( maTableInfoMap[xColumnRowRange] );
@@ -463,6 +490,9 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 
 void XMLTableExport::exportTableStyles()
 {
+     if( !mbExportTables )
+         return;
+
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
     // write graphic family styles
@@ -477,6 +507,9 @@ void XMLTableExport::exportTableStyles()
 
 void XMLTableExport::exportAutoStyles()
 {
+     if( !mbExportTables )
+         return;
+
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_COLUMN, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_ROW, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
     mrExport.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_TABLE_CELL, mrExport.GetDocHandler(), mrExport.GetMM100UnitConverter(), mrExport.GetNamespaceMap() );
@@ -507,6 +540,9 @@ const TableStyleElement* getTableStyleMap()
 
 void XMLTableExport::exportTableTemplates()
 {
+     if( !mbExportTables )
+         return;
+
     try
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
