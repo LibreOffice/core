@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CollectionView.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -274,9 +277,9 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
             EndDialog( TRUE );
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return 0;
 }
@@ -293,9 +296,9 @@ IMPL_LINK( OCollectionView, NewFolder_Click, PushButton*, EMPTYARG )
     {
         showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), this, m_xORB );
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return 0;
 }
@@ -318,9 +321,9 @@ IMPL_LINK( OCollectionView, Up_Click, PushButton*, EMPTYARG )
                 m_aUp.Disable();
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return 0;
 }
@@ -349,9 +352,9 @@ IMPL_LINK( OCollectionView, Dbl_Click_FileView, SvtFileView*, EMPTYARG )
             }
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return 0;
 }
@@ -371,9 +374,9 @@ void OCollectionView::initCurrentPath()
             bEnable = xChild.is() && Reference<XNameAccess>(xChild->getParent(),UNO_QUERY).is();
         }
     }
-    catch(Exception)
+    catch( const Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     m_aUp.Enable(bEnable);
 }
