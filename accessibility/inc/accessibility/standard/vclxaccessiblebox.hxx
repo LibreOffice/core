@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessiblebox.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,11 +65,6 @@ public:
     */
     VCLXAccessibleBox (VCLXWindow* pVCLXindow, BoxType aType, bool bIsDropDownBox);
 
-    /** The index that is passed to this method is returned on following
-        calls to <member>getAccessibleIndexInParent</member>.
-    */
-    void SetIndexInParent (sal_Int32 _nIndex);
-
     // XTypeProvider
     DECLARE_XTYPEPROVIDER()
 
@@ -104,9 +99,7 @@ public:
     */
     sal_Int16 SAL_CALL getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException);
-    /** The index returned as index in parent is always the one set with the
-        <member>SetIndexInParent()</member> method.
-    */
+
     sal_Int32 SAL_CALL getAccessibleIndexInParent (void)
         throw (::com::sun::star::uno::RuntimeException);
 
