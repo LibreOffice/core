@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -353,13 +353,6 @@ protected:
 
     void    doSetDelegator();
     void    doResetDelegator();
-
-    /** checks if the object is still alive
-
-        @throws ::com::sun::star::lang::DisposedException
-            if the object is already disposed
-    */
-    void    ensureAlive() SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
 
