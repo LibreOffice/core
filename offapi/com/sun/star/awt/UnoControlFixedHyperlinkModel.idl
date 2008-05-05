@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoControlFixedHyperlinkModel.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,15 +53,15 @@
 
 //=============================================================================
 
-/** specifies the standard model of an <type>UnoControlFixedText</type>.
+/** specifies the standard model of an <type>UnoControlFixedHyperlink</type>.
  */
-service UnoControlFixedTextModel
+service UnoControlFixedHyperlinkModel
 {
     service com::sun::star::awt::UnoControlModel;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the horiztonal alignment of the text in the control.
+    /** specifies the horizontal alignment of the text in the control.
 
         <pre>
         0: left
