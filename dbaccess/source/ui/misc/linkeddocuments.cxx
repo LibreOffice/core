@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -218,7 +218,8 @@ namespace dbaui
         DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::implOpen(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
+    Reference< XComponent> OLinkedDocumentsAccess::impl_open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
+        ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
         Reference< XComponent> xRet;
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
@@ -227,25 +228,30 @@ namespace dbaui
             return xRet;
 
         WaitObject aWaitCursor( m_pDialogParent );
-        Sequence< PropertyValue > aArguments(2);
 
-        aArguments[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"));
-        switch(_eOpenMode)
+        ::comphelper::NamedValueCollection aArguments;
+        ::rtl::OUString sOpenMode;
+        switch ( _eOpenMode )
         {
-            case OPEN_NORMAL:
-                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
+            case E_OPEN_NORMAL:
+                sOpenMode = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) );
                 break;
-            case OPEN_DESIGN:
-                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign"));
+
+            case E_OPEN_FOR_MAIL:
+                aArguments.put( "Hidden", true );
+                // fall through
+
+            case E_OPEN_DESIGN:
+                sOpenMode = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
                 break;
-            case OPEN_FORMAIL:
-                aArguments[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openForMail"));
+
+            default:
+                OSL_ENSURE( false, "OLinkedDocumentsAccess::impl_open: invalid open mode!" );
                 break;
         }
+        aArguments.put( "OpenMode", sOpenMode );
 
-        aArguments[1].Name = PROPERTY_ACTIVE_CONNECTION;
-        aArguments[1].Value <<= m_xConnection;
-        OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
+        aArguments.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
         try
         {
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
@@ -253,7 +259,10 @@ namespace dbaui
             {
                 _xDefinition.set(xHier->getByHierarchicalName(_rLinkName),UNO_QUERY);
             }
-            xRet = xComponentLoader->loadComponentFromURL(_rLinkName,::rtl::OUString(),0,aArguments);
+
+            aArguments.merge( _rAdditionalArgs, true );
+
+            xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
         }
         catch(Exception& e)
         {
@@ -264,11 +273,8 @@ namespace dbaui
         return xRet;
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newWithPilot(const char* _pWizardService
-                                                , Reference< XComponent >& _xDefinition
-                                                , const sal_Int32 _nCommandType
-                                                , const ::rtl::OUString& _rObjectName
-                                                )
+    Reference< XComponent> OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
+        Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
         Reference< XComponent> xRet;
         try
@@ -312,37 +318,37 @@ namespace dbaui
                 ::comphelper::disposeComponent(xFormWizard);
             }
         }
-        catch(const Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newWithPilot: caught an exception while loading the object!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         return xRet;
     }
     //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::newFormWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
     {
-        return newWithPilot("com.sun.star.wizards.form.CallFormWizard",_xDefinition,_nCommandType,_rObjectName);
+        return impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _xDefinition, _nCommandType, _rObjectName );
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newReportWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    Reference< XComponent> OLinkedDocumentsAccess::newReportWithPilot( Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
-        return newWithPilot("com.sun.star.wizards.report.CallReportWizard",_xDefinition,_nCommandType,_rObjectName);
+        return impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _xDefinition, _nCommandType, _rObjectName );
     }
     //------------------------------------------------------------------
     Reference< XComponent> OLinkedDocumentsAccess::newTableWithPilot()
     {
         Reference< XComponent > xDefinition;
-        return newWithPilot("com.sun.star.wizards.table.CallTableWizard",xDefinition);
+        return impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", xDefinition, -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newQueryWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    Reference< XComponent> OLinkedDocumentsAccess::newQueryWithPilot()
     {
         Reference< XComponent > xDefinition;
-        return newWithPilot("com.sun.star.wizards.query.CallQueryWizard",xDefinition,_nCommandType,_rObjectName);
+        return impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", xDefinition, -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::newDocument(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _sObjectName)
+    Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 _nNewFormId, Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _sObjectName )
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         // determine the URL to use for the new document
@@ -414,20 +420,20 @@ namespace dbaui
         catch(const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            // OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: caught an exception while loading the object!");
         }
 
         return xNewDocument;
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
+    Reference< XComponent > OLinkedDocumentsAccess::open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
+        ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
         dbtools::SQLExceptionInfo aInfo;
         Reference< XComponent > xRet;
         try
         {
-            xRet = implOpen(_rLinkName,_xDefinition, _eOpenMode);
+            xRet = impl_open( _rLinkName, _xDefinition, _eOpenMode, _rAdditionalArgs );
             if ( !xRet.is() )
             {
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
