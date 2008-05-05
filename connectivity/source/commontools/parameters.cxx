@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parameters.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include "TConnection.hxx"
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -593,7 +594,7 @@ namespace dbtools
 
                     // type and scale of the parameter field
                     sal_Int32 nParamType = DataType::VARCHAR;
-                    OSL_VERIFY( xDetailField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FIELDTYPE) ) >>= nParamType );
+                    OSL_VERIFY( xDetailField->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE) ) >>= nParamType );
 
                     sal_Int32 nScale = 0;
                     if ( xDetailField->getPropertySetInfo()->hasPropertyByName( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE) ) )
@@ -621,7 +622,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ParameterManager::fillLinkedParameters: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
