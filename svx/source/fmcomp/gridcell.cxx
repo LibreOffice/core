@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridcell.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -685,15 +685,23 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
     Window* pWindows[] = { m_pPainter,m_pWindow};
     if (bFont)
     {
-        Font aFont( pParent->IsControlFont() ? pParent->GetControlFont() : pParent->GetPointFont());
+        bool bIsControlFont( pParent->IsControlFont() );
+        Font aFont( bIsControlFont ? pParent->GetControlFont() : pParent->GetPointFont() );
         aFont.SetTransparent( isTransparent() );
 
         for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
             if ( pWindows[i] )
             {
-                pWindows[i]->SetZoomedPointFont(aFont);
-                pWindows[i]->SetZoom(pParent->GetZoom());
+                if ( bIsControlFont )
+                {
+                    pWindows[i]->SetControlFont( aFont );
+                }
+                else
+                {
+                    pWindows[i]->SetZoom( pParent->GetZoom() );
+                    pWindows[i]->SetZoomedPointFont( aFont );
+                }
             }
         }
     }
