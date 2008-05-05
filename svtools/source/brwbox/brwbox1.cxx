@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwbox1.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -539,7 +539,7 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
                 aScrollArea = Rectangle(Point(aNextRect.Left(),0),
                                         Point(aToRect.Right(),aDataWinSize.Height()));
 
-            pDataWin->Scroll(nScroll,0,aScrollArea);
+            pDataWin->Scroll( nScroll, 0, aScrollArea, SCROLL_FLAGS );
             aToRect.Top() = 0;
             aToRect.Bottom() = aScrollArea.Bottom();
             Invalidate( aToRect );
@@ -1048,7 +1048,7 @@ long BrowseBox::ScrollColumns( long nCols )
         if ( !getDataWindow()->pHeaderBar && nTitleLines )
         {
             if( bScrollable )
-                Scroll( -nDelta, 0, aScrollRect );
+                Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
             else
                 bInvalidateView = TRUE;
         }
@@ -1067,9 +1067,10 @@ long BrowseBox::ScrollColumns( long nCols )
         aScrollRect = Rectangle(
                 Point( nFrozenWidth + nDelta, 0 ),
                 Size( pDataWin->GetOutputSizePixel().Width() - nFrozenWidth -
-                      nDelta, pDataWin->GetSizePixel().Height() ) );
+                      nDelta, pDataWin->GetOutputSizePixel().Height() ) );
+
         if( bScrollable )
-            pDataWin->Scroll( -nDelta, 0, aScrollRect );
+            pDataWin->Scroll( -nDelta, 0, aScrollRect, SCROLL_FLAGS );
         else
             bInvalidateView = TRUE;
         nSkippedWidth = pDataWin->GetOutputSizePixel().Width() -
@@ -1099,7 +1100,7 @@ long BrowseBox::ScrollColumns( long nCols )
                 Scroll( nDelta, 0, Rectangle(
                     Point( nFrozenWidth, 0 ),
                     Size( GetOutputSizePixel().Width() - nFrozenWidth,
-                        GetTitleHeight() - 1 ) ) );
+                        GetTitleHeight() - 1 ) ), SCROLL_FLAGS );
             }
             else
                 bInvalidateView = TRUE;
@@ -1109,7 +1110,7 @@ long BrowseBox::ScrollColumns( long nCols )
             pDataWin->Scroll( nDelta, 0, Rectangle(
                 Point( nFrozenWidth, 0 ),
                 Size( pDataWin->GetSizePixel().Width() - nFrozenWidth,
-                    pDataWin->GetSizePixel().Height() ) ) );
+                    pDataWin->GetSizePixel().Height() ) ), SCROLL_FLAGS );
         }
         else
             bInvalidateView = TRUE;
@@ -1209,7 +1210,7 @@ long BrowseBox::ScrollRows( long nRows )
             Abs( nDeltaY ) > 0 &&
             Abs( nDeltaY ) < pDataWin->GetSizePixel().Height() )
         {
-            pDataWin->Scroll( 0, (short)-nDeltaY );
+            pDataWin->Scroll( 0, (short)-nDeltaY, SCROLL_FLAGS );
         }
         else
             getDataWindow()->Invalidate();
@@ -1359,7 +1360,7 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
                 pDataWin->Scroll( 0, GetDataRowHeight() * nNumRows,
                                 Rectangle( Point( 0, nY ),
                                         Size( aSz.Width(), aSz.Height() - nY ) ),
-                                SCROLL_CLIP );
+                                SCROLL_FLAGS );
             }
             else
                 pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
@@ -1504,7 +1505,7 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
                     pDataWin->Scroll( 0, - (short) GetDataRowHeight() * nNumRows,
                         Rectangle( Point( 0, nY ), Size( aSz.Width(),
                             aSz.Height() - nY + nNumRows*GetDataRowHeight() ) ),
-                            SCROLL_CLIP );
+                            SCROLL_FLAGS );
                 }
                 else
                     pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
