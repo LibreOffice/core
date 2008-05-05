@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwctrlr.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1343,9 +1343,9 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
             }
         }
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR("SbaXDataBrowserController::approveParameter: caught an Exception (tried to let the InteractionHandler handle it)!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return sal_True;
