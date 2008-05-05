@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofunocontrol.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,9 +65,8 @@ namespace sdr { namespace contact {
         ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >    m_pImpl;
 
     public:
-        /// returns the ->XControl instance belonging to the instance, if has already been created
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-                getExistentControl() const;
+        /// determines whether an XControl already exists, and is currently visible
+        bool    isControlVisible() const;
 
         /// returns the ->XControl instance belonging to the instance, creates it if necessary
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
