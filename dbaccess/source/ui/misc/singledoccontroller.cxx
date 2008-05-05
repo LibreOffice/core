@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: singledoccontroller.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 
 //........................................................................
@@ -306,7 +307,7 @@ namespace dbaui
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "OSingleDocumentController::initializeConnection: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
