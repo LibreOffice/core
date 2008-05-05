@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,11 +58,7 @@ CDEFS+= -DVERBOSE
 CDEFS+= -DDX_DEBUG_IMAGES
 .ENDIF
 
-.IF "$(CCNUMVER)" <= "001499999999"
 CDEFS += -DDIRECTX_VERSION=0x0500
-.ELSE
-CDEFS += -DDIRECTX_VERSION=0x0900
-.ENDIF
 
 # --- This is Windows only! { ----------------------------------------------------------------
 
@@ -90,7 +86,6 @@ SLOFILES = \
     $(SLO)$/dx_vcltools.obj					\
     $(SLO)$/dx_textlayout_drawhelper.obj    \
 
-.IF "$(CCNUMVER)" <= "001499999999"
 ########################################################
 # DX5
 ########################################################
@@ -137,7 +132,7 @@ SHL1STDLIBS += dxguid.lib    # directx 9
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
 SHL1STDLIBS += imdebug.lib
 .ENDIF
-.ENDIF
+
 ########################################################
 # DX9
 ########################################################
