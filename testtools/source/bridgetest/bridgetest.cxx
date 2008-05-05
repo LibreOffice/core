@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bridgetest.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -980,7 +980,14 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
 #endif
                     aExc.Context == xLBT->getInterface())
                 {
+#ifdef COMPCHECK
+                    //When we check if a new compiler still works then we must not call
+                    //getRuntimeException because it uses cppu::getCaughtException which
+                    //does only work if all libs are build with the same runtime.
+                    return true;
+#else
                     ++nCount;
+#endif
                 }
                 else
                 {
