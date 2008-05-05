@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FixedContentReadHandler.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@ import com.sun.star.report.pentaho.model.FixedTextElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.text.TextContentReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.IgnoreAnyChildReadHandler;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -47,7 +48,7 @@ import org.xml.sax.SAXException;
 public class FixedContentReadHandler extends ElementReadHandler
 {
 
-    private FixedTextElement element;
+    private final FixedTextElement element;
 
     public FixedContentReadHandler()
     {
@@ -67,15 +68,11 @@ public class FixedContentReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.TEXT_NS.equals(uri))
+        if (OfficeNamespaces.TEXT_NS.equals(uri) && OfficeToken.P.equals(tagName))
         {
             // expect a paragraph (which will be ignored; it is a structural
             // component that needs not to be printed at all.
-            if ("p".equals(tagName))
-            {
-
-                return new TextContentReadHandler(element.getContent());
-            }
+            return new TextContentReadHandler(element.getContent());
         }
 
         if (OfficeNamespaces.OOREPORT_NS.equals(uri))
