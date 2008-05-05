@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ExtensionNotPresent.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,28 +29,29 @@
  ************************************************************************/
 #include "precompiled_dbaccess.hxx"
 
-#include "ExtensionNotPresent.hxx"
-#include "ExtensionNotPresent.hrc"
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "dbu_resource.hrc"
+#include "ExtensionNotPresent.hrc"
+#include "ExtensionNotPresent.hxx"
 #include "moduledbu.hxx"
-#include <vcl/msgbox.hxx>
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
-#include <connectivity/dbconversion.hxx>
-#include <svtools/syslocale.hxx>
 #include "UITools.hxx"
 
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+/** === end UNO includes === **/
 
+#include <connectivity/dbconversion.hxx>
+#include <svtools/syslocale.hxx>
+#include <svx/globlmn.hrc>
+#include <svx/svxids.hrc>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
-// #include <toolkit/unohlp.hxx>
+#include <vcl/msgbox.hxx>
 
-// #include "uistrings.hrc"
 
 namespace dbaui
 {
@@ -207,9 +208,9 @@ IMPL_LINK( OExtensionNotPresentDialog, Download_Click, PushButton*, EMPTYARG )
         uno::Reference< com::sun::star::system::XSystemShellExecute > xShellExecute( getShellExecuter() );
         xShellExecute->execute( suDownloadURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
     }
-    catch(uno::Exception)
+    catch( const uno::Exception& )
     {
-        OSL_ENSURE(0,"Exception caught!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return 0;
 }
