@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: brwctrlr.hxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,7 +251,7 @@ namespace dbaui
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm) = 0;
             // called immediately after a successfull CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
-            // return sal_False if you didn't succeed (don't throw exceptions, they won't be catched)
+            // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
 
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
