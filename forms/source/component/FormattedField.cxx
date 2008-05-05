@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormattedField.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,12 +348,6 @@ void OFormattedControl::setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::un
 /*************************************************************************/
 DBG_NAME(OFormattedModel)
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OFormattedModel(_rxFactory));
-}
-
-//------------------------------------------------------------------
 void OFormattedModel::implConstruct()
 {
     // members
@@ -674,22 +668,6 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier() const
 {
     return StandardFormatsSupplier::get( m_xServiceFactory );
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 OFormattedModel::calcFormatKey() const
-{
-    DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatKey : have no aggregate !");
-    // hat mein aggregiertes Model einen FormatSupplier ?
-    Any aFormatKey = m_xAggregateSet.is() ? m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY): Any();
-    if (aFormatKey.hasValue())
-        return getINT32(aFormatKey);
-
-    Reference<XPropertySet> xField = getField();
-    if (xField.is())
-        return getINT32(xField->getPropertyValue(PROPERTY_FORMATKEY));
-
-    return 0;
 }
 
 // XBoundComponent
