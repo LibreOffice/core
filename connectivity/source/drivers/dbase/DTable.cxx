@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTable.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1547,19 +1547,23 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     // sein koennte und muesste
 
                     ByteString aDefaultValue = ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0);
-                    sal_Int32 nRealLen = aDefaultValue.Len() - nScale;
-                    if ( nScale ) // for '.'
-                        --nRealLen;
-                    if ( n < 0.0 ) // for the sign '-'
-                        --nRealLen;
-
-                    BOOL bValidLength   = sal_False;
-                    if ( nRealLen <= (nRealPrecision - nScale) )
+                    sal_Int32 nRealLen = aDefaultValue.Len();
+                    BOOL bValidLength  = nRealLen <= nLen;
+                    if ( bValidLength )
                     {
-                        strncpy(pData,aDefaultValue.GetBuffer(),nLen);
-                        // write the resulting double back
-                        *rRow[nPos] = toDouble(aDefaultValue);
-                        bValidLength = TRUE;
+                        nRealLen -= nScale;
+                        if ( nScale ) // for '.'
+                            --nRealLen;
+                        if ( n < 0.0 ) // for the sign '-'
+                            --nRealLen;
+
+                        bValidLength = nRealLen < nRealPrecision;
+                        if ( bValidLength )
+                        {
+                            strncpy(pData,aDefaultValue.GetBuffer(),nLen);
+                            // write the resulting double back
+                            *rRow[nPos] = toDouble(aDefaultValue);
+                        } // if ( nRealLen < nRealPrecision )
                     }
                     if (!bValidLength)
                     {
