@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentContentReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.office;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -57,186 +55,179 @@ import org.xml.sax.SAXException;
  */
 public class DocumentContentReadHandler extends AbstractXmlReadHandler
 {
-  private OfficeDocument report;
-  private FontFaceDeclsReadHandler fontFaceReadHandler;
-  private BodyReadHandler bodyReadHandler;
-  private OfficeStylesCollection officeStylesCollection;
 
-  public DocumentContentReadHandler()
-  {
-  }
+    private OfficeDocument report;
+    private FontFaceDeclsReadHandler fontFaceReadHandler;
+    private BodyReadHandler bodyReadHandler;
+    private OfficeStylesCollection officeStylesCollection;
 
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs)
-      throws SAXException
-  {
-    super.startParsing(attrs);
-    // parse the external 'styles.xml' if it exists
-    // parse the external 'meta.xml' if it exists
-    // parse the external 'settings.xml' if it exists
-    this.report = parseContentXml();
-    this.report.setVirtual(true);
-    this.report.setType("document-content");
-    this.report.setNamespace(OfficeNamespaces.OFFICE_NS);
-    this.report.setVirtual(true);
-    this.officeStylesCollection = parseStylesXml();
-  }
-
-  private OfficeStylesCollection parseStylesXml ()
-  {
-    final ResourceKey contextKey = getRootHandler().getContext();
-    final ResourceManager resourceManager = getRootHandler().getResourceManager();
-
-    try
+    public DocumentContentReadHandler()
     {
-      final ResourceKey key =
-          resourceManager.deriveKey(contextKey, "styles.xml");
-      final Resource resource =
-          resourceManager.create(key, contextKey, OfficeStylesCollection.class);
-      final OfficeStylesCollection styles =
-          (OfficeStylesCollection) resource.getResource();
-      if (styles != null)
-      {
-        return styles;
-      }
-    }
-    catch (ResourceKeyCreationException e)
-    {
-      // ignore ..
-      Log.debug("Failed to create resource-key for 'styles.xml'. Ignoring.", e);
-    }
-    catch (ResourceException e)
-    {
-      // ignore ..
-      Log.debug("Failed to parse resource for 'styles.xml'. Ignoring.", e);
     }
 
-    return new OfficeStylesCollection();
-  }
-
-  private OfficeDocument parseContentXml()
-  {
-    if (OfficeNamespaces.OFFICE_NS.equals(getUri()) == false)
+    /**
+     * Starts parsing.
+     *
+     * @param attrs the attributes.
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void startParsing(final Attributes attrs)
+            throws SAXException
     {
-      return new OfficeDocument();
+        super.startParsing(attrs);
+        // parse the external 'styles.xml' if it exists
+        // parse the external 'meta.xml' if it exists
+        // parse the external 'settings.xml' if it exists
+        this.report = parseContentXml();
+        this.report.setVirtual(true);
+        this.report.setType("document-content");
+        this.report.setNamespace(OfficeNamespaces.OFFICE_NS);
+        this.report.setVirtual(true);
+        this.officeStylesCollection = parseStylesXml();
     }
 
-    // Check whether this is a content.xml.
-    if ("document-content".equals(getTagName()) != false)
+    private OfficeStylesCollection parseStylesXml()
     {
-      return new OfficeDocument();
+        final ResourceKey contextKey = getRootHandler().getContext();
+        final ResourceManager resourceManager = getRootHandler().getResourceManager();
+
+        try
+        {
+            final ResourceKey key =
+                    resourceManager.deriveKey(contextKey, "styles.xml");
+            final Resource resource =
+                    resourceManager.create(key, contextKey, OfficeStylesCollection.class);
+            final OfficeStylesCollection styles =
+                    (OfficeStylesCollection) resource.getResource();
+            if (styles != null)
+            {
+                return styles;
+            }
+        }
+        catch (ResourceKeyCreationException e)
+        {
+            // ignore ..
+            Log.debug("Failed to create resource-key for 'styles.xml'. Ignoring.", e);
+        }
+        catch (ResourceException e)
+        {
+            // ignore ..
+            Log.debug("Failed to parse resource for 'styles.xml'. Ignoring.", e);
+        }
+
+        return new OfficeStylesCollection();
     }
 
-    // we may have to parse an existing content.xml.
-    final ResourceKey contextKey = getRootHandler().getContext();
-    final ResourceManager resourceManager = getRootHandler().getResourceManager();
-    try
+    private OfficeDocument parseContentXml()
     {
-      final ResourceKey key =
-          resourceManager.deriveKey(contextKey, "content.xml");
-      final Resource resource =
-          resourceManager.create(key, contextKey, JFreeReport.class);
-      final OfficeDocument report = (OfficeDocument) resource.getResource();
-      if (report != null)
-      {
+        // Check whether this is a content.xml.
+        if (!OfficeNamespaces.OFFICE_NS.equals(getUri()) || "document-content".equals(getTagName()))
+        {
+            return new OfficeDocument();
+        }
+
+        // we may have to parse an existing content.xml.
+        final ResourceKey contextKey = getRootHandler().getContext();
+        final ResourceManager resourceManager = getRootHandler().getResourceManager();
+        try
+        {
+            final ResourceKey key =
+                    resourceManager.deriveKey(contextKey, "content.xml");
+            final Resource resource =
+                    resourceManager.create(key, contextKey, JFreeReport.class);
+            final OfficeDocument doc = (OfficeDocument) resource.getResource();
+            if (doc != null)
+            {
+                return doc;
+            }
+        }
+        catch (ResourceKeyCreationException e)
+        {
+            // ignore ..
+            Log.debug("Failed to create resource-key for 'content.xml'. Ignoring.");
+        }
+        catch (ResourceException e)
+        {
+            // ignore ..
+            Log.debug("Failed to parse resource for 'content.xml'. Ignoring.");
+        }
+        return new OfficeDocument();
+
+    }
+
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
+    {
+        if (OfficeNamespaces.OFFICE_NS.equals(uri))
+        {
+            if ("font-face-decls".equals(tagName))
+            {
+                if (fontFaceReadHandler == null)
+                {
+                    fontFaceReadHandler = new FontFaceDeclsReadHandler(officeStylesCollection.getFontFaceDecls());
+                }
+                return fontFaceReadHandler;
+            }
+            else if ("automatic-styles".equals(tagName))
+            {
+                return new OfficeStylesReadHandler(officeStylesCollection.getAutomaticStyles());
+            }
+            else if ("styles".equals(tagName))
+            {
+                return new OfficeStylesReadHandler(officeStylesCollection.getCommonStyles());
+            }
+            else if ("master-styles".equals(tagName))
+            {
+                return new MasterStylesReadHandler(officeStylesCollection.getMasterStyles());
+            }
+            else if ("body".equals(tagName))
+            {
+                bodyReadHandler = new BodyReadHandler();
+                return bodyReadHandler;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
+    {
+        // The office-document is the only node of the report. It allows us to
+        // switch the layout-processing implementation later on.
+
+        report.setStylesCollection(officeStylesCollection);
+
+        if (bodyReadHandler != null)
+        {
+            report.addNode(bodyReadHandler.getElement());
+        }
+    }
+
+    /**
+     * Returns the object for this element or null, if this element does not
+     * create an object.
+     *
+     * @return the object.
+     */
+    public Object getObject()
+            throws SAXException
+    {
         return report;
-      }
     }
-    catch (ResourceKeyCreationException e)
-    {
-      // ignore ..
-      Log.debug("Failed to create resource-key for 'content.xml'. Ignoring.");
-    }
-    catch (ResourceException e)
-    {
-      // ignore ..
-      Log.debug("Failed to parse resource for 'content.xml'. Ignoring.");
-    }
-    return new OfficeDocument();
-
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (!OfficeNamespaces.OFFICE_NS.equals(uri))
-    {
-      return null;
-    }
-
-    if ("font-face-decls".equals(tagName))
-    {
-      if (fontFaceReadHandler == null)
-      {
-        fontFaceReadHandler = new FontFaceDeclsReadHandler
-            (officeStylesCollection.getFontFaceDecls());
-      }
-      return fontFaceReadHandler;
-    }
-    else if ("automatic-styles".equals(tagName))
-    {
-      return new OfficeStylesReadHandler(officeStylesCollection.getAutomaticStyles());
-    }
-    else if ("styles".equals(tagName))
-    {
-      return new OfficeStylesReadHandler(officeStylesCollection.getCommonStyles());
-    }
-    else if ("master-styles".equals(tagName))
-    {
-      return new MasterStylesReadHandler(officeStylesCollection.getMasterStyles());
-    }
-    else if ("body".equals(tagName))
-    {
-      bodyReadHandler = new BodyReadHandler();
-      return bodyReadHandler;
-    }
-    return null;
-  }
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    // The office-document is the only node of the report. It allows us to
-    // switch the layout-processing implementation later on.
-
-    report.setStylesCollection(officeStylesCollection);
-
-    if (bodyReadHandler != null)
-    {
-      report.addNode(bodyReadHandler.getElement());
-    }
-  }
-
-  /**
-   * Returns the object for this element or null, if this element does not
-   * create an object.
-   *
-   * @return the object.
-   */
-  public Object getObject()
-      throws SAXException
-  {
-    return report;
-  }
 }

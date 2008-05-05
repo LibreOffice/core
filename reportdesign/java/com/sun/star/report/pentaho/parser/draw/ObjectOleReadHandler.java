@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectOleReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,9 @@ import org.xml.sax.SAXException;
 public class ObjectOleReadHandler extends ElementReadHandler
 {
 
-    private ObjectOleElement element;
+    private final static String RPT_CHART_CLASS_ID = "80243D39-6741-46C5-926E-069164FF87BB";
+    private final static String OOO_CHART_CLASS_ID = "12DCAE26-281F-416F-A234-C3086127382E";
+    private final ObjectOleElement element;
 
     public ObjectOleReadHandler(final ObjectOleElement element)
     {
@@ -66,9 +68,11 @@ public class ObjectOleReadHandler extends ElementReadHandler
             element.setUrl(url);
         }
 
-        final String classid = attrs.getValue(OfficeNamespaces.DRAWING_NS, "class-id");
+        String classid = attrs.getValue(OfficeNamespaces.DRAWING_NS, "class-id");
         if (classid != null)
         {
+            if ( classid.equalsIgnoreCase(RPT_CHART_CLASS_ID))
+                classid = OOO_CHART_CLASS_ID;
             element.setClassId(classid);
         }
     }

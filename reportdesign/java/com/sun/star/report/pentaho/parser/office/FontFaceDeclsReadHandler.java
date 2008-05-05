@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FontFaceDeclsReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@ import com.sun.star.report.pentaho.model.FontFaceDeclsSection;
 import com.sun.star.report.pentaho.model.FontFaceElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.style.FontFaceReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
@@ -52,8 +53,8 @@ import org.xml.sax.SAXException;
  */
 public class FontFaceDeclsReadHandler extends ElementReadHandler
 {
-  private FontFaceDeclsSection fontFaceDecls;
-  private ArrayList fontFaceReadHandlers;
+  private final FontFaceDeclsSection fontFaceDecls;
+  private final List fontFaceReadHandlers;
 
   public FontFaceDeclsReadHandler(final FontFaceDeclsSection fontFaceDecls)
   {
@@ -81,7 +82,7 @@ public class FontFaceDeclsReadHandler extends ElementReadHandler
                                               final Attributes atts)
       throws SAXException
   {
-    if (OfficeNamespaces.STYLE_NS.equals(uri) == false)
+    if (!OfficeNamespaces.STYLE_NS.equals(uri) )
     {
       return null;
     }

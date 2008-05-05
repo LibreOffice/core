@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterStylesReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.office;
 
 import java.util.ArrayList;
@@ -38,6 +36,7 @@ import com.sun.star.report.pentaho.parser.style.StyleDefinitionReadHandler;
 import com.sun.star.report.pentaho.parser.style.MasterPageReadHandler;
 import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
@@ -51,77 +50,75 @@ import org.xml.sax.SAXException;
  */
 public class MasterStylesReadHandler extends ElementReadHandler
 {
-  private OfficeMasterStyles masterStyles;
-  private ArrayList otherHandlers;
-  private ArrayList masterPageHandlers;
 
-  public MasterStylesReadHandler(final OfficeMasterStyles masterStyles)
-  {
-    this.masterStyles = masterStyles;
-    this.masterPageHandlers = new ArrayList();
-    this.otherHandlers = new ArrayList();
-  }
+    private final OfficeMasterStyles masterStyles;
+    private final List otherHandlers;
+    private final List masterPageHandlers;
 
-  public OfficeMasterStyles getMasterStyles()
-  {
-    return masterStyles;
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.STYLE_NS.equals(uri))
+    public MasterStylesReadHandler(final OfficeMasterStyles masterStyles)
     {
-      if ("master-page".equals(tagName))
-      {
-        final MasterPageReadHandler mrh = new MasterPageReadHandler();
-        masterPageHandlers.add(mrh);
-        return mrh;
-      }
+        this.masterStyles = masterStyles;
+        this.masterPageHandlers = new ArrayList();
+        this.otherHandlers = new ArrayList();
     }
 
-    final StyleDefinitionReadHandler readHandler =
-            new StyleDefinitionReadHandler();
-    otherHandlers.add(readHandler);
-    return readHandler;
-  }
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    for (int i = 0; i < otherHandlers.size(); i++)
+    public OfficeMasterStyles getMasterStyles()
     {
-      final ElementReadHandler handler =
-          (ElementReadHandler) otherHandlers.get(i);
-      masterStyles.getOtherNodes().addNode(handler.getElement());
+        return masterStyles;
     }
 
-    for (int i = 0; i < masterPageHandlers.size(); i++)
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
     {
-      final MasterPageReadHandler handler =
-          (MasterPageReadHandler) masterPageHandlers.get(i);
-      masterStyles.addMasterPage(handler.getMasterPage());
-    }
-  }
+        if (OfficeNamespaces.STYLE_NS.equals(uri) && "master-page".equals(tagName))
+        {
+            final MasterPageReadHandler mrh = new MasterPageReadHandler();
+            masterPageHandlers.add(mrh);
+            return mrh;
+        }
 
-  public Element getElement()
-  {
-    return masterStyles;
-  }
+        final StyleDefinitionReadHandler readHandler =
+                new StyleDefinitionReadHandler();
+        otherHandlers.add(readHandler);
+        return readHandler;
+    }
+
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
+    {
+        for (int i = 0; i < otherHandlers.size(); i++)
+        {
+            final ElementReadHandler handler =
+                    (ElementReadHandler) otherHandlers.get(i);
+            masterStyles.getOtherNodes().addNode(handler.getElement());
+        }
+
+        for (int i = 0; i < masterPageHandlers.size(); i++)
+        {
+            final MasterPageReadHandler handler =
+                    (MasterPageReadHandler) masterPageHandlers.get(i);
+            masterStyles.addMasterPage(handler.getMasterPage());
+        }
+    }
+
+    public Element getElement()
+    {
+        return masterStyles;
+    }
 }
