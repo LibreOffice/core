@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.36 $
+# $Revision: 1.37 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,12 @@ BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 MY_LOCAL_CLASSDIR=file://$(PWD)$/$(CLASSDIR)
+.ENDIF
+
+.IF "$(GUI)"=="WNT"
+.IF "$(compcheck)" != ""
+CFLAGSCXX += -DCOMPCHECK
+.ENDIF
 .ENDIF
 
 SLOFILES = \
@@ -124,6 +130,7 @@ JAVATARGETS=\
 
 # --- Targets ------------------------------------------------------
 ALL : \
+        test \
         ALLTAR \
         $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/uno_services.rdb \
@@ -136,6 +143,9 @@ ALL : \
 
 #################################################################
 
+test: 
+    echo $(compcheck)
+    
 $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DLLDEST)
     $(GNUCOPY) -p $? $@
