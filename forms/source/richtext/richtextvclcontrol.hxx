@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: richtextvclcontrol.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,20 +100,6 @@ namespace frm
             to the SID_ATTR_PARA_ADJUST slot, which in fact *is* usable with the EditEngine.
         */
         static bool isMappableSlot( SfxSlotId _nSlotId );
-        /// converts an EditEngine-compatible font information to an UNO-compatible font
-        static void convert( const SfxPoolItem& _rFontItem, ::com::sun::star::awt::FontDescriptor& _rUnoFont );
-        /** converts an UNO-compatible font to an EditEngine-compatible font.
-
-            The caller is responsible for deleting the returned item.
-        */
-        static void convert( const ::com::sun::star::awt::FontDescriptor& _rUnoFont, SfxPoolItem*& _rpFontItem );
-        /// converts an EditEngine-compatible font height to an UNO-compatible information
-        static sal_uInt32 convertFontHeight( const SfxPoolItem& _rItem );
-        /** converts an UNO-compatible font height to an EditEngine-compatible information
-
-            The caller is responsible for deleting the returned item.
-        */
-        static SfxPoolItem* convertFontHeight( sal_uInt32 _nUnoFontHeight );
 
         // IMultiAttributeDispatcher
         virtual AttributeState  getState( AttributeId _nAttributeId ) const;
