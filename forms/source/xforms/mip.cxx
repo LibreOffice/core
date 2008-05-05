@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mip.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,18 +88,6 @@ void MIP::join( const MIP& rMip )
 {
     // TODO: inherit only inheritable MIPs...
     inherit( rMip );
-}
-
-void MIP::set( const MIP& rMip )
-{
-    *this = rMip;
-}
-
-
-bool MIP::hasInfo() const
-{
-    return mbHasReadonly || mbHasRequired || mbHasRelevant
-        || mbHasConstraint || mbHasCalculate || mbHasTypeName;
 }
 
 bool MIP::hasReadonly() const     { return mbHasReadonly; }
