@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,7 +70,8 @@ JAVAFILES       :=	DataRow.java\
                     SOImageService.java\
                     StorageRepository.java\
                     SDBCReportData.java\
-                    SDBCReportDataFactory.java
+                    SDBCReportDataFactory.java \
+                    OfficeToken.java
 
 
 # --- Targets ------------------------------------------------------
