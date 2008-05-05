@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshtxt.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -638,7 +638,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( mpText && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
                 mpObject->SetEmptyPresObj( FALSE );
-                mpText->SetOutlinerParaObject( mpOutlinerParaObject );
+                static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( mpOutlinerParaObject, mpText );
             }
         }
         else
@@ -845,25 +845,30 @@ void SvxTextEditSourceImpl::UpdateData()
         {
             if( mpOutliner && mpObject && mpText && !mbDestroyed )
             {
-                if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
+                if( pTextObj )
                 {
-                    if( mpOutliner->GetParagraphCount() > 1 )
+                    if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                     {
-                        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                        if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT )
+                        if( mpOutliner->GetParagraphCount() > 1 )
                         {
-                            while( mpOutliner->GetParagraphCount() > 1 )
+                            if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_TITLETEXT )
                             {
-                                ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
-                                mpOutliner->QuickInsertLineBreak( aSel );
+                                while( mpOutliner->GetParagraphCount() > 1 )
+                                {
+                                    ESelection aSel( 0,mpOutliner->GetEditEngine().GetTextLen( 0 ), 1,0 );
+                                    mpOutliner->QuickInsertLineBreak( aSel );
+                                }
                             }
                         }
-                    }
 
-                    mpText->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
+                        pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
+                    }
+                    else
+                    {
+                        pTextObj->NbcSetOutlinerParaObjectForText( NULL,mpText );
+                    }
                 }
-                else
-                    mpText->SetOutlinerParaObject( NULL );
 
                 if( mpObject->IsEmptyPresObj() )
                     mpObject->SetEmptyPresObj(sal_False);
