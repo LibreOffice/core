@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewcontactofunocontrol.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,23 +104,6 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    Reference< XControl > ViewContactOfUnoControl::getUnoControlForDevice( const OutputDevice* _pDevice, const SdrUnoObjAccessControl& ) const
-    {
-        sal_uInt32 vocCount = maVOCList.Count();
-        for ( sal_uInt32 voc = 0; voc < vocCount; ++voc )
-        {
-            ViewObjectContactOfUnoControl* pUCVOC = dynamic_cast< ViewObjectContactOfUnoControl* >( maVOCList.GetObject( voc ) );
-            DBG_ASSERT( pUCVOC, "ViewContactOfUnoControl::getUnoControlForDevice: wrong ViewObjectContact type!" );
-            if ( !pUCVOC )
-                continue;
-
-            if ( pUCVOC->belongsToDevice( _pDevice ) )
-                return pUCVOC->getControl();
-        }
-        return Reference< XControl >();
-    }
-
-    //--------------------------------------------------------------------
     Reference< XControl > ViewContactOfUnoControl::getTemporaryControlForWindow(
         const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer ) const
     {
@@ -208,18 +191,7 @@ namespace sdr { namespace contact {
 
         // in alive mode, don't paint if the control is not visible.
         // #i82791#
-        bool bIsVisible = true;
-        try
-        {
-            Reference< XWindow2 > xControlWindow( rVOC.getExistentControl(), UNO_QUERY );
-            if ( xControlWindow.is() )
-                bIsVisible = xControlWindow->isVisible();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return bIsVisible;
+        return rVOC.isControlVisible();
     }
 
 //........................................................................
