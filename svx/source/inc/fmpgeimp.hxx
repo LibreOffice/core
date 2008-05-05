@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +38,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-
 #include <tools/list.hxx>
+#include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
 
-#ifndef INCLUDED_SVXDLLAPI_H
-#include "svx/dllapi.h"
-#endif
+#include "svx/svxdllapi.h"
 
 class SvStream;
 class FmFormObj;
@@ -74,7 +72,8 @@ class SVX_DLLPRIVATE FmFormPageImpl
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  m_xForms;
-    FmFormPage*             pPage;
+    FmFormPage*     pPage;
+    Link            m_aFormsCreationHdl;
 
     sal_Bool        m_bFirstActivation  : 1;
     sal_Bool        m_bAttemptedFormCreation : 2;
@@ -110,6 +109,9 @@ public:
     // activation handling
     inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
     inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+
+    void        SetFormsCreationHdl( const Link& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
+    const Link& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
 
 protected:
     // lesen und schreiben der Objecte
