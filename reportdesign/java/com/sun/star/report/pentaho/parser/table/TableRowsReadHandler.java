@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableRowsReadHandler.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
+import java.util.List;
 
 /**
  *
@@ -46,8 +48,8 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 public class TableRowsReadHandler extends ElementReadHandler
 {
 
-    private ArrayList rows;
-    private Section tableRows;
+    private final List rows;
+    private final Section tableRows;
 
     public TableRowsReadHandler()
     {
@@ -68,12 +70,7 @@ public class TableRowsReadHandler extends ElementReadHandler
             final Attributes atts)
             throws SAXException
     {
-        if (OfficeNamespaces.TABLE_NS.equals(uri) == false)
-        {
-            return null;
-        }
-
-        if ("table-row".equals(tagName))
+        if (OfficeNamespaces.TABLE_NS.equals(uri) && OfficeToken.TABLE_ROW.equals(tagName))
         {
             final TableRowReadHandler readHandler = new TableRowReadHandler();
             rows.add(readHandler);
