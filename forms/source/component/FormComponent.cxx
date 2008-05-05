@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FormComponent.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -654,13 +654,6 @@ void OControlModel::doSetDelegator()
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);
-}
-
-//------------------------------------------------------------------------------
-void OControlModel::ensureAlive() SAL_THROW( ( DisposedException ) )
-{
-    if ( OComponentHelper::rBHelper.bDisposed || OComponentHelper::rBHelper.bInDispose )
-        throw DisposedException();
 }
 
 // XChild
