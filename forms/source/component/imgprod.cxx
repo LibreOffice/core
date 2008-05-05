@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imgprod.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,19 +291,6 @@ void ImageProducer::SetImage( SvStream& rStm )
 
     delete mpStm;
     mpStm = new SvStream( new ImgProdLockBytes( &rStm, sal_False ) );
-}
-
-// ------------------------------------------------------------
-
-void ImageProducer::SetImage( const Graphic& rGraphic )
-{
-    maURL = ::rtl::OUString();
-    *mpGraphic = rGraphic;
-    mbConsInit = sal_False;
-    mbAsync = sal_False;
-
-    delete mpStm;
-    mpStm = NULL;
 }
 
 // ------------------------------------------------------------
