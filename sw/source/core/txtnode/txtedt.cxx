@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtedt.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1736,12 +1736,13 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
                 const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
 
-                const bool bCount = aExpandText.getLength();
+                const bool bCount = aExpandText.getLength() > 0;
 
                 // count words in 'regular' text:
                 if( bCount && pBreakIt->xBreak.is() )
                 {
-                    SwScanner aScanner( *this, aExpandText, 0, pConversionMap,
+                    const String aScannerText( aExpandText );
+                    SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
                                         i18n::WordType::WORD_COUNT,
                                         (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
 
@@ -1763,19 +1764,20 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 if ( nStt == 0 && bCount )
                 {
                     // add numbering label
-                    rtl::OUString aNumString = GetNumString();
-                    if ( aNumString.getLength() )
+                    const String aNumString = GetNumString();
+                    const xub_StrLen nNumStringLen = aNumString.Len();
+                    if ( nNumStringLen > 0 )
                     {
                         LanguageType aLanguage = GetLang( 0 );
 
                         SwScanner aScanner( *this, aNumString, &aLanguage, 0,
                                             i18n::WordType::WORD_COUNT,
-                                            0, (xub_StrLen)aNumString.getLength() );
+                                            0, nNumStringLen );
 
                         while ( aScanner.NextWord() )
                             ++nTmpWords;
 
-                        nTmpChars += aNumString.getLength();
+                        nTmpChars += nNumStringLen;
                     }
                     else if ( HasBullet() )
                     {
