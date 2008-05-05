@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlprmap.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,17 +177,20 @@ const sal_Int32 XMLPropertySetMapper::GetEntryIndex(
     sal_Int32 nEntries = GetEntryCount();
     sal_Int32 nIndex= nStartAt == - 1? 0 : nStartAt+1;
 
-    do
+    if ( nEntries )
     {
-        const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
-        if( (!nPropType || nPropType == rEntry.GetPropType()) &&
-            rEntry.nXMLNameSpace == nNamespace &&
-            rStrName == rEntry.sXMLAttributeName )
-            return nIndex;
-        else
-            nIndex++;
+        do
+        {
+            const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+            if( (!nPropType || nPropType == rEntry.GetPropType()) &&
+                rEntry.nXMLNameSpace == nNamespace &&
+                rStrName == rEntry.sXMLAttributeName )
+                return nIndex;
+            else
+                nIndex++;
 
-    } while( nIndex<nEntries );
+        } while( nIndex<nEntries );
+    }
 
     return -1;
 }
@@ -220,17 +223,20 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
 sal_Int32 XMLPropertySetMapper::FindEntryIndex( const sal_Int16 nContextId ) const
 {
     sal_Int32 nIndex = 0;
-    sal_Int32 nEntries = GetEntryCount();
+    const sal_Int32 nEntries = GetEntryCount();
 
-    do
+    if ( nEntries )
     {
-        const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
-        if( rEntry.nContextId == nContextId )
-            return nIndex;
-        else
-            nIndex++;
+        do
+        {
+            const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];
+            if( rEntry.nContextId == nContextId )
+                return nIndex;
+            else
+                nIndex++;
 
-    } while( nIndex < nEntries );
+        } while( nIndex < nEntries );
+    }
 
     return -1;
 }
