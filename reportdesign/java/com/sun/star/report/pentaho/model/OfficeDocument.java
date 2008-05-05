@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDocument.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ public class OfficeDocument extends JFreeReport
         return jobProperties;
     }
 
-    public void setJobProperties(JobProperties jobProperties) {
+    public void setJobProperties(final JobProperties jobProperties) {
         this.jobProperties = jobProperties;
     }
 

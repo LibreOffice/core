@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeReport.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,7 @@ public class OfficeReport extends Element {
         return postBodySection;
     }
 
-    public void setPostBodySection(Node postBodySection) {
+    public void setPostBodySection(final Node postBodySection) {
         this.postBodySection = postBodySection;
     }
 
@@ -66,7 +66,7 @@ public class OfficeReport extends Element {
         return preBodySection;
     }
 
-    public void setPreBodySection(Node preBodySection) {
+    public void setPreBodySection(final Node preBodySection) {
         this.preBodySection = preBodySection;
     }
 
