@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DExport.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,6 +106,9 @@
 #include <memory>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
@@ -839,9 +842,9 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
         ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xFactory );
         bError = sal_True;
     }
-    catch(Exception& )
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "ODatabaseExport::executeWizard: caught a generic exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return bError;
