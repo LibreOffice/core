@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VariablesCollection.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ package com.sun.star.report.pentaho.layoutprocessor;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+import java.util.List;
 
 /**
  * A variables collection is used to collect all FormattedTextElement objects
@@ -51,7 +52,7 @@ public class VariablesCollection
 {
   private VariablesCollection parent;
   private String namePrefix;
-  private ArrayList variables;
+  private List variables;
 
   public VariablesCollection(final String namePrefix)
   {

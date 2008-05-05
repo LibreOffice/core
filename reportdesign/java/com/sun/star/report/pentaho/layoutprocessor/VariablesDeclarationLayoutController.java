@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VariablesDeclarationLayoutController.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,7 +146,7 @@ public class VariablesDeclarationLayoutController
     final FormulaExpression valueExpression = variable.getValueExpression();
     final Object value = LayoutControllerUtil.evaluateExpression(getFlowController(), variable, valueExpression);
     FormatValueUtility.applyValueForVariable(value, variableSection);
-    variableSection.setAttribute(OfficeNamespaces.TEXT_NS, "formula", "ooow:" + String.valueOf(value));
+    variableSection.setAttribute(OfficeNamespaces.TEXT_NS, "formula", "ooow:" + value);
     return variableSection;
   }
 
@@ -158,7 +158,7 @@ public class VariablesDeclarationLayoutController
    */
   public boolean isAdvanceable()
   {
-    return processed == false;
+    return !processed;
   }
 
   /**

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeTableLayoutController.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
@@ -41,6 +39,7 @@ import org.jfree.report.DataSourceException;
 import org.jfree.report.util.IntegerCache;
 import org.jfree.layouting.util.AttributeMap;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 
 /**
  * Creation-Date: 24.04.2007, 14:40:20
@@ -49,32 +48,32 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class OfficeTableLayoutController extends SectionLayoutController
 {
-  public OfficeTableLayoutController()
-  {
-  }
 
-  protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
-      throws DataSourceException
-  {
-    final AttributeMap attributeMap = super.computeAttributes(fc, element, target);
-    final Section s = (Section) element;
-    int rowCount = 0;
-    final Node[] nodeArray = s.getNodeArray();
-    for (int i = 0; i < nodeArray.length; i++)
+    public OfficeTableLayoutController()
     {
-      final Node node = nodeArray[i];
-      if (node instanceof Element == false)
-      {
-        continue;
-      }
-      final Element child = (Element) node;
-      if (OfficeNamespaces.TABLE_NS.equals(child.getNamespace()) &&
-          "table-row".equals(child.getType()))
-      {
-        rowCount += 1;
-      }
     }
-    attributeMap.setAttribute(OfficeNamespaces.INTERNAL_NS, "table-row-count", IntegerCache.getInteger(rowCount));
-    return attributeMap;
-  }
+
+    protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
+            throws DataSourceException
+    {
+        final AttributeMap attributeMap = super.computeAttributes(fc, element, target);
+        final Section s = (Section) element;
+        int rowCount = 0;
+        final Node[] nodeArray = s.getNodeArray();
+        for (int i = 0; i < nodeArray.length; i++)
+        {
+            final Node node = nodeArray[i];
+            if (node instanceof Element)
+            {
+                final Element child = (Element) node;
+                if (OfficeNamespaces.TABLE_NS.equals(child.getNamespace()) &&
+                        OfficeToken.TABLE_ROW.equals(child.getType()))
+                {
+                    rowCount += 1;
+                }
+            }
+        }
+        attributeMap.setAttribute(OfficeNamespaces.INTERNAL_NS, "table-row-count", IntegerCache.getInteger(rowCount));
+        return attributeMap;
+    }
 }
