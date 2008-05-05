@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibleiconchoicectrlentry.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +133,9 @@ throw(RuntimeException)
             dispose();
         }
     }
+    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
+    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
+    // in the hxx)
     // -----------------------------------------------------------------------------
     void AccessibleIconChoiceCtrlEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
                                                    const ::com::sun::star::uno::Any& _aOldValue,
@@ -144,6 +147,7 @@ throw(RuntimeException)
         if (m_nClientId)
             comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
     }
+    #endif
     // -----------------------------------------------------------------------------
     Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     {
