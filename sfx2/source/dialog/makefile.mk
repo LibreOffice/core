@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.41 $
+# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,7 +62,6 @@ SLOFILES =\
         $(SLO)$/dockwin.obj			\
         $(SLO)$/intro.obj			\
         $(SLO)$/macropg.obj         \
-        $(SLO)$/mailwindow.obj		\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
