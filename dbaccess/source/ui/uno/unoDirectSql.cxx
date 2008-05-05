@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoDirectSql.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,9 @@
 #endif
 #ifndef _DBAUI_DATASOURCECONNECTOR_HXX_
 #include "datasourceconnector.hxx"
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 
@@ -121,7 +124,7 @@ DBG_NAME(ODirectSQLDialog)
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ODirectSQLDialog::createDialog: caught an exception!" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         if ( !xConnection.is() )
