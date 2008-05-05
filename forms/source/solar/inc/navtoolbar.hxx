@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: navtoolbar.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,10 +84,6 @@ namespace frm
         */
         void                        setDispatcher( const IFeatureDispatcher* _pDispatcher );
 
-        /** returns the currently set dispatcher
-        */
-        const IFeatureDispatcher*   getDispatcher( );
-
         /** enables or disables a given feature
         */
         void                        enableFeature( sal_Int32 _nFeatureId, bool _bEnabled );
@@ -146,7 +142,9 @@ namespace frm
 
         void setItemBackground( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
         void setTextLineColor( USHORT /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const;
+#if 0
         void setItemWindowZoom( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
+#endif
         void setItemControlFont( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
         void setItemControlForeground( USHORT /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const;
         void adjustItemWindowWidth( USHORT _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const;
