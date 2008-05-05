@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: queryorder.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +171,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while filling order lines!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     EnableLines();
 
