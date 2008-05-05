@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: refvaluecomponent.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,14 +79,6 @@ namespace frm
     {
         m_sReferenceValue = _rRefValue;
         calcValueExchangeType();
-    }
-
-    //--------------------------------------------------------------------
-    void OReferenceValueComponent::setNoCheckReferenceValue( const ::rtl::OUString& _rNoCheckRefValue )
-    {
-        OSL_ENSURE( m_bSupportSecondRefValue, "OReferenceValueComponent::setNoCheckReferenceValue: no support for a second reference value!" );
-        if ( m_bSupportSecondRefValue )
-            m_sNoCheckReferenceValue = _rNoCheckRefValue;
     }
 
     //--------------------------------------------------------------------
