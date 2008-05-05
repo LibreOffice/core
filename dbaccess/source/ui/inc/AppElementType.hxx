@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppElementType.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +29,9 @@
  ************************************************************************/
 #ifndef DBAUI_APPELEMENTTYPE_HXX
 #define DBAUI_APPELEMENTTYPE_HXX
+
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
+
 //........................................................................
 namespace dbaui
 {
@@ -52,6 +54,14 @@ namespace dbaui
         E_DOCUMENT      = 1,
         E_DOCUMENTINFO  = 2
     };
+
+    enum ElementOpenMode
+    {
+        E_OPEN_NORMAL,
+        E_OPEN_DESIGN,
+        E_OPEN_FOR_MAIL
+    };
+
 //........................................................................
 } // namespace dbaui
 //........................................................................
