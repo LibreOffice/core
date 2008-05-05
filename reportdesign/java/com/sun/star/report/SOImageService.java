@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SOImageService.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ import com.sun.star.uno.XComponentContext;
 public class SOImageService implements ImageService
 {
 
-    private XGraphicProvider m_xGraphicProvider;
+    private final XGraphicProvider m_xGraphicProvider;
 
     /**
      * Creates a new instance of SOImageService
@@ -87,8 +87,8 @@ public class SOImageService implements ImageService
         final Dimension dim = new Dimension();
         try
         {
-            final PropertyValue[] value = new PropertyValue[1];
-            value[0] = new PropertyValue();
+            final PropertyValue[] value = new PropertyValue[]{new PropertyValue()};
+            // value[0] = new PropertyValue();
             value[0].Name = "InputStream";
             value[0].Value = image;
 
@@ -133,7 +133,6 @@ public class SOImageService implements ImageService
 
     private String getMimeType(final XInputStream image) throws ReportExecutionException
     {
-        String mimeType = null;
         try
         {
             final PropertyValue[] value = new PropertyValue[]{new PropertyValue()};
@@ -148,7 +147,7 @@ public class SOImageService implements ImageService
                 final XPropertySetInfo xInfo = xImage.getPropertySetInfo();
                 if (xInfo.hasPropertyByName("MimeType"))
                 {
-                    mimeType = (String) xImage.getPropertyValue("MimeType");
+                    return (String) xImage.getPropertyValue("MimeType");
                 }
             }
         }
@@ -168,7 +167,7 @@ public class SOImageService implements ImageService
         {
             throw new ReportExecutionException();
         }
-        return mimeType;
+        return null;
     }
 
     public String getMimeType(final InputStream image) throws ReportExecutionException
