@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -510,6 +510,7 @@ private:
     DECL_LINK(OnSearchContextRequest, FmSearchContext*);
     DECL_LINK(OnTimeOut, void*);
     DECL_LINK(OnFirstTimeActivation, void*);
+    DECL_LINK(OnFormsCreated, FmFormPage*);
 
     void LoopGrids(sal_Int16 nWhat);
 
