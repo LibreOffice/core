@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MasterPageFactory.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@ import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.model.RawText;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.PageLayout;
+import java.util.Map;
 import org.jfree.report.structure.Section;
 import org.jfree.report.structure.Element;
 import org.jfree.report.util.AttributeNameGenerator;
@@ -55,9 +56,9 @@ public class MasterPageFactory
     private static class MasterPageFactoryKey
     {
 
-        private String template;
-        private String pageHeader;
-        private String pageFooter;
+        private final String template;
+        private final String pageHeader;
+        private final String pageFooter;
 
         public MasterPageFactoryKey(final String template,
                 final String pageHeader,
@@ -70,31 +71,30 @@ public class MasterPageFactory
 
         public boolean equals(final Object o)
         {
-            if (this == o)
+            if (this != o)
             {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass())
-            {
-                return false;
-            }
+                if (o == null || getClass() != o.getClass())
+                {
+                    return false;
+                }
 
-            final MasterPageFactoryKey that = (MasterPageFactoryKey) o;
+                final MasterPageFactoryKey that = (MasterPageFactoryKey) o;
 
-            if (pageFooter != null ? !pageFooter.equals(
-                    that.pageFooter) : that.pageFooter != null)
-            {
-                return false;
-            }
-            if (pageHeader != null ? !pageHeader.equals(
-                    that.pageHeader) : that.pageHeader != null)
-            {
-                return false;
-            }
-            if (template != null ? !template.equals(
-                    that.template) : that.template != null)
-            {
-                return false;
+                if (pageFooter != null ? !pageFooter.equals(
+                        that.pageFooter) : that.pageFooter != null)
+                {
+                    return false;
+                }
+                if (pageHeader != null ? !pageHeader.equals(
+                        that.pageHeader) : that.pageHeader != null)
+                {
+                    return false;
+                }
+                if (template != null ? !template.equals(
+                        that.template) : that.template != null)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -127,9 +127,9 @@ public class MasterPageFactory
     private static class PageLayoutKey
     {
 
-        private String templateName;
-        private CSSNumericValue headerHeight;
-        private CSSNumericValue footerHeight;
+        private final String templateName;
+        private final CSSNumericValue headerHeight;
+        private final CSSNumericValue footerHeight;
 
         public PageLayoutKey(final String templateName,
                 final CSSNumericValue headerHeight,
@@ -199,11 +199,11 @@ public class MasterPageFactory
 
     // todo: Patch the page-layout ...
     private static final String DEFAULT_PAGE_NAME = "Default";
-    private OfficeMasterStyles predefinedStyles;
-    private AttributeNameGenerator masterPageNameGenerator;
-    private HashMap masterPages;
-    private AttributeNameGenerator pageLayoutNameGenerator;
-    private HashMap pageLayouts;
+    private final OfficeMasterStyles predefinedStyles;
+    private final AttributeNameGenerator masterPageNameGenerator;
+    private final Map masterPages;
+    private final AttributeNameGenerator pageLayoutNameGenerator;
+    private final Map pageLayouts;
 
     public MasterPageFactory(final OfficeMasterStyles predefinedStyles)
     {
@@ -418,7 +418,6 @@ public class MasterPageFactory
             headerFooterProps.setType("header-footer-properties");
             headerFooterStyle.addNode(headerFooterProps);
         }
-        headerFooterProps.setAttribute(OfficeNamespaces.SVG_NS, "height", String.valueOf(style.getValue()) +
-                style.getType().getType());
+        headerFooterProps.setAttribute(OfficeNamespaces.SVG_NS, "height", style.getValue() + style.getType().getType());
     }
 }
