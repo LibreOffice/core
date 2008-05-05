@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: StorageRepository.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,11 +29,12 @@
  ************************************************************************/
 package com.sun.star.report;
 
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.embed.ElementModes;
 import com.sun.star.embed.InvalidStorageException;
-import com.sun.star.embed.StorageWrappedTargetException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import java.io.*;
@@ -43,6 +44,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XStream;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import org.jfree.util.Log;
 
 /**
  * A directory holds all the contents here.
@@ -53,6 +55,7 @@ import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 public class StorageRepository implements InputRepository, OutputRepository
 {
 
+    private static final String REPORT_PROCESSING_FAILED = "ReportProcessing failed";
     private XStorage input;
     private XStorage output;
 
@@ -80,7 +83,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
     }
 
-    public InputStream createInputStream(String name) throws IOException
+    public InputStream createInputStream(final String name) throws IOException
     {
         if (input == null)
         {
@@ -106,7 +109,7 @@ public class StorageRepository implements InputRepository, OutputRepository
      * @return the outputstream
      * @throws IOException if opening the stream fails
      */
-    public OutputStream createOutputStream(String name, String mimeType) throws IOException
+    public OutputStream createOutputStream(final String name, final String mimeType) throws IOException
     {
         if (output == null)
         {
@@ -129,29 +132,28 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
     }
 
-    public boolean exists(String name)
+    public boolean exists(final String name)
     {
-        boolean ret = false;
         try
         {
-            ret = output.isStreamElement(name);
+            return output.isStreamElement(name);
         }
         catch (InvalidStorageException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (NoSuchElementException ex)
         {
         // We expect this exception, no need to log it.
         }
-        return ret;
+        return false;
     }
 
-    public boolean isWritable(String name)
+    public boolean isWritable(final String name)
     {
         return true;
     }
@@ -161,12 +163,12 @@ public class StorageRepository implements InputRepository, OutputRepository
         return "1";
     }
 
-    public long getVersion(String name)
+    public long getVersion(final String name)
     {
         return 1;
     }
 
-    public boolean isReadable(String name)
+    public boolean isReadable(final String name)
     {
         try
         {
@@ -177,28 +179,24 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (InvalidStorageException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (NoSuchElementException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         return false;
     }
 
-    public InputRepository openInputRepository(String name) throws IOException
+    public InputRepository openInputRepository(final String name) throws IOException
     {
         try
         {
-            String temp = name;
-            if (name.startsWith("./"))
-            {
-                temp = name.substring(2);
-            }
+            final String temp = shortenName(name);
             if (!input.isStorageElement(temp))
             {
                 throw new IOException();
@@ -208,55 +206,79 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (NoSuchElementException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (WrappedTargetException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (InvalidStorageException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (IllegalArgumentException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (com.sun.star.io.IOException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         throw new IOException();
     }
 
-    public OutputRepository openOutputRepository(String name) throws IOException
+    final String shortenName(final String name)
+    {
+        final String temp;
+        if (name.startsWith("./"))
+        {
+            temp = name.substring(2);
+        }
+        else
+        {
+            temp = name;
+        }
+        return temp;
+    }
+
+    public OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException
     {
         try
         {
-            String temp = name;
-            if (name.startsWith("./"))
-            {
-                temp = name.substring(2);
-            }
+            final String temp = shortenName(name);
             final XStorage storage = (XStorage) UnoRuntime.queryInterface(XStorage.class, output.openStorageElement(temp, ElementModes.WRITE));
+            if (mimeType != null)
+            {
+                final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, storage);
+                prop.setPropertyValue("MediaType", mimeType);
+            }
             return new StorageRepository(storage, true);
+        }
+        catch (UnknownPropertyException ex)
+        {
+            Log.error(REPORT_PROCESSING_FAILED, ex);
+        }
+        catch (PropertyVetoException ex)
+        {
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (IllegalArgumentException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
+        }
+        catch (WrappedTargetException ex)
+        {
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (InvalidStorageException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (com.sun.star.io.IOException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
-        catch (StorageWrappedTargetException ex)
-        {
-            ex.printStackTrace();
-        }
+
         throw new IOException();
     }
 
@@ -282,18 +304,18 @@ public class StorageRepository implements InputRepository, OutputRepository
             }
             catch (com.sun.star.io.IOException ex)
             {
-                ex.printStackTrace();
+                Log.error(REPORT_PROCESSING_FAILED, ex);
             }
             catch (WrappedTargetException ex)
             {
-                ex.printStackTrace();
+                Log.error(REPORT_PROCESSING_FAILED, ex);
             }
             output.dispose();
         }
 
     }
 
-    public boolean existsStorage(String name)
+    public boolean existsStorage(final String name)
     {
         try
         {
@@ -301,11 +323,11 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (InvalidStorageException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            ex.printStackTrace();
+            Log.error(REPORT_PROCESSING_FAILED, ex);
         }
         catch (NoSuchElementException ex)
         {
