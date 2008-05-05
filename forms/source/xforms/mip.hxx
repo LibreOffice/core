@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mip.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,11 +71,6 @@ public:
     /// join with same-level MIPs
     void join( const MIP& );
 
-    void set( const MIP& );
-
-
-    // has any info?
-    bool hasInfo() const;
 
     // - type (static; default: xsd:string)
     //        (currently default implemented as empty string)
