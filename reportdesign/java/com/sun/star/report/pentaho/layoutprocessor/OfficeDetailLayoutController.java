@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeDetailLayoutController.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,7 +110,7 @@ public class OfficeDetailLayoutController extends SectionLayoutController
     final GlobalMasterRow masterRow = fc.getMasterRow();
     final ReportDataRow reportDataRow = masterRow.getReportDataRow();
     final ReportData reportData = reportDataRow.getReportData();
-    if (reportData.isReadable() == false)
+    if (!reportData.isReadable())
     {
       reportData.isReadable();
       // If this report has no data, then do not print the detail section. The detail section

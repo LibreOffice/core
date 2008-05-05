@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectOleLayoutController.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,10 +29,13 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
+import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.model.ObjectOleElement;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
@@ -58,9 +61,9 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
     protected boolean isValueChanged()
     {
         final ObjectOleElement element = (ObjectOleElement) getNode();
-        final Vector masterfields = element.getMasterfields();
+        final List masterfields = element.getMasterfields();
         final DataRow view = getFlowController().getMasterRow().getGlobalView();
-        for (Iterator iter = masterfields.iterator(); iter.hasNext();)
+        for (final Iterator iter = masterfields.iterator(); iter.hasNext();)
         {
             final String master = (String) iter.next();
             try
@@ -79,7 +82,7 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
         return false;
     }
 
-    protected LayoutController delegateContentGeneration(ReportTarget target) throws ReportProcessingException, ReportDataFactoryException, DataSourceException
+    protected LayoutController delegateContentGeneration(final ReportTarget target) throws ReportProcessingException, ReportDataFactoryException, DataSourceException
     {
         final ObjectOleElement element = (ObjectOleElement) getNode();
         final String url = element.getUrl();
@@ -87,13 +90,13 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
         {
             final AttributeMap ole = new AttributeMap();
             ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.INTERNAL_NS);
-            ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, "object-ole");
+            ole.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, OfficeToken.OBJECT_OLE);
             ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "href", url);
             ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "class-id", element.getClassid());
-            final Vector masterfields = element.getMasterfields();
-            Vector values = new Vector();
+            final List masterfields = element.getMasterfields();
+            final List values = new ArrayList();
             final DataRow view = getFlowController().getMasterRow().getGlobalView();
-            for (Iterator iter = masterfields.iterator(); iter.hasNext();)
+            for (final Iterator iter = masterfields.iterator(); iter.hasNext();)
             {
                 final String master = (String) iter.next();
                 try
@@ -110,8 +113,8 @@ public class ObjectOleLayoutController extends AbstractReportElementLayoutContro
                 }
             }
             ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "master-columns", masterfields);
-            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "master-values", values);
-            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, "detail-columns", element.getDetailfields());
+            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.MASTER_VALUES, values);
+            ole.setAttribute(OfficeNamespaces.INTERNAL_NS, SDBCReportDataFactory.DETAIL_COLUMNS, element.getDetailfields());
 
             target.startElement(ole);
             target.endElement(ole);
