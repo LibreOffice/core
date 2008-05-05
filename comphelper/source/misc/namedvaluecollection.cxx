@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    NamedValueCollection::NamedValueCollection( const NamedValueCollection& _rCopySource )
+        :m_pImpl( new NamedValueCollection_Impl )
+    {
+        m_pImpl->aValues = _rCopySource.m_pImpl->aValues;
+    }
+
+    //--------------------------------------------------------------------
     NamedValueCollection::NamedValueCollection( const Any& _rElements )
         :m_pImpl( new NamedValueCollection_Impl )
     {
@@ -128,6 +135,21 @@ namespace comphelper
     //--------------------------------------------------------------------
     NamedValueCollection::~NamedValueCollection()
     {
+    }
+
+    //--------------------------------------------------------------------
+    NamedValueCollection& NamedValueCollection::merge( const NamedValueCollection& _rAdditionalValues, bool _bOverwriteExisting )
+    {
+        for (   NamedValueRepository::const_iterator namedValue = _rAdditionalValues.m_pImpl->aValues.begin();
+                namedValue != _rAdditionalValues.m_pImpl->aValues.end();
+                ++namedValue
+            )
+        {
+            if ( _bOverwriteExisting || !impl_has( namedValue->first ) )
+                impl_put( namedValue->first, namedValue->second );
+        }
+
+        return *this;
     }
 
     //--------------------------------------------------------------------
