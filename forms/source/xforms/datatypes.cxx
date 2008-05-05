@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datatypes.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,19 +74,6 @@ namespace xforms
     using namespace ::frm;
     U_NAMESPACE_USE
 
-    //====================================================================
-    //= OXSDDataType
-    //====================================================================
-    //--------------------------------------------------------------------
-    namespace
-    {
-        void lcl_throwIllegalArgumentException( const sal_Char* _pAsciiErrorMessage ) SAL_THROW( (IllegalArgumentException) )
-        {
-            IllegalArgumentException aException;
-            aException.Message = ::rtl::OUString::createFromAscii( _pAsciiErrorMessage );
-            throw IllegalArgumentException( aException );
-        }
-    }
     //====================================================================
     //= OXSDDataType
     //====================================================================
