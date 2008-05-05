@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sbagrid.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1130,9 +1130,9 @@ void SbaGridControl::SetBrowserAttrs()
         if (xExecute.is())
             xExecute->execute();
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "SbaGridControl::SetBrowserAttrs: caught an exception while creating/executing the dialog!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1750,7 +1750,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, /*EMPTY_ARG*/)
         {
             AfterDrop();
             Show();
-            OSL_ENSURE(0,"Exception catched!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         if ( !bCountFinal )
             setDataSource(Reference< XRowSet >(xDataSource,UNO_QUERY));
