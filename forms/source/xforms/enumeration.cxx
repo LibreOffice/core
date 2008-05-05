@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: enumeration.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,13 +46,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
 
-
-Enumeration::Enumeration( const Reference<XIndexAccess>& xContainer )
-    : mxContainer( xContainer ),
-      mnIndex( 0 )
-{
-    OSL_ENSURE( mxContainer.is(), "no container?" );
-}
 
 Enumeration::Enumeration( XIndexAccess* pContainer )
     : mxContainer( pContainer ),
