@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerDnD.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,9 +298,9 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
                         else
                             OSL_ENSURE(sal_False, "OApplicationController::implDropTable: something strange happended!");
                     }
-                    catch(Exception&)
+                    catch( const Exception& )
                     {
-                        DBG_ERROR("OApplicationController::implDropTable: suspicious exception caught!");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
 
                     if ( aErrorInfo.isValid() )
@@ -419,9 +419,9 @@ void OApplicationController::deleteObjects( const Reference< XNameContainer>& _r
                     else
                         OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
                 }
-                catch(Exception&)
+                catch( const Exception& )
                 {
-                    DBG_ERROR( "OApplicationController::deleteObjects: caught a generic exception!" );
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
@@ -511,57 +511,52 @@ sal_Bool OApplicationController::isConnectionReadOnly() const
     return bIsConnectionReadOnly;
 }
 // -----------------------------------------------------------------------------
-Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
+Reference< XNameAccess > OApplicationController::getElements( ElementType _eType )
 {
-    OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    // TODO get a list for all object
-    ::rtl::OUString sDataSource = getDatabaseName();
-
     Reference< XNameAccess > xElements;
     try
     {
         switch ( _eType )
         {
-            case E_REPORT: // TODO: seperate handling of forms and reports
-                {
-                    Reference< XReportDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
-                    OSL_ENSURE(xSupp.is(),"Data source doesn't return a XReportDocumentsSupplier -> GPF");
-                    if ( xSupp.is() )
-                        xElements = xSupp->getReportDocuments();
-                }
-                break;
-            case E_FORM:
-                {
-                    Reference< XFormDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
-                    OSL_ENSURE(xSupp.is(),"Data source doesn't return a XFormDocumentsSupplier -> GPF");
-                    if ( xSupp.is() )
-                        xElements = xSupp->getFormDocuments();
-                }
-                break;
-            case E_QUERY:
-                {
-                    xElements.set(getQueryDefintions(),UNO_QUERY);
-                }
-                break;
-            case E_TABLE:
-                {
-                    if ( m_xDataSourceConnection.is() )
-                    {
-                        Reference< XTablesSupplier > xSup( getConnection(), UNO_QUERY );
-                        OSL_ENSURE(xSup.is(),"OApplicationController::getElements: no XTablesSuppier!");
-                        if ( xSup.is() )
-                            xElements = xSup->getTables();
-                    }
-                }
-                break;
-            default:
-                break;
+        case E_REPORT:
+        {
+            Reference< XReportDocumentsSupplier > xSupp( m_xModel, UNO_QUERY_THROW );
+            xElements.set( xSupp->getReportDocuments(), UNO_SET_THROW );
+        }
+        break;
+
+        case E_FORM:
+        {
+            Reference< XFormDocumentsSupplier > xSupp( m_xModel, UNO_QUERY_THROW );
+            xElements.set( xSupp->getFormDocuments(), UNO_SET_THROW );
+        }
+        break;
+
+        case E_QUERY:
+        {
+            xElements.set( getQueryDefintions(), UNO_QUERY_THROW );
+        }
+        break;
+
+        case E_TABLE:
+        {
+            if ( m_xDataSourceConnection.is() )
+            {
+                Reference< XTablesSupplier > xSup( getConnection(), UNO_QUERY_THROW );
+                xElements.set( xSup->getTables(), UNO_SET_THROW );
+            }
+        }
+        break;
+
+        default:
+            break;
         }
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"Could not get element container!");
+        DBG_UNHANDLED_EXCEPTION();
     }
+
     return xElements;
 }
 // -----------------------------------------------------------------------------
@@ -574,55 +569,26 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 
     getContainer()->getSelectionElementNames( _rNames );
 }
+
 // -----------------------------------------------------------------------------
-::std::auto_ptr<OLinkedDocumentsAccess> OApplicationController::getDocumentsAccess(ElementType _eType)
+::std::auto_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAccess( ElementType _eType )
 {
-    OSL_ENSURE(_eType == E_FORM || _eType == E_REPORT || _eType == E_QUERY || _eType == E_TABLE,"Illegal type for call!");
-    Reference< XNameAccess > xNameAccess;
-    switch( _eType )
+    OSL_ENSURE( ( _eType == E_TABLE ) || ( _eType == E_QUERY ) || ( _eType == E_FORM ) || ( _eType == E_REPORT ),
+        "OApplicationController::getDocumentsAccess: only forms and reports are supported here!" );
+
+    SharedConnection xConnection( ensureConnection() );
+    Reference< XNameAccess > xDocContainer;
+
+    if ( ( _eType == E_FORM ) | ( _eType == E_REPORT ) )
     {
-        case E_FORM:
-        {
-            Reference< XFormDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
-            if ( xSupp.is() )
-                xNameAccess = xSupp->getFormDocuments();
-            break;
-        }
-        case E_REPORT:
-        {
-            Reference< XReportDocumentsSupplier > xSupp(m_xModel,UNO_QUERY);
-            if ( xSupp.is() )
-                xNameAccess = xSupp->getReportDocuments();
-            break;
-        }
-        case E_QUERY:
-        {
-            Reference< XQueryDefinitionsSupplier > xSupp(m_xDataSource,UNO_QUERY);
-            if ( xSupp.is() )
-                xNameAccess = xSupp->getQueryDefinitions();
-            break;
-        }
-        case E_TABLE:
-        {
-            Reference< XTablesSupplier > xSupp(m_xDataSource,UNO_QUERY);
-            if ( xSupp.is() )
-                xNameAccess = xSupp->getTables();
-            break;
-        }
-        case E_NONE:
-            break;
+        xDocContainer.set( getElements( _eType ) );
+        OSL_ENSURE( xDocContainer.is(), "OApplicationController::getDocumentsAccess: invalid container!" );
     }
 
-    SharedConnection xConnection;
-    try
-    {
-        xConnection = ensureConnection();
-    }
-    catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
-
-    OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
-    return ::std::auto_ptr<OLinkedDocumentsAccess>(
-        new OLinkedDocumentsAccess( getView(), m_aCurrentFrame.getFrame(), getORB(), xNameAccess, xConnection, getDatabaseName() ) );
+    ::std::auto_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
+        getView(), m_aCurrentFrame.getFrame(), getORB(), xDocContainer, xConnection, getDatabaseName()
+    ) );
+    return pDocuments;
 }
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
@@ -684,9 +650,9 @@ TransferableHelper* OApplicationController::copyObject()
     {
         showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR("OApplicationController::copyObject: caught a generic exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return NULL;
 }
@@ -761,7 +727,10 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                         }
                     }
                     catch(SQLException&) { throw; } // caught and handled by the outer catch
-                    catch(Exception&) { }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
 
                     if (!bSuccess)
                     {
