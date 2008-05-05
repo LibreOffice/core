@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TokenWriter.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_RTFREADER_HXX
 #include "RtfReader.hxx"
@@ -934,9 +937,9 @@ void OHTMLImportExport::WriteTables()
                             aValue = sValue;
                         }
                     }
-                    catch ( Exception& )
+                    catch( const Exception& )
                     {
-                        OSL_ENSURE(sal_False, "OHTMLImportExport::WriteTables: caught an exception!");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                     WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,sHTML_tabledata);
                 }
