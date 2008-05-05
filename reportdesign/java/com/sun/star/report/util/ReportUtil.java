@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportUtil.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@ import org.jfree.util.ObjectUtilities;
  */
 public class ReportUtil {
 
-    public static boolean equalNamespace(final String uri,final String uri2)
+    public static boolean equalString(final String uri,final String uri2)
     {
         return ObjectUtilities.equal(uri, uri2);
     }

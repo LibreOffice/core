@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ManifestWriter.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ public class ManifestWriter
     // need this two strings other it breaks the ooo build :-(
   public static final String MANIFEST_NS = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
   public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
-  private HashMap entries;
+  private final Map entries;
 
   public ManifestWriter()
   {
