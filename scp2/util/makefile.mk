@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -275,6 +275,10 @@ SCP2FILES +=                           \
              module_quickstart.par     \
              file_quickstart.par       \
              registryitem_quickstart.par
+
+.IF "$(ENABLE_DIRECTX)"!=""
+SCP2FILES += directxcanvas.par
+.ENDIF
 
 .IF "$(DISABLE_ACTIVEX)"==""
 SCP2FILES +=                           \
