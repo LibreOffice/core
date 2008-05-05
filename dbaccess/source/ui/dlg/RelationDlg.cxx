@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationDlg.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -77,6 +80,9 @@
 #endif
 #ifndef DBAUI_RELATIONCONTROL_HXX
 #include "RelationControl.hxx"
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 #include <algorithm>
@@ -247,15 +253,15 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
             return 0L;
         }
     }
-    catch(const SQLException& e)
+    catch( const SQLException& )
     {
-        ::dbaui::showError( SQLExceptionInfo(e),
+        ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController()->getORB());
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
-        //OSL_ENSURE(sal_False, "ORelationDialog, OKClickHdl: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     m_bTriedOneUpdate = TRUE;
