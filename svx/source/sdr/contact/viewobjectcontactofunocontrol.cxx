@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewobjectcontactofunocontrol.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,125 @@ namespace sdr { namespace contact {
     using ::com::sun::star::container::XContainerListener;
     using ::com::sun::star::container::XContainer;
     using ::com::sun::star::container::ContainerEvent;
+    using ::com::sun::star::uno::Any;
     /** === end UNO using === **/
+
+    //====================================================================
+    //= ControlHolder
+    //====================================================================
+    class ControlHolder
+    {
+    private:
+        Reference< XControl >   m_xControl;
+        Reference< XWindow2 >   m_xControlWindow;
+        Reference< XView    >   m_xControlView;
+
+    public:
+        ControlHolder()
+            :m_xControl()
+            ,m_xControlWindow()
+            ,m_xControlView()
+        {
+        }
+
+        explicit ControlHolder( const Reference< XControl >& _rxControl )
+            :m_xControl()
+            ,m_xControlWindow()
+            ,m_xControlView()
+        {
+            *this = _rxControl;
+        }
+
+        ControlHolder& operator=( const Reference< XControl >& _rxControl )
+        {
+            clear();
+
+            m_xControl = _rxControl;
+            if ( m_xControl.is() )
+            {
+                m_xControlWindow.set( m_xControl, UNO_QUERY );
+                m_xControlView.set( m_xControl, UNO_QUERY );
+                if ( !m_xControlWindow.is() || !m_xControlView.is() )
+                {
+                    OSL_ENSURE( false, "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
+                    clear();
+                }
+            }
+
+            return *this;
+        }
+
+    public:
+        inline  bool    is() const { return m_xControl.is() && m_xControlWindow.is() && m_xControlView.is(); }
+        inline  void    clear() { m_xControl.clear(); m_xControlWindow.clear(); m_xControlView.clear(); }
+
+        // delegators for the methods of the UNO interfaces
+        // Note all those will crash if called for a NULL object.
+        inline bool     isDesignMode() const                        { return m_xControl->isDesignMode();         }
+        inline void     setDesignMode( const bool _bDesign ) const  { m_xControl->setDesignMode( _bDesign );     }
+        inline bool     isVisible() const                           { return m_xControlWindow->isVisible();      }
+        inline void     setVisible( const bool _bVisible ) const    { m_xControlWindow->setVisible( _bVisible ); }
+        inline Reference< XControlModel >
+                        getModel() const { return m_xControl->getModel(); }
+        inline void     setModel( const Reference< XControlModel >& _m ) const { m_xControl->setModel( _m ); }
+        inline bool     isTransparent() const { return m_xControl->isTransparent(); }
+        inline Reference< XWindowPeer >
+                        getPeer() const { return m_xControl->getPeer(); }
+
+        inline void     addWindowListener( const Reference< XWindowListener >& _l ) const    { m_xControlWindow->addWindowListener( _l );    }
+        inline void     removeWindowListener( const Reference< XWindowListener >& _l ) const { m_xControlWindow->removeWindowListener( _l ); }
+               void     setPosSize( const Rectangle& _rPosSize ) const;
+               void     setZoom( const MapMode& _rMapMode ) const;
+
+        inline void     setGraphics( const Reference< XGraphics >& _g ) const { m_xControlView->setGraphics( _g ); }
+        inline Reference< XGraphics >
+                        getGraphics() const { return m_xControlView->getGraphics(); }
+        inline void     draw( const Point& _rTopLeft ) const { m_xControlView->draw( _rTopLeft.X(), _rTopLeft.Y() ); }
+
+    public:
+        inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
+    };
+
+    //--------------------------------------------------------------------
+    bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
+    {
+        return _rControl.getControl() == _rxCompare;
+    }
+
+    //--------------------------------------------------------------------
+    bool operator==( const Reference< XInterface >& _rxCompare, const ControlHolder& _rControl )
+    {
+        return _rxCompare == _rControl.getControl();
+    }
+
+    //--------------------------------------------------------------------
+    bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
+    {
+        return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
+    }
+
+    //--------------------------------------------------------------------
+    bool operator==( const Any& _rxCompare, const ControlHolder& _rControl )
+    {
+        return Reference< XInterface >( _rxCompare, UNO_QUERY ) == _rControl;
+    }
+
+    //--------------------------------------------------------------------
+    void ControlHolder::setPosSize( const Rectangle& _rPosSize ) const
+    {
+        // no check whether we're valid, this is the responsibility of the caller
+        m_xControlWindow->setPosSize(
+            _rPosSize.Left(), _rPosSize.Top(), _rPosSize.GetWidth(), _rPosSize.GetHeight(),
+            POSSIZE
+        );
+    }
+
+    //--------------------------------------------------------------------
+    void ControlHolder::setZoom( const MapMode& _rMapMode ) const
+    {
+        // no check whether we're valid, this is the responsibility of the caller
+        m_xControlView->setZoom( (float)double( _rMapMode.GetScaleX() ), (float)double( _rMapMode.GetScaleY() ) );
+    }
 
     //====================================================================
     //= UnoControlContactHelper
@@ -121,7 +239,7 @@ namespace sdr { namespace contact {
             @precond <arg>_pDevice</arg> is not <NULL/>
         */
         static void positionControl_throw(
-                const Reference< XControl >& _rxControl,
+                const ControlHolder& _rControl,
                 const Rectangle& _rLogicBoundingRect,
                 const OutputDevice* _pDevice
             );
@@ -131,7 +249,7 @@ namespace sdr { namespace contact {
             @precond <arg>_pDevice</arg> is not <NULL/>
         */
         static void setControlZoom(
-                const Reference< XControl >& _rxControl,
+                const ControlHolder& _rControl,
                 const OutputDevice* _pDevice
             );
 
@@ -144,7 +262,7 @@ namespace sdr { namespace contact {
             @precond <arg>_pDevice</arg> is not <NULL/>
         */
         static void drawControl(
-                const Reference< XControl >& _rxControl,
+                const ControlHolder& _rControl,
                 const Point& _rLogicTopLeft,
                 const OutputDevice* _pDevice
             );
@@ -152,7 +270,7 @@ namespace sdr { namespace contact {
         /** disposes the given control
         */
         static void disposeAndClearControl_nothrow(
-                Reference< XControl >& _rxControl
+                ControlHolder& _rControl
             );
 
     private:
@@ -162,70 +280,66 @@ namespace sdr { namespace contact {
     };
 
     //--------------------------------------------------------------------
-    void UnoControlContactHelper::positionControl_throw( const Reference< XControl >& _rxControl, const Rectangle& _rLogicBoundingRect,
+    void UnoControlContactHelper::positionControl_throw( const ControlHolder& _rControl, const Rectangle& _rLogicBoundingRect,
         const OutputDevice* _pDevice )
     {
         OSL_PRECOND( _pDevice, "UnoControlContactHelper::positionControl_throw: no device -> no survival!" );
 
-        Reference< XWindow > xControlWindow( _rxControl, UNO_QUERY );
-        if ( xControlWindow.is() )
+        if ( _rControl.is() )
         {
             const Rectangle aPaintRectPixel(
                 _pDevice->LogicToPixel( _rLogicBoundingRect.TopLeft() ),
                 _pDevice->LogicToPixel( _rLogicBoundingRect.GetSize() )
             );
 
-            xControlWindow->setPosSize(
-                aPaintRectPixel.Left(), aPaintRectPixel.Top(), aPaintRectPixel.GetWidth(), aPaintRectPixel.GetHeight(),
-                POSSIZE
-            );
+            _rControl.setPosSize( aPaintRectPixel );
         }
     }
 
     //--------------------------------------------------------------------
-    void UnoControlContactHelper::setControlZoom( const Reference< XControl >& _rxControl, const OutputDevice* _pDevice )
+    void UnoControlContactHelper::setControlZoom( const ControlHolder& _rControl, const OutputDevice* _pDevice )
     {
         OSL_PRECOND( _pDevice, "UnoControlContactHelper::setControlZoom: no device -> no survival!" );
+        OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::setControlZoom: illegal control!" );
 
-        Reference< XView > xControlView( _rxControl,  UNO_QUERY );
-        DBG_ASSERT( xControlView.is(), "UnoControlContactHelper::setControlZoom: invalid control: no XView!" );
-        if ( xControlView.is() )
-        {
-            const MapMode& rMap = _pDevice->GetMapMode();
-            xControlView->setZoom( (float)double( rMap.GetScaleX() ), (float)double( rMap.GetScaleY() ) );
-        }
+        if ( _rControl.is() )
+            _rControl.setZoom( _pDevice->GetMapMode() );
     }
 
     //--------------------------------------------------------------------
-    void UnoControlContactHelper::drawControl( const Reference< XControl >& _rxControl, const Point& _rLogicTopLeft,
+    void UnoControlContactHelper::drawControl( const ControlHolder& _rControl, const Point& _rLogicTopLeft,
         const OutputDevice* _pDevice )
     {
+        OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::drawControl: invalid control!" );
+        if ( !_rControl.is() )
+            return;
+
         try
         {
-            Point aPixelPos = _pDevice->LogicToPixel( _rLogicTopLeft );
-            Reference< XView > xControlView( _rxControl, UNO_QUERY_THROW );
-            xControlView->draw( aPixelPos.X(), aPixelPos.Y() );
+            _rControl.draw(
+                _pDevice->LogicToPixel( _rLogicTopLeft )
+            );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "UnoControlContactHelper::drawControl: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     //--------------------------------------------------------------------
-    void UnoControlContactHelper::disposeAndClearControl_nothrow( Reference< XControl >& _rxControl )
+    void UnoControlContactHelper::disposeAndClearControl_nothrow( ControlHolder& _rControl )
     {
         try
         {
-            Reference< XComponent > xControlComp( _rxControl, UNO_QUERY );
+            Reference< XComponent > xControlComp( _rControl.getControl(), UNO_QUERY );
             if ( xControlComp.is() )
                 xControlComp->dispose();
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "UnoControlContactHelper::disposeAndClearControl_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
-        _rxControl = NULL;
+        _rControl.clear();
     }
 
     //====================================================================
@@ -391,7 +505,7 @@ namespace sdr { namespace contact {
         mutable ::osl::Mutex            m_aMutex;
 
         /// the control we're responsible for
-        Reference< XControl >           m_xControl;
+        ControlHolder                   m_aControl;
 
         /// the ControlContainer where we inserted our control
         Reference< XContainer >         m_xContainer;
@@ -446,23 +560,8 @@ namespace sdr { namespace contact {
                 display info as passed to the paint-related method
             @param _out_rpObject
                 out-parameter taking our SdrUnoObj upon successfull return
-            @param _out_rxControlView
-                out-parameter taking our control's XView interface upon successfull return
         */
-        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject,
-            Reference< XView >& _out_rxControlView );
-
-        /** does initializations for a paint-related method
-
-            @param _rDisplayInfo
-                display info as passed to the paint-related method
-        */
-        bool initPaint( const DisplayInfo& _rDisplayInfo )
-        {
-            Reference< XView > xUnused;
-            SdrUnoObj* pUnused( NULL );
-            return initPaint( _rDisplayInfo, pUnused, xUnused );
-        }
+        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject );
 
         /** ensures that we have an XControl which can be painted onto the given display
         */
@@ -484,14 +583,14 @@ namespace sdr { namespace contact {
 
             If you want to ensure that the control exists before accessing it, use ->ensureControl
         */
-        inline Reference< XControl >
-                getExistentControl() const { return m_xControl; }
+        inline const ControlHolder&
+                getExistentControl() const { return m_aControl; }
 
         /** positions our XControl according to the geometry settings in the SdrUnoObj,
             and sets proper zoom settings according to our device
 
             @precond
-                ->m_pOutputDeviceForWindow and ->m_xControl are not <NULL/>
+                ->m_pOutputDeviceForWindow and ->m_aControl are not <NULL/>
             @tolerant
                 If the preconditions are not met, nothing is done at all
         */
@@ -555,7 +654,7 @@ namespace sdr { namespace contact {
                     IPageViewAccess& _rPageView,
                     const OutputDevice& _rDevice,
                     const SdrUnoObj& _rUnoObject,
-                    Reference< XControl >& _out_rControl
+                    ControlHolder& _out_rControl
                 );
 
         /// access control for locking the paint level
@@ -630,7 +729,7 @@ namespace sdr { namespace contact {
                 no matter if the control visibility is already correct
 
             @precond
-                ->m_xControl is not <NULL/>
+                ->m_aControl is not <NULL/>
 
             @precond
                 We're not disposed.
@@ -669,13 +768,13 @@ namespace sdr { namespace contact {
             @precond
                 We're not disposed.
         */
-        static void impl_adjustControlVisibilityToLayerVisibility_throw( const Reference< XControl >& _rxControl, const SdrUnoObj& _rUnoObject,
+        static void impl_adjustControlVisibilityToLayerVisibility_throw( const ControlHolder& _rxControl, const SdrUnoObj& _rUnoObject,
             IPageViewAccess& _rPageView, bool _bIsCurrentlyVisible, bool _bForce );
 
         /** starts or stops listening at various aspects of our control
 
             @precond
-                ->m_xControl is not <NULL/>
+                ->m_aControl is not <NULL/>
         */
         void impl_switchControlListening_nothrow( bool _bStart );
 
@@ -696,7 +795,7 @@ namespace sdr { namespace contact {
                 determines whether to start or to stop listening
 
             @precond
-                ->m_xControl is not <NULL/>
+                ->m_aControl is not <NULL/>
         */
         void impl_switchPropertyListening_nothrow( bool _bStart );
 
@@ -807,7 +906,7 @@ namespace sdr { namespace contact {
         if ( impl_isDisposed_nofail() )
             return;
 
-        if ( m_xControl.is() )
+        if ( m_aControl.is() )
             impl_switchControlListening_nothrow( false );
 
         if ( m_xContainer.is() )
@@ -815,9 +914,9 @@ namespace sdr { namespace contact {
 
         // dispose the control
         if ( _bAlsoDisposeControl )
-            UnoControlContactHelper::disposeAndClearControl_nothrow( m_xControl );
+            UnoControlContactHelper::disposeAndClearControl_nothrow( m_aControl );
 
-        m_xControl.clear();
+        m_aControl.clear();
         m_xContainer.clear();
         m_pOutputDeviceForWindow = NULL;
         m_bControlIsVisible = false;
@@ -848,25 +947,20 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject,
-        Reference< XView >& _out_rxControlView )
+    bool ViewObjectContactOfUnoControl_Impl::initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject )
     {
         _out_rpObject = NULL;
         if ( !getUnoObject( _out_rpObject ) )
             return false;
 
-        ensureControl( _rDisplayInfo );
-
-        _out_rxControlView = _out_rxControlView.query( m_xControl );
-        DBG_ASSERT( _out_rxControlView.is(), "ViewObjectContactOfUnoControl_Impl::initPaint: no control!" );
-        return _out_rxControlView.is();
+        return ensureControl( _rDisplayInfo );
     }
 
 
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionControlForPaint( const DisplayInfo& /* #i74769# _rDisplayInfo*/ ) const
     {
-        if ( !m_xControl.is() )
+        if ( !m_aControl.is() )
             return;
 
         positionAndZoomControl();
@@ -875,16 +969,16 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl() const
     {
-        OSL_PRECOND( m_pOutputDeviceForWindow && m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
-        if ( !m_pOutputDeviceForWindow || !m_xControl.is() )
+        OSL_PRECOND( m_pOutputDeviceForWindow && m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
+        if ( !m_pOutputDeviceForWindow || !m_aControl.is() )
             return;
 
         try
         {
             SdrUnoObj* pUnoObject( NULL );
             if ( getUnoObject( pUnoObject ) )
-                UnoControlContactHelper::positionControl_throw( m_xControl, pUnoObject->GetLogicRect(), m_pOutputDeviceForWindow );
-            UnoControlContactHelper::setControlZoom( m_xControl, m_pOutputDeviceForWindow );
+                UnoControlContactHelper::positionControl_throw( m_aControl, pUnoObject->GetLogicRect(), m_pOutputDeviceForWindow );
+            UnoControlContactHelper::setControlZoom( m_aControl, m_pOutputDeviceForWindow );
         }
         catch( const Exception& )
         {
@@ -959,7 +1053,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice )
     {
-        if ( m_xControl.is() )
+        if ( m_aControl.is() )
         {
             if ( m_pOutputDeviceForWindow == &_rDevice )
                 return true;
@@ -974,21 +1068,19 @@ namespace sdr { namespace contact {
             if ( m_xContainer.is() )
                 impl_switchContainerListening_nothrow( false );
             impl_switchControlListening_nothrow( false );
-            UnoControlContactHelper::disposeAndClearControl_nothrow( m_xControl );
+            UnoControlContactHelper::disposeAndClearControl_nothrow( m_aControl );
         }
 
         SdrUnoObj* pUnoObject( NULL );
         if ( !getUnoObject( pUnoObject ) )
             return false;
 
-        Reference< XControl >   xControl;
-        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, xControl ) )
+        ControlHolder aControl;
+        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, aControl ) )
             return false;
 
-        // listen for changes in the control container
-
         m_pOutputDeviceForWindow = &_rDevice;
-        m_xControl = xControl;
+        m_aControl = aControl;
         m_xContainer = m_xContainer.query( _rPageView.getControlContainer( _rDevice ) );
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
@@ -999,10 +1091,8 @@ namespace sdr { namespace contact {
 
         try
         {
-            m_eControlDesignMode = m_xControl->isDesignMode() ? eDesign : eAlive;
-
-            Reference< XWindow2 > xControlWindow( m_xControl, UNO_QUERY_THROW );
-            m_bControlIsVisible = xControlWindow->isVisible();
+            m_eControlDesignMode = m_aControl.isDesignMode() ? eDesign : eAlive;
+            m_bControlIsVisible = m_aControl.isVisible();
         }
         catch( const Exception& )
         {
@@ -1016,14 +1106,14 @@ namespace sdr { namespace contact {
         if ( m_xContainer.is() )
             impl_switchContainerListening_nothrow( true );
 
-        return m_xControl.is();
+        return m_aControl.is();
     }
 
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess& _rPageView,
-        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, Reference< XControl >& _out_rControl )
+        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, ControlHolder& _out_rControl )
     {
-        _out_rControl = NULL;
+        _out_rControl.clear();
 
         Reference< XControlModel > xControlModel( _rUnoObject.GetUnoControlModel() );
         DBG_ASSERT( xControlModel.is(), "ViewObjectContactOfUnoControl_Impl::createControlForDevice: no control model at the SdrUnoObject!?" );
@@ -1038,14 +1128,16 @@ namespace sdr { namespace contact {
                 const ::rtl::OUString sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
 
                 Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                if( xFactory.is() )
-                    _out_rControl = _out_rControl.query( xFactory->createInstance( sControlServiceName ) );
+                if ( xFactory.is() )
+                {
+                    _out_rControl = Reference< XControl >( xFactory->createInstance( sControlServiceName ), UNO_QUERY );
+                }
                 DBG_ASSERT( _out_rControl.is(), "ViewObjectContactOfUnoControl_Impl::createControlForDevice: no control could be created!" );
                 if ( !_out_rControl.is() )
                     break;
 
                 // knit the model and the control
-                _out_rControl->setModel( xControlModel );
+                _out_rControl.setModel( xControlModel );
 
                 UnoControlContactHelper::positionControl_throw( _out_rControl, _rUnoObject.GetLogicRect(), &_rDevice );
 
@@ -1054,7 +1146,7 @@ namespace sdr { namespace contact {
 
                 // #107049# set design mode before peer is created,
                 // this is also needed for accessibility
-                _out_rControl->setDesignMode( _rPageView.isDesignMode() );
+                _out_rControl.setDesignMode( _rPageView.isDesignMode() );
 
                 // adjust the initial visibility according to the visibility of the layer
                 // 2003-06-03 - #110592# - fs@openoffice.org
@@ -1064,7 +1156,7 @@ namespace sdr { namespace contact {
                 // #108327# do this last
                 Reference< XControlContainer > xControlContainer( _rPageView.getControlContainer( _rDevice ) );
                 if ( xControlContainer.is() )
-                    xControlContainer->addControl( sControlServiceName, _out_rControl );
+                    xControlContainer->addControl( sControlServiceName, _out_rControl.getControl() );
 
                 bSuccess = true;
             }
@@ -1104,7 +1196,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( bool _bForce )
     {
-        OSL_PRECOND( m_xControl.is(),
+        OSL_PRECOND( m_aControl.is(),
             "ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw: only valid if we have a control!" );
 
         SdrPageView* pPageView( NULL );
@@ -1116,17 +1208,17 @@ namespace sdr { namespace contact {
             return;
 
         SdrPageViewAccess aPVAccess( *pPageView );
-        impl_adjustControlVisibilityToLayerVisibility_throw( m_xControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), _bForce );
+        impl_adjustControlVisibilityToLayerVisibility_throw( m_aControl, *pUnoObject, aPVAccess, impl_isControlVisible_nofail(), _bForce );
     }
 
     //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( const Reference< XControl >& _rxControl,
+    void ViewObjectContactOfUnoControl_Impl::impl_adjustControlVisibilityToLayerVisibility_throw( const ControlHolder& _rControl,
         const SdrUnoObj& _rUnoObject, IPageViewAccess& _rPageView, bool _bIsCurrentlyVisible, bool _bForce )
     {
         // in design mode, there is no problem with the visibility: The XControl is hidden by
         // default, and the Drawing Layer will simply not call our paint routine, if we're in
         // a hidden layer. So, only alive mode matters.
-        if ( !_rxControl->isDesignMode() )
+        if ( !_rControl.isDesignMode() )
         {
             // the layer of our object
             SdrLayerID nObjectLayer = _rUnoObject.GetLayer();
@@ -1135,8 +1227,7 @@ namespace sdr { namespace contact {
 
             if ( _bForce || ( bIsObjectLayerVisible != _bIsCurrentlyVisible ) )
             {
-                Reference< XWindow2 > xControlWindow( _rxControl, UNO_QUERY_THROW );
-                xControlWindow->setVisible( bIsObjectLayerVisible );
+                _rControl.setVisible( bIsObjectLayerVisible );
             }
         }
     }
@@ -1157,28 +1248,30 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::impl_switchContainerListening_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow( bool _bStart )
     {
+        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow: invalid control!" );
+        if ( !m_aControl.is() )
+            return;
+
         try
         {
-            Reference< XWindow > xWindow( m_xControl, UNO_QUERY_THROW );
-
             // listen for visibility changes
             if ( _bStart )
-                xWindow->addWindowListener( this );
+                m_aControl.addWindowListener( this );
             else
-                xWindow->removeWindowListener( this );
+                m_aControl.removeWindowListener( this );
 
             // in design mode, listen for some more aspects
             impl_switchDesignModeListening_nothrow( impl_isControlDesignMode_nothrow() && _bStart );
 
             // listen for design mode changes
-            Reference< XModeChangeBroadcaster > xDesignModeChanges( m_xControl, UNO_QUERY_THROW );
+            Reference< XModeChangeBroadcaster > xDesignModeChanges( m_aControl.getControl(), UNO_QUERY_THROW );
             if ( _bStart )
                 xDesignModeChanges->addModeChangeListener( this );
             else
@@ -1186,7 +1279,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::impl_switchControlListening_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1203,36 +1296,34 @@ namespace sdr { namespace contact {
     //------------------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow( bool _bStart )
     {
-        OSL_PRECOND( m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: no control!" );
-        if ( !m_xControl.is() )
+        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: no control!" );
+        if ( !m_aControl.is() )
             return;
 
         try
         {
-            Reference< XPropertySet > xModelProperties( m_xControl->getModel(), UNO_QUERY_THROW );
-
-            ::rtl::OUString sPropertyToListenFor;
+            Reference< XPropertySet > xModelProperties( m_aControl.getModel(), UNO_QUERY_THROW );
             if ( _bStart )
-                xModelProperties->addPropertyChangeListener( sPropertyToListenFor, this );
+                xModelProperties->addPropertyChangeListener( ::rtl::OUString(), this );
             else
-                xModelProperties->removePropertyChangeListener( sPropertyToListenFor, this );
+                xModelProperties->removePropertyChangeListener( ::rtl::OUString(), this );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::impl_switchPropertyListening_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::isPrintableControl() const
     {
-        if ( !m_xControl.is() )
+        if ( !m_aControl.is() )
             return false;
 
         bool bIsPrintable = false;
         try
         {
-            Reference< XPropertySet > xModelProperties( m_xControl->getModel(), UNO_QUERY );
+            Reference< XPropertySet > xModelProperties( m_aControl.getModel(), UNO_QUERY );
             Reference< XPropertySetInfo > xPropertyInfo( xModelProperties.is() ? xModelProperties->getPropertySetInfo() : Reference< XPropertySetInfo >() );
             const ::rtl::OUString sPrintablePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Printable" ) );
 
@@ -1264,12 +1355,11 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::preparePaintOnDevice( OutputDevice& _rDevice ) const
     {
-        OSL_PRECOND( m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::preparePaintOnDevice: no control!" );
+        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::preparePaintOnDevice: no control!" );
         try
         {
             Reference< XGraphics > xGraphics( _rDevice.CreateUnoGraphics() );
-            Reference< XView > xControlView( m_xControl, UNO_QUERY_THROW );
-            xControlView->setGraphics( xGraphics );
+            m_aControl.setGraphics( xGraphics );
             return true;
         }
         catch( const Exception& )
@@ -1282,8 +1372,8 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::paintControl( const DisplayInfo& _rDisplayInfo ) const
     {
-        OSL_PRECOND( _rDisplayInfo.GetOutputDevice() && m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::paintControl: no output device or no control!" );
-        if ( !_rDisplayInfo.GetOutputDevice() || !m_xControl.is() )
+        OSL_PRECOND( _rDisplayInfo.GetOutputDevice() && m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::paintControl: no output device or no control!" );
+        if ( !_rDisplayInfo.GetOutputDevice() || !m_aControl.is() )
             return;
 
         SdrUnoObj* pUnoObject( NULL );
@@ -1291,7 +1381,7 @@ namespace sdr { namespace contact {
             return;
 
         const Rectangle& rPaintRect( pUnoObject->GetLogicRect() );
-        UnoControlContactHelper::drawControl( m_xControl, rPaintRect.TopLeft(), _rDisplayInfo.GetOutputDevice() );
+        UnoControlContactHelper::drawControl( m_aControl, rPaintRect.TopLeft(), _rDisplayInfo.GetOutputDevice() );
     }
 
     //--------------------------------------------------------------------
@@ -1305,11 +1395,11 @@ namespace sdr { namespace contact {
             // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
         VOCGuard aGuard( *this );
 
-        if ( !m_xControl.is() )
+        if ( !m_aControl.is() )
             return;
 
-        if  (   ( Source.Source == m_xControl )
-            ||  ( Source.Source == m_xControl->getModel() )
+        if  (   ( m_aControl            == Source.Source )
+            ||  ( m_aControl.getModel() == Source.Source )
             )
         {
             // the model or the control is dying ... hmm, not much sense in that we ourself continue
@@ -1358,8 +1448,8 @@ namespace sdr { namespace contact {
             return;
 
         VOCGuard aGuard( *this );
-        DBG_ASSERT( m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::propertyChange: " );
-        if ( !m_xControl.is() )
+        DBG_ASSERT( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::propertyChange: " );
+        if ( !m_aControl.is() )
             return;
 
         // a generic property changed. If we're in design mode, we need to repaint the control
@@ -1387,7 +1477,7 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::modeChanged: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1409,12 +1499,7 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
 
-        Reference< XControl > xRemovedControl( Event.Element, UNO_QUERY );
-        DBG_ASSERT( xRemovedControl.is(), "ViewObjectContactOfUnoControl_Impl::elementRemoved: invalid Element!" );
-        if ( !xRemovedControl.is() )
-            return;
-
-        if ( xRemovedControl.get() == m_xControl.get() )
+        if ( m_aControl == Event.Element )
             impl_dispose_nothrow( false );
     }
 
@@ -1424,32 +1509,23 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
 
-        Reference< XControl > xReplacedControl( Event.ReplacedElement, UNO_QUERY );
-        DBG_ASSERT( xReplacedControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid ReplacedElement!" );
-        if ( !xReplacedControl.is() )
-            return;
-
-        if ( xReplacedControl.get() == m_xControl.get() )
+        if ( m_aControl == Event.ReplacedElement )
         {
             Reference< XControl > xNewControl( Event.Element, UNO_QUERY );
             DBG_ASSERT( xNewControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid new control!" );
             if ( !xNewControl.is() )
                 return;
 
-            DBG_ASSERT( xNewControl->getModel() == m_xControl->getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
+            DBG_ASSERT( xNewControl->getModel() == m_aControl.getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
             // another model should - in the drawing layer - also imply another SdrUnoObj, which
             // should also result in new ViewContact, and thus in new ViewObjectContacts
 
             impl_switchControlListening_nothrow( false );
 
-            m_xControl = xNewControl;
+            m_aControl = xNewControl;
             positionAndZoomControl();
-            m_xControl->setDesignMode( impl_isControlDesignMode_nothrow() );
-
-            Reference< XWindow2 > xControlWindow( m_xControl, UNO_QUERY );
-            DBG_ASSERT( xControlWindow.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: no XWindow2 at the new control!" );
-            if ( xControlWindow.is() )
-                m_bControlIsVisible = xControlWindow->isVisible();
+            m_aControl.setDesignMode( impl_isControlDesignMode_nothrow() );
+            m_bControlIsVisible = m_aControl.isVisible();
 
             impl_switchControlListening_nothrow( true );
         }
@@ -1463,18 +1539,18 @@ namespace sdr { namespace contact {
             return;
         m_eControlDesignMode = _bDesignMode ? eDesign : eAlive;
 
-        if ( !m_xControl.is() )
+        if ( !m_aControl.is() )
             // nothing to do, the setting will be respected as soon as the control
             // is created
             return;
 
         try
         {
-            m_xControl->setDesignMode( _bDesignMode );
+            m_aControl.setDesignMode( _bDesignMode );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl_Impl::setControlDesignMode: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1544,10 +1620,11 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    Reference< XControl > ViewObjectContactOfUnoControl::getExistentControl() const
+    bool ViewObjectContactOfUnoControl::isControlVisible() const
     {
         VOCGuard aGuard( *m_pImpl );
-        return m_pImpl->getExistentControl();
+        const ControlHolder& rControl( m_pImpl->getExistentControl() );
+        return rControl.is() && rControl.isVisible();
     }
 
     //--------------------------------------------------------------------
@@ -1555,19 +1632,18 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *m_pImpl );
         m_pImpl->ensureControl();
-
-        return m_pImpl->getExistentControl();
+        return m_pImpl->getExistentControl().getControl();
     }
 
     //--------------------------------------------------------------------
     Reference< XControl > ViewObjectContactOfUnoControl::getTemporaryControlForWindow(
         const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer, const SdrUnoObj& _rUnoObject )
     {
-        Reference< XControl > xControl;
+        ControlHolder aControl;
 
         InvisibleControlViewAccess aSimulatePageView( _inout_ControlContainer );
-        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject, xControl ) );
-        return xControl;
+        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject, aControl ) );
+        return aControl.getControl();
     }
 
     //--------------------------------------------------------------------
@@ -1582,20 +1658,20 @@ namespace sdr { namespace contact {
         */
         class RestoreViewGraphics
         {
-            private:
-                Reference< XView >        m_xView;
-                Reference< XGraphics >    m_xGraphics;
+        private:
+            const ControlHolder&            m_rControl;
+            const Reference< XGraphics >    m_xOrigGraphics;
 
-            public:
-                RestoreViewGraphics( const Reference< XView >& _rxView )
-                {
-                    m_xView = _rxView;
-                    m_xGraphics = m_xView->getGraphics();
-                }
-                ~RestoreViewGraphics()
-                {
-                    m_xView->setGraphics( m_xGraphics );
-                }
+        public:
+            RestoreViewGraphics( const ControlHolder& _rControl )
+                :m_rControl( _rControl )
+                ,m_xOrigGraphics( _rControl.getGraphics() )
+            {
+            }
+            ~RestoreViewGraphics()
+            {
+                m_rControl.setGraphics( m_xOrigGraphics );
+            }
         };
     }
 
@@ -1619,19 +1695,21 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *m_pImpl );
 
         SdrUnoObj* pObject( NULL );
-        Reference< XView > xControlView;
-        if ( !m_pImpl->initPaint( _rDisplayInfo, pObject, xControlView ) )
+        if ( !m_pImpl->initPaint( _rDisplayInfo, pObject ) )
             return;
+
+        const ControlHolder& rControl( m_pImpl->getExistentControl() );
+        OSL_ENSURE( rControl.is(), "ViewObjectContactOfUnoControl::PaintObject: we did an initPaint - didn't we?" );
 
         try
         {
-            RestoreViewGraphics aRestoreGraphics( xControlView );
+            RestoreViewGraphics aRestoreGraphics( rControl );
             PaintLock aPaintLock( *m_pImpl );
             doPaintObject( _rDisplayInfo, pObject );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl::PaintObject: caught an exception while tampering with the view's XGraphics!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         mbIsPainted = sal_True;
@@ -1645,12 +1723,12 @@ namespace sdr { namespace contact {
 
         try
         {
-            Reference< XControl > xControl( m_pImpl->getExistentControl() );
-            if ( !xControl.is() )
+            const ControlHolder& rControl( m_pImpl->getExistentControl() );
+            if ( !rControl.is() )
                 return;
 
             // only need to care for alive mode
-            if ( xControl->isDesignMode() )
+            if ( rControl.isDesignMode() )
                 return;
 
             // is the visibility correct?
@@ -1658,15 +1736,14 @@ namespace sdr { namespace contact {
                 return;
 
             // no -> adjust it
-            Reference< XWindow > xControlWindow( xControl, UNO_QUERY_THROW );
-            xControlWindow->setVisible( _bVisible );
+            rControl.setVisible( _bVisible );
             DBG_ASSERT( m_pImpl->isControlVisible() == _bVisible, "ViewObjectContactOfUnoControl::ensureControlVisibility: this didn't work!" );
                 // now this would mean that either isControlVisible is not reliable,
                 // or that showing/hiding the window did not work as intended.
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ViewObjectContactOfUnoControl::ensureControlVisibility: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1733,18 +1810,12 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void UnoControlWindowContact::doPaintObject( const DisplayInfo& _rDisplayInfo, const SdrUnoObj* /*_pUnoObject*/ ) const
     {
-        OSL_PRECOND( m_pImpl->getExistentControl().is(),
+        const ControlHolder& rControl( m_pImpl->getExistentControl() );
+        OSL_PRECOND( rControl.is(),
             "UnoControlWindowContact::doPaintObject: the control was said to be non-NULL here!" );
 
         // don't paint if there's a "visible control" which paints itself
-        bool bVisibleControl = false;
-        try
-        {
-            Reference< XWindow2 > xControlWindow( m_pImpl->getExistentControl(), UNO_QUERY_THROW );
-            bVisibleControl = xControlWindow->isVisible();
-        }
-        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-
+        bool bVisibleControl = rControl.isVisible();
 
         // we need to paint if the control is not visible
         bool bNeedPaint = !bVisibleControl;
@@ -1755,7 +1826,7 @@ namespace sdr { namespace contact {
         {
             try
             {
-                Window* pControlWindow = VCLUnoHelper::GetWindow( m_pImpl->getExistentControl()->getPeer() );
+                Window* pControlWindow = VCLUnoHelper::GetWindow( rControl.getPeer() );
                 Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
                 bNeedPaint = pControlParentWindow != _rDisplayInfo.GetOutputDevice();
             }
@@ -1776,13 +1847,12 @@ namespace sdr { namespace contact {
         {
             try
             {
-                Reference< XControl > xControl( m_pImpl->getExistentControl() );
-                if ( xControl->isTransparent() )
+                if ( rControl.isTransparent() )
                 {
                     // TODO: isn't there a better way to do this? At the moment, it seems to be
                     // used to force the background of transparent controls to be repainted - it
                     // must be possible to do this more clever, using the drawing layer mechanisms.
-                    Reference< XWindowPeer > xControlPeer( xControl->getPeer() );
+                    Reference< XWindowPeer > xControlPeer( rControl.getPeer() );
                     if ( xControlPeer.is() )
                         xControlPeer->invalidate( INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
                 }
@@ -1852,7 +1922,7 @@ namespace sdr { namespace contact {
         if( pPDFExport->GetIsExportFormFields() )
         {
             ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
-            ::svxform::describePDFControl( m_pImpl->getExistentControl(), pPDFControl );
+            ::svxform::describePDFControl( m_pImpl->getExistentControl().getControl(), pPDFControl );
             if ( pPDFControl.get() != NULL )
             {
                 // still need to fill in the location
