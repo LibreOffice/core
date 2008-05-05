@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppSwapWindow.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,9 +204,10 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
     SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry( nPos );
     ElementType eType = E_NONE;
     if ( pEntry )
+    {
         eType = *static_cast<ElementType*>(pEntry->GetUserData());
-
-    onContainerSelected( eType );
+        onContainerSelected( eType ); // i87582
+    }
 
     return 1L;
 }
