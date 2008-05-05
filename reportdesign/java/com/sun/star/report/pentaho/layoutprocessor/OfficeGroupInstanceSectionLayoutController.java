@@ -84,7 +84,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
 
   protected boolean isDisplayable(final Node node) throws DataSourceException
   {
-    if (node instanceof OfficeGroupSection == false)
+    if (! (node instanceof OfficeGroupSection) )
     {
       return _isDisplayable(node);
     }
@@ -101,7 +101,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
       throws DataSourceException
   {
     // temp method until the pending upgrade to 0.9.2. Later we just call super.isDisplayable(..) instead.
-    if (node.isEnabled() == false)
+    if (!node.isEnabled())
     {
       return false;
     }
