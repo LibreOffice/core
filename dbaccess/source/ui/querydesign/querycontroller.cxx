@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: querycontroller.cxx,v $
- * $Revision: 1.117 $
+ * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -892,7 +892,7 @@ void OQueryController::impl_initialize()
     }
     catch(SQLException& e)
     {
-        OSL_ENSURE(sal_False, "OQueryController::impl_initialize: caught an exception!");
+        DBG_UNHANDLED_EXCEPTION();
         // we caught an exception so we switch to text only mode
         {
             m_bGraphicalDesign = sal_False;
