@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FontFamilyMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
@@ -41,26 +39,26 @@ import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 
 public class FontFamilyMapper implements StyleMapper
 {
-  public FontFamilyMapper ()
-  {
-  }
 
-  public void updateStyle (String uri, String attrName, String attrValue,
-                           CSSDeclarationRule targetRule)
-  {
-    final CSSStringValue cssVal = new CSSStringValue(CSSStringType.STRING, attrValue);
+    public FontFamilyMapper()
+    {
+    }
 
-    final CSSValue value = targetRule.getPropertyCSSValue(FontStyleKeys.FONT_FAMILY);
-    if (value instanceof CSSValueList == false)
+    public void updateStyle(final String uri, final String attrName, final String attrValue,
+            final CSSDeclarationRule targetRule)
     {
-      targetRule.setPropertyValue(FontStyleKeys.FONT_FAMILY,
-            new CSSValueList(new CSSValue[]{ cssVal }));
+        final CSSValue value = targetRule.getPropertyCSSValue(FontStyleKeys.FONT_FAMILY);
+        if (!(value instanceof CSSValueList))
+        {
+            final CSSStringValue cssVal = new CSSStringValue(CSSStringType.STRING, attrValue);
+            targetRule.setPropertyValue(FontStyleKeys.FONT_FAMILY,
+                    new CSSValueList(new CSSValue[]{cssVal}));
+        }
+        else
+        {
+            final CSSValueList list = (CSSValueList) value;
+            targetRule.setPropertyValue(FontStyleKeys.FONT_FAMILY,
+                    CSSValueList.insertFirst(list, value));
+        }
     }
-    else
-    {
-      CSSValueList list = (CSSValueList) value;
-      targetRule.setPropertyValue(FontStyleKeys.FONT_FAMILY,
-            CSSValueList.insertFirst(list, value));
-    }
-  }
 }

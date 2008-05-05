@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BackgroundColorMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
@@ -39,19 +37,20 @@ import org.jfree.layouting.util.ColorUtil;
 
 public class BackgroundColorMapper implements StyleMapper
 {
-  public BackgroundColorMapper ()
-  {
-  }
 
-  public void updateStyle (String uri,
-                           String attrName,
-                           String attrValue,
-                           CSSDeclarationRule targetRule)
-  {
-    final CSSColorValue cv = (CSSColorValue) ColorUtil.parseColor(attrValue);
-    if (cv != null)
+    public BackgroundColorMapper()
     {
-      targetRule.setPropertyValue(BorderStyleKeys.BACKGROUND_COLOR, cv);
     }
-  }
+
+    public void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        final CSSColorValue cv = (CSSColorValue) ColorUtil.parseColor(attrValue);
+        if (cv != null)
+        {
+            targetRule.setPropertyValue(BorderStyleKeys.BACKGROUND_COLOR, cv);
+        }
+    }
 }

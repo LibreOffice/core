@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BorderRightMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 /*
  * BorderRightMapper.java
  *
@@ -37,10 +35,11 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
+
 import com.sun.star.report.pentaho.parser.StyleMapper;
 import org.jfree.layouting.input.style.CSSDeclarationRule;
+
 /**
  *
  * @author oj93728
@@ -48,15 +47,16 @@ import org.jfree.layouting.input.style.CSSDeclarationRule;
 public class BorderRightMapper implements StyleMapper
 {
 
-  /** Creates a new instance of BorderRightMapper */
-  public BorderRightMapper()
-  {
-  }
-  public void updateStyle (String uri,
-                           String attrName,
-                           String attrValue,
-                           CSSDeclarationRule targetRule)
-  {
-    targetRule.setPropertyValueAsString(attrName, attrValue);
-  }
+    /** Creates a new instance of BorderRightMapper */
+    public BorderRightMapper()
+    {
+    }
+
+    public void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        targetRule.setPropertyValueAsString(attrName, attrValue);
+    }
 }

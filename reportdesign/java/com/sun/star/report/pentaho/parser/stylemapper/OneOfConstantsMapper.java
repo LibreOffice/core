@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OneOfConstantsMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,52 +27,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper;
 
 import java.util.HashMap;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
+import java.util.Map;
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 import org.jfree.layouting.input.style.StyleKey;
 import org.jfree.layouting.input.style.values.CSSValue;
 
 public abstract class OneOfConstantsMapper implements StyleMapper
 {
-  private StyleKey styleKey;
-  private HashMap mappings;
 
-  protected OneOfConstantsMapper (StyleKey styleKey)
-  {
-    this.styleKey = styleKey;
-    this.mappings = new HashMap();
-  }
+    private final StyleKey styleKey;
+    private final Map mappings;
 
-  public void addMapping (String value, CSSValue target)
-  {
-    mappings.put(value, target);
-  }
-
-  public void updateStyle (String uri,
-                           String attrName,
-                           String attrValue,
-                           CSSDeclarationRule targetRule)
-  {
-    final CSSValue value = lookupMapping(attrValue);
-    if (value != null)
+    protected OneOfConstantsMapper(final StyleKey styleKey)
     {
-      targetRule.setPropertyValue(styleKey, value);
+        this.styleKey = styleKey;
+        this.mappings = new HashMap();
     }
-  }
 
-  public StyleKey getStyleKey ()
-  {
-    return styleKey;
-  }
+    public void addMapping (final String value, final CSSValue target)
+    {
+        mappings.put(value, target);
+    }
 
-  protected CSSValue lookupMapping (String attrValue)
-  {
-    return (CSSValue) mappings.get(attrValue);
-  }
+    public void updateStyle(final String uri,
+            final String attrName,
+            final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        final CSSValue value = lookupMapping(attrValue);
+        if (value != null)
+        {
+            targetRule.setPropertyValue(styleKey, value);
+        }
+    }
+
+    public StyleKey getStyleKey()
+    {
+        return styleKey;
+    }
+
+    protected CSSValue lookupMapping(final String attrValue)
+    {
+        return (CSSValue) mappings.get(attrValue);
+    }
 }

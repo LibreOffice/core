@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FontWeightMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +41,8 @@ public class FontWeightMapper implements StyleMapper
   {
   }
 
-  public void updateStyle (String uri, String attrName, String attrValue,
-                           CSSDeclarationRule targetRule)
+  public void updateStyle (final String uri, final String attrName, final String attrValue,
+                           final CSSDeclarationRule targetRule)
   {
     targetRule.setPropertyValueAsString(FontStyleKeys.FONT_WEIGHT, attrValue);
   }

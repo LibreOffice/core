@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FontSizeMapper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
@@ -37,13 +35,14 @@ import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 
 public class FontSizeMapper implements StyleMapper
 {
-  public FontSizeMapper ()
-  {
-  }
 
-  public void updateStyle (String uri, String attrName, String attrValue,
-                           CSSDeclarationRule targetRule)
-  {
-    targetRule.setPropertyValueAsString(FontStyleKeys.FONT_SIZE, attrValue);
-  }
+    public FontSizeMapper()
+    {
+    }
+
+    public void updateStyle(final String uri, final String attrName, final String attrValue,
+            final CSSDeclarationRule targetRule)
+    {
+        targetRule.setPropertyValueAsString(FontStyleKeys.FONT_SIZE, attrValue);
+    }
 }
