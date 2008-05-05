@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeReportLayoutController.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,11 +63,9 @@ public class OfficeReportLayoutController extends ElementLayoutController
   private static final int STATE_COLUMN_FOOTER_DONE = 7;
   private static final int STATE_INITIAL_VARIABLES_DONE = 8;
   private static final int STATE_REPORT_HEADER_DONE = 9;
-  private static final int STATE_REPORT_PRE_BODY_DONE = 10;
-  private static final int STATE_REPORT_BODY_DONE = 11;
-  private static final int STATE_REPORT_POST_BODY_DONE = 12;
-  private static final int STATE_REPORT_FOOTER_VARIABLES = 13;
-  private static final int STATE_REPORT_FOOTER_DONE = 14;
+  private static final int STATE_REPORT_BODY_DONE = 10;
+  private static final int STATE_REPORT_FOOTER_VARIABLES = 11;
+  private static final int STATE_REPORT_FOOTER_DONE = 12;
 
   private int state;
   private VariablesCollection variablesCollection;
@@ -170,20 +168,10 @@ public class OfficeReportLayoutController extends ElementLayoutController
       }
       case OfficeReportLayoutController.STATE_REPORT_HEADER_DONE:
       {
-        return delegateSection(or.getPreBodySection(),
-            OfficeReportLayoutController.STATE_REPORT_PRE_BODY_DONE);
-      }
-      case OfficeReportLayoutController.STATE_REPORT_PRE_BODY_DONE:
-      {
         return delegateSection(or.getBodySection(),
             OfficeReportLayoutController.STATE_REPORT_BODY_DONE);
       }
       case OfficeReportLayoutController.STATE_REPORT_BODY_DONE:
-      {
-        return delegateSection(or.getPostBodySection(),
-            OfficeReportLayoutController.STATE_REPORT_POST_BODY_DONE);
-      }
-      case OfficeReportLayoutController.STATE_REPORT_POST_BODY_DONE:
       {
         return delegateSection(new VariablesDeclarationSection(),
             OfficeReportLayoutController.STATE_REPORT_FOOTER_VARIABLES);

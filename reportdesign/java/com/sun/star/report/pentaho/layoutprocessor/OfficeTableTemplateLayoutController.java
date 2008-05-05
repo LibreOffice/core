@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeTableTemplateLayoutController.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
+import java.util.List;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
@@ -107,81 +108,77 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
         this.nodes = (Node[]) tables.toArray(new Node[tables.size()]);
     }
 
-    private void addPBody(final ArrayList tables, final Section section)
+    private void addPBody(final List tables, final Section section)
     {
         if (section != null)
         {
-            tables.add(section);
+            // tables.add(section);
+            final Node[] nodeArray = section.getNodeArray();
+            for (int i = 0; i < nodeArray.length; i++)
+            {
+                final Node node = nodeArray[i];
+                tables.add(node);
+            }
+
         }
-//      final Node[] nodeArray = section.getNodeArray();
-//    for (int i = 0; i < nodeArray.length; i++)
-//    {
-//      final Node node = nodeArray[i];
-//      tables.add(node);
-//    }
     }
 
-    private void addFromBody(final ArrayList tables, final Section section)
+    private void addFromBody(final List tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)
         {
             final Node node = nodeArray[i];
-            if (node instanceof Section == false)
+            if (node instanceof Section)
             {
-                continue;
-            }
-            final Section child = (Section) node;
-            if (node instanceof OfficeGroup)
-            {
-                addFromGroup(tables, child);
-            }
-            else
-            {
-                addFromSection(tables, child);
+                final Section child = (Section) node;
+                if (node instanceof OfficeGroup)
+                {
+                    addFromGroup(tables, child);
+                }
+                else
+                {
+                    addFromSection(tables, child);
+                }
             }
         }
     }
 
-    private void addFromGroup(final ArrayList tables, final Section section)
+    private void addFromGroup(final List tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)
         {
             final Node node = nodeArray[i];
-            if (node instanceof Section == false)
+            if (node instanceof Section)
             {
-                continue;
-            }
-
-            final Section element = (Section) node;
-            if (OfficeNamespaces.INTERNAL_NS.equals(element.getNamespace()) && "group-body".equals(element.getType()))
-            {
-                addFromBody(tables, element);
-            }
-            else
-            {
-                addFromSection(tables, element);
+                final Section element = (Section) node;
+                if (OfficeNamespaces.INTERNAL_NS.equals(element.getNamespace()) && "group-body".equals(element.getType()))
+                {
+                    addFromBody(tables, element);
+                }
+                else
+                {
+                    addFromSection(tables, element);
+                }
             }
         }
     }
 
-    private void addFromSection(final ArrayList tables, final Section section)
+    private void addFromSection(final List tables, final Section section)
     {
         final Node[] nodeArray = section.getNodeArray();
         for (int i = 0; i < nodeArray.length; i++)
         {
             final Node node = nodeArray[i];
-            if (node instanceof Element == false)
+            if (node instanceof Element)
             {
-                continue;
-            }
-
-            final Element element = (Element) node;
-            if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) &&
-                    "table".equals(element.getType()))
-            {
-                tables.add(element);
+                final Element element = (Element) node;
+                if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) &&
+                        "table".equals(element.getType()))
+                {
+                    tables.add(element);
+                }
             }
         }
     }
