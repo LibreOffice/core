@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibletablistboxtable.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,13 +204,6 @@ namespace accessibility
             SAL_THROW( ( IndexOutOfBoundsException ) )
     {
         if ( ( _nIndex < 0 ) || ( _nIndex >= implGetCellCount() ) )
-            throw IndexOutOfBoundsException();
-    }
-
-    void AccessibleTabListBoxTable::ensureValidPosition( sal_Int32 _nRow, sal_Int32 _nColumn ) const
-            SAL_THROW( ( IndexOutOfBoundsException ) )
-    {
-        if ( ( _nRow < 0 ) || ( _nRow >= implGetRowCount() ) || ( _nColumn < 0 ) || ( _nColumn >= implGetColumnCount() ) )
             throw IndexOutOfBoundsException();
     }
 
