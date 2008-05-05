@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextRawReportProcessor.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,11 +48,11 @@ import org.jfree.resourceloader.ResourceManager;
 public class TextRawReportProcessor extends SinglePassReportProcessor
 {
 
-    private OutputRepository outputRepository;
-    private String targetName;
-    private InputRepository inputRepository;
-    private ImageService imageService;
-    private DataSourceFactory dataSourceFactory;
+    private final OutputRepository outputRepository;
+    private final String targetName;
+    private final InputRepository inputRepository;
+    private final ImageService imageService;
+    private final DataSourceFactory dataSourceFactory;
 
     public TextRawReportProcessor(final InputRepository inputRepository,
             final OutputRepository outputRepository,

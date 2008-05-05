@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PageBreakDefinition.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@ package com.sun.star.report.pentaho.output.text;
 public class PageBreakDefinition
 {
 
-    private boolean resetPageNumber;
+    private final boolean resetPageNumber;
 
     public PageBreakDefinition(final boolean resetPageNumber)
     {
