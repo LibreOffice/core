@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataStyleReadHandler.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.DataStyle;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+import java.util.List;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.StaticText;
 import org.jfree.xmlns.parser.XmlReadHandler;
@@ -43,9 +44,9 @@ import org.xml.sax.SAXException;
 public class DataStyleReadHandler extends ElementReadHandler
 {
 
-    private DataStyle dataStyle;
-    private ArrayList children;
-    private boolean hasCData;
+    private final DataStyle dataStyle;
+    private final List children;
+    private final boolean hasCData;
 
     public DataStyleReadHandler(final boolean hasCData)
     {
