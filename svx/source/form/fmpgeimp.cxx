@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmpgeimp.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,11 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
             UNO_QUERY
         );
         DBG_ASSERT( m_xForms.is(), "FmFormPageImpl::getForms: could not create a forms collection!" );
+
+        if ( m_aFormsCreationHdl.IsSet() )
+        {
+            m_aFormsCreationHdl.Call( this );
+        }
 
         FmFormModel* pFormsModel = pPage ? PTR_CAST( FmFormModel, pPage->GetModel() ) : NULL;
 
