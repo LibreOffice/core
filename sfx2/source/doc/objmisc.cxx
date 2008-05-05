@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objmisc.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2192,12 +2192,12 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
     return bResult;
 }
 
-sal_Int16 SfxObjectShell_Impl::getImposedMacroExecMode() const
+sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
 {
     sal_Int16 nImposedExecMode( MacroExecMode::NEVER_EXECUTE );
 
     const SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getImposedMacroExecMode: no medium!" );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
@@ -2207,10 +2207,10 @@ sal_Int16 SfxObjectShell_Impl::getImposedMacroExecMode() const
     return nImposedExecMode;
 }
 
-sal_Bool SfxObjectShell_Impl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
+sal_Bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
     const SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getImposedMacroExecMode: no medium!" );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getCurrentMacroExecMode: no medium!" );
     if ( pMedium )
     {
         pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, nMacroMode ) );
