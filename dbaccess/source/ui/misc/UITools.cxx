@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -442,9 +442,9 @@ Reference< XDataSource > getDataSourceByName_displayError( const ::rtl::OUString
                 aError = e.TargetException;
         }
     }
-    catch(const Exception&)
+    catch( const Exception& )
     {
-        DBG_ERROR( "getDataSourceByName_displayError: caught an unexpected exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if ( xDatasource.is() )
@@ -1094,7 +1094,7 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "::callColumnFormatDialog: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -1931,9 +1931,9 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
                 xFormatter->attachNumberFormatsSupplier(xSupplier);
         }
     }
-    catch(Exception&)
+    catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        DBG_UNHANDLED_EXCEPTION();
     }
     return xFormatter;
 }
