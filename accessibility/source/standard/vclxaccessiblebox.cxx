@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxaccessiblebox.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,11 +71,6 @@ VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, boo
 
 VCLXAccessibleBox::~VCLXAccessibleBox (void)
 {
-}
-
-void VCLXAccessibleBox::SetIndexInParent (sal_Int32 _nIndex)
-{
-    m_nIndexInParent = _nIndex;
 }
 
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
