@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportEngineMetaData.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,9 @@ import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ReportEngineMetaData;
 import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.ImageService;
-import java.util.Vector;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.jfree.util.HashNMap;
 
 public class PentahoReportEngineMetaData
@@ -51,9 +53,9 @@ public class PentahoReportEngineMetaData
     public static final String OPENDOCUMENT_CHART = "application/vnd.oasis.opendocument.chart";
     public final static String CONTENT_TYPE = "content-type";
     public static final String DEBUG = "raw/text+xml";
-    private HashSet mandatoryParameters;
-    private HashMap parameterTypes;
-    private HashNMap enumerationValues;
+    private final Set mandatoryParameters;
+    private final Map parameterTypes;
+    private final HashNMap enumerationValues;
 
     public PentahoReportEngineMetaData()
     {
@@ -80,15 +82,17 @@ public class PentahoReportEngineMetaData
         parameterTypes.put(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, DataSourceFactory.class);
         parameterTypes.put(ReportEngineParameterNames.IMAGE_SERVICE, ImageService.class);
         parameterTypes.put(ReportEngineParameterNames.INPUT_REPORTJOB_FACTORY, ReportJobFactory.class);
-        parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_COLUMNS, Vector.class);
-        parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_VALUES, Vector.class);
-        parameterTypes.put(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, Vector.class);
+        parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_COLUMNS, List.class);
+        parameterTypes.put(ReportEngineParameterNames.INPUT_MASTER_VALUES, List.class);
+        parameterTypes.put(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, List.class);
 
         enumerationValues = new HashNMap();
         enumerationValues.add(CONTENT_TYPE,
                 PentahoReportEngineMetaData.OPENDOCUMENT_TEXT);
         enumerationValues.add(CONTENT_TYPE,
                 PentahoReportEngineMetaData.OPENDOCUMENT_SPREADSHEET);
+        enumerationValues.add(CONTENT_TYPE,
+                PentahoReportEngineMetaData.OPENDOCUMENT_CHART);
         enumerationValues.add(CONTENT_TYPE, PentahoReportEngineMetaData.DEBUG);
     }
 

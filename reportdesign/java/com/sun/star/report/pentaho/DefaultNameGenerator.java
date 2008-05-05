@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DefaultNameGenerator.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,7 @@ import com.sun.star.report.OutputRepository;
 public class DefaultNameGenerator
 {
 
-    private OutputRepository outputRepository;
+    private final OutputRepository outputRepository;
 
     public DefaultNameGenerator(final OutputRepository outputRepository)
     {
@@ -67,7 +67,7 @@ public class DefaultNameGenerator
      * @param mimeType   the mime type of the resource to be stored in the repository.
      * @return the generated, fully qualified name.
      */
-    private String generateName(final String namePrefix, final String mimeType, boolean isStream)
+    private String generateName(final String namePrefix, final String mimeType, final boolean isStream)
             throws IOException
     {
         final String name;
@@ -81,13 +81,17 @@ public class DefaultNameGenerator
         }
 
         String firstFileName = name;
-        String suffix = null;
+        final String suffix;
         if (mimeType != null)
         {
             suffix = getSuffixForType(mimeType);
             firstFileName += "." + suffix;
         }
-        boolean exists = false;
+        else
+        {
+            suffix = null;
+        }
+        boolean exists;
         if (isStream)
         {
             exists = outputRepository.exists(firstFileName);
@@ -96,36 +100,32 @@ public class DefaultNameGenerator
         {
             exists = outputRepository.existsStorage(firstFileName);
         }
-        if (exists == false)
+        if (exists)
         {
-            return firstFileName;
+            int counter = 0;
+            while (exists)
+            {
+                if (counter < 0) // wraparound should not happen..
+                {
+                    throw new IOException();
+                }
+                firstFileName = name + counter;
+                if (suffix != null)
+                {
+                    firstFileName += "." + suffix;
+                }
+                if (isStream)
+                {
+                    exists = outputRepository.exists(firstFileName);
+                }
+                else
+                {
+                    exists = outputRepository.existsStorage(firstFileName);
+                }
+                counter += 1;
+            }
         }
-        int counter = 0;
-        while (true)
-        {
-            if (counter < 0) // wraparound should not happen..
-            {
-                throw new IOException();
-            }
-            String filename = name + counter;
-            if (suffix != null)
-            {
-                filename += "." + suffix;
-            }
-            if (isStream)
-            {
-                exists = outputRepository.exists(filename);
-            }
-            else
-            {
-                exists = outputRepository.existsStorage(filename);
-            }
-            if (exists == false)
-            {
-                return filename;
-            }
-            counter += 1;
-        }
+        return firstFileName;
     }
 
     protected String getSuffixForType(final String mimeType)

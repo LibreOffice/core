@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SDBCReportData.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +29,11 @@
  ************************************************************************/
 package com.sun.star.report;
 
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.XParametersSupplier;
 import java.sql.Timestamp;
 
@@ -48,8 +51,8 @@ import com.sun.star.util.Time;
 public class SDBCReportData implements DataSource
 {
 
-    private XRowSet rowSet;
-    private XRow row;
+    private final XRowSet rowSet;
+    private final XRow row;
     private int rowCount;
     private XIndexAccess parameters;
     private int firstParameterIndex = -1;
@@ -62,7 +65,7 @@ public class SDBCReportData implements DataSource
         row = (XRow) UnoRuntime.queryInterface(XRow.class, rowSet);
         this.rowSet = rowSet;
 
-        XParametersSupplier xSuppParams = (XParametersSupplier) UnoRuntime.queryInterface(
+        final XParametersSupplier xSuppParams = (XParametersSupplier) UnoRuntime.queryInterface(
                 XParametersSupplier.class, rowSet);
         if (xSuppParams != null)
         {
@@ -93,7 +96,7 @@ public class SDBCReportData implements DataSource
             {
                 try
                 {
-                    XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
+                    final XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
                             XPropertySet.class, parameters.getByIndex(i - firstParameterIndex));
                     columnNames[i - 1] = (String) paramColumn.getPropertyValue("Name");
                     columnTypes[i - 1] = ((Integer) paramColumn.getPropertyValue("Type")).intValue();
@@ -178,11 +181,15 @@ public class SDBCReportData implements DataSource
 //  }
     static private java.sql.Date getDate(final Object obj)
     {
-        java.sql.Date date = null;
-        if (obj != null && obj instanceof com.sun.star.util.Date)
+        final java.sql.Date date;
+        if (obj instanceof com.sun.star.util.Date)
         {
             final com.sun.star.util.Date unodate = (com.sun.star.util.Date) obj;
             date = java.sql.Date.valueOf(getDateString(unodate.Year, unodate.Month, unodate.Day).toString());
+        }
+        else
+        {
+            date = null;
         }
         return date;
     }
@@ -192,19 +199,19 @@ public class SDBCReportData implements DataSource
         final StringBuffer timeString = new StringBuffer();
         if (hours < 10)
         {
-            timeString.append("0");
+            timeString.append('0');
         }
         timeString.append(hours);
-        timeString.append(":");
+        timeString.append(':');
         if (minutes < 10)
         {
-            timeString.append("0");
+            timeString.append('0');
         }
         timeString.append(minutes);
-        timeString.append(":");
+        timeString.append(':');
         if (seconds < 10)
         {
-            timeString.append("0");
+            timeString.append('0');
         }
         timeString.append(seconds);
         return timeString;
@@ -214,19 +221,19 @@ public class SDBCReportData implements DataSource
     {
         final StringBuffer str = new StringBuffer();
         str.append(years);
-        StringBuffer str2 = new StringBuffer("0000");
-        str2 = str2.delete(0, str.length());
+        final StringBuffer str2 = new StringBuffer("0000");
+        str2.delete(0, str.length());
         str.insert(0, str2);
-        str.append("-");
+        str.append('-');
         if (months < 10)
         {
-            str.append("0");
+            str.append('0');
         }
         str.append(months);
-        str.append("-");
+        str.append('-');
         if (days < 10)
         {
-            str.append("0");
+            str.append('0');
         }
         str.append(days);
         return str;
@@ -234,27 +241,35 @@ public class SDBCReportData implements DataSource
 
     static private java.sql.Time getTime(final Object obj)
     {
-        java.sql.Time time = null;
-        if (obj != null && obj instanceof Time)
+        final java.sql.Time time;
+        if (obj instanceof Time)
         {
             final Time unoTime = (Time) obj;
             time = java.sql.Time.valueOf(getTimeString(unoTime.Hours, unoTime.Minutes, unoTime.Seconds).toString());
+        }
+        else
+        {
+            time = null;
         }
         return time;
     }
 
     static private Timestamp getTimestamp(final Object obj)
     {
-        Timestamp ts = null;
-        if (obj != null && obj instanceof DateTime)
+        final Timestamp ts;
+        if (obj instanceof DateTime)
         {
             final DateTime unoTs = (DateTime) obj;
             final StringBuffer str = getDateString(unoTs.Year, unoTs.Month, unoTs.Day);
-            str.append(" ");
+            str.append(' ');
             str.append(getTimeString(unoTs.Hours, unoTs.Minutes, unoTs.Seconds));
-            str.append(".");
+            str.append('.');
             str.append(unoTs.HundredthSeconds);
             ts = java.sql.Timestamp.valueOf(str.toString());
+        }
+        else
+        {
+            ts = null;
         }
         return ts;
     }
@@ -263,22 +278,15 @@ public class SDBCReportData implements DataSource
     {
         try
         {
-            boolean isParameterValue = (parameters != null) && (column >= firstParameterIndex);
-            Object obj = null;
-            boolean wasNull = true;
+            final boolean isParameterValue = (parameters != null) && (column >= firstParameterIndex);
+            Object obj;
+            final boolean wasNull;
             if (isParameterValue)
             {
-                try
-                {
-                    XPropertySet paramCol = (XPropertySet) UnoRuntime.queryInterface(
-                            XPropertySet.class, parameters.getByIndex(column - firstParameterIndex));
-                    obj = paramCol.getPropertyValue("Value");
-                    wasNull = false;
-                }
-                catch (Exception e)
-                {
-                    wasNull = true;
-                }
+                final XPropertySet paramCol = (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, parameters.getByIndex(column - firstParameterIndex));
+                obj = paramCol.getPropertyValue("Value");
+                wasNull = obj == null;
             }
             else
             {
@@ -288,35 +296,61 @@ public class SDBCReportData implements DataSource
 
             if (wasNull)
             {
-                return null;
+                obj = null;
             }
-
-            switch (columnTypes[column - 1])
+            else
             {
-                case DataType.DATE:
-                    obj = getDate(obj);
-                    break;
-                case DataType.TIME:
-                    obj = getTime(obj);
-                    break;
-                case DataType.TIMESTAMP:
-                    obj = getTimestamp(obj);
-                    break;
-                case DataType.DECIMAL:
-                case DataType.NUMERIC:
-                    if (obj != null && !(obj instanceof Any))
-                    {
-                        obj = new java.math.BigDecimal((String) obj);
-                    }
-                    break;
-                default:
-                    break;
+                obj = convertObject(columnTypes[column - 1], obj);
             }
             return obj;
         }
-        catch (SQLException e)
+        catch (SQLException ex)
         {
-            throw new DataSourceException(e.getMessage(), e);
+            throw new DataSourceException(ex.getMessage(), ex);
         }
+        catch (UnknownPropertyException ex)
+        {
+            throw new DataSourceException(ex.getMessage(), ex);
+        }
+        catch (IndexOutOfBoundsException ex)
+        {
+            throw new DataSourceException(ex.getMessage(), ex);
+        }
+        catch (WrappedTargetException ex)
+        {
+            throw new DataSourceException(ex.getMessage(), ex);
+        }
+    }
+
+    Object convertObject(final int type, final Object obj)
+    {
+        final Object ret;
+        switch (type)
+        {
+            case DataType.DATE:
+                ret = getDate(obj);
+                break;
+            case DataType.TIME:
+                ret = getTime(obj);
+                break;
+            case DataType.TIMESTAMP:
+                ret = getTimestamp(obj);
+                break;
+            case DataType.DECIMAL:
+            case DataType.NUMERIC:
+                if (!(obj instanceof Any))
+                {
+                    ret = new java.math.BigDecimal((String) obj);
+                }
+                else
+                {
+                    ret = obj;
+                }
+                break;
+            default:
+                ret = obj;
+                break;
+        }
+        return ret;
     }
 }

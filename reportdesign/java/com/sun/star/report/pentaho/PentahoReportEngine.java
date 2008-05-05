@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportEngine.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@ import org.jfree.report.JFreeReportBoot;
 public class PentahoReportEngine implements ReportEngine
 {
 
-    private ReportEngineMetaData metaData;
+    private final ReportEngineMetaData metaData;
 
     public PentahoReportEngine()
     {

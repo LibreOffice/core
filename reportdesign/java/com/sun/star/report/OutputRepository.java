@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OutputRepository.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ public interface OutputRepository
      * @return the outputstream
      * @throws IOException if opening the stream fails
      */
-    public OutputStream createOutputStream(String name, String mimeType) throws IOException;
+    public OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
 
     /** allows to acces sub repositories inside this repository
      *
@@ -61,13 +61,13 @@ public interface OutputRepository
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */
-    public OutputRepository openOutputRepository(final String name) throws IOException;
+    public OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException;
 
-    public boolean exists(String name);
+    public boolean exists(final String name);
 
-    public boolean existsStorage(String name);
+    public boolean existsStorage(final String name);
 
-    public boolean isWritable(String name);
+    public boolean isWritable(final String name);
 
     public void closeOutputRepository();
 }

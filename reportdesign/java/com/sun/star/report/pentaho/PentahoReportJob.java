@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,14 +44,23 @@ import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.ReportJob;
 import com.sun.star.report.ReportJobDefinition;
 import com.sun.star.report.ImageService;
+import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.loader.InputRepositoryLoader;
+import com.sun.star.report.pentaho.model.OfficeDetailSection;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.output.chart.ChartRawReportProcessor;
 import com.sun.star.report.pentaho.output.text.TextRawReportProcessor;
 import com.sun.star.report.pentaho.output.spreadsheet.SpreadsheetRawReportProcessor;
-import java.util.Vector;
+import java.util.List;
+import org.jfree.formula.lvalues.ContextLookup;
+import org.jfree.formula.lvalues.FormulaFunction;
+import org.jfree.formula.lvalues.LValue;
+import org.jfree.formula.lvalues.Term;
+import org.jfree.formula.parser.FormulaParser;
+import org.jfree.formula.parser.ParseException;
+import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.DefaultReportJob;
 import org.jfree.report.flow.ReportProcessor;
@@ -71,16 +80,18 @@ public class PentahoReportJob implements ReportJob
 {
 
     private boolean finished;
-    private ArrayList listeners;
-    private DataSourceFactory dataSourceFactory;
-    private OutputRepository outputRepository;
-    private JobProperties jobProperties;
+    private final List listeners;
+    private final DataSourceFactory dataSourceFactory;
+    private final OutputRepository outputRepository;
+    private final JobProperties jobProperties;
     private OfficeDocument report;
-    private ResourceManager resourceManager;
-    private String outputName;
-    private ImageService imageService;
-    private InputRepository inputRepository;
-    private ReportJobDefinition definition;
+    private final ResourceManager resourceManager;
+    private final String outputName;
+    private final ImageService imageService;
+    private final InputRepository inputRepository;
+    private final ReportJobDefinition definition;
+    private final List masterValues;
+    private final List detailColumns;
 
     public ReportJobDefinition getDefinition()
     {
@@ -129,6 +140,10 @@ public class PentahoReportJob implements ReportJob
         {
             throw new JobDefinitionException("A valid image-service implementation must be given.");
         }
+
+        this.masterValues = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
+        this.detailColumns = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
+
         this.resourceManager = new ResourceManager();
         this.resourceManager.registerDefaults();
         this.resourceManager.registerLoader(new InputRepositoryLoader(inputRepository));
@@ -205,7 +220,7 @@ public class PentahoReportJob implements ReportJob
      */
     public boolean isRunning()
     {
-        return finished == false;
+        return !finished;
     }
 
     public void removeProgressIndicator(final JobProgressIndicator indicator)
@@ -213,29 +228,70 @@ public class PentahoReportJob implements ReportJob
         listeners.remove(indicator);
     }
 
-    private void collectGroupExpressions(Node[] nodes, Vector expressions, OfficeReport[] report)
+    private void collectGroupExpressions(final Node[] nodes, final List expressions, final FormulaParser parser, final Expression reportFunctions[])
     {
         for (int i = 0; i < nodes.length; i++)
         {
-            Node node = nodes[i];
+            final Node node = nodes[i];
             if (node instanceof OfficeGroup)
             {
-                OfficeGroup group = (OfficeGroup) node;
-                FormulaExpression exp = (FormulaExpression) group.getGroupingExpression();
-                Object[] pair = new Object[2];
-                pair[0] = exp.getFormula();
-                pair[1] = group.getAttribute(OfficeNamespaces.OOREPORT_NS, "sort-ascending");
-                expressions.add(pair);
+                final OfficeGroup group = (OfficeGroup) node;
+                final FormulaExpression exp = (FormulaExpression) group.getGroupingExpression();
+
+                try
+                {
+                    final FormulaFunction function = (FormulaFunction) parser.parse(exp.getFormulaExpression());
+                    final LValue[] parameters = function.getChildValues();
+                    if (parameters.length > 0)
+                    {
+                        String name = parameters[0].toString();
+                        for (int j = 0; j < reportFunctions.length; j++)
+                        {
+                            if (reportFunctions[j] instanceof FormulaExpression)
+                            {
+                                final FormulaExpression reportExp = (FormulaExpression) reportFunctions[j];
+
+                                if (reportExp.getName().equals(name))
+                                {
+                                    final LValue val = (LValue) parser.parse(reportExp.getFormulaExpression());
+                                    if (val instanceof FormulaFunction)
+                                    {
+                                        final FormulaFunction reportFunction = (FormulaFunction) val;
+
+                                        final ContextLookup context = (ContextLookup) reportFunction.getChildValues()[0];
+                                        name = context.getName();
+                                    }
+                                    else if (val instanceof Term)
+                                    {
+                                        final Term term = (Term) val;
+                                        final ContextLookup context = (ContextLookup) term.getHeadValue().getChildValues()[0];
+                                        name = context.getName();
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+
+                        final Object[] pair = new Object[2];
+                        pair[0] = name;
+                        pair[1] = group.getAttribute(OfficeNamespaces.OOREPORT_NS, "sort-ascending");
+                        expressions.add(pair);
+                    }
+                }
+                catch (ParseException ex)
+                {
+                    Log.error("ReportProcessing failed", ex);
+                }
+                if (node instanceof Section)
+                {
+                    final Section section = (Section) node;
+                    collectGroupExpressions(section.getNodeArray(), expressions, parser, reportFunctions);
+                }
 
             }
-            else if (node instanceof OfficeReport && report[0] == null)
+            else if (node instanceof OfficeDetailSection)
             {
-                report[0] = (OfficeReport) node;
-            }
-            if (node instanceof Section)
-            {
-                Section section = (Section) node;
-                collectGroupExpressions(section.getNodeArray(), expressions, report);
+                return;
             }
 
         }
@@ -256,16 +312,26 @@ public class PentahoReportJob implements ReportJob
         //noinspection OverlyBroadCatchBlock
         try
         {
-            ReportParameters parameters = job.getParameters();
-            Node[] nodes = report.getNodeArray();
-            Vector expressions = new Vector();
-            OfficeReport[] officeReport = new OfficeReport[1];
-            collectGroupExpressions(nodes, expressions, officeReport);
-            parameters.put("group-expressions", expressions);
-            String command = (String) officeReport[0].getAttribute(OfficeNamespaces.OOREPORT_NS, "command");
-            String commandType = (String) officeReport[0].getAttribute(OfficeNamespaces.OOREPORT_NS, "command-type");
+            final ReportParameters parameters = job.getParameters();
+
+            if (masterValues != null && detailColumns != null)
+            {
+                parameters.put(SDBCReportDataFactory.MASTER_VALUES, masterValues);
+                parameters.put(SDBCReportDataFactory.DETAIL_COLUMNS, detailColumns);
+            }
+
+            final Node[] nodes = report.getNodeArray();
+
+            final FormulaParser parser = new FormulaParser();
+            final ArrayList expressions = new ArrayList();
+            final OfficeReport officeReport = (OfficeReport) ((Section) nodes[0]).getNode(0);
+            final Section reportBody = (Section) officeReport.getBodySection();
+            collectGroupExpressions(reportBody.getNodeArray(), expressions, parser, officeReport.getExpressions());
+            parameters.put(SDBCReportDataFactory.GROUP_EXPRESSIONS, expressions);
+            final String command = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, "command");
+            final String commandType = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.COMMAND_TYPE);
             report.setQuery(command);
-            parameters.put("command-type", commandType);
+            parameters.put(SDBCReportDataFactory.COMMAND_TYPE, commandType);
 
             final long startTime = System.currentTimeMillis();
             final ReportProcessor rp = getProcessorForContentType(contentType);
@@ -284,7 +350,8 @@ public class PentahoReportJob implements ReportJob
     protected ReportProcessor getProcessorForContentType(final String mimeType)
             throws ReportExecutionException
     {
-        ReportProcessor ret = null;
+        final ReportProcessor ret;
+
         if (PentahoReportEngineMetaData.OPENDOCUMENT_SPREADSHEET.equals(mimeType))
         {
             ret = new SpreadsheetRawReportProcessor(inputRepository, outputRepository, outputName, imageService, dataSourceFactory);
@@ -301,10 +368,11 @@ public class PentahoReportJob implements ReportJob
         {
             ret = new XmlPrintReportProcessor(System.out, "ISO-8859-1");
         }
-        if (ret == null)
+        else
         {
             throw new ReportExecutionException("Invalid mime-type");
         }
+
         return ret;
     }
 }

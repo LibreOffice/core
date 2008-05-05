@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PentahoReportAddIn.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,7 @@ public class PentahoReportAddIn implements ReportAddIn
     {
     }
 
-    public ReportExpression createExpression(int expression)
+    public ReportExpression createExpression(final int expression)
     {
         return (expression == 0) ? new SumExpression() : null;
     }
@@ -55,7 +55,7 @@ public class PentahoReportAddIn implements ReportAddIn
         return 1;
     }
 
-    public ReportExpressionMetaData getMetaData(int expression)
+    public ReportExpressionMetaData getMetaData(final int expression)
     {
         // todo implement me
         return null;
