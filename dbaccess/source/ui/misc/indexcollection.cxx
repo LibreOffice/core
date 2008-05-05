@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: indexcollection.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +34,8 @@
 #ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #include "indexcollection.hxx"
 #endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
@@ -232,10 +232,9 @@ namespace dbaui
         {   // allowed to pass
             throw;
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OIndexCollection::commitNewIndex: caught a strange exception ....");
-            return;
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -259,9 +258,9 @@ namespace dbaui
         {   // allowed to pass
             throw;
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OIndexCollection::drop: caught a strange exception ....");
+            DBG_UNHANDLED_EXCEPTION();
             return sal_False;
         }
 
@@ -370,9 +369,9 @@ namespace dbaui
         {   // allowed to pass
             throw;
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OIndexCollection::resetIndex: caught an unknown exception!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
