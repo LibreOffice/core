@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDatabaseDocumentUI.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,18 @@
 #endif
 #ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
 //=============================================================================
@@ -147,6 +159,114 @@ interface XDatabaseDocumentUI
         @since OOo 3.0
     */
     boolean closeSubComponents();
+
+    /** loads the given sub component of the database document
+
+        <p>This method allows programmatic access to the functionality which is present in the UI:
+        it allows opening a table, query, form, or report for either editing or viewing.</p>
+
+        <p>This method is a convenience wrapper for API which is also available otherwise. For instance,
+        for loading forms and reports, you could use the <type scope="com::sun::star::frame">XComponentLoader</type>
+        interface of the <type scope="::com::sun::star::sdb">Forms</type> resp. <type scope="::com::sun::star::sdb">Reports</type>
+        collections.</p>
+
+        <p>Note there must exist a connection to the database before you can call this method.</p>
+
+        <p>If an error occurs opening the given object, then this is reported to the user via an error dialog.</p>
+
+        @see isConnected
+        @see connect
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param ObjectName
+            specifies the name of the object. In case hierachical objects are supported
+            (as is the case form forms and reports), hierarchical names are supported here, too.
+
+        @param ForEditing
+            specifies whether the object should be opened for editing (<TRUE/>) or viewing (<FALSE/>).
+
+            <p>For the different object types, this means the following
+            <a name="component_types"></a>
+            <table style="width:100%;" border="1 solid black" cellpadding="2" cellspacing="2"><tbody>
+              <tr style="vertical-align: top;">
+                <td></td>
+                <td><code>ForEditing</code> = <TRUE/></td>
+                <td><code>ForEditing</code> = <FALSE/></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Tables</em></td>
+                <td>A table designer is opened, and allows to edit the structure of the table.
+                    See also <type scope="::com::sun::star::sdb">TableDesign</type></td>
+                <td>A table data view is opened, and allows to view and edit the data contained in the table.
+                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Queries</em></td>
+                <td>A query designer is opened, and allows to edit the statement constituting the query.
+                    See also <type scope="::com::sun::star::sdb">QueryDesign</type></td>
+                <td>A table data view is opened, and allows to view and edit the data contained in the query.
+                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Forms</em></td>
+                <td>The form document is opened in design mode, that is, you can modify it.</td>
+                <td>The form document is opened in read-only mode, allowing you to view and enter the data
+                    which the form is based on, but not the form design.</td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Reports</em></td>
+                <td>The report document is opened in design mode, that is, you can modify it.</td>
+                <td>The report is executed, and the results will be displayed.</td>
+              </tr>
+
+            </tbody></table>
+            </p>
+
+        @return
+            the component which has been loaded. This is either an <type scope="com::sun::star::frame">XModel</type>,
+            or an <type scope="com::sun::star::frame">XController</type> if the component does is model-less.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <param>ObjectType</param> denotes an invalid object type
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if an object with the given name and of the given type does not exist
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if there is no connection to the database at the time the method is called.
+    */
+    ::com::sun::star::lang::XComponent loadComponent(
+                    [in] long ObjectType,
+                    [in] string ObjectName,
+                    [in] boolean ForEditing )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::container::NoSuchElementException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** loads the given sub component of the database document
+
+        <p>In opposite to <member>loadComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+    */
+    ::com::sun::star::lang::XComponent loadComponentWithArguments(
+                    [in] long ObjectType,
+                    [in] string ObjectName,
+                    [in] boolean ForEditing,
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::container::NoSuchElementException,
+                 ::com::sun::star::sdbc::SQLException );
 };
 
 //=============================================================================
