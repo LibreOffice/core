@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LinuxInstaller.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,10 +168,19 @@ public class LinuxInstaller extends Installer {
             packageName = completePackage.getPath();
 
             if ( completePackage.exists() ) {
-                String fixedInstallDir = helper.fixInstallationDirectory(installDir);
                 String relocations = helper.getRelocationString(packageData, packageName);
                 if ( relocations != null ) {
-                    relocations = relocations + fixedInstallDir;
+                    // Problem: If Prefix = "/" the packages are not relocatable with RPM version 3.x .
+                    // Therefore Prefix has to be "/opt" in spec file, although packages shall not be
+                    // relocatable (except for installations with root privileges). So /opt has to be
+                    // listed left and right of equal sign: --relocate /opt=<installDir>/opt
+                    // -> /opt has to be added to the installDir
+                    File localInstallDir = new File(installDir, relocations);  // "/" -> "/opt"
+                    String localInstallDirString = localInstallDir.getPath();
+
+                    // Fixing problem with installation directory and RPM version 3.x
+                    String fixedInstallDir = helper.fixInstallationDirectory(localInstallDirString);
+                    relocations = relocations + "=" + fixedInstallDir;
                     // relocations: "/opt/staroffice8=" + fixedInstallDir;
                 }
 
