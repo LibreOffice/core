@@ -92,11 +92,7 @@ fi
 
 mkdir -p ${DESTDIR}/usr/bin
 
-# reference symbolic link in /etc for relocatable packages
-office_root=/etc/${PREFIX}
-if [ ! -e "${DESTDIR}/$office_root" -a ! -h "${DESTDIR}/$office_root" ]; then
-  office_root=/opt/${PREFIX}
-fi
+office_root=/opt/${PREFIX}
 
 ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/soffice
 ln -sf ${office_root}/program/unopkg ${DESTDIR}/usr/bin/unopkg
