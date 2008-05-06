@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framelinkarray.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,7 +192,7 @@ public:
     size_t              GetRowFromIndex( size_t nCellIndex ) const;
 
     /** Returns the cell index from the cell address (nCol,nRow). */
-    size_t              GetCellIndex( size_t nCol, size_t nRow ) const;
+    size_t              GetCellIndex( size_t nCol, size_t nRow, bool bRTL = false) const;
 
     // cell border styles -----------------------------------------------------
 
