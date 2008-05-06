@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paragrph.src,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -682,41 +682,17 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Apply list of forbidden characters to the beginning and end of lines";
     };
-    TriStateBox CB_AS_ALLOW_WORD_BREAK
+    TriStateBox CB_AS_HANG_PUNC
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Allow ~breaks in words in Latin text";
-    };
-    TriStateBox CB_AS_HANG_PUNC
-    {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Allow hanging punctuation";
-    };
-    FixedLine FL_AS_CHAR_DIST
-    {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Character spacing";
-    };
-    TriStateBox CB_AS_PUNCTUATION
-    {
-        Pos = MAP_APPFONT ( 12, 69 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Allow punctuation at line start";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text [ en-US ] = "Apply spacing between Asian, Latin and Complex text";
-    };
-    TriStateBox CB_AS_ADJUST_NUMBERS
-    {
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ en-US ] = "Automatically adjust space between Asian text and numbers";
     };
 };
 
