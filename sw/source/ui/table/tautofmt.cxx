@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tautofmt.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#include <vcl/svapp.hxx>
 #include <svtools/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -75,7 +76,7 @@ using namespace com::sun::star;
 class AutoFmtPreview : public Window
 {
 public:
-            AutoFmtPreview( Window* pParent, const ResId& rRes );
+            AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* pWrtShell );
             ~AutoFmtPreview();
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
@@ -89,6 +90,7 @@ private:
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     BOOL                    bFitWidth;
+    bool                    mbRTL;
     Size                    aPrvSize;
     long                    nLabelColWidth;
     long                    nDataColWidth1;
@@ -206,7 +208,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     aStrDelMsg      ( SW_RES( STR_DEL_MSG ) ),
     aStrRenameTitle ( SW_RES( STR_RENAME_TITLE ) ),
     aStrInvalidFmt  ( SW_RES( STR_INVALID_AFNAME )),
-    pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ) ) ),
+    pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ), pWrtShell )),
     //
     pShell          ( pWrtShell ),
     nIndex          ( 0 ),
@@ -582,13 +584,14 @@ IMPL_LINK_INLINE_END( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
+AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* pWrtShell ) :
         Window          ( pParent, rRes ),
 
         aCurData        ( aEmptyStr ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         bFitWidth       ( FALSE ),
+        mbRTL           ( false ),
         aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
         nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
         nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
@@ -603,6 +606,11 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         aStrSum         ( SW_RES( STR_SUM ) ),
         m_xMSF          ( comphelper::getProcessServiceFactory() )
 {
+    if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
+        mbRTL = Application::GetSettings().GetLayoutRTL();
+    else
+        mbRTL = pWrtShell->IsTableRightToLeft();
+
     DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
@@ -677,7 +685,7 @@ BYTE AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
         4,  5,  6,  5,  7,
         12, 13, 14, 13, 15
     };
-    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow ) ];
+    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
 const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
@@ -695,7 +703,7 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
     ULONG   nNum;
     double  nVal;
     String cellString;
-    BYTE    nIndex = static_cast< BYTE >( maArray.GetCellIndex( nCol, nRow ) );
+    BYTE    nIndex = static_cast< BYTE >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
     switch( nIndex )
     {
@@ -822,7 +830,9 @@ MAKENUMSTR:
         // horizontal
         //-----------
 /*        if ( eJustification != SC_HOR_JUSTIFY_STANDARD )*/
-        if (aCurData.IsJustify())
+        if( mbRTL )
+            aPos.X() += nRightX;
+        else if (aCurData.IsJustify())
         {
             USHORT nHorPos = (USHORT)
                     ((cellRect.GetWidth()-aStrSize.Width())/2);
