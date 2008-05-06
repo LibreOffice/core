@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofmt.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,6 +146,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIter;
     BOOL                    bFitWidth;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
+    bool                    mbRTL;
     Size                    aPrvSize;
     long                    mnLabelColWidth;
     long                    mnDataColWidth1;
