@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofmt.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,8 @@
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
+#include <sfx2/topfrm.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
@@ -64,6 +66,8 @@
 #include "autofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
+#include "docsh.hxx"
+#include "tabvwsh.hxx"
 
 #define FRAME_OFFSET 4
 
@@ -491,6 +495,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* 
         aScriptedText   ( aVD ),
         xBreakIter      ( pDoc->GetBreakIterator() ),
         bFitWidth       ( FALSE ),
+        mbRTL           ( false ),
         aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
         mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
         mnDataColWidth1 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3 ),
@@ -591,7 +596,7 @@ USHORT AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
         4,  5,  6,  5,  7,
         12, 13, 14, 13, 15
     };
-    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow ) ];
+    return pnFmtMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
 const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
@@ -621,7 +626,7 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         ULONG   nNum;
         double  nVal;
         Color*  pDummy = NULL;
-        USHORT  nIndex = static_cast< USHORT >( maArray.GetCellIndex( nCol, nRow ) );
+        USHORT  nIndex = static_cast< USHORT >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
         switch( nIndex )
         {
@@ -683,7 +688,7 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             //-------------
             // Ausrichtung:
             //-------------
-            eJustification = bJustify ?
+            eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
                 (SvxCellHorJustify)(((const SvxHorJustifyItem*)pCurData->GetItem( nFmtIndex, ATTR_HOR_JUSTIFY ))->GetValue()) :
                 SVX_HOR_JUSTIFY_STANDARD;
 
@@ -851,6 +856,16 @@ void AutoFmtPreview::Init()
     maArray.SetUseDiagDoubleClipping( false );
     CalcCellArray( FALSE );
     CalcLineMap();
+
+    TypeId aType(TYPE(ScDocShell));
+    ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
+    SfxViewShell* p = pFrame->GetViewShell();
+    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( p );
+    ScViewData* pViewData = pViewSh->GetViewData();
+    SCTAB nCurrentTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+    mbRTL = pDoc->IsLayoutRTL( nCurrentTab );
 }
 
 //------------------------------------------------------------------------
@@ -953,6 +968,8 @@ void AutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     DrawRect( aRect );
 
     Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
+    if (Application::GetSettings().GetLayoutRTL())
+       aPos.X() = -aPos.X();
     DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
 
     aVD.SetDrawMode( nOldDrawMode );
