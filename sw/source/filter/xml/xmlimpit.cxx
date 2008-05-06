@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimpit.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -845,6 +845,12 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                               aXMLTableVAlignMap );
             if( bOk )
                 pVertOrient->SetVertOrient( nValue );
+            //#i8855# text::VertOrientation::NONE is stored as empty string and should be applied here
+            else if(!rValue.getLength())
+            {
+                pVertOrient->SetVertOrient( text::VertOrientation::NONE );
+                bOk = sal_True;
+            }
         }
         break;
 
