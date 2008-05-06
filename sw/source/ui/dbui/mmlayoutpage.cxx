@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mmlayoutpage.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,8 @@
 #include <mailmergehelper.hxx>
 #include <unotools.hxx>
 #include <unotools/tempfile.hxx>
+#include <uitool.hxx>
+#include <svx/dlgutil.hxx>
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -175,6 +177,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aTopMF.SetUpHdl(aFrameHdl);
     m_aTopMF.SetDownHdl(aFrameHdl);
     m_aTopMF.SetLoseFocusHdl(aFrameHdl);
+
+    FieldUnit eFieldUnit = ::GetDfltMetric(sal_False);
+    ::SetFieldUnit( m_aLeftMF, eFieldUnit );
+    ::SetFieldUnit( m_aTopMF, eFieldUnit );
 
     Link aUpDownHdl = LINK(this, SwMailMergeLayoutPage, GreetingsHdl_Impl );
     m_aUpPB.SetClickHdl(aUpDownHdl);
