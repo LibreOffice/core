@@ -113,7 +113,7 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "adabas*" ! -name "jre*" -print`
+RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "jre*" -print`
 
 if [ -z "$RPMLIST" ]
 then
@@ -126,13 +126,7 @@ fi
 #
 
 INSTALLDIR=$2
-
-# Check for old style .RPM_OFFICEDATABASE first
-if [ -d ${INSTALLDIR}/.RPM_OFFICEDATABASE ]; then
-  RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICEDATABASE
-else
-  RPM_DB_PATH=${INSTALLDIR}/.RPM_DATABASE
-fi
+RPM_DB_PATH=${INSTALLDIR}/var/lib/rpm
 
 # Check for versionrc
 if [ -f ${INSTALLDIR}/program/versionrc ]; then VERSIONRC=versionrc; fi
@@ -257,9 +251,8 @@ echo "Path to the installation:   " $INSTALLDIR
 echo
 echo "Installing the RPMs"
 
-# inject a second slash to the last path segment to avoid rpm 3 concatination bug
-NEWPREFIX=`cd ${INSTALLDIR}; pwd | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
-RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${NEWPREFIX} \n" $RPMLIST | sort -u | tr -d "\012"`
+ABSROOT=`cd ${INSTALLDIR}; pwd`
+RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${ABSROOT}%{PREFIXES} \n" $RPMLIST | sort -u | tr -d "\012"`
 UserInstallation=\$BRAND_BASE_DIR/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
