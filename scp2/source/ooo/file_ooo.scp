@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.240 $
+ * $Revision: 1.241 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2505,7 +2505,42 @@ File gid_File_Xsl_Export_Wordml_Ooo2wordml
     Dir = gid_Dir_Share_Xslt_Export_Wordml;
     Name = "/xslt/export/wordml/ooo2wordml.xsl";
 End
-
+File gid_File_Xsl_Export_uof_odf2uof_text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_text.xsl";
+End
+File gid_File_Xsl_Export_uof_odf2uof_spreadsheet
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_spreadsheet.xsl";
+End
+File gid_File_Xsl_Export_uof_odf2uof_presentation
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_presentation.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_text.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_spreadsheet
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_spreadsheet.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_presentation
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_presentation.xsl";
+End
 File gid_File_Xsl_Export_Wordml_Ooo2wordml_Border
     TXT_FILE_BODY;
     Styles = (PACKED);
