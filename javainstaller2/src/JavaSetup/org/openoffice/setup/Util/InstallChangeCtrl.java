@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallChangeCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,8 +59,13 @@ public class InstallChangeCtrl {
     static private void setChangeInstallDir(InstallData installData, Installer installer) {
         // setting the new install dir after analyzing the installation directory
         // of the installed update package.
-        String changeInstallDir = installer.getChangeInstallDir(installData.getUpdatePackage());
-        installData.setInstallDir(changeInstallDir);
+        if ( installData.isRootInstallation() ) {
+            String changeInstallDir = "/";
+            installData.setInstallDir(changeInstallDir);
+        } else {
+            String changeInstallDir = installer.getChangeInstallDir(installData.getUpdatePackage());
+            installData.setInstallDir(changeInstallDir);
+        }
     }
 
     // static public void checkInstallChange(InstallData data, ChooseDirectory panel) {

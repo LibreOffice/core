@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InfoDir.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +50,7 @@ public class InfoDir {
             String sourceFile = sourceFileFile.getPath();
 
             // String jarFileName = jarFile.getName();
-            File destDir = new File(data.getInstallRoot(), data.getInstallDir());
-            destDir = new File(destDir, data.getProductDir());
+            File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
             File destFileFile = new File(destDir, fileName);
             destFile = destFileFile.getPath();
 
@@ -98,11 +97,10 @@ public class InfoDir {
 
     static private File createUninstallDir() {
         InstallData data = InstallData.getInstance();
-        File baseDir = new File(data.getInstallRoot(), data.getInstallDir());
-        baseDir = new File(baseDir, data.getProductDir());
-        File uninstallDir = new File(baseDir, data.getUninstallDirName());
-        uninstallDir.mkdir();
-        return uninstallDir;
+        File baseDir = new File(data.getInstallDefaultDir(), data.getProductDir());
+        baseDir = new File(baseDir, data.getUninstallDirName());
+        baseDir.mkdir();
+        return baseDir;
     }
 
     static private void copyGetUidSoFile(File dir) {
@@ -184,8 +182,6 @@ public class InfoDir {
         line = "AdminFileNoReloc=" + data.getAdminFileNameNoReloc();
         fileContent.add(line);
         line = "InstallationDir=" + data.getInstallDir();
-        fileContent.add(line);
-        line = "InstallationRoot=" + data.getInstallRoot();
         fileContent.add(line);
         line = "DatabasePath=" + data.getDatabasePath();
         fileContent.add(line);
