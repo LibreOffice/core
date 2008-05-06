@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec /etc/%PREFIX/program/spadmin
+exec /opt/%PREFIX/program/spadmin

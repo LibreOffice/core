@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /etc/%PREFIX/program/soffice "$@"
+exec /opt/%PREFIX/program/soffice "$@"
