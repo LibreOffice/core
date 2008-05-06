@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChooseInstallationTypeCtrl.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,18 @@ public class ChooseInstallationTypeCtrl extends PanelController implements Actio
     }
 
     public String getPrevious() {
-        return new String("ChooseDirectory");
+
+        InstallData data = InstallData.getInstance();
+
+        if ( data.isRootInstallation() ) {
+            if ( data.hideEula() ) {
+                return new String("Prologue");
+            } else {
+                return new String("AcceptLicense");
+            }
+        } else {
+            return new String("ChooseDirectory");
+        }
     }
 
     public final String getHelpFileName () {
