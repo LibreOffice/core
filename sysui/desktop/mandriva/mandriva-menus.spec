@@ -12,9 +12,8 @@ BuildArch: noarch
 #        which provides 'mandrake-release'. We should leave 'mandrake-release'
 #        here and check for the 'mandriva-release' in the future (next year).
 #
-Requires: %pkgprefix-core01, mandrake-release
-Provides: openoffice.org-desktop-integration
-Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
+Requires: mandrake-release
+Provides: openoffice.org3-desktop-integration
 
 %define _unpackaged_files_terminate_build 0
 
@@ -25,22 +24,18 @@ Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 %description 
 %productname desktop integration
 
-#include<symlink_triggers>
-
 # Update menus
 #
-# - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerin -- %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
+%triggerin -- %pkgprefix, %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
 %{update_menus}
 
 # Update menus
 #
-# - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerpostun -- %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
+%triggerpostun -- %pkgprefix, %pkgprefix-core01 %pkgprefix-calc %pkgprefix-draw %pkgprefix-impress %pkgprefix-writer %pkgprefix-math %pkgprefix-core02
 %{trigger_clean_menus}
 
 %post
@@ -178,9 +173,7 @@ rm -rf $RPM_BUILD_ROOT/*
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
-# enable relocation in create_tree.sh
-mkdir -p $RPM_BUILD_ROOT/etc
-touch $RPM_BUILD_ROOT/etc/%unixfilename
+mkdir -p $RPM_BUILD_ROOT
 
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
@@ -295,7 +288,6 @@ fi
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
-%ghost /etc/%unixfilename
 %{_menudir}/%{name}
 /usr/share/application-registry/*.applications
 /usr/share/applications/%unixfilename-writer.desktop
