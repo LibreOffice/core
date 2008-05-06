@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3718,7 +3718,9 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     m_aStartBracketFT   ( this, SVX_RES( FT_STARTBRACKET ) ),
     m_aStartBracketLB   ( this, SVX_RES( ED_STARTBRACKET ) ),
     m_aEndBracketFT     ( this, SVX_RES( FT_ENDBRACKET ) ),
-    m_aEndBracketLB     ( this, SVX_RES( ED_ENDBRACKET ) )
+    m_aEndBracketLB     ( this, SVX_RES( ED_ENDBRACKET ) ),
+    m_nStartBracketPosition( 0 ),
+    m_nEndBracketPosition( 0 )
 {
     FreeResource();
     Initialize();
@@ -3770,6 +3772,7 @@ void SvxCharTwoLinesPage::Initialize()
 void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 {
     //CHINA001 SvxCharacterMap aDlg( this );
+    bool bStart = pBox == &m_aStartBracketLB;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
@@ -3780,8 +3783,11 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
         if ( aDlg->Execute() == RET_OK )//CHINA001 ( aDlg.Execute() == RET_OK )
         {
             sal_Unicode cChar = aDlg->GetChar();//CHINA001 aDlg.GetChar();
-            USHORT nPos = pBox->InsertEntry( String( cChar ) );
-            pBox->SelectEntryPos( nPos );
+            SetBracket( cChar, bStart );
+        }
+        else
+        {
+            pBox->SelectEntryPos( bStart ? m_nStartBracketPosition : m_nEndBracketPosition );
         }
         delete aDlg; //add CHINA001
     }
@@ -3791,6 +3797,7 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
 
 void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
 {
+    USHORT nEntryPos = 0;
     ListBox* pBox = bStart ? &m_aStartBracketLB : &m_aEndBracketLB;
     if ( 0 == cBracket )
         pBox->SelectEntryPos(0);
@@ -3805,6 +3812,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
                 if ( cChar == cBracket )
                 {
                     pBox->SelectEntryPos(i);
+                    nEntryPos = i;
                     bFound = TRUE;
                     break;
                 }
@@ -3812,8 +3820,15 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, BOOL bStart )
         }
 
         if ( !bFound )
-            pBox->SelectEntryPos( pBox->InsertEntry( String( cBracket ) ) );
+        {
+            nEntryPos = pBox->InsertEntry( String( cBracket ) );
+            pBox->SelectEntryPos( nEntryPos );
+        }
     }
+    if( bStart )
+        m_nStartBracketPosition = nEntryPos;
+    else
+        m_nEndBracketPosition = nEntryPos;
 }
 
 // -----------------------------------------------------------------------
@@ -3837,6 +3852,14 @@ IMPL_LINK( SvxCharTwoLinesPage, CharacterMapHdl_Impl, ListBox*, pBox )
     USHORT nPos = pBox->GetSelectEntryPos();
     if ( CHRDLG_ENCLOSE_SPECIAL_CHAR == (ULONG)pBox->GetEntryData( nPos ) )
         SelectCharacter( pBox );
+    else
+    {
+        bool bStart = pBox == &m_aStartBracketLB;
+        if( bStart )
+            m_nStartBracketPosition = nPos;
+        else
+            m_nEndBracketPosition = nPos;
+    }
     UpdatePreview_Impl();
     return 0;
 }
