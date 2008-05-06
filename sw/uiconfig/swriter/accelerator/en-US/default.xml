@@ -16,6 +16,7 @@
     <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href=".uno:RightPara"/>
     <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:CenterPara"/>
     <accel:item accel:code="KEY_J" accel:mod1="true" xlink:href=".uno:JustifyPara"/>
+    <accel:item accel:code="KEY_INSERT" xlink:href=".uno:InsertMode"/>
     <accel:item accel:code="KEY_F5" xlink:href=".uno:Navigator"/>
     <accel:item accel:code="KEY_A" accel:shift="true" accel:mod1="true" xlink:href=".uno:ParaLeftToRight"/>
     <accel:item accel:code="KEY_D" accel:shift="true" accel:mod1="true" xlink:href=".uno:ParaRightToLeft"/>
