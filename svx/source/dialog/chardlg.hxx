@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -343,6 +343,9 @@ private:
     ListBox             m_aStartBracketLB;
     FixedText           m_aEndBracketFT;
     ListBox             m_aEndBracketLB;
+
+    USHORT              m_nStartBracketPosition;
+    USHORT              m_nEndBracketPosition;
 
                         SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rSet );
 
