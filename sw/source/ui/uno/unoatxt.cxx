@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoatxt.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -422,7 +422,7 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
         else
         {
             SwBookmark* pBkm = pxRange->GetBookmark();
-            if(pBkm->GetOtherBookmarkPos())
+            if(pBkm && pBkm->GetOtherBookmarkPos())
             {
                 SwPaM aTmp(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
                 bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos));
