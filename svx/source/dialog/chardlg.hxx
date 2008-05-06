@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +68,6 @@ protected:
                                             USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT );
     virtual             ~SvxCharBasePage();
 
-    virtual void        ActivatePage( const SfxItemSet& rSet );
-
     void                SetPrevFontSize( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
     void                SetPrevFont( const SfxItemSet& rSet, USHORT nSlot, SvxFont& rFont );
     void                SetPrevFontStyle( const SfxItemSet& rSet, USHORT nSlotPosture, USHORT nSlotWeight, SvxFont& rFont ); // posture/weight
@@ -81,8 +79,12 @@ protected:
     inline SvxFont&     GetPreviewCJKFont();
     inline SvxFont&     GetPreviewCTLFont();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+public:
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
+    virtual void        ActivatePage( const SfxItemSet& rSet );
+//    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 
@@ -92,6 +94,7 @@ struct SvxCharNamePage_Impl;
 
 class SvxCharNamePage : public SvxCharBasePage
 {
+
 private:
     FixedLine*          m_pWestLine;
     FixedText*          m_pWestFontNameFT;
@@ -161,15 +164,15 @@ private:
     DECL_LINK(          FontModifyHdl_Impl, void* );
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
-protected:
+public:
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
                         ~SvxCharNamePage();
-
-    virtual void DeactivatePage();
-    virtual void ActivatePage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static USHORT*      GetRanges();
@@ -184,14 +187,13 @@ public:
     void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( USHORT nDisable );
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 // class SvxCharEffectsPage ----------------------------------------------
 
 class SvxCharEffectsPage : public SvxCharBasePage
 {
-    using TabPage::DeactivatePage;
 
 private:
     FixedText           m_aUnderlineFT;
@@ -239,7 +241,11 @@ private:
     DECL_LINK(          UpdatePreview_Impl, ListBox* );
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
-protected:
+public:
+//    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
+//    virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
@@ -253,13 +259,14 @@ public:
     void                EnableFlash();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 // class SvxCharPositionPage ---------------------------------------------
 
 class SvxCharPositionPage : public SvxCharBasePage
 {
+
 private:
     FixedLine           m_aPositionLine;
     RadioButton         m_aHighPosBtn;
@@ -311,7 +318,10 @@ private:
     DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
     DECL_LINK(          ScaleWidthModifyHdl_Impl, MetricField* );
 
-protected:
+public:
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        ActivatePage( const SfxItemSet& rSet );
 
@@ -324,10 +334,7 @@ public:
     virtual void        FillUserData();
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
-
-    virtual void DeactivatePage();
-    virtual void ActivatePage();
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 // class SvxCharTwoLinesPage ---------------------------------------------
@@ -357,7 +364,10 @@ private:
     DECL_LINK(          TwoLinesHdl_Impl, CheckBox* );
     DECL_LINK(          CharacterMapHdl_Impl, ListBox* );
 
-protected:
+public:
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -369,10 +379,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     //                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
-
-    virtual void DeactivatePage();
-    virtual void ActivatePage();
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 #endif // #ifndef _SVX_CHARDLG_HXX
