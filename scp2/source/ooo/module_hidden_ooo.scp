@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.94 $
+ * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -804,6 +804,12 @@ Module gid_Module_Root_Files_6
 	gid_File_Xsl_Export_Spreadsheetml_Style_Mapping,
 	gid_File_Xsl_Export_Spreadsheetml_Styles,
 	gid_File_Xsl_Export_Spreadsheetml_Table,
+	gid_File_Xsl_Export_uof_odf2uof_text,
+	gid_File_Xsl_Export_uof_odf2uof_spreadsheet,
+	gid_File_Xsl_Export_uof_odf2uof_presentation,
+	gid_File_Xsl_Import_uof_uof2odf_text,
+	gid_File_Xsl_Import_uof_uof2odf_spreadsheet,
+	gid_File_Xsl_Import_uof_uof2odf_presentation,
 	gid_File_Xsl_Export_Wordml_Ooo2wordml,
 	gid_File_Xsl_Export_Wordml_Ooo2wordml_Border,
 	gid_File_Xsl_Export_Wordml_Ooo2wordml_Custom_Draw,
