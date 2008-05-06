@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pgfnote.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,8 +85,9 @@ private:
 
     long            lMaxHeight;
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
+
     virtual void    ActivatePage( const SfxItemSet& rSet );
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 
