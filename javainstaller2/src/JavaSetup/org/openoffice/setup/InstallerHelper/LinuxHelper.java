@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LinuxHelper.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -421,12 +421,12 @@ import java.util.Vector;public class LinuxHelper {
         String relocationString = null;
 
         if ( packageData.isRelocatable() ) {
-            // String rpmQuery = "rpm -qp --qf %{PREFIXES}=" + " " + packageName;
+            // String rpmQuery = "rpm -qp --qf %{PREFIXES}" + " " + packageName;
             String[] rpmQueryArray = new String[5];
             rpmQueryArray[0] = "rpm";
             rpmQueryArray[1] = "-qp";
             rpmQueryArray[2] = "--qf";
-            rpmQueryArray[3] = "%{PREFIXES}=";
+            rpmQueryArray[3] = "%{PREFIXES}";
             rpmQueryArray[4] = packageName;
 
             Vector returnVector = new Vector();
@@ -450,9 +450,7 @@ import java.util.Vector;public class LinuxHelper {
         // The version and release that are also stored in file "packageNames" must not be
         // used for deinstallation because they are probably not up to date.
 
-        // String destDirStr = data.getInstallDir();
-        File destDir = new File(data.getInstallDir(), data.getProductDir());
-        // File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+        File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
         File uninstallDir = new File(destDir, data.getUninstallDirName());
         String fileName = "packageNames";
         File packageNamesFile = new File(uninstallDir, fileName);
@@ -475,9 +473,7 @@ import java.util.Vector;public class LinuxHelper {
     public void saveModulesLogFile(InstallData data) {
         if ( data.logModuleStates() ) {
             Vector logContent = LogManager.getModulesLogFile();
-            File destDir = new File(data.getInstallDir(), data.getProductDir());
-            // String destDirStr = data.getInstallDir();
-            // File uninstallDir = new File(destDirStr, data.getUninstallDirName());
+            File destDir = new File(data.getInstallDefaultDir(), data.getProductDir());
             File uninstallDir = new File(destDir, data.getUninstallDirName());
             File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
             SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);
