@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -118,10 +118,6 @@ ICONDEPN = \
     ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//:s/extensionmgr//)}.png \
     ../icons/locolor/{16x16 32x32}/mimetypes/{$(MIMEICONLIST)}.png
 
-.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
-SPECFILES = $(MISC)$/{redhat suse freedesktop mandriva}-menus.spec
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -161,12 +157,6 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/openoffice.org.xml : $(ULFDIR)$/documents.ulf
     @echo ---------------------------------
     @$(PERL) create_mime_xml.pl $< > $@.$(INPATH)
     @mv -f $@.$(INPATH) $@
-
-.IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
-$(SPECFILES) : add_specfile_triggers.sed symlink_triggers
-$(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
-    @sed -f ../share/add_specfile_triggers.sed $< | tr -d "\015" >$@
-.ENDIF
 
 #
 # Create GNOME mime-info files
