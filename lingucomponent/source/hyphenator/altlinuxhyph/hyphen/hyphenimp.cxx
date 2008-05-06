@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hyphenimp.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -470,8 +470,8 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                 aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
                         (INT16) nHyphenationPosAltHyph);
                 } else {
-                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
-                       aWord, (INT16) nHyphenationPos);
+                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ),
+                        (INT16)nHyphenationPos, aWord, (INT16) nHyphenationPos);
                 }
         }
 
@@ -659,7 +659,7 @@ sal_uInt16 SAL_CALL Hyphenator::capitalType(const OUString& aTerm, CharClass * p
         if ((pCC) && (tlen)) {
               String aStr(aTerm);
               sal_Int32 nc = 0;
-              for (sal_Int32 tindex = 0; tindex < tlen;  tindex++) {
+              for (xub_StrLen tindex = 0; tindex < tlen;  tindex++) {
                if (pCC->getCharacterType(aStr,tindex) &
                        ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
           }
