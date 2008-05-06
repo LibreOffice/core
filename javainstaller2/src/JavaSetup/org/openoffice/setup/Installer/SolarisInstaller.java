@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SolarisInstaller.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,8 +150,7 @@ public class SolarisInstaller extends Installer {
         String log = "<br><b>Package: " + packageData.getName() + "</b>";
         LogManager.addCommandsLogfileComment(log);
 
-        String installDir = data.getInstallDir();
-        String rootDir = data.getInstallRoot();
+        String rootDir = data.getInstallDir();
         String packagePath = data.getPackagePath();
 
         if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
@@ -249,8 +248,7 @@ public class SolarisInstaller extends Installer {
         String log = "<br><b>Package: " + packageData.getName() + "</b>";
         LogManager.addCommandsLogfileComment(log);
 
-        String installDir = data.getInstallDir();
-        String installRoot = data.getInstallRoot();
+        String installRoot = data.getInstallDir();
         String packageName = packageData.getPackageName();
         String adminFileName = "";
 
