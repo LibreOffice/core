@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: srcview.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -314,9 +314,9 @@ SwSrcView::~SwSrcView()
 --------------------------------------------------*/
 void SwSrcView::SaveContentTo(SfxMedium& rMed)
 {
-    SvStream* pInStream = rMed.GetInStream();
-    pInStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
-    aEditWin.Write( *pInStream);//, EE_FORMAT_TEXT);
+    SvStream* pOutStream = rMed.GetOutStream();
+    pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
+    aEditWin.Write( *pOutStream );//, EE_FORMAT_TEXT);
 }
 
 /*--------------------------------------------------------------------
