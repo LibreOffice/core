@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svxacorr.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -333,7 +333,7 @@ sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == ' '  || cChar == '\'' || cChar == '\"' ||
             cChar == '*'  || cChar == '_'  ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
-            cChar == ':'  || cChar == '?';
+            cChar == ':'  || cChar == '?' || cChar == '!';
 }
 
 /* -----------------19.11.98 10:15-------------------
