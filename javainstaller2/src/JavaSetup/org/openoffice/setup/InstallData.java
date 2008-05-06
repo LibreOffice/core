@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallData.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,12 +72,13 @@ public class InstallData
     static private boolean newerVersionExists = false;
     static private boolean isMultiLingual = false;
     static private boolean dontUpdate = false;
+    static private boolean hideEula = false;
     static private boolean databaseQueried = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
-    static private String installRoot = null;     /* Root directory for Solaris user installation */
     static private String defaultDir = "/opt";
+    static private String installDefaultDir = null;
     static private String productDir = null;
     static private String packageFormat = null;
     static private String architecture = null;
@@ -289,12 +290,12 @@ public class InstallData
         installDir = dir;
     }
 
-    public String getInstallRoot() {
-        return installRoot;
+    public String getInstallDefaultDir() {
+        return installDefaultDir;
     }
 
-    public void setInstallRoot(String dir) {
-        installRoot = dir;
+    public void setInstallDefaultDir(String dir) {
+        installDefaultDir = dir;
     }
 
     public String getDatabasePath() {
@@ -562,6 +563,14 @@ public class InstallData
 
     public void setDontUpdate(boolean value) {
         dontUpdate = value;
+    }
+
+    public boolean hideEula() {
+        return hideEula;
+    }
+
+    public void setHideEula(boolean value) {
+        hideEula = value;
     }
 
     public boolean databaseQueried() {
