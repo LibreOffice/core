@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,8 +198,8 @@ class SwColumnPage : public SfxTabPage
     void            ResetColWidth();
     void            SetLabels( USHORT nVis );
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
