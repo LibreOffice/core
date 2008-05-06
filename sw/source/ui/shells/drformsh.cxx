@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drformsh.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,8 +140,12 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                             {
                                 uno::Any aTmp;
                                 // Ja!
-                                aTmp <<= OUString(rHLinkItem.GetName());
-                                xPropSet->setPropertyValue(C2U("Label"), aTmp );
+                                ::rtl::OUString sLabel(C2U("Label"));
+                                if( xPropInfoSet->hasPropertyByName(sLabel) )
+                                {
+                                    aTmp <<= OUString(rHLinkItem.GetName());
+                                    xPropSet->setPropertyValue(sLabel, aTmp );
+                                }
 
                                 SfxMedium* pMedium = GetView().GetDocShell()->GetMedium();
                                 INetURLObject aAbs;
