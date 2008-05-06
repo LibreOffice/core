@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrap.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,8 +132,8 @@ class SwWrapTabPage: public SfxTabPage
     DECL_LINK( WrapTypeHdl, ImageRadioButton * );
     DECL_LINK( ContourHdl, CheckBox * );
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
