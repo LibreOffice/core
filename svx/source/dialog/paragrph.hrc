@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paragrph.hrc,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,12 +115,10 @@
 //asian typography
 #define FL_AS_OPTIONS                   1
 #define CB_AS_HANG_PUNC                 2
-#define CB_AS_ALLOW_WORD_BREAK          3
+
 #define CB_AS_FORBIDDEN                 4
-#define FL_AS_CHAR_DIST                 5
-#define CB_AS_PUNCTUATION               6
+
 #define CB_AS_SCRIPT_SPACE              7
-#define CB_AS_ADJUST_NUMBERS            8
 
 #endif
 
