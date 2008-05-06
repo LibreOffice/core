@@ -8,7 +8,7 @@
  *
  * $RCSfile: WikiEditSettingDialog.java,v $
  *
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,6 +213,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
             HostConfiguration aHostConfig = new HostConfiguration();
             boolean bInitHost = true;
+            boolean bAllowIndex = true;
 
             do
             {
@@ -293,14 +294,24 @@ public class WikiEditSettingDialog extends WikiDialog
                     }
                     else if ( sRedirectURL == null || sRedirectURL.length() == 0 )
                     {
-                        // URL invalid
-                        // show error
-                        Helper.ShowError( m_xContext,
-                                          m_xDialog,
-                                          Helper.DLG_MEDIAWIKI_TITLE,
-                                          Helper.INVALIDURL_ERROR,
-                                          null,
-                                          false );
+                        if ( sURL.length() > 0 && !sURL.endsWith( "index.php" ) && bAllowIndex )
+                        {
+                            // the used MainURL is not alwais directly accessible
+                            // add the suffix as workaround, but only once
+                            sRedirectURL = sURL + "/index.php";
+                            bAllowIndex = false;
+                        }
+                        else
+                        {
+                            // URL invalid
+                            // show error
+                            Helper.ShowError( m_xContext,
+                                              m_xDialog,
+                                              Helper.DLG_MEDIAWIKI_TITLE,
+                                              Helper.INVALIDURL_ERROR,
+                                              null,
+                                              false );
+                        }
                     }
                 }
                 else
