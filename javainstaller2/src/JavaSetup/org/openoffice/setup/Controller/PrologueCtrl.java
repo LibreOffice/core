@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrologueCtrl.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +111,44 @@ public class PrologueCtrl extends PanelController {
                     }
 
                     if ( installData.isRootInstallation() ) {
+
+                        // Setting installation directory!
+                        String dir = "/";
+                        installData.setInstallDir(dir);
+                        installData.setInstallDefaultDir(installData.getDefaultDir());
+
                         Controller.checkForNewerVersion(installData);
+
+                        // Check Write privileges in installation directory (installData.getInstallDefaultDir())
+                        // If the directory exists, is has to be tested, whether the user has write access
+                        dir = installData.getInstallDefaultDir();
+
+                        if ( SystemManager.exists_directory(dir) ) {
+                            if ( ! Controller.createdSubDirectory(dir) ) {
+                                System.err.println("ERROR: No write privileges inside directory: " + dir);
+                                System.exit(1);
+                            }
+                        }
+
+                        // If the directory does not exist, is has to be tested, whether the user can create it
+                        if ( ! SystemManager.exists_directory(dir)) {
+                            if ( ! Controller.createdDirectory(dir) ) {
+                                System.err.println("ERROR: No privileges to create directory: " + dir);
+                                System.exit(1);
+                            }
+                        }
+
+                        // Setting macro
+                        SetupDataProvider.setNewMacro("DIR", dir); // important for string replacement
+
+                        // Calculate available disc space
+                        int discSpace = SystemManager.calculateDiscSpace(dir);
+                        installData.setAvailableDiscSpace(discSpace);
+
+                        if ( ! installData.databaseAnalyzed()) {
+                            ModuleCtrl.defaultDatabaseAnalysis(installData);
+                            installData.setDatabaseAnalyzed(true);
+                        }
                     }
 
                     getSetupFrame().setButtonEnabled(true, getSetupFrame().BUTTON_NEXT);
@@ -128,7 +165,23 @@ public class PrologueCtrl extends PanelController {
     }
 
     public String getNext() {
-        return new String("AcceptLicense");
+        InstallData data = InstallData.getInstance();
+
+        if ( data.hideEula() ) {
+            if ( data.isRootInstallation() ) {
+                if ( data.olderVersionExists() ) {
+                    return new String("InstallationImminent");
+                } else if ( data.sameVersionExists() ) {
+                    return new String("ChooseComponents");
+                } else {
+                    return new String("ChooseInstallationType");
+                }
+            } else {
+                return new String("ChooseDirectory");
+            }
+        } else {
+            return new String("AcceptLicense");
+        }
     }
 
     public String getPrevious() {
