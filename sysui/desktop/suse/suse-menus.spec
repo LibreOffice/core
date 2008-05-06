@@ -9,11 +9,10 @@ Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
-Requires: %pkgprefix-core01, /etc/SuSE-release
+Requires: /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openoffice.org-desktop-integration
-Obsoletes: openofficeorg-suse-menus
+Provides: openoffice.org3-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %description 
 %productname desktop integration
@@ -26,9 +25,7 @@ rm -rf $RPM_BUILD_ROOT/*
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
-# enable relocation in create_tree.sh
-mkdir -p $RPM_BUILD_ROOT/etc
-touch $RPM_BUILD_ROOT/etc/%unixfilename
+mkdir -p $RPM_BUILD_ROOT
 
 # set parameters for the create_tree script 
 export DESTDIR=$RPM_BUILD_ROOT
@@ -41,14 +38,12 @@ export GNOME_MIME_THEME=hicolor
 %clean
 rm -rf $RPM_BUILD_ROOT/*
 
-#include<symlink_triggers>
-
-%triggerin -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
-if [ -x /opt/gnome/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
+%triggerin -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
 fi 
 
-%triggerun -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
+%triggerun -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
@@ -254,7 +249,6 @@ done
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
-%ghost /etc/%unixfilename
 /opt/gnome/share/application-registry/*.applications
 /usr/share/applications/%unixfilename-writer.desktop
 /usr/share/applications/%unixfilename-calc.desktop
