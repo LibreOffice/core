@@ -7,8 +7,7 @@ Name: %pkgprefix-freedesktop-menus
 #BuildRequires: perl
 Group: Office
 License: LGPL
-Provides: openoffice.org-desktop-integration, openofficeorg-freedesktop-menus
-Obsoletes: openofficeorg-freedesktop-menus
+Provides: openoffice.org3-desktop-integration
 BuildArch: noarch
 AutoReqProv: no
 
@@ -26,10 +25,7 @@ rm -rf $RPM_BUILD_ROOT
 # links intentionally (until we find a better solution) #46226
 export NO_BRP_STALE_LINK_ERROR=yes
 
-# enable relocation in create_tree.sh
-mkdir -p $RPM_BUILD_ROOT/etc
-# dummy for %ghost
-touch $RPM_BUILD_ROOT/etc/%unixfilename
+mkdir -p $RPM_BUILD_ROOT
 
 # FIXME: remove - only purpose is to create packages identical to OOF680 m8
 umask 0000
@@ -55,9 +51,7 @@ rm -rf usr/share/applnk-redhat
 %clean
 rm -rf $RPM_BUILD_ROOT 
 
-#include<symlink_triggers>
-
-%triggerin -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
+%triggerin -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
 # this is run when one of the above packages is already installed and the menu
 # package gets installed OR when the menu-package is already installed and one
 # of the above listed packages gets installed
@@ -75,7 +69,7 @@ elif (which update-desktop-database); then
   update-desktop-database -q /usr/share/applications
 fi
 
-%triggerun -- %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
+%triggerun -- %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
@@ -286,7 +280,6 @@ fi
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
-%ghost /etc/%unixfilename
 %attr(0755, root, root) /usr/bin/*
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-calc.desktop
