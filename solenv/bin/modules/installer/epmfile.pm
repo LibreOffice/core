@@ -8,7 +8,7 @@
 #
 # $RCSfile: epmfile.pm,v $
 #
-# $Revision: 1.81 $
+# $Revision: 1.82 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -144,7 +144,7 @@ sub put_directories_into_epmfile
             my $hostname = $onedir->{'HostName'};
 
             # not including simple directory "/opt"
-            if (( $allvariables->{'SETSTATICPATH'} ) && ( $hostname eq $packagerootpath )) { next; }
+            # if (( $allvariables->{'SETSTATICPATH'} ) && ( $hostname eq $packagerootpath )) { next; }
 
             my $line = "d 755 root $group $hostname -\n";
 
@@ -1162,7 +1162,7 @@ sub set_topdir_in_specfile
         }
     }
 
-    # Adding "topdir" behind the line beginning with: Prefix:
+    # Adding "topdir" behind the line beginning with: Group:
 
     my $inserted_line = 0;
 
@@ -1170,7 +1170,7 @@ sub set_topdir_in_specfile
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
-        if ( ${$changefile}[$i] =~ /^\s*Prefix\:\s*/ )
+        if ( ${$changefile}[$i] =~ /^\s*Group\:\s*/ )
         {
             splice(@{$changefile},$i+1,0,$topdirline);
             $inserted_line = 1;
@@ -1180,7 +1180,7 @@ sub set_topdir_in_specfile
         }
     }
 
-    if (! $inserted_line) { installer::exiter::exit_program("ERROR: Did not find string \"Prefix:\" in file: $filename", "set_topdir_in_specfile"); }
+    if (! $inserted_line) { installer::exiter::exit_program("ERROR: Did not find string \"Group:\" in file: $filename", "set_topdir_in_specfile"); }
 
 }
 
@@ -1252,8 +1252,8 @@ sub set_autoprovreq_in_specfile
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
-        # Adding "autoreqprov" behind the line beginning with: Prefix:
-        if ( ${$changefile}[$i] =~ /^\s*Prefix\:\s*/ )
+        # Adding "autoreqprov" behind the line beginning with: Group:
+        if ( ${$changefile}[$i] =~ /^\s*Group\:\s*/ )
         {
             splice(@{$changefile},$i+1,0,$autoreqprovline);
             $autoreqprovline =~ s/\s*$//;
@@ -1312,7 +1312,7 @@ sub make_prototypefile_relocatable
     # If the $relocatablepath is "/opt/openoffice20/" the line "d none /opt/openoffice20" was not changed.
     # This line has to be removed now
 
-    $relocatablepath =~ s/\/\s*$//;     # removing the ending slash
+    if ( $relocatablepath ne "/" ) { $relocatablepath =~ s/\/\s*$//; }      # removing the ending slash
 
     for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
     {
@@ -1854,7 +1854,7 @@ sub prepare_packages
     my $newepmdir = $installer::globals::epmoutpath . $installer::globals::separator;
 
     my $localrelocatablepath = $relocatablepath;
-    $localrelocatablepath =~ s/\/\s*$//;
+    if ( $localrelocatablepath ne "/" ) { $localrelocatablepath =~ s/\/\s*$//; }
 
     if ( $installer::globals::issolarispkgbuild )
     {
@@ -1864,7 +1864,7 @@ sub prepare_packages
 
     if ( $installer::globals::islinuxrpmbuild )
     {
-        if ( $localrelocatablepath =~ /^\s*$/ ) { $localrelocatablepath = "/"; }; # at least the "/"
+        # if ( $localrelocatablepath =~ /^\s*$/ ) { $localrelocatablepath = "/"; }; # at least the "/"
         $filename =  $packagename . ".spec";
         $newline = "Prefix\:\ " . $localrelocatablepath . "\n";
     }
@@ -1873,8 +1873,11 @@ sub prepare_packages
 
     if ( ! -f $completefilename) { installer::exiter::exit_program("ERROR: Did not find file: $completefilename", "prepare_packages"); }
     my $changefile = installer::files::read_file($completefilename);
-    add_one_line_into_file($changefile, $newline, $filename);
-    installer::files::save_file($completefilename, $changefile);
+    if ( $newline ne "" )
+    {
+        add_one_line_into_file($changefile, $newline, $filename);
+        installer::files::save_file($completefilename, $changefile);
+    }
 
     # my $newepmdir = $completefilename;
     # installer::pathanalyzer::get_path_from_fullqualifiedname(\$newepmdir);
@@ -2789,22 +2792,38 @@ sub analyze_rootpath
     # Version 2: "/opt/openofficeorg20" is variable and "" fixed
     ##############################################################
 
-    if ( $$relocatablepathref eq "" )   # relocatablepath is not defined in package list
-    {
-        $$staticpathref = "";   # will be ""
-        $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/openofficeorg20/"
-        # setting the static path to the hostname of the directory with style OFFICEDIRECTORY
-        if ( $allvariables->{'SETSTATICPATH'} ) { $$staticpathref = $installer::globals::officedirhostname; }
+    # if ( $$relocatablepathref eq "" ) # relocatablepath is not defined in package list
+    # {
+    #   $$staticpathref = "";   # will be ""
+    #   $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/openofficeorg20/"
+    #   # setting the static path to the hostname of the directory with style OFFICEDIRECTORY
+    #   if ( $allvariables->{'SETSTATICPATH'} ) { $$staticpathref = $installer::globals::officedirhostname; }
+    #
+    # }
+    # else  # relocatablepath is defined in package list
+    # {
+    #   $$relocatablepathref =~ s/\/\s*$//;         # removing ending slash
+    #   $$relocatablepathref = $$relocatablepathref . "\/"; # relocatable path must end with "/"
+    #   my $staticpath = $rootpath;
+    #   $staticpath =~ s/\Q$$relocatablepathref\E//;
+    #   $staticpath =~ s/\/\s*$//;
+    #   $$staticpathref = $staticpath;
+    # }
 
-    }
-    else    # relocatablepath is defined in package list
+    ##############################################################
+    # Version 3: "/" is variable and "/opt/openofficeorg20" fixed
+    ##############################################################
+
+    $$relocatablepathref = "/";
+    # Static path has to contain the office directory name. This is replaced in shellscripts.
+    $$staticpathref = $rootpath . $installer::globals::separator . $installer::globals::officedirhostname;
+    # For RPM version 3.x it is required, that Prefix is not "/" in spec file. In this case --relocate will not work,
+    # because RPM 3.x says, that the package is not relocatable. Therefore we have to use Prefix=/opt and for
+    # all usages of --relocate this path has to be on both sides of the "=": --relocate /opt=<myselectdir>/opt .
+    if ( $installer::globals::islinuxrpmbuild )
     {
-        $$relocatablepathref =~ s/\/\s*$//;         # removing ending slash
-        $$relocatablepathref = $$relocatablepathref . "\/"; # relocatable path must end with "/"
-        my $staticpath = $rootpath;
-        $staticpath =~ s/\Q$$relocatablepathref\E//;
-        $staticpath =~ s/\/\s*$//;
-        $$staticpathref = $staticpath;
+        $$relocatablepathref = $rootpath . "\/"; # relocatable path must end with "/", will be "/opt/"
+        $$staticpathref = $installer::globals::officedirhostname; # to be used as replacement in shell scripts
     }
 
     if ( $installer::globals::islinuxdebbuild )
