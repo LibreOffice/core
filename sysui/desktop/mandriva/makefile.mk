@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +46,7 @@ TARGET=mandriva
  
 .IF "$(PKGFORMAT)"!="$(PKGFORMAT:s/rpm//)"
 
-SPECFILE=$(MISC)$/$(TARGET)-menus.spec
+SPECFILE=$(TARGET)-menus.spec
 RPMFILES=$(foreach,i,{$(PRODUCTLIST)} $(PKGDIR)$/$i-$(SPECFILE:b)-$(PKGVERSION.$i)-$(PKGREV).noarch.rpm)
 
 .ENDIF
