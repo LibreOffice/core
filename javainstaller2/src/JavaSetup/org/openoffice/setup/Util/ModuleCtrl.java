@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModuleCtrl.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -756,9 +756,7 @@ public class ModuleCtrl {
             }
 
             // Updating only those packages that are installed.
-            System.err.println("setUpdateOlderProductSettings: Start");
             ModuleCtrl.setUpdateOlderProductSettings(packageData, data, installer);
-            System.err.println("setUpdateOlderProductSettings: End");
 
             if ( data.logModuleStates() ) {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After setUpdateOlderProductSettings");
