@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outline.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,8 +149,8 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    SetModified(){aPreviewWIN.Invalidate();}
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
     SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet);
