@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.132 $
+# $Revision: 1.133 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.132 $$"
+LIBSMKREV!:="$$Revision: 1.133 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -329,7 +329,7 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) \
 SABLOT3RDLIB=-lsablot
 APP3RDLIB=-lapp
 SAMPLE3RDLIB=-lsample
-HNJLIB*=-lhnj
+HNJLIB*=-lhyphen
 MYSPELLLIB=-lmyspell
 COSVLIB=-lcosv
 UDMLIB=-ludm
