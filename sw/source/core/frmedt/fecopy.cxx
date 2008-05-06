@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fecopy.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1104,12 +1104,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         if( FLY_PAGE == aAnchor.GetAnchorId() )
                         {
                             aAnchor.SetPageNum( aAnchor.GetPageNum() + nStartPageNumber - 1 );
-                        }
-                        else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
-                        {
-                            Point aPt;
-                            lcl_SetAnchor( *PCURCRSR->GetPoint(), *PCURCRSR->GetNode(),
-                                            0, aPt, *this, aAnchor, aPt, FALSE );
                         }
                         else
                             continue;
