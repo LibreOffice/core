@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Controller.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,11 +205,11 @@ public class Controller {
 
         if ( installData.newerVersionExists() ) {
             // Inform user about a newer version installed
-            SetupDataProvider.setNewMacro("DIR", installData.getInstallDir()); // important for string replacement
+            SetupDataProvider.setNewMacro("DIR", installData.getInstallDefaultDir()); // important for string replacement
 
-            System.err.println("Error: A newer version is already installed in " + installData.getInstallDir() + " !");
+            System.err.println("Error: A newer version is already installed in " + installData.getInstallDefaultDir() + " !");
             String message1 = ResourceManager.getString("String_Newer_Version_Installed_Found")
-                            + "\n" + installData.getInstallDir() + "\n";
+                            + "\n" + installData.getInstallDefaultDir() + "\n";
             String message2 = ResourceManager.getString("String_Newer_Version_Installed_Remove");
             String message = message1 + "\n" + message2;
             String title = ResourceManager.getString("String_Error");
