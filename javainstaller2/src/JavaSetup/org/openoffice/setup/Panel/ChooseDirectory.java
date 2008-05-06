@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChooseDirectory.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,65 +114,6 @@ public class ChooseDirectory extends JPanel implements ActionListener {
         contentPanel.add(new JPanel(), constraints);
 
         contentBox.add(contentPanel);
-
-        // new Panel for Solaris User installation
-        InstallData data = InstallData.getInstance();
-
-        if ( data.isSolarisUserInstallation() ) {
-
-            Box contentBoxSolarisUser = new Box(BoxLayout.Y_AXIS);
-
-            JPanel titlePanel = new JPanel();
-            String subtitleTextRootdir = ResourceManager.getString("String_ChooseDirectory6");
-            PanelLabel subTitleLabel = new PanelLabel(subtitleTextRootdir);
-            titlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-            titlePanel.add(subTitleLabel);
-
-            contentBoxSolarisUser.add(titlePanel);
-            contentBoxSolarisUser.add(contentBoxSolarisUser.createVerticalStrut(10));
-
-            JPanel contentPanelRootdir = new JPanel();
-            contentPanelRootdir.setLayout(new GridBagLayout());
-
-            directoryChooserRootdir = new JFileChooser();
-            directoryChooserRootdir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-            String browseTextRootdir = ResourceManager.getString("String_ChooseDirectory3");
-            directoryButtonRootdir = new JButton(browseTextRootdir);
-            directoryButtonRootdir.addActionListener(this);
-
-            directoryFieldRootdir = new JTextField();
-
-            GridBagConstraints constraintsRootdir = new GridBagConstraints();
-
-            constraintsRootdir.gridx = 0;
-            constraintsRootdir.gridy = 0;
-            constraintsRootdir.weightx = 1;
-            constraintsRootdir.weighty = 0;
-            constraintsRootdir.fill = GridBagConstraints.HORIZONTAL;
-
-            contentPanelRootdir.add(directoryFieldRootdir, constraintsRootdir);
-
-            constraintsRootdir.gridx = 1;
-            constraintsRootdir.gridy = 0;
-            constraintsRootdir.weightx = 0;
-            constraintsRootdir.weighty = 0;
-            constraintsRootdir.fill = GridBagConstraints.HORIZONTAL;
-
-            contentPanelRootdir.add(directoryButtonRootdir, constraintsRootdir);
-
-            constraintsRootdir.gridx = 0;
-            constraintsRootdir.gridy = 1;
-            constraintsRootdir.weightx = 0;
-            constraintsRootdir.weighty = 1;
-            constraintsRootdir.fill = GridBagConstraints.VERTICAL;
-
-            contentPanelRootdir.add(new JPanel(), constraintsRootdir);
-
-            contentBoxSolarisUser.add(contentPanelRootdir);
-
-            contentBox.add(contentBoxSolarisUser);
-        }
 
         // defining a place for text output
         databaseProgress = new PanelLabel(""); // planned for database progress

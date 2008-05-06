@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Dumper.java,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +182,6 @@ public class Dumper {
         System.err.println("AdminFileNoReloc: " + data.getAdminFileNameNoReloc());
         System.err.println("DatabasePath: " + data.getDatabasePath());
         System.err.println("InstallDir: " + data.getInstallDir());
-        System.err.println("InstallRoot: " + data.getInstallRoot());
         System.err.println("Original privileges: " + data.getStoredInstallationPrivileges());
         System.err.println("getuid.so File: " + data.getGetUidPath());
     }
