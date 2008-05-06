@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpage.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,8 +193,8 @@ class SwFrmPage: public SfxTabPage
     SwFrmPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmPage();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
@@ -241,8 +241,8 @@ class SwGrfExtPage: public SfxTabPage
     SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
     ~SwGrfExtPage();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
@@ -277,8 +277,8 @@ class SwFrmURLPage : public SfxTabPage
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmURLPage();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
