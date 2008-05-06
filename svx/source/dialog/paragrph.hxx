@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paragrph.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,13 +309,9 @@ class SvxAsianTabPage : public SfxTabPage
     FixedLine       aOptionsFL;
 
     TriStateBox     aForbiddenRulesCB;
-    TriStateBox     aAllowWordBreakCB;
     TriStateBox     aHangingPunctCB;
 
-    FixedLine       aCharDistFL;
-    TriStateBox     aPuntuationCB;
     TriStateBox     aScriptSpaceCB;
-    TriStateBox     aAdjustNumbersCB;
 
     SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet );
 
