@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ProductDescription.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,7 +179,7 @@ public class ProductDescription {
                 String value = section.getValue();
                 if (value != null) {
                     installData.setDefaultDir(value);
-                    installData.setInstallDir(value);
+                    // installData.setInstallDir(value);
                 }
             }
 
@@ -237,6 +237,15 @@ public class ProductDescription {
                     dontupdate = Parser.parseBoolean(value);
                 }
                 installData.setDontUpdate(dontupdate);
+            }
+
+           section = data.getElement("hideeula");
+            if (section != null) {
+                String value = section.getValue();
+                if ((value != null) && (! value.equals(""))) {
+                    boolean hideeulaValue = Parser.parseBoolean(value);
+                    installData.setHideEula(hideeulaValue);
+                }
             }
 
             /* check for any macro definitions */
