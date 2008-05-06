@@ -1,0 +1,12 @@
+    <node oor:name="Unified_Office_Format_presentation" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value oor:separator=";">uop;uof</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"/>
+        <prop oor:name="UIName">
+            <value>Unified Office Format presentation</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>doctype:vnd.uof.presentation</value></prop>
+    </node>
