@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -296,6 +296,13 @@ sub set_important_properties
     foreach my $treecondition (keys %installer::globals::usedtreeconditions)
     {
         my $onepropertyline = $treecondition . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    # No more license dialog for selected products
+    if ( $allvariables->{'HIDELICENSEDIALOG'} )
+    {
+        my $onepropertyline = "HIDEEULA" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 
