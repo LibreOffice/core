@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChooseDirectoryCtrl.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +76,13 @@ public class ChooseDirectoryCtrl extends PanelController {
     }
 
     public String getPrevious() {
-        return new String("AcceptLicense");
+        InstallData data = InstallData.getInstance();
+
+        if ( data.hideEula() ) {
+            return new String("Prologue");
+        } else {
+            return new String("AcceptLicense");
+        }
     }
 
     public final String getHelpFileName () {
@@ -98,56 +104,23 @@ public class ChooseDirectoryCtrl extends PanelController {
     public void beforeShow() {
         ChooseDirectory panel = (ChooseDirectory)getPanel();
         InstallData data = InstallData.getInstance();
-        panel.setDirectory(data.getInstallDir());
 
-        if ( data.isSolarisUserInstallation() ) {
-            if ( data.getInstallRoot() == null ) {
-                String rootDir = "/";
+        if ( data.getInstallDir() == null ) {
+            String installDir = data.getDefaultDir();
+
+            if ( data.isUserInstallation() ) {
                 // System.getenv only supported in Java 1.5, property set in shell script
                 // if (( System.getenv("HOME") != null ) && ( ! System.getenv("HOME").equals(""))) {
                 //     rootDir = System.getenv("HOME");
                 // }
                 if (( System.getProperty("HOME") != null ) && ( ! System.getProperty("HOME").equals("") )) {
-                    rootDir = System.getProperty("user.home");
-                }
-                data.setInstallRoot(rootDir);
-            }
-            panel.setRootDirectory(data.getInstallRoot());
-        }
-
-        // In change of installations with root privileges, the destination directory is fix.
-        // Therefore before the directory selection dialog is shown, it has to be controlled,
-        // if there are already installed products.
-        // In installations with user privileges, this can only be checked, after the
-        // destination directory is controlled.
-        if ( data.isRootInstallation() ) {
-            // LogManager.setCommandsHeaderLine("Checking change installation");
-            // InstallChangeCtrl.checkInstallChange(data, panel);  // <- much earlier!
-            // InstallChangeCtrl.checkInstallChange(data);  // <- much earlier!
-
-            if (data.isChangeInstallation()) {
-                panel.setDirectory(data.getInstallDir());
-                panel.disableDirectoryField();
-                panel.disableBrowseButton();
-
-                // Maintenance mode
-                if ( data.sameVersionExists() ) {
-                    String dialogTitle = ResourceManager.getString("String_ChooseDirectory1_Maintain");
-                    panel.setTitleText(dialogTitle);
-                    // String dialogText = ResourceManager.getString("String_ChooseDirectory2_Maintain");
-                    // panel.setDialogText(dialogText);
-                }
-
-                // Update mode
-                if ( data.olderVersionExists() ) {
-                    String dialogTitle = ResourceManager.getString("String_ChooseDirectory1_Update");
-                    panel.setTitleText(dialogTitle);
-                    // String dialogText = ResourceManager.getString("String_ChooseDirectory2_Update");
-                    // panel.setDialogText(dialogText);
+                    installDir = System.getProperty("user.home");
                 }
             }
+            data.setInstallDir(installDir);
         }
 
+        panel.setDirectory(data.getInstallDir());
     }
 
     public boolean afterShow(boolean nextButtonPressed) {
@@ -158,15 +131,10 @@ public class ChooseDirectoryCtrl extends PanelController {
         InstallData data = InstallData.getInstance();
         data.setInstallDir(dir);
 
-        if ( data.isSolarisUserInstallation() ) {
-            String rootDir = panel.getRootDirectory();
-            rootDir = removeEndingDelimiter(rootDir);
-            data.setInstallRoot(rootDir);
-            File completeDir = new File(rootDir, dir);
-            dir = completeDir.getPath();
-        }
+        File installDefaultDir = new File(dir, data.getDefaultDir());
+        data.setInstallDefaultDir(installDefaultDir.getPath());
 
-        SetupDataProvider.setNewMacro("DIR", dir); // important for string replacement
+        SetupDataProvider.setNewMacro("DIR", installDefaultDir.getPath()); // important for string replacement
         // SetupDataProvider.dumpMacros();
 
         // Check existence of directory. Try to create, if it does not exist.
