@@ -8,7 +8,7 @@
 #
 # $RCSfile: wntmsci11.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -201,10 +201,7 @@ CFLAGSWERRCC=-WX
 MODULES_WITH_WARNINGS := \
     extensions \
     fpicker \
-    lingucomponent \
-    soldep \
-    sw \
-    svx
+    soldep
 
 CDEFS+=-DSTLPORT_VERSION=400 -D_MT
 .IF "$(COMEX)" == "11"
