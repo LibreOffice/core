@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: modcfg.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -903,8 +903,8 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         break;//CaptionText",
         case 5:
         {
-            OUString sTemp; pValues[nProp] >>= sTemp;
-            if(sTemp.getLength())
+            OUString sTemp;
+            if(pValues[nProp] >>= sTemp)
                 rOpt.SetSeparator(sTemp);
         }
         break;//Delimiter",
