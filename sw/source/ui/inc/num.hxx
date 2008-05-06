@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: num.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,8 +155,8 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( IndentAtHdl_Impl, MetricField* );
     // <--
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
