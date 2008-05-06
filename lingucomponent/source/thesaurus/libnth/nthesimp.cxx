@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,7 +473,7 @@ sal_uInt16 SAL_CALL Thesaurus::capitalType(const OUString& aTerm, CharClass * pC
         if ((pCC) && (tlen)) {
               String aStr(aTerm);
               sal_Int32 nc = 0;
-              for (sal_Int32 tindex = 0; tindex < tlen;  tindex++) {
+              for (xub_StrLen tindex = 0; tindex < tlen;  tindex++) {
                if (pCC->getCharacterType(aStr,tindex) &
                        ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
           }
