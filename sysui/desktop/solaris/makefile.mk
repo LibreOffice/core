@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,31 +70,30 @@ $(MISC)/{$(PRODUCTLIST)}/{pkginfo depend} : $$(@:f) ../productversion.mk makefil
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(PRODUCTNAME.$(@:d:d:f)) $(PRODUCTVERSION.$(@:d:d:f))/g" -e "s/%pkgprefix/$(@:d:d:f:s/.//)/" > $@
 
-# --- space, postinstall & mailcap ---------------------------------
+# --- mailcap ---------------------------------
 
 # Copy the prototype file to $(MISC)
-$(MISC)/{$(PRODUCTLIST)}/{space postinstall checkinstall mailcap} : $$(@:f) ../productversion.mk
+$(MISC)/{$(PRODUCTLIST)}/mailcap : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" -e "s_%SOURCE_$(MISC)/$(@:d:d:f)_g" > $@
 
-# --- checkinstall & copyright--------------------------------
+# --- copyright--------------------------------
 
-# Copy the checkinstall and copyright file to $(MISC) 
-$(MISC)/{$(PRODUCTLIST)}/{copyright} : $$(@:f)
+# Copy the copyright file to $(MISC) 
+$(MISC)/{$(PRODUCTLIST)}/copyright : $$(@:f)
     @$(MKDIRHIER) $(@:d)
     @cat $(@:f) | tr -d "\015" > $@
 
 # --- prototype ---------------------------------------------------
 
 # Copy the prototype file to $(MISC)
-$(MISC)/{$(PRODUCTLIST)}$/prototype : $$(@:f) ../productversion.mk $(COMMONMISC)$/$$(@:d:d:f)$/cdelauncherlist makefile.mk
+$(MISC)/{$(PRODUCTLIST)}$/prototype : $$(@:f) ../productversion.mk makefile.mk
     @$(MKDIRHIER) $(@:d)
     cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$(@:d:d:f))/g" -e "s_%SOURCE_$(COMMONMISC)/$(@:d:d:f)_g" -e "s/%ICONPREFIX/$(ICONPREFIX.$(@:d:d:f))/g" > $@
-    pkgproto $(COMMONMISC)$/$(@:d:d:f)/types=usr/dt/appconfig/types | awk '{ printf "%s %s %s 0%d%d root bin\n",$$1, $$2, $$3, $$4/100, $$4%10*11 }' >> $@
 
 # --- packaging ---------------------------------------------------
 
-$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{checkinstall copyright space pkginfo depend postinstall mailcap} makefile.mk
+$(PKGFILES) : $(MISC)/{$(PRODUCTLIST)}/{copyright pkginfo depend mailcap} makefile.mk
 $(PKGFILES) : $(MISC)$/{$(PRODUCTLIST)}$/prototype
     @-$(RM) $(BIN)$/$(@:f)
     @$(MKDIRHIER) $(@:d)
