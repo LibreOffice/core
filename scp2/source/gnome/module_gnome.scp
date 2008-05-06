@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_gnome.scp,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,6 @@ Module gid_Module_Optional_Gnome
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
     Styles = (DONTSHOWINUSERINSTALL);
     XpdCheckSolaris = "SUNWgnome-vfs";
-    Files = (gid_File_Lib_Gnomevfs, gid_File_Lib_Gconfbe, gid_File_Bin_Gnome_Set_Default_Application);
+    Files = (gid_File_Lib_Gnomevfs, gid_File_Lib_Gconfbe);
 End
 
