@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChooseComponentsCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,12 +60,23 @@ public class ChooseComponentsCtrl extends PanelController {
 
         InstallData data = InstallData.getInstance();
 
-        if ( data.sameVersionExists() ) {
-            return new String("ChooseDirectory");
+        if ( data.isRootInstallation() ) {
+            if ( data.sameVersionExists() ) {
+                if ( data.hideEula() ) {
+                    return new String("Prologue");
+                } else {
+                    return new String("AcceptLicense");
+                }
+            } else {
+                return new String("ChooseInstallationType");
+            }
         } else {
-            return new String("ChooseInstallationType");
+            if ( data.sameVersionExists() ) {
+                return new String("ChooseDirectory");
+            } else {
+                return new String("ChooseInstallationType");
+            }
         }
-
     }
 
     public final String getHelpFileName () {

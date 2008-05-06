@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SolarisHelper.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@ public class SolarisHelper {
             String log = mktempCommand + "<br><b>Returns: " + uniqueLocalDir + "</b><br>";
             LogManager.addCommandsLogfileComment(log);
 
-            String installRoot = data.getInstallRoot();
+            String installRoot = data.getInstallDir();
             File installRootTemp = new File(installRoot, "tmp");
 
             if ( installRootTemp.exists() ) {
@@ -95,7 +95,7 @@ public class SolarisHelper {
         InstallData data = InstallData.getInstance();
 
         if ( data.getLocalTempPath() != null ) {
-            File installRootTemp = new File(data.getInstallRoot(), "tmp");
+            File installRootTemp = new File(data.getInstallDir(), "tmp");
             if ( installRootTemp.exists() ) {
                 installRootTemp.delete(); // removing the link
                 SystemManager.createDirectory(installRootTemp);
@@ -113,12 +113,12 @@ public class SolarisHelper {
         Vector adminFile = new Vector();
         InstallData data = InstallData.getInstance();
 
-        if ( relocatable ) {
-            String installDir =  data.getInstallDir();
-            // installDir = installDir.replace(" ", "\\ ");
-            String baseDirLine = "basedir=" + installDir;
-            adminFile.add(baseDirLine);
-        }
+        // if ( relocatable ) {
+        //     String installDir =  data.getInstallDir();
+        //     // installDir = installDir.replace(" ", "\\ ");
+        //     String baseDirLine = "basedir=" + installDir;
+        //     adminFile.add(baseDirLine);
+        // }
 
         String conflictLine = "conflict=quit";
         if ( data.isUserInstallation() ) { conflictLine = "conflict=nocheck"; }
@@ -241,8 +241,7 @@ public class SolarisHelper {
     public void saveModulesLogFile(InstallData data) {
         if ( data.logModuleStates() ) {
             Vector logContent = LogManager.getModulesLogFile();
-            File baseDir = new File(data.getInstallRoot(), data.getInstallDir());
-            baseDir = new File(baseDir, data.getProductDir());
+            File baseDir = new File(data.getInstallDefaultDir(), data.getProductDir());
             File uninstallDir = new File(baseDir, data.getUninstallDirName());
             File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
             // System.err.println("Saving file: " + modulesLogFile.getPath());
@@ -262,7 +261,7 @@ public class SolarisHelper {
 
     public String getSolarisDatabasePath(InstallData data) {
         String databasePath = null;
-        databasePath = data.getInstallRoot();
+        databasePath = data.getInstallDir();
         return databasePath;
     }
 
@@ -278,8 +277,7 @@ public class SolarisHelper {
         }
 
         Vector fileContent = getAdminFileContent(relocatable);
-        File adminDir = new File(data.getInstallRoot(), data.getInstallDir());
-        File adminFile = new File(adminDir, adminFileName);
+        File adminFile = new File(data.getInstallDir(), adminFileName);
         String completeAdminFileName = adminFile.getPath();
 
         if ( relocatable ) {

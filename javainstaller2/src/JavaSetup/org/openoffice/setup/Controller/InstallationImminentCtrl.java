@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InstallationImminentCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,18 +62,39 @@ public class InstallationImminentCtrl extends PanelController {
 
         InstallData data = InstallData.getInstance();
 
-        if ( data.olderVersionExists() ) {
-            return new String("ChooseDirectory");
-        } else if ( data.sameVersionExists() ) {
-            return new String("ChooseComponents");
-        } else {
-            if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
+        if ( data.isRootInstallation() ) {
+            if ( data.olderVersionExists() ) {
+                if ( data.hideEula() ) {
+                    return new String("Prologue");
+                } else {
+                    return new String("AcceptLicense");
+                }
+            } else if ( data.sameVersionExists() ) {
                 return new String("ChooseComponents");
-            } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
-                return new String("ChooseInstallationType");
             } else {
-                System.err.println("Error: Unknown installation type!" );
-                return new String("Error");
+                if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
+                    return new String("ChooseComponents");
+                } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
+                    return new String("ChooseInstallationType");
+                } else {
+                    System.err.println("Error: Unknown installation type!" );
+                    return new String("Error");
+                }
+            }
+        } else {
+            if ( data.olderVersionExists() ) {
+                return new String("ChooseDirectory");
+            } else if ( data.sameVersionExists() ) {
+                return new String("ChooseComponents");
+            } else {
+                if ( data.getInstallationType().equals(data.getCustomActionCommand()) ) {
+                    return new String("ChooseComponents");
+                } else if ( data.getInstallationType().equals(data.getTypicalActionCommand()) ) {
+                    return new String("ChooseInstallationType");
+                } else {
+                    System.err.println("Error: Unknown installation type!" );
+                    return new String("Error");
+                }
             }
         }
     }

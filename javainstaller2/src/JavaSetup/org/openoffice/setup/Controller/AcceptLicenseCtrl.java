@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AcceptLicenseCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,7 @@
 
 package org.openoffice.setup.Controller;
 
+import org.openoffice.setup.InstallData;
 import org.openoffice.setup.PanelController;
 import org.openoffice.setup.Panel.AcceptLicense;
 import org.openoffice.setup.ResourceManager;
@@ -44,7 +45,19 @@ public class AcceptLicenseCtrl extends PanelController {
     }
 
     public String getNext() {
-        return new String("ChooseDirectory");
+        InstallData data = InstallData.getInstance();
+
+        if ( data.isRootInstallation() ) {
+            if ( data.olderVersionExists() ) {
+                return new String("InstallationImminent");
+            } else if ( data.sameVersionExists() ) {
+                return new String("ChooseComponents");
+            } else {
+                return new String("ChooseInstallationType");
+            }
+        } else {
+            return new String("ChooseDirectory");
+        }
     }
 
     public String getPrevious() {

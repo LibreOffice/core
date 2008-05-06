@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UninstallationPrologueCtrl.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,6 @@ public class UninstallationPrologueCtrl extends PanelController {
         data.setAdminFileNameNoReloc((String)map.get("AdminFileNoReloc"));
         data.setDatabasePath((String)map.get("DatabasePath"));
         data.setInstallDir((String)map.get("InstallationDir"));
-        data.setInstallRoot((String)map.get("InstallationRoot"));
         data.setStoredInstallationPrivileges((String)map.get("InstallationPrivileges"));
         data.setGetUidPath((String)map.get("GetUidFile"));
     }
