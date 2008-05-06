@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pggrid.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +99,8 @@ class SwTextGridPage: public SfxTabPage
     DECL_LINK(GridModifyHdl, void*);
     DECL_LINK(DisplayGridHdl, CheckBox*);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
