@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -79,6 +79,7 @@ SLOFILES = $(SLO)$/getuid.obj
 SHL1OBJS=$(SLOFILES)
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=-ldl
+SHL1CODETYPE=C
 
 .ENDIF
 
