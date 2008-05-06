@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,15 +37,11 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="UNX"
-.IF "$(SYSTEM_HYPH)" == "YES"
-HNJLIB=$(HYPHEN_LIB)
-.ELSE
-HNJLIB=-lhnj
-.ENDIF
+HNJLIB=-lhyphen
 .ELIF  "$(GUI)"=="OS2"
-HNJLIB=$(SLB)\libhnj.lib
+HNJLIB=$(SLB)\hyphen.lib
 .ELSE
-HNJLIB=libhnj.lib
+HNJLIB=hyphen.lib
 .ENDIF
 
 .IF "$(ULINGULIB)"==""
@@ -69,9 +65,9 @@ ULINGULIB=libulingu.lib
 # --- Files --------------------------------------------------------
 
 
-CXXFLAGS += -I..$/libhnj -I..$/..$/..$/lingutil
-CFLAGSCXX += -I..$/libhnj -I..$/..$/..$/lingutil
-CFLAGSCC += -I..$/libhnj -I..$/..$/..$/lingutil
+CXXFLAGS += -I..$/..$/..$/lingutil
+CFLAGSCXX += -I..$/..$/..$/lingutil
+CFLAGSCC += -I..$/..$/..$/lingutil
 
 .IF "$(header)" == ""
 
