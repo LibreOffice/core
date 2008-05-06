@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.100 $
+ * $Revision: 1.101 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -667,20 +667,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pCTLFontLanguageLB->SetLanguageList( LANG_LIST_CTL,       TRUE, FALSE, TRUE );
 
     Initialize();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharNamePage::DeactivatePage()
-{
-    SvxCharBasePage::DeactivatePage();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharNamePage::ActivatePage()
-{
-    SvxCharBasePage::ActivatePage();
 }
 
 // -----------------------------------------------------------------------
@@ -2966,20 +2952,6 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
 // -----------------------------------------------------------------------
 
-void SvxCharPositionPage::DeactivatePage()
-{
-    SvxCharBasePage::DeactivatePage();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharPositionPage::ActivatePage()
-{
-    SvxCharBasePage::ActivatePage();
-}
-
-// -----------------------------------------------------------------------
-
 void SvxCharPositionPage::Initialize()
 {
     // to handle the changes of the other pages
@@ -3726,19 +3698,6 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     Initialize();
 }
 
-// -----------------------------------------------------------------------
-
-void SvxCharTwoLinesPage::DeactivatePage()
-{
-    SvxCharBasePage::DeactivatePage();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharTwoLinesPage::ActivatePage()
-{
-    SvxCharBasePage::ActivatePage();
-}
 // -----------------------------------------------------------------------
 
 void SvxCharTwoLinesPage::Initialize()
