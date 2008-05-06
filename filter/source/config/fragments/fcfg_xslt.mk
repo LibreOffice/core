@@ -1,19 +1,25 @@
 all_fragments+=xslt
 
 # -----------------------------------------------
-# count = 3
+# count = 5
 T4_XSLT = \
     writer_DocBook_File \
-    XHTML_File
+    XHTML_File \
+    Unified_Office_Format_text \
+    Unified_Office_Format_spreadsheet \
+    Unified_Office_Format_presentation
 
 # -----------------------------------------------
-# count = 7
+# count = 8
 F4_XSLT = \
     DocBook_File \
     XHTML_Calc_File \
     XHTML_Draw_File \
     XHTML_Impress_File \
-    XHTML_Writer_File
+    XHTML_Writer_File \
+    UOF_text \
+    UOF_spreadsheet \
+    UOF_presentation
 
 # -----------------------------------------------
 # count = 0
