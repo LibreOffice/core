@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framelinkarray.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,9 +406,11 @@ size_t Array::GetRowFromIndex( size_t nCellIndex ) const
     return mxImpl->mnWidth ? (nCellIndex / mxImpl->mnWidth) : 0;
 }
 
-size_t Array::GetCellIndex( size_t nCol, size_t nRow ) const
+size_t Array::GetCellIndex( size_t nCol, size_t nRow, bool bRTL ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetCellIndex" );
+    if (bRTL)
+        nCol = mxImpl->GetMirrorCol(nCol);
     return mxImpl->GetIndex( nCol, nRow );
 }
 
