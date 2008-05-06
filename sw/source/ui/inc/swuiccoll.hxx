@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swuiccoll.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,8 +72,8 @@ class SwCondCollPage : public SfxTabPage
     DECL_LINK( AssignRemoveHdl, PushButton*);
     DECL_LINK( SelectHdl, ListBox* );
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
 
