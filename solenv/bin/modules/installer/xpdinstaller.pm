@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -809,6 +809,21 @@ sub set_update_tag
 }
 
 ###################################################
+# Setting the license dialog behaviour
+###################################################
+
+sub set_hideeula_tag
+{
+    my ($allvariables, $indent) = @_;
+
+    my $hidelicenseflag = "false";
+    if ( $allvariables->{"HIDELICENSEDIALOG"} ) { $hidelicenseflag = "true"; }
+    my $tag = $indent . "<hideeula>" . $hidelicenseflag . "</hideeula>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Setting default directory
 ###################################################
 
@@ -989,6 +1004,9 @@ sub get_setup_file_content
     push(@xpdfile, $tag);
 
     $tag = set_language_tag($languagestringref, $singleindent);
+    push(@xpdfile, $tag);
+
+    $tag = set_hideeula_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
     $tag = get_end_tag("product", $noindent);
