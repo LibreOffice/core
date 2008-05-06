@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swuicnttab.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,8 +247,8 @@ class SwTOXSelectTabPage : public SfxTabPage
       void  ApplyTOXDescription();
     void    FillTOXDescription();
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
     SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
@@ -468,8 +468,8 @@ class SwTOXEntryTabPage : public SfxTabPage
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, void*);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
     SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
@@ -518,8 +518,8 @@ class SwTOXStylesTabPage : public SfxTabPage
             return *pDlg->GetForm(pDlg->GetCurrentTOXType());
         }
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
 
 public:
     SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
