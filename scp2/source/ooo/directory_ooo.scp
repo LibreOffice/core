@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -490,7 +490,14 @@ Directory gid_Dir_Share_Xslt_Export_Spreadsheetml
     ParentID = gid_Dir_Share_Xslt_Export;
     DosName = "spreadsheetml";
 End
-
+Directory gid_Dir_Share_Xslt_Export_uof
+    ParentID = gid_Dir_Share_Xslt_Export;
+    DosName = "uof";
+End
+Directory gid_Dir_Share_Xslt_Import_uof
+    ParentID = gid_Dir_Share_Xslt_Import;
+    DosName = "uof";
+End
 Directory gid_Dir_Share_Xslt_Export_Wordml
     ParentID = gid_Dir_Share_Xslt_Export;
     DosName = "wordml";
