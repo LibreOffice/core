@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paragrph.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2276,12 +2276,8 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_PARA_ASIAN ), rSet),
     aOptionsFL(         this, SVX_RES(FL_AS_OPTIONS       )),
     aForbiddenRulesCB(  this, SVX_RES(CB_AS_FORBIDDEN     )),
-    aAllowWordBreakCB(  this, SVX_RES(CB_AS_ALLOW_WORD_BREAK)),
     aHangingPunctCB(    this, SVX_RES(CB_AS_HANG_PUNC     )),
-    aCharDistFL(        this, SVX_RES(FL_AS_CHAR_DIST     )),
-    aPuntuationCB(      this, SVX_RES(CB_AS_PUNCTUATION   )),
-    aScriptSpaceCB(     this, SVX_RES(CB_AS_SCRIPT_SPACE    )),
-    aAdjustNumbersCB(   this, SVX_RES(CB_AS_ADJUST_NUMBERS))
+    aScriptSpaceCB(     this, SVX_RES(CB_AS_SCRIPT_SPACE    ))//,
 
 {
     FreeResource();
@@ -2291,14 +2287,6 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aScriptSpaceCB.SetClickHdl( aLink );
     aForbiddenRulesCB.SetClickHdl( aLink );
 
-//JP 28.3.2001 - these options currently not available!
-    aAllowWordBreakCB.Hide();
-    aCharDistFL.Hide();
-    aPuntuationCB.Hide();
-    aAdjustNumbersCB.Hide();
-    aScriptSpaceCB.SetPosPixel( aHangingPunctCB.GetPosPixel() );
-    aHangingPunctCB.SetPosPixel( aAllowWordBreakCB.GetPosPixel() );
-//JP 28.3.2001 - these options currently not available!
 }
 /*-- 29.11.00 11:36:24---------------------------------------------------
 
@@ -2392,9 +2380,9 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 //  lcl_SetBox(rSet, , aPuntuationCB    );
     lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
 //  lcl_SetBox(rSet, , aAdjustNumbersCB );
-    aAllowWordBreakCB   .Enable(FALSE);
-    aPuntuationCB       .Enable(FALSE);
-    aAdjustNumbersCB    .Enable(FALSE);
+//  aAllowWordBreakCB   .Enable(FALSE);
+//  aPuntuationCB       .Enable(FALSE);
+//  aAdjustNumbersCB    .Enable(FALSE);
 }
 /* -----------------------------19.12.00 12:59--------------------------------
 
