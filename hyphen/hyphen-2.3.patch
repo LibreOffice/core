@@ -78,7 +78,7 @@
 +#
 +# $RCSfile: hyphen-2.3.patch,v $
 +#
-+# $Revision: 1.7 $
++# $Revision: 1.8 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -116,10 +116,10 @@
 +#        $(SLO)$/createfp.obj\
 +#        $(SLO)$/testtextcat.obj
 +
-+OBJFILES=   \
-+        $(OBJ)$/hyphen.obj\
-+        $(OBJ)$/hnjalloc.obj\
-+        $(OBJ)$/csutil.obj
++SLOFILES=   \
++        $(SLO)$/hyphen.obj\
++        $(SLO)$/hnjalloc.obj\
++        $(SLO)$/csutil.obj
 +
 +# --- Targets ------------------------------------------------------
 +
@@ -128,6 +128,6 @@
 +.INCLUDE : target.mk
 +
 +hyph_en_US.dic : hyphen.tex
-+	cp hyphen.tex hyphen.us
++	$(COPY) hyphen.tex hyphen.us
 +	$(GNUPATCH) < hyphen.patch
 +	$(PERL) substrings.pl hyphen.us hyph_en_US.dic ISO8859.-1 
