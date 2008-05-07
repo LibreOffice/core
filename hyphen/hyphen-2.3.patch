@@ -78,7 +78,7 @@
 +#
 +# $RCSfile: hyphen-2.3.patch,v $
 +#
-+# $Revision: 1.6 $
++# $Revision: 1.7 $
 +#
 +# This file is part of OpenOffice.org.
 +#
@@ -130,4 +130,4 @@
 +hyph_en_US.dic : hyphen.tex
 +	cp hyphen.tex hyphen.us
 +	$(GNUPATCH) < hyphen.patch
-+	perl substrings.pl hyphen.us hyph_en_US.dic ISO8859.-1 
++	$(PERL) substrings.pl hyphen.us hyph_en_US.dic ISO8859.-1 
