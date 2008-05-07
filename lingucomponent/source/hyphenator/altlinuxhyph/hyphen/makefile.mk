@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,7 +32,7 @@
 PRJ = ..$/..$/..$/..
 
 PRJNAME	= lingucomponent
-TARGET	= hyphen
+TARGET	= hyphen_lib
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
@@ -56,8 +56,6 @@ ULINGULIB=libulingu.lib
 .ENDIF # wnt
 .ENDIF
 
-
-
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -65,11 +63,7 @@ ULINGULIB=libulingu.lib
 # --- Files --------------------------------------------------------
 
 
-CXXFLAGS += -I..$/..$/..$/lingutil
-CFLAGSCXX += -I..$/..$/..$/lingutil
-CFLAGSCC += -I..$/..$/..$/lingutil
-
-.IF "$(header)" == ""
+CFLAGS += -I..$/..$/..$/lingutil
 
 EXCEPTIONSFILES=	\
         $(SLO)$/hprophelp.obj\
@@ -80,8 +74,8 @@ SLOFILES=	\
         $(SLO)$/hreg.obj\
         $(SLO)$/hyphenimp.obj
 
-
-SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+REALNAME:=hyphen
+SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
@@ -104,21 +98,17 @@ SHL1STDLIBS+=   $(ULINGULIB)
 SHL1STDLIBS+=   $(HUNSPELL_LIBS)
 .ENDIF
 
-
-
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
-SHL1IMPLIB=		i$(TARGET)
+SHL1IMPLIB=		i$(REALNAME)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP= $(TARGET).map
+SHL1VERSIONMAP= $(REALNAME).map
 
 # build DEF file
 DEF1NAME	 =$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
