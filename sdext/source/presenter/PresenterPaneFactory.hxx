@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneFactory.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,8 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
+#include <boost/scoped_ptr.hpp>
+#include <map>
 
 namespace css = ::com::sun::star;
 
@@ -71,8 +73,7 @@ public:
     static const ::rtl::OUString msNotesPaneURL;
     static const ::rtl::OUString msToolBarPaneURL;
     static const ::rtl::OUString msSlideSorterPaneURL;
-    static const ::rtl::OUString msClockPaneURL;
-    static const ::rtl::OUString msDebugPaneURL;
+    static const ::rtl::OUString msHelpPaneURL;
     static const ::rtl::OUString msOverlayPaneURL;
 
     /** Create a new instance of this class and register it as resource
@@ -115,6 +116,9 @@ private:
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
+    typedef ::std::map<rtl::OUString, css::uno::Reference<css::drawing::framework::XResource> >
+        ResourceContainer;
+    ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
 
     PresenterPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
