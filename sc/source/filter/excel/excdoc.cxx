@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excdoc.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 
 //------------------------------------------------------------------------
 
-#include <math.h>
+// #include <math.h>
 
 #include "scitems.hxx"
 
