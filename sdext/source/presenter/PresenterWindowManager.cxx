@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterWindowManager.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +35,15 @@
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterHelper.hxx"
+#include "PresenterPaintManager.hxx"
 #include "PresenterPaneBase.hxx"
+#include "PresenterPaneBorderManager.hxx"
 #include "PresenterPaneBorderPainter.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
+#include "PresenterSprite.hxx"
+#include "PresenterToolBar.hxx"
+#include "PresenterViewFactory.hxx"
 #include "PresenterTheme.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
@@ -58,16 +63,62 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <boost/bind.hpp>
 #include <boost/bind/protect.hpp>
+#include <cmath>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
-#undef VERBOSE
-//#define VERBOSE
+#undef ENABLE_PANE_RESIZING
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace sdext { namespace presenter {
+
+namespace {
+
+    typedef ::cppu::WeakComponentImplHelper1<
+        css::drawing::framework::XConfigurationChangeListener
+        > ModeChangeAnimationStarterInterfaceBase;
+
+    class ModeChangeAnimationStarter
+        : protected ::cppu::BaseMutex,
+          public ModeChangeAnimationStarterInterfaceBase
+    {
+    public:
+        ModeChangeAnimationStarter (
+            const Reference<drawing::framework::XConfigurationController>& rxConfigurationController,
+            const Reference<awt::XWindow>& rxWindow,
+            const Reference<rendering::XSpriteCanvas>& rxCanvas,
+            const ::boost::shared_ptr<PresenterAnimator>& rpAnimator);
+        virtual ~ModeChangeAnimationStarter (void);
+        virtual void SAL_CALL disposing (void);
+
+        // XConfigurationChangeListener
+
+        virtual void SAL_CALL notifyConfigurationChange (
+            const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
+            throw (com::sun::star::uno::RuntimeException);
+
+
+        // XEventListener
+
+        virtual void SAL_CALL disposing (
+            const com::sun::star::lang::EventObject& rEvent)
+            throw (com::sun::star::uno::RuntimeException);
+
+    private:
+        Reference<drawing::framework::XConfigurationController> mxConfigurationController;
+        ::boost::shared_ptr<PresenterAnimator> mpAnimator;
+        ::boost::shared_ptr<PresenterSprite> mpSprite;
+        Reference<rendering::XSpriteCanvas> mxCanvas;
+    };
+
+}
+
+
+//===== PresenterWindowManager ================================================
 
 PresenterWindowManager::PresenterWindowManager (
     const Reference<XComponentContext>& rxContext,
@@ -84,10 +135,15 @@ PresenterWindowManager::PresenterWindowManager (
       mbIsLayoutPending(true),
       mbIsLayouting(false),
       mpTheme(),
-      mxBackgroundBitmap(),
-      maBackgroundColor(),
+      mpBackgroundBitmap(),
+      mxScaledBackgroundBitmap(),
       maPaneBackgroundColor(),
-      mxClipPolygon()
+      mxClipPolygon(),
+      meLayoutMode(Generic),
+      mbIsSlideSorterActive(false),
+      mbIsHelpViewActive(false),
+      maLayoutListeners(),
+      mbIsMouseClickPending(false)
 {
     UpdateWindowList();
 }
@@ -104,6 +160,8 @@ PresenterWindowManager::~PresenterWindowManager (void)
 
 void SAL_CALL PresenterWindowManager::disposing (void)
 {
+    NotifyDisposing();
+
     SetParentPane(NULL);
 
     Reference<lang::XComponent> xComponent (mxPaneBorderManager, UNO_QUERY);
@@ -119,6 +177,9 @@ void SAL_CALL PresenterWindowManager::disposing (void)
         {
             (*iPane)->mxBorderWindow->removeWindowListener(this);
             (*iPane)->mxBorderWindow->removeFocusListener(this);
+#ifndef ENABLE_PANE_RESIZING
+            (*iPane)->mxBorderWindow->removeMouseListener(this);
+#endif
         }
     }
 }
@@ -166,38 +227,23 @@ void PresenterWindowManager::SetParentPane (
 
 
 
+Reference<awt::XWindow> PresenterWindowManager::GetParentWidnow (void) const
+{
+    return mxParentWindow;
+}
+
+
+
+
 void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;
 
     // Get background bitmap or background color from the theme.
-    mxBackgroundBitmap = NULL;
-    maBackgroundColor = util::Color(0x00ffffff);
 
-    try
+    if (mpTheme.get() != NULL)
     {
-        if (mpTheme.get() != NULL)
-            mxBackgroundBitmap = Reference<rendering::XBitmap>(
-                mpTheme->getPropertyValue(OUString::createFromAscii("Background_Bitmap")),
-                UNO_QUERY);
-    }
-    catch (beans::UnknownPropertyException&)
-    {
-        OSL_TRACE("no Background_Bitmap property found in PresenterWindowManager::PaintBackground");
-    }
-
-    if ( ! mxBackgroundBitmap.is())
-    {
-        try
-        {
-            if (mpTheme.get() != NULL)
-                mpTheme->getPropertyValue(OUString::createFromAscii("Background_Color"))
-                    >>= maBackgroundColor;
-        }
-        catch (beans::UnknownPropertyException&)
-        {
-            OSL_TRACE("no Background_Color property found in PresenterWindowManager::PaintBackground");
-        }
+        mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), A2S("Background"));
     }
 }
 
@@ -228,6 +274,9 @@ void PresenterWindowManager::NotifyPaneCreation (
 
         xBorderWindow->addWindowListener(this);
         xBorderWindow->addFocusListener(this);
+#ifndef ENABLE_PANE_RESIZING
+        xBorderWindow->addMouseListener(this);
+#endif
     }
 
     UpdateWindowList();
@@ -244,11 +293,12 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
     OSL_ASSERT(pDescriptor.get() != NULL);
     if (pDescriptor.get() != NULL)
     {
-        Reference<awt::XWindowPeer> xPeer (pDescriptor->mxContentWindow, UNO_QUERY);
-        if (xPeer.is())
-        {
-            xPeer->invalidate(awt::InvalidateStyle::NOERASE | awt::InvalidateStyle::UPDATE);
-        }
+        Layout();
+
+        mpPresenterController->GetPaintManager()->Invalidate(
+            pDescriptor->mxContentWindow,
+            (sal_Int16)(awt::InvalidateStyle::TRANSPARENT
+            | awt::InvalidateStyle::CHILDREN));
     }
 }
 
@@ -279,14 +329,14 @@ void PresenterWindowManager::SetPanePosSizeRelative (
 
 
 void PresenterWindowManager::SetPanePosSizeAbsolute (
-    const Reference<XResourceId>& rxPaneId,
+    const OUString& rsPaneURL,
     const double nX,
     const double nY,
     const double nWidth,
     const double nHeight)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
-        mpPaneContainer->FindPaneId(rxPaneId));
+        mpPaneContainer->FindPaneURL(rsPaneURL));
     if (pDescriptor.get() != NULL)
     {
         awt::Rectangle aParentBox = mxParentWindow->getPosSize();
@@ -332,7 +382,13 @@ void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEv
     else
     {
         Reference<awt::XWindow> xWindow (rEvent.Source,UNO_QUERY);
-        UpdateWindowSize(xWindow);
+        if (xWindow.is())
+        {
+            UpdateWindowSize(xWindow);
+
+            // Make sure the background of a transparent window is painted.
+            mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
+        }
     }
 }
 
@@ -347,6 +403,9 @@ void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEven
     {
         Reference<awt::XWindow> xWindow (rEvent.Source,UNO_QUERY);
         UpdateWindowSize(xWindow);
+
+        // Make sure the background of a transparent window is painted.
+        mpPresenterController->GetPaintManager()->Invalidate(xWindow);
     }
 }
 
@@ -390,7 +449,12 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
             if (mbIsLayoutPending)
                 Layout();
             PaintBackground(rEvent.UpdateRect);
-            PaintChildren(rEvent);
+            if ( ! PaintChildren(rEvent))
+            {
+                Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxParentCanvas, UNO_QUERY);
+                //                if (xSpriteCanvas.is())
+                //                    xSpriteCanvas->updateScreen(sal_False);
+            }
         }
         catch (RuntimeException&)
         {
@@ -408,6 +472,7 @@ void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& 
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
+    mbIsMouseClickPending = true;
 }
 
 
@@ -416,7 +481,15 @@ void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
 {
+#ifndef ENABLE_PANE_RESIZING
+    if (mbIsMouseClickPending)
+    {
+        mbIsMouseClickPending = false;
+        mpPresenterController->HandleMouseClick(rEvent);
+    }
+#else
     (void)rEvent;
+#endif
 }
 
 
@@ -426,6 +499,7 @@ void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& 
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
+    mbIsMouseClickPending = false;
 }
 
 
@@ -435,6 +509,7 @@ void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent& r
     throw(css::uno::RuntimeException)
 {
     (void)rEvent;
+    mbIsMouseClickPending = false;
 }
 
 
@@ -480,8 +555,10 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 
 //-----------------------------------------------------------------------------
 
-void PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
+bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
+    bool bChildInvalidated (false);
+
     // Call windowPaint on all children that lie in or touch the
     // update rectangle.
     PresenterPaneContainer::PaneList::const_iterator iPane;
@@ -519,17 +596,133 @@ void PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
                     -aBorderBox.Y));
 
             // Invalidate the area of the content window.
-            Reference<awt::XWindowPeer> xPeer (xBorderWindow, UNO_QUERY);
-            if (xPeer.is())
-            {
-                xPeer->invalidateRect(
-                    aLocalBorderUpdateBox,
-                    awt::InvalidateStyle::CHILDREN | awt::InvalidateStyle::NOTRANSPARENT);
-            }
+            mpPresenterController->GetPaintManager()->Invalidate(
+                xBorderWindow,
+                aLocalBorderUpdateBox,
+                sal_Int16(awt::InvalidateStyle::CHILDREN
+                    | awt::InvalidateStyle::NOTRANSPARENT));
         }
         catch (RuntimeException&)
         {
             OSL_ASSERT(FALSE);
+        }
+    }
+
+    return bChildInvalidated;
+}
+
+
+
+
+void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
+{
+    OSL_ASSERT(mpPresenterController.get() != NULL);
+
+    if (meLayoutMode != eMode
+        || mbIsSlideSorterActive
+        || mbIsHelpViewActive)
+    {
+        meLayoutMode = eMode;
+        mbIsSlideSorterActive = false;
+        mbIsHelpViewActive = false;
+
+        mpPresenterController->RequestViews(
+            mbIsSlideSorterActive,
+            meLayoutMode==Notes,
+            mbIsHelpViewActive);
+        Layout();
+        NotifyLayoutModeChange();
+    }
+}
+
+
+
+
+PresenterWindowManager::LayoutMode PresenterWindowManager::GetLayoutMode (void) const
+{
+    return meLayoutMode;
+}
+
+
+
+
+void PresenterWindowManager::SetSlideSorterState (bool bIsActive)
+{
+    if (mbIsSlideSorterActive != bIsActive)
+    {
+        mbIsSlideSorterActive = bIsActive;
+        if (mbIsSlideSorterActive)
+            mbIsHelpViewActive = false;
+
+        mpPresenterController->RequestViews(
+            mbIsSlideSorterActive,
+            meLayoutMode==Notes,
+            mbIsHelpViewActive);
+        Layout();
+        NotifyLayoutModeChange();
+    }
+}
+
+
+
+
+bool PresenterWindowManager::IsSlideSorterActive (void) const
+{
+    return mbIsSlideSorterActive;
+}
+
+
+
+
+void PresenterWindowManager::SetHelpViewState (bool bIsActive)
+{
+    if (mbIsHelpViewActive != bIsActive)
+    {
+        mbIsHelpViewActive = bIsActive;
+        if (mbIsHelpViewActive)
+            mbIsSlideSorterActive = false;
+
+        mpPresenterController->RequestViews(
+            mbIsSlideSorterActive,
+            meLayoutMode==Notes,
+            mbIsHelpViewActive);
+        Layout();
+        NotifyLayoutModeChange();
+    }
+}
+
+
+
+
+bool PresenterWindowManager::IsHelpViewActive (void) const
+{
+    return mbIsHelpViewActive;
+}
+
+
+
+
+void PresenterWindowManager::AddLayoutListener (
+    const Reference<document::XEventListener>& rxListener)
+{
+    maLayoutListeners.push_back(rxListener);
+}
+
+
+
+
+void PresenterWindowManager::RemoveLayoutListener (
+    const Reference<document::XEventListener>& rxListener)
+{
+    LayoutListenerContainer::iterator iListener (maLayoutListeners.begin());
+    LayoutListenerContainer::iterator iEnd (maLayoutListeners.end());
+    for ( ; iListener!=iEnd; ++iListener)
+    {
+        if (*iListener == rxListener)
+        {
+            maLayoutListeners.erase(iListener);
+            // Assume that there are no multiple entries.
+            break;
         }
     }
 }
@@ -543,38 +736,372 @@ void PresenterWindowManager::Layout (void)
     {
         mbIsLayoutPending = false;
         mbIsLayouting = true;
+        mxScaledBackgroundBitmap = NULL;
+        mxClipPolygon = NULL;
 
         try
         {
-            awt::Rectangle aBox = mxParentWindow->getPosSize();
+            if (mbIsSlideSorterActive)
+                LayoutSlideSorterMode();
+            else if (mbIsHelpViewActive)
+                LayoutHelpMode();
+            else
+                switch (meLayoutMode)
+                {
+                    case Standard:
+                    default:
+                        LayoutStandardMode();
+                        break;
 
-            PresenterPaneContainer::PaneList::const_iterator iPane;
-            PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
-            for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
-            {
-                const PresenterPaneContainer::SharedPaneDescriptor& pDescriptor (*iPane);
-                if ( ! pDescriptor->mxBorderWindow.is())
-                    continue;
+                    case Notes:
+                        LayoutNotesMode();
+                        break;
 
-                // Layout the border window.
-                const sal_Int32 nX = (sal_Int32)(pDescriptor->mnLeft * aBox.Width);
-                const sal_Int32 nY = (sal_Int32)(pDescriptor->mnTop * aBox.Height);
-                const sal_Int32 nWidth = (sal_Int32)(pDescriptor->mnRight * aBox.Width) - nX;
-                const sal_Int32 nHeight = (sal_Int32)(pDescriptor->mnBottom * aBox.Height) - nY;
-
-                pDescriptor->mxBorderWindow->setPosSize(
-                    nX,nY,nWidth,nHeight,
-                    awt::PosSize::POSSIZE);
-
-            }
+                    case Generic:
+                        LayoutUnknownMode();
+                        break;
+                }
         }
         catch (Exception&)
         {
-            mbIsLayouting = false;
+            OSL_ASSERT(false);
             throw;
         }
 
         mbIsLayouting = false;
+    }
+}
+
+
+
+
+void PresenterWindowManager::LayoutStandardMode (void)
+{
+    awt::Rectangle aBox = mxParentWindow->getPosSize();
+
+    const double nGoldenRatio ((1 + sqrt(5.0)) / 2);
+    const double nGap (20);
+    const double nHorizontalSlideDivide (aBox.Width / nGoldenRatio);
+    double nSlidePreviewTop (0);
+
+    // For the current slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    PresenterPaneContainer::SharedPaneDescriptor pPane (
+        mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
+            nHorizontalSlideDivide - 1.5*nGap,
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+        nSlidePreviewTop = (aBox.Height - aCurrentSlideOuterBox.Height) / 2;
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
+            nGap,
+            nSlidePreviewTop,
+            aCurrentSlideOuterBox.Width,
+            aCurrentSlideOuterBox.Height);
+    }
+
+
+    // For the next slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aNextSlideOuterBox (CalculatePaneSize(
+            aBox.Width - nHorizontalSlideDivide - 1.5*nGap,
+            PresenterPaneFactory::msNextSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNextSlidePreviewPaneURL,
+            aBox.Width - aNextSlideOuterBox.Width - nGap,
+            nSlidePreviewTop,
+            aNextSlideOuterBox.Width,
+            aNextSlideOuterBox.Height);
+    }
+
+    LayoutToolBar();
+}
+
+
+
+
+void PresenterWindowManager::LayoutNotesMode (void)
+{
+    awt::Rectangle aBox = mxParentWindow->getPosSize();
+
+    const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
+
+    const double nGoldenRatio ((1 + sqrt(5.0)) / 2);
+    const double nGap (20);
+    const double nPrimaryWidth (aBox.Width / nGoldenRatio);
+    const double nSecondaryWidth (aBox.Width - nPrimaryWidth);
+    const double nTertiaryWidth (nSecondaryWidth / nGoldenRatio);
+    double nSlidePreviewTop (0);
+    double nNotesViewBottom (aToolBarBox.Y1 - nGap);
+
+    // The notes view has no fixed aspect ratio.
+    PresenterPaneContainer::SharedPaneDescriptor pPane (
+        mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
+    if (pPane.get() != NULL)
+    {
+        const geometry::RealSize2D aNotesViewOuterSize(
+            nPrimaryWidth - 1.5*nGap + 0.5,
+            nNotesViewBottom);
+        nSlidePreviewTop = (aBox.Height
+            - aToolBarBox.Y2 + aToolBarBox.Y1 - aNotesViewOuterSize.Height) / 2;
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNotesPaneURL,
+            aBox.Width - aNotesViewOuterSize.Width - nGap,
+            nSlidePreviewTop,
+            aNotesViewOuterSize.Width,
+            aNotesViewOuterSize.Height);
+        nNotesViewBottom = nSlidePreviewTop + aNotesViewOuterSize.Height;
+    }
+
+    // For the current slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
+            nSecondaryWidth - 1.5*nGap,
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msCurrentSlidePreviewPaneURL,
+            nGap,
+            nSlidePreviewTop,
+            aCurrentSlideOuterBox.Width,
+            aCurrentSlideOuterBox.Height);
+    }
+
+
+    // For the next slide view calculate the outer height from the outer
+    // width.  This takes into acount the slide aspect ratio and thus has to
+    // go over the inner pane size.
+    pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
+    if (pPane.get() != NULL)
+    {
+        const awt::Size aNextSlideOuterBox (CalculatePaneSize(
+            nTertiaryWidth,
+            PresenterPaneFactory::msNextSlidePreviewPaneURL));
+        SetPanePosSizeAbsolute (
+            PresenterPaneFactory::msNextSlidePreviewPaneURL,
+            nGap,
+            nNotesViewBottom - aNextSlideOuterBox.Height,
+            aNextSlideOuterBox.Width,
+            aNextSlideOuterBox.Height);
+    }
+}
+
+
+
+
+void PresenterWindowManager::LayoutSlideSorterMode (void)
+{
+    const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
+
+    awt::Rectangle aWindowBox = mxParentWindow->getPosSize();
+    const double nGap (20);
+    SetPanePosSizeAbsolute(
+        mpPaneContainer->GetPaneURLForViewURL(PresenterViewFactory::msSlideSorterURL),
+        nGap,
+        nGap,
+        aWindowBox.Width - 2*nGap,
+        aToolBarBox.Y1 - 2*nGap);
+}
+
+
+
+
+void PresenterWindowManager::LayoutHelpMode (void)
+{
+    const geometry::RealRectangle2D aToolBarBox (LayoutToolBar());
+
+    awt::Rectangle aWindowBox = mxParentWindow->getPosSize();
+    const double nGap (20);
+    const double nGoldenRatio ((1 + sqrt(5.0)) / 2);
+    const double nWidth = ::std::min(aWindowBox.Width - 2*nGap, aWindowBox.Width/nGoldenRatio);
+    SetPanePosSizeAbsolute(
+        mpPaneContainer->GetPaneURLForViewURL(PresenterViewFactory::msHelpViewURL),
+        (aWindowBox.Width - nWidth)/2,
+        nGap,
+        nWidth,
+        aToolBarBox.Y1 - 2*nGap);
+}
+
+
+
+
+geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar (void)
+{
+    double nToolBarWidth (400);
+    double nToolBarHeight (80);
+
+    // Get access to the tool bar.
+    PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
+        mpPaneContainer->FindPaneURL(PresenterPaneFactory::msToolBarPaneURL));
+    if (pDescriptor.get() != NULL)
+    {
+        PresenterToolBarView* pToolBarView
+            = dynamic_cast<PresenterToolBarView*>(pDescriptor->mxView.get());
+        if (pToolBarView != NULL && pToolBarView->GetPresenterToolBar().is())
+        {
+            geometry::RealSize2D aSize (pToolBarView->GetPresenterToolBar()->GetMinimalSize());
+
+            if (mpPaneBorderPainter.is())
+            {
+                const awt::Rectangle aBox (mpPaneBorderPainter->addBorder (
+                    PresenterPaneFactory::msToolBarPaneURL,
+                    awt::Rectangle(
+                        0,
+                        0,
+                        PresenterGeometryHelper::Round(aSize.Width),
+                        PresenterGeometryHelper::Round(aSize.Height)),
+                    css::drawing::framework::BorderType_TOTAL_BORDER));
+
+                nToolBarWidth = aBox.Width;
+                nToolBarHeight = aBox.Height;
+            }
+            else
+            {
+                nToolBarWidth = aSize.Width + 20;
+                nToolBarHeight = aSize.Height + 10;
+            }
+        }
+    }
+
+    const awt::Rectangle aBox = mxParentWindow->getPosSize();
+    const double nToolBarX ((aBox.Width - nToolBarWidth) / 2);
+    const double nToolBarY (aBox.Height - nToolBarHeight);
+    SetPanePosSizeAbsolute(
+        PresenterPaneFactory::msToolBarPaneURL,
+        nToolBarX,
+        nToolBarY,
+        nToolBarWidth,
+        nToolBarHeight);
+
+    return geometry::RealRectangle2D(
+        nToolBarX,
+        nToolBarY,
+        nToolBarX + nToolBarWidth - 1,
+        nToolBarY + nToolBarHeight - 1);
+}
+
+
+
+
+awt::Size PresenterWindowManager::CalculatePaneSize (
+    const double nOuterWidth,
+    const OUString& rsPaneURL)
+{
+    // Calculate the inner width by removing the pane border.
+    awt::Rectangle aInnerBox (mpPaneBorderPainter->RemoveBorder (
+        rsPaneURL,
+        awt::Rectangle(0,0,
+            sal_Int32(nOuterWidth+0.5),sal_Int32(nOuterWidth)),
+        drawing::framework::BorderType_TOTAL_BORDER));
+
+    // Calculate the inner height with the help of the slide aspect ratio.
+    const double nCurrentSlideInnerHeight (
+        aInnerBox.Width / mpPresenterController->GetSlideAspectRatio());
+
+    // Add the pane border to get the outer box.
+    awt::Rectangle aOuterBox (mpPaneBorderPainter->AddBorder (
+        rsPaneURL,
+        awt::Rectangle(0,0,
+            aInnerBox.Width,sal_Int32(nCurrentSlideInnerHeight+0.5)),
+        drawing::framework::BorderType_TOTAL_BORDER));
+
+    return awt::Size(aOuterBox.Width, aOuterBox.Height);
+}
+
+
+
+
+void PresenterWindowManager::NotifyLayoutModeChange (void)
+{
+    document::EventObject aEvent;
+    aEvent.Source = Reference<XInterface>(static_cast<XWeak*>(this));
+
+    LayoutListenerContainer aContainerCopy (maLayoutListeners);
+    LayoutListenerContainer::iterator iListener (aContainerCopy.begin());
+    LayoutListenerContainer::iterator iEnd (aContainerCopy.end());
+    for ( ; iListener!=iEnd; ++iListener)
+    {
+        if (iListener->is())
+        {
+            try
+            {
+                (*iListener)->notifyEvent(aEvent);
+            }
+            catch (lang::DisposedException&)
+            {
+                RemoveLayoutListener(*iListener);
+            }
+            catch (RuntimeException&)
+            {
+            }
+        }
+    }
+}
+
+
+
+
+void PresenterWindowManager::NotifyDisposing (void)
+{
+    lang::EventObject aEvent;
+    aEvent.Source = static_cast<XWeak*>(this);
+
+    LayoutListenerContainer aContainer;
+    aContainer.swap(maLayoutListeners);
+    LayoutListenerContainer::iterator iListener (aContainer.begin());
+    LayoutListenerContainer::iterator iEnd (aContainer.end());
+    for ( ; iListener!=iEnd; ++iListener)
+    {
+        if (iListener->is())
+        {
+            try
+            {
+                (*iListener)->disposing(aEvent);
+            }
+            catch (lang::DisposedException&)
+            {
+            }
+            catch (RuntimeException&)
+            {
+            }
+        }
+    }
+}
+
+
+
+
+void PresenterWindowManager::LayoutUnknownMode (void)
+{
+    awt::Rectangle aBox = mxParentWindow->getPosSize();
+
+    PresenterPaneContainer::PaneList::const_iterator iPane;
+    PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
+    for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
+    {
+        const PresenterPaneContainer::SharedPaneDescriptor& pDescriptor (*iPane);
+        if ( ! pDescriptor->mxBorderWindow.is())
+            continue;
+
+        // Layout the border window.
+        const sal_Int32 nX = (sal_Int32)(pDescriptor->mnLeft * aBox.Width);
+        const sal_Int32 nY = (sal_Int32)(pDescriptor->mnTop * aBox.Height);
+        const sal_Int32 nWidth = (sal_Int32)(pDescriptor->mnRight * aBox.Width) - nX;
+        const sal_Int32 nHeight = (sal_Int32)(pDescriptor->mnBottom * aBox.Height) - nY;
+
+        pDescriptor->mxBorderWindow->setPosSize(
+            nX,nY,nWidth,nHeight,
+            awt::PosSize::POSSIZE);
     }
 }
 
@@ -640,42 +1167,85 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     rendering::RenderState aRenderState (
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         mxClipPolygon,
-        Sequence<double>(3),
+        Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
     // Paint the background.
-    if (mxBackgroundBitmap.is())
+    if (mpBackgroundBitmap.get() != NULL)
     {
-        Sequence<rendering::Texture> aTextures (1);
-        geometry::IntegerSize2D aBitmapSize (mxBackgroundBitmap->getSize());
-        aTextures[0] = rendering::Texture (
-            geometry::AffineMatrix2D(
-                aBitmapSize.Width,0,0,
-                0,aBitmapSize.Height,0),
-            1,
-            0,
-            mxBackgroundBitmap,
-            NULL,
-            NULL,
-            rendering::StrokeAttributes(),
-            rendering::TexturingMode::REPEAT,
-            rendering::TexturingMode::REPEAT);
+        ProvideBackgroundBitmap();
 
-        mxParentCanvas->fillTexturedPolyPolygon(
-            xBackgroundPolygon,
-            aViewState,
-            aRenderState,
-            aTextures);
+        if (mxScaledBackgroundBitmap.is())
+        {
+            Sequence<rendering::Texture> aTextures (1);
+            const geometry::IntegerSize2D aBitmapSize(mxScaledBackgroundBitmap->getSize());
+            aTextures[0] = rendering::Texture (
+                geometry::AffineMatrix2D(
+                    aBitmapSize.Width,0,0,
+                    0,aBitmapSize.Height,0),
+                1,
+                0,
+                mxScaledBackgroundBitmap,
+                NULL,
+                NULL,
+                rendering::StrokeAttributes(),
+                rendering::TexturingMode::REPEAT,
+                rendering::TexturingMode::REPEAT);
+
+            mxParentCanvas->fillTexturedPolyPolygon(
+                xBackgroundPolygon,
+                aViewState,
+                aRenderState,
+                aTextures);
+        }
+        else
+        {
+            const util::Color aBackgroundColor (mpBackgroundBitmap->maReplacementColor);
+            aRenderState.DeviceColor[0] = ((aBackgroundColor >> 16) & 0x0ff) / 255.0;
+            aRenderState.DeviceColor[1] = ((aBackgroundColor >> 8) & 0x0ff) / 255.0;
+            aRenderState.DeviceColor[2] = ((aBackgroundColor >> 0) & 0x0ff) / 255.0;
+            aRenderState.DeviceColor[3] = ((aBackgroundColor >> 24) & 0x0ff) / 255.0;
+            mxParentCanvas->fillPolyPolygon(
+                xBackgroundPolygon,
+                aViewState,
+                aRenderState);
+        }
     }
-    else
+}
+
+
+
+
+void PresenterWindowManager::ProvideBackgroundBitmap (void)
+{
+    if ( ! mxScaledBackgroundBitmap.is())
     {
-        aRenderState.DeviceColor[0] = ((maBackgroundColor >> 16) & 0x0ff) / 255.0;
-        aRenderState.DeviceColor[1] = ((maBackgroundColor >> 8) & 0x0ff) / 255.0;
-        aRenderState.DeviceColor[2] = ((maBackgroundColor >> 0) & 0x0ff) / 255.0;
-        mxParentCanvas->fillPolyPolygon(
-            xBackgroundPolygon,
-            aViewState,
-            aRenderState);
+        Reference<rendering::XBitmap> xBitmap (mpBackgroundBitmap->GetNormalBitmap());
+        if (xBitmap.is())
+        {
+            const bool bStretchVertical (mpBackgroundBitmap->meVerticalTexturingMode
+                == PresenterBitmapDescriptor::Stretch);
+            const bool bStretchHorizontal (mpBackgroundBitmap->meHorizontalTexturingMode
+                == PresenterBitmapDescriptor::Stretch);
+            if (bStretchHorizontal || bStretchVertical)
+            {
+                geometry::RealSize2D aSize;
+                if (bStretchVertical)
+                    aSize.Height = mxParentWindow->getPosSize().Height;
+                else
+                    aSize.Height = xBitmap->getSize().Height;
+                if (bStretchHorizontal)
+                    aSize.Width = mxParentWindow->getPosSize().Width;
+                else
+                    aSize.Width = xBitmap->getSize().Width;
+                mxScaledBackgroundBitmap = xBitmap->getScaledBitmap(aSize, sal_False);
+            }
+            else
+            {
+                mxScaledBackgroundBitmap
+                    = Reference<rendering::XBitmap>(xBitmap, UNO_QUERY);
+            }
+        }
     }
 }
 
@@ -697,7 +1267,7 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (*iPane);
         if ( ! pDescriptor->mbIsActive)
             continue;
-        if ( ! pDescriptor->mbNeedsClipping)
+        if ( ! pDescriptor->mbIsOpaque)
             continue;
         if ( ! pDescriptor->mxBorderWindow.is() || ! pDescriptor->mxContentWindow.is())
             continue;
@@ -725,6 +1295,7 @@ Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolyg
 
 void PresenterWindowManager::UpdateWindowList (void)
 {
+#ifdef ENABLE_PANE_RESIZING
     try
     {
         OSL_ASSERT(mxComponentContext.is());
@@ -759,15 +1330,18 @@ void PresenterWindowManager::UpdateWindowList (void)
             }
 
             aArguments.realloc(nIndex);
-            mxPaneBorderManager = xFactory->createInstanceWithArgumentsAndContext(
-                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPaneBorderManager"),
-                aArguments,
-                mxComponentContext);
+            rtl::Reference<PresenterPaneBorderManager> pManager (
+                new PresenterPaneBorderManager (
+                    mxComponentContext,
+                    mpPresenterController));
+            pManager->initialize(aArguments);
+            mxPaneBorderManager = Reference<XInterface>(static_cast<XWeak*>(pManager.get()));
         }
     }
     catch (RuntimeException&)
     {
     }
+#endif
 }
 
 
@@ -775,10 +1349,7 @@ void PresenterWindowManager::UpdateWindowList (void)
 
 void PresenterWindowManager::Invalidate (void)
 {
-    Reference<awt::XWindowPeer> xPeer (mxParentWindow, UNO_QUERY);
-    if (xPeer.is())
-        xPeer->invalidate(
-            awt::InvalidateStyle::CHILDREN|awt::InvalidateStyle::NOTRANSPARENT);
+    mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
 
 
@@ -826,6 +1397,138 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
 
 
 
+namespace {
+
+//===== ModeChangeAnimation ===================================================
+
+class ModeChangeAnimation : public PresenterAnimation
+{
+public:
+    ModeChangeAnimation (
+        const ::boost::shared_ptr<PresenterSprite>& rpSprite,
+        const Reference<rendering::XSpriteCanvas>& rxCanvas)
+        : PresenterAnimation (0, 1000, 20),
+          mpSprite(rpSprite),
+          mxCanvas(rxCanvas)
+    {
+    }
+
+    virtual void Run (const double nProgress, const sal_uInt64 nCurrentTime)
+    {
+        (void)nCurrentTime;
+        mpSprite->SetAlpha(1.0 - nProgress);
+        mxCanvas->updateScreen(sal_False);
+    }
+
+private:
+    ::boost::shared_ptr<PresenterSprite> mpSprite;
+    Reference<rendering::XSpriteCanvas> mxCanvas;
+};
+
+
+
+
+ModeChangeAnimationStarter::ModeChangeAnimationStarter (
+    const Reference<drawing::framework::XConfigurationController>& rxConfigurationController,
+    const Reference<awt::XWindow>& rxWindow,
+    const Reference<rendering::XSpriteCanvas>& rxCanvas,
+    const ::boost::shared_ptr<PresenterAnimator>& rpAnimator)
+    : ModeChangeAnimationStarterInterfaceBase(m_aMutex),
+      mxConfigurationController(rxConfigurationController),
+      mpAnimator(rpAnimator),
+      mpSprite(new PresenterSprite()),
+      mxCanvas(rxCanvas)
+{
+    OSL_ASSERT(rxWindow.is());
+    OSL_ASSERT(rxCanvas.is());
+
+    // Get the bitmap of the background.
+    Reference<rendering::XBitmap> xBackgroundBitmap (rxCanvas, UNO_QUERY);
+    if ( ! xBackgroundBitmap.is())
+        return;
+
+    // Create the sprite.
+    const awt::Rectangle aWindowSize (rxWindow->getPosSize());
+    mpSprite->SetFactory(rxCanvas);
+    mpSprite->Resize(geometry::RealSize2D(aWindowSize.Width, aWindowSize.Height));
+    mpSprite->SetPriority(10);
+
+    // Fill it with the background inside the bounding box.
+    const rendering::ViewState aViewState (
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL);
+    const rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL,
+        Sequence<double>(3),
+        rendering::CompositeOperation::SOURCE);
+    Reference<rendering::XCanvas> xSpriteCanvas (mpSprite->GetCanvas());
+    if (xSpriteCanvas.is())
+    {
+        xSpriteCanvas->drawBitmap(xBackgroundBitmap, aViewState, aRenderState);
+        mpSprite->Show();
+    }
+
+    // Register as listener to be notified when the new panes are visible
+    // and the sprite can be faded out.
+    mxConfigurationController->addConfigurationChangeListener(
+            this,
+            A2S("ConfigurationUpdateEnd"),
+            Any());
+}
+
+
+
+
+ModeChangeAnimationStarter::~ModeChangeAnimationStarter (void)
+{
+}
+
+
+
+
+void SAL_CALL ModeChangeAnimationStarter::disposing (void)
+{
+    mxConfigurationController = NULL;
+    mpAnimator.reset();
+    mpSprite.reset();
+}
+
+
+
+
+// XConfigurationChangeListener
+
+void SAL_CALL ModeChangeAnimationStarter::notifyConfigurationChange (
+    const com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
+    throw (com::sun::star::uno::RuntimeException)
+{
+    (void)rEvent;
+
+    // Start the actual animation.
+    mpAnimator->AddAnimation(SharedPresenterAnimation(new ModeChangeAnimation(
+        mpSprite,
+        mxCanvas)));
+
+    mxConfigurationController->removeConfigurationChangeListener(this);
+}
+
+
+
+
+// XEventListener
+
+void SAL_CALL ModeChangeAnimationStarter::disposing (
+    const com::sun::star::lang::EventObject& rEvent)
+    throw (com::sun::star::uno::RuntimeException)
+{
+    if (rEvent.Source == mxConfigurationController)
+        mxConfigurationController = NULL;
+}
+
+
+
+} // end of anonymous namespace
 
 
 } } // end of namespace ::sdext::presenter
