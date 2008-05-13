@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: macro.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
+#include <osl/endian.h>
 
 #if defined WIN32
 #define THIS_OS "Windows"
@@ -58,25 +59,37 @@ this is inserted for the case that the preprocessor ignores error
 #endif
 
 #if defined INTEL
-#define THIS_ARCH "x86"
+#    define THIS_ARCH "x86"
+#elif defined POWERPC64
+#    define THIS_ARCH "PowerPC_64"
 #elif defined POWERPC
-#define THIS_ARCH "PowerPC"
+#    define THIS_ARCH "PowerPC"
+#elif defined S390X
+#    define THIS_ARCH "S390x"
 #elif defined S390
-#define THIS_ARCH "S390"
+#    define THIS_ARCH "S390"
 #elif defined SPARC
-#define THIS_ARCH "SPARC"
+#    define THIS_ARCH "SPARC"
 #elif defined SPARC64
-#define THIS_ARCH "SPARC64"
+#    define THIS_ARCH "SPARC64"
 #elif defined IRIX
-#define THIS_ARCH "MIPS"
+#    define THIS_ARCH "MIPS"
 #elif defined X86_64
-#define THIS_ARCH "X86_64"
+#    define THIS_ARCH "X86_64"
 #elif defined MIPS
-#define THIS_ARCH "MIPS"
+#    ifdef OSL_BIGENDIAN
+#        define THIS_ARCH "MIPS_EB"
+#    else
+#        define THIS_ARCH "MIPS_EL"
+#    endif
 #elif defined ARM
-#define THIS_ARCH "ARM"
+#    ifdef __ARM_EABI__
+#        define THIS_ARCH "ARM_EABI"
+#    else
+#        define THIS_ARCH "ARM_OABI"
+#    endif
 #elif defined IA64
-#define THIS_ARCH "IA64"
+#    define THIS_ARCH "IA64"
 #endif
 
 #if ! defined THIS_ARCH
