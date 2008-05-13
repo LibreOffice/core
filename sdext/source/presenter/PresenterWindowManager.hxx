@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterWindowManager.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 #define SDEXT_PRESENTER_PRESENTER_WINDOW_MANAGER_HXX
 
 #include "PresenterPaneContainer.hxx"
+#include "PresenterTheme.hxx"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
@@ -90,6 +92,7 @@ public:
     void SAL_CALL disposing (void);
 
     void SetParentPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
+    css::uno::Reference<css::awt::XWindow> GetParentWidnow (void) const;
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
     void NotifyPaneCreation (const PresenterPaneContainer::SharedPaneDescriptor& rpDescriptor);
     void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);
@@ -100,7 +103,7 @@ public:
         const double nRelativeWidth,
         const double nRelativeHeight);
     void SetPanePosSizeAbsolute (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const ::rtl::OUString& rsPaneURL,
         const double nX,
         const double nY,
         const double nWidth,
@@ -110,6 +113,21 @@ public:
     css::uno::Reference<css::rendering::XCanvas> GetParentCanvas (void) const;
     void Update (void);
     void Layout (void);
+
+    enum LayoutMode { Standard, Notes, Generic };
+    void SetLayoutMode (const LayoutMode eMode);
+    LayoutMode GetLayoutMode (void) const;
+
+    void SetSlideSorterState (bool bIsActive);
+    bool IsSlideSorterActive (void) const;
+
+    void SetHelpViewState (bool bIsActive);
+    bool IsHelpViewActive (void) const;
+
+    void AddLayoutListener (
+        const css::uno::Reference<css::document::XEventListener>& rxListener);
+    void RemoveLayoutListener (
+        const css::uno::Reference<css::document::XEventListener>& rxListener);
 
     // XWindowListener
 
@@ -177,14 +195,22 @@ private:
     */
     bool mbIsLayouting;
     ::boost::shared_ptr<PresenterTheme> mpTheme;
-    css::uno::Reference<css::rendering::XBitmap> mxBackgroundBitmap;
-    css::util::Color maBackgroundColor;
+    SharedBitmapDescriptor mpBackgroundBitmap;
+    css::uno::Reference<css::rendering::XBitmap> mxScaledBackgroundBitmap;
     css::util::Color maPaneBackgroundColor;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxClipPolygon;
+    LayoutMode meLayoutMode;
+    bool mbIsSlideSorterActive;
+    bool mbIsHelpViewActive;
+    typedef ::std::vector<css::uno::Reference<css::document::XEventListener> >
+        LayoutListenerContainer;
+    LayoutListenerContainer maLayoutListeners;
+    bool mbIsMouseClickPending;
 
-    void PaintChildren (const css::awt::PaintEvent& rEvent) const;
+    bool PaintChildren (const css::awt::PaintEvent& rEvent) const;
     void UpdateWindowSize (const css::uno::Reference<css::awt::XWindow>& rxBorderWindow);
     void PaintBackground (const css::awt::Rectangle& rUpdateBox);
+    void ProvideBackgroundBitmap (void);
     css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon (void) const;
     void ToTop ();
 
@@ -193,6 +219,26 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 
     void Invalidate (void);
+
+    void LayoutStandardMode (void);
+    void LayoutNotesMode (void);
+    void LayoutUnknownMode (void);
+    void LayoutSlideSorterMode (void);
+    void LayoutHelpMode (void);
+
+    /** Layout the tool bar and return its outer bounding box.
+    */
+    css::geometry::RealRectangle2D LayoutToolBar (void);
+
+    css::awt::Size CalculatePaneSize (
+        const double nOuterWidth,
+        const ::rtl::OUString& rsPaneURL);
+
+    /** Notify changes of the layout mode and of the slide sorter state.
+    */
+    void NotifyLayoutModeChange (void);
+
+    void NotifyDisposing (void);
 
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
