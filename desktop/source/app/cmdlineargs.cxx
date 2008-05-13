@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,11 +107,6 @@ CommandLineArgs::Supplier::Exception::operator =(Exception const &)
 { return *this; }
 
 CommandLineArgs::Supplier::~Supplier() {}
-
-CommandLineArgs::CommandLineArgs()
-{
-    ResetParamValues();
-}
 
 // intialize class with command line parameters from process environment
 CommandLineArgs::CommandLineArgs( bool bConvert )
@@ -592,36 +587,12 @@ void CommandLineArgs::ResetParamValues()
     m_eArgumentCount = NONE;
 }
 
-sal_Bool CommandLineArgs::GetBoolParam( BoolParam eParam ) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-
-    OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
-    return m_aBoolParams[eParam];
-}
-
 void CommandLineArgs::SetBoolParam( BoolParam eParam, sal_Bool bNewValue )
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
     OSL_ASSERT( ( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT ) );
     m_aBoolParams[eParam] = bNewValue;
-}
-
-const rtl::OUString& CommandLineArgs::GetStringParam( StringParam eParam ) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-
-    OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
-    return m_aStrParams[eParam];
-}
-
-void CommandLineArgs::SetStringParam( StringParam eParam, const rtl::OUString& aNewValue )
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-
-    OSL_ASSERT( ( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT ) );
-    m_aStrParams[eParam] = aNewValue;
 }
 
 sal_Bool CommandLineArgs::IsMinimized() const
@@ -652,12 +623,6 @@ sal_Bool CommandLineArgs::IsBean() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_BEAN ];
-}
-
-sal_Bool CommandLineArgs::IsPlugin() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_PLUGIN ];
 }
 
 sal_Bool CommandLineArgs::IsServer() const
@@ -822,20 +787,6 @@ sal_Bool CommandLineArgs::GetUnAcceptString( ::rtl::OUString& rPara ) const
     return m_aStrSetParams[ CMD_STRINGPARAM_UNACCEPT ];
 }
 
-sal_Bool CommandLineArgs::GetUserDir( ::rtl::OUString& rPara) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_USERDIR ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_USERDIR ];
-}
-
-sal_Bool CommandLineArgs::GetClientDisplay( ::rtl::OUString& rPara) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_CLIENTDISPLAY ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_CLIENTDISPLAY ];
-}
-
 sal_Bool CommandLineArgs::GetOpenList( ::rtl::OUString& rPara) const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -878,13 +829,6 @@ sal_Bool CommandLineArgs::GetPrintList( ::rtl::OUString& rPara) const
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTLIST ];
 }
 
-sal_Bool CommandLineArgs::GetVersionString( ::rtl::OUString& rPara) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_VERSION ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_VERSION ];
-}
-
 sal_Bool CommandLineArgs::GetPrintToList( ::rtl::OUString& rPara ) const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
@@ -897,20 +841,6 @@ sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
-}
-
-sal_Bool CommandLineArgs::GetDisplay( ::rtl::OUString& rPara ) const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    rPara = m_aStrParams[ CMD_STRINGPARAM_DISPLAY ];
-    return m_aStrSetParams[ CMD_STRINGPARAM_DISPLAY ];
-}
-
-sal_Bool CommandLineArgs::IsPrinting() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return( m_aStrParams[ CMD_STRINGPARAM_PRINTLIST ].getLength() > 0 ||
-            m_aStrParams[ CMD_STRINGPARAM_PRINTTOLIST ].getLength() > 0 );
 }
 
 sal_Bool CommandLineArgs::IsEmpty() const
