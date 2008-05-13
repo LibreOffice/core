@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterNotesView.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,8 @@
 #define SDEXT_PRESENTER_NOTES_VIEW2_HXX
 
 #include "PresenterController.hxx"
-
+#include "PresenterToolBar.hxx"
+#include "PresenterViewFactory.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/awt/ActionEvent.hpp>
@@ -64,6 +65,7 @@ namespace {
 
 namespace sdext { namespace presenter {
 
+class PresenterButton;
 class PresenterScrollBar;
 
 /** A drawing framework view of the notes of a slide.  At the moment this is
@@ -72,7 +74,8 @@ class PresenterScrollBar;
 */
 class PresenterNotesView
     : private ::cppu::BaseMutex,
-      public PresenterNotesViewInterfaceBase
+      public PresenterNotesViewInterfaceBase,
+      public CachablePresenterView
 {
 public:
     explicit PresenterNotesView (
@@ -94,6 +97,8 @@ public:
         const css::uno::Reference<css::drawing::XDrawPage>& rxNotesPage);
 
     css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
+
+    void ChangeFontSize (const double nSizeChange);
 
     // lang::XEventListener
 
@@ -151,16 +156,28 @@ public:
 
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
+    ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::beans::XPropertySet> mxTextView;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::rendering::XBitmap> mxBitmap;
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentNotesPage;
+    PresenterTheme::SharedFontDescriptor mpFont;
     css::awt::FontDescriptor maFontDescriptor;
     ::rtl::Reference<PresenterScrollBar> mpScrollBar;
+    css::uno::Reference<css::awt::XWindow> mxToolBarWindow;
+    css::uno::Reference<css::rendering::XCanvas> mxToolBarCanvas;
+    ::rtl::Reference<PresenterToolBar> mpToolBar;
+    ::rtl::Reference<PresenterButton> mpCloseButton;
+    sal_Int32 mnSeparatorYLocation;
+    css::geometry::RealRectangle2D maTextBoundingBox;
+    SharedBitmapDescriptor mpBackground;
 
-    void Resize (void);
-    void Paint (void);
+    void CreateToolBar (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
+    void Layout (void);
+    void Paint (const css::awt::Rectangle& rUpdateBox);
     void Invalidate (void);
     void Scroll (const ::rtl::OUString& rsDistance);
     void SetTop (const double nTop);
