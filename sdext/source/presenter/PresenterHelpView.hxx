@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterHelpView.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,9 @@ namespace {
 
 namespace sdext { namespace presenter {
 
-/** Experimental.  Do not use (yet).
+class PresenterButton;
+
+/** Show help text that describes the defined keys.
 */
 class PresenterHelpView
     : private ::cppu::BaseMutex,
@@ -107,17 +109,31 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
+    class TextContainer;
+
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::drawing::framework::XPane> mxPane;
     css::uno::Reference<css::awt::XWindow> mxWindow;
+    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    css::uno::Reference<css::rendering::XCanvasFont> mxFont;
+    PresenterTheme::SharedFontDescriptor mpFont;
+    ::boost::scoped_ptr<TextContainer> mpTextContainer;
+    ::rtl::Reference<PresenterButton> mpCloseButton;
+    sal_Int32 mnSeparatorY;
+    sal_Int32 mnMaximalWidth;
 
     void ProvideCanvas (void);
     void Resize (void);
     void Paint (const css::awt::Rectangle& rRedrawArea);
+    void ReadHelpStrings (void);
+    void ProcessString (
+        const css::uno::Reference<css::beans::XPropertySet>& rsProperties);
+
+    /** Find a font size, so that all text can be displayed at the same
+        time.
+    */
+    void CheckFontSize (void);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
