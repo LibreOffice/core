@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlinehelp.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,7 @@ namespace desktop
         aDlg.Execute();
 #endif
     }
-
+#ifndef UNX
     CmdlineHelpDialog::CmdlineHelpDialog (void)
     : ModalDialog( NULL, DesktopResId( DLG_CMDLINEHELP ) )
     , m_ftHead( this, DesktopResId( TXT_DLG_CMDLINEHELP_HEADER ) )
@@ -172,6 +172,5 @@ namespace desktop
     {
         FreeResource();
     }
-
+#endif
 }
-
