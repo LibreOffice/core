@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterNotesView.cxx,v $
  *
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +30,11 @@
  ************************************************************************/
 
 #include "PresenterNotesView.hxx"
+#include "PresenterButton.hxx"
+#include "PresenterCanvasHelper.hxx"
+#include "PresenterGeometryHelper.hxx"
+#include "PresenterPaintManager.hxx"
 #include "PresenterScrollBar.hxx"
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,12 +46,19 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+
+static const sal_Int32 gnSpaceBelowSeparator (10);
+static const sal_Int32 gnSpaceAboveSeparator (10);
 
 namespace sdext { namespace presenter {
 
@@ -59,15 +69,24 @@ PresenterNotesView::PresenterNotesView (
     const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterNotesViewInterfaceBase(m_aMutex),
       mxViewId(rxViewId),
+      mpPresenterController(rpPresenterController),
       mxTextView(),
       mxCanvas(),
       mxBitmap(),
       mxCurrentNotesPage(),
+      mpFont(),
       maFontDescriptor(),
-      mpScrollBar()
+      mpScrollBar(),
+      mxToolBarWindow(),
+      mxToolBarCanvas(),
+      mpToolBar(),
+      mpCloseButton(),
+      mnSeparatorYLocation(0),
+      maTextBoundingBox(),
+      mpBackground()
 {
     const OUString sResourceURL (mxViewId->getResourceURL());
-    maFontDescriptor = rpPresenterController->GetViewFontDescriptor(sResourceURL);
+    mpFont = rpPresenterController->GetViewFont(sResourceURL);
 
     try
     {
@@ -84,19 +103,29 @@ PresenterNotesView::PresenterNotesView (
         aArguments[0] <<= mxCanvas;
         mxTextView = Reference<beans::XPropertySet>(
             xFactory->createInstanceWithArgumentsAndContext(
-                OUString::createFromAscii("com.sun.star.drawing.PresenterTextView"),
+                A2S("com.sun.star.drawing.PresenterTextView"),
                 aArguments,
                 rxComponentContext),
             UNO_QUERY_THROW);
-        mxTextView->setPropertyValue(
-            OUString::createFromAscii("BackgroundColor"),
-            Any(rpPresenterController->GetViewBackgroundColor(sResourceURL)));
-        mxTextView->setPropertyValue(
-            OUString::createFromAscii("FontDescriptor"),
-            Any(maFontDescriptor));
-        mxTextView->setPropertyValue(
-            OUString::createFromAscii("TextColor"),
-            Any(rpPresenterController->GetViewFontColor(sResourceURL)));
+        mxTextView->setPropertyValue(A2S("BackgroundColor"), Any(sal_uInt32(0x00ff0000)));
+        if (mpFont.get() != NULL)
+        {
+            maFontDescriptor.Name = mpFont->msFamilyName;
+            maFontDescriptor.Height = sal::static_int_cast<sal_Int16>(mpFont->mnSize);
+            maFontDescriptor.StyleName = mpFont->msStyleName;
+            mxTextView->setPropertyValue(A2S("FontDescriptor"), Any(maFontDescriptor));
+            mxTextView->setPropertyValue(A2S("TextColor"), Any(mpFont->mnColor));
+        }
+
+        CreateToolBar(rxComponentContext, rpPresenterController);
+
+        mpCloseButton = PresenterButton::Create(
+            rxComponentContext,
+            mpPresenterController,
+            mpPresenterController->GetTheme(),
+            mxParentWindow,
+            mxCanvas,
+            A2S("NotesViewCloser"));
 
         if (mxParentWindow.is())
         {
@@ -109,10 +138,11 @@ PresenterNotesView::PresenterNotesView (
         mpScrollBar = new PresenterVerticalScrollBar(
             rxComponentContext,
             mxParentWindow,
+            mpPresenterController->GetPaintManager(),
             ::boost::bind(&PresenterNotesView::SetTop, this, _1));
         mpScrollBar->SetCanvas(mxCanvas);
 
-        Resize();
+        Layout();
     }
     catch (RuntimeException&)
     {
@@ -148,6 +178,36 @@ void SAL_CALL PresenterNotesView::disposing (void)
             xComponent->dispose();
     }
 
+    // Dispose tool bar.
+    {
+        Reference<XComponent> xComponent (static_cast<XWeak*>(mpToolBar.get()), UNO_QUERY);
+        mpToolBar = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    {
+        Reference<XComponent> xComponent (mxToolBarCanvas, UNO_QUERY);
+        mxToolBarCanvas = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    {
+        Reference<XComponent> xComponent (mxToolBarWindow, UNO_QUERY);
+        mxToolBarWindow = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
+    // Dispose close button
+    {
+        Reference<XComponent> xComponent (static_cast<XWeak*>(mpCloseButton.get()), UNO_QUERY);
+        mpCloseButton = NULL;
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+
+    // Create the tool bar.
+
     mpScrollBar = NULL;
 
     mxViewId = NULL;
@@ -156,12 +216,52 @@ void SAL_CALL PresenterNotesView::disposing (void)
 
 
 
+void PresenterNotesView::CreateToolBar (
+    const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
+{
+    if (rpPresenterController.get() == NULL)
+        return;
+
+    Reference<drawing::XPresenterHelper> xPresenterHelper (
+        rpPresenterController->GetPresenterHelper());
+    if ( ! xPresenterHelper.is())
+        return;
+
+    // Create a new window as container of the tool bar.
+    mxToolBarWindow = xPresenterHelper->createWindow(
+        mxParentWindow,
+        sal_False,
+        sal_True,
+        sal_False,
+        sal_False);
+    mxToolBarCanvas = xPresenterHelper->createSharedCanvas (
+        Reference<rendering::XSpriteCanvas>(mxCanvas, UNO_QUERY),
+        mxParentWindow,
+        mxCanvas,
+        mxParentWindow,
+        mxToolBarWindow);
+
+    // Create the tool bar.
+    mpToolBar = new PresenterToolBar(
+        rxContext,
+        mxToolBarWindow,
+        mxToolBarCanvas,
+        rpPresenterController,
+        PresenterToolBar::Left);
+    mpToolBar->Initialize(
+        A2S("PresenterScreenSettings/ToolBars/NotesToolBar"));
+}
+
+
+
+
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
     static const ::rtl::OUString sNotesShapeName (
-        OUString::createFromAscii("com.sun.star.presentation.NotesShape"));
+        A2S("com.sun.star.presentation.NotesShape"));
     static const ::rtl::OUString sTextShapeName (
-        OUString::createFromAscii("com.sun.star.drawing.TextShape"));
+        A2S("com.sun.star.drawing.TextShape"));
 
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
     if (xIndexAccess.is()
@@ -206,11 +306,13 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
         }
 
         mxBitmap = NULL;
-        mxTextView->setPropertyValue(OUString::createFromAscii("Text"), Any(sText));
+        mxTextView->setPropertyValue(A2S("Text"), Any(sText));
+
+        Layout();
 
         if (mpScrollBar.get() != NULL)
         {
-            mpScrollBar->SetThumbPosition(0);
+            mpScrollBar->SetThumbPosition(0, false);
             UpdateScrollBar();
         }
 
@@ -247,7 +349,7 @@ void SAL_CALL PresenterNotesView::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    Resize();
+    Layout();
 }
 
 
@@ -285,10 +387,13 @@ void SAL_CALL PresenterNotesView::windowHidden (const lang::EventObject& rEvent)
 void SAL_CALL PresenterNotesView::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
-    (void)rEvent;
     ThrowIfDisposed();
+
+    if ( ! mbIsPresenterViewActive)
+        return;
+
     ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
-    Paint();
+    Paint(rEvent.UpdateRect);
 }
 
 
@@ -332,7 +437,6 @@ void SAL_CALL PresenterNotesView::setCurrentPage (const Reference<drawing::XDraw
     }
 
     SetSlide(mxCurrentNotesPage);
-    Invalidate();
 }
 
 
@@ -354,12 +458,21 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
 {
     switch (rEvent.KeyCode)
     {
-        case awt::Key::UP:
-            Scroll(OUString::createFromAscii("-1l"));
+        case awt::Key::A:
+            Scroll(A2S("-1l"));
             break;
 
-        case awt::Key::DOWN:
-            Scroll(OUString::createFromAscii("+1l"));
+        case awt::Key::Y:
+        case awt::Key::Z:
+            Scroll(A2S("+1l"));
+            break;
+
+        case awt::Key::S:
+            ChangeFontSize(-1);
+            break;
+
+        case awt::Key::G:
+            ChangeFontSize(+1);
             break;
     }
 }
@@ -370,31 +483,7 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
 void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
     throw (RuntimeException)
 {
-    switch (rEvent.KeyCode)
-    {
-        case awt::Key::ADD:
-        {
-            maFontDescriptor.Height += 1;
-            mxTextView->setPropertyValue(
-                OUString::createFromAscii("FontDescriptor"),
-                Any(maFontDescriptor));
-            UpdateScrollBar();
-            Invalidate();
-        }
-        break;
-
-        case awt::Key::SUBTRACT:
-        {
-            if (maFontDescriptor.Height > 1)
-                maFontDescriptor.Height -= 1;
-            mxTextView->setPropertyValue(
-                OUString::createFromAscii("FontDescriptor"),
-                Any(maFontDescriptor));
-            UpdateScrollBar();
-            Invalidate();
-        }
-        break;
-    }
+    (void)rEvent;
 }
 
 
@@ -402,64 +491,171 @@ void SAL_CALL PresenterNotesView::keyReleased (const awt::KeyEvent& rEvent)
 
 //-----------------------------------------------------------------------------
 
-void PresenterNotesView::Resize (void)
+void PresenterNotesView::Layout (void)
 {
-    if (mxParentWindow.is() && mpScrollBar.get()!=NULL)
+    if ( ! mxParentWindow.is())
+        return;
+    if ( ! mxTextView.is())
+        return;
+
+    awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
+    geometry::RealRectangle2D aNewTextBoundingBox (0,0,aWindowBox.Width, aWindowBox.Height);
+
+    // Size the tool bar and the horizontal separator above it.
+    if (mxToolBarWindow.is())
     {
-        const awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
+        const geometry::RealSize2D aToolBarSize (mpToolBar->GetMinimalSize());
+        const sal_Int32 nToolBarHeight = sal_Int32(aToolBarSize.Height + 0.5);
+        mxToolBarWindow->setPosSize(0, aWindowBox.Height - nToolBarHeight,
+            sal_Int32(aToolBarSize.Width + 0.5), nToolBarHeight,
+            awt::PosSize::POSSIZE);
+        aNewTextBoundingBox.Y2 -= nToolBarHeight;
+
+        mnSeparatorYLocation = aWindowBox.Height - nToolBarHeight - gnSpaceBelowSeparator;
+        aNewTextBoundingBox.Y2 = mnSeparatorYLocation - gnSpaceAboveSeparator;
+
+        // Place the close button.
+        if (mpCloseButton.get() != NULL)
+            mpCloseButton->SetCenter(geometry::RealPoint2D(
+                (aWindowBox.Width +  aToolBarSize.Width) / 2,
+                aWindowBox.Height - aToolBarSize.Height/2));
+    }
+
+    // Check whether the vertical scroll bar is necessary.
+    if (mpScrollBar.get() != NULL)
+    {
+        bool bShowVerticalScrollbar (false);
+        try
+        {
+            const double nTextBoxHeight (aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1);
+            mxTextView->setPropertyValue(
+                A2S("Size"),
+                Any(awt::Size(
+                    sal_Int32(aNewTextBoundingBox.X2 - aNewTextBoundingBox.X1),
+                    sal_Int32(nTextBoxHeight))));
+            double nHeight (0);
+            if (mxTextView->getPropertyValue(A2S("TotalHeight")) >>= nHeight)
+            {
+                if (nHeight > nTextBoxHeight)
+                {
+                    bShowVerticalScrollbar = true;
+                    aNewTextBoundingBox.X2 -= mpScrollBar->GetSize();
+                }
+                mpScrollBar->SetTotalSize(nHeight);
+            }
+        }
+        catch(beans::UnknownPropertyException&)
+        {
+            OSL_ASSERT(false);
+        }
+
+        mpScrollBar->SetVisible(bShowVerticalScrollbar);
         mxTextView->setPropertyValue(
-            OUString::createFromAscii("Size"),
-            Any(awt::Size(aWindowBox.Width - mpScrollBar->GetSize(),aWindowBox.Height)));
+            A2S("Size"),
+            Any(awt::Size(
+                sal_Int32(aNewTextBoundingBox.X2 - aNewTextBoundingBox.X1),
+                sal_Int32(aNewTextBoundingBox.Y2 - aNewTextBoundingBox.Y1))));
         mpScrollBar->SetPosSize(
             geometry::RealRectangle2D(
-                aWindowBox.Width - mpScrollBar->GetSize(),
-                0,
-                aWindowBox.Width,
-                aWindowBox.Height));
+                aNewTextBoundingBox.X2,
+                aNewTextBoundingBox.X1,
+                aNewTextBoundingBox.X2 + mpScrollBar->GetSize(),
+                aNewTextBoundingBox.Y2));
+        if ( ! bShowVerticalScrollbar)
+            mpScrollBar->SetThumbPosition(0, false);
+
         UpdateScrollBar();
     }
-    mxBitmap = NULL;
+
+    // Has the text area has changed it position or size?
+    if (aNewTextBoundingBox.X1 != maTextBoundingBox.X1
+        || aNewTextBoundingBox.Y1 != maTextBoundingBox.Y1
+        || aNewTextBoundingBox.X2 != maTextBoundingBox.X2
+        || aNewTextBoundingBox.Y2 != maTextBoundingBox.Y2)
+    {
+        maTextBoundingBox = aNewTextBoundingBox;
+
+        // When the size has changed then we need a new text bitmap.
+        if (aNewTextBoundingBox.X2-aNewTextBoundingBox.X1
+            != maTextBoundingBox.X2-maTextBoundingBox.X1
+            || aNewTextBoundingBox.Y2-aNewTextBoundingBox.Y1
+            != maTextBoundingBox.Y2-maTextBoundingBox.Y1)
+        {
+            mxBitmap = NULL;
+        }
+    }
 }
 
 
 
 
-void PresenterNotesView::Paint (void)
+void PresenterNotesView::Paint (const awt::Rectangle& rUpdateBox)
 {
-    if (mxParentWindow.is() && mpScrollBar.get() != NULL)
-        mpScrollBar->Paint(mxParentWindow->getPosSize());
+    if ( ! mxParentWindow.is())
+        return;
+    if ( ! mxCanvas.is())
+        return;
 
-    if ( ! mxBitmap.is())
+    awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
+
+    const rendering::ViewState aViewState (
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL);
+    rendering::RenderState aRenderState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL,
+        Sequence<double>(3),
+        rendering::CompositeOperation::SOURCE);
+
+    if (mpBackground.get() == NULL)
+        mpBackground = mpPresenterController->GetViewBackground(mxViewId->getResourceURL());
+    // Paint the background.
+    mpPresenterController->GetCanvasHelper()->Paint(
+        mpBackground,
+        mxCanvas,
+        rUpdateBox,
+        awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height),
+        awt::Rectangle());
+
+    // Paint the horizontal separator.
+    OSL_ASSERT(mxViewId.is());
+    if (mpFont.get() != NULL)
+        PresenterCanvasHelper::SetDeviceColor(
+            aRenderState,
+            mpFont->mnColor);
+    mxCanvas->drawLine(
+        geometry::RealPoint2D(0,mnSeparatorYLocation),
+        geometry::RealPoint2D(aWindowBox.Width,mnSeparatorYLocation),
+        aViewState,
+        aRenderState);
+
+    if ( ! PresenterGeometryHelper::AreRectanglesDisjoint(
+        rUpdateBox,
+        PresenterGeometryHelper::ConvertRectangle(maTextBoundingBox)))
     {
-        if (mxParentWindow.is())
+        // Create a new text bitmap if necessary.
+        if ( ! mxBitmap.is())
         {
-            awt::Rectangle aWindowBox (mxParentWindow->getPosSize());
-            if (mpScrollBar.get() != NULL)
-                aWindowBox.Width -= mpScrollBar->GetSize();
             mxBitmap = Reference<rendering::XBitmap>(
-                mxTextView->getPropertyValue(OUString::createFromAscii("Bitmap")),
+                mxTextView->getPropertyValue(A2S("Bitmap")),
                 UNO_QUERY);
         }
-    }
 
-    if (mxBitmap.is() && mxCanvas.is())
-    {
-        const rendering::ViewState aViewState (
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL);
-        rendering::RenderState aRenderState(
-            geometry::AffineMatrix2D(1,0,0, 0,1,0),
-            NULL,
-            Sequence<double>(3),
-            rendering::CompositeOperation::SOURCE);
-        mxCanvas->drawBitmap(
-            mxBitmap,
-            aViewState,
-            aRenderState);
+        aRenderState.AffineTransform.m02 = maTextBoundingBox.X1;
+        aRenderState.AffineTransform.m12 = maTextBoundingBox.Y1;
 
-        Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
-        if (xSpriteCanvas.is())
-            xSpriteCanvas->updateScreen(sal_False);
+        // Paint the text bitmap.
+        if (mxBitmap.is())
+        {
+            mxCanvas->drawBitmap(
+                mxBitmap,
+                aViewState,
+                aRenderState);
+
+            Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
+            if (xSpriteCanvas.is())
+                xSpriteCanvas->updateScreen(sal_False);
+        }
     }
 }
 
@@ -469,9 +665,7 @@ void PresenterNotesView::Paint (void)
 void PresenterNotesView::Invalidate (void)
 {
     mxBitmap = NULL;
-    Reference<awt::XWindowPeer> xPeer (mxParentWindow, UNO_QUERY);
-    if (xPeer.is())
-        xPeer->invalidate(awt::InvalidateStyle::NOERASE);
+    mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
 
 
@@ -481,9 +675,7 @@ void PresenterNotesView::Scroll (const OUString& rsDistance)
 {
     try
     {
-        mxTextView->setPropertyValue(
-            OUString::createFromAscii("RelativeTop"),
-            Any(rsDistance));
+        mxTextView->setPropertyValue(A2S("RelativeTop"), Any(rsDistance));
 
         UpdateScrollBar();
         Invalidate();
@@ -499,15 +691,55 @@ void PresenterNotesView::SetTop (const double nTop)
 {
     try
     {
-        mxTextView->setPropertyValue(
-            OUString::createFromAscii("Top"),
-            Any(sal_Int32(nTop)));
+        mxTextView->setPropertyValue(A2S("Top"), Any(sal_Int32(nTop)));
 
         UpdateScrollBar();
         Invalidate();
     }
     catch (beans::UnknownPropertyException&)
     {}
+}
+
+
+
+
+void PresenterNotesView::ChangeFontSize (const double nSizeChange)
+{
+    const double nNewSize (maFontDescriptor.Height + nSizeChange);
+    if (nNewSize > 5)
+    {
+        maFontDescriptor.Height = sal::static_int_cast<sal_Int16>(0.5 + nNewSize);
+        mxTextView->setPropertyValue(A2S("FontDescriptor"), Any(maFontDescriptor));
+
+        Layout();
+        UpdateScrollBar();
+        Invalidate();
+
+        // Make the new font height persistent.
+        if (mpFont.get() != NULL)
+            mpFont->mnSize = maFontDescriptor.Height;
+
+        // Write the new font size to the configuration to make it persistent.
+        try
+        {
+            const OUString sStyleName (mpPresenterController->GetTheme()->GetStyleName(
+                mxViewId->getResourceURL()));
+            ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
+                mpPresenterController->GetTheme()->GetNodeForViewStyle(
+                    sStyleName,
+                    PresenterConfigurationAccess::READ_WRITE));
+            if (pConfiguration.get()==NULL || ! pConfiguration->IsValid())
+                return;
+
+            pConfiguration->GoToChild(A2S("Font"));
+            pConfiguration->SetProperty(A2S("Size"), Any((sal_Int32)(nNewSize+0.5)));
+            pConfiguration->CommitChanges();
+        }
+        catch (Exception&)
+        {
+            OSL_ASSERT(false);
+        }
+    }
 }
 
 
@@ -520,7 +752,7 @@ void PresenterNotesView::UpdateScrollBar (void)
         try
         {
             double nHeight = 0;
-            if (mxTextView->getPropertyValue(OUString::createFromAscii("TotalHeight")) >>= nHeight)
+            if (mxTextView->getPropertyValue(A2S("TotalHeight")) >>= nHeight)
                 mpScrollBar->SetTotalSize(nHeight);
         }
         catch(beans::UnknownPropertyException&)
@@ -530,18 +762,17 @@ void PresenterNotesView::UpdateScrollBar (void)
 
         try
         {
-
             double nTop = 0;
-            if (mxTextView->getPropertyValue(OUString::createFromAscii("Top")) >>= nTop)
-                mpScrollBar->SetThumbPosition(nTop);
+            if (mxTextView->getPropertyValue(A2S("Top")) >>= nTop)
+                mpScrollBar->SetThumbPosition(nTop, false);
         }
         catch(beans::UnknownPropertyException&)
         {
             OSL_ASSERT(false);
         }
 
-        if (mxParentWindow.is())
-            mpScrollBar->SetThumbSize(mxParentWindow->getPosSize().Height);
+        mpScrollBar->SetThumbSize(maTextBoundingBox.Y2 - maTextBoundingBox.Y1);
+        mpScrollBar->CheckValues();
     }
 }
 
@@ -554,8 +785,7 @@ void PresenterNotesView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterNotesView object has already been disposed")),
+            A2S("PresenterNotesView object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }
