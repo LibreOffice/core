@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBorderPainter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,26 +123,26 @@ public:
         css::drawing::framework::BorderType eBorderType)
         throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL paintBorder(
-        const ::rtl::OUString& sPaneBorderStyleName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& xCanvas,
-        const ::com::sun::star::awt::Rectangle& aOuterBorderRectangle,
-        const ::com::sun::star::awt::Rectangle& aRepaintArea,
-        const ::rtl::OUString& sTitle )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL paintBorder (
+        const rtl::OUString& rsPaneBorderStyleName,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rOuterBorderRectangle,
+        const css::awt::Rectangle& rRepaintArea,
+        const rtl::OUString& rsTitle)
+        throw(css::uno::RuntimeException);
 
-    virtual void SAL_CALL paintBorderWithCallout(
-        const ::rtl::OUString& sPaneBorderStyleName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& xCanvas,
-        const ::com::sun::star::awt::Rectangle& aOuterBorderRectangle,
-        const ::com::sun::star::awt::Rectangle& aRepaintArea,
-        const ::rtl::OUString& sTitle,
-        const ::com::sun::star::awt::Point& aCalloutAnchor )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL paintBorderWithCallout (
+        const rtl::OUString& rsPaneBorderStyleName,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rOuterBorderRectangle,
+        const css::awt::Rectangle& rRepaintArea,
+        const rtl::OUString& rsTitle,
+        const css::awt::Point& rCalloutAnchor)
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::awt::Point SAL_CALL getCalloutOffset(
-        const ::rtl::OUString& sPaneBorderStyleName )
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual css::awt::Point SAL_CALL getCalloutOffset (
+        const rtl::OUString& rsPaneBorderStyleName)
+        throw(css::uno::RuntimeException);
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
