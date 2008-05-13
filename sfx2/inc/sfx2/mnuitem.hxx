@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnuitem.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,6 +158,7 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 class SfxAppMenuControl_Impl : public SfxMenuControl
 {
     PopupMenu*  pMenu;
+    ULONG       m_nSymbolsStyle;
     BOOL        m_bWasHiContrastMode;
     BOOL        m_bShowMenuImages;
 
