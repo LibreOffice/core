@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPane.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,9 @@ namespace sdext { namespace presenter {
 class PresenterPane : public PresenterPaneBase
 {
 public:
-    PresenterPane (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterPane (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPane (void);
 
     static ::rtl::OUString getImplementationName_static (void);
@@ -101,9 +103,18 @@ public:
 
 
 private:
+    /** Store the bounding box so that when the window is resized or moved
+        we still know the old position and size.
+    */
+    css::awt::Rectangle maBoundingBox;
+
     virtual void CreateCanvases (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas);
+
+    void Invalidate (
+        const css::awt::Rectangle& rRepaintBox);
+    void UpdateBoundingBox (void);
 };
 
 } } // end of namespace ::sd::presenter
