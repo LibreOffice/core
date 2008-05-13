@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideSorter.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,35 +33,41 @@
 #define SDEXT_PRESENTER_PRESENTER_SLIDE_SORTER_HXX
 
 #include "PresenterController.hxx"
+#include "PresenterPaneContainer.hxx"
+#include "PresenterViewFactory.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase8.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 namespace css = ::com::sun::star;
 
 namespace {
-    typedef cppu::WeakComponentImplHelper7<
+    typedef cppu::WeakComponentImplHelper8<
         css::drawing::framework::XView,
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::beans::XPropertyChangeListener,
         css::drawing::XSlidePreviewCacheListener,
         css::awt::XMouseListener,
-        css::awt::XMouseMotionListener
+        css::awt::XMouseMotionListener,
+        css::drawing::XDrawView
         > PresenterSlideSorterInterfaceBase;
 }
 
 namespace sdext { namespace presenter {
 
+class PresenterButton;
 class PresenterScrollBar;
 
 /** A simple slide sorter for the presenter screen.  It uses a preview cache
@@ -69,10 +75,11 @@ class PresenterScrollBar;
 */
 class PresenterSlideSorter
     : private ::cppu::BaseMutex,
-      public PresenterSlideSorterInterfaceBase
+      public PresenterSlideSorterInterfaceBase,
+      public CachablePresenterView
 {
 public:
-    explicit PresenterSlideSorter (
+    PresenterSlideSorter (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::frame::XController>& rxController,
@@ -158,6 +165,16 @@ public:
         sal_Int32 nSlideIndex)
         throw(css::uno::RuntimeException);
 
+
+    // XDrawView
+
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+        throw (css::uno::RuntimeException);
+
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
@@ -168,29 +185,46 @@ private:
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     css::uno::Reference<css::drawing::XSlidePreviewCache> mxPreviewCache;
     bool mbIsPaintPending;
+    bool mbIsLayoutPending;
     class Layout;
     ::boost::shared_ptr<Layout> mpLayout;
     ::rtl::Reference<PresenterScrollBar> mpHorizontalScrollBar;
+    ::rtl::Reference<PresenterScrollBar> mpVerticalScrollBar;
+    ::rtl::Reference<PresenterButton> mpCloseButton;
     class MouseOverManager;
-    ::rtl::Reference<MouseOverManager> mpMouseOverManager;
+    ::boost::scoped_ptr<MouseOverManager> mpMouseOverManager;
     sal_Int32 mnSlideIndexMousePressed;
     sal_Int32 mnCurrentSlideIndex;
+    sal_Int32 mnSeparatorY;
+    css::util::Color maSeparatorColor;
+    css::awt::Point maCloseButtonCenter;
+    css::awt::Rectangle maCurrentSlideFrameBoundingBox;
+    class CurrentSlideFrameRenderer;
+    ::boost::shared_ptr<CurrentSlideFrameRenderer> mpCurrentSlideFrameRenderer;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxPreviewFrame;
 
     void UpdateLayout (void);
+    css::geometry::RealRectangle2D PlaceScrollBars (
+        const css::geometry::RealRectangle2D& rUpperBox);
+    void PlaceCloseButton (
+        const PresenterPaneContainer::SharedPaneDescriptor& rpPane,
+        const css::awt::Rectangle& rCenterBox,
+    const sal_Int32 nLeftFrameWidth);
     void ClearBackground (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRedrawArea);
     double GetSlideAspectRatio (void) const;
     css::uno::Reference<css::rendering::XBitmap> GetPreview (const sal_Int32 nSlideIndex);
-    void PaintPreview (const sal_Int32 nSlideIndex);
     void PaintPreview (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::awt::Rectangle& rUpdateBox,
         const sal_Int32 nSlideIndex);
-    void Paint (void);
-    void Invalidate (const css::awt::Rectangle& rBBox);
+    void Paint (const css::awt::Rectangle& rUpdateBox);
     void SetHorizontalOffset (const double nXOffset);
+    void SetVerticalOffset (const double nYOffset);
     void GotoSlide (const sal_Int32 nSlideIndex);
     bool ProvideCanvas (void);
+    void Close (void);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
