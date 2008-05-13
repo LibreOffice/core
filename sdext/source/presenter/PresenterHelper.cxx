@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterHelper.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
-#include <comphelper/processfactory.hxx>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
