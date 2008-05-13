@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_xml.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,18 +155,6 @@ XmlElement::~XmlElement()
 }
 
 //______________________________________________________________________________
-Reference<xml::input::XNamespaceMapping> const &
-XmlElement::getNamespaceMapping() const
-{
-    if (! m_xNamespaceMapping.is()) {
-        throw RuntimeException(
-            OUSTR("document has not been parsed yet!"),
-            static_cast<OWeakObject *>( const_cast<XmlElement *>(this) ) );
-    }
-    return m_xNamespaceMapping;
-}
-
-//______________________________________________________________________________
 void XmlElement::check_xmlns( sal_Int32 uid ) const
     throw (xml::sax::SAXException)
 {
@@ -183,23 +171,6 @@ void XmlElement::check_xmlns( sal_Int32 uid ) const
                 exc.Message, static_cast<OWeakObject *>(
                     const_cast<XmlElement *>(this) ), Any(exc) );
         }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-        throw xml::sax::SAXException(
-            buf.makeStringAndClear(),
-            static_cast<OWeakObject *>( const_cast<XmlElement *>(this) ),
-            Any() );
-    }
-}
-
-//______________________________________________________________________________
-void XmlElement::check_parsed() const
-    throw (xml::sax::SAXException)
-{
-    if (! isParsed()) {
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("missing closing element "
-                                                    "event for \"") );
-        buf.append( m_localname );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
         throw xml::sax::SAXException(
             buf.makeStringAndClear(),
