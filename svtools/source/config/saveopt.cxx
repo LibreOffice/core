@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saveopt.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -457,6 +457,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                 sal_Int32 nTemp = 0;
                 switch ( nProp )
                 {
+                    case FORMAT:
+                        // not supported anymore
+                        break;
+
                     case TIMEINTERVALL :
                         if ( pValues[nProp] >>= nTemp )
                             nAutoSaveTime = nTemp;
@@ -475,10 +479,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         bROAutoSaveTime = pROStates[nProp];
                         break;
                     }
-
-                    case FORMAT:
-                        // not supported anymore
-                        break;
 
                     default:
                     {
@@ -601,6 +601,9 @@ void SvtSaveOptions_Impl::Commit()
     {
         switch (i)
         {
+            case FORMAT:
+                // not supported anymore
+                break;
             case TIMEINTERVALL :
                 if (!bROAutoSaveTime)
                 {
@@ -705,7 +708,6 @@ void SvtSaveOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
-
             case WARNALIENFORMAT:
                 if (!bROWarnAlienFormat)
                 {
@@ -714,7 +716,6 @@ void SvtSaveOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
-
             case LOADDOCPRINTER:
                 if (!bROLoadDocPrinter)
                 {
@@ -723,7 +724,6 @@ void SvtSaveOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
-
             case ODFDEFAULTVERSION:
                 if (!bROODFDefaultVersion)
                 {
@@ -732,7 +732,6 @@ void SvtSaveOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
-
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
