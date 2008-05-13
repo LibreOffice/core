@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: odbcconfig.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,6 +348,7 @@ protected:
     virtual void SAL_CALL run()
     {
         osl_joinProcess( m_hProcessHandle );
+        osl_freeProcessHandle( m_hProcessHandle );
         Application::PostUserEvent( m_aFinishHdl );
     }
 };
