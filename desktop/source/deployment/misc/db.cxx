@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: db.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,57 +53,11 @@ namespace berkeleydbproxy {
 
 //----------------------------------------------------------------------------
 
-DbEnv::DbEnv(u_int32_t flags)
-: m_pDBENV(0)
-{
-    db_internal::check_error( db_env_create(&m_pDBENV,flags), "DbEnv::DbEnv" );
-}
-
-DbEnv::~DbEnv()
-{
-    if (m_pDBENV)
-    {
-        // should not happen
-        // TODO: add assert
-        m_pDBENV->close(m_pDBENV,0);
-    }
-}
-
-int DbEnv::open(const char *db_home, u_int32_t flags, int mode)
-{
-  return db_internal::check_error( m_pDBENV->open(m_pDBENV,db_home,flags,mode), "DbEnv::open" );
-}
-
-void DbEnv::close(u_int32_t flags)
-{
-    int error = m_pDBENV->close(m_pDBENV,flags);
-    m_pDBENV = 0;
-
-    db_internal::check_error(error, "DbEnv::close");
-}
-
-int DbEnv::set_alloc(db_malloc_fcn_type app_malloc,
-                     db_realloc_fcn_type app_realloc,
-                     db_free_fcn_type app_free)
-{
-    int err = m_pDBENV->set_alloc(m_pDBENV,app_malloc,app_realloc,app_free);
-    return db_internal::check_error(err,"Db::set_alloc");
-}
-
-
 char *DbEnv::strerror(int error) {
     return (db_strerror(error));
 }
 
 //----------------------------------------------------------------------------
-
-int Db::set_alloc(   db_malloc_fcn_type app_malloc,
-                     db_realloc_fcn_type app_realloc,
-                     db_free_fcn_type app_free)
-{
-    int err = m_pDBP->set_alloc(m_pDBP,app_malloc,app_realloc,app_free);
-    return db_internal::check_error(err,"Db::set_alloc");
-}
 
 Db::Db(DbEnv* pDbenv,u_int32_t flags)
 : m_pDBP(0)
@@ -238,26 +192,7 @@ int Dbc::get(Dbt *key, Dbt *data, u_int32_t flags)
     return err;
 }
 
-int Dbc::del(u_int32_t flags_arg)
-{
-    DBC *cursor = m_pDBC;
-    int err;
-
-    if ((err = cursor->c_del(cursor, flags_arg)) != 0) {
-
-        // DB_KEYEMPTY is a "normal" return, so should not be
-        // thrown as an error
-        //
-        if (err != DB_KEYEMPTY) {
-            db_internal::check_error( err, "Db::del");
-            return (err);
-        }
-    }
-    return (err);
-}
-
 //----------------------------------------------------------------------------
-
 
 Dbt::Dbt()
 {
@@ -318,11 +253,6 @@ u_int32_t Dbt::get_size() const
 void Dbt::set_size(u_int32_t value)
 {
     this->size = value;
-}
-
-void Dbt::set_flags(u_int32_t value)
-{
-    this->flags = value;
 }
 
 //----------------------------------------------------------------------------
