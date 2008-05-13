@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -569,6 +569,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         switch ( rc )
         {
             case osl_Process_E_None:
+                osl_freeProcessHandle( hProcess );
                 break;
             case osl_Process_E_NotFound:
                 throw BootstrapException( OUSTR( "image not found!" ) );
