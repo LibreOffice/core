@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newhelp.cxx,v $
- * $Revision: 1.129 $
+ * $Revision: 1.130 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3178,12 +3178,15 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
             {
                 Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
                 Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
+                Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
                 Any aBoolAny = makeAny( sal_Bool( sal_True ) );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("IsExecuteHyperlinks"), aBoolAny );
+                ::rtl::OUString sProperty( DEFINE_CONST_OUSTRING("IsExecuteHyperlinks") );
+                if ( xInfo->hasPropertyByName( sProperty ) )
+                    xViewProps->setPropertyValue( sProperty, aBoolAny );
                 xController->restoreViewData(pHelpInterceptor->GetViewData());
             }
         }
