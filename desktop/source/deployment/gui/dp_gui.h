@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui.h,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,7 +179,6 @@ struct DialogImpl :
 
         SvLBoxEntry * getCurrentSingleSelectedEntry() const;
         bool isFirstLevelChild( SvLBoxEntry * entry ) const;
-        ::rtl::OUString getContext( SvLBoxEntry * entry ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage(
             SvLBoxEntry * entry ) const;
         void select(::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const &   xPackage);
