@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_xml.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,13 +81,7 @@ protected:
         {}
     virtual ~XmlElement();
 public:
-    css::uno::Reference<css::xml::input::XNamespaceMapping> const &
-    getNamespaceMapping() const;
-
     inline bool isParsed() const { return m_got_endElement; }
-    void check_parsed() const throw (css::xml::sax::SAXException);
-
-    inline ::rtl::OUString getCharacters() const;
 
     inline XmlElement(
         css::uno::Reference<css::xml::input::XNamespaceMapping>
@@ -129,14 +123,6 @@ public:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 };
-
-//______________________________________________________________________________
-inline ::rtl::OUString XmlElement::getCharacters() const
-{
-    check_parsed();
-    return m_characters;
-}
-
 
 //==============================================================================
 class XmlRootElement : public ::cppu::ImplInheritanceHelper1<
