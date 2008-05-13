@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,6 @@ class OfficeIPCThread : public vos::OThread
     virtual ~OfficeIPCThread();
 
     // controlling pipe communication during shutdown
-    static OfficeIPCThread*     GetOfficeIPCThread();
     static void                 BlockAllRequests();
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
