@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagemgr.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -572,6 +572,17 @@ static Image GetOfficeImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHigh
     static ImageList* _pBigOfficeImgList = NULL;
     static ImageList* _pSmallHCOfficeImgList = NULL;
     static ImageList* _pBigHCOfficeImgList = NULL;
+    static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+
+    // If the style has been changed, throw away our cache of the older images
+    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
+    {
+        delete _pSmallOfficeImgList, _pSmallOfficeImgList = NULL;
+        delete _pBigOfficeImgList, _pBigOfficeImgList = NULL;
+        delete _pSmallHCOfficeImgList, _pSmallHCOfficeImgList = NULL;
+        delete _pBigHCOfficeImgList, _pBigHCOfficeImgList = NULL;
+        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    }
 
     // #i21242# MT: For B&W we need the HC Image and must transform.
     // bHiContrast is TRUE for all dark backgrounds, but we need HC Images for HC White also,
@@ -640,6 +651,17 @@ static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContra
     static ImageList* _pBigImageList = NULL;
     static ImageList* _pSmallHCImageList = NULL;
     static ImageList* _pBigHCImageList = NULL;
+    static ULONG nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+
+    // If the style has been changed, throw away our cache of the older images
+    if ( nStyle != Application::GetSettings().GetStyleSettings().GetSymbolsStyle() )
+    {
+        delete _pSmallImageList, _pSmallImageList = NULL;
+        delete _pBigImageList, _pBigImageList = NULL;
+        delete _pSmallHCImageList, _pSmallHCImageList = NULL;
+        delete _pBigHCImageList, _pBigHCImageList = NULL;
+        nStyle = Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
+    }
 
     if ( bBig )
     {
