@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneContainer.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,9 @@ PresenterPaneContainer::~PresenterPaneContainer (void)
 
 void PresenterPaneContainer::PreparePane (
     const Reference<XResourceId>& rxPaneId,
+    const OUString& rsViewURL,
     const OUString& rsTitle,
+    const bool bIsOpaque,
     const ViewInitializationFunction& rViewInitialization,
     const double nLeft,
     const double nTop,
@@ -91,16 +93,30 @@ void PresenterPaneContainer::PreparePane (
         // No entry found for the given pane id.  Create a new one.
         SharedPaneDescriptor pDescriptor (new PaneDescriptor());
         pDescriptor->mxPaneId = rxPaneId;
+        pDescriptor->msViewURL = rsViewURL;
         pDescriptor->mxPane = NULL;
-        pDescriptor->msTitle = rsTitle;
+        if (rsTitle.indexOf('%') < 0)
+        {
+            pDescriptor->msTitle = rsTitle;
+            pDescriptor->msTitleTemplate = OUString();
+        }
+        else
+        {
+            pDescriptor->msTitleTemplate = rsTitle;
+            pDescriptor->msTitle = OUString();
+        }
         pDescriptor->maViewInitialization = rViewInitialization;
         pDescriptor->mnLeft = nLeft;
         pDescriptor->mnTop = nTop;
         pDescriptor->mnRight = nRight;
         pDescriptor->mnBottom = nBottom;
         pDescriptor->mbIsActive = true;
+        pDescriptor->mbIsOpaque = bIsOpaque;
         pDescriptor->maSpriteProvider = PaneDescriptor::SpriteProvider();
         pDescriptor->mbIsSprite = false;
+        pDescriptor->maCalloutAnchorLocation = awt::Point(-1,-1);
+        pDescriptor->mbHasCalloutAnchor = false;
+
         maPanes.push_back(pDescriptor);
     }
 }
@@ -110,8 +126,11 @@ void PresenterPaneContainer::PreparePane (
 
 void SAL_CALL PresenterPaneContainer::disposing (void)
 {
-    while ( ! maPanes.empty())
-        RemovePane(maPanes.back()->mxPaneId);
+    PaneList::iterator iPane (maPanes.begin());
+    PaneList::const_iterator iEnd (maPanes.end());
+    for ( ; iPane!=iEnd; ++iPane)
+        if ((*iPane)->mxPaneId.is())
+            RemovePane((*iPane)->mxPaneId);
 }
 
 
@@ -131,7 +150,8 @@ PresenterPaneContainer::SharedPaneDescriptor
 
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() == NULL)
-            PreparePane(xPaneId, OUString(), ViewInitializationFunction(), 0,0,0,0);
+            PreparePane(xPaneId, OUString(), OUString(),
+                false, ViewInitializationFunction(), 0,0,0,0);
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() != NULL)
         {
@@ -140,6 +160,11 @@ PresenterPaneContainer::SharedPaneDescriptor
             pDescriptor->mxPaneId = xPaneId;
             pDescriptor->mxPane = rxPane;
             pDescriptor->mxPane->SetTitle(pDescriptor->msTitle);
+
+            // When there is a call out anchor location set then tell the
+            // window about it.
+            if (pDescriptor->mbHasCalloutAnchor)
+                pDescriptor->mxPane->SetCalloutAnchor(pDescriptor->maCalloutAnchorLocation);
 
             if (xWindow.is())
                 xWindow->addEventListener(this);
@@ -179,8 +204,7 @@ PresenterPaneContainer::SharedPaneDescriptor
 PresenterPaneContainer::SharedPaneDescriptor
     PresenterPaneContainer::StoreView (
         const Reference<XView>& rxView,
-        const util::Color aViewBackgroundColor,
-        const Reference<rendering::XBitmap>& rxViewBackgroundBitmap)
+        const SharedBitmapDescriptor& rpViewBackground)
 {
     SharedPaneDescriptor pDescriptor;
 
@@ -199,9 +223,8 @@ PresenterPaneContainer::SharedPaneDescriptor
         if (pDescriptor.get() != NULL)
         {
             pDescriptor->mxView = rxView;
-            pDescriptor->maViewBackgroundColor = aViewBackgroundColor;
-            pDescriptor->mxViewBackgroundBitmap = rxViewBackgroundBitmap;
-            pDescriptor->mxPane->SetBackground(aViewBackgroundColor, rxViewBackgroundBitmap);
+            pDescriptor->mpViewBackground = rpViewBackground;
+            pDescriptor->mxPane->SetBackground(rpViewBackground);
             try
             {
                 if ( ! pDescriptor->maViewInitialization.empty())
@@ -224,8 +247,8 @@ PresenterPaneContainer::SharedPaneDescriptor
 
 
 
-void PresenterPaneContainer::RemovePane (
-    const Reference<drawing::framework::XResourceId>& rxPaneId)
+PresenterPaneContainer::SharedPaneDescriptor
+    PresenterPaneContainer::RemovePane (const Reference<XResourceId>& rxPaneId)
 {
     SharedPaneDescriptor pDescriptor (FindPaneId(rxPaneId));
     if (pDescriptor.get() != NULL)
@@ -238,8 +261,39 @@ void PresenterPaneContainer::RemovePane (
         pDescriptor->mxView = NULL;
         pDescriptor->mbIsActive = false;
     }
+    return pDescriptor;
 }
 
+
+
+
+
+PresenterPaneContainer::SharedPaneDescriptor
+    PresenterPaneContainer::RemoveView (const Reference<XView>& rxView)
+{
+    SharedPaneDescriptor pDescriptor;
+
+    if (rxView.is())
+    {
+        OUString sPaneURL;
+        Reference<XResourceId> xViewId (rxView->getResourceId());
+        if (xViewId.is())
+        {
+            Reference<XResourceId> xPaneId (xViewId->getAnchor());
+            if (xPaneId.is())
+                sPaneURL = xPaneId->getResourceURL();
+        }
+
+        pDescriptor = FindPaneURL(sPaneURL);
+        if (pDescriptor.get() != NULL)
+        {
+            pDescriptor->mxView = NULL;
+            pDescriptor->mpViewBackground = SharedBitmapDescriptor();
+        }
+    }
+
+    return pDescriptor;
+}
 
 
 
@@ -307,6 +361,34 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindPaneId 
             return *iPane;
     }
     return SharedPaneDescriptor();
+}
+
+
+
+
+PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL (
+    const OUString& rsViewURL)
+{
+    PaneList::iterator iEnd (maPanes.end());
+    PaneList::iterator iPane;
+    for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
+    {
+        if (rsViewURL == (*iPane)->msViewURL)
+            return *iPane;
+    }
+    return SharedPaneDescriptor();
+}
+
+
+
+
+::rtl::OUString PresenterPaneContainer::GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL)
+{
+    SharedPaneDescriptor pDescriptor (FindViewURL(rsViewURL));
+    if (pDescriptor.get() != NULL)
+        if (pDescriptor->mxPaneId.is())
+            return pDescriptor->mxPaneId->getResourceURL();
+    return OUString();
 }
 
 
