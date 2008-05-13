@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterCurrentSlideObserver.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,6 +109,13 @@ void SAL_CALL PresenterCurrentSlideObserver::resumed (void)
 void SAL_CALL PresenterCurrentSlideObserver::slideEnded (void)
     throw (css::uno::RuntimeException)
 {
+    // Determine whether the new current slide (the one after the one that
+    // just ended) is the slide past the last slide in the presentation,
+    // i.e. the one that says something like "click to end presentation...".
+    if (mxSlideShowController.is())
+        if (mxSlideShowController->getNextSlideIndex() < 0)
+            if( mpPresenterController.is() )
+                mpPresenterController->UpdateCurrentSlide(+1);
 }
 
 void SAL_CALL PresenterCurrentSlideObserver::hyperLinkClicked (const rtl::OUString &)
