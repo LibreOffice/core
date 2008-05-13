@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneAnimator.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,13 @@
 #include "PresenterAnimator.hxx"
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include "PresenterPaintManager.hxx"
 #include "PresenterPaneContainer.hxx"
 #include "PresenterPaneFactory.hxx"
 #include "PresenterSprite.hxx"
 #include "PresenterSpritePane.hxx"
 #include "PresenterWindowManager.hxx"
 
-#include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -247,6 +247,7 @@ namespace {
         const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
         const Reference<XResourceId>& rxPaneId,
         const Reference<awt::XWindow>& rxSpriteOwnerWindow,
+        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const bool bAppear,
         const double nX,
         const double nInitialTop,
@@ -402,7 +403,7 @@ void PresenterPaneAnimatorBase::ResizePane (
     if (pDescriptor.get() != NULL)
     {
         mpWindowManager->SetPanePosSizeAbsolute (
-            rxPaneId,
+            rxPaneId->getResourceURL(),
             rBox.X1,
             rBox.Y1,
             rBox.X2-rBox.X1,
@@ -535,6 +536,7 @@ void UnfoldInCenterAnimator::ShowPane (void)
         mpPaneContainer,
         mxCenterPaneId,
         xParentWindow,
+        mpPresenterController->GetPaintManager(),
         true,
         maCenterPaneBox.X1,
         nY0,
@@ -544,9 +546,9 @@ void UnfoldInCenterAnimator::ShowPane (void)
         mpPaneContainer->FindPaneId(mxCenterPaneId));
     if (pDescriptor.get() != NULL)
     {
-        Reference<awt::XWindowPeer> xPeer (pDescriptor->mxBorderWindow, UNO_QUERY);
-        if (xPeer.is())
-            xPeer->invalidate(awt::InvalidateStyle::UPDATE | awt::InvalidateStyle::CHILDREN);
+        mpPresenterController->GetPaintManager()->Invalidate(
+            pDescriptor->mxBorderWindow,
+            true);
     }
 
     // Animate the upper and lower window bitmaps.
@@ -574,6 +576,7 @@ void UnfoldInCenterAnimator::ShowPane (void)
             mpPaneContainer,
             mxCenterPaneId,
             xParentWindow,
+            mpPresenterController->GetPaintManager(),
             true,
             maCenterPaneBox.X1,
             nY0,
@@ -651,6 +654,7 @@ void UnfoldInCenterAnimator::HidePane (void)
             mpPaneContainer,
             mxCenterPaneId,
             xParentWindow,
+            mpPresenterController->GetPaintManager(),
             false,
             maCenterPaneBox.X1,
             nY0,
@@ -687,7 +691,7 @@ void UnfoldInCenterAnimator::SetupPaneGroups (void)
     pUpperPanes->AddPane(mpPaneContainer->FindPaneURL(
         PresenterPaneFactory::msToolBarPaneURL));
     pUpperPanes->AddPane(mpPaneContainer->FindPaneURL(
-        PresenterPaneFactory::msClockPaneURL));
+        PresenterPaneFactory::msHelpPaneURL));
     maPaneGroups.push_back(pUpperPanes);
 
     // Setup the lower pane group.
@@ -967,7 +971,7 @@ void TransparentOverlayAnimator::ShowPane (void)
         pAllPanes->AddPane(mpPaneContainer->FindPaneURL(
             PresenterPaneFactory::msToolBarPaneURL));
         pAllPanes->AddPane(mpPaneContainer->FindPaneURL(
-            PresenterPaneFactory::msClockPaneURL));
+            PresenterPaneFactory::msHelpPaneURL));
         pAllPanes->AddPane(mpPaneContainer->FindPaneURL(
             PresenterPaneFactory::msNotesPaneURL));
         maPaneGroups.push_back(pAllPanes);
@@ -1175,7 +1179,7 @@ void PaneGroup::MovePanes (
         aBox.X += sal_Int32(nXOffset);
         aBox.Y += sal_Int32(nYOffset);
         rpWindowManager->SetPanePosSizeAbsolute(
-            iPane->mpPaneDescriptor->mxPaneId,
+            iPane->mpPaneDescriptor->mxPaneId->getResourceURL(),
             aBox.X,
             aBox.Y,
             aBox.Width,
@@ -1334,12 +1338,15 @@ void SpriteTransform(
     const rtl::Reference<PresenterPaneContainer>& rpPaneContainer,
     const Reference<XResourceId>& rxPaneId,
     const Reference<awt::XWindow>& rxSpriteOwnerWindow,
+    const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
     const bool bAppear,
     const double nX,
     const double nInitialTop,
     const double nFinalTop,
     const double nP)
 {
+    OSL_ASSERT(rpPaintManager.get()!=NULL);
+
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         rpPaneContainer->FindPaneId(rxPaneId));
     if (pDescriptor.get() != NULL
@@ -1353,15 +1360,13 @@ void SpriteTransform(
             // invalidating the background when being transformed.  As a
             // workaround invalidate the background in the bounding box of
             // the sprite before the transformation.
-            Reference<awt::XWindowPeer> xPeer (rxSpriteOwnerWindow, UNO_QUERY);
-            if (xPeer.is())
-                xPeer->invalidateRect(
-                    awt::Rectangle(
-                        sal::static_int_cast<sal_Int32>(pSprite->GetLocation().X),
-                        sal::static_int_cast<sal_Int32>(pSprite->GetLocation().Y),
-                        sal::static_int_cast<sal_Int32>(pSprite->GetSize().Width),
-                        sal::static_int_cast<sal_Int32>(pSprite->GetSize().Height)),
-                    awt::InvalidateStyle::CHILDREN);
+            rpPaintManager->Invalidate(
+                rxSpriteOwnerWindow,
+                awt::Rectangle(
+                    sal::static_int_cast<sal_Int32>(pSprite->GetLocation().X),
+                    sal::static_int_cast<sal_Int32>(pSprite->GetLocation().Y),
+                    sal::static_int_cast<sal_Int32>(pSprite->GetSize().Width),
+                    sal::static_int_cast<sal_Int32>(pSprite->GetSize().Height)));
 
             const double nYScale (bAppear ? nP : 1-nP);
             pSprite->Transform(geometry::AffineMatrix2D(
