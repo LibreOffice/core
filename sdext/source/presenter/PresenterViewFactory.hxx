@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterViewFactory.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,14 +56,34 @@ namespace {
     > PresenterViewFactoryInterfaceBase;
 }
 
+/** Base class for presenter views that allows the view factory to store
+    them in a cache and reuse deactivated views.
+*/
+class CachablePresenterView
+{
+public:
+    virtual void ActivatePresenterView (void);
+
+    /** Called when the view is put into a cache.  The view must not paint
+        itself while being deactive.
+    */
+    virtual void DeactivatePresenterView (void);
+
+protected:
+    bool mbIsPresenterViewActive;
+
+    CachablePresenterView (void);
+};
+
+
+
 
 /** Factory of the presenter screen specific views.  The supported set of
     views includes:
         a life view of the current slide,
         a static preview of the next slide,
         the notes of the current slide,
-        a tool bar,
-        a clock.
+        a tool bar
 */
 class PresenterViewFactory
     : public ::cppu::BaseMutex,
@@ -75,7 +95,6 @@ public:
     static const ::rtl::OUString msNotesViewURL;
     static const ::rtl::OUString msToolBarViewURL;
     static const ::rtl::OUString msSlideSorterURL;
-    static const ::rtl::OUString msClockViewURL;
     static const ::rtl::OUString msHelpViewURL;
 
     /** Create a new instance of this class and register it as resource
@@ -118,6 +137,10 @@ private:
         mxConfigurationController;
     css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
+    typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
+        css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
+    typedef ::std::map<rtl::OUString, ViewResourceDescriptor> ResourceContainer;
+    ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
 
     PresenterViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -130,10 +153,15 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateSlidePreviewView(
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
+
+    css::uno::Reference<css::drawing::framework::XView> CreateToolBarView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateNotesView(
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 
     css::uno::Reference<css::drawing::framework::XView> CreateSlideSorterView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
@@ -141,7 +169,12 @@ private:
     css::uno::Reference<css::drawing::framework::XView> CreateHelpView(
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) const;
 
-    double GetSlideAspectRatio (void) const;
+    css::uno::Reference<css::drawing::framework::XResource> GetViewFromCache (
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane) const;
+    css::uno::Reference<css::drawing::framework::XResource> CreateView(
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane);
 
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
