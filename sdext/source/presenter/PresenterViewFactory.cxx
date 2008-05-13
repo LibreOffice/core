@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterViewFactory.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,10 @@
 #include "PresenterHelper.hxx"
 #include "PresenterHelpView.hxx"
 #include "PresenterNotesView.hxx"
+#include "PresenterSlideShowView.hxx"
 #include "PresenterSlidePreview.hxx"
 #include "PresenterSlideSorter.hxx"
 #include "PresenterToolBar.hxx"
-#include "PresenterClock.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
@@ -55,22 +55,22 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/CurrentSlidePreview"));
+    A2S("private:resource/view/Presenter/CurrentSlidePreview"));
 const ::rtl::OUString PresenterViewFactory::msNextSlidePreviewViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/NextSlidePreview"));
+    A2S("private:resource/view/Presenter/NextSlidePreview"));
 const ::rtl::OUString PresenterViewFactory::msNotesViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/Notes"));
+    A2S("private:resource/view/Presenter/Notes"));
 const ::rtl::OUString PresenterViewFactory::msToolBarViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/ToolBar"));
+    A2S("private:resource/view/Presenter/ToolBar"));
 const ::rtl::OUString PresenterViewFactory::msSlideSorterURL(
-    OUString::createFromAscii("private:resource/view/Presenter/SlideSorter"));
-const ::rtl::OUString PresenterViewFactory::msClockViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/Clock"));
+    A2S("private:resource/view/Presenter/SlideSorter"));
 const ::rtl::OUString PresenterViewFactory::msHelpViewURL(
-    OUString::createFromAscii("private:resource/view/Presenter/Help"));
+    A2S("private:resource/view/Presenter/Help"));
 
 
 
@@ -171,7 +171,8 @@ PresenterViewFactory::PresenterViewFactory (
       mxComponentContext(rxContext),
       mxConfigurationController(),
       mxControllerWeak(rxController),
-      mpPresenterController(rpPresenterController)
+      mpPresenterController(rpPresenterController),
+      mpResourceCache()
 {
 }
 
@@ -211,7 +212,6 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
             mxConfigurationController->addResourceFactory(msNotesViewURL, this);
             mxConfigurationController->addResourceFactory(msToolBarViewURL, this);
             mxConfigurationController->addResourceFactory(msSlideSorterURL, this);
-            mxConfigurationController->addResourceFactory(msClockViewURL, this);
             mxConfigurationController->addResourceFactory(msHelpViewURL, this);
         }
     }
@@ -242,6 +242,26 @@ void SAL_CALL PresenterViewFactory::disposing (void)
     if (mxConfigurationController.is())
         mxConfigurationController->removeResourceFactoryForReference(this);
     mxConfigurationController = NULL;
+
+    if (mpResourceCache.get() != NULL)
+    {
+        // Dispose all views in the cache.
+        ResourceContainer::const_iterator iView (mpResourceCache->begin());
+        ResourceContainer::const_iterator iEnd (mpResourceCache->end());
+        for ( ; iView!=iEnd; ++iView)
+        {
+            try
+            {
+                Reference<lang::XComponent> xComponent (iView->second.first, UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose();
+            }
+            catch (lang::DisposedException&)
+            {
+            }
+        }
+        mpResourceCache.reset();
+    }
 }
 
 
@@ -259,52 +279,18 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
 
     if (rxViewId.is())
     {
-        try
-        {
-            const OUString sResourceURL (rxViewId->getResourceURL());
-            if (sResourceURL.equals(msCurrentSlidePreviewViewURL))
-            {
-                xView = Reference<XResource>(CreateSlideShowView(rxViewId), UNO_QUERY);
-            }
-            else if (sResourceURL.equals(msNotesViewURL))
-            {
-                xView = Reference<XResource>(CreateNotesView(rxViewId), UNO_QUERY);
-            }
-            else if (sResourceURL.equals(msNextSlidePreviewViewURL))
-            {
-                xView = Reference<XResource>(CreateSlidePreviewView(rxViewId), UNO_QUERY);
-            }
-            else if (sResourceURL.equals(msToolBarViewURL))
-            {
-                xView = new PresenterToolBar(
-                    mxComponentContext,
-                    rxViewId,
-                    Reference<frame::XController>(mxControllerWeak),
-                    mpPresenterController);
-            }
-            else if (sResourceURL.equals(msSlideSorterURL))
-            {
-                xView = Reference<XResource>(CreateSlideSorterView(rxViewId), UNO_QUERY);
-            }
-            else if (sResourceURL.equals(msClockViewURL))
-            {
-                xView = Reference<XResource>(
-                    static_cast<XWeak*>(PresenterClock::Create(
-                        mxComponentContext,
-                        rxViewId,
-                        Reference<frame::XController>(mxControllerWeak),
-                        mpPresenterController).get()),
-                    UNO_QUERY);
-            }
-            else if (sResourceURL.equals(msHelpViewURL))
-            {
-                xView = Reference<XResource>(CreateHelpView(rxViewId), UNO_QUERY);
-            }
-        }
-        catch (RuntimeException&)
-        {
-            xView = NULL;
-        }
+        Reference<XPane> xAnchorPane (
+            mxConfigurationController->getResource(rxViewId->getAnchor()),
+            UNO_QUERY_THROW);
+        xView = GetViewFromCache(rxViewId, xAnchorPane);
+        if (xView == NULL)
+            xView = CreateView(rxViewId, xAnchorPane);
+
+        // Activate the view.
+        PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+            mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
+        if (pDescriptor.get() != NULL)
+            pDescriptor->SetActivationState(true);
     }
 
     return xView;
@@ -316,15 +302,145 @@ Reference<XResource> SAL_CALL PresenterViewFactory::createResource (
 void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>& rxView)
     throw (RuntimeException)
 {
-    Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    ThrowIfDisposed();
+
+    if ( ! rxView.is())
+        return;
+
+    // Deactivate the view.
+    PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+        mpPresenterController->GetPaneContainer()->FindPaneId(
+            rxView->getResourceId()->getAnchor()));
+    if (pDescriptor.get() != NULL)
+        pDescriptor->SetActivationState(false);
+
+    // Dispose only views that we can not put into the cache.
+    CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
+    if (pView == NULL || mpResourceCache.get()==NULL)
+    {
+        try
+        {
+            Reference<lang::XComponent> xComponent (rxView, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
+        }
+        catch (lang::DisposedException&)
+        {
+            // Do not let disposed exceptions get out.  It might be interpreted
+            // as coming from the factory, which would then be removed from the
+            // drawing framework.
+        }
+    }
+    else
+    {
+        // Put cachable views in the cache.
+        Reference<XResourceId> xViewId (rxView->getResourceId());
+        if (xViewId.is())
+        {
+            Reference<XPane> xAnchorPane (
+                mxConfigurationController->getResource(xViewId->getAnchor()),
+                UNO_QUERY_THROW);
+            (*mpResourceCache)[xViewId->getResourceURL()]
+                = ViewResourceDescriptor(Reference<XView>(rxView, UNO_QUERY), xAnchorPane);
+            pView->DeactivatePresenterView();
+        }
+    }
 }
 
 
 
 
 //-----------------------------------------------------------------------------
+
+Reference<XResource> PresenterViewFactory::GetViewFromCache(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
+{
+    if (mpResourceCache.get() == NULL)
+        return NULL;
+
+    try
+    {
+        const OUString sResourceURL (rxViewId->getResourceURL());
+
+        // Can we use a view from the cache?
+        ResourceContainer::const_iterator iView (mpResourceCache->find(sResourceURL));
+        if (iView != mpResourceCache->end())
+        {
+            // The view is in the container but it can only be used if
+            // the anchor pane is the same now as it was at creation of
+            // the view.
+            if (iView->second.second == rxAnchorPane)
+            {
+                CachablePresenterView* pView
+                    = dynamic_cast<CachablePresenterView*>(iView->second.first.get());
+                if (pView != NULL)
+                    pView->ActivatePresenterView();
+                return Reference<XResource>(iView->second.first, UNO_QUERY);
+            }
+
+            // Right view, wrong pane.  Create a new view.
+        }
+    }
+    catch (RuntimeException&)
+    {
+    }
+    return NULL;
+}
+
+
+
+
+Reference<XResource> PresenterViewFactory::CreateView(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane)
+{
+    Reference<XView> xView;
+
+    try
+    {
+        const OUString sResourceURL (rxViewId->getResourceURL());
+
+        if (sResourceURL.equals(msCurrentSlidePreviewViewURL))
+        {
+            xView = CreateSlideShowView(rxViewId);
+        }
+        else if (sResourceURL.equals(msNotesViewURL))
+        {
+            xView = CreateNotesView(rxViewId, rxAnchorPane);
+        }
+        else if (sResourceURL.equals(msNextSlidePreviewViewURL))
+        {
+            xView = CreateSlidePreviewView(rxViewId, rxAnchorPane);
+        }
+        else if (sResourceURL.equals(msToolBarViewURL))
+        {
+            xView = CreateToolBarView(rxViewId);
+        }
+        else if (sResourceURL.equals(msSlideSorterURL))
+        {
+            xView = CreateSlideSorterView(rxViewId);
+        }
+        else if (sResourceURL.equals(msHelpViewURL))
+        {
+            xView = CreateHelpView(rxViewId);
+        }
+
+        // Activate it.
+        CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(xView.get());
+        if (pView != NULL)
+            pView->ActivatePresenterView();
+    }
+    catch (RuntimeException&)
+    {
+        xView = NULL;
+    }
+
+    return Reference<XResource>(xView, UNO_QUERY);
+}
+
+
+
 
 Reference<XView> PresenterViewFactory::CreateSlideShowView(
     const Reference<XResourceId>& rxViewId) const
@@ -338,36 +454,14 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
 
     try
     {
-        Reference<lang::XMultiComponentFactory> xFactory (
-            mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-        Reference<XPane> xAnchorPane (
-            mxConfigurationController->getResource(rxViewId->getAnchor()),
-            UNO_QUERY_THROW);
-        Reference<awt::XWindow> xWindow (xAnchorPane->getWindow());
-        const double nSlideAspectRatio (GetSlideAspectRatio());
-        Reference<presentation::XSlideShowController> xSlideShowController(
-            PresenterHelper::GetSlideShowController(
-                Reference<frame::XController>(mxControllerWeak)));
-        Sequence<Any> aArguments(5);
-        aArguments[0] <<= rxViewId;
-        aArguments[1] <<= Reference<frame::XController>(mxControllerWeak);
-        aArguments[2] <<= xSlideShowController;
-        aArguments[3] <<= nSlideAspectRatio;
-        aArguments[4] <<= mpPresenterController->GetViewBackgroundColor(rxViewId->getResourceURL());
-
-        xView = Reference<XView>(
-            xFactory->createInstanceWithArgumentsAndContext(
-                OUString::createFromAscii("com.sun.star.drawing.presenter.SlideShowView"),
-                aArguments,
-                mxComponentContext),
-            UNO_QUERY_THROW);
-
-        if( xSlideShowController.is() )
-        {
-            Reference<presentation::XSlideShow> xSlideShow (
-                xSlideShowController->getSlideShow(), UNO_QUERY_THROW);
-            xSlideShow->addView(Reference<presentation::XSlideShowView>(xView, UNO_QUERY_THROW));
-        }
+        rtl::Reference<PresenterSlideShowView> pShowView (
+            new PresenterSlideShowView(
+                mxComponentContext,
+                rxViewId,
+                Reference<frame::XController>(mxControllerWeak),
+                mpPresenterController));
+        pShowView->LateInit();
+        xView = Reference<XView>(pShowView.get());
     }
     catch (RuntimeException&)
     {
@@ -381,7 +475,8 @@ Reference<XView> PresenterViewFactory::CreateSlideShowView(
 
 
 Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
-    const Reference<XResourceId>& rxViewId) const
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
 {
     Reference<XView> xView;
 
@@ -392,14 +487,11 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
 
     try
     {
-        Reference<XPane> xAnchorPane (
-            mxConfigurationController->getResource(rxViewId->getAnchor()),
-            UNO_QUERY_THROW);
         xView = Reference<XView>(
             static_cast<XWeak*>(new NextSlidePreview(
                 mxComponentContext,
                 rxViewId,
-                xAnchorPane,
+                rxAnchorPane,
                 mpPresenterController)),
             UNO_QUERY_THROW);
     }
@@ -414,9 +506,24 @@ Reference<XView> PresenterViewFactory::CreateSlidePreviewView(
 
 
 
-Reference<XView> PresenterViewFactory::CreateNotesView(
+Reference<XView> PresenterViewFactory::CreateToolBarView(
     const Reference<XResourceId>& rxViewId) const
 {
+    return new PresenterToolBarView(
+        mxComponentContext,
+        rxViewId,
+        Reference<frame::XController>(mxControllerWeak),
+        mpPresenterController);
+}
+
+
+
+
+Reference<XView> PresenterViewFactory::CreateNotesView(
+    const Reference<XResourceId>& rxViewId,
+    const Reference<XPane>& rxAnchorPane) const
+{
+    (void)rxAnchorPane;
     Reference<XView> xView;
 
     if ( ! mxConfigurationController.is())
@@ -426,9 +533,6 @@ Reference<XView> PresenterViewFactory::CreateNotesView(
 
     try
     {
-        Reference<XPane> xAnchorPane (
-            mxConfigurationController->getResource(rxViewId->getAnchor()),
-            UNO_QUERY_THROW);
         xView = Reference<XView>(static_cast<XWeak*>(
             new PresenterNotesView(
                 mxComponentContext,
@@ -498,43 +602,6 @@ Reference<XView> PresenterViewFactory::CreateHelpView(
 
 
 
-double PresenterViewFactory::GetSlideAspectRatio (void) const
-{
-    double nSlideAspectRatio (28.0/21.0);
-
-    try
-    {
-        Reference<frame::XController> xController (mxControllerWeak);
-        if (xController.is())
-        {
-            Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
-                xController->getModel(), UNO_QUERY_THROW);
-            Reference<drawing::XDrawPages> xSlides (xSlideSupplier->getDrawPages());
-            if (xSlides.is() && xSlides->getCount()>0)
-            {
-                Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
-                sal_Int32 nWidth (28000);
-                sal_Int32 nHeight (21000);
-                if ((xProperties->getPropertyValue(OUString::createFromAscii("Width")) >>= nWidth)
-                    && (xProperties->getPropertyValue(OUString::createFromAscii("Height")) >>= nHeight)
-                    && nHeight > 0)
-                {
-                    nSlideAspectRatio = double(nWidth) / double(nHeight);
-                }
-            }
-        }
-    }
-    catch (RuntimeException&)
-    {
-        OSL_ASSERT(false);
-    }
-
-    return nSlideAspectRatio;
-}
-
-
-
-
 void PresenterViewFactory::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
@@ -546,6 +613,33 @@ void PresenterViewFactory::ThrowIfDisposed (void) const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
+
+
+
+
+//===== CachablePresenterView =================================================
+
+CachablePresenterView::CachablePresenterView (void)
+    : mbIsPresenterViewActive(true)
+{
+}
+
+
+
+
+void CachablePresenterView::ActivatePresenterView (void)
+{
+    mbIsPresenterViewActive = true;
+}
+
+
+
+
+void CachablePresenterView::DeactivatePresenterView (void)
+{
+    mbIsPresenterViewActive = false;
+}
+
 
 
 } }
