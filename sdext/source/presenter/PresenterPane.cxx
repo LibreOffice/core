@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPane.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,9 @@
  ************************************************************************/
 
 #include "PresenterPane.hxx"
-
+#include "PresenterController.hxx"
+#include "PresenterPaintManager.hxx"
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/drawing/CanvasFeature.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -43,39 +45,13 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-//----- Service ---------------------------------------------------------------
-
-OUString PresenterPane::getImplementationName_static (void)
-{
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPane");
-}
-
-
-
-
-Sequence<OUString> PresenterPane::getSupportedServiceNames_static (void)
-{
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPane"));
-    return Sequence<rtl::OUString>(&sServiceName, 1);
-}
-
-
-
-
-Reference<XInterface> PresenterPane::Create (const Reference<uno::XComponentContext>& rxContext)
-    SAL_THROW((css::uno::Exception))
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterPane(rxContext)));
-}
-
-
-
-
 //===== PresenterPane =========================================================
 
-PresenterPane::PresenterPane (const Reference<XComponentContext>& rxContext)
-    : PresenterPaneBase(rxContext)
+PresenterPane::PresenterPane (
+    const Reference<XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController)
+    : PresenterPaneBase(rxContext, rpPresenterController),
+      maBoundingBox()
 {
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
@@ -124,9 +100,15 @@ void SAL_CALL PresenterPane::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowResized(rEvent);
+
+    Invalidate(maBoundingBox);
+
     LayoutContextWindow();
     ToTop();
+
+    UpdateBoundingBox();
+    Invalidate(maBoundingBox);
 }
 
 
@@ -137,8 +119,14 @@ void SAL_CALL PresenterPane::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowMoved(rEvent);
+
+    Invalidate(maBoundingBox);
+
     ToTop();
+
+    UpdateBoundingBox();
+    Invalidate(maBoundingBox);
 }
 
 
@@ -148,7 +136,7 @@ void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowShown(rEvent);
 
     ToTop();
 
@@ -157,6 +145,9 @@ void SAL_CALL PresenterPane::windowShown (const lang::EventObject& rEvent)
         LayoutContextWindow();
         mxContentWindow->setVisible(sal_True);
     }
+
+    UpdateBoundingBox();
+    Invalidate(maBoundingBox);
 }
 
 
@@ -166,7 +157,7 @@ void SAL_CALL PresenterPane::windowHidden (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowHidden(rEvent);
 
     if (mxContentWindow.is())
         mxContentWindow->setVisible(sal_False);
@@ -220,6 +211,25 @@ void PresenterPane::CreateCanvases (
 }
 
 
+
+
+void PresenterPane::Invalidate (const css::awt::Rectangle& rRepaintBox)
+{
+    // Invalidate the parent window to be able to invalidate an area outside
+    // the current window area.
+    mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow, rRepaintBox);
+}
+
+
+
+
+void PresenterPane::UpdateBoundingBox (void)
+{
+    if (mxBorderWindow.is() && IsVisible())
+        maBoundingBox = mxBorderWindow->getPosSize();
+    else
+        maBoundingBox = awt::Rectangle();
+}
 
 
 } } // end of namespace ::sd::presenter
