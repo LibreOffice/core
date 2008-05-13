@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: splash.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,10 +117,6 @@ public:
     static const sal_Char *supportedServiceNames[];
 
     static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
-
-    // static service info
-    static OUString  impl_getImplementationName();
-    static Sequence<OUString> impl_getSupportedServiceNames();
 
     // XStatusIndicator
     virtual void SAL_CALL end() throw ( RuntimeException );
