@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterComponent.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +34,25 @@
 
 #include <comphelper/componentmodule.hxx>
 
+namespace css = ::com::sun::star;
+
 namespace sdext { namespace presenter {
 
-const static ::rtl::OUString gsExtensionIdentifier(
-    ::rtl::OUString::createFromAscii("org.openoffice.PresenterScreen"));
+/** This string is replaced automatically by the makefile during the
+    building of this extension.
+*/
+class PresenterComponent
+{
+public:
+    const static ::rtl::OUString gsExtensionIdentifier;
 
-DECLARE_COMPONENT_MODULE(PresenterComponent, ClientClass)
+    static ::rtl::OUString GetBasePath (
+        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext);
+    static ::rtl::OUString GetBasePath (
+        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
+        const ::rtl::OUString& rsExtensionIdentifier);
+};
+
 
 } }
 
