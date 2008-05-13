@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneContainer.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #ifndef SDEXT_PRESENTER_PANE_CONTAINER_HXX
 #define SDEXT_PRESENTER_PANE_CONTAINER_HXX
 
+#include "PresenterTheme.hxx"
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
@@ -40,7 +42,6 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <comphelper/stl_types.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ref.hxx>
@@ -95,23 +96,27 @@ public:
         typedef ::boost::function<void(bool)> Activator;
         typedef ::boost::function<boost::shared_ptr<PresenterSprite>()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
+        ::rtl::OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
         css::uno::Reference<css::drawing::framework::XView> mxView;
         css::uno::Reference<css::awt::XWindow> mxContentWindow;
         css::uno::Reference<css::awt::XWindow> mxBorderWindow;
+        ::rtl::OUString msTitleTemplate;
         ::rtl::OUString msTitle;
         ViewInitializationFunction maViewInitialization;
         double mnLeft;
         double mnTop;
         double mnRight;
         double mnBottom;
-        css::util::Color maViewBackgroundColor;
-        css::uno::Reference<css::rendering::XBitmap> mxViewBackgroundBitmap;
+        SharedBitmapDescriptor mpViewBackground;
         bool mbIsActive;
         bool mbNeedsClipping;
+        bool mbIsOpaque;
         SpriteProvider maSpriteProvider;
         bool mbIsSprite;
         Activator maActivator;
+        css::awt::Point maCalloutAnchorLocation;
+        bool mbHasCalloutAnchor;
 
         void SetActivationState (const bool bIsActive);
     };
@@ -121,7 +126,9 @@ public:
 
     void PreparePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
+        const ::rtl::OUString& rsViewURL,
         const ::rtl::OUString& rsTitle,
+        const bool bIsOpaque,
         const ViewInitializationFunction& rViewIntialization,
         const double nLeft,
         const double nTop,
@@ -137,10 +144,13 @@ public:
 
     SharedPaneDescriptor StoreView (
         const css::uno::Reference<css::drawing::framework::XView>& rxView,
-        const css::util::Color aViewBackgroundColor,
-        const css::uno::Reference<css::rendering::XBitmap>& rxViewBackgroundBitmap);
+        const SharedBitmapDescriptor& rpViewBackground);
 
-    void RemovePane (const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+    SharedPaneDescriptor RemovePane (
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
+
+    SharedPaneDescriptor RemoveView (
+        const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
     void CreateBorderWindow (PaneDescriptor& rDescriptor);
 
@@ -164,6 +174,10 @@ public:
     */
     SharedPaneDescriptor FindPaneId (const css::uno::Reference<
         css::drawing::framework::XResourceId>& rxPaneId);
+
+    SharedPaneDescriptor FindViewURL (const ::rtl::OUString& rsViewURL);
+
+    ::rtl::OUString GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL);
 
     void ToTop (const SharedPaneDescriptor& rpDescriptor);
 
