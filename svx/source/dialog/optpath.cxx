@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optpath.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -600,7 +600,8 @@ IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
                         sFullPath += cDelim;
                     sFullPath += sUser;
                     sWritable += sNewPath.GetToken( i, cDelim );
-                    sFullPath += cDelim;
+                    if ( sFullPath.Len() > 0 )
+                        sFullPath += cDelim;
                     sFullPath += sWritable;
                 }
 
