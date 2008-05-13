@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layoutmanager.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -415,6 +415,13 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
 LayoutManager::~LayoutManager()
 {
+    Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
+    if ( m_pMiscOptions )
+    {
+        m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+        delete m_pMiscOptions;
+        m_pMiscOptions = 0;
+    }
     m_aAsyncLayoutTimer.Stop();
 }
 
