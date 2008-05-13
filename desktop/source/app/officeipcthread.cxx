@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,13 +297,6 @@ throw( RuntimeException )
     }
 
     return *pOfficeIPCThreadMutex;
-}
-
-OfficeIPCThread* OfficeIPCThread::GetOfficeIPCThread()
-{
-    // Return the one and only OfficeIPCThread pointer
-    ::osl::MutexGuard   aGuard( GetMutex() );
-    return pGlobalOfficeIPCThread;
 }
 
 void OfficeIPCThread::BlockAllRequests()
