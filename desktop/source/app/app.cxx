@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.220 $
+ * $Revision: 1.221 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,12 +313,6 @@ void FatalError(OUString const & aMessage)
     aBootstrapFailedBox.Execute();
 }
 
-void FatalErrorExit(OUString const & aMessage)
-{
-    FatalError(aMessage);
-    _exit( ExitHelper::E_FATAL_ERROR );
-}
-
 static bool ShouldSuppressUI(CommandLineArgs* pCmdLine)
 {
     return  pCmdLine->IsInvisible() ||
@@ -440,7 +434,6 @@ void ReplaceStringHookProc( UniString& rStr )
 
 Desktop::Desktop()
 : m_bServicesRegistered( false )
-, m_pIntro( 0 )
 , m_aBootstrapError( BE_OK )
 , m_pLockfile( NULL )
 {
@@ -1966,16 +1959,6 @@ IMPL_LINK( Desktop, AsyncInitFirstRun, void*, EMPTYARG )
 }
 
 // ========================================================================
-
-IMPL_STATIC_LINK_NOINSTANCE( Desktop, AsyncTerminate, void*, EMPTYARG )
-{
-    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XDesktop > xDesktop( rFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.frame.Desktop")),
-        UNO_QUERY );
-    xDesktop.is() && xDesktop->terminate();
-    return 0L;
-}
 
 class ExitTimer : public Timer
 {
