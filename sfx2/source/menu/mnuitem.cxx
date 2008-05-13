@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mnuitem.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -444,8 +444,8 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
-    m_bWasHiContrastMode    = bIsHiContrastMode;
+    m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
+    m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
     m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -469,13 +469,16 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
 {
     if ( pActMenu )
     {
-        BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        ULONG nSymbolsStyle = rSettings.GetSymbolsStyle();
         BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
+        BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
 
-        if (( bIsHiContrastMode != m_bWasHiContrastMode ) ||
-            ( bShowMenuImages != m_bShowMenuImages      )    )
+        if (( nSymbolsStyle != m_nSymbolsStyle ) ||
+            ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
+            ( bShowMenuImages != m_bShowMenuImages ))
         {
+            m_nSymbolsStyle         = nSymbolsStyle;
             m_bWasHiContrastMode    = bIsHiContrastMode;
             m_bShowMenuImages       = bShowMenuImages;
 
