@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: splash.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -685,19 +685,5 @@ const char* SplashScreen::interfaces[] =
 const sal_Char *SplashScreen::serviceName = "com.sun.star.office.SplashScreen";
 const sal_Char *SplashScreen::implementationName = "com.sun.star.office.comp.SplashScreen";
 const sal_Char *SplashScreen::supportedServiceNames[] = {"com.sun.star.office.SplashScreen", NULL};
-OUString SplashScreen::impl_getImplementationName()
-{
-    return OUString::createFromAscii(implementationName);
-}
-Sequence<OUString> SplashScreen::impl_getSupportedServiceNames()
-{
-    Sequence<OUString> aSequence;
-    for (int i=0; supportedServiceNames[i]!=NULL; i++) {
-        aSequence.realloc(i+1);
-        aSequence[i]=(OUString::createFromAscii(supportedServiceNames[i]));
-    }
-    return aSequence;
-}
 
 }
-
