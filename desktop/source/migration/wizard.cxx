@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wizard.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,11 +369,6 @@ sal_Bool FirstStartWizard::onFinish(sal_Int32 _nResult)
     }
     else
         return sal_False;
-}
-
-void FirstStartWizard::overrideCheck(sal_Bool bOverride)
-{
-    m_bOverride = bOverride;
 }
 
 short FirstStartWizard::Execute()
