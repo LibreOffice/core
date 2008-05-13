@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontmenucontroller.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,14 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
+using namespace std;
+
+bool lcl_I18nCompareString(const rtl::OUString& rStr1, const rtl::OUString& rStr2)
+{
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+    return rI18nHelper.CompareString( rStr1, rStr2 ) < 0 ? true : false;
+}
+
 namespace framework
 {
 
@@ -109,36 +117,27 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
 
     if ( pVCLPopupMenu )
     {
-        rtl::OUString aEmpty;
-        const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-        const rtl::OUString aFontNameCommandPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
-
+        vector<rtl::OUString> aVector;
         for ( USHORT i = 0; i < rFontNameSeq.getLength(); i++ )
         {
-            const rtl::OUString& rName = pFontNameArray[i];
+            aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
+        }
+        sort(aVector.begin(), aVector.end(), lcl_I18nCompareString );
 
-            USHORT j = m_xPopupMenu->getItemCount();
-            while ( j )
-            {
-                rtl::OUString aText = m_xPopupMenu->getItemText( m_xPopupMenu->getItemId( j-1 ) );
-
-                String aString = MnemonicGenerator::EraseAllMnemonicChars( aText );
-                if ( rI18nHelper.CompareString( rName, aString ) > 0 )
-                    break;
-                j--;
-            }
-
-            m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, j );
+        const rtl::OUString aFontNameCommandPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName?CharFontName.FamilyName:string=" ));
+        for(USHORT i = 0; i < aVector.size(); i++)
+        {
+            const rtl::OUString& rName = aVector[i];
+            m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
             if ( rName == m_aFontFamilyName )
                 m_xPopupMenu->checkItem( i+1, sal_True );
-
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
             rtl::OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
             aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, '%', INetURLObject::ENCODE_ALL ));
-
             rtl::OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
             pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
         }
+
     }
 }
 
