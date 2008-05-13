@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBorderManager.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,8 @@
  ************************************************************************/
 
 #include "PresenterPaneBorderManager.hxx"
-#include <com/sun/star/awt/InvalidateStyle.hpp>
+#include "PresenterController.hxx"
+#include "PresenterPaintManager.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -73,7 +74,8 @@ Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (
 Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::XComponentContext>& rxContext)
     SAL_THROW((css::uno::Exception))
 {
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterPaneBorderManager(rxContext)));
+    return Reference<XInterface>(static_cast<XWeak*>(
+        new PresenterPaneBorderManager(rxContext, NULL)));
 }
 
 
@@ -82,8 +84,10 @@ Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::X
 //===== PresenterPaneBorderManager ============================================
 
 PresenterPaneBorderManager::PresenterPaneBorderManager (
-    const Reference<XComponentContext>& rxContext)
+    const Reference<XComponentContext>& rxContext,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBorderManagerInterfaceBase(m_aMutex),
+      mpPresenterController(rpPresenterController),
       mxComponentContext(rxContext),
       mxPresenterHelper(),
       maWindowList(),
@@ -498,16 +502,17 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
 
         // Invalidate that is or was covered by the border window before and
         // after the move/resize.
-        Reference<awt::XWindowPeer> xPeer (mxParentWindow, UNO_QUERY);
-        if (xPeer.is())
+        if (mpPresenterController.get() != NULL)
         {
             const sal_Int32 nLeft = ::std::min(aOldBox.X,aBox.X);
             const sal_Int32 nTop = ::std::min(aOldBox.Y,aBox.Y);
             const sal_Int32 nWidth = ::std::max(nOldRight,nRight) - nLeft;
             const sal_Int32 nHeight = ::std::max(nOldBottom,nBottom) - nTop;
-            xPeer->invalidateRect(
-                ::awt::Rectangle(nLeft,nTop,nWidth-1,nHeight-1),
-                awt::InvalidateStyle::TRANSPARENT);
+
+            OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=NULL);
+            mpPresenterController->GetPaintManager()->Invalidate(
+                mxParentWindow,
+                ::awt::Rectangle(nLeft,nTop,nWidth-1,nHeight-1));
         }
     }
 }
