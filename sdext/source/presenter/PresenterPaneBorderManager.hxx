@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBorderManager.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,8 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
+class PresenterController;
+
 namespace {
     typedef ::cppu::WeakComponentImplHelper3 <
         css::lang::XInitialization,
@@ -74,7 +76,9 @@ class PresenterPaneBorderManager
       public PresenterPaneBorderManagerInterfaceBase
 {
 public:
-    PresenterPaneBorderManager (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterPaneBorderManager (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneBorderManager (void);
 
     virtual void SAL_CALL disposing (void);
@@ -126,6 +130,7 @@ private:
     enum BorderElement { Top, TopLeft, TopRight, Left, Right, BottomLeft, BottomRight, Bottom,
                          Content, Outside };
 
+    ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
     /** The parent window is stored so that it can be invalidated when one
