@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfrm.cxx,v $
- * $Revision: 1.135 $
+ * $Revision: 1.136 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -673,6 +673,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->ClearItem( SID_STREAM );
                     pNewSet->ClearItem( SID_INPUTSTREAM );
                     pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pMedium->GetFilter()->GetName() ) );
+
+                    // let the current security settings be checked again
+                    pNewSet->Put( SfxUInt16Item( SID_MACROEXECMODE, document::MacroExecMode::USE_CONFIG ) );
+
                     if ( rReq.GetSlot() == SID_EDITDOC || !bForEdit )
                         // edit mode is switched or reload of readonly document
                         pNewSet->Put( SfxBoolItem( SID_DOC_READONLY, !bForEdit ) );
