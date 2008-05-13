@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSpritePane.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,9 @@ namespace sdext { namespace presenter {
 class PresenterSpritePane : public PresenterPaneBase
 {
 public:
-    PresenterSpritePane (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterSpritePane (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSpritePane (void);
 
     virtual void SAL_CALL disposing (void);
