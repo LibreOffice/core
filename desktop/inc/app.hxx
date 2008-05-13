@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,7 +128,6 @@ class Desktop : public Application
             return m_aBootstrapStatus;
         }
 
-        DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
@@ -202,7 +201,6 @@ class Desktop : public Application
         sal_Bool                        m_bInvisible;
         bool                            m_bServicesRegistered;
         USHORT                          m_nAppEvents;
-        IntroWindow_Impl*               m_pIntro;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 
