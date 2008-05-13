@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBase.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +30,17 @@
  ************************************************************************/
 
 #include "PresenterPaneBase.hxx"
+#include "PresenterCanvasHelper.hxx"
+#include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
+#include "PresenterPaintManager.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/drawing/CanvasFeature.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/rendering/TexturingMode.hpp>
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
@@ -46,8 +52,12 @@ namespace sdext { namespace presenter {
 
 //===== PresenterPaneBase =====================================================
 
-PresenterPaneBase::PresenterPaneBase (const Reference<XComponentContext>& rxContext)
+PresenterPaneBase::PresenterPaneBase (
+    const Reference<XComponentContext>& rxContext,
+    const ::rtl::Reference<PresenterController>& rpPresenterController)
     : PresenterPaneBaseInterfaceBase(m_aMutex),
+      mpPresenterController(rpPresenterController),
+      mxParentWindow(),
       mxBorderWindow(),
       mxBorderCanvas(),
       mxContentWindow(),
@@ -57,16 +67,12 @@ PresenterPaneBase::PresenterPaneBase (const Reference<XComponentContext>& rxCont
       mxPresenterHelper(),
       msTitle(),
       mxComponentContext(rxContext),
-      maViewBackgroundColor(0x00ffffff),
-      mxViewBackgroundBitmap()
+      mpViewBackground(),
+      mbHasCallout(false),
+      maCalloutAnchor()
 {
-    Reference<lang::XMultiComponentFactory> xFactory (
-        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-    mxPresenterHelper = Reference<drawing::XPresenterHelper>(
-        xFactory->createInstanceWithContext(
-            OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
-            mxComponentContext),
-        UNO_QUERY_THROW);
+    if (mpPresenterController.get() != NULL)
+        mxPresenterHelper = mpPresenterController->GetPresenterHelper();
 }
 
 
@@ -81,13 +87,6 @@ PresenterPaneBase::~PresenterPaneBase (void)
 
 void PresenterPaneBase::disposing (void)
 {
-    {
-        Reference<lang::XComponent> xComponent (mxPresenterHelper, UNO_QUERY);
-        mxPresenterHelper = NULL;
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-
     if (mxBorderWindow.is())
     {
         mxBorderWindow->removeWindowListener(this);
@@ -131,6 +130,60 @@ void PresenterPaneBase::disposing (void)
 void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
+
+    OSL_ASSERT(mpPresenterController.get()!=NULL);
+    OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=NULL);
+
+    mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
+}
+
+
+
+
+Reference<drawing::framework::XPaneBorderPainter>
+    PresenterPaneBase::GetPaneBorderPainter (void) const
+{
+    return mxBorderPainter;
+}
+
+
+
+
+void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
+{
+    mbHasCallout = true;
+    // Anchor is given in the coorindate system of the parent window.
+    // Transform it into the local coordinate system.
+    maCalloutAnchor = rCalloutAnchor;
+    const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
+    maCalloutAnchor.X -= aBorderBox.X;
+    maCalloutAnchor.Y -= aBorderBox.Y;
+
+    // Move the bottom of the border window so that it goes through the
+    // callout anchor (special case for bottom callout).
+    sal_Int32 nHeight (rCalloutAnchor.Y - aBorderBox.Y);
+    if (mxBorderPainter.is() && mxPaneId.is())
+        nHeight += mxBorderPainter->getCalloutOffset(mxPaneId->getResourceURL()).Y;
+
+    if (nHeight != aBorderBox.Height)
+    {
+        mxBorderWindow->setPosSize(
+            aBorderBox.X,
+            aBorderBox.Y,
+            aBorderBox.Width,
+            nHeight,
+            awt::PosSize::HEIGHT);
+    }
+
+    mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
+}
+
+
+
+
+awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
+{
+    return maCalloutAnchor;
 }
 
 
@@ -163,8 +216,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
                     0);
             }
 
-            Reference<awt::XWindow> xParentWindow;
-            if ( ! (rArguments[1] >>= xParentWindow))
+            if ( ! (rArguments[1] >>= mxParentWindow))
             {
                 throw lang::IllegalArgumentException(
                     OUString::createFromAscii("PresenterPane: invalid parent window"),
@@ -206,7 +258,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
                     5);
             }
 
-            CreateWindows(xParentWindow, bIsWindowVisibleOnCreation);
+            CreateWindows(mxParentWindow, bIsWindowVisibleOnCreation);
 
             if (mxBorderWindow.is())
             {
@@ -214,7 +266,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
                 mxBorderWindow->addPaintListener(this);
             }
 
-            CreateCanvases(xParentWindow, xParentCanvas);
+            CreateCanvases(mxParentWindow, xParentCanvas);
 
             // Raise new windows.
             ToTop();
@@ -253,6 +305,49 @@ sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
     throw (RuntimeException)
 {
     return true;
+}
+
+
+
+
+//----- XWindowListener -------------------------------------------------------
+
+void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent& rEvent)
+    throw (RuntimeException)
+{
+    (void)rEvent;
+    ThrowIfDisposed();
+}
+
+
+
+
+
+void SAL_CALL PresenterPaneBase::windowMoved (const awt::WindowEvent& rEvent)
+    throw (RuntimeException)
+{
+    (void)rEvent;
+    ThrowIfDisposed();
+}
+
+
+
+
+void SAL_CALL PresenterPaneBase::windowShown (const lang::EventObject& rEvent)
+    throw (RuntimeException)
+{
+    (void)rEvent;
+    ThrowIfDisposed();
+}
+
+
+
+
+void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
+    throw (RuntimeException)
+{
+    (void)rEvent;
+    ThrowIfDisposed();
 }
 
 
@@ -317,12 +412,9 @@ void PresenterPaneBase::ToTop (void)
 
 
 
-void PresenterPaneBase::SetBackground (
-    const css::util::Color aViewBackgroundColor,
-    const css::uno::Reference<css::rendering::XBitmap>& rxViewBackgroundBitmap)
+void PresenterPaneBase::SetBackground (const SharedBitmapDescriptor& rpBackground)
 {
-    maViewBackgroundColor = aViewBackgroundColor;
-    mxViewBackgroundBitmap = rxViewBackgroundBitmap;
+    mpViewBackground = rpBackground;
 }
 
 
@@ -332,22 +424,9 @@ void PresenterPaneBase::PaintBorderBackground (
     const awt::Rectangle& rBorderBox,
     const awt::Rectangle& rUpdateBox)
 {
-    if ( ! mxBorderCanvas.is())
-        return;
-
-    rendering::ViewState aViewState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        PresenterGeometryHelper::CreatePolygon(rUpdateBox, mxBorderCanvas->getDevice()));
-
-    rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
-        Sequence<double>(3),
-        rendering::CompositeOperation::SOURCE);
-    aRenderState.DeviceColor[0] = ((maViewBackgroundColor >> 16) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[1] = ((maViewBackgroundColor >> 8) & 0x0ff) / 255.0;
-    aRenderState.DeviceColor[2] = ((maViewBackgroundColor >> 0) & 0x0ff) / 255.0;
-
+    (void)rBorderBox;
+    (void)rUpdateBox;
+    /*
     // The outer box of the border is given.  We need the center and inner
     // box as well.
     awt::Rectangle aCenterBox (
@@ -360,29 +439,13 @@ void PresenterPaneBase::PaintBorderBackground (
             mxPaneId->getResourceURL(),
             rBorderBox,
             drawing::framework::BorderType_TOTAL_BORDER));
-
-    // Create a clip polypolygon that has the inner box as hole.
-    ::std::vector<awt::Rectangle> aRectangles;
-    aRectangles.reserve(2);
-    aRectangles.push_back(aCenterBox);
-    aRectangles.push_back(aInnerBox);
-    Reference<rendering::XPolyPolygon2D> xPolyPolygon (
-        PresenterGeometryHelper::CreatePolygon(
-            aRectangles,
-            mxBorderCanvas->getDevice()));
-    if (xPolyPolygon.is())
-    {
-        xPolyPolygon->setFillRule(rendering::FillRule_EVEN_ODD);
-        aRenderState.Clip = xPolyPolygon;
-    }
-
-    Reference<rendering::XPolyPolygon2D> xPolygon(PresenterGeometryHelper::CreatePolygon(
+    mpPresenterController->GetCanvasHelper()->Paint(
+        mpViewBackground,
+        mxBorderCanvas,
+        rUpdateBox,
         aCenterBox,
-        mxBorderCanvas->getDevice()));
-    mxBorderCanvas->fillPolyPolygon(
-        xPolygon,
-        aViewState,
-        aRenderState);
+        aInnerBox);
+    */
 }
 
 
@@ -399,12 +462,21 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 
         PaintBorderBackground(aLocalBorderBox, rUpdateBox);
 
-        mxBorderPainter->paintBorder(
-            mxPaneId->getResourceURL(),
-            mxBorderCanvas,
-            aLocalBorderBox,
-            rUpdateBox,
-            msTitle);
+        if (mbHasCallout)
+            mxBorderPainter->paintBorderWithCallout(
+                mxPaneId->getResourceURL(),
+                mxBorderCanvas,
+                aLocalBorderBox,
+                rUpdateBox,
+                msTitle,
+                maCalloutAnchor);
+        else
+            mxBorderPainter->paintBorder(
+                mxPaneId->getResourceURL(),
+                mxBorderCanvas,
+                aLocalBorderBox,
+                rUpdateBox,
+                msTitle);
     }
 }
 
@@ -430,6 +502,18 @@ void PresenterPaneBase::LayoutContextWindow (void)
             aInnerBox.Height,
             awt::PosSize::POSSIZE);
     }
+}
+
+
+
+
+bool PresenterPaneBase::IsVisible (void) const
+{
+    Reference<awt::XWindow2> xWindow2 (mxBorderPainter, UNO_QUERY);
+    if (xWindow2.is())
+        return xWindow2->isVisible();
+
+    return false;
 }
 
 
