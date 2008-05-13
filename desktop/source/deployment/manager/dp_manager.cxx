@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -430,15 +430,6 @@ PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     OSL_ASSERT( m_xRegistry.is() );
     return m_xRegistry->getSupportedPackageTypes();
-}
-
-//______________________________________________________________________________
-void PackageManagerImpl::checkAborted(
-    ::rtl::Reference<AbortChannel> const & abortChannel )
-{
-    if (abortChannel.is() && abortChannel->isAborted())
-        throw CommandAbortedException(
-            OUSTR("abort!"), static_cast<OWeakObject *>(this) );
 }
 
 //______________________________________________________________________________
