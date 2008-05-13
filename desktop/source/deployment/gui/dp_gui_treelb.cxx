@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_treelb.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -611,15 +611,6 @@ bool DialogImpl::TreeListBoxImpl::isFirstLevelChild( SvLBoxEntry * entry ) const
         return GetParent( entry ) == 0;
     else
         return false;
-}
-
-//______________________________________________________________________________
-OUString DialogImpl::TreeListBoxImpl::getContext( SvLBoxEntry * entry ) const
-{
-    if (entry == 0)
-        return OUString();
-    else
-        return NodeImpl::get(entry)->m_xPackageManager->getContext();
 }
 
 //______________________________________________________________________________
