@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterToolBar.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,11 @@
 #define SDEXT_PRESENTER_TOOL_BAR_HXX
 
 #include "PresenterController.hxx"
+#include "PresenterViewFactory.hxx"
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
@@ -53,47 +55,71 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <map>
 #include <boost/scoped_ptr.hpp>
+#include <boost/function.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace css = ::com::sun::star;
 
 namespace {
-    typedef cppu::WeakComponentImplHelper6<
+    typedef cppu::WeakComponentImplHelper5<
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,
         css::awt::XMouseMotionListener,
-        css::drawing::framework::XView,
         css::drawing::XDrawView
         > PresenterToolBarInterfaceBase;
+
+    typedef cppu::WeakComponentImplHelper3<
+        css::awt::XPaintListener,
+        css::drawing::framework::XView,
+        css::drawing::XDrawView
+        > PresenterToolBarViewInterfaceBase;
 }
 
 namespace sdext { namespace presenter {
-
-class PresenterBitmapContainer;
 
 /** A simple tool bar that can display bitmapped buttons and labels.  At the
     moment there are buttons for moving to the next and previous slide and
     to the next effect.  A label displayes the index of the current slide
     and the total number of slides.
-
-    In the future this set of controls may be extended.  Declaration of the
-    control set could be made more flexible and more easy (e.g. via the
-    configuration to avoid the need to recompile this class.)
 */
 class PresenterToolBar
     : private ::cppu::BaseMutex,
-      public PresenterToolBarInterfaceBase
+      private ::boost::noncopyable,
+      public PresenterToolBarInterfaceBase,
+      public CachablePresenterView
 {
 public:
-    explicit PresenterToolBar (
+    typedef ::boost::function<void(void)> Action;
+
+    enum Anchor { Left, Center, Right };
+
+    PresenterToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const ::rtl::Reference<PresenterController>& rpPresenterController);
+        const css::uno::Reference<css::awt::XWindow>& rxWindow,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const ::rtl::Reference<PresenterController>& rpPresenterController,
+        const Anchor eAnchor);
     virtual ~PresenterToolBar (void);
 
+    void Initialize (
+        const ::rtl::OUString& rsConfigurationPath);
+
     virtual void SAL_CALL disposing (void);
+
+    void InvalidateArea (
+        const css::awt::Rectangle& rRepaintBox,
+        const bool bSynchronous);
+    sal_Int32 GetSlideCount (void);
+    sal_Int32 GetCurrentSlideIndex (void);
+    void RequestLayout (void);
+    css::geometry::RealSize2D GetSize (void);
+    css::geometry::RealSize2D GetMinimalSize (void);
+    ::rtl::Reference<PresenterController> GetPresenterController (void) const;
+    css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
+    css::uno::Reference<css::uno::XComponentContext> GetComponentContext (void) const;
 
     // lang::XEventListener
 
@@ -147,6 +173,112 @@ public:
         throw (css::uno::RuntimeException);
 
 
+    // XDrawView
+
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+        throw (css::uno::RuntimeException);
+
+    class Context;
+
+private:
+    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+
+    class ElementContainerPart;
+    typedef ::boost::shared_ptr<ElementContainerPart> SharedElementContainerPart;
+    typedef ::std::vector<SharedElementContainerPart> ElementContainer;
+    ElementContainer maElementContainer;
+    SharedElementContainerPart mpCurrentContainerPart;
+    css::uno::Reference<css::awt::XWindow> mxWindow;
+    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
+    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
+    css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
+    ::rtl::Reference<PresenterController> mpPresenterController;
+    bool mbIsLayoutPending;
+    const Anchor meAnchor;
+    css::geometry::RealRectangle2D maBoundingBox;
+    /** The minimal size that is necessary to display all elements without
+        overlap and with minimal gaps between them.
+    */
+    css::geometry::RealSize2D maMinimalSize;
+
+    void CreateControls (
+        const ::rtl::OUString& rsConfigurationPath);
+    void Layout (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+    css::geometry::RealSize2D CalculatePartSize (
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const SharedElementContainerPart& rpPart,
+        const bool bIsHorizontal);
+    void LayoutPart (
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+        const SharedElementContainerPart& rpPart,
+        const css::geometry::RealRectangle2D& rBoundingBox,
+        const css::geometry::RealSize2D& rPartSize,
+        const bool bIsHorizontal);
+    void Clear (
+        const css::awt::Rectangle& rUpdateBox,
+        const css::rendering::ViewState& rViewState);
+    void Paint (
+        const css::awt::Rectangle& rUpdateBox,
+        const css::rendering::ViewState& rViewState);
+
+    void UpdateSlideNumber (void);
+
+    void CheckMouseOver (
+        const css::awt::MouseEvent& rEvent,
+        const bool bOverWindow,
+        const bool bMouseDown=false);
+
+    void ProcessEntry (
+        const ::css::uno::Reference<css::beans::XPropertySet>& rProperties,
+        Context& rContext);
+
+    /** This method throws a DisposedException when the object has already been
+        disposed.
+    */
+    void ThrowIfDisposed (void) const
+        throw (css::lang::DisposedException);
+};
+
+
+
+
+/** View for the PresenterToolBar.
+*/
+class PresenterToolBarView
+    : private ::cppu::BaseMutex,
+      private ::boost::noncopyable,
+      public PresenterToolBarViewInterfaceBase
+{
+public:
+    explicit PresenterToolBarView (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
+    virtual ~PresenterToolBarView (void);
+
+    virtual void SAL_CALL disposing (void);
+
+    ::rtl::Reference<PresenterToolBar> GetPresenterToolBar (void) const;
+
+
+    // XPaintListener
+
+    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+
+    // lang::XEventListener
+
+    virtual void SAL_CALL
+        disposing (const css::lang::EventObject& rEventObject)
+        throw (css::uno::RuntimeException);
+
+
     // XResourceId
 
     virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId (void)
@@ -165,45 +297,15 @@ public:
     virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
         throw (css::uno::RuntimeException);
 
-    class Element;
-
 private:
-
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+    //    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     css::uno::Reference<css::drawing::framework::XPane> mxPane;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
-    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-
-    typedef ::std::vector<boost::shared_ptr<Element> > ElementContainer;
-    ElementContainer maElementContainer;
     css::uno::Reference<css::awt::XWindow> mxWindow;
-    css::uno::Reference<css::awt::XWindow> mxControl;
-    css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
-    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
+    css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    ::rtl::OUString msPreviousButtonBitmapURL;
-    ::rtl::OUString msNextButtonBitmapURL;
-    ::boost::scoped_ptr<PresenterBitmapContainer> mpIconContainer;
-
-    void CreateControls (void);
-    void Resize (void);
-    void Clear (
-        const css::awt::Rectangle& rUpdateBox,
-        const css::rendering::ViewState& rViewState);
-    void Paint (
-        const css::awt::Rectangle& rUpdateBox,
-        const css::rendering::ViewState& rViewState);
-
-    void UpdateSlideNumber (void);
-
-    void CheckMouseOver (
-        const css::awt::MouseEvent& rEvent,
-        const bool bOverWindow,
-        const bool bMouseDown=false);
-
-    void GotoPreviousSlide (void);
-    void GotoNextSlide (void);
-    void GotoNextEffect (void);
+    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
+    ::rtl::Reference<PresenterToolBar> mpToolBar;
 
     /** This method throws a DisposedException when the object has already been
         disposed.
