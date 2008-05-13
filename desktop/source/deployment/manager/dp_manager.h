@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_manager.h,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,9 +96,6 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::deployment::XPackage> const & package,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
 
-
-    void checkAborted(
-        ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel );
 
     class CmdEnvWrapperImpl
         : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
