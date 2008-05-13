@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlidePreview.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,9 @@
  ************************************************************************/
 
 #include "PresenterSlidePreview.hxx"
-#include <com/sun/star/awt/InvalidateStyle.hpp>
+#include "PresenterCanvasHelper.hxx"
+#include "PresenterGeometryHelper.hxx"
+#include "PresenterPaintManager.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -67,6 +69,7 @@ PresenterSlidePreview::PresenterSlidePreview (
       mxPreviewRenderer(),
       mxPreview(),
       mxCurrentSlide(),
+      mnSlideAspectRatio(28.0 / 21.0),
       mxWindow(),
       mxCanvas()
 {
@@ -96,6 +99,8 @@ PresenterSlidePreview::PresenterSlidePreview (
         mxWindow->setVisible(sal_True);
     }
 
+    if (mpPresenterController.get() != NULL)
+        mnSlideAspectRatio = mpPresenterController->GetSlideAspectRatio();
 
     Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager(), UNO_QUERY);
     if (xFactory.is())
@@ -281,13 +286,11 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         {
             OSL_ASSERT(false);
         }
-        if (aSlideSize.Height > 0)
-            mnSlideAspectRatio = double(aSlideSize.Width) / double(aSlideSize.Height);
     }
 
-    Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY);
-    if (xPeer.is())
-        xPeer->invalidate(awt::InvalidateStyle::NOERASE);
+    // The preview is not transparent, therefore only this window, not its
+    // parent, has to be invalidated.
+    mpPresenterController->GetPaintManager()->Invalidate(mxWindow);
 }
 
 
@@ -316,56 +319,16 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
             mxCanvas);
     }
 
-    const rendering::ViewState aViewState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
-
-    // Paint the background
-    {
-        util::Color aColor (
-            mpPresenterController->GetViewBackgroundColor(mxViewId->getResourceURL()));
-        Sequence<double> aBackgroundColor(3);
-        aBackgroundColor[0] = ((aColor >> 16) & 0x0ff) / 255.0;
-        aBackgroundColor[1] = ((aColor >> 8) & 0x0ff) / 255.0;
-        aBackgroundColor[2] = ((aColor >> 0) & 0x0ff) / 255.0;
-        const rendering::RenderState aRenderState (
-            geometry::AffineMatrix2D(1, 0, 0, 0, 1, 0),
-            NULL,
-            aBackgroundColor,
-            rendering::CompositeOperation::SOURCE);
-
-        Sequence<Sequence<geometry::RealPoint2D> > aBox(1);
-        aBox[0] = Sequence<geometry::RealPoint2D>(4);
-        aBox[0][0] = geometry::RealPoint2D(0,0);
-        aBox[0][1] = geometry::RealPoint2D(aWindowBox.Width, 0);
-        aBox[0][2] = geometry::RealPoint2D(aWindowBox.Width, aWindowBox.Height);
-        aBox[0][3] = geometry::RealPoint2D(0, aWindowBox.Height);
-        Reference<rendering::XPolyPolygon2D> xPolygon (
-            mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aBox),
-            UNO_QUERY);
-        if (xPolygon.is())
-        {
-            xPolygon->setClosed(0, sal_True);
-            mxCanvas->fillPolyPolygon(xPolygon, aViewState, aRenderState);
-        }
-    }
-
-    // Paint the preview.
-    Sequence<double> aBackgroundColor(3);
-    aBackgroundColor[0] = 0;
-    aBackgroundColor[1] = 0;
-    aBackgroundColor[2] = 0;
-    rendering::RenderState aRenderState (
-        geometry::AffineMatrix2D(1, 0, 0, 0, 1, 0),
-        NULL,
-        aBackgroundColor,
-        rendering::CompositeOperation::SOURCE);
+    // Determine the bounding box of the preview.
+    awt::Rectangle aPreviewBox;
     if (mxPreview.is())
     {
         const geometry::IntegerSize2D aPreviewSize (mxPreview->getSize());
-        aRenderState.AffineTransform.m02 = (aWindowBox.Width - aPreviewSize.Width)/2;
-        aRenderState.AffineTransform.m12 = (aWindowBox.Height - aPreviewSize.Height)/2;
-        mxCanvas->drawBitmap(mxPreview, aViewState, aRenderState);
+        aPreviewBox = awt::Rectangle(
+            (aWindowBox.Width - aPreviewSize.Width)/2,
+            (aWindowBox.Height - aPreviewSize.Height)/2,
+            aPreviewSize.Width,
+            aPreviewSize.Height);
     }
     else
     {
@@ -373,22 +336,48 @@ void PresenterSlidePreview::Paint (const awt::Rectangle& rBoundingBox)
         {
             const awt::Size aPreviewSize (mxPreviewRenderer->calculatePreviewSize(
                 mnSlideAspectRatio,awt::Size(aWindowBox.Width, aWindowBox.Height)));
-            aRenderState.AffineTransform.m02 = (aWindowBox.Width - aPreviewSize.Width)/2;
-            aRenderState.AffineTransform.m12 = (aWindowBox.Height - aPreviewSize.Height)/2;
-            Sequence<Sequence<geometry::RealPoint2D> > aBox(1);
-            aBox[0] = Sequence<geometry::RealPoint2D>(4);
-            aBox[0][0] = geometry::RealPoint2D(0,0);
-            aBox[0][1] = geometry::RealPoint2D(aPreviewSize.Width, 0);
-            aBox[0][2] = geometry::RealPoint2D(aPreviewSize.Width, aPreviewSize.Height);
-            aBox[0][3] = geometry::RealPoint2D(0, aPreviewSize.Height);
+            aPreviewBox = awt::Rectangle(
+                (aWindowBox.Width - aPreviewSize.Width)/2,
+                (aWindowBox.Height - aPreviewSize.Height)/2,
+                aPreviewSize.Width,
+                aPreviewSize.Height);
+        }
+    }
+
+    // Paint the background.
+    mpPresenterController->GetCanvasHelper()->Paint(
+        mpPresenterController->GetViewBackground(mxViewId->getResourceURL()),
+        mxCanvas,
+        rBoundingBox,
+        awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height),
+        aPreviewBox);
+
+    // Paint the preview.
+    const rendering::ViewState aViewState(
+        geometry::AffineMatrix2D(1,0,0, 0,1,0),
+        NULL);
+
+    Sequence<double> aBackgroundColor(3);
+    aBackgroundColor[0] = 0;
+    aBackgroundColor[1] = 0;
+    aBackgroundColor[2] = 0;
+    rendering::RenderState aRenderState (
+        geometry::AffineMatrix2D(1, 0, aPreviewBox.X, 0, 1, aPreviewBox.Y),
+        NULL,
+        aBackgroundColor,
+        rendering::CompositeOperation::SOURCE);
+    if (mxPreview.is())
+    {
+        mxCanvas->drawBitmap(mxPreview, aViewState, aRenderState);
+    }
+    else
+    {
+        if (mnSlideAspectRatio > 0)
+        {
             Reference<rendering::XPolyPolygon2D> xPolygon (
-                mxCanvas->getDevice()->createCompatibleLinePolyPolygon(aBox),
-                UNO_QUERY);
+                PresenterGeometryHelper::CreatePolygon(aPreviewBox, mxCanvas->getDevice()));
             if (xPolygon.is())
-            {
-                xPolygon->setClosed(0, sal_False);
                 mxCanvas->fillPolyPolygon(xPolygon, aViewState, aRenderState);
-            }
         }
     }
 
