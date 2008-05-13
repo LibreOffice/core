@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterFrameworkObserver.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,10 +58,13 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
 
     if (mxConfigurationController->hasPendingRequests())
     {
-        mxConfigurationController->addConfigurationChangeListener(
-            this,
-            rsEventName,
-            Any());
+        if (rsEventName.getLength() > 0)
+        {
+            mxConfigurationController->addConfigurationChangeListener(
+                this,
+                rsEventName,
+                Any());
+        }
         mxConfigurationController->addConfigurationChangeListener(
             this,
             A2S("ConfigurationUpdateEnd"),
@@ -98,6 +101,20 @@ void PresenterFrameworkObserver::RunOnResourceActivation (
 
 
 
+void PresenterFrameworkObserver::RunOnUpdateEnd (
+    const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
+    const Action& rAction)
+{
+    new PresenterFrameworkObserver(
+        rxController,
+        OUString(),
+        &PresenterFrameworkObserver::True,
+        rAction);
+}
+
+
+
+
 bool PresenterFrameworkObserver::HasResource (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
     const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId)
@@ -108,10 +125,34 @@ bool PresenterFrameworkObserver::HasResource (
 
 
 
+bool PresenterFrameworkObserver::True (void)
+{
+    return true;
+}
+
+
+
+
+bool PresenterFrameworkObserver::False (void)
+{
+    return false;
+}
+
+
+
+
 void SAL_CALL PresenterFrameworkObserver::disposing (void)
 {
     if ( ! maAction.empty())
         maAction(false);
+    Shutdown();
+}
+
+
+
+
+void PresenterFrameworkObserver::Shutdown (void)
+{
     maAction = Action();
     maPredicate = Predicate();
 
@@ -148,14 +189,18 @@ void SAL_CALL PresenterFrameworkObserver::notifyConfigurationChange (
 {
     bool bDispose(false);
 
+    Action aAction (maAction);
+    Predicate aPredicate (maPredicate);
     if (rEvent.Type.equals(A2S("ConfigurationUpdateEnd")))
     {
-        maAction(maPredicate);
+        Shutdown();
+        aAction(aPredicate);
         bDispose = true;
     }
-    else if (maPredicate())
+    else if (aPredicate())
     {
-        maAction(true);
+        Shutdown();
+        aAction(true);
         bDispose = true;
     }
 
