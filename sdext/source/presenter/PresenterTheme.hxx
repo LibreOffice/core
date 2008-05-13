@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterTheme.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +32,19 @@
 #ifndef SDEXT_PRESENTER_PRESENTER_THEME_HXX
 #define SDEXT_PRESENTER_PRESENTER_THEME_HXX
 
+#include "PresenterBitmapContainer.hxx"
 #include "PresenterConfigurationAccess.hxx"
+#include "PresenterTheme.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XCanvasFont.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/util/Color.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
-
 
 /** A theme is a set of properties describing fonts, colors, and bitmaps to be used to draw
     background, pane borders, and view content.
@@ -79,25 +83,69 @@ public:
 
     bool HasCanvas (void) const;
     void ProvideCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
-    css::uno::Any getPropertyValue (const ::rtl::OUString& rsPropertyName);
 
-    ::rtl::OUString GetPaneStyle (const ::rtl::OUString& rsResourceURL) const;
-    ::rtl::OUString GetViewStyle (const ::rtl::OUString& rsResourceURL) const;
+    ::rtl::OUString GetStyleName (const ::rtl::OUString& rsResourceURL) const;
+    ::std::vector<sal_Int32> GetBorderSize (
+        const ::rtl::OUString& rsStyleName,
+        const bool bOuter) const;
 
-    class BitmapContainer;
     class FontDescriptor;
-    class BitmapDescriptor;
     class Theme;
-    class PropertyMap;
+
+    class FontDescriptor
+    {
+    public:
+        explicit FontDescriptor (void);
+        explicit FontDescriptor (const ::boost::shared_ptr<FontDescriptor>& rpDescriptor);
+
+        ::rtl::OUString msFamilyName;
+        ::rtl::OUString msStyleName;
+        sal_Int32 mnSize;
+        sal_uInt32 mnColor;
+        ::rtl::OUString msAnchor;
+        sal_Int32 mnXOffset;
+        sal_Int32 mnYOffset;
+        css::uno::Reference<css::rendering::XCanvasFont> mxFont;
+
+        bool PrepareFont (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+    };
+    typedef ::boost::shared_ptr<FontDescriptor> SharedFontDescriptor;
+
+    ::rtl::OUString GetThemeName (void) const;
+
+    SharedBitmapDescriptor GetBitmap (
+        const ::rtl::OUString& rsStyleName,
+        const ::rtl::OUString& rsBitmapName) const;
+
+    SharedBitmapDescriptor GetBitmap (
+        const ::rtl::OUString& rsBitmapName) const;
+
+    ::boost::shared_ptr<PresenterBitmapContainer> GetBitmapContainer (void) const;
+
+    SharedFontDescriptor GetFont (
+        const ::rtl::OUString& rsStyleName) const;
+
+    static SharedFontDescriptor ReadFont (
+        const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
+        const ::rtl::OUString& rsFontPath,
+        const SharedFontDescriptor& rDefaultFount);
+
+    static bool ConvertToColor (
+        const css::uno::Any& rColorSequence,
+        sal_uInt32& rColor);
+
+    ::boost::shared_ptr<PresenterConfigurationAccess> GetNodeForViewStyle (
+        const ::rtl::OUString& rsStyleName,
+        const PresenterConfigurationAccess::WriteMode) const;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     const ::rtl::OUString msThemeName;
-    ::boost::shared_ptr<BitmapContainer> mpBitmapContainer;
+    ::boost::shared_ptr<Theme> mpTheme;
+    ::boost::shared_ptr<PresenterBitmapContainer> mpBitmapContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
-    ::boost::shared_ptr<PropertyMap> mpPropertyMap;
 
-    void ReadTheme (void);
+    ::boost::shared_ptr<Theme> ReadTheme (void);
 };
 
 } } // end of namespace ::sd::presenter
