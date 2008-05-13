@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterComponent.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,35 +30,122 @@
  ************************************************************************/
 
 #include "PresenterComponent.hxx"
-#include <rtl/instance.hxx>
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 
-#include "PresenterPane.hxx"
-#include "PresenterPaneBorderManager.hxx"
+#include "PresenterExtensionIdentifier.hxx"
 #include "PresenterProtocolHandler.hxx"
 #include "PresenterScreen.hxx"
-#include "PresenterSlideShowView.hxx"
-#include "PresenterSpritePane.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
+using namespace cppu;
+using namespace osl;
 using ::rtl::OUString;
+
 
 
 namespace sdext { namespace presenter {
 
-namespace {
-    void RegisterServices (void)
-    {
-        OAutoRegistration<PresenterPane>();
-        OAutoRegistration<PresenterPaneBorderManager>();
-        OAutoRegistration<PresenterProtocolHandler>();
-        OAutoRegistration<PresenterScreen>();
-        OAutoRegistration<PresenterSlideShowView>();
-        OAutoRegistration<PresenterSpritePane>();
-    }
+static OUString gsBasePath;
+
+::rtl::OUString PresenterComponent::GetBasePath (
+    const Reference<XComponentContext>& rxComponentContext)
+{
+    return GetBasePath(rxComponentContext, gsExtensionIdentifier);
 }
 
-IMPLEMENT_COMPONENT_LIBRARY_API(PresenterComponent, RegisterServices);
-IMPLEMENT_COMPONENT_MODULE(PresenterComponent);
+
+
+
+::rtl::OUString PresenterComponent::GetBasePath (
+    const Reference<XComponentContext>& rxComponentContext,
+    const OUString& rsExtensionIdentifier)
+{
+    if (gsBasePath.getLength() == 0)
+    {
+        // Determine the base path of the bitmaps.
+        Reference<deployment::XPackageInformationProvider> xInformationProvider (
+            rxComponentContext->getValueByName(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "/singletons/com.sun.star.deployment.PackageInformationProvider"))),
+            UNO_QUERY);
+        if (xInformationProvider.is())
+        {
+            try
+            {
+                gsBasePath = xInformationProvider->getPackageLocation(rsExtensionIdentifier)
+                    + OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+            }
+            catch(deployment::DeploymentException&)
+            {
+            }
+        }
+    }
+
+    return gsBasePath;
+}
+
+
+
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+static struct ImplementationEntry gServiceEntries[] =
+{
+    {
+        PresenterProtocolHandler::Create,
+        PresenterProtocolHandler::getImplementationName_static,
+        PresenterProtocolHandler::getSupportedServiceNames_static,
+        createSingleComponentFactory, &g_moduleCount.modCnt, 0
+    },
+    {
+        PresenterScreenJob::Create,
+        PresenterScreenJob::getImplementationName_static,
+        PresenterScreenJob::getSupportedServiceNames_static,
+        createSingleComponentFactory, 0, 0
+    },
+    { 0, 0, 0, 0, 0, 0 }
+};
+
+
+
+
+extern "C"
+{
+    sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+    {
+        return g_moduleCount.canUnload( &g_moduleCount , pTime );
+    }
+
+
+
+
+    void SAL_CALL component_getImplementationEnvironment(
+        const sal_Char ** ppEnvTypeName, uno_Environment ** )
+    {
+        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+    }
+
+
+
+
+    sal_Bool SAL_CALL component_writeInfo(
+        void * pServiceManager, void * pRegistryKey )
+    {
+        return component_writeInfoHelper(pServiceManager, pRegistryKey, gServiceEntries);
+    }
+
+
+
+
+    void * SAL_CALL component_getFactory(
+        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    {
+        return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , gServiceEntries);
+    }
+
+}
 
 } } // end of namespace sdext::presenter
