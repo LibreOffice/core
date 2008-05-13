@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneFactory.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,11 +61,8 @@ const ::rtl::OUString PresenterPaneFactory::msToolBarPaneURL(
     OUString::createFromAscii("private:resource/pane/Presenter/Pane4"));
 const ::rtl::OUString PresenterPaneFactory::msSlideSorterPaneURL(
     OUString::createFromAscii("private:resource/pane/Presenter/Pane5"));
-const ::rtl::OUString PresenterPaneFactory::msClockPaneURL(
+const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
     OUString::createFromAscii("private:resource/pane/Presenter/Pane6"));
-
-const ::rtl::OUString PresenterPaneFactory::msDebugPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Debug"));
 
 const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
     OUString::createFromAscii("private:resource/pane/Presenter/Overlay"));
@@ -95,7 +92,8 @@ PresenterPaneFactory::PresenterPaneFactory (
     : PresenterPaneFactoryInterfaceBase(m_aMutex),
       mxComponentContextWeak(rxContext),
       mxConfigurationControllerWeak(),
-      mpPresenterController(rpPresenterController)
+      mpPresenterController(rpPresenterController),
+      mpResourceCache()
 {
 }
 
@@ -149,7 +147,21 @@ void SAL_CALL PresenterPaneFactory::disposing (void)
     Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
         xCC->removeResourceFactoryForReference(this);
-        mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
+    mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
+
+    // Dispose the panes in the cache.
+    if (mpResourceCache.get() != NULL)
+    {
+        ResourceContainer::const_iterator iPane (mpResourceCache->begin());
+        ResourceContainer::const_iterator iEnd (mpResourceCache->end());
+        for ( ; iPane!=iEnd; ++iPane)
+        {
+            Reference<lang::XComponent> xPaneComponent (iPane->second, UNO_QUERY);
+            if (xPaneComponent.is())
+                xPaneComponent->dispose();
+        }
+        mpResourceCache.reset();
+    }
 }
 
 
@@ -161,7 +173,39 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
     throw (RuntimeException)
 {
-    return CreatePane(rxPaneId, OUString());
+    if ( ! rxPaneId.is())
+        return NULL;
+
+    const OUString sPaneURL (rxPaneId->getResourceURL());
+    if (sPaneURL.getLength() == 0)
+        return NULL;
+
+    if (mpResourceCache.get() != NULL)
+    {
+        // Has the requested resource already been created?
+        ResourceContainer::const_iterator iResource (mpResourceCache->find(sPaneURL));
+        if (iResource != mpResourceCache->end())
+        {
+            // Yes.  Mark it as active.
+            rtl::Reference<PresenterPaneContainer> pPaneContainer(
+                mpPresenterController->GetPaneContainer());
+            PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+                pPaneContainer->FindPaneURL(sPaneURL));
+            if (pDescriptor.get() != NULL)
+            {
+                pDescriptor->SetActivationState(true);
+                if (pDescriptor->mxBorderWindow.is())
+                    pDescriptor->mxBorderWindow->setVisible(sal_True);
+                pPaneContainer->StorePane(pDescriptor->mxPane);
+            }
+
+            return iResource->second;
+        }
+    }
+
+    // No.  Create a new one.
+    Reference<XResource> xResource = CreatePane(rxPaneId, OUString());
+    return xResource;
 }
 
 
@@ -173,16 +217,31 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
     if ( ! rxResource.is())
         throw lang::IllegalArgumentException();
 
-    // Remove the pane from the container.
-    Reference<XPane> rxPane (rxResource, UNO_QUERY_THROW);
+    // Mark the pane as inactive.
     rtl::Reference<PresenterPaneContainer> pPaneContainer(
         mpPresenterController->GetPaneContainer());
-    pPaneContainer->RemovePane(rxPane->getResourceId());
+    const OUString sPaneURL (rxResource->getResourceId()->getResourceURL());
+    PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
+        pPaneContainer->FindPaneURL(sPaneURL));
+    if (pDescriptor.get() != NULL)
+    {
+        pDescriptor->SetActivationState(false);
+        if (pDescriptor->mxBorderWindow.is())
+            pDescriptor->mxBorderWindow->setVisible(sal_False);
 
-    // Dispose the pane (together with the content window.)
-    Reference<lang::XComponent> xPaneComponent (rxPane, UNO_QUERY);
-    if (xPaneComponent.is())
-        xPaneComponent->dispose();
+        if (mpResourceCache.get() != NULL)
+        {
+            // Store the pane in the cache.
+            (*mpResourceCache)[sPaneURL] = rxResource;
+        }
+        else
+        {
+            // Dispose the pane.
+            Reference<lang::XComponent> xPaneComponent (rxResource, UNO_QUERY);
+            if (xPaneComponent.is())
+                xPaneComponent->dispose();
+        }
+    }
 }
 
 
@@ -246,9 +305,15 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     // Create the pane.
     ::rtl::Reference<PresenterPaneBase> xPane;
     if (bIsSpritePane)
-        xPane = ::rtl::Reference<PresenterPaneBase>(new PresenterSpritePane(xContext));
+    {
+        xPane = ::rtl::Reference<PresenterPaneBase>(
+            new PresenterSpritePane(xContext, mpPresenterController));
+    }
     else
-        xPane = ::rtl::Reference<PresenterPaneBase>(new PresenterPane(xContext));
+    {
+        xPane = ::rtl::Reference<PresenterPaneBase>(
+            new PresenterPane(xContext, mpPresenterController));
+    }
 
     // Supply arguments.
     Sequence<Any> aArguments (6);
@@ -262,13 +327,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     aArguments[5] <<= bIsSpritePane ? false : true;
     xPane->initialize(aArguments);
 
-    // Get the window of the frame and make that visible.
-    if ( ! bIsSpritePane)
-    {
-        Reference<awt::XWindow> xWindow (xPane->getWindow(), UNO_QUERY_THROW);
-        xWindow->setVisible(sal_True);
-    }
-
     // Store pane and canvases and windows in container.
     ::rtl::Reference<PresenterPaneContainer> pContainer (
         mpPresenterController->GetPaneContainer());
@@ -276,6 +334,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
         pContainer->StoreBorderWindow(rxPaneId, xPane->GetBorderWindow()));
     pContainer->StorePane(xPane);
     if (pDescriptor.get() != NULL)
+    {
         if (bIsSpritePane)
         {
             pDescriptor->maSpriteProvider = ::boost::bind(
@@ -289,6 +348,11 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
             pDescriptor->mbIsSprite = false;
             pDescriptor->mbNeedsClipping = true;
         }
+
+        // Get the window of the frame and make that visible.
+        Reference<awt::XWindow> xWindow (pDescriptor->mxBorderWindow, UNO_QUERY_THROW);
+        xWindow->setVisible(sal_True);
+    }
 
     return Reference<XResource>(static_cast<XWeak*>(xPane.get()), UNO_QUERY_THROW);
 }
