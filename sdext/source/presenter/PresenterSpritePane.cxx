@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSpritePane.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,35 +41,6 @@ using namespace ::com::sun::star::drawing::framework;
 using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
-
-//----- Service ---------------------------------------------------------------
-
-OUString PresenterSpritePane::getImplementationName_static (void)
-{
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterSpritePane");
-}
-
-
-
-
-Sequence<OUString> PresenterSpritePane::getSupportedServiceNames_static (void)
-{
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterSpritePane"));
-    return Sequence<rtl::OUString>(&sServiceName, 1);
-}
-
-
-
-
-Reference<XInterface> PresenterSpritePane::Create (const Reference<uno::XComponentContext>& rxContext)
-    SAL_THROW((css::uno::Exception))
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterSpritePane(rxContext)));
-}
-
-
-
 
 //===== TransparentBorderPainter ==============================================
 
@@ -125,8 +96,9 @@ private:
 
 //===== PresenterSpritePane =========================================================
 
-PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rxContext)
-    : PresenterPaneBase(rxContext),
+PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController)
+    : PresenterPaneBase(rxContext, rpPresenterController),
       mxParentWindow(),
       mxParentCanvas(),
       mpSprite(new PresenterSprite())
@@ -193,7 +165,8 @@ void SAL_CALL PresenterSpritePane::windowResized (const awt::WindowEvent& rEvent
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowResized(rEvent);
+
     mpSprite->Resize(geometry::RealSize2D(rEvent.Width, rEvent.Height));
     LayoutContextWindow();
     UpdateCanvases();
@@ -207,7 +180,8 @@ void SAL_CALL PresenterSpritePane::windowMoved (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowMoved(rEvent);
+
     awt::Rectangle aBox (
         mxPresenterHelper->getWindowExtentsRelative(mxBorderWindow, mxParentWindow));
     mpSprite->MoveTo(geometry::RealPoint2D(aBox.X, aBox.Y));
@@ -221,7 +195,7 @@ void SAL_CALL PresenterSpritePane::windowShown (const lang::EventObject& rEvent)
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowShown(rEvent);
 
     mpSprite->Show();
     ToTop();
@@ -240,7 +214,7 @@ void SAL_CALL PresenterSpritePane::windowHidden (const lang::EventObject& rEvent
     throw (RuntimeException)
 {
     (void)rEvent;
-    ThrowIfDisposed();
+    PresenterPaneBase::windowHidden(rEvent);
 
     mpSprite->Hide();
     if (mxContentWindow.is())
