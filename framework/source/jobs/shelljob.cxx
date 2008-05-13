@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shelljob.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,18 +208,21 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     if (eError != osl_Process_E_None)
         return sal_False;
 
-    if (! bCheckExitCode)
-        return sal_True;
-
-    // check it's return codes ...
-    oslProcessInfo aInfo;
-    aInfo.Size = sizeof (oslProcessInfo);
+    ::sal_Bool bRet = sal_True;
+    if (bCheckExitCode)
+    {
+        // check its return codes ...
+        oslProcessInfo aInfo;
+        aInfo.Size = sizeof (oslProcessInfo);
         eError = osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &aInfo);
 
-    if (eError != osl_Process_E_None)
-        return sal_False;
-
-    return (aInfo.Code == 0);
+        if (eError != osl_Process_E_None)
+            bRet = sal_False;
+        else
+            bRet = (aInfo.Code == 0);
+    }
+    osl_freeProcessHandle(hProcess);
+    return bRet;
 }
 
 } // namespace framework
