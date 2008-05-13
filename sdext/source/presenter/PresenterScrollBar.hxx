@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScrollBar.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -48,9 +48,12 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
+class PresenterPaintManager;
+
 namespace {
-    typedef ::cppu::WeakComponentImplHelper3 <
+    typedef ::cppu::WeakComponentImplHelper4 <
         css::awt::XWindowListener,
+        css::awt::XPaintListener,
         css::awt::XMouseListener,
         css::awt::XMouseMotionListener
     > PresenterScrollBarInterfaceBase;
@@ -69,6 +72,8 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
+    void SetVisible (const bool bIsVisible);
+
     /** Set the bounding box of the scroll bar.
     */
     void SetPosSize (const css::geometry::RealRectangle2D& rBox);
@@ -78,7 +83,9 @@ public:
             A value between 0 and the last value given to SetTotalSize()
             minus the last value given to SetThumbSize().
     */
-    void SetThumbPosition (const double nPosition);
+    void SetThumbPosition (
+        double nPosition,
+        const bool bAsynchronousRepaint);
 
     /** Set the upper border of the slider range.
     */
@@ -94,12 +101,17 @@ public:
     */
     void SetCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
+    /** Call this after changing total size or thumb position or size to
+        move the thumb to a valid position.
+    */
+    void CheckValues (void);
+
     /** On some occasions it is necessary to trigger the painting of a
         scrollbar from the outside.
     */
     virtual void Paint (
         const css::awt::Rectangle& rUpdateBox,
-            bool bNoClip = false);
+        bool bNoClip = false);
 
     virtual sal_Int32 GetSize (void) const = 0;
 
@@ -115,6 +127,12 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+
+    // XPaintListener
+
+    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
         throw (css::uno::RuntimeException);
 
 
@@ -153,78 +171,73 @@ protected:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
+    ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;
     double mnThumbPosition;
     double mnTotalSize;
     double mnThumbSize;
-    css::awt::Point maDragPosition;
+    css::geometry::RealPoint2D maDragAnchor;
     ::boost::function<void(double)> maThumbMotionListener;
-    enum Area { None, Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton };
+    enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
+                __AreaCount__ = None };
     Area meButtonDownArea;
     Area meMouseMoveArea;
-    enum Border {
-        LeftOrTopOfPrevButton,
-        RightOrBottomOfPrevButton,
-        LeftOrTopOfThumb,
-        RightOrBottomOfThumb,
-        LeftOrTopOfNextButton,
-        RightOrBottomOfNextButton,
-        _Count
-    };
-    double maBorders[_Count];
+    css::geometry::RealRectangle2D maBox[__AreaCount__];
     bool mbIsNotificationActive;
     static boost::weak_ptr<PresenterBitmapContainer> mpSharedBitmaps;
     boost::shared_ptr<PresenterBitmapContainer> mpBitmaps;
-    PresenterBitmapContainer::BitmapSet maPrevButtonSet;
-    PresenterBitmapContainer::BitmapSet maNextButtonSet;
-    PresenterBitmapContainer::BitmapSet maPagerStartSet;
-    PresenterBitmapContainer::BitmapSet maPagerCenterSet;
-    PresenterBitmapContainer::BitmapSet maPagerEndSet;
-    PresenterBitmapContainer::BitmapSet maThumbStartSet;
-    PresenterBitmapContainer::BitmapSet maThumbCenterSet;
-    PresenterBitmapContainer::BitmapSet maThumbEndSet;
+    SharedBitmapDescriptor mpPrevButtonDescriptor;
+    SharedBitmapDescriptor mpNextButtonDescriptor;
+    SharedBitmapDescriptor mpPagerStartDescriptor;
+    SharedBitmapDescriptor mpPagerCenterDescriptor;
+    SharedBitmapDescriptor mpPagerEndDescriptor;
+    SharedBitmapDescriptor mpThumbStartDescriptor;
+    SharedBitmapDescriptor mpThumbCenterDescriptor;
+    SharedBitmapDescriptor mpThumbEndDescriptor;
+    bool maEnabledState[__AreaCount__];
 
     virtual css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
-    virtual css::geometry::RealRectangle2D GetBorderRectangle (
-        const sal_Int32 nLeftOrTopBorder,
-        const sal_Int32 nRightOrBottomBorder) const = 0;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
+    virtual void UpdateDragAnchor (const double nDragDistance) = 0;
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const = 0;
     virtual double GetMajor (const double nX, const double nY) const = 0;
     virtual double GetMinor (const double nX, const double nY) const = 0;
     virtual void UpdateBorders (void) = 0;
     virtual void UpdateBitmaps (void) = 0;
+    virtual void PaintComposite(
+        const css::awt::Rectangle& rRepaintBox,
+        const Area eArea,
+        const SharedBitmapDescriptor& rpStartBitmaps,
+        const SharedBitmapDescriptor& rpCenterBitmaps,
+        const SharedBitmapDescriptor& rpEndBitmaps) = 0;
 
     PresenterScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::boost::function<void(double)>& rThumbMotionListener);
 
-    void Repaint (const css::geometry::RealRectangle2D aBox);
-    void Paint(
-        const Area eArea,
-        const PresenterBitmapContainer::BitmapSet& rBitmaps,
-        const double nRed,
-        const double nGreen,
-        const double nBlue);
+    void Repaint (
+        const css::geometry::RealRectangle2D aBox,
+        const bool bAsynchronous);
     void PaintBitmap(
+        const css::awt::Rectangle& rRepaintBox,
         const Area eArea,
-        const PresenterBitmapContainer::BitmapSet& rBitmaps);
-    void PaintBox (
-        const Area eArea,
-        const double nRed,
-        const double nGreen,
-        const double nBlue);
-    void Paint(
-        const Area eArea,
-        const PresenterBitmapContainer::BitmapSet& rStartBitmaps,
-        const PresenterBitmapContainer::BitmapSet& rCenterBitmaps,
-        const PresenterBitmapContainer::BitmapSet& rEndBitmaps);
+        const SharedBitmapDescriptor& rpBitmaps);
     void NotifyThumbPositionChange (void);
     void UpdateWidthOrHeight (sal_Int32& rSize,
-        const PresenterBitmapContainer::BitmapSet& rSet);
+        const SharedBitmapDescriptor& rpDescriptor);
     css::uno::Reference<css::rendering::XBitmap> GetBitmap (
         const Area eArea,
-        const PresenterBitmapContainer::BitmapSet& rBitmaps) const;
+        const SharedBitmapDescriptor& rpBitmaps) const;
+    PresenterBitmapContainer::BitmapDescriptor::Mode GetBitmapMode (
+        const Area eArea) const;
+    bool IsDisabled (const Area eArea) const;
+    double ValidateThumbPosition (double nPosition);
+        void SetThumbPosition (
+        double nPosition,
+        const bool bAsynchronousRepaint,
+        const bool bValidate,
+        const bool bNotify);
 
 private:
     Area GetArea (const double nX, const double nY) const;
@@ -241,20 +254,25 @@ public:
     PresenterVerticalScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::boost::function<void(double)>& rThumbMotionListener);
     virtual ~PresenterVerticalScrollBar (void);
     virtual sal_Int32 GetSize (void) const;
 
 protected:
-    virtual css::geometry::RealRectangle2D GetBorderRectangle (
-        const sal_Int32 nLeftOrTopBorder,
-        const sal_Int32 nRightOrBottomBorder) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const;
+    virtual void UpdateDragAnchor (const double nDragDistance);
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const;
     virtual double GetMinor (const double nX, const double nY) const;
     virtual double GetMajor (const double nX, const double nY) const;
     virtual void UpdateBorders (void);
     virtual void UpdateBitmaps (void);
+    virtual void PaintComposite(
+        const css::awt::Rectangle& rRepaintBox,
+        const Area eArea,
+        const SharedBitmapDescriptor& rpStartBitmaps,
+        const SharedBitmapDescriptor& rpCenterBitmaps,
+        const SharedBitmapDescriptor& rpEndBitmaps);
 
 private:
     sal_Int32 mnScrollBarWidth;
@@ -271,20 +289,25 @@ public:
     PresenterHorizontalScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::boost::function<void(double)>& rThumbMotionListener);
     virtual ~PresenterHorizontalScrollBar (void);
     virtual sal_Int32 GetSize (void) const;
 
 protected:
-    virtual css::geometry::RealRectangle2D GetBorderRectangle (
-        const sal_Int32 nLeftOrTopBorder,
-        const sal_Int32 nRightOrBottomBorder) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const;
+    virtual void UpdateDragAnchor (const double nDragDistance);
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const;
     virtual double GetMinor (const double nX, const double nY) const;
     virtual double GetMajor (const double nX, const double nY) const;
     virtual void UpdateBorders (void);
     virtual void UpdateBitmaps (void);
+    virtual void PaintComposite(
+        const css::awt::Rectangle& rRepaintBox,
+        const Area eArea,
+        const SharedBitmapDescriptor& rpStartBitmaps,
+        const SharedBitmapDescriptor& rpCenterBitmaps,
+        const SharedBitmapDescriptor& rpEndBitmaps);
 
 private:
     sal_Int32 mnScrollBarHeight;
