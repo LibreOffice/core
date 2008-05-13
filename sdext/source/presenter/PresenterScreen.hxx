@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterScreen.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterPaneContainer.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -44,6 +44,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -57,10 +58,52 @@ class PresenterWindowManager;
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper2 <
-        css::task::XJob,
-        css::document::XEventListener    > PresenterScreenInterfaceBase;
+    typedef ::cppu::WeakComponentImplHelper1 <
+        css::task::XJob
+        > PresenterScreenJobInterfaceBase;
+    typedef ::cppu::WeakComponentImplHelper1 <
+        css::lang::XEventListener
+        > PresenterScreenInterfaceBase;
 }
+
+
+
+
+/** The PresenterScreenJob service is instantiated every time a document is
+    created or loaded.  In its execute() method it then filters out all
+    non-Impress documents and creates and registers a new PresenterScreen
+    object.
+*/
+class PresenterScreenJob
+    : private ::boost::noncopyable,
+      private ::cppu::BaseMutex,
+      public PresenterScreenJobInterfaceBase
+{
+public:
+    static ::rtl::OUString getImplementationName_static (void);
+    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
+    static css::uno::Reference<css::uno::XInterface> Create(
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
+        SAL_THROW((css::uno::Exception));
+
+    virtual void SAL_CALL disposing (void);
+
+    // XJob
+
+    virtual css::uno::Any SAL_CALL execute(
+        const css::uno::Sequence<css::beans::NamedValue >& Arguments)
+        throw (css::lang::IllegalArgumentException,
+            css::uno::Exception,
+            css::uno::RuntimeException);
+
+private:
+    PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    virtual ~PresenterScreenJob (void);
+
+    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+};
+
+
 
 
 /** This is the bootstrap class of the presenter screen.  It is registered
@@ -80,26 +123,23 @@ class PresenterScreen
       public PresenterScreenInterfaceBase
 {
 public:
-    void SAL_CALL disposing (void);
+    PresenterScreen (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const css::uno::Reference<css::frame::XModel2>& rxModel);
+    virtual ~PresenterScreen (void);
 
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        SAL_THROW((css::uno::Exception));
+    virtual void SAL_CALL disposing (void);
 
+    /** Make the presenter screen visible.
+    */
+    void InitializePresenterScreen (void);
 
-    // XJob
+    /** Do not call ShutdownPresenterScreen() directly.  Call
+        RequestShutdownPresenterScreen() instead.  It will issue an
+        asynchronous call to ShutdownPresenterScreen() when that is safe.
+    */
+    void RequestShutdownPresenterScreen (void);
 
-    virtual css::uno::Any SAL_CALL execute(
-        const css::uno::Sequence<css::beans::NamedValue >& Arguments)
-        throw (css::lang::IllegalArgumentException,
-            css::uno::Exception,
-            css::uno::RuntimeException);
-
-    // document::XEventListener
-
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException);
 
     // XEventListener
 
@@ -120,12 +160,15 @@ private:
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxPaneFactory;
     css::uno::Reference<css::drawing::framework::XResourceFactory> mxViewFactory;
 
-    PresenterScreen (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
-    virtual ~PresenterScreen (void);
+    class ViewDescriptor
+    {
+    public:
+        ::rtl::OUString msTitle;
+        bool mbIsOpaque;
+    };
+    typedef ::std::map<rtl::OUString,ViewDescriptor> ViewDescriptorContainer;
+    ViewDescriptorContainer maViewDescriptors;
 
-    /** Make the presenter screen visible.
-    */
-    void InitializePresenterScreen (void);
 
     /** Deactivate the currently active panes to make room for the full
         screen pane and the presenter panes.
@@ -171,17 +214,41 @@ private:
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
 
-    css::uno::Reference<css::drawing::framework::XResourceId> SetupView (
+    /** Read the view descriptions from the configuration.
+    */
+    void ProcessViewDescriptions (
+        PresenterConfigurationAccess& rConfiguration);
+
+    /** Called by ProcessViewDescriptions for a single entry.
+    */
+    void ProcessViewDescription (
+        const ::rtl::OUString& rsKey,
+        const ::std::vector<css::uno::Any>& rValues);
+
+    void SetupView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
         const ::rtl::OUString& rsPaneURL,
         const ::rtl::OUString& rsViewURL,
-        const ::rtl::OUString& rsTitle,
         const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization,
         const double nLeft,
         const double nTop,
         const double nRight,
         const double nBottom);
+
+    /** Return the screen number on which to display the presenter screen.
+        @return
+            Returns -1 when the presenter screen can or shall not be
+            displayed.
+    */
+    sal_Int32 GetScreenNumber (
+        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
+
+    /** Create a resource id for the full screen background pane so that it
+        is displayed on another screen than the full screen presentation.
+    */
+    css::uno::Reference<css::drawing::framework::XResourceId> GetMainPaneId (
+        const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
 
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
