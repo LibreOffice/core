@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSprite.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,8 @@ public:
 
     void SetAlpha (const double nAlpha);
     double GetAlpha (void) const;
+
+    void SetToBitmap (const css::uno::Reference<css::rendering::XBitmap>& rxBitmap);
 
     void Update (void);
 
