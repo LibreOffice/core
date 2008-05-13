@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: db.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,17 +88,6 @@ namespace berkeleydbproxy {
         DB_ENV* m_pDBENV;
 
     public:
-        explicit DbEnv(u_int32_t flags);
-        ~DbEnv();
-
-        int open(const char *db_home, u_int32_t flags, int mode);
-        void close(u_int32_t flags);
-
-        int set_alloc(
-                  db_malloc_fcn_type app_malloc,
-                  db_realloc_fcn_type app_realloc,
-                  db_free_fcn_type app_free);
-
         static char *strerror(int);
     };
 
@@ -127,11 +116,6 @@ namespace berkeleydbproxy {
         int put(DB_TXN* txnid, Dbt *key, Dbt *data, u_int32_t flags);
 
         int cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags);
-
-        int set_alloc(
-                  db_malloc_fcn_type app_malloc,
-                  db_realloc_fcn_type app_realloc,
-                  db_free_fcn_type app_free);
     };
 
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbc : db_internal::Noncopyable
@@ -149,8 +133,6 @@ namespace berkeleydbproxy {
         int close();
 
         int get(Dbt *key, Dbt *data, u_int32_t flags);
-
-        int del(u_int32_t flags_arg);
     };
 
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbt: private DBT
@@ -172,8 +154,6 @@ namespace berkeleydbproxy {
 
           u_int32_t get_size() const;
         void set_size(u_int32_t value);
-
-        void set_flags(u_int32_t);
     };
 }
 
