@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterSlideShowView.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,17 +32,18 @@
 #ifndef SDEXT_PRESENTER_SLIDE_SHOW_VIEW_HXX
 #define SDEXT_PRESENTER_SLIDE_SHOW_VIEW_HXX
 
+#include "PresenterViewFactory.hxx"
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XPointer.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -64,7 +65,7 @@ namespace {
         css::awt::XMouseMotionListener,
         css::awt::XWindowListener,
         css::drawing::framework::XView,
-        css::lang::XInitialization
+        css::drawing::XDrawView
         > PresenterSlideShowViewInterfaceBase;
 }
 
@@ -73,22 +74,19 @@ namespace {
 class PresenterSlideShowView
     : private ::boost::noncopyable,
       protected ::cppu::BaseMutex,
-      public PresenterSlideShowViewInterfaceBase
+      public PresenterSlideShowViewInterfaceBase,
+      public CachablePresenterView
 {
 public:
-    PresenterSlideShowView (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterSlideShowView (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
+        const css::uno::Reference<css::frame::XController>& rxController,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterSlideShowView (void);
 
+    void LateInit (void);
     virtual void SAL_CALL disposing (void);
-
-    // Service.
-
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
-    static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        SAL_THROW((css::uno::Exception));
-
 
     // XSlideShowView
 
@@ -204,13 +202,25 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 
-    // XInitialization
+    // XDrawView
 
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual void SAL_CALL setCurrentPage (
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage (void)
+        throw (css::uno::RuntimeException);
+
+
+    // CachablePresenterView
+
+    virtual void ActivatePresenterView (void);
+
+    virtual void DeactivatePresenterView (void);
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
+    ::rtl::Reference<PresenterController> mpPresenterController;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::frame::XController> mxController;
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
@@ -220,7 +230,9 @@ private:
     css::uno::Reference<css::awt::XPointer> mxPointer;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::awt::XWindow> mxViewWindow;
-    css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolyPolygon;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon1;
+    css::uno::Reference<css::rendering::XPolyPolygon2D> mxBackgroundPolygon2;
+    bool mbIsViewAdded;
 
     /** Aspect ratio of the current slide.
     */
@@ -231,20 +243,32 @@ private:
     */
     ::cppu::OBroadcastHelper maBroadcaster;
 
-    css::util::Color maBackgroundColor;
+    SharedBitmapDescriptor mpBackground;
 
     bool mbIsInModifyNotification;
     bool mbIsForcedPaintPending;
     bool mbIsPaintPending;
+    ::rtl::OUString msClickToExitPresentationText;
+    ::rtl::OUString msClickToExitPresentationTitle;
+    ::rtl::OUString msTitleTemplate;
+    bool mbIsEndSlideVisible;
+    css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
 
     /** Create the window into which the slide show will render its
         content.  This window has the correct aspect ratio and is displayed centered
         and as large as possible in its parent window.
     */
     css::uno::Reference<css::awt::XWindow> CreateViewWindow (
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
+        const css::uno::Reference<css::awt::XWindow>& rxParentWindow) const;
+    css::uno::Reference<css::rendering::XCanvas> CreateViewCanvas (
+        const css::uno::Reference<css::awt::XWindow>& rxWindow,
+        const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane) const;
 
     void Resize (void);
+
+    void PaintOuterWindow (const css::awt::Rectangle& rRepaintBox);
+    void PaintInnerWindow (const css::awt::PaintEvent& rEvent);
+    void PaintEndSlide (const css::awt::Rectangle& rRepaintBox);
 
     /** The slide show relies on the back buffer of the canvas not being
         modified.  With a shared canvas there are times when that can not be
@@ -254,7 +278,7 @@ private:
     */
     void ForceRepaint (void);
 
-    css::uno::Reference<css::rendering::XPolyPolygon2D> CreateBackgroundPolyPolygon (void) const;
+    void CreateBackgroundPolygons (void);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
