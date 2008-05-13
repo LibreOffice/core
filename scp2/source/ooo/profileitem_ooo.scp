@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,7 +210,7 @@ ProfileItem gid_Profileitem_Configmgr_Unocfg_CustomLayerUrl
     Key  = "CFG_CustomLayerUrl";
     Value  = "$CustomDataUrl/share/registry";
 End
-    
+
 ProfileItem gid_Profileitem_Configmgr_Unocfg_CustomLayerModulesUrl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
@@ -219,7 +219,7 @@ ProfileItem gid_Profileitem_Configmgr_Unocfg_CustomLayerModulesUrl
     Key  = "CFG_CustomLayerModulesUrl";
     Value  = "$CFG_CustomLayerUrl/modules";
 End
-    
+
 ProfileItem gid_Profileitem_Configmgr_Unocfg_Backendservice
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
