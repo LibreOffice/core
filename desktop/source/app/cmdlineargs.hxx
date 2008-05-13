@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,16 +116,11 @@ class CommandLineArgs
             virtual bool next(rtl::OUString * argument) = 0;
         };
 
-        CommandLineArgs();
         CommandLineArgs( bool bConvert );
         CommandLineArgs( Supplier& supplier );
 
         // generic methods to access parameter
-        sal_Bool                GetBoolParam( BoolParam eParam ) const;
         void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
-
-        const rtl::OUString&    GetStringParam( StringParam eParam ) const;
-        void                    SetStringParam( StringParam eParam, const rtl::OUString& bNewValue );
 
         // Access to bool parameters
         sal_Bool                IsMinimized() const;
@@ -133,12 +128,11 @@ class CommandLineArgs
         sal_Bool                IsNoRestore() const;
         sal_Bool                IsNoDefault() const;
         sal_Bool                IsBean() const;
-        sal_Bool                IsPlugin() const;
         sal_Bool                IsServer() const;
         sal_Bool                IsHeadless() const;
         sal_Bool                IsQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
-                sal_Bool                                IsNoFirstStartWizard() const;
+        sal_Bool                IsNoFirstStartWizard() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
         sal_Bool                IsHelp() const;
@@ -163,18 +157,14 @@ class CommandLineArgs
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
         sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
         sal_Bool                GetUnAcceptString( ::rtl::OUString& rPara) const;
-        sal_Bool                GetUserDir( ::rtl::OUString& rPara) const;
-        sal_Bool                GetClientDisplay( ::rtl::OUString& rPara) const;
         sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
         sal_Bool                GetViewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetStartList( ::rtl::OUString& rPara) const;
         sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
         sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
-        sal_Bool                GetVersionString( ::rtl::OUString& rPara) const;
         sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
-        sal_Bool                GetDisplay( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
         sal_Bool                IsPrinting() const;
