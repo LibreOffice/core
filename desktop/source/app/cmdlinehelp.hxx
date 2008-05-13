@@ -7,7 +7,7 @@
 namespace desktop
 {
     void displayCmdlineHelp( void );
-
+#ifndef UNX
     class CmdlineHelpDialog : public ModalDialog
     {
     public:
@@ -19,7 +19,5 @@ namespace desktop
         FixedText   m_ftBottom;
         OKButton    m_btOk;
     };
-
-
-
+#endif
 }
