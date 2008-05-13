@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterProtocolHandler.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,15 @@
 #ifndef SDEXT_PRESENTER_PRESENTER_PROTOCOL_HANDLER_HXX
 #define SDEXT_PRESENTER_PRESENTER_PROTOCOL_HANDLER_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <hash_map>
+#include <rtl/ref.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -45,13 +48,13 @@ namespace sdext { namespace presenter {
 
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper3 <
+    typedef ::cppu::WeakComponentImplHelper2 <
         css::lang::XInitialization,
-        css::frame::XDispatchProvider,
-        css::frame::XDispatch
+        css::frame::XDispatchProvider
     > PresenterProtocolHandlerInterfaceBase;
 }
 
+class PresenterController;
 
 class PresenterProtocolHandler
     : protected ::cppu::BaseMutex,
@@ -92,23 +95,9 @@ public:
         throw(css::uno::RuntimeException);
 
 
-    // XDispatch
-    virtual void SAL_CALL dispatch(
-        const css::util::URL& aURL,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-        throw(css::uno::RuntimeException);
-
-    virtual void SAL_CALL addStatusListener(
-        const css::uno::Reference<css::frame::XStatusListener>& rxListener,
-        const css::util::URL& rURL)
-        throw(css::uno::RuntimeException);
-
-    virtual void SAL_CALL removeStatusListener (
-        const css::uno::Reference<css::frame::XStatusListener>& rxListener,
-        const css::util::URL& rURL)
-        throw(css::uno::RuntimeException);
-
 private:
+    class Dispatch;
+    ::rtl::Reference<PresenterController> mpPresenterController;
 
     void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
