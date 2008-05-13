@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterAnimator.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +61,7 @@ private:
     typedef ::std::multimap<sal_uInt64,SharedPresenterAnimation> AnimationList;
     AnimationList maFutureAnimations;
     AnimationList maActiveAnimations;
-    class Timer;
-    ::boost::scoped_ptr<Timer> mpTimer;
+    sal_Int32 mnCurrentTaskId;
     sal_uInt64 mnNextTime;
 
     void Process (void);
