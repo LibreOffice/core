@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterPaneBase.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +32,10 @@
 #ifndef SD_PRESENTER_PRESENTER_PANE_BASE_HXX
 #define SD_PRESENTER_PRESENTER_PANE_BASE_HXX
 
+#include "PresenterTheme.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase4.hxx>
+#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -52,6 +54,8 @@ namespace css = ::com::sun::star;
 
 
 namespace sdext { namespace presenter {
+
+class PresenterController;
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper4 <
@@ -75,16 +79,19 @@ class PresenterPaneBase
       public PresenterPaneBaseInterfaceBase
 {
 public:
-    PresenterPaneBase (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    PresenterPaneBase (
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
+        const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneBase (void);
 
     virtual void SAL_CALL disposing (void);
 
     css::uno::Reference<css::awt::XWindow> GetBorderWindow (void) const;
-    void SetBackground (
-        const css::util::Color aViewBackgroundColor,
-        const css::uno::Reference<css::rendering::XBitmap>& rxViewBackgroundBitmap);
+    void SetBackground (const SharedBitmapDescriptor& rpBackground);
     void SetTitle (const ::rtl::OUString& rsTitle);
+    css::uno::Reference<css::drawing::framework::XPaneBorderPainter> GetPaneBorderPainter (void) const;
+    void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
+    css::awt::Point GetCalloutAnchor (void) const;
 
     // XInitialization
 
@@ -101,11 +108,28 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 
+    // XWindowListener
+
+    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
+        throw (css::uno::RuntimeException);
+
+
     // lang::XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw (css::uno::RuntimeException);
 
 protected:
+    ::rtl::Reference<PresenterController> mpPresenterController;
+    css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::awt::XWindow> mxBorderWindow;
     css::uno::Reference<css::rendering::XCanvas> mxBorderCanvas;
     css::uno::Reference<css::awt::XWindow> mxContentWindow;
@@ -115,8 +139,9 @@ protected:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
     ::rtl::OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::util::Color maViewBackgroundColor;
-    css::uno::Reference<css::rendering::XBitmap> mxViewBackgroundBitmap;
+    SharedBitmapDescriptor mpViewBackground;
+    bool mbHasCallout;
+    css::awt::Point maCalloutAnchor;
 
     virtual void CreateCanvases (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
@@ -131,6 +156,7 @@ protected:
     void PaintBorder (const css::awt::Rectangle& rUpdateRectangle);
     void ToTop (void);
     void LayoutContextWindow (void);
+    bool IsVisible (void) const;
 
     /** This method throws a DisposedException when the object has already been
         disposed.
