@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LDriver.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,6 +180,7 @@ namespace
                 nError = nWaitForProcessError;
                 // TODO: kill the running process?
             }
+            osl_freeProcessHandle( hProcess );
         }
         return nError;
     }
