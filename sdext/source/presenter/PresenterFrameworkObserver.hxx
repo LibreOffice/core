@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterFrameworkObserver.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,9 @@ public:
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const Action& rAction);
+    static void RunOnUpdateEnd (
+        const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
+        const Action& rAction);
 
     virtual void SAL_CALL disposing (void);
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
@@ -89,6 +92,17 @@ private:
     Predicate maPredicate;
     Action maAction;
 
+    /** Create a new PresenterFrameworkObserver object.
+        @param rsEventName
+            An event name other than ConfigurationUpdateEnd.  When the
+            observer shall only listen for ConfigurationUpdateEnd then pass
+            an empty name.
+        @param rPredicate
+            This functor tests whether the action is to be executed or not.
+        @param rAction
+            The functor to execute when the predicate returns true,
+            e.g. when some resource has been created.
+    */
     PresenterFrameworkObserver (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const ::rtl::OUString& rsEventName,
@@ -96,9 +110,22 @@ private:
         const Action& rAction);
     virtual ~PresenterFrameworkObserver (void);
 
+    void Shutdown (void);
+
+    /** Predicate that returns true when the specified resource is active
+        with respect to the given configuration controller.
+    */
     static bool HasResource (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+
+    /** Predicate that always returns true.
+    */
+    static bool True (void);
+
+    /** Predicate that always returns false.
+    */
+    static bool False (void);
 };
 
 
