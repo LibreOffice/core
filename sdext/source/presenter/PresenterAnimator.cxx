@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterAnimator.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 
 #include "PresenterAnimator.hxx"
 
+#include "PresenterTimer.hxx"
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <vos/timer.hxx>
@@ -41,30 +42,12 @@ namespace sdext { namespace presenter {
 
 
 
-//===== PresenterAnimator::Timer ==============================================
-
-class PresenterAnimator::Timer : public ::vos::OTimer
-{
-public:
-    typedef ::boost::function0<void> Callback;
-    Timer (const Callback& rCallback) : maCallback(rCallback){ acquire(); };
-    virtual ~Timer (void) { };
-    void Dispose (void) { stop(); release(); };
-protected:
-    virtual void SAL_CALL onShot (void) { maCallback(); };
-private:
-    Callback maCallback;
-};
-
-
-
-
 //===== PresenterAnimator =====================================================
 
 PresenterAnimator::PresenterAnimator (void)
     : maFutureAnimations(),
       maActiveAnimations(),
-      mpTimer(new Timer(::boost::bind(&PresenterAnimator::Process, this))),
+      mnCurrentTaskId(0),
       mnNextTime(0)
 {
 }
@@ -74,7 +57,7 @@ PresenterAnimator::PresenterAnimator (void)
 
 PresenterAnimator::~PresenterAnimator (void)
 {
-    mpTimer->Dispose();
+    PresenterTimer::CancelTask(mnCurrentTaskId);
 }
 
 
@@ -97,7 +80,6 @@ void PresenterAnimator::Process (void)
     ::osl::MutexGuard aGuard (m_aMutex);
 
     mnNextTime = 0;
-    mpTimer->stop();
 
     const sal_uInt64 nCurrentTime (GetCurrentTime());
 
@@ -120,7 +102,8 @@ void PresenterAnimator::Process (void)
         else if (nProgress >= 1)
             nProgress = 1;
 
-        OSL_TRACE("running animation step at %d (requested was %d)\n", nCurrentTime, nRequestedTime);
+        OSL_TRACE("running animation step at %f (requested was %f) %f\n",
+            nCurrentTime/1e6, nRequestedTime/1e6, nProgress);
         pAnimation->Run(nProgress, nCurrentTime);
 
         if (nCurrentTime < pAnimation->GetEndTime())
@@ -179,10 +162,10 @@ void PresenterAnimator::ScheduleNextRun (const sal_uInt64 nStartTime)
     if (mnNextTime==0 || nStartTime<mnNextTime)
     {
         mnNextTime = nStartTime;
-        mpTimer->stop();
         ::vos::TTimeValue aTimeValue (GetSeconds(mnNextTime), GetNanoSeconds(mnNextTime));
-        mpTimer->setAbsoluteTime(aTimeValue);
-        mpTimer->start();
+        PresenterTimer::ScheduleSingleTaskAbsolute (
+            ::boost::bind(&PresenterAnimator::Process, this),
+            aTimeValue);
     }
 }
 
