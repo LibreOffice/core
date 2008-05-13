@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.40 $
+# $Revision: 1.41 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -93,7 +93,7 @@ OBJFILES = \
 SLOFILES = $(SHL1OBJS)
 
 SRS1NAME=	desktop
-SRC1FILES=	desktop.src	
+SRC1FILES=	desktop.src
 
 # --- Targets ------------------------------------------------------
 
