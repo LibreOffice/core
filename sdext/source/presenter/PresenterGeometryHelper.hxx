@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterGeometryHelper.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,30 @@ namespace sdext { namespace presenter {
 class PresenterGeometryHelper
 {
 public:
+    static sal_Int32 Round (const double nValue);
+    static sal_Int32 Floor (const double nValue);
+    static sal_Int32 Ceil (const double nValue);
+
+    /** Return the bounding box with integer coordinates of the given
+        rectangle.  Note that due to different rounding of the left/top and
+        the right/bottom border the width of the resulting rectangle may
+        differ for different positions but constant width and height.
+    */
+    static css::awt::Rectangle ConvertRectangle (
+        const css::geometry::RealRectangle2D& rBox);
+
+    /** Convert the given rectangle to integer coordinates so that width and
+        height remain constant when only the position changes.
+    */
+    static css::awt::Rectangle ConvertRectangleWithConstantSize (
+        const css::geometry::RealRectangle2D& rBox);
+
+    static css::geometry::RealRectangle2D ConvertRectangle (
+        const css::awt::Rectangle& rBox);
+
+    static css::awt::Size ConvertSize (
+        const css::geometry::RealSize2D& rSize);
+
     static css::awt::Rectangle TranslateRectangle (
         const css::awt::Rectangle& rBox,
         const sal_Int32 nXOffset,
@@ -57,6 +81,10 @@ public:
         const css::awt::Rectangle& rBox1,
         const css::awt::Rectangle& rBox2);
 
+    static css::geometry::RealRectangle2D Intersection (
+        const css::geometry::RealRectangle2D& rBox1,
+        const css::geometry::RealRectangle2D& rBox2);
+
     static bool IsInside (
         const css::awt::Rectangle& rBox,
         const css::awt::Point& rPoint);
@@ -65,9 +93,19 @@ public:
         const css::geometry::RealRectangle2D& rBox,
         const css::geometry::RealPoint2D& rPoint);
 
+    /** Return whether rBox1 is completly inside rBox2.
+    */
+    static bool IsInside (
+        const css::awt::Rectangle& rBox1,
+        const css::awt::Rectangle& rBox2);
+
     static css::awt::Rectangle Union (
         const css::awt::Rectangle& rBox1,
         const css::awt::Rectangle& rBox2);
+
+    static css::geometry::RealRectangle2D Union (
+        const css::geometry::RealRectangle2D& rBox1,
+        const css::geometry::RealRectangle2D& rBox2);
 
     static bool AreRectanglesDisjoint (
         const css::awt::Rectangle& rBox1,
@@ -83,6 +121,13 @@ public:
 
     static css::uno::Reference<css::rendering::XPolyPolygon2D> CreatePolygon(
         const ::std::vector<css::awt::Rectangle>& rBoxes,
+        const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
+
+    /** Create a polygon for a rounded rectangle.
+    */
+    static css::uno::Reference<css::rendering::XPolyPolygon2D> CreatePolygon(
+        const css::awt::Rectangle& rBox,
+        const double nRadius,
         const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
 };
 
