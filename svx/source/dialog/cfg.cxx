@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfg.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2340,10 +2340,11 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
 bool SvxConfigPage::MoveEntryData(
     SvLBoxEntry* pSourceEntry, SvLBoxEntry* pTargetEntry )
 {
-    if ( pSourceEntry == NULL )
-    {
-        return FALSE;
-    }
+    //modified by shizhoubo for issue53677
+    if ( NULL == pSourceEntry || NULL == pTargetEntry )
+     {
+         return FALSE;
+     }
 
     // Grab the entries list for the currently selected menu
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
@@ -4867,9 +4868,17 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 {
     PopupMenu* pPopup = aModifyCommandButton.GetPopupMenu();
 
-    // disable all buttons first and then re-enable buttons as needed
-    aMoveUpButton.Enable( FALSE );
-    aMoveDownButton.Enable( FALSE );
+    //Always enable Up and Down buttons
+    // added for issue53677 by shizhoubo
+    aMoveDownButton.Enable(TRUE);
+    aMoveUpButton.Enable(TRUE);
+    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
+    SvLBoxEntry* first = aContentsListBox->First();
+    SvLBoxEntry* last = aContentsListBox->Last();
+    if (selection == first || selection == last)
+    {
+        return;
+    }
 
     pPopup->EnableItem( ID_RENAME, FALSE );
     pPopup->EnableItem( ID_DELETE, FALSE );
@@ -4883,17 +4892,10 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
     aDescriptionField.Clear();
 
-    SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
     if ( aContentsListBox->GetEntryCount() == 0 || selection == NULL )
     {
         return;
     }
-
-    SvLBoxEntry* first = aContentsListBox->First();
-    SvLBoxEntry* last = aContentsListBox->Last();
-
-    aMoveUpButton.Enable( selection != first );
-    aMoveDownButton.Enable( selection != last );
 
     SvxConfigEntry* pEntryData =
         (SvxConfigEntry*) selection->GetUserData();
