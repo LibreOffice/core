@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ieps.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,8 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     oslProcessError eErr = osl_executeProcess_WithRedirectedIO(fileName.pData,
-        args, sizeof(args)/sizeof(rtl_uString *), osl_Process_SEARCHPATH,
+        args, sizeof(args)/sizeof(rtl_uString *),
+        osl_Process_SEARCHPATH | osl_Process_HIDDEN,
         osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
     if (eErr!=osl_Process_E_None)
         return false;
@@ -214,6 +215,8 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         if (GraphicConverter::Import(aFile, rGraphic, CVT_EMF) == ERRCODE_NONE)
             bRet = true;
     }
+    osl_joinProcess(aProcess);
+    osl_freeProcessHandle(aProcess);
     return bRet;
 }
 
@@ -225,7 +228,7 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     oslFileHandle pOut = NULL;
     oslFileHandle pErr = NULL;
     oslProcessError eErr = osl_executeProcess_WithRedirectedIO(rProgName.pData,
-        pArgs, nArgs, osl_Process_SEARCHPATH,
+        pArgs, nArgs, osl_Process_SEARCHPATH | osl_Process_HIDDEN,
         osl_getCurrentSecurity(), 0, 0, 0, &aProcess, &pIn, &pOut, &pErr);
     if (eErr!=osl_Process_E_None)
         return false;
@@ -257,6 +260,8 @@ static bool RenderAsPNGThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
     }
     if (pOut) osl_closeFile(pOut);
     if (pErr) osl_closeFile(pErr);
+    osl_joinProcess(aProcess);
+    osl_freeProcessHandle(aProcess);
     return bRet;
 }
 
