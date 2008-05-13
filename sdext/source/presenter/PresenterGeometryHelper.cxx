@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterGeometryHelper.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 
 #include "PresenterGeometryHelper.hxx"
 
+#include <cmath>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -58,11 +59,119 @@ sal_Int32 Height (const sal_Int32 nTop, const sal_Int32 nBottom)
     return nBottom - nTop + 1;
 }
 
+
+void SetBezierCurve (
+    geometry::RealBezierSegment2D& rBezierSegment,
+    const double nX,
+    const double nY,
+    const double nDX1,
+    const double nDY1,
+    const double nDX2,
+    const double nDY2)
+{
+    rBezierSegment.Px = nX;
+    rBezierSegment.Py = nY;
+    rBezierSegment.C1x = nX + nDX1;
+    rBezierSegment.C1y = nY + nDY1;
+    rBezierSegment.C2x = nX + nDX1 + nDX2;
+    rBezierSegment.C2y = nY + nDY1 + nDY2;
+}
+
+
+
+void SetBezierLine (
+    geometry::RealBezierSegment2D& rBezierSegment,
+    const double nX1,
+    const double nY1,
+    const double nX2,
+    const double nY2)
+{
+    rBezierSegment.Px = nX1;
+    rBezierSegment.Py = nY1;
+    rBezierSegment.C1x = 0.666 * nX1 + 0.334 * nX2;
+    rBezierSegment.C1y = 0.666 * nY1 + 0.334 * nY2;
+    rBezierSegment.C2x = 0.333 * nX1 + 0.667 * nX2;
+    rBezierSegment.C2y = 0.333 * nY1 + 0.667 * nY2;
+}
+
+
 } // end of anonymous namespace
 
 
 
 namespace sdext { namespace presenter {
+
+sal_Int32 PresenterGeometryHelper::Floor (const double nValue)
+{
+    return sal::static_int_cast<sal_Int32>(floor(nValue));
+}
+
+
+
+
+sal_Int32 PresenterGeometryHelper::Ceil (const double nValue)
+{
+    return sal::static_int_cast<sal_Int32>(ceil(nValue));
+}
+
+
+
+
+sal_Int32 PresenterGeometryHelper::Round (const double nValue)
+{
+    return sal::static_int_cast<sal_Int32>(floor(0.5 + nValue));
+}
+
+
+
+
+awt::Rectangle PresenterGeometryHelper::ConvertRectangle (
+    const geometry::RealRectangle2D& rBox)
+{
+    const sal_Int32 nLeft (Floor(rBox.X1));
+    const sal_Int32 nTop (Floor(rBox.Y1));
+    const sal_Int32 nRight (Ceil(rBox.X2));
+    const sal_Int32 nBottom (Ceil(rBox.Y2));
+    return awt::Rectangle (nLeft,nTop,nRight-nLeft,nBottom-nTop);
+}
+
+
+
+
+awt::Rectangle PresenterGeometryHelper::ConvertRectangleWithConstantSize (
+    const geometry::RealRectangle2D& rBox)
+{
+    return awt::Rectangle (
+        Round(rBox.X1),
+        Round(rBox.Y1),
+        Round(rBox.X2 - rBox.X1),
+        Round(rBox.Y2 - rBox.Y1));
+}
+
+
+
+
+geometry::RealRectangle2D PresenterGeometryHelper::ConvertRectangle (
+    const css::awt::Rectangle& rBox)
+{
+    return geometry::RealRectangle2D(
+        rBox.X,
+        rBox.Y,
+        rBox.X + rBox.Width,
+        rBox.Y + rBox.Height);
+}
+
+
+
+
+css::awt::Size PresenterGeometryHelper::ConvertSize (
+    const css::geometry::RealSize2D& rSize)
+{
+    return awt::Size(Round(rSize.Width), Round(rSize.Height));
+}
+
+
+
 
 awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
     const css::awt::Rectangle& rBox,
@@ -87,6 +196,23 @@ awt::Rectangle PresenterGeometryHelper::Intersection (
         return awt::Rectangle();
     else
         return awt::Rectangle(nLeft,nTop, Width(nLeft,nRight), Height(nTop,nBottom));
+}
+
+
+
+
+geometry::RealRectangle2D PresenterGeometryHelper::Intersection (
+    const geometry::RealRectangle2D& rBox1,
+    const geometry::RealRectangle2D& rBox2)
+{
+    const double nLeft (::std::max(rBox1.X1, rBox2.X1));
+    const double nTop (::std::max(rBox1.Y1, rBox2.Y1));
+    const double nRight (::std::min(rBox1.X2, rBox2.X2));
+    const double nBottom (::std::min(rBox1.Y2, rBox2.Y2));
+    if (nLeft >= nRight || nTop >= nBottom)
+        return geometry::RealRectangle2D(0,0,0,0);
+    else
+        return geometry::RealRectangle2D(nLeft,nTop, nRight, nBottom);
 }
 
 
@@ -118,6 +244,19 @@ bool PresenterGeometryHelper::IsInside (
 
 
 
+bool PresenterGeometryHelper::IsInside (
+    const css::awt::Rectangle& rBox1,
+    const css::awt::Rectangle& rBox2)
+{
+    return rBox1.X >= rBox2.X
+        && rBox1.Y >= rBox2.Y
+        && rBox1.X+rBox1.Width <= rBox2.X+rBox2.Width
+        && rBox1.Y+rBox1.Height <= rBox2.Y+rBox2.Height;
+}
+
+
+
+
 awt::Rectangle PresenterGeometryHelper::Union (
     const css::awt::Rectangle& rBox1,
     const css::awt::Rectangle& rBox2)
@@ -135,6 +274,23 @@ awt::Rectangle PresenterGeometryHelper::Union (
         return awt::Rectangle();
     else
         return awt::Rectangle(nLeft,nTop, Width(nLeft,nRight), Height(nTop,nBottom));
+}
+
+
+
+
+geometry::RealRectangle2D PresenterGeometryHelper::Union (
+    const geometry::RealRectangle2D& rBox1,
+    const geometry::RealRectangle2D& rBox2)
+{
+    const double nLeft (::std::min(rBox1.X1, rBox2.X1));
+    const double nTop (::std::min(rBox1.Y1, rBox2.Y1));
+    const double nRight (::std::max(rBox1.X2, rBox2.X2));
+    const double nBottom (::std::max(rBox1.Y2, rBox2.Y2));
+    if (nLeft >= nRight || nTop >= nBottom)
+        return geometry::RealRectangle2D(0,0,0,0);
+    else
+        return geometry::RealRectangle2D(nLeft,nTop, nRight, nBottom);
 }
 
 
@@ -166,9 +322,9 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     aPoints[0][1] = geometry::RealPoint2D(rBox.X, rBox.Y+rBox.Height);
     aPoints[0][2] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y+rBox.Height);
     aPoints[0][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
-    Reference<rendering::XPolyPolygon2D> xRectangle (
-        rxDevice->createCompatibleLinePolyPolygon(aPoints),
-        UNO_QUERY);
+    Reference<rendering::XLinePolyPolygon2D> xPolygon (
+        rxDevice->createCompatibleLinePolyPolygon(aPoints));
+    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
         xRectangle->setClosed(0, sal_True);
 
@@ -191,9 +347,9 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     aPoints[0][1] = geometry::RealPoint2D(rBox.X1, rBox.Y2);
     aPoints[0][2] = geometry::RealPoint2D(rBox.X2, rBox.Y2);
     aPoints[0][3] = geometry::RealPoint2D(rBox.X2, rBox.Y1);
-    Reference<rendering::XPolyPolygon2D> xRectangle (
-        rxDevice->createCompatibleLinePolyPolygon(aPoints),
-        UNO_QUERY);
+    Reference<rendering::XLinePolyPolygon2D> xPolygon (
+        rxDevice->createCompatibleLinePolyPolygon(aPoints));
+    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
         xRectangle->setClosed(0, sal_True);
 
@@ -222,9 +378,9 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
         aPoints[nIndex][3] = geometry::RealPoint2D(rBox.X+rBox.Width, rBox.Y);
     }
 
-    Reference<rendering::XPolyPolygon2D> xRectangle (
-        rxDevice->createCompatibleLinePolyPolygon(aPoints),
-        UNO_QUERY);
+    Reference<rendering::XLinePolyPolygon2D> xPolygon (
+        rxDevice->createCompatibleLinePolyPolygon(aPoints));
+    Reference<rendering::XPolyPolygon2D> xRectangle (xPolygon, UNO_QUERY);
     if (xRectangle.is())
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
             xRectangle->setClosed(nIndex, sal_True);
@@ -232,5 +388,44 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     return xRectangle;
 }
 
+
+
+
+Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
+    const css::awt::Rectangle& rBox,
+    const double nRadius,
+    const Reference<rendering::XGraphicDevice>& rxDevice)
+{
+    if ( ! rxDevice.is())
+        return NULL;
+
+    Sequence<Sequence<geometry::RealBezierSegment2D> > aPolygon(1);
+    aPolygon[0] = Sequence<geometry::RealBezierSegment2D>(8);
+    const double nLeft = rBox.X;
+    const double nTop = rBox.Y;
+    const double nRight = rBox.X + rBox.Width - 1;
+    const double nBottom = rBox.Y + rBox.Height - 1;
+
+
+    SetBezierCurve(aPolygon[0][0], nLeft + nRadius, nTop, -nRadius, 0, 0,0);
+    SetBezierLine(aPolygon[0][1], nLeft, nTop+nRadius, nLeft, nBottom-nRadius);
+
+    SetBezierCurve(aPolygon[0][2], nLeft, nBottom-nRadius, 0,nRadius, 0,0);
+    SetBezierLine(aPolygon[0][3], nLeft+nRadius, nBottom, nRight-nRadius, nBottom);
+
+    SetBezierCurve(aPolygon[0][4], nRight-nRadius, nBottom, nRadius,0, 0,0);
+    SetBezierLine(aPolygon[0][5], nRight, nBottom-nRadius, nRight, nTop+nRadius);
+
+    SetBezierCurve(aPolygon[0][6], nRight, nTop+nRadius, 0,-nRadius, 0,0);
+    SetBezierLine(aPolygon[0][7], nRight-nRadius, nTop, nLeft+nRadius, nTop);
+
+    Reference<rendering::XPolyPolygon2D> xPolygon (
+        rxDevice->createCompatibleBezierPolyPolygon(aPolygon),
+        UNO_QUERY_THROW);
+    if (xPolygon.is())
+        xPolygon->setClosed(0, sal_True);
+
+    return xPolygon;
+}
 
 } }
