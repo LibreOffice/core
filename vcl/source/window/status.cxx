@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: status.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -453,8 +453,10 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
         if ( bOffScreen )
         {
             mbInUserDraw = TRUE;
+            mpImplData->mpVirDev->EnableRTL( IsRTLEnabled() );
             UserDrawEvent aODEvt( mpImplData->mpVirDev, Rectangle( Point(), aTextRectSize ), pItem->mnId );
             UserDraw( aODEvt );
+            mpImplData->mpVirDev->EnableRTL( FALSE );
             mbInUserDraw = FALSE;
         }
         else
