@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -99,6 +99,7 @@ IDLFILES=\
     FTPContent.idl\
     FTPContentProvider.idl\
     GlobalTransferCommandArgument.idl\
+        GIOContentProvider.idl\
     GnomeVFSContentProvider.idl\
     GnomeVFSDocumentContent.idl\
     GnomeVFSFolderContent.idl\
