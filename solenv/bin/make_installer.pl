@@ -8,7 +8,7 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.110 $
+# $Revision: 1.111 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -211,8 +211,8 @@ if ( $#{$globalproductblockref} > -1 )
     my $allglobalvariablesarrayref = installer::ziplist::get_variables_from_ziplist($globalsettingsblockref);
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allglobalvariables1.log" ,$allglobalvariablesarrayref); }
 
-    if ( $#{$allglobalsettingsarrayref} > -1 ) { $allsettingsarrayref = installer::converter::combine_arrays_from_references($allsettingsarrayref, $allglobalsettingsarrayref); }
-    if ( $#{$allglobalvariablesarrayref} > -1 ) { $allvariablesarrayref = installer::converter::combine_arrays_from_references($allvariablesarrayref, $allglobalvariablesarrayref); }
+    if ( $#{$allglobalsettingsarrayref} > -1 ) { $allsettingsarrayref = installer::converter::combine_arrays_from_references_first_win($allsettingsarrayref, $allglobalsettingsarrayref); }
+    if ( $#{$allglobalvariablesarrayref} > -1 ) { $allvariablesarrayref = installer::converter::combine_arrays_from_references_first_win($allvariablesarrayref, $allglobalvariablesarrayref); }
 }
 
 $allsettingsarrayref = installer::ziplist::remove_multiples_from_ziplist($allsettingsarrayref); # the settings from the zip.lst
@@ -421,6 +421,12 @@ if (! $installer::globals::tab)
 {
     $filesinproductarrayref = installer::scriptitems::remove_tabonlyfiles_from_Installset($filesinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2c.log", $filesinproductarrayref); }
+}
+
+if (( $installer::globals::packageformat ne "installed" ) && ( $installer::globals::packageformat ne "archive" ))
+{
+    $filesinproductarrayref = installer::scriptitems::remove_installedproductonlyfiles_from_Installset($filesinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2cc.log", $filesinproductarrayref); }
 }
 
 installer::logger::print_message( "... analyzing scpactions ... \n" );
@@ -1444,6 +1450,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # ... replacing the variable PRODUCTDIRECTORYNAME in the shellscriptfile by $staticpath
 
                 installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "PRODUCTDIRECTORYNAME", $staticpath);
+                installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "SOLSUREPACKAGEPREFIX", $allvariableshashref->{'SOLSUREPACKAGEPREFIX'});
+                installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "UREPACKAGEPREFIX", $allvariableshashref->{'UREPACKAGEPREFIX'});
                 # installer::epmfile::resolve_path_in_epm_list_before_packaging(\@epmfile, $completeepmfilename, "BASISDIRECTORYVERSION", $allvariableshashref->{'OOOBASEVERSION'});
                 installer::files::save_file($completeepmfilename ,\@epmfile);
 
