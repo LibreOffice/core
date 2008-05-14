@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmtool.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2938,10 +2938,15 @@ void MA_FASTCALL lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
         }
         else
         {
-            // --> OD 2004-07-02 #i28701#
-            if ( pObj->GetPageFrm() )
-                pObj->GetPageFrm()->RemoveDrawObjFromPage( *pObj );
-            pPage->AppendDrawObjToPage( *pObj );
+            // --> OD 2008-04-22 #i87493#
+            if ( pPage != pObj->GetPageFrm() )
+            {
+                // --> OD 2004-07-02 #i28701#
+                if ( pObj->GetPageFrm() )
+                    pObj->GetPageFrm()->RemoveDrawObjFromPage( *pObj );
+                pPage->AppendDrawObjToPage( *pObj );
+                // <--
+            }
             // <--
         }
 
