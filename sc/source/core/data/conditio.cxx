@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conditio.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -628,7 +628,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula1, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged1 );
         else
         {
-            ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula1, pDoc->GetGrammar() );
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged1 );
             else
@@ -644,7 +644,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             lcl_CondUpdateInsertTab( *pFormula2, rRange.aStart.Tab(), aSrcPos.Tab(), bChanged2 );
         else
         {
-            ScCompiler aComp( pDoc, aSrcPos, *pFormula2 );
+            ScCompiler aComp( pDoc, aSrcPos, *pFormula2, pDoc->GetGrammar() );
             if ( bDeleteTab )
                 aComp.UpdateDeleteTab( rRange.aStart.Tab(), FALSE, TRUE, bChanged2 );
             else
@@ -660,13 +660,13 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     if (pFormula1)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
+        ScCompiler aComp( pDoc, aSrcPos, *pFormula1, pDoc->GetGrammar() );
         aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell1);
     }
     if (pFormula2)
     {
-        ScCompiler aComp( pDoc, aSrcPos, *pFormula2 );
+        ScCompiler aComp( pDoc, aSrcPos, *pFormula2, pDoc->GetGrammar() );
         aComp.UpdateMoveTab(nOldPos, nNewPos, TRUE );
         DELETEZ(pFCell2);
     }
