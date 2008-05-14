@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbnamdlg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +102,7 @@ private:
     ScViewData*     pViewData;
     ScDocument*     pDoc;
     BOOL            bRefInputMode;
+    ScAddress::Details aAddrDetails;
 
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;
