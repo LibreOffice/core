@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,7 +133,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( co
 
     if (mpDocShell)
     {
-        ScCompiler aCompiler( mpDocShell->GetDocument(), maRefPos );
+        ScDocument* pDoc = mpDocShell->GetDocument();
+        ScCompiler aCompiler( pDoc, maRefPos, pDoc->GetGrammar() );
         SetCompilerFlags( aCompiler );
 
         ScTokenArray* pCode = aCompiler.CompileString( aFormula );
@@ -152,9 +153,10 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula( const uno::Sequence<she
 
     if (mpDocShell)
     {
+        ScDocument* pDoc = mpDocShell->GetDocument();
         ScTokenArray aCode;
         (void)ScTokenConversion::ConvertToTokenArray( aCode, aTokens );
-        ScCompiler aCompiler( mpDocShell->GetDocument(), maRefPos, aCode );
+        ScCompiler aCompiler( pDoc, maRefPos, aCode, pDoc->GetGrammar() );
         SetCompilerFlags( aCompiler );
 
         rtl::OUStringBuffer aBuffer;
