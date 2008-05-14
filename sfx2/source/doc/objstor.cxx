@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objstor.cxx,v $
- * $Revision: 1.209 $
+ * $Revision: 1.210 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,6 +369,25 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 catch( uno::Exception& )
                 {
                     // TODO/LATER: ErrorHandling
+                }
+
+                ::rtl::OUString aVersion;
+                SvtSaveOptions aSaveOpt;
+                SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
+
+                // older versions can not have this property set, it exists only starting from ODF1.2
+                if ( nDefVersion == SvtSaveOptions::ODFVER_012 )
+                    aVersion = ODFVER_012_TEXT;
+
+                if ( aVersion.getLength() )
+                {
+                    try
+                    {
+                        xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Version" ), uno::makeAny( aVersion ) );
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
                 }
             }
         }
@@ -1159,6 +1178,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     // the detection whether the script is changed should be done before saving
     sal_Bool bTryToPreservScriptSignature = sal_False;
+    // no way to detect whether a filter is oasis format, have to wait for saving process
+    sal_Bool bNoPreserveForOasis = sal_False;
     if ( bOwnSource && bOwnTarget
       && ( pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_OK
         || pImp->nScriptingSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED
@@ -1166,6 +1187,27 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // the checking of the library modified state iterates over the libraries, should be done only when required
         bTryToPreservScriptSignature = !pImp->pBasicManager->isAnyContainerModified();
+        if ( bTryToPreservScriptSignature )
+        {
+            // check that the storage format stays the same
+            SvtSaveOptions aSaveOpt;
+            SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
+
+            ::rtl::OUString aODFVersion;
+            try
+            {
+                uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
+                xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aODFVersion;
+            }
+            catch( uno::Exception& )
+            {}
+
+            // preserve only if the same filter has been used
+            bTryToPreservScriptSignature = pMedium->GetFilter() && pFilter && pMedium->GetFilter()->GetFilterName() == pFilter->GetFilterName();
+
+            bNoPreserveForOasis = ( aODFVersion.equals( ODFVER_012_TEXT ) && nVersion == SvtSaveOptions::ODFVER_011
+                                      || !aODFVersion.getLength() && nVersion == SvtSaveOptions::ODFVER_012 );
+        }
     }
 
     sal_Bool bCopyTo = sal_False;
@@ -1508,6 +1550,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // we also don't touch any graphical replacements here
             bOk = SaveChildren( TRUE );
     }
+
+    // if ODF version of oasis format changes on saving the signature should not be preserved
+    if ( bOk && bTryToPreservScriptSignature && bNoPreserveForOasis )
+        bTryToPreservScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
 
     uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
     sal_Bool bScriptSignatureIsCopied = sal_False;
