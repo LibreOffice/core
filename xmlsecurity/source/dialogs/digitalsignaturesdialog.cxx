@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,8 @@
 #include "resourcemanager.hxx"
 
 #include <vcl/msgbox.hxx> // Until encrypted docs work...
+#include <unotools/configitem.hxx>
+
 
 using namespace ::com::sun::star::security;
 namespace css = ::com::sun::star;
@@ -66,6 +68,40 @@ namespace css = ::com::sun::star;
 #endif
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
+namespace
+{
+    class SaveODFItem: public utl::ConfigItem
+    {
+        sal_Int16 m_nODF;
+    public:
+        SaveODFItem();
+        //See group ODF in Common.xcs
+        bool isLessODF1_2()
+        {
+            return m_nODF < 3;
+        }
+    };
+
+    SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "Office.Common/Save"))), m_nODF(0)
+    {
+        OUString sDef(RTL_CONSTASCII_USTRINGPARAM("ODF/DefaultVersion"));
+        Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
+        if ( aValues.getLength() == 1)
+        {
+            sal_Int16 nTmp;
+            if ( aValues[0] >>= nTmp )
+                m_nODF = nTmp;
+            else
+                DBG_ASSERT(0, "SaveODFItem::SaveODFItem(): Wrong Type!" );
+        }
+        else
+            DBG_ASSERT(0, "No ODF/DefaultVersion");
+    }
+
+}
 
 sal_Bool HandleStreamAsXML_Impl( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
 {
@@ -103,7 +139,10 @@ sal_Bool HandleStreamAsXML_Impl( const uno::Reference < embed::XStorage >& rxSto
     return bResult;
 }
 
-DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly )
+DigitalSignaturesDialog::DigitalSignaturesDialog(
+    Window* pParent,
+    uno::Reference< lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode,
+    sal_Bool bReadOnly)
     :ModalDialog        ( pParent, XMLSEC_RES( RID_XMLSECDLG_DIGSIG ) )
     ,maSignatureHelper  ( rxMSF )
     ,meSignatureMode    ( eMode )
@@ -154,7 +193,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     maViewBtn.Disable();
 
     maAddBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, AddButtonHdl ) );
-    if ( bReadOnly )
+    if ( bReadOnly  )
         maAddBtn.Disable();
 
     maRemoveBtn.SetClickHdl( LINK( this, DigitalSignaturesDialog, RemoveButtonHdl ) );
@@ -202,6 +241,36 @@ void DigitalSignaturesDialog::SetSignatureStream( const cssu::Reference < css::i
     mxSignatureStream = rxStream;
 }
 
+
+bool DigitalSignaturesDialog::canAdd()
+{
+    bool ret = false;
+    OSL_ASSERT(mxStore.is());
+    bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(mxStore);
+    SaveODFItem item;
+    bool bSave1_1 = item.isLessODF1_2();
+
+    // see specification
+    //cvs: specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
+    //Paragraph 'Behavior with regard to ODF 1.2'
+    if (!bSave1_1  && bDoc1_1
+        || bSave1_1 && bDoc1_1)
+    {
+        //#4
+        ErrorBox err(NULL, XMLSEC_RES(RID_XMLSECDLG_OLD_ODF_FORMAT));
+        err.Execute();
+    }
+    else
+        ret = true;
+
+    return ret;
+}
+
+bool DigitalSignaturesDialog::canRemove()
+{
+    return canAdd();
+}
+
 short DigitalSignaturesDialog::Execute()
 {
     // Verify Signatures and add certificates to ListBox...
@@ -240,6 +309,8 @@ IMPL_LINK( DigitalSignaturesDialog, ViewButtonHdl, Button*, EMPTYARG )
 
 IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 {
+    if( ! canAdd())
+        return 0;
     try
     {
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
@@ -341,6 +412,8 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
 IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 {
+    if (!canRemove())
+        return 0;
     if( maSignaturesLB.FirstSelected() )
     {
         try
