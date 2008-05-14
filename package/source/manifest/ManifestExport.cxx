@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ManifestExport.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
 
     const OUString sCdataAttribute      ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
     const OUString sMediaTypeAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
+    const OUString sVersionAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
     const OUString sFullPathAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
     const OUString sSizeAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
     const OUString sSaltAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
@@ -76,6 +77,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     const OUString sChecksumAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
 
     const OUString sFullPathProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+    const OUString sVersionProperty     ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
     const OUString sMediaTypeProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
     const OUString sIterationCountProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
     const OUString sSaltProperty        ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
@@ -124,6 +126,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
     }
 
     sal_Bool bProvideDTD = sal_False;
+    sal_Bool bAcceptNonemptyVersion = sal_False;
     if ( aDocMediaType.getLength() )
     {
         if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) ) )
@@ -148,6 +151,7 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
+            bAcceptNonemptyVersion = sal_True;
         }
         else
         {
@@ -185,6 +189,13 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
             {
                 pValue->Value >>= aString;
                 pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
+            }
+            else if (pValue->Name.equals (sVersionProperty) )
+            {
+                pValue->Value >>= aString;
+                // the version is stored only if it is not empty
+                if ( bAcceptNonemptyVersion && aString.getLength() )
+                    pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
             }
             else if (pValue->Name.equals (sFullPathProperty) )
             {
