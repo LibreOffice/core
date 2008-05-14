@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +286,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pDBColl || !pDBColl->SearchName( sTarget, nDummy ) )
                     {
                         ScAddress aPos;
-                        if ( aPos.Parse( sTarget, &aDocument ) & SCA_VALID )
+                        if ( aPos.Parse( sTarget, &aDocument, aDocument.GetAddressConvention() ) & SCA_VALID )
                         {
                             bMakeArea = TRUE;
                             if (bUndo)
@@ -373,7 +373,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     bRowInit = TRUE;
                 }
 
-                BOOL bValid = ( aSingleRange.ParseAny( aRangeName, pDoc ) & SCA_VALID ) != 0;
+                ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
+                BOOL bValid = ( aSingleRange.ParseAny( aRangeName, pDoc, aDetails ) & SCA_VALID ) != 0;
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
@@ -2475,8 +2476,9 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
         }
     }
     ScRange aRange;
-    BOOL bValid = ( ( aRange.Parse( aPos, &aDocument ) & SCA_VALID ) ||
-                    ( aRange.aStart.Parse( aPos, &aDocument ) & SCA_VALID ) );
+    ScAddress::Convention eConv = aDocument.GetAddressConvention();
+    BOOL bValid = ( ( aRange.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) ||
+                    ( aRange.aStart.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) );
 
     ScServerObject* pObj = NULL;            // NULL = error
     if ( bValid )
