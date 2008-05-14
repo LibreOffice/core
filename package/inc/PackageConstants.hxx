@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PackageConstants.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,4 +40,20 @@ const sal_Int32 n_ConstDigestLength = 1024;
 #define ZIP_FORMAT      2
 #define OFOPXML_FORMAT  3
 
+// the constants related to the manifest.xml entries
+#define PKG_MNFST_MEDIATYPE 0
+#define PKG_MNFST_VERSION   1
+#define PKG_MNFST_FULLPATH  2
+
+#define PKG_MNFST_INIVECTOR 3
+#define PKG_MNFST_SALT      4
+#define PKG_MNFST_ITERATION 5
+#define PKG_MNFST_UCOMPSIZE 6
+#define PKG_MNFST_DIGEST    7
+
+#define PKG_SIZE_NOENCR_MNFST 3
+#define PKG_SIZE_ENCR_MNFST   8
+
+
 #endif
+
