@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwsresync.pl,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,9 +61,6 @@ BEGIN {
 use lib (@lib_dirs);
 
 use Cws;
-eval { require Logging; import Logging; };
-my $log = undef;
-$log = Logging->new() if (!$@);
 
 eval {
     require EnvHelper; import EnvHelper;
@@ -74,13 +71,15 @@ use GenInfoParser;
 use CwsConfig;
 use CwsCvsOps;
 use CvsModule; # to be removed ASAP
+my $config = CwsConfig->get_config();
+my $sointernal = $config->sointernal();
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.35 $ ';
+my $id_str = ' $Revision: 1.36 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -142,7 +141,6 @@ my %global_stats = ('new'       => 0,
                    );
 
 #### main #####
-my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
 
 my ($dir, $milestone, @args) = parse_options();
 my $cws = get_and_verify_cws();
@@ -173,7 +171,6 @@ sub log_stats
     $statistic_log_message .= "conflicts: $global_stats{'conflict'} " if $global_stats{'conflict'};
     $statistic_log_message .= "alerts: $global_stats{'alert'} " if $global_stats{'alert'};
     $statistic_log_message .= "ignored: $global_stats{'ignored'} " if $global_stats{'ignored'};
-    $log->end_log_extended($script_name,"unknown",$statistic_log_message) if (defined $log);
 }   ##create_log_stats
 
 # Get child workspace from environment.
@@ -190,7 +187,6 @@ sub get_and_verify_cws
     my $cws = Cws->new();
     $cws->child($childws);
     $cws->master($masterws);
-    $log->start_log_extended($script_name,$parameter_list,$masterws,$childws) if (defined $log);
 
     # check if we got a valid child workspace
     my $id = $cws->eis_id();
@@ -216,8 +212,8 @@ sub parse_options
 
     # some sanity checks
     if ( !($opt_merge || $opt_commit || $opt_link || $opt_remove_trees) ) {
-        print_error("Please specify one of '-m', '-c', '-l'.", 0) if defined($log);
-        print_error("Please specify one of '-m', '-c', '-l', '-r'.", 0) if !defined($log);
+        print_error("Please specify one of '-m', '-c', '-l'.", 0) if ($sointernal);
+        print_error("Please specify one of '-m', '-c', '-l', '-r'.", 0) if !($sointernal);
         usage();
         exit(1);
     }
@@ -816,7 +812,7 @@ sub remove_output_trees {
         };
     };
     print_warning("'$_' cannot be deleted. Please remove it manually") foreach(@warnings);
-    print_message("Please run configure & bootstrap again\n") if !defined($log);
+    print_message("Please run configure & bootstrap again\n") if !($sointernal);
 };
 
 #
@@ -934,7 +930,7 @@ sub relink_cws_action
     if ( "$new_master" eq "$cws_master" ) {
         print_error("Child workspace \"".$cws->child()."\" already based on milestone \"$milestone\"", 1) if $cws->milestone() eq $milestone;
     }
-    return update_sources($cws, $new_master, $milestone) if (!defined $log); # HACK
+    return update_sources($cws, $new_master, $milestone) if ( !($sointernal) ); # HACK
 
     # SOURCE_ROOT set correct
     print_error("Environment variable \"SOURCE_ROOT\" not set.", 1) if ! defined($ENV{SOURCE_ROOT});
@@ -1851,14 +1847,13 @@ sub get_cvs_module
 
     my $cvs_module = CvsModule->new();
     my ($method, $vcsid, $server, $repository);
-    if ( defined($log) ) {
+    if ( $sointernal ) {
         ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module);
     }
     else {
         # For now just take the configured OOo sever. Later we might implement a mechanism were
         # only known OOo modules are fetched from the OOo server, the rest from a local
         # server
-        my $config = CwsConfig::get_config();
         ($method, $vcsid, $server, $repository) = ($config->get_cvs_server_method(),
                                                    $config->get_cvs_server_id(),
                                                    $config->get_cvs_server(),
@@ -1885,10 +1880,8 @@ sub get_cvs_handle
 
     my $server_type;
 
-    my  $config = CwsConfig::get_config();
-
     if ( $from_config eq 'config' ) {
-        if ( defined($log) ) {
+        if ( $sointernal ) {
             my ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module_or_dir);
             my @elem = split(/\./, $server);
             $server = $elem[0];
@@ -1996,7 +1989,6 @@ sub print_error
 
     if ( $error_code ) {
         print STDERR "\nFAILURE: $script_name aborted.\n";
-        $log->end_log_extended($script_name,"unknown",$message) if (defined $log);
         exit($error_code);
     }
     return;
@@ -2022,7 +2014,7 @@ sub print_plog
 
 sub usage
 {
-    my $sw_skip_checkout = !defined($log) ? " [-f] " : " ";
+    my $sw_skip_checkout = !($sointernal) ? " [-f] " : " ";
     print STDERR "Usage:\n";
     print STDERR "cwsresync [-h] [-d dir] [-F] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
     print STDERR "cwsresync [-h] [-d dir] -m HEAD <file> [file ...]\n";
@@ -2036,17 +2028,17 @@ sub usage
     print STDERR "\t-F\t\tforce checkout of complete modules\n";
     print STDERR "\t-m milestone\tmerge changes from MWS into CWS\n";
     print STDERR "\t-c\t\tcommit the merged files to CWS\n";
-    print STDERR "\t-l milestone\trenew solver, relink modules to new milestone\n" if defined($log);
-    print STDERR "\t-l milestone\tregister new milestone with database\n" if !defined($log);
-    print STDERR "\t-r\t\tremove solver and module output trees, update milestone information\n" if !defined($log);
-    print STDERR "\t-f\t\tavoid updating entire tree\n" if !defined($log);
+    print STDERR "\t-l milestone\trenew solver, relink modules to new milestone\n" if ($sointernal);
+    print STDERR "\t-l milestone\tregister new milestone with database\n" if !($sointernal);
+    print STDERR "\t-r\t\tremove solver and module output trees, update milestone information\n" if !($sointernal);
+    print STDERR "\t-f\t\tavoid updating entire tree\n" if !($sointernal);
     print STDERR "Notes:\n";
     print STDERR "\tA Milestone on a different MWS can be specified as <MWS:milestone>.\n";
     print STDERR "Examples:\n";
     print STDERR "\tcwsresync -m SRX645:m1 all \n";
     print STDERR "\tcwsresync -c all \n";
-    print STDERR "\tcwsresync -l SRX645:m1 \n" if defined($log);
-    print STDERR "\tcwsresync -r\n" if !defined($log);
+    print STDERR "\tcwsresync -l SRX645:m1 \n" if ($sointernal);
+    print STDERR "\tcwsresync -r\n" if !($sointernal);
 }
 
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
