@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crnrdlg.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
+#include <hash_map>
 
 class ScViewData;
 class ScDocument;
@@ -80,6 +81,8 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
+    typedef ::std::hash_map< String, ScRange, ScStringHashCode, ::std::equal_to<String> > NameRangeMap;
+    NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;
     ScRefEdit*      pEdActive;
@@ -89,7 +92,7 @@ private:
 private:
     void Init               ();
     void UpdateNames        ();
-    void UpdateRangeData    ( const String& rStrName, BOOL bColName );
+    void UpdateRangeData    ( const ScRange& rRange, BOOL bColName );
     void SetColRowData( const ScRange& rLabelRange,BOOL bRef=FALSE);
     void AdjustColRowData( const ScRange& rDataRange,BOOL bRef=FALSE);
     DECL_LINK( CancelBtnHdl, void * );
