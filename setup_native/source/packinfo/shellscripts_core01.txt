@@ -8,12 +8,12 @@ END
 platform=`uname -s`
 case $$platform in
 SunOS)
-  UREPACKAGE=openofficeorg-ure
+  UREPACKAGE=SOLSUREPACKAGEPREFIX-ure
   UREDIR=`pkginfo -r $$UREPACKAGE`
   PRODUCTINSTALLLOCATION="$$BASEDIR"
   ;;
 Linux)
-  UREPACKAGE=openoffice.org-ure
+  UREPACKAGE=UREPACKAGEPREFIX-ure
   UREDIR=`rpm -q --queryformat "%{INSTALLPREFIX}" $$UREPACKAGE`
   PRODUCTINSTALLLOCATION="$$RPM_INSTALL_PREFIX"
   ;;
