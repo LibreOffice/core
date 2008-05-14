@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Storage.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,6 +299,12 @@ service Storage
     /** allows to get and set the media type of the storage.
      */
     [property] string MediaType;
+
+    // -----------------------------------------------------------------------
+    /** allows to get and set the version of the format related to the
+        MediaType.
+     */
+    [property,optional] string Version;
 
     // -----------------------------------------------------------------------
     /** allows to detect whether mediatype is detected by using fallback
