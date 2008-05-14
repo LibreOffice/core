@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xstorage.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,6 +217,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_bControlVersion( sal_False )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -256,6 +257,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_bControlVersion( sal_False )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -299,6 +301,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages and relation storage
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_bControlVersion( sal_False )
 , m_pSwitchStream( NULL )
 , m_nStorageType( nStorageType )
 , m_pRelStorElement( NULL )
@@ -531,15 +534,24 @@ SotElementList_Impl& OStorage_Impl::GetChildrenList()
 //-----------------------------------------------
 void OStorage_Impl::GetStorageProperties()
 {
-    if ( m_nStorageType == PACKAGE_STORAGE && !m_bControlMediaType )
+    if ( m_nStorageType == PACKAGE_STORAGE )
     {
-        uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
-        xPackageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) )
-                                                                                                    >>= m_bMTFallbackUsed;
-
         uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= m_aMediaType;
-        m_bControlMediaType = sal_True;
+
+        if ( !m_bControlMediaType )
+        {
+            uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
+            xPackageProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaTypeFallbackUsed" ) ) ) >>= m_bMTFallbackUsed;
+
+            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= m_aMediaType;
+            m_bControlMediaType = sal_True;
+        }
+
+        if ( !m_bControlVersion )
+        {
+            xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= m_aVersion;
+            m_bControlVersion = sal_True;
+        }
     }
 
     // the properties of OFOPXML will be handled directly
@@ -690,7 +702,9 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     if ( m_nStorageType == PACKAGE_STORAGE )
     {
         ::rtl::OUString aMediaTypeString = ::rtl::OUString::createFromAscii( "MediaType" );
+        ::rtl::OUString aVersionString = ::rtl::OUString::createFromAscii( "Version" );
         xPropSet->setPropertyValue( aMediaTypeString, uno::makeAny( m_aMediaType ) );
+        xPropSet->setPropertyValue( aVersionString, uno::makeAny( m_aVersion ) );
     }
 
     if ( m_nStorageType == PACKAGE_STORAGE )
@@ -1198,6 +1212,7 @@ void OStorage_Impl::Commit()
             throw uno::RuntimeException(); // TODO:
 
         xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( m_aMediaType ) );
+        xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Version" ), uno::makeAny( m_aVersion ) );
     }
 
     if ( m_nStorageType == OFOPXML_STORAGE )
@@ -1286,6 +1301,9 @@ void OStorage_Impl::Revert()
         (*pDeletedIter)->m_bIsRemoved = sal_False;
     }
     m_aDeletedList.clear();
+
+    m_bControlMediaType = sal_False;
+    m_bControlVersion = sal_False;
 
     GetStorageProperties();
 
@@ -4276,6 +4294,14 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             m_pImpl->m_bBroadcastModified = sal_True;
             m_pImpl->m_bIsModified = sal_True;
         }
+        else if ( aPropertyName.equalsAscii( "Version" ) )
+        {
+            aValue >>= m_pImpl->m_aVersion;
+            m_pImpl->m_bControlVersion = sal_True;
+
+            m_pImpl->m_bBroadcastModified = sal_True;
+            m_pImpl->m_bIsModified = sal_True;
+        }
         else if ( m_pData->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "URL" )
                                     || aPropertyName.equalsAscii( "RepairPackage" ) )
@@ -4350,7 +4376,9 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
         throw lang::DisposedException();
 
     if ( m_pData->m_nStorageType == PACKAGE_STORAGE
-      && ( aPropertyName.equalsAscii( "MediaType" ) || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" ) ) )
+      && ( aPropertyName.equalsAscii( "MediaType" )
+        || aPropertyName.equalsAscii( "MediaTypeFallbackUsed" )
+        || aPropertyName.equalsAscii( "Version" ) ) )
     {
         try
         {
@@ -4371,6 +4399,8 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
 
         if ( aPropertyName.equalsAscii( "MediaType" ) )
             return uno::makeAny( m_pImpl->m_aMediaType );
+        else if ( aPropertyName.equalsAscii( "Version" ) )
+            return uno::makeAny( m_pImpl->m_aVersion );
         else
             return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
     }
