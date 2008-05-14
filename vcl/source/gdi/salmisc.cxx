@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmisc.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -368,7 +368,17 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     pDstBuffer->mnWidth = rTwoRect.mnDestWidth;
     pDstBuffer->mnHeight = rTwoRect.mnDestHeight;
     pDstBuffer->mnScanlineSize = AlignedWidth4Bytes( pDstBuffer->mnBitCount * pDstBuffer->mnWidth );
-    pDstBuffer->mpBits = new BYTE[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
+    try
+    {
+        pDstBuffer->mpBits = new BYTE[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
+    }
+    catch( const std::bad_alloc& )
+    {
+        // memory exception, clean up
+        pDstBuffer->mpBits = NULL;
+        delete pDstBuffer;
+        return NULL;
+    }
 
     // do we need a destination palette or color mask?
     if( ( nDstScanlineFormat == BMP_FORMAT_1BIT_MSB_PAL ) ||
