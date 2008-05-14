@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: entrylisthelper.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +31,15 @@
 #ifndef FORMS_ENTRYLISTHELPER_HXX
 #define FORMS_ENTRYLISTHELPER_HXX
 
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HDL_
+/** === begin UNO includes === **/
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYLISTENER_HDL_
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/form/binding/XListEntryListener.hpp>
-#endif
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <cppuhelper/implbase2.hxx>
+/** === end UNO includes === **/
+
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 
 //.........................................................................
 namespace frm
@@ -48,8 +49,9 @@ namespace frm
     //=====================================================================
     //= OEntryListHelper
     //=====================================================================
-    typedef ::cppu::ImplHelper2 <   ::com::sun::star::form::binding::XListEntrySink
+    typedef ::cppu::ImplHelper3 <      ::com::sun::star::form::binding::XListEntrySink
                                 ,   ::com::sun::star::form::binding::XListEntryListener
+                                ,   ::com::sun::star::util::XRefreshable
                                 >   OEntryListHelper_BASE;
 
     class OEntryListHelper : public OEntryListHelper_BASE
@@ -61,6 +63,9 @@ namespace frm
                         m_xListSource;      /// our external list source
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
+           ::cppu::OInterfaceContainerHelper
+                        m_aRefreshListeners;
+
 
     protected:
         OEntryListHelper( ::osl::Mutex& _rMutex );
@@ -132,6 +137,11 @@ namespace frm
         */
         virtual void    disconnectedExternalListSource( );
 
+        /** called when XRefreshable::refresh has been called, and we do *not* have an external
+            list source
+        */
+        virtual void    refreshInternalEntryList() = 0;
+
     private:
         // XListEntrySink
         virtual void SAL_CALL setListEntrySource( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource ) throw (::com::sun::star::uno::RuntimeException);
@@ -142,6 +152,11 @@ namespace frm
         virtual void SAL_CALL entryRangeInserted( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL entryRangeRemoved( const ::com::sun::star::form::binding::ListEntryEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL allEntriesChanged( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XRefreshable
+        virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
     private:
         /** disconnects from the active external list source, if present
@@ -157,6 +172,16 @@ namespace frm
         void        connectExternalListSource(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                     );
+
+        /** refreshes our list entries
+
+            In case we have an external list source, its used to obtain the new entries, and then
+            stringItemListChanged is called to give the derived class the possibility to
+            react on this.
+
+            In case we do not have an external list source, refreshInternalEntryList is called.
+        */
+        void        impl_lock_refreshList();
 
     private:
         OEntryListHelper();                                     // never implemented
