@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,7 +231,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     ScAddress aScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(), 0 );
                     String  aAddr;
-                    aScAddress.Format( aAddr, SCA_ABS );
+                    aScAddress.Format( aAddr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
                     SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
 
                     rSet.Put( aPosItem );
@@ -516,7 +516,7 @@ void ScTabViewShell::ExecuteInputDirect()
             ScViewData* pViewData = GetViewData();
             ScDocument* pDoc = pViewData->GetDocument();
             ScAddress aPos( pViewData->GetCurPos() );
-            ScCompiler aComp( pDoc, aPos );
+            ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
             aComp.SetCloseBrackets( false );
             ScTokenArray* pArr = aComp.CompileString( aString );
             if ( pArr->MayReferenceFollow() )
