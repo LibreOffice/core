@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen3.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -347,12 +347,17 @@ BOOL ScDocument::IsLinked( SCTAB nTab ) const
 
 ScAddress::Convention ScDocument::GetAddressConvention() const
 {
-    return eAddrConv;
+    return ScGrammar::extractRefConvention(eGrammar);
 }
 
-void ScDocument::SetAddressConvention( ScAddress::Convention eConv )
+ScGrammar::Grammar ScDocument::GetGrammar() const
 {
-    eAddrConv = eConv;
+    return eGrammar;
+}
+
+void ScDocument::SetGrammar( ScGrammar::Grammar eGram )
+{
+    eGrammar = eGram;
 }
 
 BOOL ScDocument::GetLinkMode( SCTAB nTab ) const
