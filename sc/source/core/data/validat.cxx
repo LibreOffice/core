@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: validat.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -288,7 +288,7 @@ BOOL ScValidationData::DoScript( const ScAddress& rPos, const String& rInput,
 
     //  2) Position der Zelle
     String aPosStr;
-    rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument );
+    rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention() );
     aParams[1] = ::com::sun::star::uno::makeAny( ::rtl::OUString( aPosStr ) );
 
     //  use link-update flag to prevent closing the document
@@ -422,7 +422,7 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 
         //  2) Position der Zelle
         String aPosStr;
-        rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument );
+        rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention() );
         refPar->Get(2)->PutString( aPosStr );
 
         //  use link-update flag to prevent closing the document
