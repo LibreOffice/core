@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formula.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,7 +223,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         aMEFormula.UpdateOldSel();
 
         pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-        pComp=new ScCompiler( pDoc, aCursorPos );
+        pComp=new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar() );
         pComp->SetCompileForFAP(TRUE);
         UpdateTokenArray(pMEdit->GetText());
         FormulaCursorHdl(&aMEFormula);
@@ -346,7 +346,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pData->SetMode( (USHORT) eMode );
         rStrExp=pMEdit->GetText();
         pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-        pComp=new ScCompiler( pDoc, aCursorPos );
+        pComp=new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar() );
         pComp->SetCompileForFAP(TRUE);
         CalcStruct(rStrExp);
         FillDialog();
@@ -1065,8 +1065,6 @@ BOOL ScFormulaDlg::CalcValue( const String& rStrExp, String& rStrResult )
         {
             ScFormulaCell* pFCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
 
-            ScCompiler* pCompi=new ScCompiler( pDoc, aCursorPos, *(pFCell->GetCode()));
-
             // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
             // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
             // eingefuegt wird, bei der Einzeldarstellung aber als
@@ -1126,7 +1124,6 @@ BOOL ScFormulaDlg::CalcValue( const String& rStrExp, String& rStrResult )
             }
 
             delete pFCell;
-            delete pCompi;
         }
         else
             bResult = FALSE;
@@ -1523,7 +1520,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             USHORT nFmt = ( rRef.aStart.Tab() == aCursorPos.Tab() )
                                 ? SCA_VALID
                                 : SCA_VALID | SCA_TAB_3D;
-            rRef.Format( aRefStr, nFmt, pRefDoc );
+            rRef.Format( aRefStr, nFmt, pRefDoc, pRefDoc->GetAddressConvention() );
         }
 
         aEdRef.ReplaceSelected( aRefStr );
@@ -1645,6 +1642,8 @@ void ScFormulaDlg::UpdateTokenArray( const String& rStrExp)
 
 xub_StrLen ScFormulaDlg::GetFunctionPos(xub_StrLen nPos)
 {
+    const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+
     xub_StrLen nTokPos=1;
     xub_StrLen nOldTokPos=1;
     xub_StrLen nFuncPos=STRING_NOTFOUND;    //@ Testweise
@@ -1670,7 +1669,7 @@ xub_StrLen ScFormulaDlg::GetFunctionPos(xub_StrLen nPos)
 
             if(eOp==ocPush || eOp==ocSpaces)
             {
-                xub_StrLen n1=aFormString.Search(';',nTokPos);
+                xub_StrLen n1=aFormString.Search(sep, nTokPos);
                 xub_StrLen n2=aFormString.Search(')',nTokPos);
                 xub_StrLen nXXX=nTokPos;
                 if(n1<n2)
