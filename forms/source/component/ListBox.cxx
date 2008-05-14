@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,6 @@ namespace frm
     {
         return TypeBag(
             OBoundControlModel::_getTypes(),
-            OListBoxModel_BASE::getTypes(),
             OEntryListHelper::getTypes(),
             OErrorBroadcaster::getTypes()
         ).getTypes();
@@ -128,7 +127,6 @@ namespace frm
         ,OEntryListHelper( m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet( getContext() )
-        ,m_aRefreshListeners(m_aMutex)
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
         ,m_eTransferSelectionAs( tsEntry )
@@ -152,7 +150,6 @@ namespace frm
         ,m_aListSourceSeq( _pOriginal->m_aListSourceSeq )
         ,m_aValueSeq( _pOriginal->m_aValueSeq )
         ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
-        ,m_aRefreshListeners( m_aMutex )
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
         ,m_eTransferSelectionAs( tsEntry )
@@ -205,8 +202,6 @@ namespace frm
     {
         Any aReturn = OBoundControlModel::queryAggregation( _rType );
         if ( !aReturn.hasValue() )
-            aReturn = OListBoxModel_BASE::queryInterface( _rType );
-        if ( !aReturn.hasValue() )
             aReturn = OEntryListHelper::queryInterface( _rType );
         if ( !aReturn.hasValue() )
             aReturn = OErrorBroadcaster::queryInterface( _rType );
@@ -217,38 +212,9 @@ namespace frm
     //------------------------------------------------------------------------------
     void OListBoxModel::disposing()
     {
-        EventObject aEvt( static_cast< XWeak* >( this ) );
-        m_aRefreshListeners.disposeAndClear(aEvt);
-
         OBoundControlModel::disposing();
         OEntryListHelper::disposing();
         OErrorBroadcaster::disposing();
-    }
-
-    // XRefreshable
-    //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
-    {
-        m_aRefreshListeners.addInterface(_rxListener);
-    }
-
-    //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
-    {
-        m_aRefreshListeners.removeInterface(_rxListener);
-    }
-
-    //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::refresh() throw(RuntimeException)
-    {
-        {
-            ::osl::MutexGuard aGuard( m_aMutex );
-            if ( !hasExternalListSource() )
-                implRefreshListFromDbBinding( );
-        }
-
-        EventObject aEvt(static_cast< XWeak*>(this));
-        m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
     }
 
     //------------------------------------------------------------------------------
@@ -312,7 +278,7 @@ namespace frm
             else if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
                 // listbox is already connected to a database, and no external list source
                 // data source changed -> refresh
-                loadData();
+                loadData( false );
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
@@ -598,7 +564,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OListBoxModel::loadData()
+    void OListBoxModel::loadData( bool _bForce )
     {
         RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData" );
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
@@ -744,11 +710,12 @@ namespace frm
                 m_aListRowSet.setEscapeProcessing( ListSourceType_SQLPASSTHROUGH != m_eListSourceType );
                 m_aListRowSet.setCommand( sListSource );
                 bExecute = sal_True;
+                break;
             }
 
             if (bExecute)
             {
-                if ( !m_aListRowSet.isDirty() )
+                if ( !_bForce && !m_aListRowSet.isDirty() )
                 {
                     // if none of the settings of the row set changed, compared to the last
                     // invocation of loadData, then don't re-fill the list. Instead, assume
@@ -808,11 +775,23 @@ namespace frm
                     ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
                     // Feld der BoundColumn des ResultSets holen
-                    Reference<XColumn> xBoundField;
+                    Reference< XPropertySet > xBoundField;
                     if ((nBoundColumn > 0) && m_xColumn.is())
-                        // don't look for a bound column if we're not connected to a field
-                        xColumns->getByIndex(nBoundColumn) >>= xBoundField;
+                    {   // don't look for a bound column if we're not connected to a field
+                        try
+                        {
+                            xColumns->getByIndex(nBoundColumn) >>= xBoundField;
+                        }
+                        catch( const Exception& )
+                        {
+                            DBG_UNHANDLED_EXCEPTION();
+                        }
+                    }
                     m_bBoundComponent = xBoundField.is();
+
+                    ::std::auto_ptr< ::dbtools::FormattedColumnValue > pBoundFieldFormatter;
+                    if ( xBoundField.is() )
+                        pBoundFieldFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), m_xCursor, xBoundField ) );
 
                     //  Ist die LB an ein Feld gebunden und sind Leereintraege zulaessig
                     //  dann wird die Position fuer einen Leereintrag gemerkt
@@ -826,10 +805,10 @@ namespace frm
                         aStr = aValueFormatter.getFormattedValue();
                         aStringList.push_back(aStr);
 
-                        if (m_bBoundComponent)
+                        if ( pBoundFieldFormatter.get() )
                         {
-                            aStr = xBoundField->getString();
-                            aValueList.push_back(aStr);
+                            aStr = pBoundFieldFormatter->getFormattedValue();
+                            aValueList.push_back( aStr );
                         }
 
                         if (bUseNULL && (m_nNULLPos == -1) && !aStr.getLength())
@@ -862,9 +841,9 @@ namespace frm
             onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
             return;
         }
-        catch( const Exception& eUnknown )
+        catch( const Exception& )
         {
-            (void)eUnknown;
+            DBG_UNHANDLED_EXCEPTION();
             return;
         }
 
@@ -895,18 +874,6 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OListBoxModel::implRefreshListFromDbBinding( )
-    {
-        DBG_ASSERT( !hasExternalListSource( ), "OListBoxModel::implRefreshListFromDbBinding: invalid call!" );
-
-        if ( m_eListSourceType != ListSourceType_VALUELIST )
-        {
-            if ( m_xCursor.is() )
-                loadData();
-        }
-    }
-
-    //------------------------------------------------------------------------------
     void OListBoxModel::onConnectedDbColumn( const Reference< XInterface >& /*_rxForm*/ )
     {
         // list boxes which are bound to a db column don't have multi selection
@@ -917,12 +884,17 @@ namespace frm
         }
 
         if ( !hasExternalListSource() )
-            implRefreshListFromDbBinding( );
+            impl_refreshDbEntryList( false );
+
+        if ( hasField() )
+            m_pBoundFieldFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), m_xCursor, getField() ) );
     }
 
     //------------------------------------------------------------------------------
     void OListBoxModel::onDisconnectedDbColumn()
     {
+        m_pBoundFieldFormatter.reset( NULL );
+
         if (m_eListSourceType != ListSourceType_VALUELIST)
         {
             m_aValueSeq = StringSequence();
@@ -1024,11 +996,18 @@ namespace frm
         if ( !m_xAggregateFastSet.is() || !m_xAggregateSet.is() )
             return Any();
 
+        OSL_ENSURE( m_pBoundFieldFormatter.get(), "OListBoxModel::translateDbColumnToControlValue: illegal call!" );
+        if ( !m_pBoundFieldFormatter.get() )
+            return Any();
+
         Sequence<sal_Int16> aSelSeq;
 
         // Bei NULL-Eintraegen Selektion aufheben!
-        ::rtl::OUString sValue = m_xColumn->getString();
-        if (m_xColumn->wasNull())
+        ::rtl::OUString sValue = m_pBoundFieldFormatter->getFormattedValue();
+        OSL_PRECOND( getField() == m_xColumn, "OListBoxModel::translateDbColumnToControlValue: inconsistency!" );
+            // m_pBoundFieldFormatter is based on m_xField, and we use m_xColumn to check for wasNull
+            // => both should better be the same object ...
+        if ( m_xColumn->wasNull() )
         {
             m_aSaveValue.clear();
             if (m_nNULLPos != -1)
@@ -1388,6 +1367,26 @@ namespace frm
         // TODO: in case we're part of an already loaded form, we should probably simulate
         // an onConnectedDbColumn, so our list get's filled with the data as indicated
         // by our SQL-binding related properties
+    }
+
+    //--------------------------------------------------------------------
+    void OListBoxModel::impl_refreshDbEntryList( bool _bForce )
+    {
+        DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::impl_refreshDbEntryList: invalid call!" );
+
+        if  (   !hasExternalListSource( )
+            &&  ( m_eListSourceType != ListSourceType_VALUELIST )
+            &&  ( m_xCursor.is() )
+            )
+        {
+            loadData( _bForce );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void OListBoxModel::refreshInternalEntryList()
+    {
+        impl_refreshDbEntryList( true );
     }
 
     //==================================================================
