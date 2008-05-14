@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -115,7 +115,8 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/pngwrite.obj	\
             $(SLO)$/graphictools.obj
 
-EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
+EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
+                    $(SLO)$/outdev.obj		\
                     $(SLO)$/outdev3.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
