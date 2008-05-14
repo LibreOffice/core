@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -621,7 +621,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         BOOL bRefSizeChanged;
         if ( bHasRefs )
         {
-            ScCompiler aComp(pDocument, aPos, *pCode);
+            ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
             pRangeData = aComp.UpdateReference(eUpdateRefMode, aOldPos, r,
                                              nDx, nDy, nDz,
                                              bValChanged, bRefSizeChanged);
@@ -773,7 +773,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            ScCompiler aComp2(pDocument, aPos, *pCode);
+            ScCompiler aComp2(pDocument, aPos, *pCode, pDocument->GetGrammar());
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
                 nDx, nDy, nDz );
             bValChanged = TRUE;
@@ -825,7 +825,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
         if ( bPosChanged )
             aPos.IncTab();
         ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         pRangeData = aComp.UpdateInsertTab( nTable, FALSE );
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
@@ -833,7 +833,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = new ScTokenArray( *pRangeData->GetCode() );
-            ScCompiler aComp2(pDocument, aPos, *pCode);
+            ScCompiler aComp2(pDocument, aPos, *pCode, pDocument->GetGrammar());
             aComp2.MoveRelWrap();
             aComp2.UpdateInsertTab( nTable, FALSE );
             // If the shared formula contained a named range/formula containing
@@ -859,14 +859,14 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
         if ( bPosChanged )
             aPos.IncTab(-1);
         ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, FALSE, bRefChanged);
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            ScCompiler aComp2(pDocument, aPos, *pCode);
+            ScCompiler aComp2(pDocument, aPos, *pCode, pDocument->GetGrammar());
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
             aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bRefChanged );
@@ -894,14 +894,14 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
         // SetTab _nach_ EndListeningTo und _vor_ Compiler UpdateMoveTab !
         aPos.SetTab( nTabNo );
         ScRangeData* pRangeData;
-        ScCompiler aComp(pDocument, aPos, *pCode);
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         pRangeData = aComp.UpdateMoveTab( nOldPos, nNewPos, FALSE );
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
-            ScCompiler aComp2(pDocument, aPos, *pCode);
+            ScCompiler aComp2(pDocument, aPos, *pCode, pDocument->GetGrammar());
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
             aComp2.UpdateMoveTab( nOldPos, nNewPos, TRUE );
