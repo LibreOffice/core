@@ -11,3 +11,5 @@ DeregisterExtensions
 RemoveExtensions
 CheckInstallDirectory
 SetAdminInstallProperty
+CreateLayerLinks
+RemoveLayerLinks
