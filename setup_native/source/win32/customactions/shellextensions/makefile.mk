@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,6 +62,7 @@ SLOFILES = \
     $(SLO)$/migrateinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/setadmininstall.obj \
+    $(SLO)$/layerlinks.obj \
     $(SLO)$/registerextensions.obj
 
 
