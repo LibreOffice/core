@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ManifestDefines.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +30,8 @@
 #ifndef _MANIFEST_DEFINES_HXX
 #define _MANIFEST_DEFINES_HXX
 
+#include <PackageConstants.hxx>
+
 #define ELEMENT_MANIFEST "manifest:manifest"
 #define ATTRIBUTE_XMLNS "xmlns:manifest"
 #define MANIFEST_NAMESPACE "http://openoffice.org/2001/manifest"
@@ -39,6 +41,7 @@
 
 #define ELEMENT_FILE_ENTRY "manifest:file-entry"
 #define ATTRIBUTE_FULL_PATH "manifest:full-path"
+#define ATTRIBUTE_VERSION "manifest:version"
 #define ATTRIBUTE_MEDIA_TYPE "manifest:media-type"
 #define ATTRIBUTE_SIZE "manifest:size"
 
