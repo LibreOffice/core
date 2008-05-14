@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -348,7 +348,8 @@ IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
                 {
                     ScRange aRange = pLink->GetDestArea();
                     String aRangeStr;
-                    aRange.Format( aRangeStr, SCR_ABS_3D, GetSourceDocument() );
+                    ScDocument* pSrcDoc = GetSourceDocument();
+                    aRange.Format( aRangeStr, SCR_ABS_3D, pSrcDoc, pSrcDoc->GetAddressConvention() );
                     pParentWindow->SetCurrentCellStr( aRangeStr );
                 }
             }
