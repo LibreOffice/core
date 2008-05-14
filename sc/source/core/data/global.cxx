@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1285,7 +1285,15 @@ xub_StrLen  ScFormulaUtil::GetFunctionEnd( const String& rStr, xub_StrLen nStart
     if ( nStrLen < nStart )
         return nStart;
 
+    // We assume the following tokens are single-character tokens.
+    const sal_Unicode open       = ScCompiler::GetStringFromOpCode(ocOpen).GetChar(0);
+    const sal_Unicode close      = ScCompiler::GetStringFromOpCode(ocClose).GetChar(0);
+    const sal_Unicode sep        = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+    const sal_Unicode arrayOpen  = ScCompiler::GetStringFromOpCode(ocArrayOpen).GetChar(0);
+    const sal_Unicode arrayClose = ScCompiler::GetStringFromOpCode(ocArrayClose).GetChar(0);
+
     short   nParCount = 0;
+    bool    bInArray = false;
     BOOL    bFound = FALSE;
 
     while ( !bFound && (nStart < nStrLen) )
@@ -1298,9 +1306,9 @@ xub_StrLen  ScFormulaUtil::GetFunctionEnd( const String& rStr, xub_StrLen nStart
             while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
                 nStart++;
         }
-        else if ( c == '(' )
+        else if ( c == open )
             nParCount++;
-        else if ( c == ')' )
+        else if ( c == close )
         {
             nParCount--;
             if ( nParCount == 0 )
@@ -1311,9 +1319,17 @@ xub_StrLen  ScFormulaUtil::GetFunctionEnd( const String& rStr, xub_StrLen nStart
                 nStart--;   // einen zu weit gelesen
             }
         }
-        else if ( c == ';' )
+        else if ( c == arrayOpen )
         {
-            if ( nParCount == 0 )
+            bInArray = true;
+        }
+        else if ( c == arrayClose )
+        {
+            bInArray = false;
+        }
+        else if ( c == sep )
+        {
+            if ( !bInArray && nParCount == 0 )
             {
                 bFound = TRUE;
                 nStart--;   // einen zu weit gelesen
@@ -1334,7 +1350,15 @@ xub_StrLen ScFormulaUtil::GetArgStart( const String& rStr, xub_StrLen nStart, US
     if ( nStrLen < nStart )
         return nStart;
 
+    // We assume the following tokens are single-character tokens.
+    const sal_Unicode open       = ScCompiler::GetStringFromOpCode(ocOpen).GetChar(0);
+    const sal_Unicode close      = ScCompiler::GetStringFromOpCode(ocClose).GetChar(0);
+    const sal_Unicode sep        = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+    const sal_Unicode arrayOpen  = ScCompiler::GetStringFromOpCode(ocArrayOpen).GetChar(0);
+    const sal_Unicode arrayClose = ScCompiler::GetStringFromOpCode(ocArrayClose).GetChar(0);
+
     short   nParCount   = 0;
+    bool    bInArray    = false;
     BOOL    bFound      = FALSE;
 
     while ( !bFound && (nStart < nStrLen) )
@@ -1347,19 +1371,27 @@ xub_StrLen ScFormulaUtil::GetArgStart( const String& rStr, xub_StrLen nStart, US
             while ( (nStart < nStrLen) && rStr.GetChar(nStart) != '"' )
                 nStart++;
         }
-        else if ( c == '(' )
+        else if ( c == open )
         {
             bFound = ( nArg == 0 );
             nParCount++;
         }
-        else if ( c == ')' )
+        else if ( c == close )
         {
             nParCount--;
             bFound = ( nParCount == 0 );
         }
-        else if ( c == ';' )
+        else if ( c == arrayOpen )
         {
-            if ( nParCount == 1 )
+            bInArray = true;
+        }
+        else if ( c == arrayClose )
+        {
+            bInArray = false;
+        }
+        else if ( c == sep )
+        {
+            if ( !bInArray && nParCount == 1 )
             {
                 nArg--;
                 bFound = ( nArg == 0  );
@@ -1765,6 +1797,8 @@ void ScFuncDesc::InitArgumentInfo() const
 
 String ScFuncDesc::GetParamList() const
 {
+    const String& sep = ScCompiler::GetStringFromOpCode(ocSep);
+
     String aSig;
 
     if ( nArgCount > 0 )
@@ -1782,7 +1816,10 @@ String ScFuncDesc::GetParamList() const
                     nLastAdded = i;
                     aSig += *(ppDefArgNames[i]);
                     if ( i != nArgCount-1 )
-                        aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                    {
+                        aSig.Append(sep);
+                        aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
+                    }
                 }
             }
             // If only suppressed parameters follow the last added parameter,
@@ -1799,7 +1836,8 @@ String ScFuncDesc::GetParamList() const
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
                     aSig += *(ppDefArgNames[nArg]);
-                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+                    aSig.Append(sep);
+                    aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
                 }
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
@@ -1808,10 +1846,12 @@ String ScFuncDesc::GetParamList() const
              * treatment of a trailing "; " necessary. */
             aSig += *(ppDefArgNames[nFix]);
             aSig += '1';
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
+            aSig.Append(sep);
+            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " " ));
             aSig += *(ppDefArgNames[nFix]);
             aSig += '2';
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ... " ));
+            aSig.Append(sep);
+            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " ... " ));
         }
     }
 
@@ -1846,6 +1886,8 @@ String ScFuncDesc::GetSignature() const
 
 String ScFuncDesc::GetFormulaString( String** aArgArr ) const
 {
+    const String& sep = ScCompiler::GetStringFromOpCode(ocSep);
+
     String aFormula;
 
     if(pFuncName)
@@ -1868,7 +1910,7 @@ String ScFuncDesc::GetFormulaString( String** aArgArr ) const
                     {
                         bLastArg = !( aArgArr[i+1]->Len() > 0 );
                         if ( !bLastArg )
-                            aFormula += ';';
+                            aFormula += sep;
                     }
                 }
             }
