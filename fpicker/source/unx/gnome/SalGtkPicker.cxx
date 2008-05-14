@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SalGtkPicker.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,9 @@ using namespace ::com::sun::star::uno;
 
 rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
+    if (!pIn)
+        return rtl::OUString();
+
     rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
         RTL_TEXTENCODING_UTF8 );
 
