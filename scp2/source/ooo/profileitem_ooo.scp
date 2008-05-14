@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -444,4 +444,72 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Lib_Dir
 #else
     Value = "$ORIGIN/../ure-link/lib";
 #endif
+End
+
+// Basis layer: gid_Profile_Version_Ini_Basis
+
+ProfileItem gid_Basis_Profileitem_Version_Buildid
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "buildid";
+    Value = "<buildid>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productpatch
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductPatch";
+    Value = "<productupdate>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productsource
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductSource";
+    Value = "<sourceid>";
+End
+
+#ifdef WNT
+ProfileItem gid_Basis_Profileitem_Version_Productcode
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductCode";
+    Value = "<productcode>";
+End
+#endif
+
+ProfileItem gid_Basis_Profileitem_Version_Productmajor
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductMajor";
+    Value = "<productmajor>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productminor
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductMinor";
+    Value = "<productminor>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productbuildid
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Ooobaseversion
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "OOOBaseVersion";
+    Value = "${OOOBASEVERSION}";
 End
