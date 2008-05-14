@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,8 +104,16 @@ private:
     void                ImplShowSignaturesDetails();
     SignatureStreamHelper ImplOpenSignatureStream( sal_Int32 eStreamMode );
 
+    //Checks if adding is allowed.
+    //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
+    //(6.6.2)Behaviour with regard to ODF 1.2
+    bool DigitalSignaturesDialog::canAdd();
+    bool DigitalSignaturesDialog::canRemove();
+
 public:
-    DigitalSignaturesDialog( Window* pParent, cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode, sal_Bool bReadOnly );
+    DigitalSignaturesDialog( Window* pParent, cssu::Reference<
+        css::lang::XMultiServiceFactory >& rxMSF, DocumentSignatureMode eMode,
+        sal_Bool bReadOnly );
     ~DigitalSignaturesDialog();
 
             // Initialize the dialog and the security environment, returns TRUE on success
