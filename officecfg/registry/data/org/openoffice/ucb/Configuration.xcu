@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Configuration.xcu,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,6 +151,18 @@
               </prop>
               <prop oor:name="URLTemplate">
                 <value>https</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
+            <!-- We want the Provider to be the final fallback provider -->
+            <node oor:name="Provider999" oor:op="replace" install:module="gio">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.GIOContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>.*</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
