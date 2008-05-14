@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1683,7 +1683,7 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "ADDRESS" ) )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
                 USHORT nFlags = (aCellPos.Tab() == aPos.Tab()) ? (SCA_ABS) : (SCA_ABS_3D);
-                aCellPos.Format( aFuncResult, nFlags, pDok );
+                aCellPos.Format( aFuncResult, nFlags, pDok, pDok->GetAddressConvention() );
                 PushString( aFuncResult );
             }
             else if( aInfoType.EqualsAscii( "FILENAME" ) )
@@ -1713,10 +1713,12 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "COORD" ) )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
                 // Yes, passing tab as col is intentional!
-                ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format( aFuncResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL) );
+                ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format(
+                    aFuncResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL), NULL, pDok->GetAddressConvention() );
                 aFuncResult += ':';
                 String aCellStr;
-                aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW) );
+                aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW),
+                                 NULL, pDok->GetAddressConvention() );
                 aFuncResult += aCellStr;
                 PushString( aFuncResult );
             }
