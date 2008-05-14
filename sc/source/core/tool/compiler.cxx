@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.77 $
+ * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
@@ -209,23 +210,116 @@ short lcl_GetRetFormat( OpCode eOpCode )
 class ScOpCodeList : public Resource        // temp object for resource
 {
 public:
+
     ScOpCodeList( USHORT, ScCompiler::NonConstOpCodeMapPtr );
+
+private:
+    void init( ScGrammar::Grammar eGrammar );
+    bool getOpCodeString( String& rStr, USHORT nOp );
+    void putDefaultOpCode( ScCompiler::NonConstOpCodeMapPtr xMap, USHORT nOp );
+
+private:
+    enum SeparatorType
+    {
+        SEMICOLON_BASE,
+        COMMA_BASE
+    };
+    SeparatorType meSepType;
 };
 
-ScOpCodeList::ScOpCodeList( USHORT nRID, ScCompiler::NonConstOpCodeMapPtr xMap )
-        :
-        Resource( ScResId( nRID ) )
+ScOpCodeList::ScOpCodeList( USHORT nRID, ScCompiler::NonConstOpCodeMapPtr xMap ) :
+    Resource( ScResId(nRID) )
 {
-    for (USHORT i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; i++)
+    init(xMap->getGrammar());
+
+    for (USHORT i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
-        ScResId aRes(i);
-        aRes.SetRT(RSC_STRING);
-        if (IsAvailableRes(aRes))
-            xMap->putOpCode( aRes, OpCode(i));
+        String aOpStr;
+        if ( getOpCodeString(aOpStr, i) )
+            xMap->putOpCode(aOpStr, OpCode(i));
+        else
+            putDefaultOpCode(xMap, i);
     }
+
     FreeResource();
 }
 
+void ScOpCodeList::init( ScGrammar::Grammar /*eGrammar*/ )
+{
+    using namespace ::com::sun::star::sheet;
+
+    meSepType = SEMICOLON_BASE;
+#if 0
+    if (ScGrammar::extractFormulaLanguage(eGrammar) == FormulaLanguage::NATIVE)
+    {
+        // Use localized separators.
+        const lang::Locale& rLocale = *ScGlobal::pLocale;
+        if (rLocale.Language.equalsAscii("en"))
+            meSepType = COMMA_BASE;
+
+        // TODO: Check for more locales.
+    }
+#endif
+}
+
+bool ScOpCodeList::getOpCodeString( String& rStr, USHORT nOp )
+{
+    switch (nOp)
+    {
+        case SC_OPCODE_SEP:
+        {
+            if (meSepType == COMMA_BASE)
+            {
+                rStr = String::CreateFromAscii(",");
+                return true;
+            }
+            else if (meSepType == SEMICOLON_BASE)
+            {
+                rStr = String::CreateFromAscii(";");
+                return true;
+            }
+        }
+        break;
+        case SC_OPCODE_ARRAY_COL_SEP:
+        {
+            if (meSepType == COMMA_BASE)
+            {
+                rStr = String::CreateFromAscii(",");
+                return true;
+            }
+            else if (meSepType == SEMICOLON_BASE)
+            {
+                rStr = String::CreateFromAscii(";");
+                return true;
+            }
+        }
+        break;
+        case SC_OPCODE_ARRAY_ROW_SEP:
+        {
+            if (meSepType == COMMA_BASE)
+            {
+                rStr = String::CreateFromAscii(";");
+                return true;
+            }
+            else if (meSepType == SEMICOLON_BASE)
+            {
+                rStr = String::CreateFromAscii("|");
+                return true;
+            }
+        }
+        break;
+    }
+
+    return false;
+}
+
+void ScOpCodeList::putDefaultOpCode( ScCompiler::NonConstOpCodeMapPtr xMap, USHORT nOp )
+{
+    ScResId aRes(nOp);
+    aRes.SetRT(RSC_STRING);
+    if (IsAvailableRes(aRes))
+        xMap->putOpCode(aRes, OpCode(nOp));
+}
 
 class ScCompilerRecursionGuard
 {
@@ -310,7 +404,7 @@ void ScCompiler::InitSymbolsNative()
     // Core
     mxSymbolsNative.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1,
                 true, ScGrammar::GRAM_NATIVE_UI));
-    ScOpCodeList aOpCodeListNative( RID_SC_FUNCTION_NAMES, mxSymbolsNative);
+    ScOpCodeList aOpCodeListNative( RID_SC_FUNCTION_NAMES, mxSymbolsNative );
 
     // No AddInMap for native core mapping.
 }
@@ -1290,11 +1384,12 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     {
         ComplRefData aRef( rRef );
 
-        MakeDocStr( rBuf, rComp, aRef, bSingleRef );
-
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
         aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
+
+        MakeDocStr( rBuf, rComp, aRef, bSingleRef );
+
         if( aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() )
         {
             rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
@@ -1493,6 +1588,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         bCorrected( FALSE ),
         bCompileForFAP( FALSE ),
         bIgnoreErrors( FALSE ),
+        pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
         meGrammar( ScGrammar::GRAM_UNSPECIFIED )
 {
@@ -1516,6 +1612,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         bCorrected( FALSE ),
         bCompileForFAP( FALSE ),
         bIgnoreErrors( FALSE ),
+        pConv( pConvOOO_A1 ),
         mbCloseBrackets( true ),
         meGrammar( ScGrammar::GRAM_UNSPECIFIED )
 {
@@ -3003,8 +3100,7 @@ BOOL ScCompiler::NextNewToken( bool bAllowBooleans )
         return FALSE;
 }
 
-ScTokenArray* ScCompiler::CompileString( const String& rFormula,
-                                         ScAddress::Convention eConv )
+ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
 #if 0
     fprintf( stderr, "CompileString '%s'\n",
@@ -3014,8 +3110,6 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
     ScTokenArray aArr;
     pArr = &aArr;
     aFormula = rFormula;
-
-    SetRefConvention( eConv );
 
     aFormula.EraseLeadingChars();
     aFormula.EraseTrailingChars();
