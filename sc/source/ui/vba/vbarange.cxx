@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vbarange.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,7 @@
 #include "rangelst.hxx"
 #include "convuno.hxx"
 #include "compiler.hxx"
+#include "grammar.hxx"
 #include "attrib.hxx"
 #include "undodat.hxx"
 #include "dbdocfun.hxx"
@@ -731,30 +732,30 @@ class CellFormulaValueSetter : public CellValueSetter
 {
 private:
     ScDocument*  m_pDoc;
-    ScAddress::Convention m_eConv;
+    ScGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, ScAddress::Convention eConv  ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eConv( eConv ){}
+    CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, ScGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
 protected:
     bool processValue( const uno::Any& aValue, const uno::Reference< table::XCell >& xCell )
     {
         rtl::OUString sFormula;
         if ( aValue >>= sFormula )
         {
-            // get current convention
-            ScAddress::Convention eConv = m_pDoc->GetAddressConvention();
-            // only convert/compile 'real' formulas
-            if ( eConv != m_eConv && ( sFormula.trim().indexOf('=') == 0 ) )
+            // convert to CONV_OOO style formula string because XCell::setFormula
+            // always compile it in CONV_OOO style.  Perhaps css.sheet.FormulaParser
+            // should be used in future to directly pass formula tokens.
+            if ( m_eGrammar != ScGrammar::GRAM_PODF_A1 && ( sFormula.trim().indexOf('=') == 0 ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );
                 if ( pUnoRangesBase )
                 {
                     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
+                    ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart, m_eGrammar );
                     // compile the string in the format passed in
-                    aCompiler.CompileString( sFormula, m_eConv );
+                    aCompiler.CompileString( sFormula );
                     // set desired convention to that of the document
-                    aCompiler.SetRefConvention( eConv );
+                    aCompiler.SetGrammar( ScGrammar::GRAM_PODF_A1 );
                     String sConverted;
                     aCompiler.CreateStringFromTokenArray(sConverted);
                     sFormula = EQUALS + sConverted;
@@ -773,9 +774,9 @@ class CellFormulaValueGetter : public CellValueGetter
 {
 private:
     ScDocument*  m_pDoc;
-    ScAddress::Convention m_eConv;
+    ScGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueGetter(ScDocument* pDoc, ScAddress::Convention eConv ) : CellValueGetter( ), m_pDoc( pDoc ), m_eConv( eConv ) {}
+    CellFormulaValueGetter(ScDocument* pDoc, ScGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell )
     {
         uno::Any aValue;
@@ -788,10 +789,10 @@ public:
             pUnoRangesBase )
         {
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
-            aCompiler.CompileString( sVal,  ScAddress::CONV_OOO );
+            ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart, ScGrammar::GRAM_DEFAULT );
+            aCompiler.CompileString( sVal );
             // set desired convention
-            aCompiler.SetRefConvention( m_eConv );
+            aCompiler.SetGrammar( m_eGrammar );
             String sConverted;
             aCompiler.CreateStringFromTokenArray(sConverted);
             sVal = EQUALS + sConverted;
@@ -1359,7 +1360,7 @@ ScVbaRange::ClearFormats() throw (uno::RuntimeException)
 }
 
 void
-ScVbaRange::setFormulaValue( const uno::Any& rFormula, ScAddress::Convention eConv ) throw (uno::RuntimeException)
+ScVbaRange::setFormulaValue( const uno::Any& rFormula, ScGrammar::Grammar eGram ) throw (uno::RuntimeException)
 {
     // If this is a multiple selection apply setFormula over all areas
     if ( m_Areas->getCount() > 1 )
@@ -1369,12 +1370,12 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, ScAddress::Convention eCo
         aVisitor.visit( valueProcessor );
         return;
     }
-    CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eConv );
+    CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
     setValue( rFormula, formulaValueSetter );
 }
 
 uno::Any
-ScVbaRange::getFormulaValue( ScAddress::Convention eConv) throw (uno::RuntimeException)
+ScVbaRange::getFormulaValue( ScGrammar::Grammar eGram ) throw (uno::RuntimeException)
 {
     // #TODO code within the test below "if ( m_Areas.... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1385,7 +1386,7 @@ ScVbaRange::getFormulaValue( ScAddress::Convention eConv) throw (uno::RuntimeExc
         uno::Reference< excel::XRange > xRange( getArea( 0 ), uno::UNO_QUERY_THROW );
         return xRange->getFormula();
     }
-    CellFormulaValueGetter valueGetter( getScDocument(), eConv );
+    CellFormulaValueGetter valueGetter( getScDocument(), eGram );
     return getValue( valueGetter );
 
 }
@@ -1394,26 +1395,25 @@ void
 ScVbaRange::setFormula(const uno::Any &rFormula ) throw (uno::RuntimeException)
 {
     // #FIXME converting "=$a$1" e.g. CONV_XL_A1 -> CONV_OOO                            // results in "=$a$1:a1", temporalily disable conversion
-    //setFormulaValue( rFormula, ScAddress::CONV_XL_A1 );;
-    setFormulaValue( rFormula, ScAddress::CONV_OOO );;
+    setFormulaValue( rFormula, ScGrammar::GRAM_NATIVE_XL_A1 );;
 }
 
 uno::Any
 ScVbaRange::getFormulaR1C1() throw (::com::sun::star::uno::RuntimeException)
 {
-    return getFormulaValue( ScAddress::CONV_XL_R1C1 );
+    return getFormulaValue( ScGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 void
 ScVbaRange::setFormulaR1C1(const uno::Any& rFormula ) throw (uno::RuntimeException)
 {
-    setFormulaValue( rFormula, ScAddress::CONV_XL_R1C1 );
+    setFormulaValue( rFormula, ScGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 uno::Any
 ScVbaRange::getFormula() throw (::com::sun::star::uno::RuntimeException)
 {
-    return getFormulaValue( ScAddress::CONV_XL_A1 );
+    return getFormulaValue( ScGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 sal_Int32
