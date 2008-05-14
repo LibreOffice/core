@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optsolver.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -382,7 +382,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         maRbMax.Check();
         String aCursorStr;
         if ( !mpDoc->GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
-            rCursorPos.Format( aCursorStr, SCA_ABS );
+            rCursorPos.Format( aCursorStr, SCA_ABS, NULL, mpDoc->GetAddressConvention() );
         maEdObjectiveCell.SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
@@ -499,10 +499,11 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             aStr = aName;
         else                                                        // format cell/range reference
         {
+            USHORT nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
             if ( bSingle )
-                aAdr.Format( aStr, ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D, pDocP );
+                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
             else
-                rRef.Format( aStr, ( aAdr.Tab() == mnCurTab ) ? SCR_ABS : SCR_ABS_3D, pDocP );
+                rRef.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
         }
 
         // variable cells can be several ranges, so only the selection is replaced
@@ -772,7 +773,8 @@ void ScOptSolverDlg::ShowError( bool bCondition, ScRefEdit* pFocus )
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const String& rInput, bool bAllowRange )
 {
     ScRangeUtil aRangeUtil;
-    USHORT nFlags = rRange.ParseAny( rInput, mpDoc );
+    ScAddress::Details aDetails(mpDoc->GetAddressConvention(), 0, 0);
+    USHORT nFlags = rRange.ParseAny( rInput, mpDoc, aDetails );
     if ( nFlags & SCA_VALID )
     {
         if ( (nFlags & SCA_TAB_3D) == 0 )
@@ -781,7 +783,7 @@ bool ScOptSolverDlg::ParseRef( ScRange& rRange, const String& rInput, bool bAllo
             rRange.aEnd.SetTab( rRange.aStart.Tab() );
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
     }
-    else if ( aRangeUtil.MakeRangeFromName( rInput, mpDoc, mnCurTab, rRange, RUTL_NAMES ) )
+    else if ( aRangeUtil.MakeRangeFromName( rInput, mpDoc, mnCurTab, rRange, RUTL_NAMES, aDetails ) )
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
 
     return false;   // not recognized
