@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -664,7 +664,7 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
             default:
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= SCA_TAB_3D;
-                aTmpRange.Format( aStr, nFlags, pDoc );
+                aTmpRange.Format( aStr, nFlags, pDoc, pDoc->GetAddressConvention() );
         }
         if ( (bFlag3D && IsDeleteType()) || IsDeletedIn() )
         {
@@ -2191,7 +2191,7 @@ void ScChangeActionContent::GetRefString( String& rStr, ScDocument* pDoc,
         ScAddress aTmpAddress( GetBigRange().aStart.MakeAddress() );
         if ( bFlag3D )
             nFlags |= SCA_TAB_3D;
-        aTmpAddress.Format( rStr, nFlags, pDoc );
+        aTmpAddress.Format( rStr, nFlags, pDoc, pDoc->GetAddressConvention() );
         if ( IsDeletedIn() )
         {
             rStr.Insert( '(', 0 );
