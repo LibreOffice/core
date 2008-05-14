@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
 
 TARFILE_ROOTDIR=hsqldb
 
-#CONVERTFILES=build$/build.xml
+CONVERTFILES=build$/build.xml
 
 PATCH_FILE_NAME=patches$/accumulated_patches.patch
 
