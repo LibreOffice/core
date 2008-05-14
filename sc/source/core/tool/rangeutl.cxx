@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangeutl.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,7 +468,7 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
     OUString sToken;
     GetTokenByOffset( sToken, rAddressStr, nOffset, cSeperator, cQuote );
     if( nOffset >= 0 )
-        return ((rAddress.Parse( sToken, (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID);
+        return ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), pDocument->GetAddressConvention() ) & SCA_VALID) == SCA_VALID);
     return sal_False;
 }
 
@@ -492,7 +492,7 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
         {
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
                 aUIString.Erase( 0, 1 );
-            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument)) & SCA_VALID) == SCA_VALID);
+            bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), pDocument->GetAddressConvention()) & SCA_VALID) == SCA_VALID);
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -633,7 +633,7 @@ void ScRangeStringConverter::GetStringFromAddress(
     if (pDocument && pDocument->HasTable(rAddress.Tab()))
     {
         String sAddress;
-        rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument );
+        rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument, pDocument->GetAddressConvention() );
         AssignString( rString, sAddress, bAppendStr, cSeperator );
     }
 }
@@ -652,10 +652,9 @@ void ScRangeStringConverter::GetStringFromRange(
         ScAddress aEndAddress( rRange.aEnd );
         String sStartAddress;
         String sEndAddress;
-        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument,
-                              ScAddress::CONV_OOO );
-        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument,
-                            ScAddress::CONV_OOO );
+        ScAddress::Convention eConv = pDocument->GetAddressConvention();
+        aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
+        aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument, eConv );
         OUString sOUStartAddress( sStartAddress );
         sOUStartAddress += OUString(':');
         sOUStartAddress += OUString( sEndAddress );
