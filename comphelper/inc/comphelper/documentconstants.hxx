@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentconstants.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,5 +104,13 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII ) )
 #define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII ) )
 
+// ODF versions
+#define ODFVER_010_TEXT_ASCII   "1.0"
+#define ODFVER_011_TEXT_ASCII   "1.1"
+#define ODFVER_012_TEXT_ASCII   "1.2"
+
+#define ODFVER_010_TEXT ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODFVER_010_TEXT_ASCII ) )
+#define ODFVER_011_TEXT ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODFVER_011_TEXT_ASCII ) )
+#define ODFVER_012_TEXT ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ODFVER_012_TEXT_ASCII ) )
 #endif
 
