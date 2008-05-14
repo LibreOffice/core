@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ManifestImport.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +68,7 @@ protected:
 
     const ::rtl::OUString sCdataAttribute;
     const ::rtl::OUString sMediaTypeAttribute;
+    const ::rtl::OUString sVersionAttribute;
     const ::rtl::OUString sFullPathAttribute;
     const ::rtl::OUString sSizeAttribute;
     const ::rtl::OUString sSaltAttribute;
@@ -80,6 +81,7 @@ protected:
 
     const ::rtl::OUString sFullPathProperty;
     const ::rtl::OUString sMediaTypeProperty;
+    const ::rtl::OUString sVersionProperty;
     const ::rtl::OUString sIterationCountProperty;
     const ::rtl::OUString sSaltProperty;
     const ::rtl::OUString sInitialisationVectorProperty;
