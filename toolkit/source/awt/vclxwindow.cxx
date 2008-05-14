@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclxwindow.cxx,v $
- * $Revision: 1.87 $
+ * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,7 +216,7 @@ private:
 #else
 #if !defined( SYNCHRON_NOTIFICATION )
     EventArray                          maEvents;
-    sal_Int32                           mnEventId;
+    ULONG                               mnEventId;
 #endif
 #endif
 
