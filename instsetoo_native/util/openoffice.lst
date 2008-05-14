@@ -7,12 +7,16 @@ Globals
 			OOOBASEVERSION 3.0
 			OOOPACKAGEVERSION 3.0.0
 			UREPACKAGEVERSION 1.4.0
+			URELAYERVERSION 1
 			SERVICETAG_PRODUCTNAME OpenOffice.org 3.0 Beta
 			SERVICETAG_PRODUCTVERSION 3.0
 			SERVICETAG_PARENTNAME OpenOffice.org 3.0 Beta
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
 			SERVICETAG_URN urn:uuid:724443b7-e0de-11dc-ac55-080020a9ed93
 			HIDELICENSEDIALOG 1
+			BASISPACKAGEPREFIX ooobasis
+			UREPACKAGEPREFIX openoffice.org
+			SOLSUREPACKAGEPREFIX openofficeorg
 		}
 	}
 }
@@ -144,13 +148,16 @@ OpenOffice_Dev
 			PRODUCTEXTENSION Beta
 			LONG_PRODUCTEXTENSION Beta
 			SHORT_PRODUCTEXTENSION Beta
-            POSTVERSIONEXTENSION
-            POSTVERSIONEXTENSIONUNIX
+			POSTVERSIONEXTENSION
+			POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
 			BASEPRODUCTVERSION 3.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo-Dev/register.html?id=${INSTANCE_URN}&amp;cid=923142
+			BASISPACKAGEPREFIX ooobasis-dev
+			UREPACKAGEPREFIX ooodev
+			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
@@ -181,8 +188,8 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
-            STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
+			STARTCENTER_INFO_URL http://www.openoffice.org
 		}
 		active			1
 		compression		5
@@ -201,14 +208,18 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 2.0
-            PACKAGEVERSION 2.0
+            PRODUCTVERSION 1.4
+            PACKAGEVERSION 1.4
             PACKAGEREVISION 1
+			PRODUCTEXTENSION 
+			LONG_PRODUCTEXTENSION 
+			SHORT_PRODUCTEXTENSION 
             LICENSENAME LGPL
 			SERVICESPROJEKT 1
 			SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
 			PROGRAMFILESROOT 1
+			GLOBALFILEGID gid_File_Dl_Cppu
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
@@ -391,6 +402,9 @@ BrOffice_Dev
 			USERDIRPRODUCTVERSION 3
 			ABOUTBOXPRODUCTVERSION 3.0.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo-Dev/register.html?id=${INSTANCE_URN}&amp;cid=923142
+			BASISPACKAGEPREFIX ooobasis-dev
+			UREPACKAGEPREFIX ooodev
+			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
