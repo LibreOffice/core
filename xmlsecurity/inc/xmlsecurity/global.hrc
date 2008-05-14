@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,8 @@
 #define RID_XMLSECTP_LOCK                   1011
 #define RID_XMLSECTP_LOCK_HC                1012
 #define RID_XMLSECWB_NO_MOZILLA_PROFILE     1013
+#define RID_XMLSECDLG_OLD_ODF_FORMAT        1014
+
 
 #endif
 
