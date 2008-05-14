@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: servobj.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +104,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         {
             // area reference
         }
-        else if ( aRange.aStart.Parse( rItem, pDoc ) & SCA_VALID )
+        else if ( aRange.aStart.Parse( rItem, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID )
         {
             // cell reference
             aRange.aEnd = aRange.aStart;
