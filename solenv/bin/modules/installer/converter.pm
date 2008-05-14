@@ -8,7 +8,7 @@
 #
 # $RCSfile: converter.pm,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -378,6 +378,30 @@ sub copy_hash_from_references
     }
 
     return \%newhash;
+}
+
+#################################################################
+# Combining two arrays, first wins
+#################################################################
+
+sub combine_arrays_from_references_first_win
+{
+    my ( $arrayref1, $arrayref2 ) = @_;
+
+    my $hashref1 = convert_array_to_hash($arrayref1);
+    my $hashref2 = convert_array_to_hash($arrayref2);
+    my %commonhash = ();
+    my @newarray = ();
+
+    # starting with second hash
+    foreach my $key ( keys %{$hashref2} ) { $commonhash{$key} = $hashref2->{$key}; }
+    # overwriting with first hash
+    foreach my $key ( keys %{$hashref1} ) { $commonhash{$key} = $hashref1->{$key}; }
+
+    # Creating the new array
+    foreach my $key ( keys %commonhash ) { push(@newarray, "$key $commonhash{$key}\n"); }
+
+    return \@newarray;
 }
 
 #################################################################
