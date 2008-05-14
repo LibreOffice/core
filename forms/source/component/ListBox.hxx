@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ListBox.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 #include "entrylisthelper.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
@@ -52,10 +51,14 @@
 #include <comphelper/asyncnotification.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <memory>
+
+namespace dbtools
+{
+    class FormattedColumnValue;
+}
 
 //.........................................................................
 namespace frm
@@ -64,15 +67,13 @@ namespace frm
 //==================================================================
 //= OListBoxModel
 //==================================================================
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::util::XRefreshable
-                            >   OListBoxModel_BASE;
-
 class OListBoxModel :public OBoundControlModel
-                    ,public OListBoxModel_BASE
                     ,public OEntryListHelper
                     ,public OErrorBroadcaster
 {
     CachedRowSet                                m_aListRowSet;          // the row set to fill the list
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+                                                m_pBoundFieldFormatter;
 
     ::com::sun::star::uno::Any                  m_aSaveValue;
 
@@ -83,8 +84,6 @@ class OListBoxModel :public OBoundControlModel
     StringSequence                              m_aValueSeq;            // alle Werte, readonly
     ::com::sun::star::uno::Sequence<sal_Int16>  m_aDefaultSelectSeq;    // DefaultSelected
     // </properties>
-
-    ::cppu::OInterfaceContainerHelper           m_aRefreshListeners;
 
     sal_Int16                                   m_nNULLPos;             // position of the NULL value in our list
     sal_Bool                                    m_bBoundComponent : 1;
@@ -139,11 +138,6 @@ protected:
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    // XRefreshable
-    virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
-
     // OControlModel's property handling
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
@@ -185,17 +179,18 @@ protected:
     virtual void    stringItemListChanged( );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
+    virtual void    refreshInternalEntryList();
 
 protected:
     DECLARE_XCLONEABLE();
 
 private:
-    void        loadData();
+    void        loadData( bool _bForce );
 
-    /**
-    @precond we don't actually have an external list source
+    /** refreshes the list boxes list data
+        @precond we don't actually have an external list source
     */
-    void        implRefreshListFromDbBinding( );
+    void        impl_refreshDbEntryList( bool _bForce );
 
     StringSequence
                 impl_getValues() const { return m_aValueSeq.getLength() ? m_aValueSeq : getStringItemList(); }
