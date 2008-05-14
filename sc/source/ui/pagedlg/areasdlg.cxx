@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: areasdlg.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include "docsh.hxx"
 #include "globstr.hrc"
 #include "pagedlg.hrc"
+#include "compiler.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -77,10 +78,34 @@ const USHORT SC_AREASDLG_RR_OFFSET  = 2;
 
 // globale Funktionen (->am Ende der Datei):
 
-BOOL    lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange );
-void    lcl_GetRepeatRangeString( const ScRange* pRange, BOOL bIsRow, String& rStr );
-void    lcl_CheckEqual( String& rStr );
+bool    lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+void    lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
 
+#if 0
+static void printAddressFlags(USHORT nFlag)
+{
+    if ((nFlag & SCA_COL_ABSOLUTE  ) == SCA_COL_ABSOLUTE  )  printf("SCA_COL_ABSOLUTE \n");
+    if ((nFlag & SCA_ROW_ABSOLUTE  ) == SCA_ROW_ABSOLUTE  )  printf("SCA_ROW_ABSOLUTE \n");
+    if ((nFlag & SCA_TAB_ABSOLUTE  ) == SCA_TAB_ABSOLUTE  )  printf("SCA_TAB_ABSOLUTE \n");
+    if ((nFlag & SCA_TAB_3D        ) == SCA_TAB_3D        )  printf("SCA_TAB_3D       \n");
+    if ((nFlag & SCA_COL2_ABSOLUTE ) == SCA_COL2_ABSOLUTE )  printf("SCA_COL2_ABSOLUTE\n");
+    if ((nFlag & SCA_ROW2_ABSOLUTE ) == SCA_ROW2_ABSOLUTE )  printf("SCA_ROW2_ABSOLUTE\n");
+    if ((nFlag & SCA_TAB2_ABSOLUTE ) == SCA_TAB2_ABSOLUTE )  printf("SCA_TAB2_ABSOLUTE\n");
+    if ((nFlag & SCA_TAB2_3D       ) == SCA_TAB2_3D       )  printf("SCA_TAB2_3D      \n");
+    if ((nFlag & SCA_VALID_ROW     ) == SCA_VALID_ROW     )  printf("SCA_VALID_ROW    \n");
+    if ((nFlag & SCA_VALID_COL     ) == SCA_VALID_COL     )  printf("SCA_VALID_COL    \n");
+    if ((nFlag & SCA_VALID_TAB     ) == SCA_VALID_TAB     )  printf("SCA_VALID_TAB    \n");
+    if ((nFlag & SCA_FORCE_DOC     ) == SCA_FORCE_DOC     )  printf("SCA_FORCE_DOC    \n");
+    if ((nFlag & SCA_VALID_ROW2    ) == SCA_VALID_ROW2    )  printf("SCA_VALID_ROW2   \n");
+    if ((nFlag & SCA_VALID_COL2    ) == SCA_VALID_COL2    )  printf("SCA_VALID_COL2   \n");
+    if ((nFlag & SCA_VALID_TAB2    ) == SCA_VALID_TAB2    )  printf("SCA_VALID_TAB2   \n");
+    if ((nFlag & SCA_VALID         ) == SCA_VALID         )  printf("SCA_VALID        \n");
+    if ((nFlag & SCA_ABS           ) == SCA_ABS           )  printf("SCA_ABS          \n");
+    if ((nFlag & SCR_ABS           ) == SCR_ABS           )  printf("SCR_ABS          \n");
+    if ((nFlag & SCA_ABS_3D        ) == SCA_ABS_3D        )  printf("SCA_ABS_3D       \n");
+    if ((nFlag & SCR_ABS_3D        ) == SCR_ABS_3D        )  printf("SCR_ABS_3D       \n");
+}
+#endif
 
 //============================================================================
 //  class ScPrintAreasDlg
@@ -182,11 +207,11 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
             RefInputStart( pRefInputEdit );
 
         String  aStr;
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
         if ( &aEdPrintArea == pRefInputEdit )
         {
-            rRef.Format( aStr, SCR_ABS );
-            lcl_CheckEqual( aStr );
+            rRef.Format( aStr, SCR_ABS, pDoc, eConv );
 
 //          aEdPrintArea.ReplaceSelected( aStr );
 
@@ -202,7 +227,7 @@ void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ 
         else
         {
             BOOL bRow = ( &aEdRepeatRow == pRefInputEdit );
-            lcl_GetRepeatRangeString( &rRef, bRow, aStr );
+            lcl_GetRepeatRangeString(&rRef, pDoc, bRow, aStr);
             pRefInputEdit->SetRefString( aStr );
         }
     }
@@ -217,8 +242,9 @@ void ScPrintAreasDlg::AddRefEntry()
 {
     if ( pRefInputEdit == &aEdPrintArea )
     {
+        const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
         String aVal = aEdPrintArea.GetText();
-        aVal += ';';
+        aVal += sep;
         aEdPrintArea.SetText(aVal);
 
         xub_StrLen nLen = aVal.Len();
@@ -288,6 +314,8 @@ void ScPrintAreasDlg::Impl_Reset()
     //-------------------------
     aStrRange.Erase();
     String aOne;
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
     USHORT nRangeCount = pDoc->GetPrintRangeCount( nCurTab );
     for (USHORT i=0; i<nRangeCount; i++)
     {
@@ -295,9 +323,8 @@ void ScPrintAreasDlg::Impl_Reset()
         if (pPrintRange)
         {
             if ( aStrRange.Len() )
-                aStrRange += ';';
-            pPrintRange->Format( aOne, SCR_ABS );
-            lcl_CheckEqual( aOne );
+                aStrRange += sep;
+            pPrintRange->Format( aOne, SCR_ABS, pDoc, eConv );
             aStrRange += aOne;
         }
     }
@@ -306,13 +333,13 @@ void ScPrintAreasDlg::Impl_Reset()
     //-------------------------------
     // Wiederholungszeile
     //-------------------------------
-    lcl_GetRepeatRangeString( pRepeatRowRange, TRUE, aStrRange );
+    lcl_GetRepeatRangeString(pRepeatRowRange, pDoc, true, aStrRange);
     aEdRepeatRow.SetText( aStrRange );
 
     //--------------------------------
     // Wiederholungsspalte
     //--------------------------------
-    lcl_GetRepeatRangeString( pRepeatColRange, FALSE, aStrRange );
+    lcl_GetRepeatRangeString(pRepeatColRange, pDoc, false, aStrRange);
     aEdRepeatCol.SetText( aStrRange );
 
     Impl_ModifyHdl( &aEdPrintArea );
@@ -337,9 +364,9 @@ BOOL ScPrintAreasDlg::Impl_GetItem( Edit* pEd, SfxStringItem& rItem )
     if ( (aRangeStr.Len() > 0) && &aEdPrintArea != pEd )
     {
         ScRange aRange;
-        lcl_CheckRepeatString( aRangeStr, &aEdRepeatRow == pEd, &aRange );
-        aRange.Format( aRangeStr, SCR_ABS );
-        lcl_CheckEqual( aRangeStr );
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        lcl_CheckRepeatString(aRangeStr, pDoc, &aEdRepeatRow == pEd, &aRange);
+        aRange.Format(aRangeStr, SCR_ABS, pDoc, eConv);
     }
 
     rItem.SetValue( aRangeStr );
@@ -360,25 +387,35 @@ BOOL ScPrintAreasDlg::Impl_CheckRefStrings()
     BOOL bPrintAreaOk = TRUE;
     if ( aStrPrintArea.Len() )
     {
+        const USHORT nValidAddr  = SCA_VALID | SCA_VALID_ROW | SCA_VALID_COL;
+        const USHORT nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const sal_Unicode sep  = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+        const sal_Unicode rsep = ScCompiler::GetStringFromOpCode(ocRange).GetChar(0);
+
+        ScAddress aAddr;
         ScRange aRange;
-        xub_StrLen nTCount = aStrPrintArea.GetTokenCount();
-        for ( xub_StrLen i=0; i<nTCount && bPrintAreaOk; i++ )
+        xub_StrLen nSepCount = aStrPrintArea.GetTokenCount(sep);
+        for ( xub_StrLen i = 0; i < nSepCount && bPrintAreaOk; ++i )
         {
-            String aOne = aStrPrintArea.GetToken(i);
-            lcl_CheckEqual( aOne );
-            USHORT nResult = aRange.ParseAny( aOne, pDoc );
-            if (!(nResult & SCA_VALID))
-                bPrintAreaOk = FALSE;
+            String aOne = aStrPrintArea.GetToken(i, sep);
+            USHORT nResult = aRange.Parse( aOne, pDoc, eConv );
+            if ((nResult & nValidRange) != nValidRange)
+            {
+                USHORT nResult = aAddr.Parse( aOne, pDoc, eConv );
+                if ((nResult & nValidAddr) != nValidAddr)
+                    bPrintAreaOk = FALSE;
+            }
         }
     }
 
     BOOL bRepeatRowOk = (aStrRepeatRow.Len() == 0);
     if ( !bRepeatRowOk )
-        bRepeatRowOk = lcl_CheckRepeatString( aStrRepeatRow, TRUE, NULL );
+        bRepeatRowOk = lcl_CheckRepeatString(aStrRepeatRow, pDoc, true, NULL);
 
     BOOL bRepeatColOk = (aStrRepeatCol.Len() == 0);
     if ( !bRepeatColOk )
-        bRepeatColOk = lcl_CheckRepeatString( aStrRepeatCol, FALSE, NULL );
+        bRepeatColOk = lcl_CheckRepeatString(aStrRepeatCol, pDoc, false, NULL);
 
     // Fehlermeldungen
 
@@ -414,13 +451,15 @@ void ScPrintAreasDlg::Impl_FillLists()
     if ( pViewData )
         bSimple = (pViewData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE);
 
+    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+
     if ( bSimple )
-        aRange.Format( aStrRange, SCR_ABS, pDoc );
+        aRange.Format( aStrRange, SCR_ABS, pDoc, eConv );
     else
     {
         ScRangeListRef aList( new ScRangeList );
         pViewData->GetMarkData().FillRangeListWithMarks( aList, FALSE );
-        aList->Format( aStrRange, SCR_ABS, pDoc );
+        aList->Format( aStrRange, SCR_ABS, pDoc, eConv );
     }
 
     aLbPrintArea.SetEntryData( SC_AREASDLG_PR_SELECT, new String( aStrRange ) );
@@ -449,11 +488,11 @@ void ScPrintAreasDlg::Impl_FillLists()
                 {
                     pData->GetName( aName );
                     pData->GetSymbol( aSymbol );
-                    if ( aRange.ParseAny( aSymbol, pDoc ) & SCA_VALID )
+                    if ( aRange.ParseAny( aSymbol, pDoc, eConv ) & SCA_VALID )
                     {
                         if ( pData->HasType( RT_PRINTAREA ) )
                         {
-                            aRange.Format( aSymbol, SCR_ABS, pDoc );
+                            aRange.Format( aSymbol, SCR_ABS, pDoc, eConv );
                             aLbPrintArea.SetEntryData(
                                 aLbPrintArea.InsertEntry( aName ),
                                 new String( aSymbol ) );
@@ -461,7 +500,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
                         if ( pData->HasType( RT_ROWHEADER ) )
                         {
-                            lcl_GetRepeatRangeString( &aRange, TRUE, aSymbol );
+                            lcl_GetRepeatRangeString(&aRange, pDoc, true, aSymbol);
                             aLbRepeatRow.SetEntryData(
                                 aLbRepeatRow.InsertEntry( aName ),
                                 new String( aSymbol ) );
@@ -469,7 +508,7 @@ void ScPrintAreasDlg::Impl_FillLists()
 
                         if ( pData->HasType( RT_COLHEADER ) )
                         {
-                            lcl_GetRepeatRangeString( &aRange, FALSE, aSymbol );
+                            lcl_GetRepeatRangeString(&aRange, pDoc, false, aSymbol);
                             aLbRepeatCol.SetEntryData(
                                 aLbRepeatCol.InsertEntry( aName ),
                                 new String( aSymbol ) );
@@ -661,9 +700,11 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, ScRefEdit*, pEd )
 //============================================================================
 // globale Funktionen:
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, SCCOLROW& rVal )
+// TODO: It might make sense to move these functions to address.?xx. -kohei
+
+bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // Zulaessige Syntax fuer rStr:
     // Row: [$]1-MAXTAB
@@ -705,115 +746,160 @@ BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, SCCOLROW& rVal )
     return bStrOk;
 }
 
-
-//----------------------------------------------------------------------------
-//  doppelte Referenz testen
-
-
-BOOL lcl_CheckRepeatString( const String& rStr, BOOL bIsRow, ScRange* pRange )
+bool lcl_CheckOne_XL_A1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 {
-    // Zulaessige Syntax fuer rStr:
-    // Row: $1, $1:$2
-    // Col: $A, $A:$B
-    // und alles auch ohne $
+    // XL A1 style is identical to OOO one for print range formats.
+    return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
+}
 
-    BOOL bOk = FALSE;
-    SCCOLROW nStart = 0;
-    SCCOLROW nEnd = 0;
-    xub_StrLen nCount = rStr.GetTokenCount(':');
-    if (nCount == 1)
+bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+{
+    xub_StrLen nLen = rStr.Len();
+    if (nLen <= 1)
+        // There must be at least two characters.
+        return false;
+
+    const sal_Unicode preUpper = bIsRow ? 'R' : 'C';
+    const sal_Unicode preLower = bIsRow ? 'r' : 'c';
+    if (rStr.GetChar(0) != preUpper && rStr.GetChar(0) != preLower)
+        return false;
+
+    String aNumStr = rStr.Copy(1);
+    if (!CharClass::isAsciiNumeric(aNumStr))
+        return false;
+
+    sal_Int32 nNum = aNumStr.ToInt32();
+
+    if (nNum <= 0)
+        return false;
+
+    if ((bIsRow && nNum > MAXROWCOUNT) || (!bIsRow && nNum > MAXCOLCOUNT))
+        return false;
+
+    rVal = static_cast<SCCOLROW>(nNum-1);
+    return true;
+}
+
+bool lcl_CheckRepeatOne( const String& rStr, ScAddress::Convention eConv, bool bIsRow, SCCOLROW& rVal )
+{
+    switch (eConv)
     {
-        bOk = lcl_CheckRepeatOne( rStr, bIsRow, nStart );
-        nEnd = nStart;
+        case ScAddress::CONV_OOO:
+            return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
+        case ScAddress::CONV_XL_A1:
+            return lcl_CheckOne_XL_A1(rStr, bIsRow, rVal);
+        case ScAddress::CONV_XL_R1C1:
+            return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
     }
-    else if (nCount == 2)
+    return false;
+}
+
+bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
+{
+    // Row: [valid row] rsep [valid row]
+    // Col: [valid col] rsep [valid col]
+
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    const sal_Unicode rsep = ScCompiler::GetStringFromOpCode(ocRange).GetChar(0);
+
+    if (pRange)
     {
-        String aFirst  = rStr.GetToken( 0, ':' );
-        String aSecond = rStr.GetToken( 1, ':' );
-        bOk = lcl_CheckRepeatOne( aFirst, bIsRow, nStart );
-        if (bOk)
-            bOk = lcl_CheckRepeatOne( aSecond, bIsRow, nEnd );
+        // initialize the range value.
+        pRange->aStart.SetCol(0);
+        pRange->aStart.SetRow(0);
+        pRange->aEnd.SetCol(0);
+        pRange->aEnd.SetRow(0);
     }
 
-
-    if ( bOk && pRange )
+    String aBuf;
+    SCCOLROW nVal = 0;
+    xub_StrLen nLen = rStr.Len();
+    bool bEndPos = false;
+    for (xub_StrLen i = 0; i < nLen; ++i)
     {
-        ScAddress& rStart = pRange->aStart;
-        ScAddress& rEnd   = pRange->aEnd;
-
-        if ( bIsRow )
+        const sal_Unicode c = rStr.GetChar(i);
+        if (c == rsep)
         {
-            rStart.SetCol( 0 );
-            rEnd  .SetCol( 0 );
-            rStart.SetRow( nStart );
-            rEnd  .SetRow( nEnd );
+            if (bEndPos)
+                // We aren't supposed to have more than one range separator.
+                return false;
+
+            // range separator
+            if (aBuf.Len() == 0)
+                return false;
+
+            bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
+            if (!bRes)
+                return false;
+
+            if (pRange)
+            {
+                if (bIsRow)
+                {
+                    pRange->aStart.SetRow(static_cast<SCROW>(nVal));
+                    pRange->aEnd.SetRow(static_cast<SCROW>(nVal));
+                }
+                else
+                {
+                    pRange->aStart.SetCol(static_cast<SCCOL>(nVal));
+                    pRange->aEnd.SetCol(static_cast<SCCOL>(nVal));
+                }
+            }
+
+            aBuf.Erase();
+            bEndPos = true;
         }
         else
-        {
-            rStart.SetCol( static_cast<SCCOL>(nStart) );
-            rEnd  .SetCol( static_cast<SCCOL>(nEnd) );
-            rStart.SetRow( 0 );
-            rEnd  .SetRow( 0 );
-        }
+            aBuf.Append(c);
     }
 
-    return bOk;
-}
-
-
-//----------------------------------------------------------------------------
-
-void lcl_GetRepeatRangeString( const ScRange* pRange, BOOL bIsRow, String& rStr )
-{
-    if ( pRange )
+    if (aBuf.Len() > 0)
     {
-        // In rStr wird die pRange im folgenden Format ausgegeben
-        // Row: $1, $1:$2
-        // Col: $A, $A:$B
+        bool bRes = lcl_CheckRepeatOne(aBuf, eConv, bIsRow, nVal);
+        if (!bRes)
+            return false;
 
-        const ScAddress& rStart = pRange->aStart;
-        const ScAddress& rEnd = pRange->aEnd;
-
-        rStr  = '$';
-        if ( bIsRow )
+        if (pRange)
         {
-            rStr += String::CreateFromInt32( rStart.Row()+1 );
-            if ( rStart.Row() != rEnd.Row() )
+            if (bIsRow)
             {
-                rStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":$" ));
-                rStr += String::CreateFromInt32( rEnd.Row()+1 );
+                if (!bEndPos)
+                    pRange->aStart.SetRow(static_cast<SCROW>(nVal));
+                pRange->aEnd.SetRow(static_cast<SCROW>(nVal));
             }
-        }
-        else
-        {
-            rStr += ::ColToAlpha( rStart.Col() );
-            if ( rStart.Col() != rEnd.Col() )
+            else
             {
-                rStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":$" ));
-                rStr += ::ColToAlpha( rEnd.Col() );
+                if (!bEndPos)
+                    pRange->aStart.SetCol(static_cast<SCCOL>(nVal));
+                pRange->aEnd.SetCol(static_cast<SCCOL>(nVal));
             }
         }
     }
-    else
-        rStr.Erase();
+
+    return true;
 }
 
+// ----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
-
-void lcl_CheckEqual( String& rStr )
+void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr )
 {
-    if ( STRING_NOTFOUND == rStr.Search( ':' ) )
+    rStr.Erase();
+    if (!pRange)
+        return;
+
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    const ScAddress& rStart = pRange->aStart;
+    const ScAddress& rEnd   = pRange->aEnd;
+
+    const USHORT nFmt = bIsRow ? (SCA_VALID_ROW | SCA_ROW_ABSOLUTE) : (SCA_VALID_COL | SCA_COL_ABSOLUTE);
+    String aTmpStr;
+    rStart.Format(aTmpStr, nFmt, pDoc, eConv);
+    rStr += aTmpStr;
+    if ((bIsRow && rStart.Row() != rEnd.Row()) || (!bIsRow && rStart.Col() != rEnd.Col()))
     {
-        String aStrTmp = rStr;
-        rStr += ':';
-        rStr += aStrTmp;
+        rStr += ScCompiler::GetStringFromOpCode(ocRange);
+        rEnd.Format(aTmpStr, nFmt, pDoc, eConv);
+        rStr += aTmpStr;
     }
 }
-
-
-
-
-
-
 
