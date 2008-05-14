@@ -13,9 +13,6 @@ AdminNetworkLocation	Cancel	SpawnDialog	CancelSetup	1	0
 AdminNetworkLocation	InstallNow	EndDialog	Return	OutOfNoRbDiskSpace <> 1	3
 AdminNetworkLocation	InstallNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	2
 AdminNetworkLocation	InstallNow	SetTargetPath	TARGETDIR	1	1
-AdminNetworkLocation	InstallNow	DoAction	SetOfficeInstallLocation	1	1
-AdminNetworkLocation	InstallNow	DoAction	SetBasisInstallLocation	1	1
-AdminNetworkLocation	InstallNow	DoAction	SetUreInstallLocation	1	1
 AdminWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
 ApplicationInfo1	OK	EndDialog	Return	1	0
@@ -37,9 +34,6 @@ CustomSetup	Help	SpawnDialog	CustomSetupTips	1	1
 CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
 CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
 CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1 And (LANG_SELECTED = 1) And (APP_SELECTED = 1)	9
-CustomSetup	Next	DoAction	SetOfficeInstallLocation	1	1
-CustomSetup	Next	DoAction	SetBasisInstallLocation	1	1
-CustomSetup	Next	DoAction	SetUreInstallLocation	1	1
 CustomSetup	Next	DoAction	ResetLanguageSelected	1	1
 CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti <> 1) Or Installed	3
 CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti = 1) And Not Installed And (LANGUAGECONDITIONINSTALL)	4
