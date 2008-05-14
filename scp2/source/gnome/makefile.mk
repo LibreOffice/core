@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,7 +43,16 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
+.IF "$(ENABLE_GNOMEVFS)" != "" || "$(ENABLE_GIO)" != ""
+
 .IF "$(ENABLE_GNOMEVFS)" != ""
+SCPDEFS+=-DENABLE_GNOMEVFS
+.ENDIF
+
+.IF "$(ENABLE_GIO)" != ""
+SCPDEFS+=-DENABLE_GIO
+.ENDIF
+
 PARFILES =                   \
         module_gnome.par     \
         file_gnome.par
