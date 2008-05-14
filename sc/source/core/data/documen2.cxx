@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen2.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,7 +197,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nInDdeLinkUpdate( 0 ),
         bInUnoBroadcast( FALSE ),
         bInUnoListenerCall( FALSE ),
-        eAddrConv( ScAddress::CONV_OOO ),
+        eGrammar( ScGrammar::GRAM_NATIVE ),
         bStyleSheetUsageInvalid( TRUE ),
         bUndoEnabled( TRUE ),
         mbAdjustHeightEnabled( true ),
@@ -249,20 +249,20 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 }
 
 
-void ScDocument::SetStorageGrammar( ScGrammar::Grammar eGrammar )
+void ScDocument::SetStorageGrammar( ScGrammar::Grammar eGram )
 {
     DBG_ASSERT(
-            eGrammar == ScGrammar::GRAM_ODFF ||
-            eGrammar == ScGrammar::GRAM_PODF,
+            eGram == ScGrammar::GRAM_ODFF ||
+            eGram == ScGrammar::GRAM_PODF,
             "ScDocument::SetStorageGrammar: wrong storage grammar");
 
-    eStorageGrammar = eGrammar;
+    eStorageGrammar = eGram;
 
     // FIXME: the XML import shouldn't strip brackets, the compiler should
     // digest them instead, which could also speedup reference recognition
     // during import.
 
-    eXmlImportGrammar = ScGrammar::mergeToGrammar( eGrammar,
+    eXmlImportGrammar = ScGrammar::mergeToGrammar( eGram,
             ScAddress::CONV_OOO);
 }
 
