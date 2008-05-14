@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crnrdlg.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,8 +279,9 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
     }
     if ( bValid )
     {
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
         String aStr;
-        theCurArea.Format( aStr, SCR_ABS_3D, pDoc );
+        theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
 
         if(bRef)
             aEdAssign.SetRefString( aStr );
@@ -288,7 +289,7 @@ void ScColRowNameRangesDlg::SetColRowData( const ScRange& rLabelRange,BOOL bRef)
             aEdAssign.SetText( aStr );
 
         aEdAssign.SetSelection( Selection( SELECTION_MAX, SELECTION_MAX ) );
-        theCurData.Format( aStr, SCR_ABS_3D, pDoc );
+        theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
 
         if(bRef)
             aEdAssign2.SetRefString( aStr );
@@ -383,7 +384,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
         }
     }
     String aStr;
-    theCurData.Format( aStr, SCR_ABS_3D, pDoc );
+    theCurData.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
 
     if(bRef)
         aEdAssign2.SetRefString( aStr );
@@ -504,6 +505,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aLbRange.SetUpdateMode( FALSE );
     //-----------------------------------------------------------
     aLbRange.Clear();
+    aRangeMap.clear();
     aEdAssign.SetText( EMPTY_STRING );
 
     ULONG nCount, j;
@@ -517,6 +519,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     SCTAB nTab2;
     String rString;
     String strShow;
+    const ScAddress::Details aDetails(pDoc->GetAddressConvention());
 
     String aString;
     String strDelim = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( " --- " ));
@@ -531,7 +534,8 @@ void ScColRowNameRangesDlg::UpdateNames()
             nCount, pDoc );
         for ( j=0; j < nCount; j++ )
         {
-            ppSortArray[j]->GetRange(0).Format( aString, SCR_ABS_3D, pDoc );
+            const ScRange aRange(ppSortArray[j]->GetRange(0));
+            aRange.Format( aString, SCR_ABS_3D, pDoc, aDetails );
 
             //@008 Hole Bereichsparameter aus Dok
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -561,6 +565,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             String aInsStr = aString;
             aInsStr += strShow;
             nPos = aLbRange.InsertEntry( aInsStr );
+            aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
             aLbRange.SetEntryData( nPos, (void*)nEntryDataCol );
         }
         delete [] ppSortArray;
@@ -576,7 +581,8 @@ void ScColRowNameRangesDlg::UpdateNames()
             nCount, pDoc );
         for ( j=0; j < nCount; j++ )
         {
-            ppSortArray[j]->GetRange(0).Format( aString, SCR_ABS_3D, pDoc );
+            const ScRange aRange(ppSortArray[j]->GetRange(0));
+            aRange.Format( aString, SCR_ABS_3D, pDoc, aDetails );
 
             //@008 Ab hier baue String fuer Zeilen
             ppSortArray[j]->GetRange(0).GetVars( nCol1, nRow1, nTab1,
@@ -604,6 +610,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             String aInsStr = aString;
             aInsStr += strShow;
             nPos = aLbRange.InsertEntry( aInsStr );
+            aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
             aLbRange.SetEntryData( nPos, (void*)nEntryDataRow );
         }
         delete [] ppSortArray;
@@ -629,40 +636,28 @@ void ScColRowNameRangesDlg::UpdateNames()
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::UpdateRangeData( const String& rRangeStr, BOOL bColName )
+void ScColRowNameRangesDlg::UpdateRangeData( const ScRange& rRange, BOOL bColName )
 {
-    ScRange aRange;
-    String aRefString=rRangeStr;
-
-    //@008 Suchen nach Erweiterung u. rausschmeissen
-    xub_StrLen nPosExt=rRangeStr.Search( '[',0 );
-
-    if(nPosExt!=STRING_NOTFOUND)
-    {
-        nPosExt--;
-        aRefString.Erase(nPosExt);
-    }
-    aRange.ParseAny( aRefString, pDoc );
-
     ScRangePair* pPair = NULL;
     BOOL bFound = FALSE;
-    if ( bColName && (pPair = xColNameRanges->Find( aRange )) != NULL )
+    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
         bFound = TRUE;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) != NULL )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
         bFound = TRUE;
 
     if ( bFound )
     {
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
         String aStr;
-        theCurArea = aRange;
-        theCurArea.Format( aStr, SCR_ABS_3D, pDoc );
+        theCurArea = rRange;
+        theCurArea.Format( aStr, SCR_ABS_3D, pDoc, eConv );
         aEdAssign.SetText( aStr );
         aBtnAdd.Disable();
         aBtnRemove.Enable();
         aBtnColHead.Check( bColName );
         aBtnRowHead.Check( !bColName );
         theCurData = pPair->GetRange(1);
-        theCurData.Format( aStr, SCR_ABS_3D, pDoc );
+        theCurData.Format( aStr, SCR_ABS_3D, pDoc, eConv );
         aEdAssign2.SetText( aStr );
     }
     else
@@ -780,10 +775,11 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
 
     if ( aNewArea.Len() > 0 && aNewData.Len() > 0 )
     {
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
         ScRange aRange1, aRange2;
         BOOL bOk1;
-        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc ) & SCA_VALID) == SCA_VALID)) != FALSE
-          && ((aRange2.ParseAny( aNewData, pDoc ) & SCA_VALID) == SCA_VALID) )
+        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc, eConv ) & SCA_VALID) == SCA_VALID)) != FALSE
+          && ((aRange2.ParseAny( aNewData, pDoc, eConv ) & SCA_VALID) == SCA_VALID) )
         {
             theCurArea = aRange1;
             AdjustColRowData( aRange2 );
@@ -850,26 +846,16 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
     USHORT nSelectPos = aLbRange.GetSelectEntryPos();
     BOOL bColName =
         ((ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
-    ScRange aRange;
-
-    //@008 Suchen nach Erweiterung u. rausschmeissen
-    String aRefString=aRangeStr;
-
-    xub_StrLen nPosExt=aRangeStr.Search( '[', 0 );
-
-    if(nPosExt!=STRING_NOTFOUND)
-    {
-        nPosExt--;
-        aRefString.Erase(nPosExt);
-    }
-
-    aRange.ParseAny( aRefString, pDoc );
+    NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
+    if (itr == aRangeMap.end())
+        return 0;
+    const ScRange& rRange = itr->second;
 
     ScRangePair* pPair = NULL;
     BOOL bFound = FALSE;
-    if ( bColName && (pPair = xColNameRanges->Find( aRange )) != NULL )
+    if ( bColName && (pPair = xColNameRanges->Find( rRange )) != NULL )
         bFound = TRUE;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) != NULL )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( rRange )) != NULL )
         bFound = TRUE;
     if ( bFound )
     {
@@ -961,11 +947,12 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1SelectHdl, void *, EMPTYARG )
             aRangeStr = aLbRange.GetSelectEntry();
         }
     }
-    if ( aRangeStr.Len() && aRangeStr.GetChar(0) == '$' )
+    NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
+    if ( itr != aRangeMap.end() )
     {
         BOOL bColName =
             ((ULONG)aLbRange.GetEntryData( nSelectPos ) == nEntryDataCol);
-        UpdateRangeData( aRangeStr, bColName );
+        UpdateRangeData( itr->second, bColName );
         aBtnAdd.Disable();
         aBtnRemove.Enable();
     }
@@ -1025,7 +1012,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range1DataModifyHdl, void *, EMPTYARG )
     if ( aNewArea.Len() > 0 )
     {
         ScRange aRange;
-        if ( (aRange.ParseAny( aNewArea, pDoc ) & SCA_VALID) == SCA_VALID )
+        if ( (aRange.ParseAny( aNewArea, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
         {
             SetColRowData( aRange );
             bValid = TRUE;
@@ -1073,7 +1060,7 @@ IMPL_LINK( ScColRowNameRangesDlg, Range2DataModifyHdl, void *, EMPTYARG )
     if ( aNewData.Len() > 0 )
     {
         ScRange aRange;
-        if ( (aRange.ParseAny( aNewData, pDoc ) & SCA_VALID) == SCA_VALID )
+        if ( (aRange.ParseAny( aNewData, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID) == SCA_VALID )
         {
             AdjustColRowData( aRange );
             aBtnAdd.Enable();
@@ -1115,7 +1102,7 @@ IMPL_LINK( ScColRowNameRangesDlg, ColClickHdl, void *, EMPTYARG )
         {
             theCurArea.aEnd.SetRow( MAXROW - 1 );
             String aStr;
-            theCurArea.Format( aStr, SCR_ABS_3D, pDoc );
+            theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
@@ -1153,7 +1140,7 @@ IMPL_LINK( ScColRowNameRangesDlg, RowClickHdl, void *, EMPTYARG )
         {
             theCurArea.aEnd.SetCol( MAXCOL - 1 );
             String aStr;
-            theCurArea.Format( aStr, SCR_ABS_3D, pDoc );
+            theCurArea.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
             aEdAssign.SetText( aStr );
         }
         ScRange aRange( theCurData );
