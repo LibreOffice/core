@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anyrefdg.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -415,7 +415,7 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         String rStrExp;
         pRefCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
-        pRefComp=new ScCompiler( pDoc, aCursorPos );
+        pRefComp=new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar() );
         pRefComp->SetCompileForFAP(TRUE);
 
         nRefTab = nTab;
@@ -632,6 +632,7 @@ bool ScAnyRefDlg::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDo
     bool bError = false;
     rRanges.RemoveAll();
 
+    ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
     ScRangeUtil aRangeUtil;
     xub_StrLen nTokenCnt = rStr.GetTokenCount();
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
@@ -639,7 +640,7 @@ bool ScAnyRefDlg::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDo
         ScRange aRange;
         String aRangeStr( rStr.GetToken( nToken ) );
 
-        USHORT nFlags = aRange.ParseAny( aRangeStr, pDoc );
+        USHORT nFlags = aRange.ParseAny( aRangeStr, pDoc, aDetails );
         if ( nFlags & SCA_VALID )
         {
             if ( (nFlags & SCA_TAB_3D) == 0 )
@@ -648,7 +649,7 @@ bool ScAnyRefDlg::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDo
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             rRanges.Append( aRange );
         }
-        else if ( aRangeUtil.MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES ) )
+        else if ( aRangeUtil.MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES, aDetails ) )
             rRanges.Append( aRange );
         else
             bError = true;
