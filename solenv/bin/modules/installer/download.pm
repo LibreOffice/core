@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.38 $
+# $Revision: 1.39 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1167,11 +1167,12 @@ sub replace_identifier_in_nlffile
 
 sub translate_nsh_nlf_file
 {
-    my ($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename) = @_;
+    my ($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename, $nsislanguage) = @_;
 
     # Analyzing the mlf file, collecting all Identifier
     my $allidentifier = get_identifier($mlffile);
 
+    $onelanguage = "en-US" if ( $nsislanguage eq "English" && $onelanguage ne "en-US");
     for ( my $i = 0; $i <= $#{$allidentifier}; $i++ )
     {
         my $identifier = ${$allidentifier}[$i];
@@ -1232,7 +1233,7 @@ sub copy_and_translate_nsis_language_files
 
         # Translate the files
         my $nlffile = installer::files::read_file($nlffilename);
-        translate_nsh_nlf_file($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename);
+        translate_nsh_nlf_file($nshfile, $nlffile, $mlffile, $onelanguage, $nshfilename, $nlffilename, $nsislanguage);
 
         installer::files::save_file($nshfilename, $nshfile);
         installer::files::save_file($nlffilename, $nlffile);
