@@ -56,9 +56,11 @@ ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100
 SetARPInstallLocation	Not Installed	990
-SetOfficeInstallLocation	Not Installed	375
-SetBasisInstallLocation	Not Installed	376
-SetUreInstallLocation	Not Installed	377
+SetOfficeInstallLocation	Not Installed AND OFFICEINSTALLLOCATION=""	575
+SetBasisDir	Not Installed AND BASISINSTALLLOCATION<>""	379
+SetBasisInstallLocation	Not Installed AND BASISINSTALLLOCATION=""	576
+SetUreDir	Not Installed AND UREINSTALLLOCATION<>""	380
+SetUreInstallLocation	Not Installed AND UREINSTALLLOCATION=""	577
 SetODBCFolders		550
 StartServices	VersionNT	2800
 StopServices	VersionNT	950
