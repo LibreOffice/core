@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flylay.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -702,6 +702,10 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         (void) bSucessInserted;
 #endif
 
+        // --> OD 2008-04-22 #i87493#
+        ASSERT( pNew->GetPageFrm() == 0 || pNew->GetPageFrm() == this,
+                "<SwPageFrm::AppendFlyToPage(..)> - anchored fly frame seems to be registered at another page frame. Serious defect -> please inform OD." );
+        // <--
         // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
         pNew->SetPageFrm( this );
         pNew->InvalidatePage( this );
@@ -736,7 +740,17 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
             }
             else if ( pTmpObj->ISA(SwAnchoredDrawObject) )
             {
-                AppendDrawObjToPage( *pTmpObj );
+                // --> OD 2008-04-22 #i87493#
+//                AppendDrawObjToPage( *pTmpObj );
+                if ( pTmpObj->GetPageFrm() != this )
+                {
+                    if ( pTmpObj->GetPageFrm() != 0 )
+                    {
+                        pTmpObj->GetPageFrm()->RemoveDrawObjFromPage( *pTmpObj );
+                    }
+                    AppendDrawObjToPage( *pTmpObj );
+                }
+                // <--
             }
         }
     }
@@ -957,6 +971,10 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
                 "Drawing object not appended into list <pSortedObjs>." );
 #endif
     }
+    // --> OD 2008-04-22 #i87493#
+    ASSERT( _rNewObj.GetPageFrm() == 0 || _rNewObj.GetPageFrm() == this,
+            "<SwPageFrm::AppendDrawObjToPage(..)> - anchored draw object seems to be registered at another page frame. Serious defect -> please inform OD." );
+    // <--
     _rNewObj.SetPageFrm( this );
 
     // invalidate page in order to force a reformat of object layout of the page.
