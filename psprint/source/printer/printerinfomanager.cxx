@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printerinfomanager.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,13 +159,9 @@ void PrinterInfoManager::initSystemDefaultPaper()
     bool bSuccess = false;
 
     // try libpaper
-    #ifdef SOLARIS
-    // #i78617# workaround missing paperconf command; on e.g. Linux
-    // the 2>/dev/null works on the started shell also
+
+    // #i78617# workaround missing paperconf command
     FILE* pPipe = popen( "sh -c paperconf 2>/dev/null", "r" );
-    #else
-    FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );
-    #endif
     if( pPipe )
     {
         char pBuffer[ 1024 ];
