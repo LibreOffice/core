@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impex.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,11 +172,12 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
                 pData->GetSymbol( aPos );                   // mit dem Inhalt weitertesten
         }
     }
+    ScAddress::Convention eConv = pDoc->GetAddressConvention();
     // Bereich?
-    if( aRange.Parse( aPos, pDoc ) & SCA_VALID )
+    if( aRange.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         bSingle = FALSE;
     // Zelle?
-    else if( aRange.aStart.Parse( aPos, pDoc ) & SCA_VALID )
+    else if( aRange.aStart.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         aRange.aEnd = aRange.aStart;
     else
         bAll = TRUE;
@@ -510,7 +511,7 @@ BOOL ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, ULON
             String aRefName;
             USHORT nFlags = SCA_VALID | SCA_TAB_3D;
             if( bSingle )
-                aRange.aStart.Format( aRefName, nFlags, pDoc );
+                aRange.aStart.Format( aRefName, nFlags, pDoc, pDoc->GetAddressConvention() );
             else
             {
                 if( aRange.aStart.Tab() != aRange.aEnd.Tab() )
