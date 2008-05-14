@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_brand.txt,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,8 +34,8 @@ module = "gid_Module_Root_Brand"
 # script = "shellscripts_brand.txt"
 solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME%BRANDPACKAGEVERSION"
 packagename = "%UNIXPRODUCTNAME%BRANDPACKAGEVERSION"
-requires = "ooobasis%OOOBASEVERSION-core01"
-solarisrequires = "ooobasis%WITHOUTDOTOOOBASEVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
 copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
