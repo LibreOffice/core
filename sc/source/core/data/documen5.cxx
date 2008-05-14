@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen5.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,7 +168,7 @@ void ScDocument::UpdateAllCharts()
                             {
                                 ScRangeListRef aRanges = pChartObj->GetRangeList();
                                 String sRangeStr;
-                                aRanges->Format( sRangeStr, SCR_ABS_3D, this );
+                                aRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
 
                                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                                 bool bHasCategories = pChartObj->HasRowHeaders();
@@ -384,7 +384,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         }
 
                         String sRangeStr;
-                        aNewRanges->Format( sRangeStr, SCR_ABS_3D, this );
+                        aNewRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
 
                         lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
@@ -545,7 +545,8 @@ void ScDocument::RestoreChartListener( const String& rName )
             for ( sal_Int32 i=0; i<nRangeCount; i++ )
             {
                 ScRange aRange;
-                if ( aRange.ParseAny( aRepresentations[i], this ) & SCA_VALID )
+                ScAddress::Details aDetails(GetAddressConvention(), 0, 0);
+                if ( aRange.ParseAny( aRepresentations[i], this, aDetails ) & SCA_VALID )
                     aRanges->Append( aRange );
             }
 
@@ -677,7 +678,7 @@ void ScDocument::SetChartRangeList( const String& rChartName,
                         lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
                         String sRangeStr;
-                        rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this );
+                        rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
 
                         lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
