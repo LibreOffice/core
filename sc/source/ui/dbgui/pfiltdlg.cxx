@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pfiltdlg.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,7 +184,7 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
          * Bereich um einen Datenbankbereich handelt:
          */
 
-        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc );
+        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
 
         if ( pDBColl )
         {
