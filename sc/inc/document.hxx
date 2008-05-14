@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.hxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -397,7 +397,7 @@ private:
 
     BOOL                bInUnoBroadcast;
     BOOL                bInUnoListenerCall;
-    ScAddress::Convention eAddrConv;
+    ScGrammar::Grammar  eGrammar;
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
@@ -591,7 +591,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     BOOL            IsActiveScenario( SCTAB nTab ) const;
     void            SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
     SC_DLLPUBLIC ScAddress::Convention GetAddressConvention() const;
-    void            SetAddressConvention( ScAddress::Convention eConv );
+    SC_DLLPUBLIC ScGrammar::Grammar GetGrammar() const;
+    void            SetGrammar( ScGrammar::Grammar eGram );
     BYTE            GetLinkMode( SCTAB nTab ) const;
     BOOL            IsLinked( SCTAB nTab ) const;
     const String&   GetLinkDoc( SCTAB nTab ) const;
