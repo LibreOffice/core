@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filtdlg.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,7 +303,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
         String aRefStr;
-        rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP );
+        rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP, pDocP->GetAddressConvention() );
         aEdCopyArea.SetRefString( aRefStr );
     }
 }
@@ -532,7 +532,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
         if ( STRING_NOTFOUND != nColonPos )
             theCopyStr.Erase( nColonPos );
 
-        USHORT nResult = theCopyPos.Parse( theCopyStr, pDoc );
+        USHORT nResult = theCopyPos.Parse( theCopyStr, pDoc, pDoc->GetAddressConvention() );
         bCopyPosOk = ( SCA_VALID == (nResult & SCA_VALID) );
     }
 
