@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: resultset.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
 #endif
@@ -86,6 +89,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace dbaccess;
@@ -406,23 +410,61 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
     {
         // get the metadata
         Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xDelegatorResultSet, UNO_QUERY)->getMetaData();
+
+        sal_Int32 nColCount = 0;
         // do we have columns
         try
         {
             Reference< XDatabaseMetaData > xDBMetaData( lcl_getDBMetaDataFromStatement_nothrow( getStatement() ) );
+            nColCount = xMetaData->getColumnCount();
 
-            for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+            for ( sal_Int32 i = 0; i < nColCount; ++i)
             {
                 // retrieve the name of the column
-                rtl::OUString aName = xMetaData->getColumnName(i + 1);
+                rtl::OUString sName = xMetaData->getColumnName(i + 1);
                 ODataColumn* pColumn = new ODataColumn(xMetaData, m_xDelegatorRow, m_xDelegatorRowUpdate, i + 1, xDBMetaData);
-                m_pColumns->append(aName, pColumn);
+
+                // don't silently assume that the name is unique - result set implementations
+                // are allowed to return duplicate names, but we are required to have
+                // unique column names
+                if ( m_pColumns->hasByName( sName ) )
+                    sName = ::dbtools::createUniqueName( m_pColumns, sName );
+
+                m_pColumns->append( sName, pColumn );
             }
         }
-        catch (SQLException)
+        catch ( const SQLException& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
         m_pColumns->setInitialized();
+
+    #if OSL_DEBUG_LEVEL > 0
+        // some sanity checks. Especially in case we auto-adjusted the column names above,
+        // this might be reasonable
+        try
+        {
+            const Reference< XNameAccess > xColNames( static_cast< XNameAccess* >( m_pColumns ), UNO_SET_THROW );
+            const Sequence< ::rtl::OUString > aNames( xColNames->getElementNames() );
+            OSL_POSTCOND( aNames.getLength() == nColCount,
+                "OResultSet::getColumns: invalid column count!" );
+            for (   const ::rtl::OUString* pName = aNames.getConstArray();
+                    pName != aNames.getConstArray() + aNames.getLength();
+                    ++pName
+                )
+            {
+                Reference< XPropertySet > xColProps( xColNames->getByName( *pName ), UNO_QUERY_THROW );
+                ::rtl::OUString sName;
+                OSL_VERIFY( xColProps->getPropertyValue( PROPERTY_NAME ) >>= sName );
+                OSL_POSTCOND( sName == *pName, "OResultSet::getColumns: invalid column name!" );
+            }
+
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    #endif
     }
     return m_pColumns;
 }
