@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignaturehelper.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@
 #include "precompiled_xmlsecurity.hxx"
 
 #include <xmlsecurity/xmlsignaturehelper.hxx>
+#include <xmlsecurity/documentsignaturehelper.hxx>
 #include <xsecctl.hxx>
 
 #include <xmlsignaturehelper2.hxx>
@@ -58,11 +59,12 @@
 
 #define TAG_DOCUMENTSIGNATURES  "document-signatures"
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
+#define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
 
 using namespace ::com::sun::star;
 
-XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< lang::XMultiServiceFactory>& rxMSF )
-    : mxMSF(rxMSF)
+XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< lang::XMultiServiceFactory>& rxMSF)
+    : mxMSF(rxMSF), mbODFPre1_2(false)
 {
     mpXSecController = new XSecController;
     mxSecurityController = mpXSecController;
@@ -112,6 +114,8 @@ void XMLSignatureHelper::SetStorage( const com::sun::star::uno::Reference < com:
 {
     DBG_ASSERT( !mxUriBinding.is(), "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );
+    DBG_ASSERT(rxStorage.is(), "SetStorage - empty storage!");
+    mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(rxStorage);
 }
 
 
@@ -220,9 +224,15 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
 
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
+    rtl::OUString sNamespace;
+    if (mbODFPre1_2)
+        sNamespace = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES));
+    else
+        sNamespace = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES_ODF_1_2));
+
     pAttributeList->AddAttribute(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES)));
+        sNamespace);
 
     xDocHandler->startDocument();
     xDocHandler->startElement(
