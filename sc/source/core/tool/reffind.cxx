@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reffind.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include "reffind.hxx"
 #include "global.hxx"
 #include "compiler.hxx"
-
+#include "document.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -137,11 +137,11 @@ void ScRefFinder::ToggleRel( xub_StrLen nStartPos, xub_StrLen nEndPos )
 
         //  Test, ob aExpr eine Referenz ist
 
-        USHORT nResult = aAddr.Parse( aExpr, pDoc );
+        USHORT nResult = aAddr.Parse( aExpr, pDoc, pDoc->GetAddressConvention() );
         if ( nResult & SCA_VALID )
         {
             USHORT nFlags = lcl_NextFlags( nResult );
-            aAddr.Format( aExpr, nFlags, pDoc );
+            aAddr.Format( aExpr, nFlags, pDoc, pDoc->GetAddressConvention() );
 
             xub_StrLen nAbsStart = nStartPos+aResult.Len()+aSep.Len();
 
