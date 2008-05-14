@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registryitem_ooo.scp,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -408,7 +408,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	Subkey = "Software\OpenOffice.org\Layer\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "INSTALLLOCATION";
 	Value = "[INSTALLLOCATION]";
@@ -435,7 +435,7 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	Subkey = "Software\OpenOffice.org\Layer\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
@@ -462,7 +462,16 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	Subkey = "Software\OpenOffice.org\Layer\Basis\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[BASISINSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\Layer\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "BASISINSTALLLOCATION";
 	Value = "[BASISINSTALLLOCATION]";
@@ -489,7 +498,16 @@ End
 
 RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\%OOOBASEVERSION";
+	Subkey = "Software\OpenOffice.org\Layer\URE\%URELAYERVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[UREINSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\Layer\%PRODUCTNAME\%BRANDPACKAGEVERSION";
 	ModuleID = gid_Module_Root;
 	Name = "UREINSTALLLOCATION";
 	Value = "[UREINSTALLLOCATION]";
