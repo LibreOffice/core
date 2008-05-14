@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfunc.hxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ public:
 
     BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    BOOL            SetAddressConvention( ScAddress::Convention eConv );
+    BOOL            SetGrammar( ScGrammar::Grammar eGrammar );
 
     SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
