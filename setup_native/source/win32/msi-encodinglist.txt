@@ -54,6 +54,8 @@ lt    1257  1063   # Lithuanian
 lv    1257  1062   # Latvian
 mk    1251  1071   # Macedonian
 ml-IN    0  1100
+mn       0  1104   # Mongolian
+mn-TR    0  2128   # Mongolian Classical/traditional
 mr       0  1102   # Marathi
 mr-IN    0  1102
 ms       0  1086   # Malay (Malaysian)
