@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlsignaturehelper.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,7 @@ private:
     XMLSignatureVerifyResults   maVerifyResults;
     XSecController*             mpXSecController;
     bool                        mbError;
+    bool mbODFPre1_2;
     Link                        maStartVerifySignatureHdl;
 
 private:
