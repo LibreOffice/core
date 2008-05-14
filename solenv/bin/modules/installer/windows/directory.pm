@@ -8,7 +8,7 @@
 #
 # $RCSfile: directory.pm,v $
 #
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -135,6 +135,7 @@ sub create_unique_directorynames
             if ( $installer::globals::officeinstalldirectoryset ) { installer::exiter::exit_program("ERROR: Directory with flag OFFICEDIRECTORY alread set: \"$installer::globals::officeinstalldirectory\".", "create_unique_directorynames"); }
             $installer::globals::officeinstalldirectory = $uniquename;
             $installer::globals::officeinstalldirectoryset = 1;
+            if ( $installer::globals::officeinstalldirectory =~ /sun_/i ) { $installer::globals::sundirexists = 1; }
         }
 
         # setting the bais installation directory
