@@ -8,7 +8,7 @@
 #
 # $RCSfile: scriptitems.pm,v $
 #
-# $Revision: 1.46 $
+# $Revision: 1.47 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1663,6 +1663,43 @@ sub remove_tabonlyfiles_from_Installset
             $infoline = "Removing tab only file $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::globallogfileinfo, $infoline);
 
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
+}
+
+###############################################################################
+# Removing all files with flag ONLY_INSTALLED_PRODUCT from installation set.
+# This function is not called for PKGFORMAT installed and archive.
+###############################################################################
+
+sub remove_installedproductonlyfiles_from_Installset
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_installedproductonlyfiles_from_Installset : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bONLY_INSTALLED_PRODUCT\b/ )
+        {
+            $infoline = "Removing file $oneitem->{'gid'} from the installation set. This file is only required for PKGFORMAT archive or installed).\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
             next;
         }
 
