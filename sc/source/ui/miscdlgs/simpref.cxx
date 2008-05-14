@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: simpref.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,10 +143,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( bSingleCell )
         {
             ScAddress aAdr = rRef.aStart;
-            aAdr.Format( aRefStr, SCA_ABS_3D, pDocP );
+            aAdr.Format( aRefStr, SCA_ABS_3D, pDocP, pDocP->GetAddressConvention() );
         }
         else
-            theCurArea.Format( aRefStr, ABS_DREF3D, pDocP );
+            theCurArea.Format( aRefStr, ABS_DREF3D, pDocP, pDocP->GetAddressConvention() );
 
         if ( bMultiSelection )
         {
