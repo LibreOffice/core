@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: arealink.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,7 +228,8 @@ BOOL ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
     }
     if (!bFound)        // direct reference (range or cell)
     {
-        if ( rRange.ParseAny( rAreaName, pSrcDoc ) & SCA_VALID )
+        ScAddress::Details aDetails(pSrcDoc->GetAddressConvention(), 0, 0);
+        if ( rRange.ParseAny( rAreaName, pSrcDoc, aDetails ) & SCA_VALID )
             bFound = TRUE;
     }
     return bFound;
