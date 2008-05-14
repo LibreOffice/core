@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -847,6 +847,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 GetViewData()->GetFillData( nStartCol, nStartRow, nEndCol, nEndRow );
                 SCCOL nFillCol = GetViewData()->GetRefEndX();
                 SCROW nFillRow = GetViewData()->GetRefEndY();
+                ScDocument* pDoc = GetViewData()->GetDocument();
 
                 if( pReqArgs != NULL )
                 {
@@ -857,7 +858,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAddress aScAddress;
                         String aArg = ((const SfxStringItem*)pItem)->GetValue();
 
-                        if( aScAddress.Parse( aArg ) & SCA_VALID )
+                        if( aScAddress.Parse( aArg, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID )
                         {
                             nFillRow = aScAddress.Row();
                             nFillCol = aScAddress.Col();
@@ -929,7 +930,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 String  aAdrStr;
                                 ScAddress aAdr( nFillCol, nFillRow, 0 );
-                                aAdr.Format( aAdrStr, SCR_ABS, GetViewData()->GetDocument() );
+                                ScDocument* pDoc = GetViewData()->GetDocument();
+                                aAdr.Format( aAdrStr, SCR_ABS, pDoc, pDoc->GetAddressConvention() );
 
                                 rReq.AppendItem( SfxStringItem( FID_FILL_AUTO, aAdrStr ) );
                                 rReq.Done();
