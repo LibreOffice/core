@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undotab.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,7 @@ TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
 TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
-TYPEINIT1(ScUndoSetAddressConvention,       SfxUndoAction);
+TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -1529,41 +1529,41 @@ String __EXPORT ScUndoLayoutRTL::GetComment() const
 
 // -----------------------------------------------------------------------
 //
-//      Set the address convention used for the sheet
+//      Set the grammar used for the sheet
 //
 
-ScUndoSetAddressConvention::ScUndoSetAddressConvention( ScDocShell* pShell,
-                                                        ScAddress::Convention eConv ) :
+ScUndoSetGrammar::ScUndoSetGrammar( ScDocShell* pShell,
+                                    ScGrammar::Grammar eGrammar ) :
     ScSimpleUndo( pShell ),
-    eNewConv( eConv )
+    meNewGrammar( eGrammar )
 {
-    eOldConv = pDocShell->GetDocument()->GetAddressConvention();
+    meOldGrammar = pDocShell->GetDocument()->GetGrammar();
 }
 
-__EXPORT ScUndoSetAddressConvention::~ScUndoSetAddressConvention()
+__EXPORT ScUndoSetGrammar::~ScUndoSetGrammar()
 {
 }
 
-void ScUndoSetAddressConvention::DoChange( ScAddress::Convention eConv )
+void ScUndoSetGrammar::DoChange( ScGrammar::Grammar eGrammar )
 {
     pDocShell->SetInUndo( TRUE );
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->SetAddressConvention( eConv );
+    pDoc->SetGrammar( eGrammar );
     pDocShell->SetDocumentModified();
     pDocShell->SetInUndo( FALSE );
 }
 
-void __EXPORT ScUndoSetAddressConvention::Undo()
+void __EXPORT ScUndoSetGrammar::Undo()
 {
-    DoChange( eOldConv );
+    DoChange( meOldGrammar );
 }
 
-void __EXPORT ScUndoSetAddressConvention::Redo()
+void __EXPORT ScUndoSetGrammar::Redo()
 {
-    DoChange( eNewConv );
+    DoChange( meNewGrammar );
 }
 
-void __EXPORT ScUndoSetAddressConvention::Repeat(SfxRepeatTarget& /* rTarget */)
+void __EXPORT ScUndoSetGrammar::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 #if 0
 // erAck: 2006-09-07T23:00+0200  commented out in CWS scr1c1
@@ -1573,12 +1573,12 @@ void __EXPORT ScUndoSetAddressConvention::Repeat(SfxRepeatTarget& /* rTarget */)
 #endif
 }
 
-BOOL __EXPORT ScUndoSetAddressConvention::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoSetGrammar::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-String __EXPORT ScUndoSetAddressConvention::GetComment() const
+String __EXPORT ScUndoSetGrammar::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TAB_R1C1 );
 }
