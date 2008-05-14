@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfiltdlg.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +186,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
         {
             String aRefStr;
-            aAdvSource.Format( aRefStr, SCR_ABS_3D, pDoc );
+            aAdvSource.Format( aRefStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
             aEdFilterArea.SetRefString( aRefStr );
         }
     }
@@ -249,11 +249,12 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         String aRefStr;
+        const ScAddress::Convention eConv = pDocP->GetAddressConvention();
 
         if ( pRefInputEdit == &aEdCopyArea)
-            rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP );
+            rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP, eConv );
         else if ( pRefInputEdit == &aEdFilterArea)
-            rRef.Format( aRefStr, SCR_ABS_3D, pDocP );
+            rRef.Format( aRefStr, SCR_ABS_3D, pDocP, eConv );
 
         pRefInputEdit->SetRefString( aRefStr );
     }
@@ -323,6 +324,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         BOOL            bEditInputOk    = TRUE;
         BOOL            bQueryOk        = FALSE;
         ScRange         theFilterArea;
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
         if ( aBtnCopyResult.IsChecked() )
         {
@@ -331,7 +333,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
             if ( STRING_NOTFOUND != nColonPos )
                 theCopyStr.Erase( nColonPos );
 
-            USHORT nResult = theAdrCopy.Parse( theCopyStr, pDoc );
+            USHORT nResult = theAdrCopy.Parse( theCopyStr, pDoc, eConv );
 
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
@@ -346,7 +348,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
         if ( bEditInputOk )
         {
-            USHORT nResult = ScRange().Parse( theAreaStr, pDoc );
+            USHORT nResult = ScRange().Parse( theAreaStr, pDoc, eConv );
 
             if ( SCA_VALID != (nResult & SCA_VALID) )
             {
@@ -364,7 +366,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
              * ein ScQueryParam zu erzeugen:
              */
 
-            USHORT  nResult = theFilterArea.Parse( theAreaStr, pDoc );
+            USHORT  nResult = theFilterArea.Parse( theAreaStr, pDoc, eConv );
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
