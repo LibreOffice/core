@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: solvrdlg.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ void __EXPORT ScSolverDlg::Init()
     aEdVariableCell.SetLoseFocusHdl ( aLink );
     aRBVariableCell.SetLoseFocusHdl ( aLink );
 
-    theFormulaCell.Format( aStr, SCA_ABS );
+    theFormulaCell.Format( aStr, SCA_ABS, NULL, pDoc->GetAddressConvention() );
 
     aEdFormulaCell.SetText( aStr );
     aEdFormulaCell.GrabFocus();
@@ -167,7 +167,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
                                 ? SCA_ABS
                                 : SCA_ABS_3D;
 
-        aAdr.Format( aStr, nFmt, pDocP );
+        aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
         pEdActive->SetRefString( aStr );
 
         if ( pEdActive == &aEdFormulaCell )
@@ -236,8 +236,9 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         // 2. verweist die Formel-Koordinate wirklich auf eine Formelzelle?
         // 3. wurde ein korrekter Zielwert eingegeben
 
-        USHORT  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(), pDoc );
-        USHORT  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc );
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        USHORT  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
+        USHORT  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
 
         if ( SCA_VALID == ( nRes1 & SCA_VALID ) )
         {
