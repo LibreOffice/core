@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,7 +309,7 @@ File gid_Brand_File_BasisLink
    TXT_FILE_BODY;
    Dir = gid_Dir_Brand_Root;
    Name = "basis-link";
-   Styles = (PACKED, SCPZIP_REPLACE);
+   Styles = (PACKED, SCPZIP_REPLACE, ONLY_INSTALLED_PRODUCT);
 End
 #elif defined MACOSX
 Directory gid_Brand_Dir_BasisLink
@@ -1223,3 +1223,59 @@ ProfileItem gid_Brand_Profileitem_Setup_Buildid
     Key = "buildid";
     Value = "<buildid>";
 End
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Ureinstall
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "UREINSTALLLOCATION";
+    Value = "[UREINSTALLLOCATION]";
+    Inifiletablekey = "UreInstallLocation";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Basisinstall
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "BASISINSTALLLOCATION";
+    Value = "[BASISINSTALLLOCATION]";
+    Inifiletablekey = "BasisInstallLocation";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Officeinstall
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "OFFICEINSTALLLOCATION";
+    Value = "[OFFICEINSTALLLOCATION]";
+    Inifiletablekey = "OfficeInstallLocation";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
+
+#ifdef WNT
+ProfileItem gid_Brand_Profileitem_Setup_Install
+    ProfileID = gid_Brand_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "INSTALLLOCATION";
+    Value = "[INSTALLLOCATION]";
+    Inifiletablekey = "InstallLocation";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+#endif
