@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpusrlst.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -760,14 +760,16 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                                              pViewData->GetTabNo(),
                                              &theAreaStr,
                                              &theStartPos,
-                                             &theEndPos );
+                                             &theEndPos,
+                                             pDoc->GetAddressConvention() );
             if ( !bAreaOk )
             {
                 bAreaOk = pRangeUtil->IsAbsPos(  theAreaStr,
                                                  pDoc,
                                                  pViewData->GetTabNo(),
                                                  &theAreaStr,
-                                                 &theStartPos );
+                                                 &theStartPos,
+                                                 pDoc->GetAddressConvention() );
                 theEndPos = theStartPos;
             }
         }
