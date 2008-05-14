@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackageFolder.hxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@ protected:
     ContentHash maContents;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     sal_Int16 m_nFormat;
+    ::rtl::OUString m_sVersion;
 
 public:
 
@@ -69,6 +70,9 @@ public:
                       sal_Int16 nFormat,
                       sal_Bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
+
+    ::rtl::OUString& GetVersion() { return m_sVersion; }
+    void SetVersion( const ::rtl::OUString& aVersion ) { m_sVersion = aVersion; }
 
     void setChildStreamsTypeByExtension( const ::com::sun::star::beans::StringPair& aPair );
 
