@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -881,6 +881,16 @@ End
 Directory gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort
     ParentID = gid_Dir_Share_Registry_Modules_Oo_TypeDetection;
     HostName = "UISort";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Ucb
+    ParentID = gid_Dir_Share_Registry_Modules_Oo;
+    HostName = "ucb";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Ucb_Configuration
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Ucb;
+    HostName = "Configuration";
 End
 
 Directory gid_Dir_Share_Registry_Modules_Oo_Setup
