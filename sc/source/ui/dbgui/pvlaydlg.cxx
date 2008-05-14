@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pvlaydlg.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,7 +280,7 @@ void __EXPORT ScDPLayoutDlg::Init()
             {
                 USHORT nInsert = aLbOutPos.InsertEntry( aName );
 
-                aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc );
+                aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention() );
                 aLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
             }
         }
@@ -291,7 +291,7 @@ void __EXPORT ScDPLayoutDlg::Init()
         String aStr;
         ScAddress( thePivotData.nCol,
                    thePivotData.nRow,
-                   thePivotData.nTab ).Format( aStr, STD_FORMAT, pDoc );
+                   thePivotData.nTab ).Format( aStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
         aEdOutPos.SetText( aStr );
         EdModifyHdl(0);
     }
@@ -1323,7 +1323,7 @@ void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         aAdr.PutInOrder( ScAddress( nEndCol, nEndRow, nEndTab ) );
 */
         String aRefStr;
-        rRef.aStart.Format( aRefStr, STD_FORMAT, pDocP );
+        rRef.aStart.Format( aRefStr, STD_FORMAT, pDocP, pDocP->GetAddressConvention() );
         aEdOutPos.SetRefString( aRefStr );
     }
 }
