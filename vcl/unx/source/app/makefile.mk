@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -100,14 +100,6 @@ CDEFS+=-DUSE_XINERAMA_XSUN
 .ENDIF
 .ENDIF
 
-.IF "$(OS)$(CPU)" == "SOLARISS"
-.IF "$(COM)"!="GCC"
-SLOFILES+=$(SLO)$/getfpsols.obj
-.ENDIF			# "$(COM)"!="GCC"
-.ELIF "$(OS)$(CPU)" == "SOLARISI"
-SLOFILES+=$(SLO)$/getfpsoli.obj
-.ENDIF
-
 .ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
@@ -115,8 +107,4 @@ SLOFILES+=$(SLO)$/getfpsoli.obj
 .INCLUDE :  target.mk
 
 .INCLUDE :  $(PRJ)$/util$/target.pmk
-
-# local rule to create the additional object file for SOLARIS
-$(SLO)$/%.obj: %.s
-    $(CXX) -c -o $(@:s/.obj/.o/) $< && touch $@
 
