@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ namespace drawinglayer
                 appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
             }
 
-            return aRetval;
+            return EventuallyAddTestRange(aRetval);
         }
 
         SdrCubePrimitive3D::SdrCubePrimitive3D(

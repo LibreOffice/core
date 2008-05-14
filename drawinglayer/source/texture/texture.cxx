@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:46 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace drawinglayer
 
         void GeoTexSvx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
-            // base implementation uses inverse of luminance of solved color
+            // base implementation uses inverse of luminance of solved color (for testing only, may also be pure virtual)
             basegfx::BColor aBaseColor;
             modifyBColor(rUV, aBaseColor, rfOpacity);
             rfOpacity = 1.0 - aBaseColor.luminance();

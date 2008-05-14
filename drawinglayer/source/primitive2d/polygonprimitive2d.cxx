@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:43 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,18 +288,30 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get range of it (subdivided)
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolygon()));
-
-            // if width, grow by line width
             if(getLineAttribute().getWidth())
             {
-                aRetval.grow(getLineAttribute().getWidth() / 2.0);
+                if(basegfx::B2DLINEJOIN_MITER == getLineAttribute().getLineJoin())
+                {
+                    // if line is mitered, use parent call since mitered line
+                    // geometry may use more space than the geometry grown by half line width
+                    return BasePrimitive2D::getB2DRange(rViewInformation);
+                }
+                else
+                {
+                    // for all other B2DLINEJOIN_* get the range from the base geometry
+                    // and expand by half the line width
+                    basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolygon()));
+                    aRetval.grow(getLineAttribute().getWidth() / 2.0);
+                    return aRetval;
+                }
             }
-
-            return aRetval;
+            else
+            {
+                // range of polygon is adequate
+                return basegfx::tools::getRange(getB2DPolygon());
+            }
         }
 
         // provide unique ID

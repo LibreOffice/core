@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
+#include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,7 @@ namespace drawinglayer
 
                     if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
                     {
-                        // expand by hald LineWidth as tube radius
+                        // expand by half LineWidth as tube radius
                         aRetval.grow(rLine.getWidth() / 2.0);
                     }
                 }
@@ -131,6 +135,31 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        Primitive3DSequence SdrPrimitive3D::EventuallyAddTestRange(Primitive3DSequence& rTarget) const
+        {
+            static bool bAddBoundCretsForTest(false);
+
+            if(bAddBoundCretsForTest)
+            {
+                const basegfx::B3DRange a3DRange(getB3DRange(0.0));
+                const basegfx::B3DPolyPolygon aLine(basegfx::tools::createCubePolyPolygonFromB3DRange(a3DRange));
+                const basegfx::BColor aBColor(0.0, 0.0, 1.0);
+                const ::std::vector< double > aEmptyVector;
+                const drawinglayer::attribute::SdrLineAttribute aLineAttribute(
+                    basegfx::B2DLINEJOIN_NONE,
+                    0.0,
+                    0.0,
+                    aBColor,
+                    aEmptyVector,
+                    0.0);
+                const basegfx::B3DHomMatrix aEmptyTransform;
+                const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, aEmptyTransform, aLineAttribute));
+                appendPrimitive3DSequenceToPrimitive3DSequence(rTarget, aLines);
+            }
+
+            return rTarget;
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

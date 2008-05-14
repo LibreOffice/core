@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
+#   last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,8 @@ SLOFILES= \
         $(SLO)$/defaultprocessor3d.obj	\
         $(SLO)$/label3dextractor.obj	\
         $(SLO)$/shadow3dextractor.obj	\
-        $(SLO)$/geometry2dextractor.obj
-
-
+        $(SLO)$/geometry2dextractor.obj	\
+        $(SLO)$/zbufferprocessor3d.obj
 
 
 # --- Targets ----------------------------------

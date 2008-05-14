@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpolypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,14 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b3dpolypolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
+#include <drawinglayer/attribute/sdrattribute.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -95,7 +103,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            return EventuallyAddTestRange(aRetval);
         }
 
         SdrPolyPolygonPrimitive3D::SdrPolyPolygonPrimitive3D(
@@ -119,6 +127,35 @@ namespace drawinglayer
             }
 
             return false;
+        }
+
+        basegfx::B3DRange SdrPolyPolygonPrimitive3D::getB3DRange(double /*fTime*/) const
+        {
+            // added this implementation to make sure that non-visible objects of this
+            // kind will deliver their expansion. If not implemented, it would never deliver
+            // the used space for non-visible objects since the decomposition for that
+            // case will be empty (what is correct). To support chart ATM which relies on
+            // non-visible objects occupying space in 3D, this method was added
+            basegfx::B3DRange aRetval;
+
+            if(getPolyPolygon3D().count())
+            {
+                aRetval = basegfx::tools::getRange(getPolyPolygon3D());
+                aRetval.transform(getTransform());
+
+                if(getSdrLFSAttribute().getLine())
+                {
+                    const attribute::SdrLineAttribute& rLine = *getSdrLFSAttribute().getLine();
+
+                    if(rLine.isVisible() && !basegfx::fTools::equalZero(rLine.getWidth()))
+                    {
+                        // expand by half LineWidth as tube radius
+                        aRetval.grow(rLine.getWidth() / 2.0);
+                    }
+                }
+            }
+
+            return aRetval;
         }
 
         // provide unique ID

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:22:01 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,65 +36,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SCENEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
-#include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
+#include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
+#include <drawinglayer/processor3d/tbufferprocessor3d.hxx>
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_LABEL3DEXTRACTOR_HXX
 #include <drawinglayer/processor3d/label3dextractor.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 #include <svtools/optionsdrawinglayer.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 #include <drawinglayer/processor3d/geometry2dextractor.hxx>
-#endif
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -114,15 +72,6 @@ namespace drawinglayer
         {
             // use unit range and transform to discrete coordinates
             rDiscreteRange = basegfx::B2DRange(0.0, 0.0, 1.0, 1.0);
-
-            {
-                // take a look at object transformation
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
-                fRotate = 0;
-            }
-
             rDiscreteRange.transform(rViewInformation.getViewTransformation() * getObjectTransformation());
 
             // force to discrete expanded bounds (it grows, so expanding works perfectly well)
@@ -218,20 +167,25 @@ namespace drawinglayer
                     aDiscreteRange.getHeight() * fReduceFactor);
                 aLogicRenderSize *= rViewInformation.getInverseViewTransformation();
 
+                // determine the oversample value
+                static bool bDoOversample(false);
+                static sal_uInt16 nDefaultOversampleValue(3);
+                const sal_uInt16 nOversampleValue((bDoOversample || aDrawinglayerOpt.IsAntiAliasing()) ? nDefaultOversampleValue : 0);
+
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
-                processor3d::DefaultProcessor3D aProcessor3D(
+                processor3d::ZBufferProcessor3D aZBufferProcessor3D(
                     rViewInformation,
                     getTransformation3D(),
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
                     aLogicRenderSize.getX(),
                     aLogicRenderSize.getY(),
-                    aUnitVisibleRange);
+                    aUnitVisibleRange,
+                    nOversampleValue);
 
-                aProcessor3D.processNonTransparent(getChildren3D());
-                aProcessor3D.processTransparent(getChildren3D());
-
-                const BitmapEx aNewBitmap(aProcessor3D.getBitmapEx());
+                aZBufferProcessor3D.processNonTransparent(getChildren3D());
+                aZBufferProcessor3D.processTransparent(getChildren3D());
+                const BitmapEx aNewBitmap(aZBufferProcessor3D.getBitmapEx());
                 const Size aBitmapSizePixel(aNewBitmap.GetSizePixel());
 
                 if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
@@ -248,9 +202,19 @@ namespace drawinglayer
                     aNew2DTransform *= rViewInformation.getInverseViewTransformation();
 
                     // create bitmap primitive and add
-                    BitmapPrimitive2D* pNewTextBitmap = new BitmapPrimitive2D(aNewBitmap, aNew2DTransform);
-                    const Primitive2DReference xRef(pNewTextBitmap);
+                    const Primitive2DReference xRef(new BitmapPrimitive2D(aNewBitmap, aNew2DTransform));
                     appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef);
+
+                    // test: Allow to add an outline in the debugger when tests are needed
+                    static bool bAddOutlineToCreated3DSceneRepresentation(false);
+
+                    if(bAddOutlineToCreated3DSceneRepresentation)
+                    {
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        aOutline.transform(aNew2DTransform);
+                        const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
+                        appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);
+                    }
                 }
             }
 

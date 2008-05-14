@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpolypolygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:07 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@ namespace drawinglayer
 
             // compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B3DRange getB3DRange(double fTime) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()

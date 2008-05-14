@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ namespace drawinglayer
                                             if(a2DHatchLines.count())
                                             {
                                                 // clip against texture polygon
-                                                a2DHatchLines = basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, false);
+                                                a2DHatchLines = basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, true);
                                             }
 
                                             if(a2DHatchLines.count())

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridprimitive2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:42 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace drawinglayer
                 double fStepY(getHeight());
                 const double fMinimalStep(10.0);
 
-                // guarantee a step width of 100.0
+                // guarantee a step width of 10.0
                 if(basegfx::fTools::less(fStepX, fMinimalStep))
                 {
                     fStepX = fMinimalStep;
@@ -170,12 +170,22 @@ namespace drawinglayer
                     for(double fY(0.0); fY < aScale.getY(); fY += fStepY)
                     {
                         const bool bYZero(basegfx::fTools::equalZero(fY));
-                        basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
 
-                        if(rViewInformation.getDiscreteViewport().isInside(aViewPos) && !bXZero && !bYZero)
+                        if(!bXZero && !bYZero)
                         {
-                            const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
-                            aPositionsCross.push_back(aLogicPos);
+                            // get discrete position and test against 3x3 area surrounding it
+                            // since it's a cross
+                            const double fHalfCrossSize(3.0 * 0.5);
+                            const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fY));
+                            const basegfx::B2DRange aDiscreteRangeCross(
+                                aViewPos.getX() - fHalfCrossSize, aViewPos.getY() - fHalfCrossSize,
+                                aViewPos.getX() + fHalfCrossSize, aViewPos.getY() + fHalfCrossSize);
+
+                            if(rViewInformation.getDiscreteViewport().overlaps(aDiscreteRangeCross))
+                            {
+                                const basegfx::B2DPoint aLogicPos(rViewInformation.getInverseViewTransformation() * aViewPos);
+                                aPositionsCross.push_back(aLogicPos);
+                            }
                         }
 
                         if(getSubdivisionsX() && !bYZero)
@@ -184,7 +194,7 @@ namespace drawinglayer
 
                             for(sal_uInt32 a(0L); a < nSmallStepsX && fF < aScale.getX(); a++, fF += fSmallStepX)
                             {
-                                aViewPos = aRST * basegfx::B2DPoint(fF, fY);
+                                const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fF, fY));
 
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {
@@ -200,7 +210,7 @@ namespace drawinglayer
 
                             for(sal_uInt32 a(0L); a < nSmallStepsY && fF < aScale.getY(); a++, fF += fSmallStepY)
                             {
-                                aViewPos = aRST * basegfx::B2DPoint(fX, fF);
+                                const basegfx::B2DPoint aViewPos(aRST * basegfx::B2DPoint(fX, fF));
 
                                 if(rViewInformation.getDiscreteViewport().isInside(aViewPos))
                                 {

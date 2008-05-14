@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:22:03 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1431,7 +1431,6 @@ namespace drawinglayer
                             {
                                 // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
-                                mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
                                 mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
                             }
 

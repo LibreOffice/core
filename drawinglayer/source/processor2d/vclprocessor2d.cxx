@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-16 04:59:58 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,9 +700,26 @@ namespace drawinglayer
             // get BoundRect
             basegfx::B2DRange aOutlineRange(rMetaCandidate.getB2DRange(getViewInformation2D()));
             aOutlineRange.transform(maCurrentTransformation);
-            const Rectangle aDestRectView(
-                basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-                basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
+
+            // Due to the integer MapModes used from VCL aind inside MetaFiles errors of up to three
+            // pixels in size may happen. As long as there is no better way (e.g. convert the MetaFile
+            // to primitives) it is necessary to reduce maximum pixel size by 1 in X and Y and to use
+            // the inner pixel bounds accordingly (ceil resp. floor). This will also be done for logic
+            // units e.g. when creating a new MetaFile, but since much huger value ranges are used
+            // there typically will be okay for this compromize.
+            Rectangle aDestRectView(
+                (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
+                (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
+
+            if(aDestRectView.Right() > aDestRectView.Left())
+            {
+                aDestRectView.Right()--;
+            }
+
+            if(aDestRectView.Bottom() > aDestRectView.Top())
+            {
+                aDestRectView.Bottom()--;
+            }
 
             // get metafile (copy it)
             GDIMetaFile aMetaFile;
@@ -905,15 +922,12 @@ namespace drawinglayer
                     const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
                     const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
                     const Color aVCLColor(aRGBColor);
-                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+                    const basegfx::B2DHomMatrix aTransObjectToDiscrete(mpOutputDevice->GetViewTransformation() * maCurrentTransformation);
 
                     for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
                     {
-                        const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
-                        Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
-
-                        aPos = mpOutputDevice->LogicToPixel(aPos);
-                        mpOutputDevice->EnableMapMode(false);
+                        const basegfx::B2DPoint aDiscretePosition(aTransObjectToDiscrete * (*aIter));
+                        const Point aPos(basegfx::fround(aDiscretePosition.getX()), basegfx::fround(aDiscretePosition.getY()));
 
                         switch(rMarkArrayCandidate.getStyle())
                         {
@@ -953,7 +967,6 @@ namespace drawinglayer
                             }
                         }
 
-                        mpOutputDevice->EnableMapMode(bWasEnabled);
                     }
 
                     break;

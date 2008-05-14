@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-19 04:35:22 $
+ *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ namespace drawinglayer
                 }
             }
 
-            return aRetval;
+            return EventuallyAddTestRange(aRetval);
         }
 
         void SdrLathePrimitive3D::impCreateSlices()
@@ -247,7 +247,9 @@ namespace drawinglayer
 
         const Slice3DVector& SdrLathePrimitive3D::getSlices() const
         {
-            if(getPolyPolygon().count() && !maSlices.size() && (getSdrLFSAttribute().getFill() || getSdrLFSAttribute().getLine()))
+            // This can be made dependent of  getSdrLFSAttribute().getFill() and getSdrLFSAttribute().getLine()
+            // again when no longer geometry is needed for non-visible 3D objects as it is now for chart
+            if(getPolyPolygon().count() && !maSlices.size())
             {
                 ::osl::Mutex m_mutex;
                 const_cast< SdrLathePrimitive3D& >(*this).impCreateSlices();
