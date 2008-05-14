@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbnamdlg.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         bRefInputMode   ( FALSE ),
+        aAddrDetails    ( pDoc->GetAddressConvention(), 0, 0 ),
         aLocalDbCol     ( *(pDoc->GetDBCollection()) )
 {
     // WB_NOLABEL can't be set in resource...
@@ -258,7 +259,7 @@ void ScDbNameDlg::Init()
         theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
                               ScAddress( nEndCol,   nEndRow,   nEndTab ) );
 
-        theCurArea.Format( theAreaStr, ABS_DREF3D, pDoc );
+        theCurArea.Format( theAreaStr, ABS_DREF3D, pDoc, aAddrDetails );
 
         if ( pDBColl )
         {
@@ -337,7 +338,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         theCurArea = rRef;
 
         String aRefStr;
-        theCurArea.Format( aRefStr, ABS_DREF3D, pDocP );
+        theCurArea.Format( aRefStr, ABS_DREF3D, pDocP, aAddrDetails );
         aEdAssign.SetRefString( aRefStr );
         aBtnHeader.Enable();
         aBtnDoSize.Enable();
@@ -432,7 +433,7 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        theCurArea.Format( theArea, ABS_DREF3D, pDoc );
+        theCurArea.Format( theArea, ABS_DREF3D, pDoc, aAddrDetails );
         aEdAssign.SetText( theArea );
         aBtnAdd.SetText( aStrModify );
         aBtnHeader.Check( pData->HasHeader() );
@@ -506,7 +507,7 @@ IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
             String aText = aEdAssign.GetText();
-            if ( aTmpRange.ParseAny( aText, pDoc ) & SCA_VALID )
+            if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
             {
                 theCurArea = aTmpRange;
                 ScAddress aStart = theCurArea.aStart;
@@ -725,7 +726,7 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
 
     ScRange aTmpRange;
     String aText = aEdAssign.GetText();
-    if ( aTmpRange.ParseAny( aText, pDoc ) & SCA_VALID )
+    if ( aTmpRange.ParseAny( aText, pDoc, aAddrDetails ) & SCA_VALID )
         theCurArea = aTmpRange;
 
     return 0;
