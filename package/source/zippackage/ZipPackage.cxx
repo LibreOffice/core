@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ZipPackage.cxx,v $
- * $Revision: 1.113 $
+ * $Revision: 1.114 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,6 +237,7 @@ void ZipPackage::parseManifest()
                         if ( xReader.is() )
                         {
                             const OUString sPropFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+                            const OUString sPropVersion ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
                             const OUString sPropMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
                             const OUString sPropInitialisationVector ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
                             const OUString sPropSalt ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
@@ -252,13 +253,15 @@ void ZipPackage::parseManifest()
 
                             for (sal_Int32 i = 0; i < nLength ; i++, pSequence++)
                             {
-                                OUString sPath, sMediaType;
+                                OUString sPath, sMediaType, sVersion;
                                 const PropertyValue *pValue = pSequence->getConstArray();
                                 const Any *pSalt = NULL, *pVector = NULL, *pCount = NULL, *pSize = NULL, *pDigest = NULL;
                                 for (sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                                 {
                                     if (pValue[j].Name.equals( sPropFullPath ) )
                                         pValue[j].Value >>= sPath;
+                                    else if (pValue[j].Name.equals( sPropVersion ) )
+                                        pValue[j].Value >>= sVersion;
                                     else if (pValue[j].Name.equals( sPropMediaType ) )
                                         pValue[j].Value >>= sMediaType;
                                     else if (pValue[j].Name.equals( sPropSalt ) )
@@ -282,6 +285,7 @@ void ZipPackage::parseManifest()
                                     {
                                         pFolder = reinterpret_cast < ZipPackageFolder* > ( nTest );
                                         pFolder->SetMediaType ( sMediaType );
+                                        pFolder->SetVersion ( sVersion );
                                     }
                                     else
                                     {
@@ -1009,15 +1013,18 @@ sal_Bool ZipPackage::writeFileIsTemp()
         // until the call to ZipOutputStream->finish()
         uno::Reference < XOutputStream > xManOutStream;
         const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+        const OUString sVersion ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
         const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
 
         if ( m_nFormat == PACKAGE_FORMAT )
         {
-            Sequence < PropertyValue > aPropSeq ( 2 );
-            aPropSeq [0].Name = sMediaType;
-            aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
-            aPropSeq [1].Name = sFullPath;
-            aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            Sequence < PropertyValue > aPropSeq ( PKG_SIZE_NOENCR_MNFST );
+            aPropSeq [PKG_MNFST_MEDIATYPE].Name = sMediaType;
+            aPropSeq [PKG_MNFST_MEDIATYPE].Value <<= pRootFolder->GetMediaType( );
+            aPropSeq [PKG_MNFST_VERSION].Name = sVersion;
+            aPropSeq [PKG_MNFST_VERSION].Value <<= pRootFolder->GetVersion( );
+            aPropSeq [PKG_MNFST_FULLPATH].Name = sFullPath;
+            aPropSeq [PKG_MNFST_FULLPATH].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
             aManList.push_back( aPropSeq );
         }
