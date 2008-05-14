@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undotab.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "undobase.hxx"
 #include "markdata.hxx"
+#include "grammar.hxx"
 #include <tools/color.hxx>
 
 #ifndef _SVSTDARR_SHORTS
@@ -48,6 +49,7 @@
 #include <svtools/svstdarr.hxx>
 
 #endif
+
 #include <com/sun/star/uno/Sequence.hxx>
 
 class ScDocShell;
@@ -464,13 +466,13 @@ private:
 };
 
 
-class ScUndoSetAddressConvention : public ScSimpleUndo
+class ScUndoSetGrammar : public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoSetAddressConvention( ScDocShell* pShell,
-                                                ScAddress::Convention eConv );
-    virtual         ~ScUndoSetAddressConvention();
+                    ScUndoSetGrammar( ScDocShell* pShell,
+                                      ScGrammar::Grammar eGrammar );
+    virtual         ~ScUndoSetGrammar();
 
     virtual void    Undo();
     virtual void    Redo();
@@ -480,9 +482,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScAddress::Convention eNewConv, eOldConv;
+    ScGrammar::Grammar meNewGrammar, meOldGrammar;
 
-    void DoChange( ScAddress::Convention eConv );
+    void DoChange( ScGrammar::Grammar eGrammar );
 };
 
 #endif
