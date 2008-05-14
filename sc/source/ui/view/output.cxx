@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: output.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2380,7 +2380,7 @@ void ScOutputData::AddPDFNotes()
                         // Note title is the cell address (as on printed note pages)
                         String aTitle;
                         ScAddress aAddress( nMergeX, nMergeY, nTab );
-                        aAddress.Format( aTitle, SCA_VALID, pDoc );
+                        aAddress.Format( aTitle, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
 
                         // Content has to be a simple string without line breaks
                         String aContent = pNote->GetText();
