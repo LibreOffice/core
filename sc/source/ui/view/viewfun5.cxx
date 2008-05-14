@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun5.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -387,7 +387,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             else
             {
                 ScAddress aCellPos( nPosX,nPosY,nTab );
-                aCellPos.Format( sTarget, SCA_ABS_3D, pDoc );
+                aCellPos.Format( sTarget, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention() );
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 
