@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xstorage.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,6 +172,9 @@ struct OStorage_Impl
     sal_Bool        m_bControlMediaType;
     ::rtl::OUString m_aMediaType;
     sal_Bool        m_bMTFallbackUsed;
+
+    sal_Bool        m_bControlVersion;
+    ::rtl::OUString m_aVersion;
 
     SwitchablePersistenceStream* m_pSwitchStream;
 
