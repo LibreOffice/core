@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: foptmgr.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,8 +148,9 @@ void ScFilterOptionsMgr::Init()
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         String          theDbArea;
         String          theDbName   = rStrNoName;
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
-        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc );
+        theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
 
         // Zielbereichsliste fuellen
 
@@ -164,7 +165,7 @@ void ScFilterOptionsMgr::Init()
         {
             USHORT nInsert = rLbCopyPos.InsertEntry( aName );
 
-            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc );
+            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
             rLbCopyPos.SetEntryData( nInsert, new String( aRefStr ) );
         }
 
@@ -213,7 +214,7 @@ void ScFilterOptionsMgr::Init()
             ScAddress( rQueryData.nDestCol,
                        rQueryData.nDestRow,
                        rQueryData.nDestTab
-                     ).Format( aString, SCA_ABS_3D, pDoc );
+                     ).Format( aString, SCA_ABS_3D, pDoc, eConv );
 
             rBtnCopyResult.Check( TRUE );
             rEdCopyPos.SetText( aString );
@@ -248,7 +249,7 @@ BOOL ScFilterOptionsMgr::VerifyPosStr( const String& rPosStr ) const
     if ( STRING_NOTFOUND != nColonPos )
         aPosStr.Erase( nColonPos );
 
-    USHORT nResult = ScAddress().Parse( aPosStr, pDoc );
+    USHORT nResult = ScAddress().Parse( aPosStr, pDoc, pDoc->GetAddressConvention() );
 
     return ( SCA_VALID == (nResult & SCA_VALID) );
 }
@@ -283,7 +284,7 @@ IMPL_LINK( ScFilterOptionsMgr, EdPosModifyHdl, Edit*, pEd )
     if ( pEd == &rEdCopyPos )
     {
         String  theCurPosStr = pEd->GetText();
-        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc );
+        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
