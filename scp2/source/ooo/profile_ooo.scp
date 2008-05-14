@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profile_ooo.scp,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,12 @@ Profile gid_Profile_Uno_Ini
   #endif
     Dir = gid_Dir_Program;
     Styles = (NETWORK);
+End
+
+Profile gid_Profile_Version_Ini_Basis
+    ModuleID = gid_Module_Root;
+    Name = PROFILENAME(version);
+    Dir = gid_Dir_Program;
 End
 
 Profile gid_Profile_Fundamentalbasis_Ini
