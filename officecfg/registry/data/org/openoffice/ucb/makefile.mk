@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,8 @@ PACKAGE=org.openoffice.ucb
 XCUFILES= \
     Configuration.xcu
 
+MODULEFILES= \
+    Configuration-gio.xcu
 
 .INCLUDE :  target.mk
 
