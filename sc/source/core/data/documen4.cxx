@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen4.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const ScMarkData& rMark,
                                      const String& rFormula,
                                      const ScTokenArray* pArr,
-                                     const ScGrammar::Grammar eGrammar )
+                                     const ScGrammar::Grammar eGram )
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
@@ -148,9 +148,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     ScFormulaCell* pCell;
     ScAddress aPos( nCol1, nRow1, nTab1 );
     if (pArr)
-        pCell = new ScFormulaCell( this, aPos, pArr, eGrammar, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, pArr, eGram, MM_FORMULA );
     else
-        pCell = new ScFormulaCell( this, aPos, rFormula, eGrammar, MM_FORMULA );
+        pCell = new ScFormulaCell( this, aPos, rFormula, eGram, MM_FORMULA );
     pCell->SetMatColsRows( nCol2 - nCol1 + 1, nRow2 - nRow1 + 1 );
     for (i = 0; i <= MAXTAB; i++)
     {
@@ -197,7 +197,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                         // Zelle ein eigenes Array erhaelt!
                         aPos = ScAddress( j, k, i );
                         t->CalcRelFromAbs( aPos );
-                        pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGrammar, MM_REFERENCE );
+                        pCell = new ScFormulaCell( this, aPos, aArr.Clone(), eGram, MM_REFERENCE );
                         pTab[i]->PutCell(j, k, (ScBaseCell*) pCell);
                     }
                 }
