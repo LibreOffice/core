@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh3.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,8 +313,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScRangeUtil     aRangeUtil;
-                    if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES ) ||
-                        aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE ) )
+                    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+                    if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
+                        aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {
                         nResult |= SCA_VALID;
                         if( aScRange.aStart.Tab() != nTab )
