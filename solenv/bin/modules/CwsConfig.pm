@@ -8,7 +8,7 @@
 #
 # $RCSfile: CwsConfig.pm,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -425,4 +425,11 @@ sub parse_config_file
     }
 }
 
+sub sointernal
+{
+    my $self = shift;
+    my $config_file = $self->get_config_file();
+    my $val = ($config_file->{CWS_CONFIG}->{"SO_INTERNAL"}) ? 1 : 0;
+    return $val;
+}
 1; # needed by "use" or "require"
