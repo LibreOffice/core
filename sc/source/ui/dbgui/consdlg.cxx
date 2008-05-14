@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: consdlg.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,6 +192,7 @@ void ScConsolidateDlg::Init()
 
     // Einlesen der Konsolidierungsbereiche
     aLbConsAreas.Clear();
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
     {
         const ScArea& rArea = *(theConsData.ppDataAreas[i] );
@@ -199,7 +200,7 @@ void ScConsolidateDlg::Init()
         {
             ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                     rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( aStr,
-                        SCR_ABS_3D, pDoc );
+                        SCR_ABS_3D, pDoc, eConv );
             aLbConsAreas.InsertEntry( aStr );
         }
     }
@@ -207,7 +208,7 @@ void ScConsolidateDlg::Init()
     if ( theConsData.nTab < pDoc->GetTableCount() )
     {
         ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
-                ).Format( aStr, SCA_ABS_3D, pDoc );
+                ).Format( aStr, SCA_ABS_3D, pDoc, eConv );
         aEdDestArea.SetText( aStr );
     }
     else
@@ -240,7 +241,7 @@ void ScConsolidateDlg::Init()
         ScAreaNameIterator aIter( pDoc );
         while ( aIter.Next( aStrName, aRange ) )
         {
-            aRange.Format( aStrArea, SCA_ABS_3D, pDoc );
+            aRange.Format( aStrArea, SCA_ABS_3D, pDoc, eConv );
             pAreaData[nAt++].Set( aStrName, aStrArea, aIter.WasDBName() );
         }
     }
@@ -297,14 +298,15 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
         String      aStr;
         USHORT      nFmt = SCR_ABS_3D;       //!!! nCurTab fehlt noch
+        const ScAddress::Convention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
             nFmt |= SCA_TAB2_3D;
 
         if ( pRefInputEdit == &aEdDataArea)
-            rRef.Format( aStr, nFmt, pDocP );
+            rRef.Format( aStr, nFmt, pDocP, eConv );
         else if ( pRefInputEdit == &aEdDestArea )
-            rRef.aStart.Format( aStr, nFmt, pDocP );
+            rRef.aStart.Format( aStr, nFmt, pDocP, eConv );
 
         pRefInputEdit->SetRefString( aStr );
     }
@@ -361,11 +363,12 @@ BOOL ScConsolidateDlg::VerifyEdit( ScRefEdit* pEd )
     SCTAB   nTab    = pViewData->GetTabNo();
     BOOL    bEditOk = FALSE;
     String  theCompleteStr;
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
     if ( pEd == &aEdDataArea )
     {
         bEditOk = pRangeUtil->IsAbsArea( pEd->GetText(), pDoc,
-                                         nTab, &theCompleteStr );
+                                         nTab, &theCompleteStr, NULL, NULL, eConv );
     }
     else if ( pEd == &aEdDestArea )
     {
@@ -373,7 +376,7 @@ BOOL ScConsolidateDlg::VerifyEdit( ScRefEdit* pEd )
 
         pRangeUtil->CutPosString( pEd->GetText(), aPosStr );
         bEditOk = pRangeUtil->IsAbsPos( aPosStr, pDoc,
-                                        nTab, &theCompleteStr );
+                                        nTab, &theCompleteStr, NULL, eConv );
     }
 
     if ( bEditOk )
@@ -417,8 +420,9 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
         ScRefAddress aDestAddress;
         SCTAB       nTab = pViewData->GetTabNo();
         String      aDestPosStr( aEdDestArea.GetText() );
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
-        if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress ) )
+        if ( pRangeUtil->IsAbsPos( aDestPosStr, pDoc, nTab, NULL, &aDestAddress, eConv ) )
         {
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
@@ -429,7 +433,7 @@ IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
             {
                 pArea = new ScArea;
                 pRangeUtil->MakeArea( aLbConsAreas.GetEntry( i ),
-                                      *pArea, pDoc, nTab );
+                                      *pArea, pDoc, nTab, eConv );
                 ppDataAreas[i] = pArea;
             }
 
@@ -480,8 +484,9 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             String      aNewEntry( aEdDataArea.GetText() );
             ScArea**    ppAreas = NULL;
             USHORT      nAreaCount = 0;
+            const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE ) )
+            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE, eConv ) )
             {
                 // IsAbsTabArea() legt ein Array von ScArea-Zeigern an,
                 // welche ebenfalls dynamisch erzeugt wurden.
@@ -496,7 +501,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
                         const ScArea& rArea = *(ppAreas[i]);
                         ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
                                 rArea.nColEnd, rArea.nRowEnd, rArea.nTab
-                                ).Format( aNewArea, SCR_ABS_3D, pDoc );
+                                ).Format( aNewArea, SCR_ABS_3D, pDoc, eConv );
 
                         if ( aLbConsAreas.GetEntryPos( aNewArea )
                              == LISTBOX_ENTRY_NOTFOUND )
