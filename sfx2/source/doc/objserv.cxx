@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objserv.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,7 @@
 #include <svtools/useroptions.hxx>
 #include <svtools/asynclink.hxx>
 #include <svtools/saveopt.hxx>
+#include <comphelper/documentconstants.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -1355,26 +1356,83 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 
 void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 {
-    if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
+    // Check if it is stored in OASIS format...
+    if ( GetMedium() && GetMedium()->GetFilter()
+      && ( !GetMedium()->GetFilter()->IsOwnFormat() || !GetMedium()->HasStorage_Impl() ) )
     {
-        if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
-        {
-            USHORT nId = SID_SAVEDOC;
-            if ( !GetMedium() || !GetMedium()->GetName().Len() )
-                nId = SID_SAVEASDOC;
-            SfxRequest aSaveRequest( nId, 0, GetPool() );
-            ExecFile_Impl( aSaveRequest );
-        }
-        if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
-            return;
-
-    }
-
-    // Check if it is stored in a OOo format...
-    if ( GetMedium() && GetMedium()->GetFilter() && !GetMedium()->GetFilter()->IsOwnFormat() )
-    {
+        // Only OASIS and OOo6.x formats will be handled further
         InfoBox( NULL, SfxResId( RID_XMLSEC_INFO_WRONGDOCFORMAT ) ).Execute();
         return;
+    }
+
+    // check whether the document is signed
+    ImplGetSignatureState( sal_False ); // document signature
+    ImplGetSignatureState( sal_True ); // script signature
+    sal_Bool bHasSign = ( pImp->nScriptingSignatureState != SIGNATURESTATE_NOSIGNATURES || pImp->nDocumentSignatureState != SIGNATURESTATE_NOSIGNATURES );
+
+    // the target ODF version on saving
+    SvtSaveOptions aSaveOpt;
+    SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
+
+    // the document is not new and is not modified
+    ::rtl::OUString aODFVersion;
+    try
+    {
+        // check the version of the document
+        uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
+        xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= aODFVersion;
+    }
+    catch( uno::Exception& )
+    {}
+
+    bool bNoSig = false;
+
+    if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len()
+      || !aODFVersion.equals( ODFVER_012_TEXT ) && !bHasSign )
+    {
+        // the document might need saving ( new, modified or in ODF1.1 format without signature )
+
+        if ( nVersion == SvtSaveOptions::ODFVER_012 )
+        {
+
+            if ( bHasSign && QueryBox( NULL, SfxResId( MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN ) ).Execute() == RET_YES
+              || !bHasSign && QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
+            {
+                USHORT nId = SID_SAVEDOC;
+                if ( !GetMedium() || !GetMedium()->GetName().Len() )
+                    nId = SID_SAVEASDOC;
+                SfxRequest aSaveRequest( nId, 0, GetPool() );
+                //ToDo: Review. We needed to call SetModified, otherwise the document would not be saved.
+                SetModified(sal_True);
+                ExecFile_Impl( aSaveRequest );
+
+                // Check if it is stored in OASIS format...
+                if ( GetMedium() && GetMedium()->GetFilter()
+                  && ( !GetMedium()->GetFilter()->IsOwnFormat() || !GetMedium()->HasStorage_Impl()
+                    || SotStorage::GetVersion( GetMedium()->GetStorage() ) <= SOFFICE_FILEFORMAT_60 ) )
+                {
+                    // Only OASIS format will be handled further
+                    InfoBox( NULL, SfxResId( RID_XMLSEC_INFO_WRONGDOCFORMAT ) ).Execute();
+                    return;
+                }
+            }
+            else
+            {
+                //When the document is modified then we must not show the digital signatures dialog
+                //If we have come here then the user denied to save.
+                if (!bHasSign)
+
+                    bNoSig = true;
+            }
+        }
+        else
+        {
+            ErrorBox( NULL, WB_OK, SfxResId( STR_XMLSEC_ODF12_EXPECTED ) ).Execute();
+            return;
+        }
+
+        if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
+            return;
     }
 
     // the document is not modified currently, so it can not become modified after signing
@@ -1385,7 +1443,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
         bAllowModifiedBack = sal_True;
     }
 
-    if ( GetMedium()->SignContents_Impl( bScriptingContent ) )
+    if ( ! bNoSig && GetMedium()->SignContents_Impl( bScriptingContent ) )
     {
         if ( bScriptingContent )
             pImp->nScriptingSignatureState = SIGNATURESTATE_UNKNOWN;// Re-Check
