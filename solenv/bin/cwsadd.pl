@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwsadd.pl,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +41,6 @@ use Getopt::Long;
 use Cwd;
 use IO::Handle;
 use File::Copy;
-
 #### module lookup
 my @lib_dirs;
 BEGIN {
@@ -56,10 +55,6 @@ use lib (@lib_dirs);
 use Cws;
 use CwsConfig;
 
-eval { require Logging; import Logging; };
-# $log variable is only defined in SO environment...
-my $log = undef;
-$log = Logging->new() if (!$@);
 eval { require CopyPrj; import CopyPrj; };
 use CvsModule;
 
@@ -68,7 +63,7 @@ use CvsModule;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.9 $ ';
+my $id_str = ' $Revision: 1.10 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -84,6 +79,7 @@ my $vcsid = "unknown";
 my $add_output_tree = 1;
 my $keep_output_trees = 0;
 my $force_output_tree_copy = 0;
+my $sointernal = undef;
 my @found_platforms = ();
 
 my @args_bak = @ARGV;
@@ -95,14 +91,13 @@ qw(common common.pro cvs cws wntmsci unxsols unxsoli unxlngi unxlngp macosxp);
 
 
 #### main #####
-my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
 
 my @modules = parse_options();
 my ($dir, $cws) = get_and_verify_cws();
 my @modules_to_add = check_modules($cws, @modules);
 my $workspace_db;
 if ( @modules_to_add ) {
-    if (defined $log) {
+    if ($sointernal) {
         require EnvHelper; import EnvHelper;
         $workspace_db = EnvHelper::get_workspace_db();
         @modules_to_add = copy_modules($cws, $dir, $workspace_db, @modules_to_add);
@@ -134,7 +129,6 @@ if ( @modules_to_add ) {
     }
 }
 
-$log->end_log_extended($script_name,$vcsid,"success") if (defined $log);
 exit(0);
 
 #### subroutines ####
@@ -189,7 +183,6 @@ sub get_and_verify_cws
     my $cws = Cws->new();
     $cws->child($childws);
     $cws->master($masterws);
-    $log->start_log_extended($script_name,$parameter_list,$masterws,$childws) if (defined $log);
 
     # check if we got a valid child workspace
     my $id = $cws->eis_id();
@@ -253,6 +246,7 @@ sub check_modules
     }
 
     my $config = CwsConfig->get_config();
+    $sointernal = $config->sointernal();
     my $cvs_module = CvsModule->new();
     $cvs_module->cvs_method($config->get_cvs_server_method());
     $cvs_module->vcsid($config->get_cvs_server_id());
@@ -268,7 +262,7 @@ sub check_modules
             print_warning("Module '$_' already registered, skipping.");
             next;
         };
-        if (!defined($log) && !defined $cvs_aliases{$_}) {
+        if (!($sointernal) && !defined $cvs_aliases{$_}) {
             print_error("There is no such module alias '$_'.", 3);
         };
         push(@new_modules, $_);
@@ -553,7 +547,7 @@ sub register_module
 
     # find out if module has public flag
     my $master = $cws->master();
-    if (defined $log) {
+    if ($sointernal) {
         my $key = "$master/Drives/o:/Projects/$module/SCS";
         my $scs = $workspace_db->get_value($key);
 
@@ -605,7 +599,6 @@ sub print_error
 
     if ( $error_code ) {
         print STDERR "\nFAILURE: $script_name aborted.\n";
-        $log->end_log_extended($script_name,$vcsid,$message) if (defined $log);
         exit($error_code);
     }
     return;
