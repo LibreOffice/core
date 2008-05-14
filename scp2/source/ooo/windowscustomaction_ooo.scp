@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,7 @@ WindowsCustomAction gid_Customaction_Deregister_Extensions
 	Target = "DeregisterExtensions";
 	Inbinarytable = 1;
 	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "gid_Customaction_Remove_Extensions");
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "Shellextensionsdll4");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Check_Install_Directory
@@ -255,6 +255,25 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "ExitInstallDirNotEmpty");
 	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
+End
+
+WindowsCustomAction gid_Customaction_Create_Layerlinks
+	Name = "CreateLayerLinks";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CreateLayerLinks";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
+	Assignment2 = ("AdminExecuteSequence", "", "behind_SetUreInstallLocation");
+End
+
+WindowsCustomAction gid_Customaction_Remove_Layerlinks
+	Name = "RemoveLayerLinks";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RemoveLayerLinks";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_CreateLayerLinks");
 End
 
 WindowsCustomAction gid_Customaction_RegCleanOld
