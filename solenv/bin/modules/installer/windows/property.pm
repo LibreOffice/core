@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -248,6 +248,30 @@ sub set_important_properties
     if ( $allvariables->{'PRODUCTBUILDID'} )
     {
         my $onepropertyline = "PRODUCTBUILDID" . "\t" . $allvariables->{'PRODUCTBUILDID'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'OOOBASEVERSION'} )
+    {
+        my $onepropertyline = "OOOBASEVERSION" . "\t" . $allvariables->{'OOOBASEVERSION'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'URELAYERVERSION'} )
+    {
+        my $onepropertyline = "URELAYERVERSION" . "\t" . $allvariables->{'URELAYERVERSION'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'BRANDPACKAGEVERSION'} )
+    {
+        my $onepropertyline = "BRANDPACKAGEVERSION" . "\t" . $allvariables->{'BRANDPACKAGEVERSION'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::sundirexists )
+    {
+        my $onepropertyline = "SUNDIREXISTS" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 
