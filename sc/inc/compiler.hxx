@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -446,11 +446,11 @@ private:
 
 public:
     ScCompiler( ScDocument* pDocument, const ScAddress&,
-                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                const ScGrammar::Grammar eGrammar );
 
     ScCompiler( ScDocument* pDocument, const ScAddress&,
                 ScTokenArray& rArr,
-                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                const ScGrammar::Grammar eGrammar );
 
     static bool IsInitialized()
     {
@@ -523,8 +523,7 @@ public:
     const String&   GetCorrectedFormula() { return aCorrectedFormula; }
 
     // Use convention from this->aPos by default
-    ScTokenArray* CompileString( const String& rFormula,
-                                 ScAddress::Convention eConv = ScAddress::CONV_UNSPECIFIED );
+    ScTokenArray* CompileString( const String& rFormula );
     BOOL  CompileTokenArray();
     short GetNumFormatType() { return nNumFmt; }
     const ScDocument* GetDoc() const { return pDoc; }
