@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: highred.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +190,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(&aEdAssign);
         String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDocP );
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP, pDocP->GetAddressConvention() );
         aEdAssign.SetRefString( aRefStr );
         aFilterCtr.SetRange(aRefStr);
     }
