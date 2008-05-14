@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComboBox.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 #include "cachedrowset.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
@@ -152,9 +151,10 @@ protected:
     virtual void    stringItemListChanged( );
     virtual void    connectedExternalListSource( );
     virtual void    disconnectedExternalListSource( );
+    virtual void    refreshInternalEntryList();
 
 protected:
-    void loadData();
+    void loadData( bool _bForce );
 
     DECLARE_XCLONEABLE();
 };
