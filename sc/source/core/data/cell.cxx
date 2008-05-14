@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -907,7 +907,7 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
-        ScCompiler aComp(pDocument, aPos, *pCode );
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         if( !pCode->GetCodeError() )
         {
@@ -994,7 +994,7 @@ void ScFormulaCell::CalcAfterLoad()
     // wurde, da die RangeNames erst jetzt existieren.
     if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
-        ScCompiler aComp(pDocument, aPos, *pCode);
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
         nFormatIndex = 0;
@@ -1085,7 +1085,8 @@ void ScFormulaCell::Interpret()
                     aDebugVec.push_back( aR);
                 }
                 String aStr;
-                pCell->aPos.Format( aStr, SCA_VALID | SCA_TAB_3D, pCell->GetDocument());
+                pCell->aPos.Format( aStr, SCA_VALID | SCA_TAB_3D, pCell->GetDocument(),
+                                    pCell->GetDocument()->GetAddressConvention() );
                 ByteString aB( aStr, RTL_TEXTENCODING_UTF8);
                 aDebugVec.push_back( aB);
             }
