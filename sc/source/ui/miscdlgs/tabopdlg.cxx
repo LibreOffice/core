@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabopdlg.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +157,8 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( pEdActive )
     {
+        ScAddress::Details aDetails(pDocP->GetAddressConvention(), 0, 0);
+
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(pEdActive);
 
@@ -169,17 +171,17 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            rRef.Format( aStr, nFmt, pDocP );
+            rRef.Format( aStr, nFmt, pDocP, aDetails );
         }
         else if ( pEdActive == &aEdRowCell )
         {
             theRowCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDocP );
+            rRef.aStart.Format( aStr, nFmt, pDocP, aDetails );
         }
         else if ( pEdActive == &aEdColCell )
         {
             theColCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDocP );
+            rRef.aStart.Format( aStr, nFmt, pDocP, aDetails );
         }
 
         pEdActive->SetRefString( aStr );
@@ -241,11 +243,12 @@ BOOL lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     BOOL bRet = FALSE;
+    const ScAddress::Convention eConv = pDoc->GetAddressConvention();
     if ( rString.Search(':') != STRING_NOTFOUND )
-        bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd );
+        bRet = ConvertDoubleRef( pDoc, rString, nCurTab, rStart, rEnd, eConv );
     else
     {
-        bRet = ConvertSingleRef( pDoc, rString, nCurTab, rStart );
+        bRet = ConvertSingleRef( pDoc, rString, nCurTab, rStart, eConv );
         rEnd = rStart;
     }
     return bRet;
@@ -277,9 +280,11 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             nError = TABOPERR_WRONGFORMULA;
         else
         {
+            const ScAddress::Convention eConv = pDoc->GetAddressConvention();
             if (aEdRowCell.GetText().Len() > 0)
             {
-                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab, theRowCell ))
+                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
+                                       theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else
                 {
@@ -293,7 +298,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             if (aEdColCell.GetText().Len() > 0)
             {
                 if (!ConvertSingleRef( pDoc, aEdColCell.GetText(), nCurTab,
-                                       theColCell ))
+                                       theColCell, eConv ))
                     nError = TABOPERR_WRONGCOL;
                 else
                 {
@@ -301,7 +306,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     {
                         nMode = 2;
                         ConvertSingleRef( pDoc, aEdFormulaRange.GetText(), nCurTab,
-                                          theFormulaCell );
+                                          theFormulaCell, eConv );
                     }
                     else if (theFormulaCell.Row() != theFormulaEnd.Row())
                         nError = TABOPERR_NOROWFORMULA;
