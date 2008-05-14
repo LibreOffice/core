@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tpsort.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -628,6 +628,7 @@ void ScTabPageSortOptions::Init()
         String          theDbArea;
         String          theDbName   = aStrNoName;
         const SCTAB nCurTab     = pViewData->GetTabNo();
+        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();
         aLbOutPos.InsertEntry( aStrUndefined, 0 );
@@ -641,7 +642,7 @@ void ScTabPageSortOptions::Init()
         {
             USHORT nInsert = aLbOutPos.InsertEntry( aName );
 
-            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc );
+            aRange.aStart.Format( aRefStr, SCA_ABS_3D, pDoc, eConv );
             aLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
         }
 
@@ -656,7 +657,7 @@ void ScTabPageSortOptions::Init()
         ScAddress aScAddress( rSortData.nCol1, rSortData.nRow1, nCurTab );
         ScRange( aScAddress,
                  ScAddress( rSortData.nCol2, rSortData.nRow2, nCurTab )
-               ).Format( theArea, SCR_ABS, pDoc );
+               ).Format( theArea, SCR_ABS, pDoc, eConv );
 
         if ( pDBColl )
         {
@@ -757,7 +758,7 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
                        rSortData.nDestRow,
                        rSortData.nDestTab );
 
-        theOutPos.Format( aStr, nFormat, pDoc );
+        theOutPos.Format( aStr, nFormat, pDoc, pDoc->GetAddressConvention() );
         aBtnCopyResult.Check();
         aLbOutPos.Enable();
         aEdOutPos.Enable();
@@ -869,7 +870,7 @@ int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
             thePos.SetTab( pViewData->GetTabNo() );
         }
 
-        USHORT nResult = thePos.Parse( thePosStr, pDoc );
+        USHORT nResult = thePos.Parse( thePosStr, pDoc, pDoc->GetAddressConvention() );
 
         bPosInputOk = ( SCA_VALID == (nResult & SCA_VALID) );
 
@@ -988,7 +989,7 @@ void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
     if ( pEd == &aEdOutPos )
     {
         String  theCurPosStr = aEdOutPos.GetText();
-        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc );
+        USHORT  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
