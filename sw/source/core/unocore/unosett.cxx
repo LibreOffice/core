@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosett.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1358,8 +1358,12 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                             rProperties, nIndex);
     else if(pDocShell)
     {
-        pNumRule = pDocShell->GetDoc()->GetOutlineNumRule();
-        SwNumRule aNumRule(*pNumRule);
+        // --> OD 2008-04-21 #i87650# - correction of cws swwarnings:
+        // Do not set member <pNumRule>
+//        pNumRule = pDocShell->GetDoc()->GetOutlineNumRule();
+//        SwNumRule aNumRule(*pNumRule);
+        SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
+        // <--
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
                             rProperties, nIndex);
         //hier noch die Zeichenformate bei Bedarf setzen
