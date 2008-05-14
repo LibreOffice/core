@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentsignaturehelper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +38,47 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include "com/sun/star/beans/XPropertySet.hpp"
 
+#include "comphelper/documentconstants.hxx"
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
+namespace css = ::com::sun::star;
 
+namespace
+{
+::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
+{
+    while (*index < version.getLength() && version[*index] == '0') {
+        ++*index;
+    }
+    return version.getToken(0, '.', *index);
+}
+
+
+
+// Return 1 if version1 is greater then version 2, 0 if they are equal
+//and -1 if version1 is less version 2
+int compareVersions(
+    ::rtl::OUString const & version1, ::rtl::OUString const & version2)
+{
+    for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
+        ::rtl::OUString e1(getElement(version1, &i1));
+        ::rtl::OUString e2(getElement(version2, &i2));
+        if (e1.getLength() < e2.getLength()) {
+            return -1;
+        } else if (e1.getLength() > e2.getLength()) {
+            return 1;
+        } else if (e1 < e2) {
+            return -1;
+        } else if (e1 > e2) {
+            return 1;
+        }
+    }
+    return 0;
+}
+}
 
 void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, bool bRecursive )
 {
@@ -72,56 +108,79 @@ void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Refere
     }
 }
 
+
+bool DocumentSignatureHelper::isODFPre_1_2(const uno::Reference < embed::XStorage >& rxStore)
+{
+    ::rtl::OUString sVersion;
+    uno::Reference< beans::XPropertySet > xProps(rxStore, uno::UNO_QUERY_THROW );
+    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ) ) >>= sVersion;
+    //The property version exists only if the document is at least version 1.2
+    //The constant is defined in comphelper/documentconstants.hxx
+    if (compareVersions(sVersion, ODFVER_012_TEXT) == -1)
+        return true;
+    return false;
+}
+
+
 std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode )
 {
     std::vector< rtl::OUString > aElements;
     ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
+    bool bPre1_2 = isODFPre_1_2(rxStore);
 
     switch ( eMode )
     {
         case SignatureModeDocumentContent:
         {
-            // 1) Main content
-            ImplFillElementList( aElements, rxStore, ::rtl::OUString(), false );
+            if (bPre1_2)
+            {
+                // 1) Main content
+                ImplFillElementList( aElements, rxStore, ::rtl::OUString(), false );
 
-            // 2) Pictures...
-            rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Pictures" ) );
-            try
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
-            }
-            catch( com::sun::star::io::IOException& )
-            {
-                ; // Doesn't have to exist...
-            }
-            // 3) OLE....
-            aSubStorageName = rtl::OUString::createFromAscii( "ObjectReplacements" );
-            try
-            {
-                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
-                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
-                xSubStore.clear();
-
-                // Object folders...
-                rtl::OUString aMatchStr( rtl::OUString::createFromAscii( "Object " ) );
-                uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
-                uno::Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
-                sal_Int32 nElements = aElementNames.getLength();
-                const ::rtl::OUString* pNames = aElementNames.getConstArray();
-                for ( sal_Int32 n = 0; n < nElements; n++ )
+                // 2) Pictures...
+                rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Pictures" ) );
+                try
                 {
-                    if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
+                    uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
+                    ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                }
+                catch( com::sun::star::io::IOException& )
+                {
+                    ; // Doesn't have to exist...
+                }
+                // 3) OLE....
+                aSubStorageName = rtl::OUString::createFromAscii( "ObjectReplacements" );
+                try
+                {
+                    uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
+                    ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                    xSubStore.clear();
+
+                    // Object folders...
+                    rtl::OUString aMatchStr( rtl::OUString::createFromAscii( "Object " ) );
+                    uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
+                    uno::Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
+                    sal_Int32 nElements = aElementNames.getLength();
+                    const ::rtl::OUString* pNames = aElementNames.getConstArray();
+                    for ( sal_Int32 n = 0; n < nElements; n++ )
                     {
-                        uno::Reference < embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
-                        ImplFillElementList( aElements, xTmpSubStore, pNames[n]+aSep, true );
+                        if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
+                        {
+                            uno::Reference < embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
+                            ImplFillElementList( aElements, xTmpSubStore, pNames[n]+aSep, true );
+                        }
                     }
                 }
+                catch( com::sun::star::io::IOException& )
+                {
+                    ; // Doesn't have to exist...
+                }
             }
-            catch( com::sun::star::io::IOException& )
+            else
             {
-                ; // Doesn't have to exist...
+                // Everything except META-INF
+                ImplFillElementList( aElements, rxStore, ::rtl::OUString(), true );
             }
         }
         break;
