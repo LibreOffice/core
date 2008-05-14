@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colorcfg.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,6 +584,14 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case FONTCOLOR :
             aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+            break;
+
+        case LINKS :
+            aRet = Application::GetSettings().GetStyleSettings().GetLinkColor();
+            break;
+
+        case LINKSVISITED :
+            aRet = Application::GetSettings().GetStyleSettings().GetVisitedLinkColor();
             break;
 
         default:
