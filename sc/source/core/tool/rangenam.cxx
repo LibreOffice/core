@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rangenam.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     aRefData.InitAddress( rTarget );
     aRefData.SetFlag3D( TRUE );
     pCode->AddSingleReference( aRefData );
-    ScCompiler aComp( pDoc, aPos, *pCode );
+    ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
     aComp.CompileTokenArray();
     if ( !pCode->GetCodeError() )
         eType |= RT_ABSPOS;
@@ -281,7 +281,7 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
     if( pCode->GetNextReference() )
     {
         BOOL bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
-        ScCompiler aComp( pDoc, aPos, *pCode );
+        ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
         BOOL bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
                                                     nDx, nDy, nDz,
                                                     bChanged, bSharedFormula);
@@ -412,7 +412,7 @@ BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
         if ( pCode )
         {
             ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
-            ScCompiler aComp( pDoc, rPos, *pTemp );
+            ScCompiler aComp( pDoc, rPos, *pTemp, pDoc->GetGrammar() );
             aComp.MoveRelWrap();
             return pTemp->IsReference( rRange );
         }
@@ -436,7 +436,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
     {
         ScRangeData* pRangeData = NULL;     // must not be dereferenced
         BOOL bChanged;
-        ScCompiler aComp( pDoc, aPos, *pCode );
+        ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
         switch (nFlag)
         {
             case 1:                                     // einfache InsertTab (doc.cxx)
@@ -599,7 +599,7 @@ void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
     }
     if ( bCompile )
     {
-        ScCompiler aComp( pDoc, aPos, *pCode );
+        ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
         aComp.CompileTokenArray();
     }
 }
