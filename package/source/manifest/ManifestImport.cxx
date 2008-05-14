@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ManifestImport.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +57,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 
 , sCdataAttribute               ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) )
 , sMediaTypeAttribute           ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) )
+, sVersionAttribute             ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) )
 , sFullPathAttribute            ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) )
 , sSizeAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) )
 , sSaltAttribute                ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) )
@@ -69,6 +70,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 
 , sFullPathProperty             ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) )
 , sMediaTypeProperty            ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) )
+, sVersionProperty              ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) )
 , sIterationCountProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) )
 , sSaltProperty                 ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) )
 , sInitialisationVectorProperty ( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) )
@@ -98,13 +100,20 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     if (aName == sFileEntryElement)
     {
         aStack.push( e_FileEntry );
-        aSequence.realloc ( 7 ); // Can have at most 6 entries (currently, will realloc to actual number in endElement)
+        aSequence.realloc ( PKG_SIZE_ENCR_MNFST );
 
         // Put full-path property first for MBA
         aSequence[nNumProperty].Name = sFullPathProperty;
         aSequence[nNumProperty++].Value <<= xAttribs->getValueByName( sFullPathAttribute );
         aSequence[nNumProperty].Name = sMediaTypeProperty;
         aSequence[nNumProperty++].Value <<= xAttribs->getValueByName( sMediaTypeAttribute );
+
+        OUString sVersion = xAttribs->getValueByName ( sVersionAttribute );
+        if ( sVersion.getLength() )
+        {
+            aSequence[nNumProperty].Name = sVersionProperty;
+            aSequence[nNumProperty++].Value <<= sVersion;
+        }
 
         OUString sSize = xAttribs->getValueByName ( sSizeAttribute );
         if (sSize.getLength())
