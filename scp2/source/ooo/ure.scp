@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure.scp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -999,6 +999,80 @@ Module gid_Module_Root_Ure_Hidden
     Unixlinks = (gid_Unixlink_Ure_Bin_Urelibs);
 End
 
+// Profile version.ini
+
+Profile gid_Profile_Version_Ini_Ure
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Name = PROFILENAME(version);
+    Dir = gid_Dir_Ure_Bin;
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Buildid
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "buildid";
+    Value = "<buildid>";
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Productpatch
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductPatch";
+    Value = "<productupdate>";
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Productsource
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductSource";
+    Value = "<sourceid>";
+End
+
+#ifdef WNT
+ProfileItem gid_Ure_Profileitem_Version_Productcode
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductCode";
+    Value = "<productcode>";
+End
+#endif
+
+ProfileItem gid_Ure_Profileitem_Version_Productmajor
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductMajor";
+    Value = "<productmajor>";
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Productminor
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductMinor";
+    Value = "<productminor>";
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Productbuildid
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Ure_Profileitem_Version_Ooobaseversion
+    ProfileID = gid_Profile_Version_Ini_Ure;
+    ModuleID = gid_Module_Root_Ure_Hidden;
+    Section = "Version";
+    Key = "OOOBaseVersion";
+    Value = "${OOOBASEVERSION}";
+End
+
 // Windows Registry:
 
 RegistryItem gid_Regitem_Path
@@ -1006,5 +1080,5 @@ RegistryItem gid_Regitem_Path
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "Software\OpenOffice.org\%PRODUCTNAME";
     Name = "Path";
-    Value = "<progpath>";
+    Value = "[UREINSTALLLOCATION]";
 End
