@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwscreate.pl,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,21 +57,17 @@ use lib (@lib_dirs);
 use Cws;
 use CvsModule;
 use CwsConfig;
-eval { require Logging; import Logging; };
-# $log variable is only defined in SO environment...
-my $log = undef;
-$log = Logging->new() if (!$@);
-use GenInfoParser;
+my $config = CwsConfig->get_config;
+my $sointernal = $config->sointernal();
 
-######### Interrupt handler #########
-$SIG{'INT'} = 'INT_handler' if defined($log);
+use GenInfoParser;
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.25 $ ';
+my $id_str = ' $Revision: 1.26 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -113,15 +109,12 @@ $obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest_native'}++;
 $obligatory_modules{'smoketestoo_native'}++;
 
-my $parameter_list = $log->array2string(";",@args_bak) if defined($log);
-
 #### main #####
 my ($cws, $wslocation, $is_promotion) = parse_options();
-my $success = defined($log) ? copy_workspace($cws, $wslocation) : update_workspace($cws, $wslocation);
+my $success = ($sointernal) ? copy_workspace($cws, $wslocation) : update_workspace($cws, $wslocation);
 if ( $success ) {
     register_workspace($cws, $is_promotion);
 }
-$log->end_log_extended($script_name,$vcsid,"success") if defined($log);
 exit(0);
 
 #### subroutines ####
@@ -159,7 +152,7 @@ sub parse_options
         print_error("Invalid child workspace name '$childws'.\nCws names should contain lowercase letters and digits, starting with a letter.", 3);
     }
 
-    if ( defined($log) ) {
+    if ( $sointernal ) {
         # check if environment matches masterws and milestone
         if ($masterws ne $ENV{WORK_STAMP} ||
             !defined $ENV{UPDMINOR} ||
@@ -172,7 +165,7 @@ sub parse_options
     }
 
     my $wslocation;
-    if ( defined($log) ) {
+    if ( $sointernal ) {
         # check if master is known to 'stand.lst'
         my $workspace_lst = get_workspace_lst();
         my $workspace_db = GenInfoParser->new();
@@ -197,7 +190,6 @@ sub parse_options
     my $cws = Cws->new();
     $cws->master($masterws);
     $cws->child($childws);
-    $log->start_log_extended($script_name,$parameter_list,$masterws,$childws) if defined($log);
 
     # Check if a least one milestone exist on master workspace,
     # this is a prerequisite before we can create a CWS on it,
@@ -370,7 +362,6 @@ sub update_workspace {
     my @dir_content = readdir(SOURCES);
     close SOURCES;
     my $master_tag =  $cws->get_master_tag();
-    my $config = CwsConfig->get_config;
     my $cvs_module = CvsModule->new();
     $cvs_module->cvs_method($config->get_cvs_server_method());
     $cvs_module->vcsid($config->get_cvs_server_id());
@@ -636,11 +627,10 @@ sub register_workspace
     my $hostname = hostname();
     my $dir = $opt_dir ? $opt_dir : cwd();
     my $abspath = File::Spec->rel2abs("$dir/$child");
-    my $config = CwsConfig->get_config();
     my $vcsid = $config->vcsid();
 
     if ( !$vcsid ) {
-        if ( $log ) {
+        if ( $sointernal ) {
             print_error("Can't determine owner for CWS '$child'. Please set VCSID environment variable.", 6);
         }
         else {
@@ -687,7 +677,6 @@ sub print_error
 
     if ( $error_code ) {
         print STDERR "\n***** FAILURE: $script_name aborted. *****\n";
-        $log->end_log_extended($script_name,$vcsid,$message) if defined($log);
         exit($error_code);
     }
 }
@@ -712,17 +701,17 @@ sub print_warning
 
 sub usage
 {
-    my $m = defined($log) ? "-a" : "-f";
+    my $m = ($sointernal) ? "-a" : "-f";
 
     print STDERR "Usage: cwscreate [$m] [-d dir] [-p <p1,...>] <mws_name> <milestone> <cws_name>\n";
     print STDERR "Creates a new child workspace <cws_name> for\n";
     print STDERR "milestone <milestone> of master workspace <mws_name>.\n";
     print STDERR "Options:\n";
     print STDERR "    -h        help\n";
-    print STDERR "    -a        use cvs checkout instead of copying\n" if defined($log);
+    print STDERR "    -a        use cvs checkout instead of copying\n" if ($sointernal);
     print STDERR "    -d dir    create workspace in directory dir\n";
     print STDERR "    -p p1,p2,p3    only create workspace for specified platforms\n";
-    print STDERR "    -f        don't perform checkout after creation\n" if !defined($log);
+    print STDERR "    -f        don't perform checkout after creation\n" if !($sointernal);
 }
 
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
