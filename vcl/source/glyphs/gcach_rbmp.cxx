@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gcach_rbmp.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,8 +154,8 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
                 *(p1++) = (unsigned char)nTemp;
                 nTemp = 1;
             }
-            // update input byte if needed
-            if( (nInp >>= 1) <= 1 )
+            // update input byte if needed (and available)
+            if( (nInp >>= 1) <= 1 && ((y != 0) || (x != 0)) )
                 nInp = 0x100 + *(--p2);
         }
 
