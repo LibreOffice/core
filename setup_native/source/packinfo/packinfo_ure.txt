@@ -8,7 +8,7 @@
 #
 # $RCSfile: packinfo_ure.txt,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,8 +31,8 @@
 
 Start
 module = "gid_Module_Root"
-solarispackagename = "openofficeorg-ure"
-packagename = "openoffice.org-ure"
+solarispackagename = "%SOLSUREPACKAGEPREFIX-ure"
+packagename = "%UREPACKAGEPREFIX-ure"
 copyright = "2005-2007 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
@@ -43,8 +43,8 @@ End
 
 Start
 module = "gid_Module_Root_Ure_Hidden"
-solarispackagename = "openofficeorg-ure"
-packagename = "openoffice.org-ure"
+solarispackagename = "%SOLSUREPACKAGEPREFIX-ure"
+packagename = "%UREPACKAGEPREFIX-ure"
 copyright = "2005-2007 by OpenOffice.org"
 solariscopyright = "solariscopyrightfile"
 vendor = "OpenOffice.org"
