@@ -32,3 +32,4 @@
 ..\source\ucp\tdoc\ucptdoc.xml %_DEST%\xml%_EXT%\ucptdoc.xml
 
 ..\%__SRC%\misc\ucpgvfs-ucd.txt  %_DEST%\bin%_EXT%\ucpgvfs-ucd.txt
+..\%__SRC%\misc\ucpgio-ucd.txt  %_DEST%\bin%_EXT%\ucpgio-ucd.txt
