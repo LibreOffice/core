@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: settings.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -464,7 +464,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maHelpColor( rData.maHelpColor ),
     maHelpTextColor( rData.maHelpTextColor ),
     maHighlightColor( rData.maHighlightColor ),
-    maHighlightLinkColor( rData.maLinkColor ),
+    maHighlightLinkColor( rData.maHighlightLinkColor ),
     maHighlightTextColor( rData.maHighlightTextColor ),
     maInfoTextColor( rData.maInfoTextColor ),
     maLabelTextColor( rData.maLabelTextColor ),
@@ -480,7 +480,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
-    maVisitedLinkColor( rData.maLinkColor ),
+    maVisitedLinkColor( rData.maVisitedLinkColor ),
     maWindowColor( rData.maWindowColor ),
     maWindowTextColor( rData.maWindowTextColor ),
     maWorkspaceColor( rData.maWorkspaceColor ),
@@ -601,7 +601,7 @@ void ImplStyleData::SetStandardStyles()
     maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
     maHelpTextColor             = Color( COL_BLACK );
     maLinkColor                 = Color( COL_BLUE );
-    maVisitedLinkColor          = Color( COL_RED );
+    maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
     maFontColor                 = Color( COL_BLACK );
 
