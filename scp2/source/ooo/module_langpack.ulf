@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_langpack.ulf,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -669,3 +669,9 @@ en-US = "Uzbek"
 
 [STR_DESC_MODULE_LANGPACK_UZ]
 en-US = "Installs Uzbek support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_MN]
+en-US = "Mongolian"
+
+[STR_DESC_MODULE_LANGPACK_MN]
+en-US = "Installs Mongolian support in %PRODUCTNAME %PRODUCTVERSION"
