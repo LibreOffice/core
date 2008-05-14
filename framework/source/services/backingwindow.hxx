@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,6 +168,8 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+        virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
+        virtual Window*     GetParentLabeledBy( const Window* pLabeled ) const;
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };
