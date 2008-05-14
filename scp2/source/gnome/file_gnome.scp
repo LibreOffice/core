@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_gnome.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,19 @@
  ************************************************************************/
 #include "macros.inc"
 
+#ifdef ENABLE_GIO
+File gid_File_Lib_GIO
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "ucpgio-ucd.txt";
+End
+#endif
+
+#ifdef ENABLE_GNOMEVFS
+
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -37,6 +50,15 @@ File gid_File_Lib_Gnomevfs
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "ucpgvfs-ucd.txt";
 End
+
+File gid_File_Bin_Gnome_Set_Default_Application
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "gnome-set-default-application";
+    Styles = (PACKED);
+End
+
+#endif
 
 File gid_File_Lib_Gconfbe
     TXT_FILE_BODY;
