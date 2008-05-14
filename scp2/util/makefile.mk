@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -143,7 +143,7 @@ SCP1FILES +=                           \
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_GNOMEVFS)" != ""
+.IF "$(ENABLE_GNOMEVFS)" != "" || "$(ENABLE_GIO)" != ""
 SCP1FILES += \
              module_gnome.par   \
              file_gnome.par
@@ -291,7 +291,7 @@ SCP2FILES +=                           \
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_GNOMEVFS)" != ""
+.IF "$(ENABLE_GNOMEVFS)" != "" || "$(ENABLE_GIO)" != ""
 SCP2FILES += \
              module_gnome.par   \
              file_gnome.par
