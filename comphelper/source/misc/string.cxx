@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: string.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +34,12 @@
 #include <cstddef>
 #include <string.h>
 #include <vector>
+#include <algorithm>
 
 #include "comphelper/string.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "comphelper/stlunosequence.hxx"
 
 
 namespace comphelper { namespace string {
@@ -95,9 +97,11 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString& searchAndReplaceAsciiI(
       }
     } while (idx >= 0);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > kws(vec.size());
+    std::copy(vec.begin(), vec.end(), stl_begin(kws));
+    /*
     for (size_t i = 0; i < vec.size(); ++i) {
         kws[i] = vec.at(i);
-    }
+    }*/
     return kws;
 }
 
