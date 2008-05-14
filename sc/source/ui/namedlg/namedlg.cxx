@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedlg.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,7 +200,8 @@ void __EXPORT ScNameDlg::Init()
     UpdateNames();
 
     pViewData->GetSimpleArea( aRange );
-    aRange.Format( aAreaStr, ABS_DREF3D, pDoc );
+    aRange.Format( aAreaStr, ABS_DREF3D, pDoc,
+                   ScAddress::Details(pDoc->GetAddressConvention(), 0, 0) );
 
     theCurSel = Selection( 0, SELECTION_MAX );
     aEdAssign.GrabFocus();
@@ -245,7 +246,8 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(&aEdAssign);
         String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDocP );
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP,
+                     ScAddress::Details(pDocP->GetAddressConvention(), 0, 0) );
         aEdAssign.SetRefString( aRefStr );
     }
 }
