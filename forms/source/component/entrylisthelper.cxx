@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: entrylisthelper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ namespace frm
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
     //=====================================================================
@@ -51,6 +52,7 @@ namespace frm
     //---------------------------------------------------------------------
     OEntryListHelper::OEntryListHelper( ::osl::Mutex& _rMutex )
         :m_rMutex( _rMutex )
+        ,m_aRefreshListeners( _rMutex )
     {
     }
 
@@ -59,6 +61,7 @@ namespace frm
         :m_rMutex( _rMutex )
         ,m_xListSource ( _rSource.m_xListSource  )
         ,m_aStringItems( _rSource.m_aStringItems )
+        ,m_aRefreshListeners( _rMutex )
     {
     }
 
@@ -179,11 +182,49 @@ namespace frm
             "OEntryListHelper::allEntriesChanged: where did this come from?" );
 
         Reference< XListEntrySource > xSource( _rEvent.Source, UNO_QUERY );
-        if ( xSource.is() )
+        if ( _rEvent.Source == m_xListSource )
         {
-            m_aStringItems = xSource->getAllListEntries( );
+            impl_lock_refreshList();
+        }
+    }
+
+    // XRefreshable
+    //------------------------------------------------------------------------------
+    void SAL_CALL OEntryListHelper::addRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
+    {
+        if ( _rxListener.is() )
+            m_aRefreshListeners.addInterface( _rxListener );
+    }
+
+    //------------------------------------------------------------------------------
+    void SAL_CALL OEntryListHelper::removeRefreshListener(const Reference<XRefreshListener>& _rxListener) throw(RuntimeException)
+    {
+        if ( _rxListener.is() )
+            m_aRefreshListeners.removeInterface( _rxListener );
+    }
+
+    //------------------------------------------------------------------------------
+    void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
+    {
+        {
+            ::osl::MutexGuard aGuard( m_rMutex );
+            impl_lock_refreshList();
+        }
+
+        EventObject aEvt( static_cast< XRefreshable* >( this ) );
+        m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
+    }
+
+    //---------------------------------------------------------------------
+    void OEntryListHelper::impl_lock_refreshList()
+    {
+        if ( hasExternalListSource() )
+        {
+            m_aStringItems = m_xListSource->getAllListEntries( );
             stringItemListChanged();
         }
+        else
+            refreshInternalEntryList();
     }
 
     //---------------------------------------------------------------------
@@ -200,6 +241,9 @@ namespace frm
     //---------------------------------------------------------------------
     void OEntryListHelper::disposing( )
     {
+        EventObject aEvt( static_cast< XRefreshable* >( this ) );
+        m_aRefreshListeners.disposeAndClear(aEvt);
+
         if ( hasExternalListSource( ) )
             disconnectExternalListSource( );
     }
