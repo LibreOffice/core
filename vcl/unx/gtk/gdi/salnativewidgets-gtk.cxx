@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3113,6 +3113,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     NWEnsureGTKMenubar( m_nScreen );
     NWEnsureGTKScrollbars( m_nScreen );
     NWEnsureGTKEditBox( m_nScreen );
+    NWEnsureGTKTooltip( m_nScreen );
 
     gtk_widget_ensure_style( m_pWindow );
     GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
@@ -3133,6 +3134,10 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetInfoTextColor( aTextColor );
     aStyleSet.SetWindowTextColor( aTextColor );
     aStyleSet.SetFieldTextColor( aTextColor );
+
+    // Tooltip colors
+    GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nScreen].gTooltipPopup );
+    aTextColor = getColor( pTooltipStyle->fg[ GTK_STATE_NORMAL ] );
     aStyleSet.SetHelpTextColor( aTextColor );
 
     // mouse over text colors
@@ -3168,6 +3173,22 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     Color aHighlightTextColor = getColor( pStyle->text[GTK_STATE_SELECTED] );
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
+
+    // hyperlink colors
+    GdkColor *link_color = NULL;
+    gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
+    if (link_color)
+    {
+        aStyleSet.SetLinkColor(getColor(*link_color));
+        gdk_color_free (link_color);
+        link_color = NULL;
+    }
+    gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
+    if (link_color)
+    {
+        aStyleSet.SetVisitedLinkColor(getColor(*link_color));
+        gdk_color_free (link_color);
+    }
 
     // menu disabled entries handling
     aStyleSet.SetSkipDisabledInMenus( TRUE );
