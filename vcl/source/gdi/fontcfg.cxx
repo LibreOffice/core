@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontcfg.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,9 +204,12 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
             try
             {
                 Reference< XNameAccess > xNode;
-                Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
-                if( aAny >>= xNode )
-                    it->second.xAccess = xNode;
+                if ( m_xConfigAccess->hasByName( it->second.aConfigLocaleString ) )
+                {
+                    Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
+                    if( aAny >>= xNode )
+                        it->second.xAccess = xNode;
+                }
             }
             catch( NoSuchElementException )
             {
@@ -219,8 +222,11 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
         {
             try
             {
-                Any aAny = it->second.xAccess->getByName( rType );
-                aAny >>= aRet;
+                if ( it->second.xAccess->hasByName( rType ) )
+                {
+                    Any aAny = it->second.xAccess->getByName( rType );
+                    aAny >>= aRet;
+                }
             }
             catch( NoSuchElementException& )
             {
