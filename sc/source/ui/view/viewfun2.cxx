@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -961,6 +961,8 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
 
     ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
 
+    ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
+
     for (nTab=0; nTab<nTabCount; nTab++)
         if (rMark.GetTableSelect(nTab))
         {
@@ -979,11 +981,12 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
             {
                 if ( pPrint->Len() )
                 {
-                    USHORT nTCount = pPrint->GetTokenCount();
+                    const sal_Unicode sep = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
+                    USHORT nTCount = pPrint->GetTokenCount(sep);
                     for (USHORT i=0; i<nTCount; i++)
                     {
-                        String aToken = pPrint->GetToken(i);
-                        if ( aRange.ParseAny( aToken, pDoc ) & SCA_VALID )
+                        String aToken = pPrint->GetToken(i, sep);
+                        if ( aRange.ParseAny( aToken, pDoc, aDetails ) & SCA_VALID )
                             pDoc->AddPrintRange( nTab, aRange );
                     }
                 }
@@ -1020,7 +1023,7 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                 if ( !pRepCol->Len() )
                     pDoc->SetRepeatColRange( nTab, NULL );
                 else
-                    if ( aRange.ParseAny( *pRepCol, pDoc ) & SCA_VALID )
+                    if ( aRange.ParseAny( *pRepCol, pDoc, aDetails ) & SCA_VALID )
                         pDoc->SetRepeatColRange( nTab, &aRange );
             }
 
@@ -1031,7 +1034,7 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                 if ( !pRepRow->Len() )
                     pDoc->SetRepeatRowRange( nTab, NULL );
                 else
-                    if ( aRange.ParseAny( *pRepRow, pDoc ) & SCA_VALID )
+                    if ( aRange.ParseAny( *pRepRow, pDoc, aDetails ) & SCA_VALID )
                         pDoc->SetRepeatRowRange( nTab, &aRange );
             }
         }
