@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,7 +168,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
                 String aTmpStr;
-                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc );   // update string from changed ranges
+                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );   // update string from changed ranges
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
