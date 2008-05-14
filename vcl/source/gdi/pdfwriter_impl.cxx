@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.127 $
+ * $Revision: 1.128 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1172,7 +1172,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( ">>\n" );
     }
-    if( m_pWriter->getVersion() > PDFWriter::PDF_1_3 )
+    if( m_pWriter->getVersion() > PDFWriter::PDF_1_3 && ! m_pWriter->m_bIsPDF_A1 )
     {
         aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/I true>>" );
     }
@@ -4175,7 +4175,9 @@ we check in the following sequence:
             {//add the fragment
                 aLine.append("/GoToR");
                 aLine.append("/F");
-                appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark ) :
+                appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
+                                                                                     INetURLObject::WAS_ENCODED,
+                                                                                     INetURLObject::DECODE_WITH_CHARSET ) :
                                                                aURLNoMark, rLink.m_nObject, aLine );
                 if( aFragment.getLength() > 0 )
                 {
@@ -11052,9 +11054,19 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         // acrobat reader since 3.0 does not support unicode text
         // strings for the field name; so we need to encode unicodes
         // larger than 255
+
         rNewWidget.m_aName          =
             convertWidgetFieldName( (m_aContext.Version > PDFWriter::PDF_1_2) ?
                                     rControl.Name : rControl.Text );
+        // #i88040# acrobat reader crashes on empty field names,
+        // so always create one
+        if( rNewWidget.m_aName.getLength() == 0 )
+        {
+            OUStringBuffer aBuf( 32 );
+            aBuf.appendAscii( "Widget" );
+            aBuf.append( nNewWidget );
+            rNewWidget.m_aName = convertWidgetFieldName( aBuf.makeStringAndClear() );
+        }
     }
     rNewWidget.m_aDescription       = rControl.Description;
     rNewWidget.m_aText              = rControl.Text;
