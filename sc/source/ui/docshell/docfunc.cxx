@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfunc.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2222,21 +2222,21 @@ BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL /* bApi */ )
     return TRUE;
 }
 
-BOOL ScDocFunc::SetAddressConvention( ScAddress::Convention eConv )
+BOOL ScDocFunc::SetGrammar( ScGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    if ( pDoc->GetAddressConvention() == eConv )
+    if ( pDoc->GetGrammar() == eGrammar )
         return TRUE;
 
     BOOL bUndo(pDoc->IsUndoEnabled());
     ScDocShellModificator aModificator( rDocShell );
 
-    pDoc->SetAddressConvention( eConv );
+    pDoc->SetGrammar( eGrammar );
 
     if (bUndo)
     {
-        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetAddressConvention( &rDocShell, eConv ) );
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoSetGrammar( &rDocShell, eGrammar ) );
     }
 
     rDocShell.PostPaint( 0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_ALL );
