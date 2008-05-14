@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: address.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,7 +423,7 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
                            const ScAddress::Details& rDetails,
                            BOOL bOnlyAcceptSingle )
 {
-    const sal_Unicode* pTmp;
+    const sal_Unicode* pTmp = NULL;
     String aExternDocName, aStartTabName, aEndTabName;
     USHORT nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB2;
 
@@ -448,11 +448,25 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         {
             if( p[0] != ':' || (p[1] != 'R' && p[1] != 'r' ) ||
                 NULL == (pTmp = lcl_r1c1_get_row( p+1, rDetails, &r.aEnd, &nFlags2 )))
-            {   // Fallback to just the initial R
+            {
+                // Only the initial row number is given, or the second row
+                // number is invalid. Fallback to just the initial R
                 nFlags |= (nFlags << 4);
                 r.aEnd.SetRow( r.aStart.Row() );
-            } else
+            }
+            else
+            {
+                // Full row range successfully parsed.
                 nFlags |= (nFlags2 << 4);
+                p = pTmp;
+            }
+
+            if (p && p[0] != 0)
+            {
+                // any trailing invalid character must invalidate the whole address.
+                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+                return nFlags;
+            }
 
             nFlags |=
                 SCA_VALID_COL | SCA_VALID_COL2 |
@@ -472,8 +486,28 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             (*pTmp != 'C' && *pTmp != 'c') ||
             NULL == (pTmp = lcl_r1c1_get_col( pTmp, rDetails, &r.aEnd, &nFlags2 )))
         {
+            // single cell reference
+
+            if (p && p[0] != 0)
+            {
+                // any trailing invalid character must invalidate the whole address.
+                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+                return nFlags;
+            }
+
             return bOnlyAcceptSingle ? lcl_XL_LinkSheetRef( r, pDoc,
                 aExternDocName, aStartTabName, aEndTabName, nFlags ) : 0;
+        }
+        p = pTmp;
+
+        // double reference
+
+        if (p && p[0] != 0)
+        {
+            // any trailing invalid character must invalidate the whole range.
+            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                        SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+            return nFlags;
         }
 
         nFlags |= (nFlags2 << 4);
@@ -492,7 +526,17 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             r.aEnd.SetCol( r.aStart.Col() );
         }
         else
+        {
             nFlags |= (nFlags2 << 4);
+            p = pTmp;
+        }
+
+        if (p && p[0] != 0)
+        {
+            // any trailing invalid character must invalidate the whole address.
+            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+            return nFlags;
+        }
 
         nFlags |=
             SCA_VALID_ROW | SCA_VALID_ROW2 |
@@ -618,10 +662,24 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     // prepare as if it's a singleton, in case we want to fall back */
     r.aEnd.SetCol( r.aStart.Col() );
     r.aEnd.SetRow( r.aStart.Row() );    // don't overwrite sheet number as parsed in lcl_ScRange_Parse_XL_Header
+
+    if ( bOnlyAcceptSingle )
+    {
+        if ( *tmp2 == 0 )
+            return lcl_XL_LinkSheetRef( r, pDoc,
+                aExternDocName, aStartTabName, aEndTabName, nFlags );
+        else
+        {
+            // any trailing invalid character must invalidate the address.
+            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+            return nFlags;
+        }
+    }
+
     if( *tmp2 != ':' )
     {
-        if ( !bOnlyAcceptSingle )
-            nFlags &= ~SCA_VALID;   // when looking for a double ref, a single-cell ref must not be accepted
+        nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                    SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
         return nFlags;
     }
 
@@ -634,6 +692,14 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     if( !tmp2 ) // strange, but valid singleton
         return lcl_XL_LinkSheetRef( r, pDoc,
             aExternDocName, aStartTabName, aEndTabName, nFlags );
+
+    if ( *tmp2 != 0 )
+    {
+        // any trailing invalid character must invalidate the range.
+        nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                    SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
+        return nFlags;
+    }
 
     nFlags |= (nFlags2 << 4);
     return lcl_XL_LinkSheetRef( r, pDoc,
@@ -1329,9 +1395,12 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
 
             case CONV_XL_A1:
             case CONV_XL_R1C1:
-                r += '[';
-                r += aDocName;
-                r += ']';
+                if (aDocName.Len() > 0)
+                {
+                    r += '[';
+                    r += aDocName;
+                    r += ']';
+                }
                 r += aTabName;
                 r += '!';
                 break;
@@ -1429,6 +1498,7 @@ lcl_ScRange_Format_XL_Header( String& r, const ScRange& rRange,
 void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc,
                       const ScAddress::Details& rDetails ) const
 {
+    r.Erase();
     if( !( nFlags & SCA_VALID ) )
     {
         r = ScGlobal::GetRscString( STR_NOREF_STR );
