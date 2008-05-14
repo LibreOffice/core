@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentsignaturehelper.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,9 @@ public:
     static ::rtl::OUString GetDocumentContentSignatureDefaultStreamName();
     static ::rtl::OUString GetScriptingContentSignatureDefaultStreamName();
     static ::rtl::OUString GetPackageSignatureDefaultStreamName();
+    static bool isODFPre_1_2(const ::com::sun::star::uno::Reference <
+        ::com::sun::star::embed::XStorage >& /*rxStore*/);
+
 };
 
 #endif // _XMLSECURITY_XMLSIGNATUREHELPER_HXX
