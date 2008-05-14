@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,15 +169,18 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // insert toolbox items
     maToolbox.InsertItem( nItemId_Extensions, Image( aExtImage ) );
     maToolbox.SetQuickHelpText( nItemId_Extensions, aExtHelpText );
+    maToolbox.SetItemText( nItemId_Extensions, aExtHelpText );
     maToolbox.SetItemCommand( nItemId_Extensions, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Extensions" ) ) );
     maToolbox.ShowItem( nItemId_Extensions );
 
     maToolbox.InsertItem( nItemId_Reg, Image( aRegImage ) );
     maToolbox.SetQuickHelpText( nItemId_Reg, aRegHelpText );
+    maToolbox.SetItemText( nItemId_Reg, aRegHelpText );
     maToolbox.SetItemCommand( nItemId_Reg, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Register" ) ) );
     maToolbox.ShowItem( nItemId_Reg );
 
     maToolbox.InsertItem( nItemId_Info, Image( aInfoImage ) );
+    maToolbox.SetItemText( nItemId_Info, aInfoHelpText );
     maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
     maToolbox.SetItemCommand( nItemId_Info, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Info" ) ) );
     maToolbox.ShowItem( nItemId_Info );
@@ -727,6 +730,50 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
     }
     return 0;
+}
+
+Window* BackingWindow::GetParentLabelFor( const Window* pLabel ) const
+{
+    const Window* pRet = NULL;
+
+    if( pLabel == &maWriterText )
+        pRet = &maWriterButton;
+    else if( pLabel == &maCalcText )
+        pRet = &maCalcButton;
+    else if( pLabel == &maImpressText )
+        pRet = &maImpressButton;
+    else if( pLabel == &maDrawText )
+        pRet = &maDrawButton;
+    else if( pLabel == &maDBText )
+        pRet = &maDBButton;
+    else if( pLabel == &maTemplateText )
+        pRet = &maTemplateButton;
+    else if( pLabel == &maOpenText )
+        pRet = &maOpenButton;
+
+    return const_cast<Window*>(pRet);
+}
+
+Window* BackingWindow::GetParentLabeledBy( const Window* pLabeled ) const
+{
+    const Window *pRet = NULL;
+
+    if( pLabeled == &maWriterButton )
+        pRet = &maWriterText;
+    else if( pLabeled == &maCalcButton )
+        pRet = &maCalcText;
+    else if( pLabeled == &maImpressButton )
+        pRet = &maImpressText;
+    else if( pLabeled == &maDrawButton )
+        pRet = &maDrawText;
+    else if( pLabeled == &maDBButton )
+        pRet = &maDBText;
+    else if( pLabeled == &maTemplateButton )
+        pRet = &maTemplateText;
+    else if( pLabeled == &maOpenButton )
+        pRet = &maOpenText;
+
+    return const_cast<Window*>(pRet);
 }
 
 void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
