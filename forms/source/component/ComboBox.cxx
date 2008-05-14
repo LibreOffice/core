@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComboBox.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -246,7 +246,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
                 if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
                     // combo box is already connected to a database, and no external list source
                     // data source changed -> refresh
-                    loadData();
+                    loadData( false );
             }
             break;
 
@@ -474,7 +474,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::loadData()
+void OComboBoxModel::loadData( bool _bForce )
 {
     DBG_ASSERT(m_eListSourceType != ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
     DBG_ASSERT( !hasExternalListSource(), "OComboBoxModel::loadData: cannot load from DB when I have an external list source!" );
@@ -602,7 +602,7 @@ void OComboBoxModel::loadData()
 
         if ( bExecuteRowSet )
         {
-            if ( !m_aListRowSet.isDirty() )
+            if ( !_bForce && !m_aListRowSet.isDirty() )
             {
                 // if none of the settings of the row set changed, compared to the last
                 // invocation of loadData, then don't re-fill the list. Instead, assume
@@ -715,7 +715,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
 
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
     if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
-        loadData();
+        loadData( false );
 }
 
 //------------------------------------------------------------------------------
@@ -735,7 +735,7 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
 
     // reload data if we have a list source
     if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
-        loadData();
+        loadData( false );
 }
 
 //-----------------------------------------------------------------------------
@@ -847,6 +847,20 @@ void OComboBoxModel::connectedExternalListSource( )
 void OComboBoxModel::disconnectedExternalListSource( )
 {
     // TODO?
+}
+
+//--------------------------------------------------------------------
+void OComboBoxModel::refreshInternalEntryList()
+{
+    DBG_ASSERT( !hasExternalListSource(), "OComboBoxModel::refreshInternalEntryList: invalid call!" );
+
+    if  (   !hasExternalListSource( )
+        &&  ( m_eListSourceType != ListSourceType_VALUELIST )
+        &&  ( m_xCursor.is() )
+        )
+    {
+        loadData( true );
+    }
 }
 
 //--------------------------------------------------------------------
