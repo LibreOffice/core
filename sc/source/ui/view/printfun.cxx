@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: printfun.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2010,7 +2010,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
                         pEditEngine->Draw( pDev, Point( nPosX, nPosY ), 0 );
 
                         String aMarkStr;
-                        pPos->Format( aMarkStr, SCA_VALID, pDoc );
+                        pPos->Format( aMarkStr, SCA_VALID, pDoc, pDoc->GetAddressConvention() );
                         aMarkStr += ':';
 
                         //  Zellposition auch per EditEngine, damit die Position stimmt
