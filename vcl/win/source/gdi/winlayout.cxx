@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2328,8 +2328,11 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
         // ignore empty visual items
         if( rVisualItem.IsEmpty() )
+        {
+            for (i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; i++)
+              nXOffset += mpCharWidths[i];
             continue;
-
+        }
         // ignore irrelevant visual items
         if( (rVisualItem.mnMinCharPos >= mnEndCharPos)
          || (rVisualItem.mnEndCharPos <= mnMinCharPos) )
