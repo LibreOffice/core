@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: cwsanalyze.pl,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,17 +57,15 @@ use lib (@lib_dirs);
 use Cws;
 use CvsModule;
 use Cvs;
-eval { require Logging; import Logging; };
-# $log variable is only defined in SO environment...
-my $log = undef;
-$log = Logging->new() if (!$@);
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
+my $config = CwsConfig->get_config();
+my $sointernal = $config->sointernal();
 
 my $script_rev;
-my $id_str = ' $Revision: 1.18 $ ';
+my $id_str = ' $Revision: 1.19 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -118,7 +116,6 @@ my @args_bak = @ARGV;
 my @problem_log = ();
 
 #### main #####
-my $parameter_list = $log->array2string(";",@args_bak) if defined($log);
 
 my ($dir, @modules) = parse_options();
 my $cws = get_and_verify_cws();
@@ -131,7 +128,6 @@ else {
     integrate($cws, $dir, @modules);
 }
 print_plog();
-$log->end_log_extended($script_name,$vcsid,"success") if defined($log);
 exit(0);
 
 #### subroutines ####
@@ -155,7 +151,6 @@ sub get_and_verify_cws
     my $cws = Cws->new();
     $cws->child($childws);
     $cws->master($masterws);
-    $log->start_log_extended($script_name,$parameter_list,$masterws,$childws) if defined($log);
 
     # check if we got a valid child workspace
     my $id = $cws->eis_id();
@@ -904,7 +899,6 @@ sub sanitize_cvs_hierarchy
 
     my $save_dir = cwd();
 
-    my $config = CwsConfig->get_config();
     my $cvs_binary = $config->cvs_binary();
 
     foreach ( @elements ) {
@@ -931,14 +925,13 @@ sub get_cvs_module
 
     my $cvs_module = CvsModule->new();
     my ($method, $vcsid, $server, $repository);
-    if ( defined($log) ) {
+    if ( $sointernal ) {
         ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module);
     }
     else {
         # For now just take the configured OOo sever. Later we might implement a mechanism were
         # only known OOo modules are fetched from the OOo server, the rest from a local
         # server
-        my $config = CwsConfig::get_config();
         ($method, $vcsid, $server, $repository) = ($config->get_cvs_server_method(),
                                                    $config->get_cvs_server_id(),
                                                    $config->get_cvs_server(),
@@ -1071,13 +1064,12 @@ sub auto_int
         print STDERR "Conflicts and/or alarms occured during analysis.\n";
         print STDERR "Can't continue...... Bye!\n";
     }
-    $log->end_log_extended($script_name,$vcsid,"success");
     exit;
 }
 
 sub prompt_manual_registration
 {
-    return unless defined($log);
+    return unless ($sointernal);
     my $cws_name = shift;
     my $mws_name = shift;
     my @files = @_;
@@ -1169,7 +1161,6 @@ sub print_error
 
     if ( $error_code ) {
         print STDERR "\nFAILURE: $script_name aborted.\n";
-        $log->end_log_extended($script_name,$vcsid,$message) if defined($log);
         exit($error_code);
     }
     return;
