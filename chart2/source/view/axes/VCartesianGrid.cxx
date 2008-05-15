@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianGrid.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,13 +59,19 @@ struct GridLinePoints
     Sequence< double > P1;
     Sequence< double > P2;
 
-    GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex );
+    GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex
+        , CuboidPlanePosition eLeftWallPos=CuboidPlanePosition_Left
+        , CuboidPlanePosition eBackWallPos=CuboidPlanePosition_Back
+        , CuboidPlanePosition eBottomPos=CuboidPlanePosition_Bottom );
     void update( double fScaledTickValue );
 
     sal_Int32 m_nDimensionIndex;
 };
 
-GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex )
+GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex
+                , CuboidPlanePosition eLeftWallPos
+                , CuboidPlanePosition eBackWallPos
+                , CuboidPlanePosition eBottomPos )
                 : m_nDimensionIndex(nDimensionIndex)
 {
     double MinX = pPosHelper->getLogicMinX();
@@ -96,29 +102,45 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
         MinZ = MaxZ;
         MaxZ = fHelp;
     }
+    bool bSwapXY = pPosHelper->isSwapXAndY();
 
     P0.realloc(3);
     P1.realloc(3);
     P2.realloc(3);
 
-    P0[0]=P1[0]=P2[0]=MinX;
-    P0[1]=P1[1]=P2[1]=MinY;
-    P0[2]=P1[2]=P2[2]=MinZ;
+    //P0: point on 'back' wall, not on 'left' wall
+    //P1: point on both walls
+    //P2: point on 'left' wall not on 'back' wall
+
+    P0[0]=P1[0]=P2[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MinX : MaxX;
+    P0[1]=P1[1]=P2[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MinY : MaxY;
+    P0[2]=P1[2]=P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MinZ : MaxZ;
 
     if(m_nDimensionIndex==0)
     {
-        P0[1]=MaxY;
-        P2[2]=MaxZ;
+        P0[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MaxY : MinY;
+        P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MaxZ : MinZ;
+        if( CuboidPlanePosition_Bottom != eBottomPos && !bSwapXY )
+            P2=P1;
     }
     else if(m_nDimensionIndex==1)
     {
-        P0[0]=MaxX;
-        P2[2]=MaxZ;
+        P0[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MaxX : MinX;
+        P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MaxZ : MinZ;
+        if( CuboidPlanePosition_Bottom != eBottomPos && bSwapXY )
+            P2=P1;
     }
     else if(m_nDimensionIndex==2)
     {
-        P0[0]=MaxX;
-        P2[1]=MaxY;
+        P0[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MaxX : MinX;
+        P2[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MaxY : MinY;
+        if( CuboidPlanePosition_Bottom != eBottomPos )
+        {
+            if( !bSwapXY )
+                P0=P1;
+            else
+                P2=P1;
+        }
     }
 }
 
@@ -283,7 +305,7 @@ void SAL_CALL VCartesianGrid::createShapes()
         //-----------------------------------------
         else //if(2!=m_nDimension)
         {
-            GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex );
+            GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex, m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PolyPolygonShape3D aPoints;
