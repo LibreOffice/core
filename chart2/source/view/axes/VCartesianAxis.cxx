@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianAxis.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -836,31 +836,203 @@ bool VCartesianAxis::getLogicValueWhereExtraLineCrossesOtherAxis( double& fCross
     fCrossesOtherAxis = *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis;
     return true;
 }
-void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, double fCrossesOtherAxis ) const
-{
-    double fXStart = m_pPosHelper->getLogicMinX();//@todo get x value at left border
-    double fYStart = m_pPosHelper->getLogicMinY();//@todo get y value at bottom
-    double fZStart = m_pPosHelper->getLogicMinZ();//@todo get z value at front
 
+B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const
+{
+    B2DVector aRet(0,0);
+
+    if( m_pPosHelper )
+    {
+        drawing::Position3D aScenePos = m_pPosHelper->transformLogicToScene( fLogicX, fLogicY, fLogicZ, true );
+        if(3==m_nDimension)
+        {
+            if( m_xLogicTarget.is() && m_pPosHelper && m_pShapeFactory )
+            {
+                tPropertyNameMap aDummyPropertyNameMap;
+                Reference< drawing::XShape > xShape3DAnchor = m_pShapeFactory->createCube( m_xLogicTarget
+                        , aScenePos,drawing::Direction3D(1,1,1), 0, 0, aDummyPropertyNameMap);
+                awt::Point a2DPos = xShape3DAnchor->getPosition(); //get 2D position from xShape3DAnchor
+                m_xLogicTarget->remove(xShape3DAnchor);
+                aRet.setX( a2DPos.X );
+                aRet.setY( a2DPos.Y );
+            }
+            else
+            {
+                DBG_ERROR("cannot calculate scrren position in VCartesianAxis::getScreenPosition");
+            }
+        }
+        else
+        {
+            aRet.setX( aScenePos.PositionX );
+            aRet.setY( aScenePos.PositionY );
+        }
+    }
+
+    return aRet;
+}
+
+VCartesianAxis::ScreenPosAndLogicPos VCartesianAxis::getScreenPosAndLogicPos( double fLogicX_, double fLogicY_, double fLogicZ_ ) const
+{
+    ScreenPosAndLogicPos aRet;
+    aRet.fLogicX = fLogicX_;
+    aRet.fLogicY = fLogicY_;
+    aRet.fLogicZ = fLogicZ_;
+    aRet.aScreenPos = getScreenPosition( fLogicX_, fLogicY_, fLogicZ_ );
+    return aRet;
+}
+
+typedef ::std::vector< VCartesianAxis::ScreenPosAndLogicPos > tScreenPosAndLogicPosList;
+struct lcl_LessXPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
+{
+    inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
+    {
+        return ( rPos1.aScreenPos.getX() < rPos2.aScreenPos.getX() );
+    }
+};
+
+struct lcl_GreaterYPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
+{
+    inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
+    {
+        return ( rPos1.aScreenPos.getY() > rPos2.aScreenPos.getY() );
+    }
+};
+
+void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, double fCrossesOtherAxis )
+{
+    //m_aAxisProperties might get updated and changed here because
+    //    the label alignmant and inner direction sign depends exactly of the choice of the axis line position which is made here in this method
+
+    double fMinX = m_pPosHelper->getLogicMinX();
+    double fMinY = m_pPosHelper->getLogicMinY();
+    double fMinZ = m_pPosHelper->getLogicMinZ();
+    double fMaxX = m_pPosHelper->getLogicMaxX();
+    double fMaxY = m_pPosHelper->getLogicMaxY();
+    double fMaxZ = m_pPosHelper->getLogicMaxZ();
+
+    double fXStart = fMinX;
+    double fYStart = fMinY;
+    double fZStart = fMinZ;
     double fXEnd = fXStart;
     double fYEnd = fYStart;
     double fZEnd = fZStart;
 
-    if(!m_nDimensionIndex)
+    double fXOnXPlane = fMinX;
+    double fXOther = fMaxX;
+    int nDifferentValue = !m_pPosHelper->isMathematicalOrientationX() ? -1 : 1;
+    if( !m_pPosHelper->isSwapXAndY() )
+        nDifferentValue *= (CuboidPlanePosition_Left != m_eLeftWallPos) ? -1 : 1;
+    else
+        nDifferentValue *= (CuboidPlanePosition_Bottom != m_eBottomPos) ? -1 : 1;
+    if( nDifferentValue<0 )
     {
-        //x-axis
+        fXOnXPlane = fMaxX;
+        fXOther = fMinX;
+    }
+
+    double fYOnYPlane = fMinY;
+    double fYOther = fMaxY;
+    nDifferentValue = !m_pPosHelper->isMathematicalOrientationY() ? -1 : 1;
+    if( !m_pPosHelper->isSwapXAndY() )
+        nDifferentValue *= (CuboidPlanePosition_Bottom != m_eBottomPos) ? -1 : 1;
+    else
+        nDifferentValue *= (CuboidPlanePosition_Left != m_eLeftWallPos) ? -1 : 1;
+    if( nDifferentValue<0 )
+    {
+        fYOnYPlane = fMaxY;
+        fYOther = fMinY;
+    }
+
+    double fZOnZPlane = fMaxZ;
+    double fZOther = fMinZ;
+    nDifferentValue = !m_pPosHelper->isMathematicalOrientationZ() ? -1 : 1;
+    nDifferentValue *= (CuboidPlanePosition_Back != m_eBackWallPos) ? -1 : 1;
+    if( nDifferentValue<0 )
+    {
+        fZOnZPlane = fMinZ;
+        fZOther = fMaxZ;
+    }
+
+    if( 0==m_nDimensionIndex ) //x-axis
+    {
         fYStart = fYEnd = fCrossesOtherAxis;
         fXEnd=m_pPosHelper->getLogicMaxX();
+
+        if(3==m_nDimension)
+        {
+            rStart = getScreenPosition( fXStart, fYStart, fZStart );
+            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+            double fDeltaX = rEnd.getX() - rStart.getX();
+            double fDeltaY = rEnd.getY() - rStart.getY();
+
+            //only those points are candidates which are lying on exactly one wall as these are outer edges
+            tScreenPosAndLogicPosList aPosList;
+            aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOnYPlane, fZOther ) );
+            aPosList.push_back( getScreenPosAndLogicPos( fMinX, fYOther, fZOnZPlane ) );
+
+            if( fabs(fDeltaY) > fabs(fDeltaX)  )
+            {
+                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                //choose most left positions
+                ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                m_aAxisProperties.m_fInnerDirectionSign = fDeltaY<0 ? -1 : 1;
+            }
+            else
+            {
+                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                //choose most bottom positions
+                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
+            }
+            ScreenPosAndLogicPos aBestPos( aPosList[0] );
+            fYStart = fYEnd = aBestPos.fLogicY;
+            fZStart = fZEnd = aBestPos.fLogicZ;
+            if( !m_pPosHelper->isMathematicalOrientationX() )
+                m_aAxisProperties.m_fInnerDirectionSign *= -1;
+        }//end 3D x axis
     }
-    else if(m_nDimensionIndex==1)
+    else if( 1==m_nDimensionIndex ) //y-axis
     {
-        //y-axis
         fXStart = fXEnd = fCrossesOtherAxis;
         fYEnd=m_pPosHelper->getLogicMaxY();
+
+        if(3==m_nDimension)
+        {
+            rStart = getScreenPosition( fXStart, fYStart, fZStart );
+            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+            double fDeltaX = rEnd.getX() - rStart.getX();
+            double fDeltaY = rEnd.getY() - rStart.getY();
+
+            //only those points are candidates which are lying on exactly one wall as these are outer edges
+            tScreenPosAndLogicPosList aPosList;
+            aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fMinY, fZOther ) );
+            aPosList.push_back( getScreenPosAndLogicPos( fXOther, fMinY, fZOnZPlane ) );
+
+            if( fabs(fDeltaY) > fabs(fDeltaX)  )
+            {
+                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+                //choose most left positions
+                ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                m_aAxisProperties.m_fInnerDirectionSign = fDeltaY<0 ? -1 : 1;
+            }
+            else
+            {
+                m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                //choose most bottom positions
+                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
+            }
+            ScreenPosAndLogicPos aBestPos( aPosList[0] );
+            fXStart = fXEnd = aBestPos.fLogicX;
+            fZStart = fZEnd = aBestPos.fLogicZ;
+            if( !m_pPosHelper->isMathematicalOrientationY() )
+                m_aAxisProperties.m_fInnerDirectionSign *= -1;
+        }//end 3D y axis
     }
-    else
+    else //z-axis
     {
-        //z-axis
         fZEnd = m_pPosHelper->getLogicMaxZ();
         if( !m_pPosHelper->isSwapXAndY() )
         {
@@ -872,37 +1044,50 @@ void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, doub
             fXStart = fXEnd = m_pPosHelper->isMathematicalOrientationX() ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMaxX();
             fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMaxY() : m_pPosHelper->getLogicMinY();
         }
+
+        if(3==m_nDimension)
+        {
+            rStart = getScreenPosition( fXStart, fYStart, fZStart );
+            rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
+
+            double fDeltaX = rEnd.getX() - rStart.getX();
+
+            //only those points are candidates which are lying on exactly one wall as these are outer edges
+            tScreenPosAndLogicPosList aPosList;
+            aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
+            aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) );
+
+            ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+            ScreenPosAndLogicPos aBestPos( aPosList[0] );
+            ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
+
+            //choose most bottom positions
+            if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefere left-right algnments
+            {
+                if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_RIGHT;
+                else
+                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
+            }
+            else
+            {
+                if( aBestPos.aScreenPos.getY() > aNotSoGoodPos.aScreenPos.getY() )
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
+                else
+                     m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_TOP;
+            }
+
+            m_aAxisProperties.m_fInnerDirectionSign = fDeltaX<0 ? -1 : 1;
+            if( !m_pPosHelper->isMathematicalOrientationZ() )
+                m_aAxisProperties.m_fInnerDirectionSign *= -1;
+
+            fXStart = fXEnd = aBestPos.fLogicX;
+            fYStart = fYEnd = aBestPos.fLogicY;
+        }//end 3D z axis
     }
 
-    drawing::Position3D aSceneStart = m_pPosHelper->transformLogicToScene( fXStart, fYStart, fZStart, true );
-    drawing::Position3D aSceneEnd = m_pPosHelper->transformLogicToScene( fXEnd, fYEnd, fZEnd, true );
-
-    rStart.setX( aSceneStart.PositionX );
-    rStart.setY( aSceneStart.PositionY );
-    rEnd.setX( aSceneEnd.PositionX );
-    rEnd.setY( aSceneEnd.PositionY );
-
-    if(3==m_nDimension)
-    {
-        tPropertyNameMap aDummyPropertyNameMap;
-        //create 3D anchor shape
-        Reference< drawing::XShape > xShape3DAnchor_Start = m_pShapeFactory->createCube( m_xLogicTarget
-                , aSceneStart,drawing::Direction3D(1,1,1)
-                , 0, 0, aDummyPropertyNameMap);
-        awt::Point aStart = xShape3DAnchor_Start->getPosition(); //get 2D position from xShape3DAnchor
-        rStart.setX( aStart.X );
-        rStart.setY( aStart.Y );
-        m_xLogicTarget->remove(xShape3DAnchor_Start);
-
-        //create 3D anchor shape
-        Reference< drawing::XShape > xShape3DAnchor_End = m_pShapeFactory->createCube( m_xLogicTarget
-                , aSceneEnd, drawing::Direction3D(1,1,1)
-                , 0, 0, aDummyPropertyNameMap);
-        awt::Point aEnd = xShape3DAnchor_End->getPosition(); //get 2D position from xShape3DAnchor
-        rEnd.setX( aEnd.X );
-        rEnd.setY( aEnd.Y );
-        m_xLogicTarget->remove(xShape3DAnchor_End);
-    }
+    rStart = getScreenPosition( fXStart, fYStart, fZStart );
+    rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
 }
 
 TickmarkHelper* VCartesianAxis::createTickmarkHelper()
