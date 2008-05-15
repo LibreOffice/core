@@ -155,7 +155,7 @@ application/vnd.stardivision.draw; %unixfilename -view %s
 application/x-stardraw; %unixfilename -view %s
 application/vnd.oasis.opendocument.database; %unixfilename -view %s
 application/vnd.sun.xml.base; %unixfilename -view %s
-application/vnd.openofficeorg.extension; unopkg gui %s
+application/vnd.openofficeorg.extension; %unixfilename %s
 END
 
   # and replace the original file
@@ -284,7 +284,6 @@ fi
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
-%attr(0755,root,root) /usr/bin/unopkg
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -297,7 +296,6 @@ fi
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
-/usr/share/applications/%unixfilename-extensionmgr.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop
