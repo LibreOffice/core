@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -92,6 +92,7 @@ IDLFILES=\
     PieDiagram.idl\
     StackableDiagram.idl\
     StockDiagram.idl\
+    X3DDefaultSetter.idl\
     X3DDisplay.idl\
     XAxisXSupplier.idl\
     XAxisYSupplier.idl\
