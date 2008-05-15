@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XSLTFilter.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,8 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -240,6 +242,7 @@ private:
     OUString m_aOldBaseUrl;
 
     OUString rel2abs(const OUString&);
+    OUString expandUrl(const OUString&);
 
 public:
 
@@ -299,6 +302,24 @@ void XSLTFilter::disposing(const EventObject& ) throw (RuntimeException)
 {
 }
 
+::rtl::OUString XSLTFilter::expandUrl( const ::rtl::OUString& sUrl )
+{
+    ::rtl::OUString sExpandedUrl;
+    try
+    {
+        Reference< XComponentContext > xContext;
+        Reference< XPropertySet > xProps( m_rServiceFactory, UNO_QUERY_THROW );
+        xContext.set( xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "DefaultContext" ) ), UNO_QUERY_THROW );
+        Reference< XMacroExpander > xMacroExpander( xContext->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) ), UNO_QUERY_THROW );
+        sExpandedUrl = xMacroExpander->expandMacros(sUrl);
+        sal_Int32 nPos = sExpandedUrl.indexOf(::rtl::OUString::createFromAscii("vnd.sun.star.expand:"));
+        if ( nPos != -1 )
+            sExpandedUrl = sExpandedUrl.copy(nPos+20);
+    }
+    catch (Exception&) {}
+    return sExpandedUrl;
+}
+
 void XSLTFilter::started() throw (RuntimeException)
 {
     osl_resetCondition(m_cTransformed);
@@ -347,7 +368,8 @@ sal_Bool XSLTFilter::importer(
         const Sequence<OUString>& msUserData)
     throw (RuntimeException)
 {
-
+    if ( msUserData.getLength() < 5 )
+        return sal_False;
 
     OUString udImport = msUserData[2];
     OUString udStyleSheet = rel2abs(msUserData[4]);
@@ -384,7 +406,7 @@ sal_Bool XSLTFilter::importer(
     NamedValue nv;
 
     nv.Name = OUString::createFromAscii("StylesheetURL");
-    nv.Value <<= udStyleSheet; args[0] <<= nv;
+    nv.Value <<= expandUrl(udStyleSheet); args[0] <<= nv;
     nv.Name = OUString::createFromAscii("SourceURL");
     nv.Value <<= aURL; args[1] <<= nv;
     nv.Name = OUString::createFromAscii("SourceBaseURL");
@@ -460,6 +482,8 @@ sal_Bool XSLTFilter::exporter(
         const Sequence<OUString>& msUserData)
     throw (RuntimeException)
 {
+    if ( msUserData.getLength() < 6 )
+        return sal_False;
 
     // get interesting values from user data
     OUString udImport = msUserData[2];
@@ -502,7 +526,7 @@ sal_Bool XSLTFilter::exporter(
     Sequence< Any > args(4);
     NamedValue nv;
     nv.Name = OUString::createFromAscii("StylesheetURL");
-    nv.Value <<= udStyleSheet; args[0] <<= nv;
+    nv.Value <<= expandUrl(udStyleSheet); args[0] <<= nv;
     nv.Name = OUString::createFromAscii("TargetURL");
     nv.Value <<= sURL; args[1] <<= nv;
     nv.Name = OUString::createFromAscii("DoctypeSystem");
