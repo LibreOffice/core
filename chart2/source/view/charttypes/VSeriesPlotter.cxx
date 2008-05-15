@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,13 +377,9 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
 OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
-                , double fSumValue
                 , bool bAsPercentage )
 {
     OUString aNumber;
-
-    if( m_pPosHelper->isPercentY() )
-        fValue *= fSumValue;
 
     if( m_apNumberFormatterWrapper.get())
     {
@@ -498,7 +494,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             if(pLabel->ShowNumber)
             {
                 OUString aNumber( this->getLabelTextForValue( rDataSeries
-                    , nPointIndex, fValue, fSumValue, false /*bAsPercentage*/ ) );
+                    , nPointIndex, fValue, false /*bAsPercentage*/ ) );
                 if( aNumber.getLength() )
                 {
                     if(aText.getLength())
@@ -517,7 +513,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     fValue*=-1.0;
 
                 OUString aPercentage( this->getLabelTextForValue( rDataSeries
-                    , nPointIndex, fValue, fSumValue, true /*bAsPercentage*/ ) );
+                    , nPointIndex, fValue, true /*bAsPercentage*/ ) );
                 if( aPercentage.getLength() )
                 {
                     if(aText.getLength())
