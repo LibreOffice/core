@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ThreeDHelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,11 @@
 #include "BaseGFXHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include <svx/unoprnms.hxx>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+
+#include <tools/debug.hxx>
 
 //.............................................................................
 namespace chart
@@ -51,11 +54,33 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
+using ::rtl::math::cos;
+using ::rtl::math::sin;
+using ::rtl::math::tan;
 
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 
 namespace
 {
+
+bool lcl_isRightAngledAxesSetAndSupported( const Reference< beans::XPropertySet >& xSceneProperties )
+{
+    sal_Bool bRightAngledAxes = sal_False;
+    if( xSceneProperties.is() )
+    {
+        xSceneProperties->getPropertyValue( C2U("RightAngledAxes")) >>= bRightAngledAxes;
+        if(bRightAngledAxes)
+        {
+            uno::Reference< chart2::XDiagram > xDiagram( xSceneProperties, uno::UNO_QUERY );
+            if( ChartTypeHelper::isSupportingRightAngledAxes(
+                    DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 void lcl_RotateLightSource( const Reference< beans::XPropertySet >& xSceneProperties
                            , const OUString& rLightSourceDirection
@@ -372,6 +397,516 @@ void lcl_shiftAngleToIntervalMinus180To180( sal_Int32& rnAngleDegree )
         rnAngleDegree-=360;
 }
 
+void lcl_shiftAngleToIntervalZeroTo360( sal_Int32& rnAngleDegree )
+{
+    //valid range:  [0,360[
+    while( rnAngleDegree<0 )
+        rnAngleDegree+=360;
+    while( rnAngleDegree>=360 )
+        rnAngleDegree-=360;
+}
+
+void lcl_ensureIntervalMinus1To1( double& rSinOrCos )
+{
+    if (rSinOrCos < -1.0)
+       rSinOrCos = -1.0;
+    else if (rSinOrCos > 1.0)
+        rSinOrCos = 1.0;
+}
+
+bool lcl_isSinZero( double fAngleRad )
+{
+    return ::basegfx::fTools::equalZero( sin(fAngleRad), 0.0000001 );
+}
+bool lcl_isCosZero( double fAngleRad )
+{
+    return ::basegfx::fTools::equalZero( cos(fAngleRad), 0.0000001 );
+}
+
+}
+
+void ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
+    sal_Int32 nElevationDeg, sal_Int32 nRotationDeg,
+    double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad)
+{
+    // for a description of the algorithm see issue 72994
+    //http://www.openoffice.org/issues/show_bug.cgi?id=72994
+    //http://www.openoffice.org/nonav/issues/showattachment.cgi/50608/DescriptionCorrected.odt
+
+    lcl_shiftAngleToIntervalZeroTo360( nElevationDeg );
+    lcl_shiftAngleToIntervalZeroTo360( nRotationDeg );
+
+    double& x = rfXAngleRad;
+    double& y = rfYAngleRad;
+    double& z = rfZAngleRad;
+
+    double E = F_PI*nElevationDeg/180; //elevation in Rad
+    double R = F_PI*nRotationDeg/180; //rotation in Rad
+
+    if( (nRotationDeg == 0 || nRotationDeg == 180 )
+        && ( nElevationDeg == 90 || nElevationDeg == 270 ) )
+    {
+        //sR==0 && cE==0
+        z = 0.0;
+        //element 23
+        double f23 = cos(R)*sin(E);
+        if(f23>0)
+            x = F_PI/2;
+        else
+            x = -F_PI/2;
+        y = R;
+    }
+    else if( ( nRotationDeg == 90 || nRotationDeg == 270 )
+        && ( nElevationDeg == 90 || nElevationDeg == 270 ) )
+    {
+        //cR==0 && cE==0
+        z = F_PI/2;
+        if( sin(R)>0 )
+            x = F_PI/2.0;
+        else
+            x = -F_PI/2.0;
+
+        if( (sin(R)*sin(E))>0 )
+            y = 0.0;
+        else
+            y = F_PI;
+    }
+    else if( (nRotationDeg == 0 || nRotationDeg == 180 )
+        && ( nElevationDeg == 0 || nElevationDeg == 180 ) )
+    {
+        //sR==0 && sE==0
+        z = 0.0;
+        y = R;
+        x = E;
+    }
+    else if( ( nRotationDeg == 90 || nRotationDeg == 270 )
+        && ( nElevationDeg == 0 || nElevationDeg == 180 ) )
+    {
+        //cR==0 && sE==0
+        z = 0.0;
+
+        if( (sin(R)/cos(E))>0 )
+            y = F_PI/2;
+        else
+            y = -F_PI/2;
+
+        if( (cos(E))>0 )
+            x = 0;
+        else
+            x = F_PI;
+    }
+    else if ( nElevationDeg == 0 || nElevationDeg == 180 )
+    {
+        //sR!=0 cR!=0 sE==0
+        z = 0.0;
+        x = E;
+        y = R;
+        //use element 13 for sign
+        if((cos(x)*sin(y)*sin(R))<0.0)
+            y *= -1.0;
+    }
+    else if ( nElevationDeg == 90 || nElevationDeg == 270 )
+    {
+        //sR!=0 cR!=0 cE==0
+        //element 12 + 22 --> y=0 or F_PI and x=+-F_PI/2
+        //-->element 13/23:
+        z = atan(sin(R)/(cos(R)*sin(E)));
+        //use element 13 for sign for x
+        if( (sin(R)*sin(z))>0.0 )
+            x = F_PI/2;
+        else
+            x = -F_PI/2;
+        //use element 21 for y
+        if( (sin(R)*sin(E)*sin(z))>0.0)
+            y = 0.0;
+        else
+            y = F_PI;
+    }
+    else if ( nRotationDeg == 0 || nRotationDeg == 180 )
+    {
+        //sE!=0 cE!=0 sR==0
+        z = 0.0;
+        x = E;
+        y = R;
+        double f23 = cos(R)*sin(E);
+        if( (f23 * sin(x)) < 0.0 )
+            x *= -1.0; //todo ??
+    }
+    else if (nRotationDeg == 90 || nRotationDeg == 270)
+    {
+        //sE!=0 cE!=0 cR==0
+        //z = +- F_PI/2;
+        //x = +- F_PI/2;
+        z = F_PI/2;
+        x = F_PI/2;
+        double sR = sin(R);
+        if( sR<0.0 )
+            x *= -1.0; //different signs for x and z
+
+        //use element 21:
+        double cy = sR*sin(E)/sin(z);
+        lcl_ensureIntervalMinus1To1(cy);
+        y = acos(cy);
+
+        //use element 22 for sign:
+        if( (sin(x)*sin(y)*sin(z)*cos(E))<0.0)
+            y *= -1.0;
+    }
+    else
+    {
+        z = atan(tan(R) * sin(E));
+        if(cos(z)==0.0)
+        {
+            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            return;
+        }
+        double cy = cos(R)/cos(z);
+        lcl_ensureIntervalMinus1To1(cy);
+        y = acos(cy);
+
+        //element 12 in 23
+        double fDenominator = cos(z)*(1.0-pow(sin(y),2));
+        if(fDenominator==0.0)
+        {
+            DBG_ERROR("calculation error in ThreeDHelper::convertElevationRotationDegToXYZAngleRad");
+            return;
+        }
+        double sx = cos(R)*sin(E)/fDenominator;
+        lcl_ensureIntervalMinus1To1(sx);
+        x = asin( sx );
+
+        //use element 13 for sign:
+        double f13a = cos(x)*cos(z)*sin(y);
+        double f13b = sin(R)-sx*sin(z);
+        if( (f13b*f13a)<0.0 )
+        {
+            //change x or y
+            //use element 22 for further investigations:
+            //try
+            y *= -1;
+            double f22a = cos(x)*cos(z);
+            double f22b = cos(E)-(sx*sin(y)*sin(z));
+            if( (f22a*f22b)<0.0 )
+            {
+                y *= -1;
+                x=(F_PI-x);
+            }
+        }
+        else
+        {
+            //change nothing or both
+            //use element 22 for further investigations:
+            double f22a = cos(x)*cos(z);
+            double f22b = cos(E)-(sx*sin(y)*sin(z));
+            if( (f22a*f22b)<0.0 )
+            {
+                y *= -1;
+                x=(F_PI-x);
+            }
+        }
+    }
+}
+
+void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
+    sal_Int32& rnElevationDeg, sal_Int32& rnRotationDeg,
+    double fXRad, double fYRad, double fZRad)
+{
+    // for a description of the algorithm see issue 72994
+    //http://www.openoffice.org/issues/show_bug.cgi?id=72994
+    //http://www.openoffice.org/nonav/issues/showattachment.cgi/50608/DescriptionCorrected.odt
+
+    double R = 0.0; //Rotation in Rad
+    double E = 0.0; //Elevation in Rad
+
+    double& x = fXRad;
+    double& y = fYRad;
+    double& z = fZRad;
+
+    double f11 = cos(y)*cos(z);
+
+    if( lcl_isSinZero(y) )
+    {
+        //siny == 0
+
+        if( lcl_isCosZero(x) )
+        {
+            //siny == 0 && cosx == 0
+
+            if( lcl_isSinZero(z) )
+            {
+                //siny == 0 && cosx == 0 && sinz == 0
+                //example: x=+-90 y=0oder180 z=0(oder180)
+
+                //element 13+11
+                if( f11 > 0 )
+                    R = 0.0;
+                else
+                    R = F_PI;
+
+                //element 23
+                double f23 = cos(z)*sin(x) / cos(R);
+                if( f23 > 0 )
+                    E = F_PI/2.0;
+                else
+                    E = -F_PI/2.0;
+            }
+            else if( lcl_isCosZero(z) )
+            {
+                //siny == 0 && cosx == 0 && cosz == 0
+                //example: x=+-90 y=0oder180 z=+-90
+
+                double f13 = sin(x)*sin(z);
+                //element 13+11
+                if( f13 > 0 )
+                    R = F_PI/2.0;
+                else
+                    R = -F_PI/2.0;
+
+                //element 21
+                double f21 = cos(y)*sin(z) / sin(R);
+                if( f21 > 0 )
+                    E = F_PI/2.0;
+                else
+                    E = -F_PI/2.0;
+            }
+            else
+            {
+                //siny == 0 && cosx == 0 && cosz != 0 && sinz != 0
+                //element 11 && 13
+                double f13 = sin(x)*sin(z);
+                R = atan( f13/f11 );
+
+                if(f11<0)
+                    R+=F_PI;
+
+                //element 23
+                double f23 = cos(z)*sin(x);
+                if( f23/cos(R) > 0 )
+                    E = F_PI/2.0;
+                else
+                    E = -F_PI/2.0;
+            }
+        }
+        else if( lcl_isSinZero(x) )
+        {
+            //sinY==0 sinX==0
+            //element 13+11
+            if( f11 > 0 )
+                R = 0.0;
+            else
+                R = F_PI;
+
+            double f22 = cos(x)*cos(z);
+            if( f22 > 0 )
+                E = 0.0;
+            else
+                E = F_PI;
+        }
+        else if( lcl_isSinZero(z) )
+        {
+            //sinY==0 sinZ==0 sinx!=0 cosx!=0
+            //element 13+11
+            if( f11 > 0 )
+                R = 0.0;
+            else
+                R = F_PI;
+
+            //element 22 && 23
+            double f22 = cos(x)*cos(z);
+            double f23 = cos(z)*sin(x);
+            E = atan( f23/(f22*cos(R)) );
+            if( (f22*cos(E))<0 )
+                E+=F_PI;
+        }
+        else if( lcl_isCosZero(z) )
+        {
+            //sinY == 0 && cosZ == 0 && cosx != 0 && sinx != 0
+            double f13 = sin(x)*sin(z);
+            //element 13+11
+            if( f13 > 0 )
+                R = F_PI/2.0;
+            else
+                R = -F_PI/2.0;
+
+            //element 21+22
+            double f21 = cos(y)*sin(z);
+            if( f21/sin(R) > 0 )
+                E = F_PI/2.0;
+            else
+                E = -F_PI/2.0;
+        }
+        else
+        {
+            //sinY == 0 && all other !=0
+            double f13 = sin(x)*sin(z);
+            R = atan( f13/f11 );
+            if( (f11*cos(R))<0.0 )
+                R+=F_PI;
+
+            double f22 = cos(x)*cos(z);
+            if( !lcl_isCosZero(R) )
+                E = atan( cos(z)*sin(x) /( f22*cos(R) ) );
+            else
+                E = atan( cos(y)*sin(z) /( f22*sin(R) ) );
+            if( (f22*cos(E))<0 )
+                E+=F_PI;
+        }
+    }
+    else if( lcl_isCosZero(y) )
+    {
+        //cosY==0
+
+        double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
+        if( f13 >= 0 )
+            R = F_PI/2.0;
+        else
+            R = -F_PI/2.0;
+
+        double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
+        if( f22 >= 0 )
+            E = 0.0;
+        else
+            E = F_PI;
+    }
+    else if( lcl_isSinZero(x) )
+    {
+        //cosY!=0 sinY!=0 sinX=0
+        if( lcl_isSinZero(z) )
+        {
+            //cosY!=0 sinY!=0 sinX=0 sinZ=0
+            double f13 = cos(x)*cos(z)*sin(y);
+            R = atan( f13/f11 );
+            //R = asin(f13);
+            if( f11<0 )
+                R+=F_PI;
+
+            double f22 = cos(x)*cos(z);
+            if( f22>0 )
+                E = 0.0;
+            else
+                E = F_PI;
+        }
+        else if( lcl_isCosZero(z) )
+        {
+            //cosY!=0 sinY!=0 sinX=0 cosZ=0
+            R = x;
+            E = y;//or -y
+            //use 23 for 'signs'
+            double f23 =  -1.0*cos(x)*sin(y)*sin(z);
+            if( (f23*cos(R)*sin(E))<0.0 )
+            {
+                //change R or E
+                E = -y;
+            }
+        }
+        else
+        {
+            //cosY!=0 sinY!=0 sinX=0 sinZ!=0 cosZ!=0
+            double f13 = cos(x)*cos(z)*sin(y);
+            R = atan( f13/f11 );
+
+            if( f11<0 )
+                R+=F_PI;
+
+            double f21 = cos(y)*sin(z);
+            double f22 = cos(x)*cos(z);
+            E = atan(f21/(f22*sin(R)) );
+
+            if( (f22*cos(E))<0.0 )
+                E+=F_PI;
+        }
+    }
+    else if( lcl_isCosZero(x) )
+    {
+        //cosY!=0 sinY!=0 cosX=0
+
+        if( lcl_isSinZero(z) )
+        {
+            //cosY!=0 sinY!=0 cosX=0 sinZ=0
+            R=0;//13 -> R=0 or F_PI
+            if( f11<0.0 )
+                R=F_PI;
+            E=F_PI/2;//22 -> E=+-F_PI/2
+            //use element 11 and 23 for sign
+            double f23 = cos(z)*sin(x);
+            if( (f11*f23*sin(E))<0.0 )
+                E=-F_PI/2.0;
+        }
+        else if( lcl_isCosZero(z) )
+        {
+            //cosY!=0 sinY!=0 cosX=0 cosZ=0
+            //element 11 & 13:
+            if( (sin(x)*sin(z))>0.0 )
+                R=F_PI/2.0;
+            else
+                R=-F_PI/2.0;
+            //element 22:
+            E=acos( sin(x)*sin(y)*sin(z));
+            //use element 21 for sign:
+            if( (cos(y)*sin(z)*sin(R)*sin(E))<0.0 )
+                E*=-1.0;
+        }
+        else
+        {
+            //cosY!=0 sinY!=0 cosX=0 sinZ!=0 cosZ!=0
+            //element 13/11
+            R = atan( sin(x)*sin(z)/(cos(y)*cos(z)) );
+            //use 13 for 'sign'
+            if( (sin(x)*sin(z))<0.0 )
+                R += F_PI;
+            //element 22
+            E = acos(sin(x)*sin(y)*sin(z) );
+            //use 21 for sign
+            if( (cos(y)*sin(z)*sin(R)*sin(E))<0.0 )
+                E*=-1.0;
+        }
+    }
+    else if( lcl_isSinZero(z) )
+    {
+        //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ=0
+        //element 11
+        R=y;
+        //use elenment 13 for sign
+        if( (cos(x)*cos(z)*sin(y)*sin(R))<0.0 )
+            R*=-1.0;
+        //element 22
+        E = acos( cos(x)*cos(z) );
+        //use element 23 for sign
+        if( (cos(z)*sin(x)*cos(R)*sin(E))<0.0 )
+            E*=-1.0;
+    }
+    else if( lcl_isCosZero(z) )
+    {
+        //cosY!=0 sinY!=0 sinX!=0 cosX!=0 cosZ=0
+        //element 21/23
+        R=atan(-cos(y)/(cos(x)*sin(y)));
+        //use element 13 for 'sign'
+        if( (sin(x)*sin(z)*sin(R))<0.0 )
+            R+=F_PI;
+        //element 21/22
+        E=atan( cos(y)*sin(z)/(sin(R)*sin(x)*sin(y)*sin(z)) );
+        //use element 23 for 'sign'
+        if( (-cos(x)*sin(y)*sin(z)*cos(R)*sin(E))<0.0 )
+            E+=F_PI;
+    }
+    else
+    {
+        //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ!=0 cosZ!=0
+        //13/11:
+        double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
+        R = atan( f13/ f11 );
+        if(f11<0.0)
+            R+=F_PI;
+        double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
+        double f23 = cos(x)*sin(y)*sin(z)-cos(z)*sin(x);
+        //23/22:
+        E = atan( -1.0*f23/(f22*cos(R)) );
+        if(f22<0.0)
+            E+=F_PI;
+    }
+
+    rnElevationDeg = ::basegfx::fround( BaseGFXHelper::Rad2Deg( E ) );
+    rnRotationDeg = ::basegfx::fround( BaseGFXHelper::Rad2Deg( R ) );
 }
 
 double ThreeDHelper::getValueClippedToRange( double fAngle, const double& fPositivLimit )
@@ -534,18 +1069,25 @@ void ThreeDHelper::setRotationAngleToDiagram(
 void ThreeDHelper::getRotationFromDiagram( const uno::Reference< beans::XPropertySet >& xSceneProperties
             , sal_Int32& rnHorizontalAngleDegree, sal_Int32& rnVerticalAngleDegree )
 {
-    //todo: x and y is not equal to horz and vert in case of RightAngledAxes==false
-
     double fXAngle, fYAngle, fZAngle;
     ThreeDHelper::getRotationAngleFromDiagram( xSceneProperties, fXAngle, fYAngle, fZAngle );
 
-    fXAngle = BaseGFXHelper::Rad2Deg( fXAngle );
-    fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
-    fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
+    if( !lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
+    {
+        ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
+            rnHorizontalAngleDegree, rnVerticalAngleDegree, fXAngle, fYAngle, fZAngle);
+        rnVerticalAngleDegree*=-1;
+    }
+    else
+    {
+        fXAngle = BaseGFXHelper::Rad2Deg( fXAngle );
+        fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
+        fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
 
-    rnHorizontalAngleDegree = ::basegfx::fround(fXAngle);
-    rnVerticalAngleDegree = ::basegfx::fround(-1.0*fYAngle);
-    //nZRotation = ::basegfx::fround(-1.0*fZAngle);
+        rnHorizontalAngleDegree = ::basegfx::fround(fXAngle);
+        rnVerticalAngleDegree = ::basegfx::fround(-1.0*fYAngle);
+        //nZRotation = ::basegfx::fround(-1.0*fZAngle);
+    }
 
     lcl_shiftAngleToIntervalMinus180To180( rnHorizontalAngleDegree );
     lcl_shiftAngleToIntervalMinus180To180( rnVerticalAngleDegree );
@@ -558,6 +1100,10 @@ void ThreeDHelper::setRotationToDiagram( const uno::Reference< beans::XPropertyS
     double fXAngle = BaseGFXHelper::Deg2Rad( nHorizontalAngleDegree );
     double fYAngle = BaseGFXHelper::Deg2Rad( -1*nVerticalYAngleDegree );
     double fZAngle = 0.0;
+
+    if( !lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
+        ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
+            nHorizontalAngleDegree, -1*nVerticalYAngleDegree, fXAngle, fYAngle, fZAngle );
 
     ThreeDHelper::setRotationAngleToDiagram( xSceneProperties, fXAngle, fYAngle, fZAngle );
 }
@@ -736,6 +1282,69 @@ void ThreeDHelper::setScheme( const uno::Reference< XDiagram >& xDiagram, ThreeD
 }
 
 //static
+void ThreeDHelper::set3DSettingsToDefault( const uno::Reference< beans::XPropertySet >& xSceneProperties )
+{
+    Reference< beans::XPropertyState > xState( xSceneProperties, uno::UNO_QUERY );
+    if(xState.is())
+    {
+        xState->setPropertyToDefault( C2U("D3DSceneDistance"));
+        xState->setPropertyToDefault( C2U("D3DSceneFocalLength"));
+    }
+    ThreeDHelper::setDefaultRotation( xSceneProperties );
+    ThreeDHelper::setDefaultIllumination( xSceneProperties );
+}
+
+//static
+void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet >& xSceneProperties, bool bPieOrDonut )
+{
+    if( !xSceneProperties.is() )
+        return;
+
+    drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( bPieOrDonut ) );
+    xSceneProperties->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
+
+    ::basegfx::B3DHomMatrix aSceneRotation;
+    if( bPieOrDonut )
+        aSceneRotation.rotate( -F_PI/3.0, 0, 0 );
+    xSceneProperties->setPropertyValue( C2U("D3DTransformMatrix"),
+        uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
+}
+
+//static
+void ThreeDHelper::setDefaultRotation( const uno::Reference< beans::XPropertySet >& xSceneProperties )
+{
+    bool bPieOrDonut( DiagramHelper::isPieOrDonutChart( uno::Reference< XDiagram >(xSceneProperties, uno::UNO_QUERY) ) );
+    ThreeDHelper::setDefaultRotation( xSceneProperties, bPieOrDonut );
+}
+
+//static
+void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropertySet >& xSceneProperties )
+{
+    if( !xSceneProperties.is() )
+        return;
+
+    drawing::ShadeMode aShadeMode( drawing::ShadeMode_SMOOTH );
+    try
+    {
+        xSceneProperties->getPropertyValue( C2U( "D3DSceneShadeMode" ) )>>= aShadeMode;
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_1 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_3 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_4 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_5 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_6 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_7 ), uno::makeAny( sal_False ) );
+        xSceneProperties->setPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTON_8 ), uno::makeAny( sal_False ) );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    ThreeDLookScheme aScheme = (drawing::ShadeMode_FLAT==aShadeMode) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;
+    lcl_setLightsForScheme( xSceneProperties, aScheme );
+}
+
+//static
 void ThreeDHelper::getRoundedEdgesAndObjectLines(
             const uno::Reference< XDiagram > & xDiagram
             , sal_Int32& rnRoundedEdges, sal_Int32& rnObjectLines )
@@ -863,6 +1472,57 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
         if( nObjectLines==0 || nObjectLines==1 )
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), aALineStyle );
     }
+}
+
+//static
+CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( const Reference< beans::XPropertySet >& xSceneProperties )
+{
+    CuboidPlanePosition eRet(CuboidPlanePosition_Left);
+
+    double fXAngleRad=0.0; double fYAngleRad=0.0; double fZAngleRad=0.0;
+    ThreeDHelper::getRotationAngleFromDiagram( xSceneProperties, fXAngleRad, fYAngleRad, fZAngleRad );
+    if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
+    {
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
+        fZAngleRad=0.0;
+    }
+    if( sin(fYAngleRad)>0.0 )
+        eRet = CuboidPlanePosition_Right;
+    return eRet;
+}
+
+//static
+CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( const Reference< beans::XPropertySet >& xSceneProperties )
+{
+    CuboidPlanePosition eRet(CuboidPlanePosition_Back);
+
+    double fXAngleRad=0.0; double fYAngleRad=0.0; double fZAngleRad=0.0;
+    ThreeDHelper::getRotationAngleFromDiagram( xSceneProperties, fXAngleRad, fYAngleRad, fZAngleRad );
+    if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
+    {
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
+        fZAngleRad=0.0;
+    }
+    if( cos(fXAngleRad)*cos(fYAngleRad)<0.0 )
+        eRet = CuboidPlanePosition_Front;
+    return eRet;
+}
+
+//static
+CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( const Reference< beans::XPropertySet >& xSceneProperties )
+{
+    CuboidPlanePosition eRet(CuboidPlanePosition_Bottom);
+
+    double fXAngleRad=0.0; double fYAngleRad=0.0; double fZAngleRad=0.0;
+    ThreeDHelper::getRotationAngleFromDiagram( xSceneProperties, fXAngleRad, fYAngleRad, fZAngleRad );
+    if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
+    {
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
+        fZAngleRad=0.0;
+    }
+    if( sin(fXAngleRad)*cos(fYAngleRad)<0.0 )
+        eRet = CuboidPlanePosition_Top;
+    return eRet;
 }
 
 //.............................................................................
