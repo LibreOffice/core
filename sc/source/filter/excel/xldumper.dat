@@ -678,10 +678,10 @@ end
 
 flagslist=CHCHART3D-FLAGS
 begin
-  ignore=0x0010
   0x0001=real3d
   0x0002=clustered
   0x0004=auto-height
+  0x0010=has-walls
   0x0020=2d-plotarea
 end
 
