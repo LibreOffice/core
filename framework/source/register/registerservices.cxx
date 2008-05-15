@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: registerservices.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,9 @@
 
 #include <services/frame.hxx>
 #include <services/modulemanager.hxx>
+
+#include <dispatch/oxt_handler.hxx>
+
 #include <jobs/jobexecutor.hxx>
 #include <recording/dispatchrecordersupplier.hxx>
 #include <recording/dispatchrecorder.hxx>
@@ -130,6 +133,7 @@ COMPONENTGETIMPLEMENTATIONENVIRONMENT
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
                         COMPONENTINFO( ::framework::Desktop                                 )
                         COMPONENTINFO( ::framework::Frame                                   )
+                        COMPONENTINFO( ::framework::Oxt_Handler                             )
                         COMPONENTINFO( ::framework::JobExecutor                             )
                         COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
                         COMPONENTINFO( ::framework::DispatchRecorder                        )
@@ -185,6 +189,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
+                        IFFACTORY( ::framework::Oxt_Handler                             )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
@@ -233,7 +238,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::SimpleTextStatusbarController           )   else
                         IFFACTORY( ::framework::UriAbbreviation                         )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
-                        IFFACTORY( ::framework::ImageManager                            )
+                        IFFACTORY( ::framework::ImageManager                            )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )
