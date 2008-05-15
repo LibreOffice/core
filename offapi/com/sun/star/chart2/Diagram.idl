@@ -8,7 +8,7 @@
  *
  * $RCSfile: Diagram.idl,v $
  *
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <com/sun/star/chart2/XTitled.idl>
 #include <com/sun/star/chart2/RelativePosition.idl>
 #include <com/sun/star/layout/RelativeSize.idl>
+#include <com/sun/star/chart/X3DDefaultSetter.idl>
 
 module com
 {
@@ -64,6 +65,10 @@ service Diagram
     /** gives access to the sub title of a chart document
      */
     interface  XTitled;
+
+    /** makes it easy to set suiteable defaults for illumination and rotation for 3D charts
+     */
+    [optional] interface ::com::sun::star::chart::X3DDefaultSetter;
 
     /** The position is as a relative position on the page.
 
