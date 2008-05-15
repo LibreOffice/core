@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Dim3DDiagram.idl,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,9 @@
 #ifndef __com_sun_star_chart_X3DDisplay_idl__
 #include <com/sun/star/chart/X3DDisplay.idl>
 #endif
+#ifndef __com_sun_star_chart_X3DDefaultSetter_idl__
+#include <com/sun/star/chart/X3DDefaultSetter.idl>
+#endif
 
 
 //=============================================================================
@@ -53,6 +56,10 @@ published service Dim3DDiagram
      */
     interface com::sun::star::chart::X3DDisplay;
 
+    /** makes it easy to set suiteable defaults for illumination and rotation for 3D charts
+     */
+    [optional] interface ::com::sun::star::chart::X3DDefaultSetter;
+
     //-------------------------------------------------------------------------
 
     /** If set to <TRUE/>, the chart becomes a three-dimensional
@@ -60,6 +67,17 @@ published service Dim3DDiagram
     */
     [property] boolean Dim3D;
 
+    /** Perspective of 3D charts ( [0,100] ).
+     */
+    [optional, property] long   Perspective;
+
+    /** Horizontal rotation of 3D charts in degrees ( ]-180,180] ).
+     */
+    [optional, property] long   RotationHorizontal;
+
+    /** Vertical rotation of 3D charts in degrees ( ]-180,180] ).
+     */
+    [optional, property] long   RotationVertical;
 };
 
 //=============================================================================
