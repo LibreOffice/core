@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -523,15 +523,6 @@ File gid_Brand_File_Share_Xdg_Draw
 	Dir = gid_Brand_Dir_Share_Xdg;
 	Name = "draw.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-File gid_Brand_File_Share_Xdg_Extension
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Xdg;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Name = "extensionmgr.desktop";
 End
 #endif
 
