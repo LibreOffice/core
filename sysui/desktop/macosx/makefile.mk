@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,6 @@ CWS=[CWS:$(CWS_WORK_STAMP)]
 ULFDIR:=$(COMMONMISC)$/desktopshare
 .ELSE # "$(WITH_LANG)"!=""
 ULFDIR:=..$/share
-WITH_LANG *= en-US           # Fallback for configure w/o --with-lang switch
 .ENDIF # "$(WITH_LANG)"!=""
 
 # --- Targets --------------------------------------------------
@@ -77,11 +76,7 @@ WITH_LANG *= en-US           # Fallback for configure w/o --with-lang switch
 
 ZIP1TARGETN : Info.plist extract_icons_names.pl
 
-ALLTAR : $(COMMONMISC)$/{PkgInfo Info.plist}
-
-.IF "$(WITH_LANG)"!=""
-ALLTAR : $(COMMONBIN)$/InfoPlist_{$(WITH_LANG)}.zip
-.ENDIF
+ALLTAR : $(COMMONMISC)$/{PkgInfo Info.plist} $(COMMONBIN)$/InfoPlist_{$(alllangiso)}.zip
 
 $(COMMONMISC)$/PkgInfo :
     echo "APPL$(CREATOR_TYPE)" > $@
@@ -90,11 +85,11 @@ $(COMMONMISC)$/PkgInfo :
 $(COMMONMISC)$/Info.plist : $$(@:f)
     sed -e "s|\%EXECUTABLE|${EXECUTABLE}|g" -e "s|\%SOURCE|[$(SOURCE)$(CWS)]|g" $< > $@
 
-$(COMMONBIN)$/InfoPlist_{$(WITH_LANG)}.zip : $(COMMONMISC)$/$$(@:b)/InfoPlist.strings
+$(COMMONBIN)$/InfoPlist_{$(alllangiso)}.zip : $(COMMONMISC)$/$$(@:b)/InfoPlist.strings
     cd $(<:d) && zip ../$(@:f).$(INPATH) $(<:f)
     $(MV) -f $(COMMONMISC)$/$(@:f).$(INPATH) $@
 
-$(COMMONMISC)$/InfoPlist_{$(WITH_LANG)}$/InfoPlist.strings : Info.plist $(ULFDIR)$/documents.ulf
+$(COMMONMISC)$/InfoPlist_{$(alllangiso)}$/InfoPlist.strings : Info.plist $(ULFDIR)$/documents.ulf
     $(MKDIRHIER) $(@:d)
     $(PERL) -w gen_strings.pl -l $(@:d:d:b:s/InfoPlist_//) -p $< | iconv -f UTF-8 -t UTF-16 > $@.$(INPATH)
     $(MV) -f $@.$(INPATH) $@
