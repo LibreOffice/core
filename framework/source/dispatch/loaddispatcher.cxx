@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: loaddispatcher.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,54 @@ void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&    
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
     throw(css::uno::RuntimeException)
 {
+    impl_dispatch( aURL, lArguments, xListener );
+}
+
+/*-----------------------------------------------
+    20.08.2003 09:16
+-----------------------------------------------*/
+void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
+                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+    throw(css::uno::RuntimeException)
+{
+    impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
+}
+
+/*-----------------------------------------------
+    14.04.2008
+-----------------------------------------------*/
+css::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
+                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+    throw( css::uno::RuntimeException )
+{
+    return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+}
+
+/*-----------------------------------------------
+    20.08.2003 10:48
+-----------------------------------------------*/
+void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                const css::util::URL&                                     /*aURL*/     )
+    throw(css::uno::RuntimeException)
+{
+}
+
+/*-----------------------------------------------
+    20.08.2003 10:49
+-----------------------------------------------*/
+void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+                                                   const css::util::URL&                                     /*aURL*/     )
+    throw(css::uno::RuntimeException)
+{
+}
+
+/*-----------------------------------------------
+    20.08.2003 09:58
+-----------------------------------------------*/
+css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
+                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                             const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+{
     // Attention: May be nobody outside hold such temp. dispatch object alive (because
     // the container in which we resists isnt implemented threadsafe but updated by a timer
     // and clear our reference ...) we should hold us self alive!
@@ -120,7 +168,7 @@ void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&    
     css::uno::Reference< css::lang::XComponent > xComponent;
     try
     {
-        m_aLoader.initializeLoading(aURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, (LoadEnv::EFeature)(LoadEnv::E_ALLOW_CONTENTHANDLER | LoadEnv::E_WORK_WITH_UI));
+        m_aLoader.initializeLoading( rURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, (LoadEnv::EFeature)(LoadEnv::E_ALLOW_CONTENTHANDLER | LoadEnv::E_WORK_WITH_UI));
         m_aLoader.startLoading();
         m_aLoader.waitWhileLoading(); // wait for ever!
         xComponent = m_aLoader.getTargetComponent();
@@ -140,36 +188,14 @@ void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&    
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, css::uno::Any()));
     }
 
+    // return the model - like loadComponentFromURL()
+    css::uno::Any aRet;
+    if ( xComponent.is () )
+        aRet = css::uno::makeAny( xComponent );
+
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-}
-
-/*-----------------------------------------------
-    20.08.2003 09:16
------------------------------------------------*/
-void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
-                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-    throw(css::uno::RuntimeException)
-{
-    dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
-}
-
-/*-----------------------------------------------
-    20.08.2003 10:48
------------------------------------------------*/
-void SAL_CALL LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
-                                                const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException)
-{
-}
-
-/*-----------------------------------------------
-    20.08.2003 10:49
------------------------------------------------*/
-void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
-                                                   const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException)
-{
+    return aRet;
 }
 
 } // namespace framework
