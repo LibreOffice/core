@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WrappedNumberFormatProperty.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,7 +176,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
     if( !xInnerPropertySet.is() )
     {
         DBG_ERROR("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
-        return Any( false );
+        return getPropertyDefault(0);
     }
     bool bLink = ! xInnerPropertySet->getPropertyValue( C2U("NumberFormat" )).hasValue();
     return uno::makeAny( bLink );
