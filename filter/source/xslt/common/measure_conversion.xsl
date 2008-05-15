@@ -9,7 +9,7 @@
  
   $RCSfile: measure_conversion.xsl,v $
  
-  $Revision: 1.8 $
+  $Revision: 1.9 $
  
   This file is part of OpenOffice.org.
  
@@ -27,10 +27,10 @@
   version 3 along with OpenOffice.org.  If not, see
   <http://www.openoffice.org/license.html>
   for a copy of the LGPLv3 License.
- 
+
 -->
 <!--
-	For further documentation and updates visit http://xml.openoffice.org/sx2ml
+	For further documentation and updates visit http://xml.openoffice.org/odf2xhtml
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- DPI (dots per inch) the standard resolution of given pictures (necessary for the conversion of 'cm' into 'pixel')
@@ -319,7 +319,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- changing measure to pt (cp. section comment) -->
+	<!-- changing measure to twip (cp. section comment) -->
 	<xsl:template name="convert2twip">
 		<xsl:param name="value"/>
 		<xsl:param name="rounding-factor" select="10000"/>
