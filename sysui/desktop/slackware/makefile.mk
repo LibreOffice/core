@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -72,14 +72,13 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
     $(RM) $*$/opt$/kde$/share$/mimelnk$/application$/*-extension.desktop 
     $(RM) $*$/usr$/share$/applications$/*.desktop
     $(RM) $*$/usr$/bin$/soffice
-    $(RM) $*$/usr$/bin$/unopkg
 
 %$/install$/doinst.sh : update-script
     @echo "( cd etc ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//)) )" > $@
     @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
     @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))/program/soffice soffice )" >> $@
-    @echo $(ECHOPARAM) $(foreach,i,$(shell @sed  's/extensionmgr.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.0//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))-$i )") >> $@
+    @echo $(ECHOPARAM) $(foreach,i,$(shell @cat $(COMMONMISC)$/$(*:b:s/-/ /:1:s/3.0//)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1:s/3.0//))-$i )") >> $@
     @cat $< >> $@
 
 %$/install$/slack-desc : slack-desc
