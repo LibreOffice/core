@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 #include "WrappedPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase11.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -64,7 +64,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DiagramWrapper : public ::cppu::ImplInheritanceHelper10<
+class DiagramWrapper : public ::cppu::ImplInheritanceHelper11<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
                      , ::com::sun::star::chart::XAxisZSupplier
