@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,10 +50,19 @@ PATCH_FILE_NAME=hyphen-2.3.patch
 CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
+# still needed also in system-hyphen case as it creates the makefile
 CONFIGURE_ACTION=configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
 
+.IF "$(SYSTEM_HYPH)" == "YES" && "$(WITH_MYSPELL_DICTS)" == "YES"
+BUILD_ACTION=make hyph_en_US.dic
+.ELIF "$(SYSTEM_HYPH)" == "YES" && "$(WITH_MYSPELL_DICTS)" != "YES"
+@all:
+    echo "Nothing to do here."
+.ELSE
 BUILD_ACTION=make
+OUT2INC += hyphen.h 
+.ENDIF
 
 .ENDIF # "$(GUI)"=="UNX"
 
