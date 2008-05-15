@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -745,7 +745,7 @@ public:
     explicit            XclExpChChart3d();
 
     /** Converts 3d settings for the passed chart type. */
-    void                Convert( const ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo );
+    void                Convert( const ScfPropertySet& rPropSet, bool b3dWallChart );
     /** Sets flag that the data points are clustered on the X axis. */
     inline void         SetClustered() { ::set_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
 
@@ -858,7 +858,7 @@ public:
     /** Returns true, if the chart is three-dimensional. */
     inline bool         Is3dChart() const { return maTypeInfo.mb3dChart; }
     /** Returns true, if chart type supports wall and floor format. */
-    inline bool         Is3dWallChart() const { return Is3dChart() && maTypeInfo.mb3dWalls; }
+    inline bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */
     inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d.is() && !mxChart3d->IsClustered(); }
     /** Returns true, if this chart type can be combined with other types. */
