@@ -199,7 +199,7 @@ application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
-application/vnd.openofficeorg.extension; unopkg gui %s
+application/vnd.openofficeorg.extension; %unixfilename %s
 END
 
   # and replace the original file
@@ -243,7 +243,6 @@ done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
-%attr(0755,root,root) /usr/bin/unopkg
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -255,7 +254,6 @@ done
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
 /usr/share/applications/%unixfilename-printeradmin.desktop
-/usr/share/applications/%unixfilename-extensionmgr.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-writer.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-calc.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-draw.desktop
@@ -263,7 +261,6 @@ done
 /usr/share/applnk-redhat/Office/%unixfilename-math.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-base.desktop
 /usr/share/applnk-redhat/Office/%unixfilename-printeradmin.desktop
-/usr/share/applnk-redhat/Office/%unixfilename-extensionmgr.desktop
 /usr/share/mime-info/*.keys
 /usr/share/mime-info/*.mime
 /usr/share/mimelnk/application/*.desktop
