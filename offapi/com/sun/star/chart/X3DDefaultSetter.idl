@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: X3DDefaultSetter.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2008-05-15 07:59:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_X3DDefaultSetter_idl__
+#define __com_sun_star_chart_X3DDefaultSetter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** makes it easy to set suiteable defaults for illumination and rotation for 3D charts
+
+    @see Dim3DDiagram
+ */
+published interface X3DDefaultSetter : com::sun::star::uno::XInterface
+{
+    /** The result may depend on the current chart type and the current shade mode.
+    */
+    void set3DSettingsToDefault();
+
+    /** sets a suiteable default for the rotation of the current 3D chart.
+    The result may depend on the current chart type.
+    */
+    void setDefaultRotation();
+
+    /** set suiteable defaults for the illumination of the current 3D chart.
+    The result may dependent on other 3D settings as rotation or shade mode. It may depend on the current chart type also.
+    */
+    void setDefaultIllumination();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
