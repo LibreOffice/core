@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: services.h,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,6 +142,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_LOGINDIALOG                          DECLARE_ASCII("com.sun.star.comp.framework.LoginDialog"             )
 #define IMPLEMENTATIONNAME_TYPEDETECTION                        DECLARE_ASCII("com.sun.star.comp.framework.TypeDetection"           )
 #define IMPLEMENTATIONNAME_DOCUMENTPROPERTIES                   DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"      )
+#define IMPLEMENTATIONNAME_OXT_HANDLER                          DECLARE_ASCII("com.sun.star.comp.framework.OXTFileHandler"          )
 #define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY                DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
 #define IMPLEMENTATIONNAME_SFXTERMINATOR                        DECLARE_ASCII("com.sun.star.comp.sfx2.SfxTerminateListener"         )
 #define IMPLEMENTATIONNAME_PIPETERMINATOR                       DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
