@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +36,8 @@
 #include <algorithm>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/CameraGeometry.hpp>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -74,7 +74,6 @@
 #include "xiescher.hxx"
 
 using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -85,11 +84,6 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::drawing::CameraGeometry;
-using ::com::sun::star::drawing::Direction3D;
-using ::com::sun::star::drawing::HomogenMatrix;
-using ::com::sun::star::drawing::HomogenMatrixLine;
-using ::com::sun::star::drawing::Position3D;
 
 using ::com::sun::star::chart2::XChartDocument;
 using ::com::sun::star::chart2::XDiagram;
@@ -1979,33 +1973,66 @@ void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
             >> maData.mnFlags;
 }
 
-void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const
+void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const
 {
-    // do not set right-angled axes for pie charts
-    bool bRightAngled = rTypeInfo.mb3dWalls && !::get_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D );
+    namespace cssd = ::com::sun::star::drawing;
+    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
+
+    sal_Int32 nRotationY = 0;
+    sal_Int32 nRotationX = 0;
+    sal_Int32 nPerspective = 15;
+    bool bRightAngled = false;
+    cssd::ProjectionMode eProjMode = cssd::ProjectionMode_PERSPECTIVE;
+    Color aAmbientColor, aLightColor;
+
+    if( b3dWallChart )
+    {
+        // Y rotation (Excel [0..359], Chart2 [-179,180])
+        nRotationY = maData.mnRotation % 360;
+        if( nRotationY > 180 ) nRotationY -= 360;
+        // X rotation a.k.a. elevation (Excel [-90..90], Chart2 [-179,180])
+        nRotationX = limit_cast< sal_Int32, sal_Int32 >( maData.mnElevation, -90, 90 );
+        // perspective (Excel and Chart2 [0,100])
+        nPerspective = limit_cast< sal_Int32, sal_Int32 >( maData.mnEyeDist, 0, 100 );
+        // right-angled axes
+        bRightAngled = !::get_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D );
+        eProjMode = bRightAngled ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
+        // ambient color (Gray 20%)
+        aAmbientColor.SetColor( RGB_COLORDATA( 204, 204, 204 ) );
+        // light color (Gray 60%)
+        aLightColor.SetColor( RGB_COLORDATA( 102, 102, 102 ) );
+    }
+    else
+    {
+        // Y rotation not used in pie charts, but 'first slice angle'
+        nRotationY = 0;
+        // X rotation a.k.a. elevation (map Excel [10..80] to Chart2 [-80,-10])
+        nRotationX = limit_cast< sal_Int32, sal_Int32 >( maData.mnElevation, 10, 80 ) - 90;
+        // perspective (Excel and Chart2 [0,100])
+        nPerspective = limit_cast< sal_Int32, sal_Int32 >( maData.mnEyeDist, 0, 100 );
+        // no right-angled axes in pie charts, but parallel projection
+        bRightAngled = false;
+        eProjMode = cssd::ProjectionMode_PARALLEL;
+        // ambient color (Gray 30%)
+        aAmbientColor.SetColor( RGB_COLORDATA( 179, 179, 179 ) );
+        // light color (Gray 70%)
+        aLightColor.SetColor( RGB_COLORDATA( 76, 76, 76 ) );
+    }
+
+    // properties
+    rPropSet.SetProperty( EXC_CHPROP_ROTATIONVERTICAL, nRotationY );
+    rPropSet.SetProperty( EXC_CHPROP_ROTATIONHORIZONTAL, nRotationX );
+    rPropSet.SetProperty( EXC_CHPROP_PERSPECTIVE, nPerspective );
     rPropSet.SetBoolProperty( EXC_CHPROP_RIGHTANGLEDAXES, bRightAngled );
-    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENEAMBIENTCOLOR, Color( RGB_COLORDATA( 204, 204, 204 ) ) );
+    rPropSet.SetProperty( EXC_CHPROP_D3DSCENEPERSPECTIVE, eProjMode );
+
+    // light settings
+    rPropSet.SetProperty( EXC_CHPROP_D3DSCENESHADEMODE, cssd::ShadeMode_FLAT );
+    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENEAMBIENTCOLOR, aAmbientColor );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON1, false );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON2, true );
-    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, Color( RGB_COLORDATA( 102, 102, 102 ) ) );
-    rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, Direction3D( 0.2, 0.4, 1.0 ) );
-    rPropSet.SetProperty( EXC_CHPROP_D3DSCENESHADEMODE, ::com::sun::star::drawing::ShadeMode_FLAT );
-
-    // change 3D view of pie charts to Excel's default view
-    if( rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE )
-    {
-        static const HomogenMatrix saMatrix(
-            HomogenMatrixLine( 1.0,  0.0,  0.0,  0.0 ),
-            HomogenMatrixLine( 0.0,  0.5,  1.5,  0.0 ),
-            HomogenMatrixLine( 0.0, -1.5,  0.5,  0.0 ),
-            HomogenMatrixLine( 0.0,  0.0,  0.0,  1.0 ) );
-        rPropSet.SetProperty( EXC_CHPROP_D3DTRANSFORMMATRIX, saMatrix );
-        static const CameraGeometry saCamera(
-            Position3D(   0.0,  0.0, 85000.0 ),
-            Direction3D(  0.0,  0.0,     1.0 ),
-            Direction3D(  0.0,  1.0,     0.0 ) );
-        rPropSet.SetProperty( EXC_CHPROP_D3DCAMERAGEOMETRY, saCamera );
-    }
+    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, aLightColor );
+    rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
 
 // ----------------------------------------------------------------------------
@@ -2213,7 +2240,7 @@ const String& XclImpChTypeGroup::GetSingleSeriesTitle() const
 void XclImpChTypeGroup::ConvertChart3d( ScfPropertySet& rPropSet ) const
 {
     if( mxChart3d.is() )
-        mxChart3d->Convert( rPropSet, maTypeInfo );
+        mxChart3d->Convert( rPropSet, Is3dWallChart() );
 }
 
 Reference< XCoordinateSystem > XclImpChTypeGroup::CreateCoordSystem() const
