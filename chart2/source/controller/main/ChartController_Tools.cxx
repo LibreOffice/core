@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Tools.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,13 +303,7 @@ void ChartController::executeDispatch_NewArrangement()
             xState->setPropertyToDefault( C2U("RelativePosition"));
 
             // 3d rotation
-            xState->setPropertyToDefault( C2U("D3DTransformMatrix"));
-            xState->setPropertyToDefault( C2U("D3DSceneDistance"));
-            xState->setPropertyToDefault( C2U("D3DSceneFocalLength"));
-            Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-            drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry());
-            xDiaProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
-            //todo: different defaults for pie and donut; todo ask template
+            ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
 
             // legend
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
