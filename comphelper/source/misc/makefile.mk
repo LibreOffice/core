@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.46 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -84,7 +84,8 @@ SLOFILES=	\
             $(SLO)$/logging.obj \
             $(SLO)$/documentinfo.obj \
             $(SLO)$/string.obj \
-            $(SLO)$/legacysingletonfactory.obj
+            $(SLO)$/legacysingletonfactory.obj \
+            $(SLO)$/synchronousdispatch.obj
 
 # --- Targets ----------------------------------
 
