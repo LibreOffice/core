@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,7 @@ ULFFILES= \
     launcher_genericname.ulf \
     launcher_name.ulf
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin qstart extensionmgr
+LAUNCHERLIST = writer calc draw impress math base printeradmin qstart
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
@@ -113,9 +113,9 @@ MIMEICONLIST = \
     extension
 
 ICONDEPN = \
-    ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST:s/qstart//:s/extensionmgr//)}.png \
+    ../icons/hicolor/{16x16 32x32 48x48}/apps/{$(LAUNCHERLIST:s/qstart//)}.png \
     ../icons/hicolor/{16x16 32x32 48x48}/mimetypes/{$(MIMEICONLIST)}.png \
-    ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//:s/extensionmgr//)}.png \
+    ../icons/locolor/{16x16 32x32}/apps/{$(LAUNCHERLIST:s/qstart//)}.png \
     ../icons/locolor/{16x16 32x32}/mimetypes/{$(MIMEICONLIST)}.png
 
 # --- Targets ------------------------------------------------------
