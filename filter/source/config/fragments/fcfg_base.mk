@@ -1,9 +1,10 @@
 all_fragments+=base
 
 # -----------------------------------------------
-# count = 5
+# count = 6
 T4_BASE = \
     writer_web_HTML_help \
+    oxt_OpenOffice_Extension \
     wav_Wave_Audio_File \
     component_Bibliography \
     component_DB
@@ -24,9 +25,10 @@ L4_BASE = \
     com_sun_star_sdb_ContentLoader
 
 # -----------------------------------------------
-# count = 1
+# count = 2
 C4_BASE = \
-    com_sun_star_comp_framework_SoundHandler
+    com_sun_star_comp_framework_SoundHandler \
+    com_sun_star_comp_framework_oxt_handler
 
 # -----------------------------------------------
 TYPES_4fcfg_base           = $(foreach,i,$(T4_BASE)    types$/$i.xcu                     )
