@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: loaddispatcher.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,10 +39,12 @@
 //_______________________________________________
 // interface includes
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
 
 //_______________________________________________
 // other includes
-#include <cppuhelper/implbase1.hxx>
+
+#include <cppuhelper/implbase2.hxx>
 
 //_______________________________________________
 // namespace
@@ -64,7 +66,8 @@ namespace css = ::com::sun::star;
     @author     as96863
  */
 class LoadDispatcher : private ThreadHelpBase
-                     , public  ::cppu::WeakImplHelper1< css::frame::XNotifyingDispatch > // => XDispatch => XInterface
+                     , public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDispatch,          // => XDispatch => XInterface
+                                                        css::frame::XSynchronousDispatch >
 {
     //___________________________________________
     // member
@@ -145,6 +148,15 @@ class LoadDispatcher : private ThreadHelpBase
                                                    const css::util::URL&                                     aURL     )
             throw(css::uno::RuntimeException);
 
+        // XSynchronousDispatch
+        virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
+                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+            throw( css::uno::RuntimeException );
+
+    private:
+        css::uno::Any impl_dispatch( const css::util::URL& rURL,
+                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 }; // class LoadDispatcher
 
 } // namespace framework
