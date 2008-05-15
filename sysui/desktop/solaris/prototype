@@ -5,7 +5,6 @@ d none etc 0755 root sys
 d none usr 0755 root sys
 d none usr/bin 0755 root bin
 s none usr/bin/soffice=../../etc/%PREFIX/program/soffice
-s none usr/bin/unopkg=../../etc/%PREFIX/program/unopkg
 f none usr/bin/%PREFIX=%SOURCE/openoffice.sh 0755 root bin
 f none usr/bin/%PREFIX-printeradmin=%SOURCE/printeradmin.sh 0755 root bin
 d none usr/share 0755 root sys
