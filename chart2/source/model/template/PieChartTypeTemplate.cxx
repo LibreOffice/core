@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PieChartTypeTemplate.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -641,16 +641,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     }
 
     //reset scene properties
-    Reference< beans::XPropertySet > xDiagramProp( xDiagram, uno::UNO_QUERY );
-    if( xDiagramProp.is() )
-    {
-        drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( false ) );
-        xDiagramProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
-
-        ::basegfx::B3DHomMatrix aSceneRotation;
-        xDiagramProp->setPropertyValue( C2U("D3DTransformMatrix"),
-            uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
-    }
+    ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), false );
 }
 
 // ____ XChartTypeTemplate ____
@@ -659,20 +650,8 @@ void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram 
     if( !xDiagram.is() )
         return;
 
-    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
-    if( xProp.is() )
-    {
-        //different default for scene geometry:
-        {
-            drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( true ) );
-            xProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
-
-            ::basegfx::B3DHomMatrix aSceneRotation;
-            aSceneRotation.rotate( -F_PI/3.0, 0, 0 );
-            xProp->setPropertyValue( C2U("D3DTransformMatrix"),
-                uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
-        }
-    }
+    //different default for scene geometry:
+    ThreeDHelper::setDefaultRotation( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ), true );
 }
 
 // ----------------------------------------
