@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1061,6 +1061,31 @@ Reference<
         m_xFloor = new WallFloorWrapper( false, m_spChart2ModelContact );
     }
     return m_xFloor;
+}
+
+// ____ X3DDefaultSetter ____
+void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
+    throw (uno::RuntimeException)
+{
+    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    if( x3DDefaultSetter.is() )
+        x3DDefaultSetter->set3DSettingsToDefault();
+}
+
+void SAL_CALL DiagramWrapper::setDefaultRotation()
+    throw (uno::RuntimeException)
+{
+    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    if( x3DDefaultSetter.is() )
+        x3DDefaultSetter->setDefaultRotation();
+}
+
+void SAL_CALL DiagramWrapper::setDefaultIllumination()
+    throw (uno::RuntimeException)
+{
+    Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
+    if( x3DDefaultSetter.is() )
+        x3DDefaultSetter->setDefaultIllumination();
 }
 
 // ____ XComponent ____
