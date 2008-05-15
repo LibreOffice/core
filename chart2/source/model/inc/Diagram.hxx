@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Diagram.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +32,13 @@
 
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/chart/X3DDefaultSetter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -54,11 +55,12 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper7<
+typedef ::cppu::WeakImplHelper8<
     ::com::sun::star::chart2::XDiagram,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::chart2::XCoordinateSystemContainer,
     ::com::sun::star::chart2::XTitled,
+    ::com::sun::star::chart::X3DDefaultSetter,
     ::com::sun::star::util::XModifyBroadcaster,
     ::com::sun::star::util::XModifyListener,
     ::com::sun::star::util::XCloneable >
@@ -174,6 +176,11 @@ protected:
     virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ X3DDefaultSetter ____
+    virtual void SAL_CALL set3DSettingsToDefault() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultRotation() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultIllumination() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
