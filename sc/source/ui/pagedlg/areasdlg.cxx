@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: areasdlg.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,7 +391,7 @@ BOOL ScPrintAreasDlg::Impl_CheckRefStrings()
         const USHORT nValidRange = nValidAddr | SCA_VALID_ROW2 | SCA_VALID_COL2;
         const ScAddress::Convention eConv = pDoc->GetAddressConvention();
         const sal_Unicode sep  = ScCompiler::GetStringFromOpCode(ocSep).GetChar(0);
-        const sal_Unicode rsep = ScCompiler::GetStringFromOpCode(ocRange).GetChar(0);
+        // const sal_Unicode rsep = ScCompiler::GetStringFromOpCode(ocRange).GetChar(0);
 
         ScAddress aAddr;
         ScRange aRange;
@@ -402,8 +402,8 @@ BOOL ScPrintAreasDlg::Impl_CheckRefStrings()
             USHORT nResult = aRange.Parse( aOne, pDoc, eConv );
             if ((nResult & nValidRange) != nValidRange)
             {
-                USHORT nResult = aAddr.Parse( aOne, pDoc, eConv );
-                if ((nResult & nValidAddr) != nValidAddr)
+                USHORT nAddrResult = aAddr.Parse( aOne, pDoc, eConv );
+                if ((nAddrResult & nValidAddr) != nValidAddr)
                     bPrintAreaOk = FALSE;
             }
         }
@@ -790,6 +790,10 @@ bool lcl_CheckRepeatOne( const String& rStr, ScAddress::Convention eConv, bool b
             return lcl_CheckOne_XL_A1(rStr, bIsRow, rVal);
         case ScAddress::CONV_XL_R1C1:
             return lcl_CheckOne_XL_R1C1(rStr, bIsRow, rVal);
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return false;
 }

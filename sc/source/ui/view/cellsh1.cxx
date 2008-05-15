@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -930,7 +930,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 String  aAdrStr;
                                 ScAddress aAdr( nFillCol, nFillRow, 0 );
-                                ScDocument* pDoc = GetViewData()->GetDocument();
                                 aAdr.Format( aAdrStr, SCR_ABS, pDoc, pDoc->GetAddressConvention() );
 
                                 rReq.AppendItem( SfxStringItem( FID_FILL_AUTO, aAdrStr ) );
