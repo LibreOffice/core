@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.121 $
+# $Revision: 1.122 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -221,6 +221,7 @@ SHL4OBJS=       \
                 $(SLO)$/oframes.obj					\
                 $(SLO)$/registerservices.obj		\
                 $(SLO)$/closedispatcher.obj         \
+                $(SLO)$/oxt_handler.obj    			\
                 $(SLO)$/statusindicator.obj			\
                 $(SLO)$/statusindicatorfactory.obj	\
                 $(SLO)$/targetfinder.obj		  	\
