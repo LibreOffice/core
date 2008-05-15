@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ThreeDHelper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,16 @@ enum ThreeDLookScheme
     ThreeDLookScheme_Unknown
 };
 
+enum CuboidPlanePosition
+{
+    CuboidPlanePosition_Left,
+    CuboidPlanePosition_Right,
+    CuboidPlanePosition_Top,
+    CuboidPlanePosition_Bottom,
+    CuboidPlanePosition_Front,
+    CuboidPlanePosition_Back
+};
+
 class ThreeDHelper
 {
 public:
@@ -90,6 +100,14 @@ public:
     static double getYDegreeAngleLimitForRightAngledAxes();
     static double getValueClippedToRange( double fValue, const double& fPositivLimit );
 
+    static void convertElevationRotationDegToXYZAngleRad(
+        sal_Int32 nElevationDeg, sal_Int32 nRotationDeg
+        , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
+
+    static void convertXYZAngleRadToElevationRotationDeg(
+        sal_Int32& rnElevationDeg, sal_Int32& rnRotationDeg
+        , double fXRad, double fYRad, double fZRad );
+
     static double getCameraDistance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties );
@@ -102,6 +120,23 @@ public:
 
     static double CameraDistanceToPerspective( double fCameraDistance );
     static double PerspectiveToCameraDistance( double fPerspective );
+
+    static void set3DSettingsToDefault( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static void setDefaultRotation( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static void setDefaultIllumination( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+
+    static void setDefaultRotation( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties, bool bPieOrDonut );
+
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardLeftWall( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBackWall(const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
+    static CuboidPlanePosition getAutomaticCuboidPlanePositionForStandardBottom(const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
 
     static ThreeDLookScheme detectScheme( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram );
