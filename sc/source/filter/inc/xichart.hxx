@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xichart.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -881,7 +881,7 @@ public:
     /** Returns true, if the data points are clustered on the X axis. */
     inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
+    void                Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const;
 
 private:
     XclChChart3d        maData;             /// Contents of the CHCHART3D record.
@@ -996,7 +996,7 @@ public:
     /** Returns true, if the chart is three-dimensional. */
     inline bool         Is3dChart() const { return mxChart3d.is() && maTypeInfo.mbSupports3d; }
     /** Returns true, if chart type supports wall and floor format in 3d mode. */
-    inline bool         Is3dWallChart() const { return Is3dChart() && maTypeInfo.mb3dWalls; }
+    inline bool         Is3dWallChart() const { return Is3dChart() && (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE); }
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */
     inline bool         Is3dDeepChart() const { return Is3dWallChart() && mxChart3d.is() && !mxChart3d->IsClustered(); }
     /** Returns true, if category (X axis) labels are enabled (may be disabled in radar charts). */
@@ -1013,7 +1013,7 @@ public:
     /** Returns series title, if the chart type group contains only one single series. */
     const String&       GetSingleSeriesTitle() const;
 
-    /** Converts and writes all 3D settings to the passed chart. */
+    /** Converts and writes all 3D settings to the passed diagram. */
     void                ConvertChart3d( ScfPropertySet& rPropSet ) const;
     /** Creates a coordinate system according to the contained chart type. */
     XCoordSystemRef     CreateCoordSystem() const;
