@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianAxis.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,7 @@ public:
     //-------------------------------------------------------------------------
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
     bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
-    void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis ) const;
+    void        get2DAxisMainLine( ::basegfx::B2DVector& rStart, ::basegfx::B2DVector& rEnd, double fCrossesOtherAxis );
 
     //-------------------------------------------------------------------------
     //Layout interface for cartesian axes:
@@ -102,6 +102,15 @@ public:
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
+    struct ScreenPosAndLogicPos
+    {
+        double fLogicX;
+        double fLogicY;
+        double fLogicZ;
+
+        B2DVector aScreenPos;
+    };
+
 protected: //methods
     bool    createTextShapes( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::drawing::XShapes >& xTarget
@@ -117,6 +126,9 @@ protected: //methods
                             , TickmarkHelper_2D* pTickmarkHelper);
     bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
                                                      , TickmarkHelper_2D* pTickmarkHelper );
+
+    ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
+    ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;
 };
 
 //.............................................................................
