@@ -540,13 +540,13 @@ end Sub
 Function GetDocEndings (DocType as Integer) as String
 	Select Case ( DocType )
 		case frmWriter or cFlt8
-			GetDocEndings = &quot;oxt&quot; &apos; Textdokument 
+			GetDocEndings = &quot;odt&quot; &apos; Textdokument 
 		case frmCalc or cFlt8
-			GetDocEndings = &quot;oxs&quot; &apos;Tabellendokument 
+			GetDocEndings = &quot;ods&quot; &apos;Tabellendokument 
 		case frmImpress or cFlt8
-			GetDocEndings = &quot;oxp&quot; &apos;PrÕsentation 
+			GetDocEndings = &quot;odp&quot; &apos;PrÕsentation 
 		case frmDraw or cFlt8
-			GetDocEndings = &quot;oxd&quot; &apos;Zeichen
+			GetDocEndings = &quot;odg&quot; &apos;Zeichen
 		case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
 			GetDocEndings = &quot;html&quot; &apos;Hypertext-Dokument
 		case frmWriter or cFlt50
