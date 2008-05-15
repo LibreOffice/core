@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1043,6 +1043,14 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     for( nC=0; nC < rVCooSysList.size(); nC++)
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        if(3==nDimensionCount)
+        {
+            uno::Reference<beans::XPropertySet> xSceneProperties( xDiagram, uno::UNO_QUERY );
+            CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( xSceneProperties ) );
+            CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( xSceneProperties ) );
+            CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xSceneProperties ) );
+            pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
+        }
         pVCooSys->createVAxisList( xNumberFormatsSupplier
                                         , rAvailableSize //font reference size
                                         , BaseGFXHelper::B2IRectangleToAWTRectangle( aAvailableOuterRect ) //maximum space for labels
