@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianCoordinateSystem.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +103,7 @@ void VCartesianCoordinateSystem::createGridShapes()
         VCartesianGrid aGrid(nDimensionIndex,nDimensionCount,this->getGridListFromAxis( xAxis ));
         aGrid.setExplicitScaleAndIncrement( this->getExplicitScale(nDimensionIndex,nAxisIndex)
                             , this->getExplicitIncrement(nDimensionIndex,nAxisIndex) );
+        aGrid.set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
         aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
             , this->createCIDForGrid( xAxis,nDimensionIndex,nAxisIndex ) );
@@ -153,6 +154,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
+            apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
             //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
             //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
