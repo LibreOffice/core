@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragMethod_RotateDiagram.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +77,12 @@ private:
     double      m_fAdditionalXAngleRad;
     double      m_fAdditionalYAngleRad;
     double      m_fAdditionalZAngleRad;
+
+    sal_Int32 m_nInitialHorizontalAngleDegree;
+    sal_Int32 m_nInitialVerticalAngleDegree;
+
+    sal_Int32 m_nAdditionalHorizontalAngleDegree;
+    sal_Int32 m_nAdditionalVerticalAngleDegree;
 
     RotationDirection m_eRotationDirection;
     sal_Bool    m_bRightAngledAxes;
