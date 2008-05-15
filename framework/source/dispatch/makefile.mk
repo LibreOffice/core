@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +57,7 @@ SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/closedispatcher.obj                 \
                     $(SLO)$/systemexec.obj						\
                     $(SLO)$/popupmenudispatcher.obj             \
+                    $(SLO)$/oxt_handler.obj                     \
                     $(SLO)$/windowcommanddispatch.obj
 
 # --- Targets ------------------------------------------------------
