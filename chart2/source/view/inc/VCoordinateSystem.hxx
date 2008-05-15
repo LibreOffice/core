@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCoordinateSystem.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 
 #include "MinimumAndMaximumSupplier.hxx"
 #include "ScaleAutomatism.hxx"
+#include "ThreeDHelper.hxx"
+
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
@@ -102,6 +104,8 @@ public:
     void setExplicitScaleAndIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
         , const ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale
         , const ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement );
+
+    void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem >
@@ -178,6 +182,10 @@ protected: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
     ::com::sun::star::drawing::HomogenMatrix                            m_aMatrixSceneToScreen;
+
+    CuboidPlanePosition m_eLeftWallPos;
+    CuboidPlanePosition m_eBackWallPos;
+    CuboidPlanePosition m_eBottomPos;
 
     //
     MergedMinimumAndMaximumSupplier m_aMergedMinimumAndMaximumSupplier; //this is used only for autoscaling purpose
