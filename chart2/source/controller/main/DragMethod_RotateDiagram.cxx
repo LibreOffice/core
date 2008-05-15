@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DragMethod_RotateDiagram.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,10 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_fAdditionalXAngleRad(0.0)
     , m_fAdditionalYAngleRad(0.0)
     , m_fAdditionalZAngleRad(0.0)
+    , m_nInitialHorizontalAngleDegree(0)
+    , m_nInitialVerticalAngleDegree(0)
+    , m_nAdditionalHorizontalAngleDegree(0)
+    , m_nAdditionalVerticalAngleDegree(0)
     , m_eRotationDirection(eRotationDirection)
     , m_bRightAngledAxes(sal_False)
 {
@@ -88,8 +92,12 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
         uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
         if( xDiagramProperties.is() )
         {
+            ThreeDHelper::getRotationFromDiagram( xDiagramProperties
+                , m_nInitialHorizontalAngleDegree, m_nInitialVerticalAngleDegree );
+
             ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
                 , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
+
             if( ChartTypeHelper::isSupportingRightAngledAxes(
                 DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
                 xDiagramProperties->getPropertyValue(C2U( "RightAngledAxes" )) >>= m_bRightAngledAxes;
@@ -149,6 +157,9 @@ void DragMethod_RotateDiagram::Mov(const Point& rPnt)
                 + atan((double)(fCx - rPnt.X())/(fCy-rPnt.Y()));
         }
 
+        m_nAdditionalHorizontalAngleDegree = static_cast<sal_Int32>(m_fAdditionalXAngleRad*180.0/F_PI);
+        m_nAdditionalVerticalAngleDegree = -static_cast<sal_Int32>(m_fAdditionalYAngleRad*180.0/F_PI);
+
         DragStat().NextMove(rPnt);
         MovAllPoints();
 
@@ -167,7 +178,15 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(::sdr::overlay::OverlayMana
     double fResultZ = m_fInitialZAngleRad + m_fAdditionalZAngleRad;
 
     if(!m_bRightAngledAxes)
+    {
+        if( m_eRotationDirection!=ROTATIONDIRECTION_Z )
+        {
+            ThreeDHelper::convertElevationRotationDegToXYZAngleRad(
+                m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, -(m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree)
+                , fResultX, fResultY, fResultZ );
+        }
         aCurrentTransform.rotate( fResultX, fResultY, fResultZ );
+    }
     else
     {
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
@@ -201,15 +220,23 @@ FASTBOOL DragMethod_RotateDiagram::End(FASTBOOL /* bCopy */)
 {
     Hide();
 
-    double fResultX = m_fInitialXAngleRad + m_fAdditionalXAngleRad;
-    double fResultY = m_fInitialYAngleRad + m_fAdditionalYAngleRad;
-    double fResultZ = m_fInitialZAngleRad + m_fAdditionalZAngleRad;
+    if( m_bRightAngledAxes || m_eRotationDirection==ROTATIONDIRECTION_Z )
+    {
+        double fResultX = m_fInitialXAngleRad + m_fAdditionalXAngleRad;
+        double fResultY = m_fInitialYAngleRad + m_fAdditionalYAngleRad;
+        double fResultZ = m_fInitialZAngleRad + m_fAdditionalZAngleRad;
 
-    if(m_bRightAngledAxes)
-        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
+        if(m_bRightAngledAxes)
+            ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
 
-    ThreeDHelper::setRotationAngleToDiagram( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY )
-        , fResultX, fResultY, fResultZ );
+        ThreeDHelper::setRotationAngleToDiagram( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY )
+            , fResultX, fResultY, fResultZ );
+    }
+    else
+    {
+        ThreeDHelper::setRotationToDiagram( ( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY ) )
+            , m_nInitialHorizontalAngleDegree+m_nAdditionalHorizontalAngleDegree, m_nInitialVerticalAngleDegree+m_nAdditionalVerticalAngleDegree );
+    }
 
     return true;
 }
