@@ -502,6 +502,30 @@
 				</array>
 			</dict>
 		</dict>
+
+		<!-- Extensions -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.openoffice.extension</string>
+			<key>UTTypeDescription</key>
+			<string>${PRODUCTNAME} Extension</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>oxt</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.openofficeorg.extension</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	
 	<!-- Document type declaration for OS X < 10.4 -->
@@ -1021,6 +1045,24 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>oxt</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.openofficeorg.extension</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>extension.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>${PRODUCTNAME} Extension</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
