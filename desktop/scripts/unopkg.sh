@@ -9,7 +9,7 @@
 #
 # $RCSfile: unopkg.sh,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -75,10 +75,6 @@ unset XENVIRONMENT
 PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
-# assume gui mode if passed a single oxt file as argument
-GUI=""
-[ $# -eq 1 -a "oxt" = "`echo $1 | cut -d . -f 2`" -a -n "$DISPLAY" ] && GUI="gui"
-
 # execute binary
-exec "$sd_prog/unopkg.bin" $GUI "$@" "-env:INIFILEPATH=$sd_prog/redirectrc"
+exec "$sd_prog/unopkg.bin" "$@" "-env:INIFILEPATH=$sd_prog/redirectrc"
 
