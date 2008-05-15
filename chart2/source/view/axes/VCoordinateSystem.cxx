@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCoordinateSystem.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,9 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
     , m_xFinalTarget(0)
     , m_xShapeFactory(0)
     , m_aMatrixSceneToScreen()
+    , m_eLeftWallPos(CuboidPlanePosition_Left)
+    , m_eBackWallPos(CuboidPlanePosition_Back)
+    , m_eBottomPos(CuboidPlanePosition_Bottom)
     , m_aMergedMinimumAndMaximumSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
@@ -464,6 +467,13 @@ void VCoordinateSystem::setExplicitScaleAndIncrement(
         m_aSecondaryExplicitScales[aFullAxisIndex] = rExplicitScale;
         m_aSecondaryExplicitIncrements[aFullAxisIndex] = rExplicitIncrement;
     }
+}
+
+void VCoordinateSystem::set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos )
+{
+    m_eLeftWallPos = eLeftWallPos;
+    m_eBackWallPos = eBackWallPos;
+    m_eBottomPos = eBottomPos;
 }
 
 void VCoordinateSystem::createMaximumAxesLabels()
