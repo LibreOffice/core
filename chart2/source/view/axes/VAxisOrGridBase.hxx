@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VAxisOrGridBase.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,8 @@
 #define _CHART2_VAXISORGRIDBASE_HXX
 
 #include "PlotterBase.hxx"
+#include "ThreeDHelper.hxx"
+
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -60,6 +62,7 @@ public:
             const ::com::sun::star::chart2::ExplicitScaleData& rScale
           , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
                 throw (::com::sun::star::uno::RuntimeException);
+    void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
     virtual TickmarkHelper* createTickmarkHelper();
 
@@ -71,6 +74,10 @@ protected: //member
     sal_Int32                                       m_nDimensionIndex;
 
     ::basegfx::B3DHomMatrix                         m_aMatrixScreenToScene;
+
+    CuboidPlanePosition m_eLeftWallPos;
+    CuboidPlanePosition m_eBackWallPos;
+    CuboidPlanePosition m_eBottomPos;
 };
 
 //.............................................................................
