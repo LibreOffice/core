@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appopen.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,9 +54,10 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
-#ifndef _COMPHELPER_STORAGEHELPER_HXX_
+
 #include <comphelper/storagehelper.hxx>
-#endif
+#include <comphelper/synchronousdispatch.hxx>
+
 #include <vcl/wrkwin.hxx>
 #include <svtools/intitem.hxx>
 #include <vcl/msgbox.hxx>
@@ -1334,8 +1335,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             try
             {
-                Reference < XComponentLoader > xLoader( xFrame, UNO_QUERY );
-                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
+                xComp = ::comphelper::SynchronousDispatch::dispatch( xFrame, aFileName, aTarget, 0, aArgs );
+//                Reference < XComponentLoader > xLoader( xFrame, UNO_QUERY );
+//                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
             }
             catch(const RuntimeException&)
             {
