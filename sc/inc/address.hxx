@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: address.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +176,26 @@ inline bool ValidColRow( SCCOL nCol, SCROW nRow )
 inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ValidCol( nCol) && ValidRow( nRow) && ValidTab( nTab);
+}
+
+inline SCCOL SanitizeCol( SCCOL nCol )
+{
+    return nCol < 0 ? 0 : (nCol > MAXCOL ? MAXCOL : nCol);
+}
+
+inline SCROW SanitizeRow( SCROW nRow )
+{
+    return nRow < 0 ? 0 : (nRow > MAXROW ? MAXROW : nRow);
+}
+
+inline SCTAB SanitizeTab( SCTAB nTab )
+{
+    return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
+}
+
+inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
+{
+    return nTab < 0 ? 0 : (nTab > nMaxTab ? nMaxTab : nTab);
 }
 
 // === ScAddress =============================================================
