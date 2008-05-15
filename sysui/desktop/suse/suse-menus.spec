@@ -200,11 +200,11 @@ application/wordperfect5.1; %unixfilename -view %s
 application/x-wordperfect; %unixfilename -view %s
 application/wordperfect; %unixfilename -view %s
 application/wpwin; %unixfilename -view %s
-application/vnd.openofficeorg.extension; unopkg gui %s
+application/vnd.openofficeorg.extension; %unixfilename %s
 END
 
   # and replace the original file
-  mv -f /etc/mailcap.tmp$$ /etc/mailcapl
+  mv -f /etc/mailcap.tmp$$ /etc/mailcap
 fi
 
 %preun
@@ -245,7 +245,6 @@ done
 
 %files
 %attr(0755,root,root) /usr/bin/soffice
-%attr(0755,root,root) /usr/bin/unopkg
 %attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
 %attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
@@ -253,7 +252,6 @@ done
 /usr/share/applications/%unixfilename-writer.desktop
 /usr/share/applications/%unixfilename-calc.desktop
 /usr/share/applications/%unixfilename-draw.desktop
-/usr/share/applications/%unixfilename-extensionmgr.desktop
 /usr/share/applications/%unixfilename-impress.desktop
 /usr/share/applications/%unixfilename-math.desktop
 /usr/share/applications/%unixfilename-base.desktop
