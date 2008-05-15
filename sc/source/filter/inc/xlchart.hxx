@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_D3DSCENELIGHTCOLOR2      CREATE_OUSTRING( "D3DSceneLightColor2" )
 #define EXC_CHPROP_D3DSCENELIGHTDIR2        CREATE_OUSTRING( "D3DSceneLightDirection2" )
 #define EXC_CHPROP_D3DSCENELIGHTON2         CREATE_OUSTRING( "D3DSceneLightOn2" )
+#define EXC_CHPROP_D3DSCENEPERSPECTIVE      CREATE_OUSTRING( "D3DScenePerspective" )
 #define EXC_CHPROP_D3DSCENESHADEMODE        CREATE_OUSTRING( "D3DSceneShadeMode" )
 #define EXC_CHPROP_D3DTRANSFORMMATRIX       CREATE_OUSTRING( "D3DTransformMatrix" )
 #define EXC_CHPROP_DISPLAYLABELS            CREATE_OUSTRING( "DisplayLabels" )
@@ -107,9 +108,12 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_OVERLAPSEQ               CREATE_OUSTRING( "OverlapSequence" )
 #define EXC_CHPROP_PERCENTAGENUMFMT         CREATE_OUSTRING( "PercentageNumberFormat" )
 #define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
+#define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
+#define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
+#define EXC_CHPROP_ROTATIONVERTICAL         CREATE_OUSTRING( "RotationVertical" )
 #define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
 #define EXC_CHPROP_SHOWCORRELATION          CREATE_OUSTRING( "ShowCorrelationCoefficient" )
 #define EXC_CHPROP_SHOWEQUATION             CREATE_OUSTRING( "ShowEquation" )
@@ -479,8 +483,8 @@ const sal_uInt16 EXC_ID_CHCHART3D               = 0x103A;
 const sal_uInt16 EXC_CHCHART3D_REAL3D           = 0x0001;   /// true = real 3d perspective.
 const sal_uInt16 EXC_CHCHART3D_CLUSTER          = 0x0002;   /// false = Z axis, true = clustered/stacked.
 const sal_uInt16 EXC_CHCHART3D_AUTOHEIGHT       = 0x0004;   /// true = automatic height to width ratio.
-const sal_uInt16 EXC_CHCHART3D_BIT4             = 0x0010;   /// This bit is always set in BIFF5+.
-const sal_uInt16 EXC_CHCHART3D_2DWALLS          = 0x0020;   /// true = 2d wall, no floor.
+const sal_uInt16 EXC_CHCHART3D_HASWALLS         = 0x0010;   /// true = 3d chart has walls/floor.
+const sal_uInt16 EXC_CHCHART3D_2DWALLS          = 0x0020;   /// true = 2d wall/gridlines, no floor.
 
 // (0x103C) CHPICFORMAT -------------------------------------------------------
 
@@ -1157,7 +1161,6 @@ struct XclChTypeInfo
     sal_Int32           mnDefaultLabelPos;      /// Default data label position (API constant).
     bool                mbCombinable2d;         /// true = Types can be combined in one axes set.
     bool                mbSupports3d;           /// true = 3d type allowed, false = Only 2d type.
-    bool                mb3dWalls;              /// true = 3d type includes wall and floor format.
     bool                mbPolarCoordSystem;     /// true = Polar, false = Cartesian.
     bool                mbSeriesIsFrame2d;      /// true = Series with area formatting (2d charts).
     bool                mbSeriesIsFrame3d;      /// true = Series with area formatting (3d charts).
