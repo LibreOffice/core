@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramWrapper.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 
+#include <com/sun/star/chart/X3DDefaultSetter.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace chart
@@ -71,6 +72,7 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper10<
                      , ::com::sun::star::chart::XTwoAxisYSupplier   //  : XAxisYSupplier
                      , ::com::sun::star::chart::XStatisticDisplay
                      , ::com::sun::star::chart::X3DDisplay
+                     , ::com::sun::star::chart::X3DDefaultSetter
                      , ::com::sun::star::lang::XServiceInfo
                         , ::com::sun::star::lang::XComponent
 //                      , ::com::sun::star::lang::XEventListener
@@ -200,6 +202,11 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getFloor()
         throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ X3DDefaultSetter ____
+    virtual void SAL_CALL set3DSettingsToDefault() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultRotation() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDefaultIllumination() throw (::com::sun::star::uno::RuntimeException);
 
 //     // ____ XEventListener ____
 //     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
