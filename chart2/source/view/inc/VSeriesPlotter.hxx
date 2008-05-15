@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VSeriesPlotter.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,7 +354,6 @@ protected: //methods
     ::rtl::OUString getLabelTextForValue( VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
-                , double fSumValue
                 , bool bAsPercentage );
 
     /** creates two T-shaped error bars in both directions (up/down or
