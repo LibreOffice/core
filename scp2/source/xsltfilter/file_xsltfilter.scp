@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_xsltfilter.scp,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,51 +67,23 @@ End
 
 File gid_File_Xsl_Export_Xhtml_Body
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/body.xsl";
 End
 
 File gid_File_Xsl_Export_Xhtml_Header
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/header.xsl";
 End
 
-File gid_File_Xsl_Export_Xhtml_Master_Chapter_Numbering
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/master_chapter_numbering.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Master_Document
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/master_document.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Master_Refs_Workaround
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/master_refs_workaround.xsl";
-End
-
-File gid_File_Xsl_Export_Xhtml_Master_Usability_Links
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/master_usability_links.xsl";
-End
-
 File gid_File_Xsl_Export_Xhtml_Ooo2xhtml
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/ooo2xhtml.xsl";
+    Name = "/xslt/export/xhtml/opendoc2xhtml.xsl";
 End
 
 File gid_File_Xsl_Export_Xhtml_Table
