@@ -8,7 +8,7 @@
  *
  * $RCSfile: Diagram.cxx,v $
  *
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -394,6 +394,25 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& T
         aGuard.clear();
         fireModifyEvent();
     }
+}
+
+// ____ X3DDefaultSetter ____
+void SAL_CALL Diagram::set3DSettingsToDefault()
+    throw (uno::RuntimeException)
+{
+    ThreeDHelper::set3DSettingsToDefault( this );
+}
+
+void SAL_CALL Diagram::setDefaultRotation()
+    throw (uno::RuntimeException)
+{
+    ThreeDHelper::setDefaultRotation( this );
+}
+
+void SAL_CALL Diagram::setDefaultIllumination()
+    throw (uno::RuntimeException)
+{
+    ThreeDHelper::setDefaultIllumination( this );
 }
 
 // ____ XCoordinateSystemContainer ____
