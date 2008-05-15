@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xechart.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1763,18 +1763,39 @@ XclExpChChart3d::XclExpChChart3d() :
 {
 }
 
-void XclExpChChart3d::Convert( const ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo )
+void XclExpChChart3d::Convert( const ScfPropertySet& rPropSet, bool b3dWallChart )
 {
-    if( rTypeInfo.mb3dWalls )
+    sal_Int32 nRotationY = 0;
+    rPropSet.GetProperty( nRotationY, EXC_CHPROP_ROTATIONVERTICAL );
+    sal_Int32 nRotationX = 0;
+    rPropSet.GetProperty( nRotationX, EXC_CHPROP_ROTATIONHORIZONTAL );
+    sal_Int32 nPerspective = 15;
+    rPropSet.GetProperty( nPerspective, EXC_CHPROP_PERSPECTIVE );
+
+    if( b3dWallChart )
     {
-        maData.mnRotation = 20;
+        // Y rotation (Excel [0..359], Chart2 [-179,180])
+        if( nRotationY < 0 ) nRotationY += 360;
+        maData.mnRotation = static_cast< sal_uInt16 >( nRotationY );
+        // X rotation a.k.a. elevation (Excel [-90..90], Chart2 [-179,180])
+        maData.mnElevation = limit_cast< sal_Int16 >( nRotationX, -90, 90 );
+        // perspective (Excel and Chart2 [0,100])
+        maData.mnEyeDist = limit_cast< sal_uInt16 >( nPerspective, 0, 100 );
+        // flags
+        maData.mnFlags = 0;
         ::set_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D, !rPropSet.GetBoolProperty( EXC_CHPROP_RIGHTANGLEDAXES ) );
         ::set_flag( maData.mnFlags, EXC_CHCHART3D_AUTOHEIGHT );
-        ::set_flag( maData.mnFlags, EXC_CHCHART3D_BIT4 );
+        ::set_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS );
     }
     else
     {
+        // Y rotation not used in pie charts, but 'first slice angle'
         maData.mnRotation = 0;
+        // X rotation a.k.a. elevation (map Chart2 [-80,-10] to Excel [10..80])
+        maData.mnElevation = limit_cast< sal_Int16 >( (nRotationX + 270) % 180, 10, 80 );
+        // perspective (Excel and Chart2 [0,100])
+        maData.mnEyeDist = limit_cast< sal_uInt16 >( nPerspective, 0, 100 );
+        // flags
         maData.mnFlags = 0;
     }
 }
@@ -1879,7 +1900,7 @@ void XclExpChTypeGroup::ConvertType(
     {
         mxChart3d.reset( new XclExpChChart3d );
         ScfPropertySet aDiaProp( xDiagram );
-        mxChart3d->Convert( aDiaProp, maTypeInfo );
+        mxChart3d->Convert( aDiaProp, Is3dWallChart() );
     }
 }
 
