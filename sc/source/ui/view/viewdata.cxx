@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdata.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,12 +188,12 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         if (sName.compareToAscii(SC_CURSORPOSITIONX) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nCurX = static_cast<SCCOL>(nTemp32);
+            nCurX = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName.compareToAscii(SC_CURSORPOSITIONY) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nCurY = static_cast<SCROW>(nTemp32);
+            nCurY = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName.compareToAscii(SC_HORIZONTALSPLITMODE) == 0)
         {
@@ -233,22 +233,22 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName.compareToAscii(SC_POSITIONLEFT) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosX[SC_SPLIT_LEFT] = static_cast<SCCOL>(nTemp32);
+            nPosX[SC_SPLIT_LEFT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName.compareToAscii(SC_POSITIONRIGHT) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosX[SC_SPLIT_RIGHT] = static_cast<SCCOL>(nTemp32);
+            nPosX[SC_SPLIT_RIGHT] = SanitizeCol( static_cast<SCCOL>(nTemp32));
         }
         else if (sName.compareToAscii(SC_POSITIONTOP) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosY[SC_SPLIT_TOP] = static_cast<SCROW>(nTemp32);
+            nPosY[SC_SPLIT_TOP] = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName.compareToAscii(SC_POSITIONBOTTOM) == 0)
         {
             aSettings[i].Value >>= nTemp32;
-            nPosY[SC_SPLIT_BOTTOM] = static_cast<SCROW>(nTemp32);
+            nPosY[SC_SPLIT_BOTTOM] = SanitizeRow( static_cast<SCROW>(nTemp32));
         }
         else if (sName.compareToAscii(SC_ZOOMTYPE) == 0)
         {
@@ -277,14 +277,13 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             rViewData.GetMarkData().SelectTable( nTab, bSelected );
         }
     }
-
     if (eHSplitMode == SC_SPLIT_FIX)
-        nFixPosX = static_cast< SCCOL >( bHasHSplitInTwips ? nTempPosHTw : nTempPosH );
+        nFixPosX = SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
     else
         nHSplitPos = bHasHSplitInTwips ? static_cast< long >( nTempPosHTw * rViewData.GetPPTX() ) : nTempPosH;
 
     if (eVSplitMode == SC_SPLIT_FIX)
-        nFixPosY = static_cast< SCROW >( bHasVSplitInTwips ? nTempPosVTw : nTempPosV );
+        nFixPosY = SanitizeRow( static_cast<SCROW>( bHasVSplitInTwips ? nTempPosVTw : nTempPosV ));
     else
         nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
 }
@@ -2303,14 +2302,14 @@ void ScViewData::ReadUserData(const String& rData)
 
         if (cTabSep)
         {
-            pTabData[nPos]->nCurX = static_cast<SCCOL>(aTabOpt.GetToken(0,cTabSep).ToInt32());
-            pTabData[nPos]->nCurY = aTabOpt.GetToken(1,cTabSep).ToInt32();
+            pTabData[nPos]->nCurX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(0,cTabSep).ToInt32()));
+            pTabData[nPos]->nCurY = SanitizeRow( aTabOpt.GetToken(1,cTabSep).ToInt32());
             pTabData[nPos]->eHSplitMode = (ScSplitMode) aTabOpt.GetToken(2,cTabSep).ToInt32();
             pTabData[nPos]->eVSplitMode = (ScSplitMode) aTabOpt.GetToken(3,cTabSep).ToInt32();
 
             if ( pTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
-                pTabData[nPos]->nFixPosX = static_cast<SCCOL>(aTabOpt.GetToken(4,cTabSep).ToInt32());
+                pTabData[nPos]->nFixPosX = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(4,cTabSep).ToInt32()));
                 UpdateFixX(nPos);
             }
             else
@@ -2318,17 +2317,17 @@ void ScViewData::ReadUserData(const String& rData)
 
             if ( pTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
-                pTabData[nPos]->nFixPosY = aTabOpt.GetToken(5,cTabSep).ToInt32();
+                pTabData[nPos]->nFixPosY = SanitizeRow( aTabOpt.GetToken(5,cTabSep).ToInt32());
                 UpdateFixY(nPos);
             }
             else
                 pTabData[nPos]->nVSplitPos = aTabOpt.GetToken(5,cTabSep).ToInt32();
 
             pTabData[nPos]->eWhichActive = (ScSplitPos) aTabOpt.GetToken(6,cTabSep).ToInt32();
-            pTabData[nPos]->nPosX[0] = static_cast<SCCOL>(aTabOpt.GetToken(7,cTabSep).ToInt32());
-            pTabData[nPos]->nPosX[1] = static_cast<SCCOL>(aTabOpt.GetToken(8,cTabSep).ToInt32());
-            pTabData[nPos]->nPosY[0] = aTabOpt.GetToken(9,cTabSep).ToInt32();
-            pTabData[nPos]->nPosY[1] = aTabOpt.GetToken(10,cTabSep).ToInt32();
+            pTabData[nPos]->nPosX[0] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(7,cTabSep).ToInt32()));
+            pTabData[nPos]->nPosX[1] = SanitizeCol( static_cast<SCCOL>(aTabOpt.GetToken(8,cTabSep).ToInt32()));
+            pTabData[nPos]->nPosY[0] = SanitizeRow( aTabOpt.GetToken(9,cTabSep).ToInt32());
+            pTabData[nPos]->nPosY[1] = SanitizeRow( aTabOpt.GetToken(10,cTabSep).ToInt32());
 
             //  Test, ob der aktive Teil laut SplitMode ueberhaupt existiert
             //  (Bug #44516#)
