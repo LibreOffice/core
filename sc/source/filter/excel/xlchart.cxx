@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xlchart.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -486,21 +486,21 @@ namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
 static const XclChTypeInfo spTypeInfos[] =
 {
-    // chart type             chart type category      record id           service                 varied point color     def label combi       3d     3dwall polar  area2d area3d 1stvis xcateg swap   stack  revers betw
-    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  true,  false, true,  true,  false, true,  true,  true,  false, true  },
-    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  true,  false, false, true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
-    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, false, true,  false, true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, false, true,  true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  false, true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  false, true,  true,  true,  false, true,  false, false, true,  false },
-    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, false, true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, false, true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, false, true,  true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   csscd::RIGHT,         false, true,  true,  false, true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
+    // chart type             chart type category      record id           service                 varied point color     def label combi       comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
+    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
+    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, true,  true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   csscd::RIGHT,         false, true,  false, true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
 };
 
 } // namespace
