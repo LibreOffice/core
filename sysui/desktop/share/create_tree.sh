@@ -95,7 +95,6 @@ mkdir -p ${DESTDIR}/usr/bin
 office_root=/opt/${PREFIX}
 
 ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/soffice
-ln -sf ${office_root}/program/unopkg ${DESTDIR}/usr/bin/unopkg
 
 cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
