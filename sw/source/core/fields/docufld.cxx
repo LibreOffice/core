@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docufld.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1020,12 +1020,6 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
             else if( nSub == DI_CHANGE )
-            {
-                aName = pInf->GetModificationAuthor();
-                aDate = pInf->GetModificationDate();
-            }
-            else if( nSub == DI_PRINT &&
-                    pInf->GetPrintDate() != aDate )
             {
                 aName = xDocProps->getModifiedBy();
                 uDT = xDocProps->getModificationDate();
