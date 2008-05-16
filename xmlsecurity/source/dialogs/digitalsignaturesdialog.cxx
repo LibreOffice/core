@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,10 +95,15 @@ namespace
             if ( aValues[0] >>= nTmp )
                 m_nODF = nTmp;
             else
-                DBG_ASSERT(0, "SaveODFItem::SaveODFItem(): Wrong Type!" );
+                throw uno::RuntimeException(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!")), 0 );
+
         }
         else
-            DBG_ASSERT(0, "No ODF/DefaultVersion");
+            throw uno::RuntimeException(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion")), 0);
     }
 
 }
