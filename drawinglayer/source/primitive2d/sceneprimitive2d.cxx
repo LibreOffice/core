@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
+ *  last change: $Author: aw $ $Date: 2008-05-16 10:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
-#include <drawinglayer/processor3d/tbufferprocessor3d.hxx>
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/processor3d/label3dextractor.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
