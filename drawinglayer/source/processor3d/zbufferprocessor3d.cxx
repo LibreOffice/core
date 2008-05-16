@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
+ *  last change: $Author: aw $ $Date: 2008-05-16 10:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,10 +582,10 @@ namespace drawinglayer
         :   DefaultProcessor3D(rViewInformation.getViewTime(), rSdrSceneAttribute, rSdrLightingAttribute),
             mpBZPixelRaster(0),
             maInvEyeToView(),
-            mbProcessTransparent(false),
-            mbContainsTransparent(false),
+            mpZBufferRasterConverter3D(0),
             mnAntiAlialize(nAntiAlialize),
-            mpZBufferRasterConverter3D(0)
+            mbProcessTransparent(false),
+            mbContainsTransparent(false)
         {
             // generate ViewSizes
             const double fFullViewSizeX((rViewInformation.getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
