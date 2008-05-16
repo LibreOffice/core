@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,6 +86,7 @@ EXCEPTIONSFILES = \
     $(SLO)$/sharedocdlg.obj		\
     $(SLO)$/optsolver.obj       \
     $(SLO)$/solveroptions.obj   \
+    $(SLO)$/crnrdlg.obj         \
     $(SLO)$/solverutil.obj
 
 SRS1NAME=$(TARGET)
