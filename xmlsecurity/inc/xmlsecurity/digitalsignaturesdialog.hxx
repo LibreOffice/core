@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +107,8 @@ private:
     //Checks if adding is allowed.
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //(6.6.2)Behaviour with regard to ODF 1.2
-    bool DigitalSignaturesDialog::canAdd();
-    bool DigitalSignaturesDialog::canRemove();
+    bool canAdd();
+    bool canRemove();
 
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
