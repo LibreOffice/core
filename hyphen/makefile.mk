@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,6 +69,7 @@ OUT2INC += hyphen.h
 
 .IF "$(GUI)"=="WNT"
 BUILD_ACTION=dmake
+OUT2INC += hyphen.h
 .ENDIF # "$(GUI)"=="WNT"
 
 
