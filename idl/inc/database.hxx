@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: database.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,9 +103,6 @@ public:
     void        Load( SvStream & rInStm );
     void        Save( SvStream & rInStm, UINT32 nContextFlags );
 
-    BOOL                      IsModified() const;
-
-
     SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
     SvStringHashTable *       GetIdTable() { return pIdTable; }
     SvMetaTypeMemberList &    GetTypeList();
@@ -148,9 +145,6 @@ public:
                                     rInStm.Seek( nTokPos );
                                 return bOk;
                             }
-    BOOL                    FillTypeList( SvMetaTypeList & rOutList,
-                                          SvToken * pNameTok );
-
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
     BOOL                    FindId( const ByteString & rIdName, ULONG * pVal );
     BOOL                    InsertId( const ByteString & rIdName, ULONG nVal );
@@ -158,10 +152,8 @@ public:
 
     SvMetaType *            FindType( const ByteString & rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
-    static ByteString *     FindName( const ByteString & rName, ByteStringList & );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
-    SvMetaAttribute *       FindAttr( SvMetaAttributeMemberList *, SvMetaAttribute * ) const;
     SvMetaAttribute *       ReadKnownAttr( SvTokenStream & rInStm,
                                             SvMetaType * pType = NULL );
     SvMetaAttribute *       SearchKnownAttr( const SvNumberIdentifier& );
@@ -180,14 +172,7 @@ public:
 
     BOOL        WriteSfx( SvStream & );
     BOOL        WriteHelpIds( SvStream & );
-    BOOL        WriteCHeader( SvStream & );
-    BOOL        WriteCSource( SvStream & );
     BOOL        WriteSfxItem( SvStream & );
-//    BOOL        WriteSbx( SvStream & );
-    BOOL        WriteOdl( SvStream & );
-    BOOL        WriteSrc( SvStream & );
-    BOOL        WriteCxx( SvStream & );
-    BOOL        WriteHxx( SvStream & );
     BOOL        WriteCSV( SvStream& );
     BOOL        WriteDocumentation( SvStream& );
 };
