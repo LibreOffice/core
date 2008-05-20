@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: command.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,22 +208,6 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
             return FALSE;
     }
     return TRUE;
-}
-
-/*************************************************************************
-|*
-|*    SvCommand::SvCommand()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.12.94
-|*    Letzte Aenderung  MM 15.12.94
-|*
-*************************************************************************/
-SvCommand::SvCommand()
-    : nFlags( 0 )
-{
-    DirEntry aEntry;
-    aPath = aEntry.GetFull(); //Immer im Aktuellen Pfad suchen
 }
 
 /*************************************************************************
