@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_instance.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,8 +111,6 @@ public:
     static sal_Bool ShutDown(void);
     static sal_Bool SetSODir(char * sDir);
     static char* GetSODir(void) {return sSO_Dir;};
-    void SetPosSize(int x, int y, int w, int h);
-    void Setflag(sal_Int16 n);
     long GetParent(void) {return m_pParent;};
 };
 
