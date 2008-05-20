@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: controlwizard.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,8 +83,6 @@ namespace dbp
     protected:
         OControlWizard*                 getDialog();
         const OControlWizard*           getDialog() const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                        getServiceFactory();
         const OControlWizardContext&    getContext();
         sal_Bool                        updateContext();
         void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
