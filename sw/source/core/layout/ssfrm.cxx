@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ssfrm.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,7 +241,8 @@ void SwFrm::CheckDirChange()
             // set minimum row height for vertical cells in horizontal table:
             if ( IsCellFrm() && GetUpper() )
             {
-                if ( IsVertical() != GetUpper()->IsVertical() )
+                if ( IsVertical() != GetUpper()->IsVertical() &&
+                     ((SwCellFrm*)this)->GetTabBox()->getRowSpan() == 1 )
                 {
                     SwTableLine* pLine = (SwTableLine*)((SwCellFrm*)this)->GetTabBox()->GetUpper();
                     SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
@@ -606,10 +607,24 @@ const SwRect SwFrm::PaintArea() const
     const SwFrm* pTmp = this;
     BOOL bLeft = TRUE;
     BOOL bRight = TRUE;
+    long nRowSpan = 0;
     while( pTmp )
     {
+        if( pTmp->IsCellFrm() && pTmp->GetUpper() &&
+            pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
+            nRowSpan = ((SwCellFrm*)pTmp)->GetTabBox()->getRowSpan();
         long nTmpRight = (pTmp->Frm().*fnRect->fnGetRight)();
         long nTmpLeft = (pTmp->Frm().*fnRect->fnGetLeft)();
+        if( pTmp->IsRowFrm() && nRowSpan > 1 )
+        {
+            const SwFrm* pNxt = pTmp;
+            while( --nRowSpan > 0 && pNxt->GetNext() )
+                pNxt = pNxt->GetNext();
+            if( pTmp->IsVertical() )
+                nTmpLeft = (pNxt->Frm().*fnRect->fnGetLeft)();
+            else
+                nTmpRight = (pNxt->Frm().*fnRect->fnGetRight)();
+        }
         ASSERT( pTmp, "PaintArea lost in time and space" );
         if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() ||
             pTmp->IsCellFrm() || pTmp->IsRowFrm() || //nobody leaves a table!
