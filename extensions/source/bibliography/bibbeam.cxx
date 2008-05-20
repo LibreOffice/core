@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bibbeam.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +116,6 @@ namespace bib
             ~BibGridwin();
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
-            void changeGridModel(const Reference< awt::XControlModel > & xGModel);
             void disposeGridWin();
 
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
@@ -208,15 +207,6 @@ namespace bib
             m_xControlContainer->removeControl( xDel );
             xDel->dispose();
         }
-    }
-
-    //---------------------------------------------------------------------
-    void BibGridwin::changeGridModel(const uno::Reference< awt::XControlModel > & xGModel)
-    {
-        m_xGridModel = xGModel;
-
-        if ( m_xControl.is() )
-            m_xControl->setModel( m_xGridModel );
     }
 
     //---------------------------------------------------------------------
