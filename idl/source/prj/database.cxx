@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: database.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,20 +82,6 @@ SvIdlDataBase::~SvIdlDataBase()
         pStr = aIdFileList.Next();
     }
     delete pIdTable;
-}
-
-/*************************************************************************
-|*    SvIdlDataBase::IsModified()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlDataBase::IsModified() const
-{
-    for( ULONG n = 0; n < aModuleList.Count(); n++ )
-        if( aModuleList.GetObject( n )->IsModified() )
-            return TRUE;
-    //bIsModified;
-    return FALSE;
 }
 
 /*************************************************************************
@@ -492,43 +478,6 @@ SvMetaType * SvIdlDataBase::FindType( const ByteString & rName )
 }
 
 /*************************************************************************
-|*    SvIdlDataBase::FindName()
-|*
-|*    Beschreibung
-*************************************************************************/
-ByteString * SvIdlDataBase::FindName( const ByteString & rName, ByteStringList & rList )
-{
-    ByteString * pS = rList.First();
-    while( pS && *pS != rName )
-        pS = rList.Next();
-    return pS;
-}
-
-/*************************************************************************
-|*    SvIdlDataBase::FillTypeList()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlDataBase::FillTypeList( SvMetaTypeList & rOutList,
-                                  SvToken * pNameTok )
-{
-    rOutList.Clear();
-//    if( pNameTok->IsIdentifierHash() ) Optimierung spaeter
-    if( pNameTok->IsIdentifier() )
-    {
-        ByteString aName = pNameTok->GetString();
-        SvMetaType * pMetaType = GetTypeList().First();
-        while( pMetaType )
-        {
-            if( pMetaType->GetName() == aName )
-                rOutList.Insert( pMetaType, LIST_APPEND );
-            pMetaType = GetTypeList().Next();
-        }
-    }
-    return rOutList.Count() != 0;
-}
-
-/*************************************************************************
 |*    SvIdlDataBase::ReadKnownType()
 |*
 |*    Beschreibung
@@ -638,34 +587,6 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         }
     }
     rInStm.Seek( nTokPos );
-    return NULL;
-}
-
-/*************************************************************************
-|*
-|*    SvIdlDataBase::ReadKnownAttr()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-SvMetaAttribute * SvIdlDataBase::FindAttr( SvMetaAttributeMemberList * pList,
-                                      SvMetaAttribute * pAttr ) const
-{
-    for( ULONG n = 0; n < pList->Count(); n++ )
-    {
-        SvMetaAttribute * p = pList->GetObject( n );
-        if( p->GetName() == pAttr->GetName() )
-            return pAttr;
-        else if( p->GetSlotId().GetValue() == pAttr->GetSlotId().GetValue() )
-        {
-            ByteString aStr = "different slot names with same id: ";
-            aStr += p->GetName();
-            aStr += " and ";
-            aStr += pAttr->GetName();
-            WriteError( "warning", "*.srs", aStr );
-            return FALSE;
-        }
-    }
     return NULL;
 }
 
@@ -1060,65 +981,6 @@ BOOL SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
 }
 
 /*************************************************************************
-|*    SvIdlWorkingBase::WriteCHeader()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteCHeader( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    ULONG n;
-    for( n = 0; n < GetTypeList().Count(); n++ )
-    {
-        SvMetaType * pType = GetTypeList().GetObject( n );
-        pType->Write( *this, rOutStm, 0, WRITE_C_HEADER );
-    }
-    for( n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-        {
-            aModulePrefix = pModule->GetModulePrefix();
-            pModule->Write( *this, rOutStm, 0, WRITE_C_HEADER );
-        }
-    }
-    return TRUE;
-}
-
-/*************************************************************************
-|*    SvIdlWorkingBase::WriteCSource()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteCSource( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    ULONG n;
-    for( n = 0; n < GetTypeList().Count(); n++ )
-    {
-        SvMetaType * pType = GetTypeList().GetObject( n );
-        pType->Write( *this, rOutStm, 0, WRITE_C_SOURCE );
-    }
-    rOutStm << endl;
-    for( n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-        {
-            aModulePrefix = pModule->GetModulePrefix();
-            pModule->Write( *this, rOutStm, 0, WRITE_C_SOURCE );
-        }
-    }
-    return TRUE;
-}
-
-
-
-/*************************************************************************
 |*    SvIdlWorkingBase::WriteSfxItem()
 |*
 |*    Beschreibung
@@ -1126,141 +988,6 @@ BOOL SvIdlWorkingBase::WriteCSource( SvStream & rOutStm )
 BOOL SvIdlWorkingBase::WriteSfxItem( SvStream & )
 {
     return FALSE;
-}
-
-/*************************************************************************
-|*    SvIdlWorkingBase::WriteSbx()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-BOOL SvIdlWorkingBase::WriteSbx( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    SvNamePosList   aList;
-    SvMemoryStream aTmpStm( 256000, 256000 );
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-            pModule->WriteSbx( *this, aTmpStm, aList );
-    }
-    // Version, steht auch in so2 auto.cxx
-    rOutStm << (UINT32)0x1258F170;
-    rOutStm << (UINT32)aList.Count();
-    ULONG i ;
-    for( i = 0; i < aList.Count(); i++ )
-    {
-        SvNamePos * p = aList.GetObject( i );
-        rOutStm << p->aUUId;
-        rOutStm << (UINT32)0;
-    }
-    // Ende der Tabelle
-    ULONG nEndPos = rOutStm.Tell();
-    rOutStm.Seek( 2 * sizeof( UINT32 ) );
-    SvGlobalName aTmpName;
-    for( i = 0; i < aList.Count(); i++ )
-    {
-        SvNamePos * p = aList.GetObject( i );
-        // Um an die richtige Position zu gelangen
-        rOutStm >> aTmpName;
-        // richtigen Offset schreiben
-        rOutStm << (UINT32)(nEndPos + p->nStmPos);
-    }
-    aTmpStm.Seek( 0L );
-    rOutStm << aTmpStm;
-
-    return TRUE;
-}
-*/
-
-/*************************************************************************
-|*    SvIdlWorkingBase::WriteOdl()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteOdl( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-            pModule->Write( *this, rOutStm, 0, WRITE_ODL );
-    }
-    return TRUE;
-}
-
-/*************************************************************************
-|*    OdlWorkingBase::WriteSrc()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteSrc( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    Table aIdTable;
-    ULONG n;
-    for( n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        //if( !pModule->IsImported() )
-            pModule->WriteSrc( *this, rOutStm, &aIdTable );
-    }
-    const SvMetaAttributeMemberList & rAttrList = GetAttrList();
-    for( n = 0; n < rAttrList.Count(); n++ )
-    {
-        SvMetaAttribute * pAttr = rAttrList.GetObject( n );
-        pAttr->WriteSrc( *this, rOutStm, &aIdTable );
-    }
-
-    return TRUE;
-}
-
-/*************************************************************************
-|*    OdlWorkingBase::WriteCxx()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteCxx( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-            pModule->WriteCxx( *this, rOutStm, 0 );
-    }
-
-    return TRUE;
-}
-
-/*************************************************************************
-|*    OdlWorkingBase::WriteHxx()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvIdlWorkingBase::WriteHxx( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return FALSE;
-
-    for( ULONG n = 0; n < GetModuleList().Count(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
-        if( !pModule->IsImported() )
-            pModule->WriteHxx( *this, rOutStm, 0 );
-    }
-
-    return TRUE;
 }
 
 void SvIdlDataBase::StartNewFile( const String& rName )
