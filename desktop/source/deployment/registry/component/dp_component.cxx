@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_component.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,9 +119,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class ComponentPackageImpl : public ::dp_registry::backend::Package
     {
-        BackendImpl * getMyBackend() const {
-            return static_cast<BackendImpl *>(m_myBackend.get());
-        }
+        BackendImpl * getMyBackend() const;
 
         const OUString m_loader;
         Reference<XComponentContext> m_xRemoteContext;
@@ -165,9 +163,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     class TypelibraryPackageImpl : public ::dp_registry::backend::Package
     {
-        BackendImpl * getMyBackend() const {
-            return static_cast<BackendImpl *>(m_myBackend.get());
-        }
+        BackendImpl * getMyBackend() const;
 
         const bool m_jarFile;
         Reference<container::XHierarchicalNameAccess> m_xTDprov;
@@ -266,6 +262,22 @@ BackendImpl::ComponentPackageImpl::getRDB() const
     else
         return that->m_xCommonRDB;
 }
+
+BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //Throws a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<ComponentPackageImpl *>(this)));
+    }
+    return pBackend;
+}
+
 
 //______________________________________________________________________________
 void BackendImpl::ComponentPackageImpl::disposing()
@@ -1217,6 +1229,20 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
 //##############################################################################
 
 // Package
+BackendImpl * BackendImpl::TypelibraryPackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<TypelibraryPackageImpl *>(this)));
+    }
+    return pBackend;
+}
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::TypelibraryPackageImpl::isRegistered_(
