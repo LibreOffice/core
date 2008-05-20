@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datman.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,10 +177,6 @@ public:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const ::rtl::OUString& rName,
                                                         sal_Bool bForceListBox = sal_False);
-        void                        saveCtrModel(const ::rtl::OUString& rName,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & rCtrModel);
-
-        sal_Bool                        moveRelative(sal_Int32 nMove);
 
         void                        CreateMappingDialog(Window* pParent);
         ::rtl::OUString             CreateDBChangeDialog(Window* pParent);
