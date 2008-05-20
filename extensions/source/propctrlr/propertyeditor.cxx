@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyeditor.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -283,15 +283,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::CalcVisibleLines()
-    {
-        OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
-        if (pPage)
-            return pPage->getListBox().CalcVisibleLines();
-        else return 0;
-    }
-
-    //------------------------------------------------------------------
     void OPropertyEditor::Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction)
     {
         // forward this to all our pages
@@ -454,16 +445,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    Any OPropertyEditor::GetPropertyValue( const ::rtl::OUString& rEntryName ) const
-    {
-        Any aValue;
-        const OBrowserPage* pPage = getPage( rEntryName );
-        if ( pPage )
-            aValue = pPage->getListBox().GetPropertyValue( rEntryName );
-        return aValue;
-    }
-
-    //------------------------------------------------------------------
     sal_uInt16 OPropertyEditor::GetPropertyPos( const ::rtl::OUString& rEntryName ) const
     {
         sal_uInt16 nVal=LISTBOX_ENTRY_NOTFOUND;
@@ -471,22 +452,6 @@ namespace pcr
         if ( pPage )
             nVal = pPage->getListBox().GetPropertyPos( rEntryName );
         return nVal;
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OPropertyEditor::IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const
-    {
-        // "yes" if and only if all pages say "yes" (since pages which do not know this property
-        // will answer "yes")
-
-        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
-        {
-            OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
-            if ( pPage )
-                if ( !pPage->getListBox().IsPropertyInputEnabled( _rEntryName) )
-                    return sal_False;
-        }
-        return sal_True;
     }
 
     //------------------------------------------------------------------
