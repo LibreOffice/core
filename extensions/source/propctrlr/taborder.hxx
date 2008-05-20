@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: taborder.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,6 @@ namespace pcr
     class TabOrderListBox : public SvTreeListBox
     {
     public:
-        TabOrderListBox( Window* pParent );
         TabOrderListBox( Window* pParent, const ResId& rResId  );
         virtual ~TabOrderListBox();
 
