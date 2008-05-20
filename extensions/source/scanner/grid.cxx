@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grid.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -213,13 +213,6 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
     x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)m_aGridArea.GetWidth() + m_fMinX;
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)m_aGridArea.GetHeight() + m_fMinY;
-}
-
-// ---------------------------------------------------------------------
-
-void GridWindow::drawPoint( double x, double y )
-{
-    DrawPixel( transform( x, y ) );
 }
 
 // ---------------------------------------------------------------------
