@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: loadlisteneradapter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,18 +113,6 @@ namespace bib
     //---------------------------------------------------------------------
     OComponentAdapterBase::~OComponentAdapterBase()
     {
-    }
-
-    //---------------------------------------------------------------------
-    void OComponentAdapterBase::lock()
-    {
-        ++m_nLockCount;
-    }
-
-    //---------------------------------------------------------------------
-    void OComponentAdapterBase::unlock()
-    {
-        --m_nLockCount;
     }
 
     //---------------------------------------------------------------------
