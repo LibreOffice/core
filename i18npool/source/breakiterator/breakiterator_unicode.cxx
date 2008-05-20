@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: breakiterator_unicode.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,21 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
         if (line.aBreakIterator) delete line.aBreakIterator;
 }
 
+/*
+    Wrapper class to provide public access to the RuleBasedBreakIterator's
+    setbreakType method.
+*/
+class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator {
+    public:
+        inline void publicSetBreakType(int32_t type) {
+            setBreakType(type);
+        };
+        OOoRuleBasedBreakIterator(UDataMemory* image,
+                UErrorCode &status) :
+            RuleBasedBreakIterator(image, status) { };
+
+};
+
 // loading ICU breakiterator on demand.
 void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char *rule, const OUString& rText) throw(uno::RuntimeException)
@@ -113,10 +128,10 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw ERROR;
 
-            RuleBasedBreakIterator *rbi = NULL;
+            OOoRuleBasedBreakIterator *rbi = NULL;
 
             if (breakRules.getLength() > 0 && breakRules[breakType].getLength() > 0) {
-                rbi = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
+                rbi = new OOoRuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {
                 status = U_ZERO_ERROR;
@@ -126,21 +141,21 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                 aUDName.append( OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US));
                 UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
-                    rbi = new RuleBasedBreakIterator( pUData, status);
+                    rbi = new OOoRuleBasedBreakIterator( pUData, status);
                 if (!U_SUCCESS(status) ) {
                     status = U_ZERO_ERROR;
                     pUData = udata_open("OpenOffice", "brk", rule, &status);
                     if( U_SUCCESS(status) )
-                        rbi = new RuleBasedBreakIterator( pUData, status);
+                        rbi = new OOoRuleBasedBreakIterator( pUData, status);
                     if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
                 }
             }
             if (rbi) {
                 switch (rBreakType) {
-                    case LOAD_CHARACTER_BREAKITERATOR: rbi->setBreakType(UBRK_CHARACTER); break;
-                    case LOAD_WORD_BREAKITERATOR: rbi->setBreakType(UBRK_WORD); break;
-                    case LOAD_SENTENCE_BREAKITERATOR: rbi->setBreakType(UBRK_SENTENCE); break;
-                    case LOAD_LINE_BREAKITERATOR: rbi->setBreakType(UBRK_LINE); break;
+                    case LOAD_CHARACTER_BREAKITERATOR: rbi->publicSetBreakType(UBRK_CHARACTER); break;
+                    case LOAD_WORD_BREAKITERATOR: rbi->publicSetBreakType(UBRK_WORD); break;
+                    case LOAD_SENTENCE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_SENTENCE); break;
+                    case LOAD_LINE_BREAKITERATOR: rbi->publicSetBreakType(UBRK_LINE); break;
                 }
                 icuBI->aBreakIterator = rbi;
             }
