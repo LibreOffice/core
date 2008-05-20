@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,16 +43,6 @@
 
 /****************** SvMetaModule ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaModule::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 
 /*************************************************************************
 |*
