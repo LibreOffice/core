@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basobj.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,16 +44,6 @@
 
 /****************** SvMetaObject *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaObject, SvRttiBase )
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaObject::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*    SvMetaObject::SvMetaObject()
 |*
@@ -199,17 +189,6 @@ void SvMetaObject::WriteHxx( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
 
 /****************** SvMetaName *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaName, SvMetaObject );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaName::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-        pAttribList->Append( new SV_ATTRIBUTE( Name, Name ) );
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*    SvMetaName::SvMetaName()
 |*
@@ -572,16 +551,6 @@ void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
 
 /****************** SvMetaReference *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaReference, SvMetaName );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaReference::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 
 /*************************************************************************
 |*    SvMetaReference::SvMetaReference()
@@ -629,16 +598,6 @@ void SvMetaReference::Save( SvPersistStream & rStm )
 /**************************************************************************/
 /****************** SvMetaExtern ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaExtern, SvMetaReference );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaExtern::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 
 /*************************************************************************
 |*    SvMetaExtern::SvMetaExtern()
