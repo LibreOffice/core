@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpgroup.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@
 #define SC_DPGROUP_HXX
 
 #include <vector>
+#include <hash_set>
+
 #include "dptabdat.hxx"
 
 class ScDocument;
@@ -94,6 +96,8 @@ public:
     const ScDPItemData& GetName() const     { return aGroupName; }
     bool        HasElement( const ScDPItemData& rData ) const;
     bool        HasCommonElement( const ScDPGroupItem& rOther ) const;
+
+    void        FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) const;
 };
 
 typedef ::std::vector<ScDPGroupItem> ScDPGroupItemVec;
@@ -124,12 +128,15 @@ public:
     const TypedStrCollection& GetColumnEntries( const TypedStrCollection& rOriginal, ScDocument* pDoc ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
+    const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
 
     const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
 
     void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 
     void        DisposeData();
+
+    size_t      GetItemCount() const { return aItems.size(); }
 };
 
 typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
@@ -172,13 +179,17 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
+    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > StringHashSet;
+
     ScDPTableData*          pSourceData;
     long                    nSourceCount;
     ScDPGroupDimensionVec   aGroups;
     ScDPNumGroupDimension*  pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;
+    StringHashSet           aGroupNames;
 
     void        FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims );
+    void        CopyFields(const ::std::vector<long>& rFieldDims, ::std::vector<long>& rNewFieldDims);
     long*       CopyFields( const long* pSourceDims, long nCount );
 
     bool        IsNumGroupDimension( long nDimension ) const;
@@ -205,8 +216,12 @@ public:
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
-    virtual void                    ResetIterator();
-    virtual BOOL                    GetNextRow( const ScDPTableIteratorParam& rParam );
+    virtual void                    CreateCacheTable();
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPDimension*>& rPageDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
+    virtual const ScDPCacheTable&   GetCacheTable() const;
 
     virtual BOOL                    IsBaseForGroup(long nDim) const;
     virtual long                    GetGroupBase(long nGroupDim) const;
