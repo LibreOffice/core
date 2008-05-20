@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwNumberTree.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1128,7 +1128,7 @@ SwNumberTreeNode * SwNumberTreeNode::GetLastDescendant() const
     return pResult;
 }
 
-SwNumberTreeNode * SwNumberTreeNode::GetPred() const
+SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
 {
     SwNumberTreeNode * pResult = NULL;
 
@@ -1148,7 +1148,10 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred() const
         {
             aIt--;
 
-            pResult = (*aIt)->GetLastDescendant();
+            if ( !bSibling )
+                pResult = (*aIt)->GetLastDescendant();
+            else
+                pResult = (*aIt);
 
             if (! pResult)
                 pResult = (*aIt);
