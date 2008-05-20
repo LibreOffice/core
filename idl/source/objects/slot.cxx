@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slot.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,16 +41,11 @@
 
 /****************** SvMetaSlot *****************************************/
 SV_IMPL_META_FACTORY1( SvMetaSlot, SvMetaAttribute );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaSlot::GetAttributeList()
+
+SvMetaObject *SvMetaSlot::MakeClone() const
 {
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
+        return new SvMetaSlot( *this );
 }
-#endif
 
 /*************************************************************************
 |*    SvMetaSlot::SvMetaSlot()
@@ -927,14 +922,6 @@ BOOL SvMetaSlot::Test( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         }
     }
 
-/*
-    if ( bOk )
-    {
-        SvMetaSlot* pRef = (SvMetaSlot*) GetRef();
-        if ( pRef )
-            CompareSlotAttributes( pRef );
-    }
-*/
     return bOk;
 }
 
@@ -1724,147 +1711,6 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                         << ByteString::CreateFromInt32( nSId2 ).GetBuffer() << endl;
             }
         }
-    }
-}
-
-
-void SvMetaSlot::CompareSlotAttributes( SvMetaSlot* pSlot )
-{
-    ByteString aStr = Compare( pSlot );
-
-    if ( GetMenuConfig() || GetToolBoxConfig() || GetAccelConfig() || GetStatusBarConfig() )
-    {
-        if ( GetHelpText().Len() )
-        {
-            ByteString aRefText( pSlot->GetHelpText() );
-            ByteString aText( GetHelpText() );
-            if ( !aText.Equals( aRefText ) )
-            {
-                aStr += "    HelpText\n";
-                aStr += aText;
-                aStr += '\n';
-                aStr += aRefText;
-                aStr += '\n';
-            }
-        }
-
-        if ( GetConfigName().Len() )
-        {
-            ByteString aRefText( pSlot->GetConfigName() );
-            ByteString aText( GetConfigName() );
-            if ( !aText.Equals( aRefText ) )
-            {
-                aStr += "    ConfigName\n";
-                aStr += aText;
-                aStr += '\n';
-                aStr += aRefText;
-                aStr += '\n';
-            }
-        }
-    }
-
-    if ( GetExport() && !GetName().Equals( pSlot->GetName() ) )
-    {
-        aStr += "    Name\n";
-        aStr += GetName();
-        aStr += '\n';
-        aStr += pSlot->GetName();
-        aStr += '\n';
-    }
-
-    if ( (SvMetaType *)GetSlotType() != (SvMetaType *)pSlot->GetSlotType() )
-        aStr += "    SlotType\n";
-
-    if ( GetMethod() && !pSlot->GetMethod() ||
-         !GetMethod() && pSlot->GetMethod() )
-        aStr += "    Method\n";
-
-    if ( GetMethod() && pSlot->GetMethod() )
-        GetMethod()->Compare( pSlot->GetMethod() );
-
-    if ( !GetGroupId().Equals( pSlot->GetGroupId() ) )
-        aStr += "    GroupId\n";
-
-    if ( GetHasCoreId() != (BOOL) pSlot->GetHasCoreId() )
-        aStr += "    HasCoreId\n";
-
-    if ( !GetConfigId().Equals( pSlot->GetConfigId() ) )
-        aStr += "    ConfigId\n";
-
-    if ( !GetDefault().Equals( pSlot->GetDefault() ) )
-        aStr += "    Default\n";
-
-    if ( GetPseudoSlots() != pSlot->GetPseudoSlots() )
-        aStr += "    PseudoSlots\n";
-
-    if ( GetCachable() != pSlot->GetCachable() )
-        aStr += "    Cachable\n";
-
-    if ( GetVolatile() != pSlot->GetVolatile() )
-        aStr += "    Volatile";
-
-    if ( GetToggle() != pSlot->GetToggle() )
-        aStr += "    Toggle\n";
-
-    if ( GetAutoUpdate() != pSlot->GetAutoUpdate() )
-        aStr += "    AutoUpdate\n";
-
-    if ( GetSynchron() != pSlot->GetSynchron() )
-        aStr += "    Synchron\n";
-
-    if ( GetAsynchron() != pSlot->GetAsynchron() )
-        aStr += "    Asynchron\n";
-
-    if ( GetRecordPerItem() != pSlot->GetRecordPerItem() )
-        aStr += "    RecordPerItem\n";
-
-    if ( GetRecordPerSet() != pSlot->GetRecordPerSet() )
-        aStr += "    RecordPerSet\n";
-
-    if ( GetRecordManual() != pSlot->GetRecordManual() )
-        aStr += "    RecordManual\n";
-
-    if ( GetNoRecord() != pSlot->GetNoRecord() )
-        aStr += "    NoRecord\n";
-
-    if ( GetRecordAbsolute() != pSlot->GetRecordAbsolute() )
-        aStr += "    RecordAbsolute\n";
-
-    if ( GetHasDialog() != pSlot->GetHasDialog() )
-        aStr += "    HasDialog\n";
-
-    if ( GetMenuConfig() != pSlot->GetMenuConfig() )
-        aStr += "    MenuConfig\n";
-
-    if ( GetToolBoxConfig() != pSlot->GetToolBoxConfig() )
-        aStr += "    ToolBoxConfig\n";
-
-    if ( GetStatusBarConfig() != pSlot->GetStatusBarConfig() )
-        aStr += "    StatusBarConfig\n";
-
-    if ( GetAccelConfig() != pSlot->GetAccelConfig() )
-        aStr += "    AccelConfig\n";
-
-    if ( pSlot->GetFastCall() && !GetFastCall() )
-        aStr += "    FastCall\n";
-
-    if ( GetContainer() != pSlot->GetContainer() )
-        aStr += "    Container\n";
-
-    if ( GetImageRotation() != pSlot->GetImageRotation() )
-        aStr += "    ImageRotation\n";
-    if ( GetImageReflection() != pSlot->GetImageReflection() )
-        aStr += "    ImageReflection\n";
-    if ( !GetPseudoPrefix().Equals( pSlot->GetPseudoPrefix() ) )
-        aStr += "    PseudoPrefix\n";
-
-    if ( IsVariable() != pSlot->IsVariable() )
-        aStr += "    Variable\n";
-
-    if ( aStr.Len() )
-    {
-        DBG_ERROR( GetSlotId().GetBuffer() );
-        DBG_ERROR( aStr.GetBuffer() );
     }
 }
 
