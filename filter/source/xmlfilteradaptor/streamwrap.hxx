@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: streamwrap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,69 +52,6 @@ namespace foo
 {
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
-
-//==================================================================
-//= OInputFileWrapper
-//==================================================================
-typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
-                                > InputStreamWrapper_Base;
-    // needed for some compilers
-/// helper class for wrapping a File into an <type scope="com.sun.star.io">XInputStream</type>
-class OInputStreamWrapper : public InputStreamWrapper_Base
-{
-protected:
-    ::osl::Mutex    m_aMutex;
-    ::osl::File*        m_pSvStream;
-    sal_Bool        m_bSvStreamOwner : 1;
-
-public:
-    OInputStreamWrapper(::osl::File& _rStream);
-    OInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
-    virtual ~OInputStreamWrapper();
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OInputStreamWrapper, InputStreamWrapper_Base);
-
-// stario::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
-
-protected:
-    /// throws a NotConnectedException if the object is not connected anymore
-    void checkConnected() const;
-    /// throws an exception according to the error flag of m_pSvStream
-    void checkError() const;
-};
-
-//==================================================================
-//= OSeekableInputFIleWrapper
-//==================================================================
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
-                            >   OSeekableInputStreamWrapper_Base;
-/** helper class for wrapping an File into an <type scope="com.sun.star.io">XInputStream</type>
-    which is seekable (i.e. supports the <type scope="com.sun.star.io">XSeekable</type> interface).
-*/
-class OSeekableInputStreamWrapper
-                :public OInputStreamWrapper
-                ,public OSeekableInputStreamWrapper_Base
-{
-public:
-    OSeekableInputStreamWrapper(::osl::File& _rStream);
-    OSeekableInputStreamWrapper(::osl::File* _pStream, sal_Bool _bOwner = sal_False);
-
-    // disambiguate XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw ();
-    virtual void SAL_CALL release(  ) throw ();
-
-    // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-};
 
 //==================================================================
 //= OOutputStreamWrapper
