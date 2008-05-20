@@ -78,6 +78,7 @@
         <type>com.sun.star.sheet.XConsolidationDescriptor</type>
         <type>com.sun.star.sheet.XDataPilotDescriptor</type>
         <type>com.sun.star.sheet.XDataPilotTable</type>
+        <type>com.sun.star.sheet.XDataPilotTable2</type>
         <type>com.sun.star.sheet.XDataPilotTables</type>
         <type>com.sun.star.sheet.XDatabaseRange</type>
         <type>com.sun.star.sheet.XDatabaseRanges</type>
