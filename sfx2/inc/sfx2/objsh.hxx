@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objsh.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,6 +357,7 @@ public:
                                     sal_Bool bForceNonModified = sal_False );
     sal_Bool                    SaveCompletedChildren( sal_Bool bSuccess );
 
+    sal_Bool                    InsertFrom( SfxMedium &rMedium );
     sal_Bool                    ImportFrom( SfxMedium &rMedium );
     sal_Bool                    ExportTo( SfxMedium &rMedium );
 
