@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,7 +477,7 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
             {
                 SwpHints* pHints =
                         const_cast<SwTxtFrm&>(_rFrm).GetTxtNode()->GetpSwpHints();
-                const SwTxtAttr* pHint( 0L );
+                const SwTxtAttr* pHint( 0 );
                 if( pHints )
                 {
                     for( MSHORT i = 0; i < pHints->Count(); ++i )
@@ -2289,62 +2289,67 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     else
     {
         // new determination of last line height - take actually height of last line
-        bool bCalcHeightOfLastLine = true;
-        if ( !HasPara() )
+        // --> OD 2008-05-06 #i89000#
+        // assure same results, if paragraph is undersized
+        if ( IsUndersized() )
         {
-            if ( IsUndersized() )
-            {
-                mnHeightOfLastLine = 0L;
-                bCalcHeightOfLastLine = false;
-            }
-            else if ( IsEmpty() )
-            {
-                mnHeightOfLastLine = EmptyHeight();
-                bCalcHeightOfLastLine = false;
-            }
+            mnHeightOfLastLine = 0;
         }
+        else
+        {
+            bool bCalcHeightOfLastLine = true;
+            if ( !HasPara() )
+            {
+                if ( IsEmpty() )
+                {
+                    mnHeightOfLastLine = EmptyHeight();
+                    bCalcHeightOfLastLine = false;
+                }
+            }
 
-        if ( bCalcHeightOfLastLine )
-        {
-            ASSERT( HasPara(),
-                    "<SwTxtFrm::_CalcHeightOfLastLine()> - missing paragraph portions." );
-            const SwLineLayout* pLineLayout = GetPara();
-            while ( pLineLayout && pLineLayout->GetNext() )
+            if ( bCalcHeightOfLastLine )
             {
-                // iteration to last line
-                pLineLayout = pLineLayout->GetNext();
-            }
-            if ( pLineLayout )
-            {
-                SwTwips nAscent, nDescent, nDummy1, nDummy2;
-                // --> OD 2005-05-20 #i47162# - suppress consideration of
-                // fly content portions and the line portion.
-                pLineLayout->MaxAscentDescent( nAscent, nDescent,
-                                               nDummy1, nDummy2,
-                                               0L, true );
-                // <--
-                // --> OD 2006-11-22 #i71281#
-                // Suppress wrong invalidation of printing area, if method is
-                // called recursive.
-                // Thus, member <mnHeightOfLastLine> is only set directly, if
-                // no recursive call is needed.
-//                mnHeightOfLastLine = nAscent + nDescent;
-                const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
-                // --> OD 2005-05-20 #i47162# - if last line only contains
-                // fly content portions, <mnHeightOfLastLine> is zero.
-                // In this case determine height of last line by the font
-                if ( nNewHeightOfLastLine == 0 )
+                ASSERT( HasPara(),
+                        "<SwTxtFrm::_CalcHeightOfLastLine()> - missing paragraph portions." );
+                const SwLineLayout* pLineLayout = GetPara();
+                while ( pLineLayout && pLineLayout->GetNext() )
                 {
-                    _CalcHeightOfLastLine( true );
+                    // iteration to last line
+                    pLineLayout = pLineLayout->GetNext();
                 }
-                else
+                if ( pLineLayout )
                 {
-                    mnHeightOfLastLine = nNewHeightOfLastLine;
+                    SwTwips nAscent, nDescent, nDummy1, nDummy2;
+                    // --> OD 2005-05-20 #i47162# - suppress consideration of
+                    // fly content portions and the line portion.
+                    pLineLayout->MaxAscentDescent( nAscent, nDescent,
+                                                   nDummy1, nDummy2,
+                                                   0, true );
+                    // <--
+                    // --> OD 2006-11-22 #i71281#
+                    // Suppress wrong invalidation of printing area, if method is
+                    // called recursive.
+                    // Thus, member <mnHeightOfLastLine> is only set directly, if
+                    // no recursive call is needed.
+    //                mnHeightOfLastLine = nAscent + nDescent;
+                    const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
+                    // --> OD 2005-05-20 #i47162# - if last line only contains
+                    // fly content portions, <mnHeightOfLastLine> is zero.
+                    // In this case determine height of last line by the font
+                    if ( nNewHeightOfLastLine == 0 )
+                    {
+                        _CalcHeightOfLastLine( true );
+                    }
+                    else
+                    {
+                        mnHeightOfLastLine = nNewHeightOfLastLine;
+                    }
+                    // <--
+                    // <--
                 }
-                // <--
-                // <--
             }
         }
+        // <--
     }
     // --> OD 2006-11-13 #i71281#
     // invalidate printing area, if height of last line changes
