@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbar.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,10 +63,6 @@ public:
     ~BibToolBarListener();
 
     rtl::OUString           GetCommand();
-    void            SetCommand(const rtl::OUString& aStr);
-
-    sal_uInt16          GetIndex();
-    void            SetIndex(sal_uInt16 nIndex);
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
