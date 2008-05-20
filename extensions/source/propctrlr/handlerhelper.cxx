@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: handlerhelper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,14 +175,6 @@ namespace pcr
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_True );
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
-    {
-        ::std::vector< ::rtl::OUString > aAsVector( _rInitialListEntries.getConstArray(), _rInitialListEntries.getConstArray() + _rInitialListEntries.getLength() );
-        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, _bSorted, sal_False );
     }
 
     //--------------------------------------------------------------------
