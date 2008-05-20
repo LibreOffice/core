@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: loadlisteneradapter.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,10 +114,6 @@ namespace bib
         virtual void SAL_CALL release(  ) throw () = 0;
 
     // helper
-        /// incremental lock
-        void        lock();
-        /// incremental unlock
-        void        unlock();
         /// get the lock count
         sal_Int32   locked() const { return m_nLockCount; }
 
