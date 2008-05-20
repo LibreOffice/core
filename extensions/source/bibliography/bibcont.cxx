@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bibcont.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,12 +96,6 @@ using namespace ::rtl;
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10
 #define WIN_STEP_SIZE 5
-
-BibWindowContainer::BibWindowContainer( Window* pParent, WinBits nStyle ) :
-        BibWindow( pParent, nStyle ),
-        pChild( NULL )
-{
-}
 
 BibWindowContainer::BibWindowContainer( Window* pParent, BibShortCutHandler* pChildWin, WinBits nStyle ) :
         BibWindow( pParent, nStyle ),
@@ -192,25 +186,6 @@ IMPL_LINK( BibBookContainer, SplitHdl, Timer*,/*pT*/)
     nSize = GetItemSize( BOTTOM_WINDOW);
     pConfig->setViewSize(nSize);
     return 0;
-}
-
-
-uno::Reference < awt::XWindowPeer>  BibBookContainer::GetTopComponentInterface( sal_Bool bCreate)
-{
-    return pTopWin->GetComponentInterface(bCreate);
-}
-void BibBookContainer::SetTopComponentInterface( awt::XWindowPeer* pIFace )
-{
-    pTopWin->SetComponentInterface(pIFace);
-}
-
-uno::Reference < awt::XWindowPeer > BibBookContainer::GetBottomComponentInterface( sal_Bool bCreate)
-{
-    return pBottomWin->GetComponentInterface(bCreate);
-}
-void BibBookContainer::SetBottomComponentInterface( awt::XWindowPeer* pIFace )
-{
-    pBottomWin->SetComponentInterface(pIFace);
 }
 
 void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
