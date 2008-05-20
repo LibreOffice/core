@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Calc.xcs,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1217,7 +1217,15 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="Save" oor:type="xs:boolean">
+          <prop oor:name="Executable" oor:type="xs:boolean">
+            <info>
+              <author>AB</author>
+              <desc>Indicates whether VBA macros are imported without comments to be executable.</desc>
+              <label>Executable code</label>
+            </info>
+            <value>false</value>
+          </prop>
+          <prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
