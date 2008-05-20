@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylepool.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,12 +59,36 @@ namespace {
             pItem( rItem.Clone() ), pUpper( pParent ){}
         ~Node();
         const bool hasItemSet() const { return 0 < aItemSet.size(); }
-        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return aItemSet[aItemSet.size()-1]; }
+        // --> OD 2008-04-29 #i87808#
+//        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return aItemSet[aItemSet.size()-1]; }
+        const StylePool::SfxItemSet_Pointer_t getItemSet() const
+        {
+            return aItemSet.back();
+        }
+        const StylePool::SfxItemSet_Pointer_t getUsedOrLastAddedItemSet() const;
+        // <--
         void setItemSet( const SfxItemSet& rSet ){ aItemSet.push_back( StylePool::SfxItemSet_Pointer_t( rSet.Clone() ) ); }
         Node* findChildNode( const SfxPoolItem& rItem );
         Node* nextItemSet( Node* pLast );
         const SfxPoolItem& getPoolItem() const { return *pItem; }
     };
+
+    // --> OD 2008-04-29 #i87808#
+    const StylePool::SfxItemSet_Pointer_t Node::getUsedOrLastAddedItemSet() const
+    {
+        std::vector< StylePool::SfxItemSet_Pointer_t >::const_reverse_iterator aIter;
+
+        for ( aIter = aItemSet.rbegin(); aIter != aItemSet.rend(); ++aIter )
+        {
+            if ( (*aIter).use_count() > 1 )
+            {
+                return *aIter;
+            }
+        }
+
+        return aItemSet.back();
+    }
+    // <--
 
     Node* Node::findChildNode( const SfxPoolItem& rItem )
     {
@@ -157,11 +181,21 @@ namespace {
                 pNode = &pCurrNode->second;
                 ++pCurrNode;
                 if( pNode->hasItemSet() )
-                    return pNode->getItemSet();
+                {
+                    // --> OD 2008-04-30 #i87808#
+//                    return pNode->getItemSet();
+                    return pNode->getUsedOrLastAddedItemSet();
+                    // <--
+                }
             }
             pNode = pNode->nextItemSet( pNode );
             if( pNode && pNode->hasItemSet() )
-                return pNode->getItemSet();
+            {
+                // --> OD 2008-04-30 #i87808#
+//                return pNode->getItemSet();
+                return pNode->getUsedOrLastAddedItemSet();
+                // <--
+            }
         }
         return pReturn;
     }
@@ -170,7 +204,12 @@ namespace {
     {
         ::rtl::OUString aString;
         if( pNode && pNode->hasItemSet() )
-            aString = StylePool::nameOf( pNode->getItemSet() );
+        {
+            // --> OD 2008-04-30 #i87808#
+//            aString = StylePool::nameOf( pNode->getItemSet() );
+            aString = StylePool::nameOf( pNode->getUsedOrLastAddedItemSet() );
+            // <--
+        }
         return aString;
     }
 
