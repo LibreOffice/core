@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datman.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1588,30 +1588,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     return xModel;
 }
 //------------------------------------------------------------------------
-void BibDataManager::saveCtrModel(const ::rtl::OUString& rName,const Reference< awt::XControlModel > & rCtrModel)
-{
-    if(m_xSourceProps.is())
-    {
-        try
-        {
-            ::rtl::OUString aName(C2U("View_"));
-            aName+=rName;
-
-            Reference< io::XPersistObject >  aPersistObject(rCtrModel, UNO_QUERY );
-
-            Any aModel(&aPersistObject, ::getCppuType((Reference<io::XPersistObject>*)0));
-
-            m_xSourceProps->setPropertyValue(aName,aModel);
-        }
-        catch(Exception& e )
-        {
-            (void) e;   // make compiler happy
-            DBG_ERROR("::saveCtrModel: something went wrong !");
-        }
-    }
-
-}
-//------------------------------------------------------------------------
 void SAL_CALL BibDataManager::disposing()
 {
     BibDataManager_Base::WeakComponentImplHelperBase::disposing();
@@ -1743,31 +1719,6 @@ catch(Exception& e )
 }
 
 
-}
-/* -----------------02.11.99 16:11-------------------
-
- --------------------------------------------------*/
-sal_Bool BibDataManager::moveRelative(sal_Int32 nCount)
-{
-    sal_Bool bRet = sal_False;
-    try
-    {
-        Reference< XResultSet >  xCursor( m_xForm, UNO_QUERY );
-        Reference< XResultSetUpdate >  xCursorUpdate( m_xForm, UNO_QUERY );
-        if (xCursor.is() && xCursorUpdate.is())
-        {
-            bRet = xCursor->relative(nCount);
-            if (xCursor->isAfterLast())
-                xCursorUpdate->moveToInsertRow();
-        }
-    }
-    catch(Exception& e )
-    {
-        (void) e;   // make compiler happy
-        DBG_ERROR("Exception in BibDataManager::moveRelative")
-    }
-
-    return bRet;
 }
 /* -----------------11.11.99 15:51-------------------
 
