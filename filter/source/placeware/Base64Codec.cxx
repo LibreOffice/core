@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Base64Codec.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,7 @@ void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Seque
 
 const rtl::OUString s2equal(RTL_CONSTASCII_USTRINGPARAM("=="));
 const rtl::OUString s1equal(RTL_CONSTASCII_USTRINGPARAM("="));
-
+#if 0
 void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
 {
     nLength = 0;
@@ -207,3 +207,4 @@ void Base64Codec::decodeBase64(uno::Sequence< sal_uInt8 >& aBuffer, const rtl::O
     aBuffer = uno::Sequence<sal_uInt8>(pBuffer, nSecondLength);
     delete[] pBuffer;
 }
+#endif
