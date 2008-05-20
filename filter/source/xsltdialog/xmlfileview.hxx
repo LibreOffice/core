@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfileview.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,7 +115,6 @@ protected:
 
     void            DoDelayedSyntaxHighlight( USHORT nPara );
 
-    void            SyntaxColorsChanged();
     void            DoSyntaxHighlight( USHORT nPara );
 
 public:
