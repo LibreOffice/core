@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_treelb.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -382,8 +382,16 @@ IMPL_LINK(NodeImpl, asyncModified, ModifiedParams*, pModifiedParams)
                 {
                     t_set::iterator iFind( tlboxPackages.find( packages[ pos ] ) );
                     if (iFind == iEnd) {
-                        m_treelb->addPackageNode(
-                            m_lbEntry, packages[ pos ], xCmdEnv );
+                        try
+                        {
+                            m_treelb->addPackageNode(
+                                m_lbEntry, packages[ pos ], xCmdEnv );
+                        }
+                        catch (lang::DisposedException &)
+                        {
+                            //In case an extension was uninstalled or updated then
+                            //the package may already be disposed
+                        }
                     }
                 }
             }
