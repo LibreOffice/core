@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.115 $
+ * $Revision: 1.116 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2899,7 +2899,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
                 // OD 20.12.2002 #94627# - no paint of page border and shadow, if
                 // writer is in place mode.
-                if( pSh->GetWin() &&
+                if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
                     !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
                 {
                     // OD 12.02.2003 #i9719#, #105645# - use new method
