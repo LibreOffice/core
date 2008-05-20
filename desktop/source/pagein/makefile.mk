@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.11 $
+# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -106,7 +106,6 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)go$(DFTDLLPOST)    >> $@
     @-echo $(DLLPRE)sb$(DFTDLLPOST)    >> $@
     @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)so$(DFTDLLPOST)    >> $@
 #
     @-echo $(DLLPRE)fwe$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)fwk$(DFTDLLPOST)   >> $@
@@ -118,12 +117,14 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
     @-echo $(DLLPRE)sot$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)psp$(DFTDLLPOST)   >> $@
+.IF "$(USE_SYSTEM_STL)"!="YES"
 .IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
     @-echo $(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
 .ENDIF # gcc
 .IF "$(COMNAME)" == "sunpro5"
     @-echo $(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
 .ENDIF # sunpro5
+.ENDIF
     @-echo $(DLLPRE)uno_sal$(UDKDLLPOST)   >>  $@
     @-echo $(DLLPRE)uno_cppu$(UDKDLLPOST)  >> $@
     @-echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
