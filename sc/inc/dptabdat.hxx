@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabdat.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,18 @@
 #define SC_DPTABDAT_HXX
 
 #include "address.hxx"
+#include "dpoutput.hxx"
+#include "dpcachetable.hxx"
+
 #include <tools/string.hxx>
+
+#include <vector>
+#include <set>
+#include <hash_map>
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
 
 class TypedStrCollection;
 
@@ -54,6 +65,7 @@ class TypedStrCollection;
 #define SC_DAPI_LEVEL_DAY       3
 #define SC_DAPI_LEVEL_WEEK      1
 #define SC_DAPI_LEVEL_WEEKDAY   2
+
 
 // --------------------------------------------------------------------
 //
@@ -95,29 +107,11 @@ struct ScDPValueData
     void    Set( double fV, BYTE nT ) { fValue = fV; nType = nT; }
 };
 
-
-struct ScDPTableIteratorParam
-{
-    //  all pointers are just copied
-
-    SCSIZE          nColCount;
-    const long*     pCols;
-    ScDPItemData*   pColData;
-    SCSIZE          nRowCount;
-    const long*     pRows;
-    ScDPItemData*   pRowData;
-    SCSIZE          nPageCount;
-    const long*     pPages;
-    ScDPItemData*   pPageData;
-    SCSIZE          nDatCount;
-    const long*     pDats;
-    ScDPValueData*  pValues;
-
-    ScDPTableIteratorParam( long nCCount, const long* pC, ScDPItemData* pCDat,
-                            long nRCount, const long* pR, ScDPItemData* pRDat,
-                            long nPCount, const long* pP, ScDPItemData* pPDat,
-                            long nDCount, const long* pD, ScDPValueData* pV );
-};
+class ScDPResultMember;
+class ScDPDimension;
+class ScDPLevel;
+class ScDPInitState;
+class ScDPResultMember;
 
 class ScDPTableData
 {
@@ -128,6 +122,30 @@ class ScDPTableData
     long    nLastRet;
 
 public:
+
+    /** This structure stores dimension information used when calculating
+        results.  These data are read only during result calculation, so it
+        should be passed as a const instance. */
+    struct CalcInfo
+    {
+        ::std::vector<long>             aColLevelDims;
+        ::std::vector<ScDPDimension*>   aColDims;
+        ::std::vector<ScDPLevel*>       aColLevels;
+        ::std::vector<long>             aRowLevelDims;
+        ::std::vector<ScDPDimension*>   aRowDims;
+        ::std::vector<ScDPLevel*>       aRowLevels;
+        ::std::vector<long>             aPageDims;
+        ::std::vector<long>             aDataSrcCols;
+
+        ScDPInitState*                  pInitState;
+        ScDPResultMember*               pColRoot;
+        ScDPResultMember*               pRowRoot;
+
+        bool                            bRepeatIfEmpty;
+
+        CalcInfo();
+    };
+
                 ScDPTableData();
     virtual     ~ScDPTableData();
 
@@ -145,8 +163,14 @@ public:
     virtual void                    DisposeData() = 0;
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty ) = 0;
 
-    virtual void                    ResetIterator() = 0;
-    virtual BOOL                    GetNextRow( const ScDPTableIteratorParam& rParam ) = 0;
+    virtual bool                    IsRepeatIfEmpty();
+
+    virtual void                    CreateCacheTable();
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPDimension*>& rPageDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
+    virtual const ScDPCacheTable&   GetCacheTable() const = 0;
 
                                     // overloaded in ScDPGroupTableData:
     virtual BOOL                    IsBaseForGroup(long nDim) const;
@@ -156,6 +180,25 @@ public:
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
+
+protected:
+    /** This structure stores vector arrays that hold intermediate data for
+        each row during cache table iteration. */
+    struct CalcRowData
+    {
+        ::std::vector<ScDPItemData>  aColData;
+        ::std::vector<ScDPItemData>  aRowData;
+        ::std::vector<ScDPItemData>  aPageData;
+        ::std::vector<ScDPValueData> aValues;
+    };
+
+    void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);
+    void            ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow);
+    void            CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
+
+private:
+    void            GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
+                                const ::std::vector<long>& rDims, ::std::vector<ScDPItemData>& rItemData);
 };
 
 
