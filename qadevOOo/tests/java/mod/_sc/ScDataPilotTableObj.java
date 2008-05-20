@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScDataPilotTableObj.java,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,7 @@ public class ScDataPilotTableObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "Creating a test environment" );
         log.println("getting sheets");
-        XSpreadsheets xSpreadsheets = (XSpreadsheets)xSheetDoc.getSheets();
+        XSpreadsheets xSpreadsheets = xSheetDoc.getSheets();
         XIndexAccess oIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         XSpreadsheet oSheet = null;
@@ -278,8 +278,79 @@ public class ScDataPilotTableObj extends TestCase {
         tEnv.addObjRelation("CELLFORCHANGE", oChangeCell);
         tEnv.addObjRelation("CELLFORCHECK", oCheckCell);
         tEnv.addObjRelation("FIELDSAMOUNT", new Integer(5));
+        tEnv.addObjRelation("SHEETDOCUMENT", xSheetDoc);
+
+        createTable2(oSheet, sCellRangeAddress, tEnv);
 
         return tEnv;
+    }
+
+    /**
+     * Create a new DataPilot table output for use with testing XDataPilotTable2
+     * interface.
+     *
+     * @param oSheet current sheet instance
+     * @param srcRange source range
+     * @param tEnv test environment instance
+     */
+    private void createTable2(XSpreadsheet oSheet, CellRangeAddress srcRange, TestEnvironment tEnv)
+    {
+        XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
+            UnoRuntime.queryInterface(XDataPilotTablesSupplier.class, oSheet);
+        log.println("Creating test table object");
+        XDataPilotTables DPT = DPTS.getDataPilotTables();
+        XDataPilotDescriptor DPDsc = DPT.createDataPilotDescriptor();
+        DPDsc.setSourceRange(srcRange);
+
+        XIndexAccess xIA = DPDsc.getDataPilotFields();
+        int fieldCount = xIA.getCount() - 1; // skip the last field because it's always hidden.
+        try
+        {
+            for (int i = 0; i < fieldCount; ++i)
+            {
+                Object o = xIA.getByIndex(i);
+                XPropertySet fieldPropSet = (XPropertySet)UnoRuntime.queryInterface(
+                    XPropertySet.class, o);
+
+                if (i == fieldCount - 1)
+                {
+                    // last field
+                    fieldPropSet.setPropertyValue(
+                        "Function", com.sun.star.sheet.GeneralFunction.SUM);
+                    fieldPropSet.setPropertyValue(
+                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.DATA);
+                }
+                else if (i%2 == 0)
+                {
+                    // even number fields
+                    fieldPropSet.setPropertyValue(
+                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.COLUMN);
+                }
+                else if (i%2 == 1)
+                {
+                    // odd number fields
+                    fieldPropSet.setPropertyValue(
+                        "Orientation", com.sun.star.sheet.DataPilotFieldOrientation.ROW);
+                }
+            }
+
+            if (DPT.hasByName("DataPilotTable2"))
+                DPT.removeByName("DataPilotTable2");
+
+            CellAddress destAddr = new CellAddress();
+            destAddr.Sheet = 0;
+            destAddr.Column = 0;
+            destAddr.Row = 14;
+            DPT.insertNewByName("DataPilotTable2", destAddr, DPDsc);
+
+            Object o = DPT.getByName("DataPilotTable2");
+            tEnv.addObjRelation("DATAPILOTTABLE2", o);
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create a test environment", e);
+        }
     }
 
 }
