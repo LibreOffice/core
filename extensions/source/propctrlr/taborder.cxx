@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: taborder.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -322,18 +322,6 @@ namespace pcr
     //= TabOrderListBox
     //========================================================================
     DBG_NAME(TabOrderListBox);
-    //------------------------------------------------------------------------
-    TabOrderListBox::TabOrderListBox( Window* pParent )
-        :SvTreeListBox( pParent, WB_BORDER )
-    {
-        DBG_CTOR(TabOrderListBox,NULL);
-        // with the following, the AcceptDrop of the base class does the scrolling when the
-        // window border is reached
-        SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
-            // Hmm. The flag alone is not enough, so to be on the safe side ...
-
-        SetSelectionMode( MULTIPLE_SELECTION );
-    }
     //------------------------------------------------------------------------
     TabOrderListBox::TabOrderListBox( Window* pParent, const ResId& rResId  )
         :SvTreeListBox( pParent, rResId  )
