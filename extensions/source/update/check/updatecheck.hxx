@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheck.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,8 +76,6 @@ public:
     void initialize(const com::sun::star::uno::Sequence<com::sun::star::beans::NamedValue>& rValues,
                     const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
 
-    void dispose();
-
     /* Returns an instance of the specified service obtained from the specified
      * component context
      */
@@ -85,9 +83,6 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createService(
         const rtl::OUString& aServiceName,
         const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
-
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createService(
-        const rtl::OUString& aServiceName) const;
 
     // Update internal update info member
     void setUpdateInfo(const UpdateInfo& aInfo);
