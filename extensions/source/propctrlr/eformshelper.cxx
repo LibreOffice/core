@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eformshelper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -510,12 +510,6 @@ namespace pcr
         {
             OSL_ENSURE( sal_False, "EFormsHelper::setBinding: caught an exception!" );
         }
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XPropertySet > EFormsHelper::createBindingForFormModel( const ::rtl::OUString& _rTargetModel ) const SAL_THROW(())
-    {
-        return implGetOrCreateBinding( _rTargetModel, ::rtl::OUString() );
     }
 
     //--------------------------------------------------------------------
