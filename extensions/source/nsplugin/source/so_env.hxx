@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_env.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,13 +83,13 @@ const char* findProgramDir();
 // return nsplugin executable absolute path, like "/home/build/staroffice/program/nsplugin"
 const char* findNsExeFile();
 
-
+#ifdef WNT
 // return SO executable absolute path, like "/home/build/staroffice/program/soffice"
 const char* findSofficeExecutable();
 
-
 // change Dos path such as c:\program\soffice to c:/program/soffice
 int DosToUnixPath(char*);
+#endif
 
 //change Unix path such as program\soffice to program/soffice
 int UnixToDosPath(char*);
