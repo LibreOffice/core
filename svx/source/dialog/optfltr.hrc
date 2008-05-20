@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optfltr.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +39,10 @@
 #define CB_WBAS_CODE    1
 #define CB_WBAS_STG     2
 #define CB_EBAS_CODE    3
-#define CB_EBAS_STG     4
-#define CB_PBAS_CODE    5
-#define CB_PBAS_STG     6
+#define CB_EBAS_EXECTBL 4
+#define CB_EBAS_STG     5
+#define CB_PBAS_CODE    6
+#define CB_PBAS_STG     7
 
 #define CLB_SETTINGS    1
 #define ST_CHG_MATH     1
