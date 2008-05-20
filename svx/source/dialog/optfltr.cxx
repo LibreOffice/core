@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optfltr.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,16 +65,25 @@ OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
     aWBasicStgCB    ( this, SVX_RES( CB_WBAS_STG  ) ),
     aMSExcelGB      ( this, SVX_RES( GB_EXCEL     ) ),
     aEBasicCodeCB   ( this, SVX_RES( CB_EBAS_CODE ) ),
+    aEBasicExectblCB( this, SVX_RES( CB_EBAS_EXECTBL ) ),
     aEBasicStgCB    ( this, SVX_RES( CB_EBAS_STG  ) ),
     aMSPPointGB     ( this, SVX_RES( GB_PPOINT    ) ),
     aPBasicCodeCB   ( this, SVX_RES( CB_PBAS_CODE ) ),
     aPBasicStgCB    ( this, SVX_RES( CB_PBAS_STG  ) )
 {
     FreeResource();
+
+    aEBasicCodeCB.SetClickHdl( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
 }
 
 OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
+}
+
+IMPL_LINK( OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, CheckBox*, EMPTYARG )
+{
+    aEBasicExectblCB.Enable( aEBasicCodeCB.IsChecked() );
+    return 0;
 }
 
 SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
@@ -95,6 +104,8 @@ BOOL OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 
     if( aEBasicCodeCB.GetSavedValue() != (bFlag = aEBasicCodeCB.IsChecked()))
         pOpt->SetLoadExcelBasicCode( bFlag );
+    if( aEBasicExectblCB.GetSavedValue() != (bFlag = aEBasicExectblCB.IsChecked()))
+        pOpt->SetLoadExcelBasicExecutable( bFlag );
     if( aEBasicStgCB.GetSavedValue() != (bFlag = aEBasicStgCB.IsChecked()))
         pOpt->SetLoadExcelBasicStorage( bFlag );
 
@@ -121,8 +132,11 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 
     aEBasicCodeCB.Check( pOpt->IsLoadExcelBasicCode() );
     aEBasicCodeCB.SaveValue();
+    aEBasicExectblCB.Check( pOpt->IsLoadExcelBasicExecutable() );
+    aEBasicExectblCB.SaveValue();
     aEBasicStgCB.Check( pOpt->IsLoadExcelBasicStorage() );
     aEBasicStgCB.SaveValue();
+    LoadExcelBasicCheckHdl_Impl( &aEBasicCodeCB );
 
     aPBasicCodeCB.Check( pOpt->IsLoadPPointBasicCode() );
     aPBasicCodeCB.SaveValue();
