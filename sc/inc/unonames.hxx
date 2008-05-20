@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unonames.hxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -550,6 +550,10 @@
 #define SC_UNO_REPEATIF             "RepeatIfEmpty"
 #define SC_UNO_DATADESC             "DataDescription"
 #define SC_UNO_NUMBERFO             "NumberFormat"
+#define SC_UNO_ROWFIELDCOUNT        "RowFieldCount"
+#define SC_UNO_COLUMNFIELDCOUNT     "ColumnFieldCount"
+#define SC_UNO_DATAFIELDCOUNT       "DataFieldCount"
+
 //  (preliminary:)
 #define SC_UNO_REFVALUE             "ReferenceValue"
 #define SC_UNO_SORTING              "Sorting"
