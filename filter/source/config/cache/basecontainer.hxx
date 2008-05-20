@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basecontainer.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,11 +232,6 @@ class BaseContainer : public BaseLock
                         // after this point p cant b e guaranteed any longer!
          */
         FilterCache* impl_getWorkingCache() const;
-
-        //---------------------------------------
-        // TODO
-
-        sal_Bool impl_checkIfItemExist(const ::rtl::OUString& sItem);
 
     //-------------------------------------------
     // uno interface
