@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_backend.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,13 +217,13 @@ void Package::disposing()
 }
 
 //______________________________________________________________________________
-void Package::check()
+void Package::check() const
 {
     ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {
         throw lang::DisposedException(
             OUSTR("Package instance has already been disposed!"),
-            static_cast<OWeakObject *>(this) );
+            static_cast<OWeakObject *>(const_cast<Package *>(this)));
     }
 }
 
