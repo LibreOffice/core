@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellbindinghelper.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,21 +84,6 @@ namespace pcr
                 return ( _rCompare == m_sReference ) ? true : false;
             }
         };
-        //....................................................................
-        bool isAsciiLetter( sal_Unicode _c )
-        {
-            return  ( _c >= 'A' && _c <= 'Z' )
-                ||  ( _c >= 'a' && _c <= 'z' );
-        }
-
-        //....................................................................
-        sal_Unicode toUpperAscii( sal_Unicode _c )
-        {
-            sal_Unicode nUpper( _c );
-            if ( _c >= 'a' && _c <= 'z' )
-                nUpper += sal_Unicode( 'A' - 'a' );
-            return nUpper;
-        }
     }
 
     //========================================================================
