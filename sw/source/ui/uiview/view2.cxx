@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2051,7 +2051,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                     {
                         sal_Bool bUndo = pDoc->DoesUndo();
                         pDoc->DoUndo( sal_False );
-                        nErrno = pDocSh->ImportFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
+                        nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
                         pDoc->DoUndo( bUndo );
                     }
 
