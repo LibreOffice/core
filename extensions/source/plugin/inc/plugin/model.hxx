@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: model.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,11 +103,6 @@ class PluginModel : public BroadcasterHelperHolder,
 
     // com::sun::star::lang::XTypeProvider
 
-    // com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName() throw(  );
-
-    sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw(  );
-    Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
     static Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
     static rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
     {
