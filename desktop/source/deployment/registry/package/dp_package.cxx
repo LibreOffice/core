@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,9 +96,7 @@ class BackendImpl : public ImplBaseT
 {
     class PackageImpl : public ::dp_registry::backend::Package
     {
-        BackendImpl * getMyBackend() const {
-            return static_cast<BackendImpl *>(m_myBackend.get());
-        }
+        BackendImpl * getMyBackend() const;
 
         OUString m_description;
         OUString m_url_expanded;
@@ -368,6 +366,20 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
 //##############################################################################
 
+BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
+    }
+    return pBackend;
+}
 //______________________________________________________________________________
 void BackendImpl::PackageImpl::disposing()
 {
