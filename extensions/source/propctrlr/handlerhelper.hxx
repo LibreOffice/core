@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: handlerhelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,14 +139,6 @@ namespace pcr
             @return
                 the newly created control
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-            createComboBoxControl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rInitialListEntries,
-                sal_Bool _bReadOnlyControl,
-                sal_Bool _bSorted
-            );
-
         static ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
             createComboBoxControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory,
