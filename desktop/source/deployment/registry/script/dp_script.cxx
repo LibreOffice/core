@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_script.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,9 +65,7 @@ class BackendImpl : public t_helper
 {
     class PackageImpl : public ::dp_registry::backend::Package
     {
-        BackendImpl * getMyBackend() const {
-            return static_cast<BackendImpl *>(m_myBackend.get());
-        }
+        BackendImpl * getMyBackend() const;
 
         const OUString m_scriptURL;
         const OUString m_dialogURL;
@@ -311,6 +309,20 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 //##############################################################################
 
 // Package
+BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
+    }
+    return pBackend;
+}
 //______________________________________________________________________________
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
