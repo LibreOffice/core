@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1287,7 +1287,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
 
-    if ( !bScrolled && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
+    if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
 
     if( Imp()->IsAccessible() )
