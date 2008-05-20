@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -70,7 +70,8 @@ SHL1STDLIBS = 	$(SVXLIB)			\
                 $(UCBHELPERLIB)		\
                 $(CPPULIB)			\
                 $(SALLIB)			\
-                $(COMPHELPERLIB)
+                $(COMPHELPERLIB)	\
+                $(I18NISOLANGLIB)
 
 # --- Targets --------------------------------------------------------------
 
