@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfwriter.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,15 +298,6 @@ void Writer::removeShape( sal_uInt16 nDepth )
 
 // -----------------------------------------------------------------------------
 
-void Writer::setBackgroundColor( Color& rColor )
-{
-    startTag( TAG_BACKGROUNDCOLOR );
-    mpTag->addRGBA( rColor );
-    endTag();
-}
-
-// -----------------------------------------------------------------------------
-
 void Writer::startTag( sal_uInt8 nTagId )
 {
     DBG_ASSERT( mpTag == NULL, "Last tag was not ended");
@@ -391,14 +382,6 @@ sal_uInt16 Writer::defineShape( const Polygon& rPoly, const FillStyle& rFillStyl
 {
     const PolyPolygon aPolyPoly( rPoly );
     return defineShape( aPolyPoly, rFillStyle );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_uInt16 Writer::defineShape( const Polygon& rPoly, sal_uInt16 nLineWidth, const Color& rLineColor )
-{
-    const PolyPolygon aPolyPoly( rPoly );
-    return defineShape( aPolyPoly, nLineWidth, rLineColor );
 }
 
 // -----------------------------------------------------------------------------
@@ -631,16 +614,6 @@ void Writer::stop()
 
 // -----------------------------------------------------------------------------
 
-void Writer::play()
-{
-    startTag( TAG_DOACTION );
-    mpTag->addUI8( 0x06 );
-    mpTag->addUI8( 0 );
-    endTag();
-}
-
-// -----------------------------------------------------------------------------
-
 void Writer::waitOnClick( sal_uInt16 nDepth )
 {
     placeShape( _uInt16( mnPageButtonId ), nDepth, 0, 0 );
@@ -660,11 +633,4 @@ void Writer::gotoFrame( sal_uInt16 nFrame )
     mpTag->addUI16( nFrame );
     mpTag->addUI8( 0 );
     endTag();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_uInt16 Writer::getWhiteBackgroundShapeId()
-{
-    return mnWhiteBackgroundShapeId;
 }
