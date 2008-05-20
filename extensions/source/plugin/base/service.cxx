@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: service.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,32 +48,6 @@
 #include <cppuhelper/factory.hxx>
 
 using namespace cppu;
-
-//==================================================================================================
-void registerPluginService( const Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMgr )
-{
-    if (! xMgr.is())
-        return;
-
-    Reference< ::com::sun::star::container::XSet >  xReg( xMgr, UNO_QUERY );
-    if(xReg.is())
-    {
-        Any aAny;
-        Reference< ::com::sun::star::lang::XSingleServiceFactory >  xF;
-        xF = createSingleFactory( xMgr, PluginModel::getImplementationName_Static(),
-
-                                        PluginModel_CreateInstance,
-                                        PluginModel::getSupportedServiceNames_Static() );
-        aAny <<= xF;
-        xReg->insert( aAny );
-        xF = createSingleFactory( xMgr, XPluginManager_Impl::getImplementationName_Static(),
-
-                                        PluginManager_CreateInstance,
-                                        XPluginManager_Impl::getSupportedServiceNames_Static() );
-        aAny <<= xF;
-        xReg->insert( aAny );
-    }
-}
 
 extern "C" {
     void SAL_CALL component_getImplementationEnvironment(
@@ -145,26 +119,5 @@ extern "C" {
             }
         }
         return pRet;
-    }
-
-/** special registration procedure for the staroffice player */
-    void SAL_CALL exService_getSmartFactory( const sal_Char* implementationName, const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr, Reference< ::com::sun::star::lang::XSingleServiceFactory > & xFactory )
-    {
-        ::rtl::OUString                 aImplementationName( ::rtl::OUString::createFromAscii(implementationName));
-
-        if (aImplementationName == PluginModel::getImplementationName_Static() )
-
-        {
-            xFactory = createSingleFactory( rSMgr, aImplementationName,
-                                            PluginModel_CreateInstance,
-                                            PluginModel::getSupportedServiceNames_Static() );
-        }
-        else if (aImplementationName == XPluginManager_Impl::getImplementationName_Static() )
-
-        {
-            xFactory = createSingleFactory( rSMgr, aImplementationName,
-                                            PluginManager_CreateInstance,
-                                            XPluginManager_Impl::getSupportedServiceNames_Static() );
-        }
     }
 } /* extern "C" */
