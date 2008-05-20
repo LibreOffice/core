@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framectr.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -199,23 +199,6 @@ void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
         pController->getFrame()->removeFrameActionListener( this );
 }
 
-BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent):
-    xWindow( xComponent ),
-    pDatMan(NULL)
-
-{
-    Window* pParent = VCLUnoHelper::GetWindow( xWindow );
-    pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
-    pBibMod = OpenBibModul();
-    pDatMan = (*pBibMod)->createDataManager();
-    m_xDatMan = pDatMan;
-    bDisposing=sal_False;
-    bHierarchical=sal_True;
-    pImp = new BibFrameCtrl_Impl;
-    pImp->pController = this;
-    pImp->acquire();
-}
-
 BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWindow > & xComponent,
                                                 BibDataManager* pDataManager)
     :xWindow( xComponent )
@@ -230,11 +213,6 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     pImp = new BibFrameCtrl_Impl;
     pImp->pController = this;
     pImp->acquire();
-}
-
-BibDataManager* BibFrameController_Impl::GetDataManager()
-{
-    return pDatMan;
 }
 
 BibFrameController_Impl::~BibFrameController_Impl()
