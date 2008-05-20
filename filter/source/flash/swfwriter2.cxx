@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfwriter2.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,28 +186,28 @@ void Tag::write( SvStream &out )
 
     out.Write( GetData(), nSz );
 }
-
+#if 0
 // -----------------------------------------------------------------------------
 
 void Tag::addI32( sal_Int32 nValue )
 {
     addUI32( static_cast<sal_uInt32>( nValue ) );
 }
-
+#endif
 // -----------------------------------------------------------------------------
 
 void Tag::addUI32( sal_uInt32 nValue )
 {
     *this << nValue;
 }
-
+#if 0
 // -----------------------------------------------------------------------------
 
 void Tag::addI16( sal_Int16 nValue )
 {
     addUI16( static_cast<sal_uInt16>( nValue ) );
 }
-
+#endif
 // -----------------------------------------------------------------------------
 
 void Tag::addUI16( sal_uInt16 nValue )
