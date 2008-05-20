@@ -8,7 +8,7 @@
  *
  * $RCSfile: SlsCurrentSlideManager.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +97,7 @@ void CurrentSlideManager::ReleaseCurrentSlide (void)
     }
 
     mpCurrentSlide.reset();
+    mnCurrentSlideIndex = -1;
 }
 
 
@@ -251,11 +252,12 @@ void CurrentSlideManager::PrepareModelChange (void)
 
 void CurrentSlideManager::HandleModelChange (void)
 {
-    if (mpCurrentSlide.get() != NULL)
+    if (mnCurrentSlideIndex >= 0)
     {
         mpCurrentSlide = mrSlideSorter.GetModel().GetPageDescriptor(
-            mpCurrentSlide->GetPageIndex());
-        mpCurrentSlide->SetIsCurrentPage(true);
+            mnCurrentSlideIndex);
+        if (mpCurrentSlide.get() != NULL)
+            mpCurrentSlide->SetIsCurrentPage(true);
     }
 }
 
