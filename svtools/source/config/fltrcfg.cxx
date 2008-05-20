@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,7 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_CALC_SAVE             0x2000
 #define FILTERCFG_IMPRESS_LOAD          0x4000
 #define FILTERCFG_IMPRESS_SAVE          0x8000
+#define FILTERCFG_EXCEL_EXECTBL         0x10000
 
 static SvtFilterOptions* pOptions=0;
 
@@ -93,6 +94,7 @@ public:
                                 bSaveVBA = bSet;
                             }
 };
+
 /* -----------------------------22.01.01 11:08--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -137,6 +139,53 @@ void    SvtAppFilterOptions_Impl::Load()
     if(pValues[1].hasValue())
         bSaveVBA = *(sal_Bool*)pValues[1].getValue();
 }
+
+// -----------------------------------------------------------------------
+class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
+{
+    sal_Bool                bLoadExecutable;
+public:
+    SvtCalcFilterOptions_Impl(const OUString& rRoot) :
+        SvtAppFilterOptions_Impl(rRoot),
+        bLoadExecutable(sal_False)
+    {}
+    virtual void            Commit();
+    void                    Load();
+
+    sal_Bool                IsLoadExecutable() const {return bLoadExecutable;}
+    void                    SetLoadExecutable(sal_Bool bSet)
+                            {
+                                if(bSet != bLoadExecutable)
+                                    SetModified();
+                                bLoadExecutable = bSet;
+                            }
+};
+
+void SvtCalcFilterOptions_Impl::Commit()
+{
+    SvtAppFilterOptions_Impl::Commit();
+
+    Sequence<OUString> aNames(1);
+    aNames[0] = C2U("Executable");
+    Sequence<Any> aValues(1);
+    aValues[0] <<= bLoadExecutable;
+
+    PutProperties(aNames, aValues);
+}
+
+void SvtCalcFilterOptions_Impl::Load()
+{
+    SvtAppFilterOptions_Impl::Load();
+
+    Sequence<OUString> aNames(1);
+    aNames[0] = C2U("Executable");
+
+    Sequence<Any> aValues = GetProperties(aNames);
+    const Any* pValues = aValues.getConstArray();
+    if(pValues[0].hasValue())
+        bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
+}
+
 /* -----------------------------22.01.01 10:32--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -144,7 +193,7 @@ struct SvtFilterOptions_Impl
 {
     ULONG nFlags;
     SvtAppFilterOptions_Impl    aWriterCfg;
-    SvtAppFilterOptions_Impl    aCalcCfg;
+    SvtCalcFilterOptions_Impl   aCalcCfg;
     SvtAppFilterOptions_Impl    aImpressCfg;
 
     SvtFilterOptions_Impl() :
@@ -182,6 +231,7 @@ void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
         case FILTERCFG_WORD_STORAGE:    aWriterCfg.SetSave(bSet);break;
         case FILTERCFG_EXCEL_CODE:      aCalcCfg.SetLoad(bSet);break;
         case FILTERCFG_EXCEL_STORAGE:   aCalcCfg.SetSave(bSet);break;
+        case FILTERCFG_EXCEL_EXECTBL:   aCalcCfg.SetLoadExecutable(bSet);break;
         case FILTERCFG_PPOINT_CODE:     aImpressCfg.SetLoad(bSet);break;
         case FILTERCFG_PPOINT_STORAGE:  aImpressCfg.SetSave(bSet);break;
         default:
@@ -203,6 +253,7 @@ BOOL SvtFilterOptions_Impl::IsFlag( ULONG nFlag ) const
         case FILTERCFG_WORD_STORAGE     : bRet = aWriterCfg.IsSave();break;
         case FILTERCFG_EXCEL_CODE       : bRet = aCalcCfg.IsLoad();break;
         case FILTERCFG_EXCEL_STORAGE    : bRet = aCalcCfg.IsSave();break;
+        case FILTERCFG_EXCEL_EXECTBL    : bRet = aCalcCfg.IsLoadExecutable();break;
         case FILTERCFG_PPOINT_CODE      : bRet = aImpressCfg.IsLoad();break;
         case FILTERCFG_PPOINT_STORAGE   : bRet = aImpressCfg.IsSave();break;
         default:
@@ -355,6 +406,17 @@ void SvtFilterOptions::SetLoadExcelBasicCode( BOOL bFlag )
 BOOL SvtFilterOptions::IsLoadExcelBasicCode() const
 {
     return pImp->IsFlag( FILTERCFG_EXCEL_CODE );
+}
+
+void SvtFilterOptions::SetLoadExcelBasicExecutable( BOOL bFlag )
+{
+    pImp->SetFlag( FILTERCFG_EXCEL_EXECTBL, bFlag );
+    SetModified();
+}
+
+BOOL SvtFilterOptions::IsLoadExcelBasicExecutable() const
+{
+    return pImp->IsFlag( FILTERCFG_EXCEL_EXECTBL );
 }
 
 void SvtFilterOptions::SetLoadExcelBasicStorage( BOOL bFlag )
