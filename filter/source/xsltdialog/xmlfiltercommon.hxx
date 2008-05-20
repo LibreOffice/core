@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfiltercommon.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 // --------------------------------------------------------------------
 
 extern ::rtl::OUString string_encode( const ::rtl::OUString & rText );
-extern ::rtl::OUString xmlname_encode( const ::rtl::OUString & rText );
 extern ::rtl::OUString string_decode( const ::rtl::OUString & rText );
 
 // --------------------------------------------------------------------
