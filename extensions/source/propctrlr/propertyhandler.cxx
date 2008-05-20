@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyhandler.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,22 +69,6 @@ namespace pcr
         ,m_bSupportedPropertiesAreKnown( false )
         ,m_aPropertyListeners( m_aMutex )
         ,m_aContext( _rxContext )
-        ,m_pInfoService  ( new OPropertyInfoService )
-    {
-        DBG_CTOR( PropertyHandler, NULL );
-
-        m_xTypeConverter = Reference< XTypeConverter >(
-            m_aContext.createComponent( "com.sun.star.script.Converter" ),
-            UNO_QUERY_THROW
-        );
-    }
-
-    //--------------------------------------------------------------------
-    PropertyHandler::PropertyHandler( const Reference< XMultiServiceFactory >& _rxLegacyFactory )
-        :PropertyHandler_Base( m_aMutex )
-        ,m_bSupportedPropertiesAreKnown( false )
-        ,m_aPropertyListeners( m_aMutex )
-        ,m_aContext( _rxLegacyFactory )
         ,m_pInfoService  ( new OPropertyInfoService )
     {
         DBG_CTOR( PropertyHandler, NULL );
