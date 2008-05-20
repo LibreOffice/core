@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formcomponenthandler.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3157,24 +3157,6 @@ namespace pcr
         }
         return bHas;
     }
-
-    //------------------------------------------------------------------------
-    bool FormComponentPropertyHandler::impl_isValidDataSourceName_nothrow( const ::rtl::OUString& _rDSName ) const
-    {
-        bool bHas = false;
-        try
-        {
-            Reference< XNameAccess > xDataSourceNameAccess;
-            if ( m_aContext.createComponent( (rtl::OUString)SERVICE_DATABASE_CONTEXT, xDataSourceNameAccess ) )
-                bHas = xDataSourceNameAccess->hasByName( _rDSName );
-        }
-        catch ( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_isValidDataSourceName_nothrow: caught an exception!" );
-        }
-        return bHas;
-    }
-
     //------------------------------------------------------------------------
     ::rtl::OUString FormComponentPropertyHandler::impl_getDocumentURL_nothrow() const
     {
