@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: controlwizard.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,12 +150,6 @@ namespace dbp
     const OControlWizardContext& OControlWizardPage::getContext()
     {
         return getDialog()->getContext();
-    }
-
-    //---------------------------------------------------------------------
-    Reference< XMultiServiceFactory > OControlWizardPage::getServiceFactory()
-    {
-        return getDialog()->getServiceFactory();
     }
 
     //---------------------------------------------------------------------
