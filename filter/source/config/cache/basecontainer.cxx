@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basecontainer.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,23 +175,6 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     else
         return &(*m_rCache);
     // <- SAFE
-}
-
-//-----------------------------------------------
-sal_Bool BaseContainer::impl_checkIfItemExist(const ::rtl::OUString& sItem)
-{
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-
-    FilterCache* pCache = impl_getWorkingCache();
-    if ( pCache->hasItem(m_eType, sItem) )
-        return sal_True;
-
-    impl_loadOnDemand();
-    if ( pCache->hasItem(m_eType, sItem) )
-        return sal_True;
-
-    return sal_False;
 }
 
 /*-----------------------------------------------
