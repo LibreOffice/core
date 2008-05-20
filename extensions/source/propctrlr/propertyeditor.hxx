@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: propertyeditor.hxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,6 @@ namespace pcr
 
                                     ~OPropertyEditor();
 
-        sal_uInt16                  CalcVisibleLines();
         void                        EnableUpdate();
         void                        DisableUpdate();
 
@@ -115,7 +114,6 @@ namespace pcr
                                     GetPropertyControl( const ::rtl::OUString& rEntryName );
         void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
         void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
-        sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
         void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
