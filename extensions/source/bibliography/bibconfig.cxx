@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bibconfig.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,17 +243,6 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     nTblOrQuery = rDesc.nCommandType;
     SetModified();
 };
-/* -----------------------------13.11.00 12:20--------------------------------
-
- ---------------------------------------------------------------------------*/
-OUString lcl_GetRealNameFor(const OUString& rLogName, const Mapping& rMapping)
-{
-    for(sal_Int16 nField = 0; nField < COLUMN_COUNT; nField++)
-        if(rMapping.aColumnPairs[nField].sLogicalColumnName == rLogName)
-            return rMapping.aColumnPairs[nField].sRealColumnName;
-    return OUString();
-}
-
 //---------------------------------------------------------------------------
 void    BibConfig::Commit()
 {
