@@ -8,7 +8,7 @@
 #
 # $RCSfile: pythonloader.py,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +38,7 @@ from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
 
 MODULE_PROTOCOL = "vnd.openoffice.pymodule:"
-DEBUG = 0
+DEBUG = 1
 
 g_supportedServices  = "com.sun.star.loader.Python",      # referenced by the native C++ loader !
 g_implementationName = "org.openoffice.comp.pyuno.Loader" # referenced by the native C++ loader !
@@ -53,17 +53,20 @@ g_loadedComponents = {}
 def checkForPythonPathBesideComponent( url ):
       path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
       if DEBUG == 1:
-            print "checking for existence of " + path  
-      if 1 == os.access( path, os.F_OK) and not path in sys.path:
+            print "checking for existence of " + encfile( path )
+      if 1 == os.access( encfile( path ), os.F_OK) and not path in sys.path:
             if DEBUG == 1:
-                  print "adding " + path + " to sys.path"
+                  print "adding " + encfile( path ) + " to sys.path"
             sys.path.append( path )
 
       path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
-      if 1 == os.access( path, os.F_OK) and not path in sys.path:
+      if 1 == os.access( encfile( path ), os.F_OK) and not path in sys.path:
             if DEBUG == 1:
-                  print "adding " + path + " to sys.path"
+                  print "adding " + encfile( path ) + " to sys.path"
             sys.path.append( path )
+
+def encfile(uni):
+    return uni.encode( sys.getfilesystemencoding())
 
 class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
       def __init__(self, ctx ):
@@ -104,9 +107,9 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                                   src = src + "\n"
 
                             # compile and execute the module
-                            codeobject = compile( src, filename, "exec" )
+                            codeobject = compile( src, encfile(filename), "exec" )
                             exec codeobject in mod.__dict__
-                            mod.__file__ = filename
+                            mod.__file__ = encfile(filename)
                             g_loadedComponents[url] = mod
                       return mod
                 elif "vnd.openoffice.pymodule" == protocol:
