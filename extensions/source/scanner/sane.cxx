@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sane.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,16 +349,6 @@ void Sane::Close()
         mppOptions = 0;
         maHandle = 0;
         mnDevice = -1;
-    }
-}
-
-void Sane::Stop()
-{
-    if( maHandle )
-    {
-        int nDevice = mnDevice;
-        Close();
-        Open( nDevice );
     }
 }
 
