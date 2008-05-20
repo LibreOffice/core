@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,12 @@
 
 //------------------------------------------------------------------
 
+namespace com { namespace sun { namespace star { namespace sheet {
+
+    struct DataPilotTablePositionData;
+    struct DataPilotTableHeaderData;
+
+}}}}
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -49,7 +55,6 @@ class Rectangle;
 class SvStream;
 class ScDPSaveData;
 class ScDPOutput;
-struct ScDPPositionData;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class ScPivot;
@@ -60,7 +65,7 @@ struct ScSheetSourceDesc;
 class StrCollection;
 class TypedStrCollection;
 struct PivotField;
-
+class ScDPCacheTable;
 
 struct ScDPServiceDesc
 {
@@ -124,6 +129,7 @@ public:
 
     void                Output();
     ScRange             GetNewOutputRange( BOOL& rOverflow );
+    const ScRange       GetOutputRangeByType( sal_Int32 nType );
 
     void                SetSaveData(const ScDPSaveData& rData);
     ScDPSaveData*       GetSaveData() const     { return pSaveData; }
@@ -157,7 +163,7 @@ public:
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
     BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
-    void                GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
+    void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
     long                GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
     BOOL                GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                         long nDragDim,
@@ -174,7 +180,7 @@ public:
 
     void                FillPageList( TypedStrCollection& rStrings, long nField );
 
-    void                ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestObj );
+    void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
     BOOL                StoreOld(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
     BOOL                StoreNew(SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;
@@ -205,9 +211,16 @@ public:
     BOOL                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
 
-    bool                GetDataFieldPositionData(
-                            ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters,
-                            const ScAddress& rPos);
+    void                GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
+
+    bool                GetDataFieldPositionData(const ScAddress& rPos,
+                                                 ::com::sun::star::uno::Sequence<
+                                                    ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters);
+
+    void                GetDrillDownData(const ScAddress& rPos,
+                                         ::com::sun::star::uno::Sequence<
+                                            ::com::sun::star::uno::Sequence<
+                                                ::com::sun::star::uno::Any > >& rTableData);
 
     // apply drop-down attribute, initialize nHeaderRows, without accessing the source
     // (button attribute must be present)
