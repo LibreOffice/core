@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bibcont.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@ class BibWindowContainer : public BibWindow     //Window
         virtual void            Resize();
 
     public:
-        BibWindowContainer( Window* pParent, WinBits nStyle = WB_3DLOOK );
         BibWindowContainer( Window* pParent, BibShortCutHandler* pChild, WinBits nStyle = WB_3DLOOK);
         ~BibWindowContainer();
 
@@ -96,12 +95,6 @@ class BibBookContainer: public BibSplitWindow
         virtual void            Split();
 
         virtual long            PreNotify( NotifyEvent& rNEvt );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                                GetTopComponentInterface( sal_Bool bCreate = sal_True );
-        void                    SetTopComponentInterface( ::com::sun::star::awt::XWindowPeer* pIFace );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > GetBottomComponentInterface( sal_Bool bCreate = sal_True );
-        void                    SetBottomComponentInterface( ::com::sun::star::awt::XWindowPeer* pIFace );
 
     public:
 
