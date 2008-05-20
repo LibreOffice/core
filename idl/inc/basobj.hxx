@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basobj.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,6 @@ typedef int WriteAttribute;
 
 #define PRV_SV_DECL_META_FACTORY( Class )                               \
     static SvAttributeList * pAttribList;                               \
-    static SvAttributeList & GetAttributeList();                        \
     static SvMetaObject * Create() { return new Class; }                \
     static const char *   GetClassName() { return #Class; }
 
@@ -83,27 +82,21 @@ typedef int WriteAttribute;
 
 #define SV_DECL_META_FACTORY( Class, CLASS_ID )                         \
     SV_DECL_PERSIST( Class, CLASS_ID )                                  \
-    PRV_SV_DECL_META_FACTORY( Class )                                   \
-    SvMetaObject *  MakeClone() const;                                  \
-    Class *         Clone() const { return (Class *)MakeClone(); }
+    PRV_SV_DECL_META_FACTORY( Class )
 
 
 #define SV_DECL_META_FACTORY1( Class, Super1, CLASS_ID )                \
     SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                         \
-    PRV_SV_DECL_META_FACTORY( Class )                                   \
-    SvMetaObject *  MakeClone() const;                                  \
-    Class *         Clone() const { return (Class *)MakeClone(); }
+    PRV_SV_DECL_META_FACTORY( Class )
 
 #define SV_IMPL_META_FACTORY( Class )                                   \
     PRV_SV_IMPL_META_FACTORY( Class )                                   \
-    SV_IMPL_PERSIST( Class )                                            \
-    SvMetaObject *  Class::MakeClone() const { return new Class( *this ); }
+    SV_IMPL_PERSIST( Class )
 
 
 #define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
     PRV_SV_IMPL_META_FACTORY( Class )                                   \
-    SV_IMPL_PERSIST1( Class, Super1 )                                   \
-    SvMetaObject *  Class::MakeClone() const { return new Class( *this ); }
+    SV_IMPL_PERSIST1( Class, Super1 )
 
 
 /******************** class SvMetaObject ********************************/
