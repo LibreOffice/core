@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: browserline.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,39 +142,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetPosPixel(Point aPosPoint)
-    {
-        m_aLinePos = aPosPoint;
-        Point aPos( m_aLinePos );
-        aPos.Y()+=2;
-
-        Point aTitlePos(m_aLinePos);
-        aTitlePos.Y()+=8;
-        m_aFtTitle.SetPosPixel(aTitlePos);
-
-        if ( m_pControlWindow )
-        {
-            Point aControlPos( aPos );
-            aControlPos.X() = m_pControlWindow->GetPosPixel().X();
-            m_pControlWindow->SetPosPixel( aControlPos );
-        }
-
-        if ( m_pBrowseButton )
-        {
-            Point aButtonPos( aPos );
-            aButtonPos.X() = m_pBrowseButton->GetPosPixel().X();
-            m_pBrowseButton->SetPosPixel( aButtonPos );
-        }
-
-        if ( m_pAdditionalBrowseButton )
-        {
-            Point aButtonPos( aPos );
-            aButtonPos.X() = m_pAdditionalBrowseButton->GetPosPixel().X();
-            m_pAdditionalBrowseButton->SetPosPixel( aButtonPos );
-        }
-    }
-
-    //------------------------------------------------------------------
     Window* OBrowserLine::GetRefWindow()
     {
         Window* pRefWindow=&m_aFtTitle;
@@ -234,12 +201,6 @@ namespace pcr
         m_aOutputSize = _rSize;
 
         impl_layoutComponents();
-    }
-
-    //------------------------------------------------------------------
-    Size OBrowserLine::GetSizePixel()
-    {
-        return m_aOutputSize;
     }
 
     //------------------------------------------------------------------
