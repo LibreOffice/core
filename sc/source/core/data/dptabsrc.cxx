@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabsrc.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <stdio.h>
 
 
 // INCLUDE ---------------------------------------------------------------
 
 #include <algorithm>
+#include <vector>
+#include <set>
+#include <hash_map>
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -61,13 +65,22 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;
+using ::std::vector;
+using ::std::set;
+using ::std::hash_map;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
 
 // -----------------------------------------------------------------------
 
@@ -405,6 +418,45 @@ void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRef
     DBG_ERROR("not implemented");   //! exception?
 }
 
+Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
+    throw (uno::RuntimeException)
+{
+    long nColumnCount = GetData()->GetColumnCount();
+
+    // collect ScDPItemData for each filtered column
+    vector<ScDPCacheTable::Criterion> aFilterCriteria;
+    sal_Int32 nFilterCount = aFilters.getLength();
+    for (sal_Int32 i = 0; i < nFilterCount; ++i)
+    {
+        const sheet::DataPilotFieldFilter& rFilter = aFilters[i];
+        String aFieldName( rFilter.FieldName );
+        for (long nCol = 0; nCol < nColumnCount; ++nCol)
+        {
+            if ( aFieldName == pData->getDimensionName(nCol) )
+            {
+                ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
+                ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
+                                        GetLevelsObject()->getByIndex(0)->GetMembersObject();
+                sal_Int32 nIndex = pMembers->GetIndexFromName( rFilter.MatchValue );
+                if ( nIndex >= 0 )
+                {
+                    ScDPItemData aItem;
+                    pMembers->getByIndex(nIndex)->FillItemData( aItem );
+                    aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
+                    sal_Int32 nMatchStrId = ScSharedString::getStringId(aItem.aString);
+                    aFilterCriteria.back().mnFieldIndex = nCol;
+                    aFilterCriteria.back().mpFilter.reset(
+                        new ScDPCacheTable::SingleFilter(nMatchStrId, aItem.fValue, aItem.bHasValue) );
+                }
+            }
+        }
+    }
+
+    Sequence< Sequence<Any> > aTabData;
+    pData->GetDrillDownData(aFilterCriteria, aTabData);
+    return aTabData;
+}
+
 String ScDPSource::getDataDescription()
 {
     CreateRes_Impl();       // create pResData
@@ -496,7 +548,7 @@ void ScDPSource::disposeData()
     bResultOverflow = FALSE;
 }
 
-long lcl_CountMinMembers( ScDPDimension** ppDim, ScDPLevel** ppLevel, long nLevels )
+long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, long nLevels )
 {
     //  Calculate the product of the member count for those consecutive levels that
     //  have the "show all" flag, one following level, and the data layout dimension.
@@ -568,6 +620,54 @@ long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence<rtl::O
     return -1;  // not found
 }
 
+void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &rHasAutoShow)
+{
+    long* nDims = bIsRow ? nRowDims : nColDims;
+    long nDimCount = bIsRow ? nRowDimCount : nColDimCount;
+
+    for (long i = 0; i < nDimCount; ++i)
+    {
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nDims[i] );
+        long nHierarchy = pDim->getUsedHierarchy();
+        if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
+            nHierarchy = 0;
+        ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
+        long nCount = pLevels->getCount();
+
+        //! Test
+        if ( pDim->getIsDataLayoutDimension() && nDataDimCount < 2 )
+            nCount = 0;
+        //! Test
+
+        for (long j = 0; j < nCount; ++j)
+        {
+            ScDPLevel* pLevel = pLevels->getByIndex(j);
+            pLevel->EvaluateSortOrder();
+
+            // no layout flags for column fields, only for row fields
+            pLevel->SetEnableLayout( bIsRow );
+
+            if ( pLevel->GetAutoShow().IsEnabled )
+                rHasAutoShow = TRUE;
+
+            if (bIsRow)
+            {
+                rInfo.aRowLevelDims.push_back(nDims[i]);
+                rInfo.aRowDims.push_back(pDim);
+                rInfo.aRowLevels.push_back(pLevel);
+            }
+            else
+            {
+                rInfo.aColLevelDims.push_back(nDims[i]);
+                rInfo.aColDims.push_back(pDim);
+                rInfo.aColLevels.push_back(pLevel);
+            }
+
+            pLevel->GetMembersObject();                 // initialize for groups
+        }
+    }
+}
+
 void ScDPSource::CreateRes_Impl()
 {
     if ( !pResData )
@@ -581,24 +681,33 @@ void ScDPSource::CreateRes_Impl()
             nDataOrient = sheet::DataPilotFieldOrientation_ROW;
         }
 
+        // TODO: Aggreate pDataNames, pDataRefValues, nDataRefOrient, and
+        // eDataFunctions into a structure and use vector instead of static
+        // or pointer arrays.
         String* pDataNames = NULL;
         sheet::DataPilotFieldReference* pDataRefValues = NULL;
+        ScSubTotalFunc eDataFunctions[SC_DAPI_MAXFIELDS];
+        USHORT nDataRefOrient[SC_DAPI_MAXFIELDS];
         if (nDataDimCount)
         {
             pDataNames = new String[nDataDimCount];
             pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
         }
 
-        long nDataSrcCols[SC_DAPI_MAXFIELDS];
-        USHORT nDataRefOrient[SC_DAPI_MAXFIELDS];
+        ScDPTableData::CalcInfo aInfo;
+
 
         //  LateInit (initialize only those rows/children that are used) can be used unless
         //  any data dimension needs reference values from column/row dimensions
         BOOL bLateInit = TRUE;
 
+        // Go through all data dimensions (i.e. fields) and build their meta data
+        // so that they can be passed on to ScDPResultData instance later.
+        // TODO: aggregate all of data dimension info into a structure.
         long i;
         for (i=0; i<nDataDimCount; i++)
         {
+            // Get function for each data field.
             long nDimIndex = nDataDims[i];
             ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
             sheet::GeneralFunction eUser = (sheet::GeneralFunction)pDim->getFunction();
@@ -607,7 +716,11 @@ void ScDPSource::CreateRes_Impl()
                 //! test for numeric data
                 eUser = sheet::GeneralFunction_SUM;
             }
+
+            // Map UNO's enum to internal enum ScSubTotalFunc.
             eDataFunctions[i] = ScDataUnoConversion::GeneralToSubTotal( eUser );
+
+            // Get reference field/item information.
             pDataRefValues[i] = pDim->GetReferenceValue();
             nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
             sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
@@ -641,10 +754,10 @@ void ScDPSource::CreateRes_Impl()
             //! the complete name (function and field) must be stored at the dimension
 
             long nSource = ((ScDPDimension*)pDim)->GetSourceDim();
-            if ( nSource >= 0 )
-                nDataSrcCols[i] = nSource;
+            if (nSource >= 0)
+                aInfo.aDataSrcCols.push_back(nSource);
             else
-                nDataSrcCols[i] = nDimIndex;
+                aInfo.aDataSrcCols.push_back(nDimIndex);
         }
 
         pResData = new ScDPResultData( this );
@@ -655,7 +768,7 @@ void ScDPSource::CreateRes_Impl()
         delete[] pDataNames;
         delete[] pDataRefValues;
 
-        BOOL bHasAutoShow = FALSE;
+        bool bHasAutoShow = false;
 
         ScDPInitState aInitState;
 
@@ -673,86 +786,22 @@ void ScDPSource::CreateRes_Impl()
         pColResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bColumnGrand );
         pRowResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bRowGrand );
 
-        ScDPDimension* ppColDim[SC_DAPI_MAXFIELDS];     //! Ref?
-        ScDPLevel* ppColLevel[SC_DAPI_MAXFIELDS];       //! Ref?
-        long nColLevelDims[SC_DAPI_MAXFIELDS];
-        long nColLevelCount = 0;
-        for (i=0; i<nColDimCount; i++)
-        {
-            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nColDims[i] );
-            long nHierarchy = pDim->getUsedHierarchy();
-            if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
-                nHierarchy = 0;
-            ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
-            long nCount = pLevels->getCount();
+        FillCalcInfo(false, aInfo, bHasAutoShow);
+        long nColLevelCount = aInfo.aColLevels.size();
 
-            //! Test
-            if ( pDim->getIsDataLayoutDimension() && nDataDimCount < 2 )
-                nCount = 0;
-            //! Test
-
-            for (long j=0; j<nCount; j++)
-            {
-                ScDPLevel* pLevel = pLevels->getByIndex(j);
-                pLevel->EvaluateSortOrder();
-                pLevel->SetEnableLayout( FALSE );           // no layout flags for column fields
-                if ( pLevel->GetAutoShow().IsEnabled )
-                    bHasAutoShow = TRUE;
-                nColLevelDims[nColLevelCount] = nColDims[i];
-                ppColDim[nColLevelCount] = pDim;
-                ppColLevel[nColLevelCount] = pLevel;
-                pLevel->GetMembersObject();                 // initialize for groups
-                ++nColLevelCount;
-            }
-        }
-        ppColDim[nColLevelCount] = NULL;
-        ppColLevel[nColLevelCount] = NULL;
-
-        pColResRoot->InitFrom( ppColDim, ppColLevel, aInitState );
+        pColResRoot->InitFrom( aInfo.aColDims, aInfo.aColLevels, 0, aInitState );
         pColResRoot->SetHasElements();
 
-        ScDPDimension* ppRowDim[SC_DAPI_MAXFIELDS];     //! Ref?
-        ScDPLevel* ppRowLevel[SC_DAPI_MAXFIELDS];       //! Ref?
-        long nRowLevelDims[SC_DAPI_MAXFIELDS];
-        long nRowLevelCount = 0;
-        for (i=0; i<nRowDimCount; i++)
-        {
-            ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nRowDims[i] );
-            long nHierarchy = pDim->getUsedHierarchy();
-            if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
-                nHierarchy = 0;
-            ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
-            long nCount = pLevels->getCount();
-
-            //! Test
-            if ( pDim->getIsDataLayoutDimension() && nDataDimCount < 2 )
-                nCount = 0;
-            //! Test
-
-            for (long j=0; j<nCount; j++)
-            {
-                ScDPLevel* pLevel = pLevels->getByIndex(j);
-                pLevel->EvaluateSortOrder();
-                pLevel->SetEnableLayout( TRUE );            // enable layout flags for row fields
-                if ( pLevel->GetAutoShow().IsEnabled )
-                    bHasAutoShow = TRUE;
-                nRowLevelDims[nRowLevelCount] = nRowDims[i];
-                ppRowDim[nRowLevelCount] = pDim;
-                ppRowLevel[nRowLevelCount] = pLevel;
-                pLevel->GetMembersObject();                 // initialize for groups
-                ++nRowLevelCount;
-            }
-        }
-        ppRowDim[nRowLevelCount] = NULL;
-        ppRowLevel[nRowLevelCount] = NULL;
+        FillCalcInfo(true, aInfo, bHasAutoShow);
+        long nRowLevelCount = aInfo.aRowLevels.size();
 
         if ( nRowLevelCount > 0 )
         {
             // disable layout flags for the innermost row field (level)
-            ppRowLevel[nRowLevelCount-1]->SetEnableLayout( FALSE );
+            aInfo.aRowLevels[nRowLevelCount-1]->SetEnableLayout( FALSE );
         }
 
-        pRowResRoot->InitFrom( ppRowDim, ppRowLevel, aInitState );
+        pRowResRoot->InitFrom( aInfo.aRowDims, aInfo.aRowLevels, 0, aInitState );
         pRowResRoot->SetHasElements();
 
         // initialize members object also for all page dimensions (needed for numeric groups)
@@ -762,6 +811,7 @@ void ScDPSource::CreateRes_Impl()
             long nHierarchy = pDim->getUsedHierarchy();
             if ( nHierarchy >= pDim->GetHierarchiesObject()->getCount() )
                 nHierarchy = 0;
+
             ScDPLevels* pLevels = pDim->GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
             long nCount = pLevels->getCount();
             for (long j=0; j<nCount; j++)
@@ -771,8 +821,9 @@ void ScDPSource::CreateRes_Impl()
         //  pre-check: calculate minimum number of result columns / rows from
         //  levels that have the "show all" flag set
 
-        long nMinColMembers = lcl_CountMinMembers( ppColDim, ppColLevel, nColLevelCount );
-        long nMinRowMembers = lcl_CountMinMembers( ppRowDim, ppRowLevel, nRowLevelCount );
+        long nMinColMembers = lcl_CountMinMembers( aInfo.aColDims, aInfo.aColLevels, nColLevelCount );
+        long nMinRowMembers = lcl_CountMinMembers( aInfo.aRowDims, aInfo.aRowLevels, nRowLevelCount );
+
         if ( nMinColMembers > SC_MINCOUNT_LIMIT || nMinRowMembers > SC_MINCOUNT_LIMIT )
         {
             //  resulting table is too big -> abort before calculating
@@ -782,49 +833,25 @@ void ScDPSource::CreateRes_Impl()
         }
         else
         {
-            ScDPItemData aColData[SC_DAPI_MAXFIELDS];
-            ScDPItemData aRowData[SC_DAPI_MAXFIELDS];
-            ScDPItemData aPageData[SC_DAPI_MAXFIELDS];
-            ScDPValueData aValues[SC_DAPI_MAXFIELDS];
-
-            ScDPTableIteratorParam aIterPar(
-                        nColLevelCount,  nColLevelDims,  aColData,
-                        nRowLevelCount,  nRowLevelDims,  aRowData,
-                        nPageDimCount,   nPageDims,      aPageData,
-                        nDataDimCount,   nDataSrcCols,   aValues );
-
-            pData->ResetIterator();
-            while ( pData->GetNextRow( aIterPar ) )
             {
-                // test page fields ----------------------------
-                BOOL bValidPage = TRUE;
-                for (i=0; i<nPageDimCount; i++)
+                vector<ScDPDimension*> aPageDims;
+                aPageDims.reserve(nPageDimCount);
+                for (i = 0; i < nPageDimCount; ++i)
                 {
-                    ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
-                    if ( !pDim->IsValidPage( aPageData[i] ) )
-                        bValidPage = FALSE;
+                    ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
+                    if (pDim)
+                        aPageDims.push_back(pDim);
                 }
-                // end of page fields --------------------------
-
-                if ( bValidPage )
-                {
-                    //! move LateInit outside of bValidPage test?
-                    pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData, aInitState );
-                    pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData, aInitState );
-
-                    //  test for filtered entries
-                    //! test child dimensions for null !!!
-                    if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
-                         ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
-                    {
-                        //! single process method with ColMembers, RowMembers and data !!!
-                        if (pColResRoot->GetChildDimension())
-                            pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
-
-                        pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
-                    }
-                }
+                pData->FilterCacheTable(aPageDims);
             }
+            aInfo.aPageDims.reserve(nPageDimCount);
+            for (i = 0; i < nPageDimCount; ++i)
+                aInfo.aPageDims.push_back(nPageDims[i]);
+
+            aInfo.pInitState = &aInitState;
+            aInfo.pColRoot   = pColResRoot;
+            aInfo.pRowRoot   = pRowResRoot;
+            pData->CalcResults(aInfo, false);
 
             // ----------------------------------------------------------------
             //  With all data processed, calculate the final results:
@@ -842,21 +869,7 @@ void ScDPSource::CreateRes_Impl()
                 //  desired members only.
                 pColResRoot->ResetResults( TRUE );
                 pRowResRoot->ResetResults( TRUE );
-
-                //  Again loop over the source data.
-                //  LateInitFrom is not needed again.
-                pData->ResetIterator();
-                while ( pData->GetNextRow( aIterPar ) )
-                {
-                    //  test for filtered entries
-                    if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
-                         ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
-                    {
-                        if (pColResRoot->GetChildDimension())
-                            pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
-                        pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
-                    }
-                }
+                pData->CalcResults(aInfo, true);
 
                 //  Call UpdateDataResults again, with the new (limited) values.
                 pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
@@ -880,105 +893,6 @@ void ScDPSource::CreateRes_Impl()
             // ----------------------------------------------------------------
         }
     }
-}
-
-void ScDPSource::WriteDrillDownData( ScDocument* pDoc, const ScAddress& rPos,
-                    const std::vector< sheet::DataPilotFieldFilter > rFilters )
-{
-    ScAddress aOutPos( rPos );
-    long nCol;
-    long nColumnCount = GetData()->GetColumnCount();
-
-    // count non-group columns (for output - still included in filtering)
-    long nSourceCount = 0;
-    while ( nSourceCount < nColumnCount && pData->GetGroupBase(nSourceCount) < 0 )
-        ++nSourceCount;
-
-    // collect ScDPItemData for each filtered column
-    std::vector<bool> aFilterFlags( nColumnCount, false );
-    std::vector<ScDPItemData> aFilterValues( nColumnCount );
-    for ( std::vector<sheet::DataPilotFieldFilter>::const_iterator aFilterIter = rFilters.begin();
-          aFilterIter != rFilters.end(); ++aFilterIter )
-    {
-        String aFieldName( aFilterIter->FieldName );
-        for (nCol=0; nCol<nColumnCount; ++nCol)
-            if ( aFieldName == pData->getDimensionName( nCol ) )
-            {
-                ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
-                ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
-                                        GetLevelsObject()->getByIndex(0)->GetMembersObject();
-                sal_Int32 nIndex = pMembers->GetIndexFromName( aFilterIter->MatchValue );
-                if ( nIndex >= 0 )
-                {
-                    aFilterFlags[nCol] = true;
-                    pMembers->getByIndex(nIndex)->FillItemData( aFilterValues[nCol] );
-                }
-            }
-    }
-
-    // add filter conditions for page fields
-    for (long nPagePos=0; nPagePos<nPageDimCount; ++nPagePos)
-    {
-        nCol = nPageDims[nPagePos];
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
-        if ( pDim->HasSelectedPage() )
-        {
-            aFilterFlags[nCol] = true;
-            aFilterValues[nCol] = pDim->GetSelectedData();
-        }
-    }
-
-    // output column headers
-    for (nCol=0; nCol<nSourceCount; ++nCol)
-    {
-        pDoc->PutCell( aOutPos, new ScStringCell( pData->getDimensionName( nCol ) ) );
-        aOutPos.SetCol( aOutPos.Col() + 1 );
-    }
-    aOutPos.SetRow( aOutPos.Row() + 1 );
-
-    // get all fields from source as column fields
-    ScDPItemData aColData[SC_DAPI_MAXFIELDS];
-    long nFields[SC_DAPI_MAXFIELDS];
-    for (sal_Int32 i=0; i<nColumnCount; ++i)
-        nFields[i] = i;
-    ScDPTableIteratorParam aIterPar( nColumnCount, nFields, aColData,   // column fields
-                                     0, NULL, NULL,                     // row fields
-                                     0, NULL, NULL,                     // page fields
-                                     0, NULL, NULL );                   // data fields
-    pData->ResetIterator();
-    while ( pData->GetNextRow( aIterPar ) )
-    {
-        bool bInclude = true;
-        for (nCol=0; nCol<nColumnCount; ++nCol)
-        {
-            if ( aFilterFlags[nCol] && !aColData[nCol].IsCaseInsEqual( aFilterValues[nCol] ) )
-                bInclude = false;
-        }
-
-        if ( bInclude )         // output data row
-        {
-            aOutPos.SetCol( rPos.Col() );
-            for (nCol=0; nCol<nSourceCount; ++nCol)
-            {
-                if ( aColData[nCol].bHasValue )
-                    pDoc->SetValue( aOutPos.Col(), aOutPos.Row(), aOutPos.Tab(), aColData[nCol].fValue );
-                else if ( aColData[nCol].aString.Len() )
-                    pDoc->PutCell( aOutPos, new ScStringCell( aColData[nCol].aString ) );
-                aOutPos.SetCol( aOutPos.Col() + 1 );
-            }
-            aOutPos.SetRow( aOutPos.Row() + 1 );
-        }
-    }
-
-    // set number format (important for dates)
-    if ( aOutPos.Row() > rPos.Row() + 1 )
-        for (nCol=0; nCol<nSourceCount; ++nCol)
-        {
-            ScPatternAttr aPattern( pDoc->GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, pData->GetNumberFormat(nCol) ) );
-            SCCOL nFmtCol = static_cast<SCCOL>( rPos.Col() + nCol );
-            pDoc->ApplyPatternAreaTab( nFmtCol, rPos.Row() + 1, nFmtCol, aOutPos.Row() - 1, rPos.Tab(), aPattern );
-        }
 }
 
 void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
@@ -1174,6 +1088,12 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getRepeatIfEmpty() );
     else if ( aNameStr.EqualsAscii( SC_UNO_DATADESC ) )             // read-only
         aRet <<= rtl::OUString( getDataDescription() );
+    else if ( aNameStr.EqualsAscii( SC_UNO_ROWFIELDCOUNT ) )        // read-only
+        aRet <<= static_cast<sal_Int32>(nRowDimCount);
+    else if ( aNameStr.EqualsAscii( SC_UNO_COLUMNFIELDCOUNT ) )     // read-only
+        aRet <<= static_cast<sal_Int32>(nColDimCount);
+    else if ( aNameStr.EqualsAscii( SC_UNO_DATAFIELDCOUNT ) )       // read-only
+        aRet <<= static_cast<sal_Int32>(nDataDimCount);
     else
     {
         DBG_ERROR("unknown property");
