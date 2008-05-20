@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastype.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,26 +42,6 @@ class SvStringHashEntry;
 class SvIdlDataBase;
 class SvTokenStream;
 
-ByteString MakeDefineName( const ByteString & rName );
-/************class RangeUniqueIdContainer ****************************/
-class RangeUniqueIdContainer : private UniqueIdContainer
-{
-    UINT32 nMax, nMin;
-public:
-                    RangeUniqueIdContainer();
-                    RangeUniqueIdContainer( const Range & rRange );
-                    ~RangeUniqueIdContainer();
-
-    RangeUniqueIdContainer & operator = ( const RangeUniqueIdContainer & );
-
-    BOOL            CreateId( UniqueItemId * );
-    BOOL            CreateId( UINT32 nIdValue, UniqueItemId * );
-
-    UINT32          GetMin() const { return nMin; }
-    UINT32          GetMax() const { return nMax; }
-};
-
-
 /******************** class SvUINT32 **********************************/
 class SvUINT32
 {
@@ -80,11 +60,6 @@ public:
                 { SvUINT32::Write( rStm, r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvUINT32 & r )
                 { r.nVal = SvUINT32::Read( rStm ); return rStm; }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-#endif
 };
 
 
@@ -103,11 +78,6 @@ public:
                 { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvINT16 & r )
                 { r.nVal = (short)SvUINT32::Read( rStm ); return rStm; }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-#endif
 };
 
 
@@ -126,11 +96,6 @@ public:
                 { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvUINT16 & r )
                 { r.nVal = (USHORT)SvUINT32::Read( rStm ); return rStm; }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-#endif
 };
 
 
@@ -149,11 +114,6 @@ public:
                 { SvUINT32::Write( rStm, (UINT32)r.nVal ); return rStm; }
     friend SvStream& operator >> (SvStream & rStm, SvINT32 & r )
                 { r.nVal = (INT32)SvUINT32::Read( rStm ); return rStm; }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-#endif
 };
 
 
@@ -175,11 +135,6 @@ public:
                 { SvUINT32::Write( rStm, (UINT32)r.nVal ); rStm << r.bSet; return rStm; }
     friend SvStream& operator >> (SvStream & rStm, Svint & r )
                 { r.nVal = (int)SvUINT32::Read( rStm ); rStm >> r.bSet ; return rStm; }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-#endif
 };
 
 
@@ -291,22 +246,6 @@ public:
 /******************** class SvHelpContext *******************************/
 class SvHelpContext : public SvNumberIdentifier
 {
-/*
-    UniqueItemId    aId;
-    BOOL            bSet;
-public:
-                SvHelpContext() : bSet( FALSE ) {}
-
-    BOOL        IsSet() const { return bSet; }
-    UINT32      GetId() const { return aId.GetId(); }
-
-#ifdef IDL_COMPILER
-    BOOL        ReadSvIdl( RangeUniqueIdContainer & rCont,
-                           SvTokenStream & rInStm );
-    BOOL        WriteSvIdl( RangeUniqueIdContainer & rCont, SvStream & rOutStm,
-                            USHORT nTab );
-#endif
-*/
 };
 
 /******************** class SvUUId *************************************/
