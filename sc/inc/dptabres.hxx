@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabres.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -287,9 +287,9 @@ public:
 class ScDPResultMember
 {
 private:
-    ScDPResultData*         pResultData;
-    ScDPDimension*          pParentDim;             //! Ref
-    ScDPLevel*              pParentLevel;           //! Ref
+    const ScDPResultData*   pResultData;
+    const ScDPDimension*    pParentDim;             //! Ref
+    const ScDPLevel*        pParentLevel;           //! Ref
     const ScDPMember*       pMemberDesc;            //! Ref
     ScDPResultDimension*    pChildDimension;
     ScDPDataMember*         pDataRoot;
@@ -301,15 +301,20 @@ private:
     ScDPAggData             aColTotal;              // to store column totals
 
 public:
-                        ScDPResultMember( ScDPResultData* pData, ScDPDimension* pDim,
-                                            ScDPLevel* pLev, ScDPMember* pDesc,
-                                            BOOL bForceSub );   //! Ref
+                        ScDPResultMember( const ScDPResultData* pData, const ScDPDimension* pDim,
+                                          const ScDPLevel* pLev, const ScDPMember* pDesc,
+                                          BOOL bForceSub );   //! Ref
                         ~ScDPResultMember();
 
-    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState );
-    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
-                                        ScDPInitState& rInitState );
-
+    void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
+                                  const ::std::vector<ScDPLevel*>& ppLev,
+                                  size_t nPos,
+                                  ScDPInitState& rInitState );
+    void                LateInitFrom( const ::std::vector<ScDPDimension*>& ppDim,
+                                      const ::std::vector<ScDPLevel*>& ppLev,
+                                      const ::std::vector<ScDPItemData>& pItemData,
+                                      size_t nPos,
+                                      ScDPInitState& rInitState );
     String              GetName() const;
     void                FillItemData( ScDPItemData& rData ) const;
     BOOL                IsValid() const;
@@ -322,15 +327,15 @@ public:
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;
 
     BOOL                IsNamedItem( const ScDPItemData& r ) const;
-    BOOL                IsValidEntry( const ScDPItemData* pMembers ) const;
+    bool                IsValidEntry( const ::std::vector<ScDPItemData>& aMembers ) const;
 
     void                SetHasElements()    { bHasElements = TRUE; }
     void                SetAutoHidden()     { bAutoHidden = TRUE; }
 
-    void                ProcessData( const ScDPItemData* pChildMembers,
-                                        ScDPResultDimension* pDataDim,
-                                        const ScDPItemData* pDataMembers,
-                                        const ScDPValueData* pValues );
+    void                ProcessData( const ::std::vector<ScDPItemData>& aChildMembers,
+                                     const ScDPResultDimension* pDataDim,
+                                     const ::std::vector<ScDPItemData>& aDataMembers,
+                                     const ::std::vector<ScDPValueData>& aValues );
 
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
@@ -370,15 +375,15 @@ public:
 class ScDPDataMember
 {
 private:
-    ScDPResultData*         pResultData;
+    const ScDPResultData*       pResultData;
     const ScDPResultMember*     pResultMember;          //! Ref?
     ScDPDataDimension*      pChildDimension;
     ScDPAggData             aAggregate;
 
-    void                UpdateValues( const ScDPValueData* pValues, const ScDPSubTotalState& rSubState );
+    void                UpdateValues( const ::std::vector<ScDPValueData>& aValues, const ScDPSubTotalState& rSubState );
 
 public:
-                        ScDPDataMember( ScDPResultData* pData, const ScDPResultMember* pRes );
+                        ScDPDataMember( const ScDPResultData* pData, const ScDPResultMember* pRes );
                         ~ScDPDataMember();
 
     void                InitFrom( const ScDPResultDimension* pDim );
@@ -391,8 +396,8 @@ public:
 
     BOOL                HasHiddenDetails() const;
 
-    void                ProcessData( const ScDPItemData* pChildMembers, const ScDPValueData* pValues,
-                                    const ScDPSubTotalState& rSubState );
+    void                ProcessData( const ::std::vector<ScDPItemData>& aChildMembers, const ::std::vector<ScDPValueData>& aValues,
+                                     const ScDPSubTotalState& rSubState );
 
     BOOL                HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
     double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
@@ -441,7 +446,7 @@ public :
     typedef std::hash_map <ScDPItemData, ScDPResultMember *, MemberHashFunc>    MemberHash;
 
 private:
-    ScDPResultData*         pResultData;
+    const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
     BOOL                    bInitialized;
@@ -458,23 +463,28 @@ private:
 
     ScDPResultMember*       FindMember( const ScDPItemData& rData ) const;
 public:
-                        ScDPResultDimension( ScDPResultData* pData );
+                        ScDPResultDimension( const ScDPResultData* pData );
                         ~ScDPResultDimension();
 
                         //  allocates new members
-    void                InitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPInitState& rInitState );
-    void                LateInitFrom( ScDPDimension** ppDim, ScDPLevel** ppLev, ScDPItemData* pItemData,
-                                        ScDPInitState& rInitState );
+    void                InitFrom( const ::std::vector<ScDPDimension*>& ppDim,
+                                  const ::std::vector<ScDPLevel*>& ppLev,
+                                  size_t nPos,
+                                  ScDPInitState& rInitState );
+    void                LateInitFrom( const ::std::vector<ScDPDimension*>& ppDim,
+                                      const ::std::vector<ScDPLevel*>& ppLev,
+                                      const ::std::vector<ScDPItemData>& pItemData,
+                                      size_t nPos,
+                                      ScDPInitState& rInitState );
 
     long                GetSize(long nMeasure) const;
 
-    BOOL                IsValidEntry( const ScDPItemData* pMembers ) const;
-
+    bool                IsValidEntry( const ::std::vector<ScDPItemData>& aMembers ) const;
                         //  modifies existing members, allocates data dimensions
-    void                ProcessData( const ScDPItemData* pMembers,
-                                        ScDPResultDimension* pDataDim,
-                                        const ScDPItemData* pDataMembers,
-                                        const ScDPValueData* pValues ); //! Test
+    void                ProcessData( const ::std::vector<ScDPItemData>& aMembers,
+                                     const ScDPResultDimension* pDataDim,
+                                     const ::std::vector<ScDPItemData>& aDataMembers,
+                                     const ::std::vector<ScDPValueData>& aValues ) const;   //! Test
 
     void                FillMemberResults( com::sun::star::uno::Sequence<
                                                 com::sun::star::sheet::MemberResult>* pSequences,
@@ -533,18 +543,18 @@ public:
 class ScDPDataDimension
 {
 private:
-    ScDPResultData*     pResultData;
+    const ScDPResultData*       pResultData;
     const ScDPResultDimension* pResultDimension;  // column
     ScDPDataMembers     aMembers;
     BOOL                bIsDataLayout;      //! or ptr to IntDimension?
 
 public:
-                        ScDPDataDimension( ScDPResultData* pData );
+                        ScDPDataDimension( const ScDPResultData* pData );
                         ~ScDPDataDimension();
 
     void                InitFrom( const ScDPResultDimension* pDim );        // recursive
-    void                ProcessData( const ScDPItemData* pDataMembers, const ScDPValueData* pValues,
-                                    const ScDPSubTotalState& rSubState );
+    void                ProcessData( const ::std::vector<ScDPItemData>& aDataMembers, const ::std::vector<ScDPValueData>& aValues,
+                                     const ScDPSubTotalState& rSubState );
 
     void                FillDataRow( const ScDPResultDimension* pRefDim,
                                     com::sun::star::uno::Sequence<com::sun::star::sheet::DataResult>& rSequence,
