@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objserv.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
