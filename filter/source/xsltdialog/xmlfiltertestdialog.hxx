@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfiltertestdialog.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,6 @@ public:
     virtual ~XMLFilterTestDialog();
 
     void test( const filter_info_impl& rFilterInfo );
-    const filter_info_impl* getFilterInfo() const;
 
     void updateCurrentDocumentButtonState( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > * pRef = NULL );
 
