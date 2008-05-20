@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2365,7 +2365,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
         ViewShell* pSh = GetShell();
 
-        if ( pSh )
+        if ( pSh && pSh->GetDoc()->GetDocShell() )
         {
             pSh->SetFirstVisPageInvalid();
             if (bOldCallbackActionEnabled)
