@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -966,7 +966,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 if ( pDPObj )
                 {
-                    std::vector<sheet::DataPilotFieldFilter> aFilters;
+                    Sequence<sheet::DataPilotFieldFilter> aFilters;
                     USHORT nOrientation;
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
@@ -983,9 +983,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                     }
                     else if ( !pDPObj->IsServiceData() &&
-                               pDPObj->GetDataFieldPositionData( aFilters,
-                                        ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
-                                                   GetViewData()->GetTabNo() ) ) )
+                               pDPObj->GetDataFieldPositionData(
+                                   ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() ),
+                                   aFilters ) )
                         pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
                         pTabViewShell->SetDataPilotDetails( TRUE );
