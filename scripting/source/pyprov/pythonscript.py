@@ -20,6 +20,9 @@ LOG_STDOUT = True                           # True, writes to stdout (difficult 
 ENABLE_EDIT_DIALOG=False                    # offers a minimal editor for editing.
 #-------------------------------------------------------------------
 
+def encfile(uni):
+    return uni.encode( sys.getfilesystemencoding())
+
 def lastException2String():
     (excType,excInstance,excTraceback) = sys.exc_info()
     ret = str(excType) + ": "+str(excInstance) + "\n" + \
@@ -74,7 +77,7 @@ class Logger(LogLevel):
                     " [" +
                     logLevel2String( level ) +
                     "] " +
-                    msg +
+                    encfile(msg) +
                     "\n" )
                 self.target.flush()
             except Exception,e:
@@ -142,17 +145,18 @@ def ensureSourceState( code ):
     code = code.replace( "\r", "" )
     return code
 
+
 def checkForPythonPathBesideScript( url ):
     if url.startswith( "file:" ):
         path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
         log.log( LogLevel.DEBUG,  "checking for existence of " + path )
-        if 1 == os.access( path, os.F_OK) and not path in sys.path:
+        if 1 == os.access( encfile(path), os.F_OK) and not path in sys.path:
             log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
             sys.path.append( path )
 
         path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
         log.log( LogLevel.DEBUG,  "checking for existence of " + path )
-        if 1 == os.access( path, os.F_OK) and not path in sys.path:
+        if 1 == os.access( encfile(path), os.F_OK) and not path in sys.path:
             log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
             sys.path.append( path )
         
@@ -295,7 +299,7 @@ class ProviderContext:
 
             code = None
             if url.startswith( "file:" ):
-                code = compile( src, uno.fileUrlToSystemPath( url ), "exec" )
+                code = compile( src, encfile(uno.fileUrlToSystemPath( url ) ), "exec" )
             else:
                 code = compile( src, url, "exec" )
             exec code in entry.module.__dict__
