@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapiuno.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,9 @@
 #include "rangeutl.hxx"     // ScArea
 #include <svtools/lstner.hxx>
 #include <svtools/itemprop.hxx>
+
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
+#include <com/sun/star/sheet/XDataPilotTable2.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -60,6 +62,11 @@
 
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+    struct DataPilotTablePositionData;
+}}}}
 
 class ScDocShell;
 class ScPivot;
@@ -297,7 +304,7 @@ public:
 
 
 class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
-                            public com::sun::star::sheet::XDataPilotTable
+                            public com::sun::star::sheet::XDataPilotTable2
 {
 private:
     SCTAB                   nTab;
@@ -328,6 +335,22 @@ public:
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getOutputRange()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XDataPilotTable2
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+        SAL_CALL getDrillDownData(const ::com::sun::star::table::CellAddress& aAddr)
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::sheet::DataPilotTablePositionData
+        SAL_CALL getPositionData(const ::com::sun::star::table::CellAddress& aAddr)
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL insertDrillDownSheet(const ::com::sun::star::table::CellAddress& aAddr)
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getOutputRangeByType( sal_Int32 nType )
+                                throw(::com::sun::star::lang::IllegalArgumentException,
+                                      ::com::sun::star::uno::RuntimeException);
 
                             // XTypeProvider (overloaded)
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
