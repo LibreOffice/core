@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlServerDatabase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,6 +155,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
         else
         {
             sURL.append(sType);
+            sURL.appendAscii(":");
             sURL.append(sHostName);
             if ( sPortNumber.getLength() )
             {
