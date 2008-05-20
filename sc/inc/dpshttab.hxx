@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpshttab.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,14 @@
 #include "global.hxx"
 #include "address.hxx"
 
+#include <vector>
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
+
+class ScDPDimension;
+class ScDPItemData;
 
 // --------------------------------------------------------------------
 //
@@ -57,7 +65,6 @@ class ScSheetDPData : public ScDPTableData
 {
 private:
     ScSheetDPData_Impl* pImpl;
-    BOOL* pSpecial;
 
 public:
                     ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc );
@@ -72,8 +79,14 @@ public:
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
-    virtual void                    ResetIterator();
-    virtual BOOL                    GetNextRow( const ScDPTableIteratorParam& rParam );
+    virtual bool                    IsRepeatIfEmpty();
+
+    virtual void                    CreateCacheTable();
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPDimension*>& rPageDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
+    virtual const ScDPCacheTable&   GetCacheTable() const;
 };
 
 
