@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.94 $
+ * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,10 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
+#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -145,6 +149,8 @@
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
 
 const BYTE SC_NESTEDBUTTON_NONE = 0;
 const BYTE SC_NESTEDBUTTON_DOWN = 1;
@@ -2011,11 +2017,13 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
             ScAddress aCellPos( nPosX, nPosY, pViewData->GetTabNo() );
-            ScDPPositionData aData;
-            pDPObj->GetPositionData( aData, aCellPos );
 
-            if ( ( aData.nFlags & sheet::MemberResultFlags::HASMEMBER ) &&
-                 ! ( aData.nFlags & sheet::MemberResultFlags::SUBTOTAL ) )
+            // Check for header drill-down first.
+            sheet::DataPilotTableHeaderData aData;
+            pDPObj->GetHeaderPositionData(aCellPos, aData);
+
+            if ( ( aData.Flags & sheet::MemberResultFlags::HASMEMBER ) &&
+                 ! ( aData.Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
                 USHORT nDummy;
                 if ( pView->HasSelectionForDrillDown( nDummy ) )
@@ -2037,8 +2045,8 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 // Check if the data area is double-clicked.
 
-                std::vector<sheet::DataPilotFieldFilter> aFilters;
-                if ( !pDPObj->IsServiceData() && pDPObj->GetDataFieldPositionData( aFilters, aCellPos ) )
+                Sequence<sheet::DataPilotFieldFilter> aFilters;
+                if ( pDPObj->GetDataFieldPositionData(aCellPos, aFilters) )
                     pViewData->GetView()->ShowDataPilotSourceData( *pDPObj, aFilters );
                 else
                     Sound::Beep();  // nothing to expand/collapse/show
@@ -2057,8 +2065,8 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
             pEditView->MouseButtonDown( aEditEvt );
             pEditView->MouseButtonUp( aEditEvt );
-            return;
         }
+        return;
     }
 
             //
@@ -3233,24 +3241,24 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             bool bDPSort = false;
             if ( pThisDoc->GetDPAtCursor( nSourceStartX, nSourceStartY, aSourceRange.aStart.Tab() ) == pDPObj )
             {
-                ScDPPositionData aDestData;
-                pDPObj->GetPositionData( aDestData, ScAddress(nNewDragX, nNewDragY, nTab) );
-                bool bValid = ( aDestData.nDimension >= 0 );        // dropping onto a field
+                sheet::DataPilotTableHeaderData aDestData;
+                pDPObj->GetHeaderPositionData( ScAddress(nNewDragX, nNewDragY, nTab), aDestData );
+                bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
                 // look through the source range
                 for (SCROW nRow = aSourceRange.aStart.Row(); bValid && nRow <= aSourceRange.aEnd.Row(); ++nRow )
                     for (SCCOL nCol = aSourceRange.aStart.Col(); bValid && nCol <= aSourceRange.aEnd.Col(); ++nCol )
                     {
-                        ScDPPositionData aSourceData;
-                        pDPObj->GetPositionData( aSourceData, ScAddress( nCol, nRow, aSourceRange.aStart.Tab() ) );
-                        if ( aSourceData.nDimension != aDestData.nDimension || !aSourceData.aMemberName.Len() )
+                        sheet::DataPilotTableHeaderData aSourceData;
+                        pDPObj->GetHeaderPositionData( ScAddress( nCol, nRow, aSourceRange.aStart.Tab() ), aSourceData );
+                        if ( aSourceData.Dimension != aDestData.Dimension || !aSourceData.MemberName.getLength() )
                             bValid = false;     // empty (subtotal) or different field
                     }
 
                 if ( bValid )
                 {
                     BOOL bIsDataLayout;
-                    String aDimName = pDPObj->GetDimName( aDestData.nDimension, bIsDataLayout );
+                    String aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
                     const ScDPSaveDimension* pDim = pDPObj->GetSaveData()->GetExistingDimensionByName( aDimName );
                     if ( pDim )
                     {
