@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Base64Codec.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,8 @@ class Base64Codec
 {
 public:
     static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_Int8>& aPass);
+#if 0
     static void decodeBase64(com::sun::star::uno::Sequence<sal_uInt8>& aPass, const rtl::OUString& sBuffer);
+#endif
 };
 #endif
