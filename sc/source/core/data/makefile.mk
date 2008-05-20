@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,6 +73,7 @@ SLOFILES =  \
     $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
     $(SLO)$/document.obj \
+        $(SLO)$/dpcachetable.obj \
         $(SLO)$/dpdimsave.obj \
         $(SLO)$/dpgroup.obj \
     $(SLO)$/dpobject.obj \
@@ -128,6 +129,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/documen5.obj \
     $(SLO)$/documen6.obj \
     $(SLO)$/documen9.obj \
+        $(SLO)$/dpcachetable.obj \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
