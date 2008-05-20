@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsddatatypes.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,9 +90,6 @@ namespace pcr
 
         /// determines whether a given facet exists at the type
         bool                hasFacet( const ::rtl::OUString& _rFacetName ) const SAL_THROW(());
-        /// determines the UNO type of a facet
-        ::com::sun::star::uno::Type
-                            getFacetType( const ::rtl::OUString& _rFacetName ) const SAL_THROW(());
         /// retrieves a facet value
         ::com::sun::star::uno::Any
                             getFacet( const ::rtl::OUString& _rFacetName ) SAL_THROW(());
