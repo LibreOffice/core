@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pcrcomponentcontext.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,31 +65,6 @@ namespace pcr
     ComponentContext::ComponentContext( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
     {
-        if ( m_xContext.is() )
-            m_xORB = m_xContext->getServiceManager();
-        if ( !m_xORB.is() )
-            throw NullPointerException();
-    }
-
-    //------------------------------------------------------------------------
-    ComponentContext::ComponentContext( const Reference< XMultiServiceFactory >& _rxLegacyFactory )
-    {
-        if ( !_rxLegacyFactory.is() )
-            throw NullPointerException();
-
-        try
-        {
-            Reference< XPropertySet > xFactoryProperties( _rxLegacyFactory, UNO_QUERY_THROW );
-            m_xContext = Reference< XComponentContext >(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
-                UNO_QUERY );
-        }
-        catch( const RuntimeException& ) { throw; }
-        catch( const Exception& )
-        {
-            throw RuntimeException();
-        }
-
         if ( m_xContext.is() )
             m_xORB = m_xContext->getServiceManager();
         if ( !m_xORB.is() )
