@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BDatabaseMetaData.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +64,7 @@ Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
     if(aRows.empty())
     {
         aRows.reserve(19);
-        Reference< XResultSet > xRes = OAdabasDatabaseMetaData_BASE::getTypeInfo();
+        Reference< XResultSet > xRes = OAdabasDatabaseMetaData_BASE::impl_getTypeInfo_throw();
 
         if(xRes.is())
         {
