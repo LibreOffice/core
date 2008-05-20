@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,7 +95,6 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
     // <--
     XubString   aText;
-    SwNodeNum::tSwNumTreeNumber nStart;
 
     SwParaIdleData_Impl* pParaIdleData_Impl;
 
