@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pcrcomponentcontext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,18 +60,6 @@ namespace pcr
                 if the given context, or its component factory, are <NULL/>
         */
         ComponentContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
-
-        /** constructs an instance
-            @param _rxLegacyFactory
-                the legacy service factor to obtain the <type scope="com::sun::star::uno">XComponentContext</type> from
-            @throws ::com::sun::star::uno::RuntimeException
-                if the given factory or does not have a DefaultContext property to obtain
-                a component context
-            @throws ::com::sun::star::lang::NullPointerException
-                if the given factory is <NULL/>, or provides a component context being <NULL/>, or provides
-                a component context whose component factory is <NULL/>
-        */
-        ComponentContext( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxLegacyFactory );
 
         /** returns the ->XComponentContext interface
         */
