@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacxi.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +36,15 @@
 PROCESSOR_DEFINES=-DX86
 
 DLLPOSTFIX=mxi
+
+# special for SO build environment
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CPP:=gcc -E $(EXTRA_CFLAGS)
+CXXCPP*:=g++ -E $(EXTRA_CFLAGS)
+.EXPORT : CPP CXXCPP
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
 
 # Include generic Mac OS X makefile
 .INCLUDE : unxmacx.mk
