@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inspectorhelpwindow.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,12 +102,6 @@ namespace pcr
     long InspectorHelpWindow::GetMinimalHeightPixel()
     {
         return impl_getMinimalTextWindowHeight() + impl_getSpaceAboveTextWindow();
-    }
-
-    //--------------------------------------------------------------------
-    long InspectorHelpWindow::GetMaximalHeightPixel()
-    {
-        return impl_getMaximalTextWindowHeight() + impl_getSpaceAboveTextWindow();
     }
 
     //--------------------------------------------------------------------
