@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfiltertestdialog.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,15 +231,6 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
     initDialog();
 
     Execute();
-}
-
-String getSystemPathFromFileURL( const OUString& rURL )
-{
-    OUString aPath;
-
-    osl::FileBase::getSystemPathFromFileURL( rURL, aPath );
-
-    return aPath;
 }
 
 static OUString getFileNameFromURL( OUString& rURL )
@@ -793,10 +784,3 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     return xRet;
 }
-
-
-const filter_info_impl* XMLFilterTestDialog::getFilterInfo() const
-{
-    return mpFilterInfo;
-}
-
