@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ODatabaseMetaData.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,6 @@ namespace connectivity
             sal_Bool        m_bUseCatalog;
             sal_Bool        m_bOdbc3;
 
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             // cached database information
             virtual ::rtl::OUString impl_getIdentifierQuoteString_throw(  );
             virtual sal_Bool        impl_isCatalogAtStart_throw(  );
@@ -66,6 +65,7 @@ namespace connectivity
             virtual sal_Bool        impl_storesMixedCaseQuotedIdentifiers_throw(  );
         protected:
             ::rtl::OUString getURLImpl();
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
             virtual ~ODatabaseMetaData();
         public:
 
