@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataPilotSource.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +99,29 @@ published service DataPilotSource
      */
     [property] boolean RowGrand;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of row fields.
+
+        @since OOo 3.0.0
+     */
+    [readonly, property, optional] long RowFieldCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of column fields.
+
+        @since OOo 3.0.0
+     */
+    [readonly, property, optional] long ColumnFieldCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of data fields.
+
+        @since OOo 3.0.0
+     */
+    [readonly, property, optional] long DataFieldCount;
 };
 
 //=============================================================================
