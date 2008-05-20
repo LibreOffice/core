@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_executable.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,9 +55,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class ExecutablePackageImpl : public ::dp_registry::backend::Package
     {
-        BackendImpl * getMyBackend() const {
-            return static_cast<BackendImpl *>(m_myBackend.get());
-        }
+        BackendImpl * getMyBackend() const;
 
         // Package
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
@@ -163,6 +161,21 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
 
 // Package
+BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //May throw a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<ExecutablePackageImpl *>(this)));
+    }
+    return pBackend;
+}
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::ExecutablePackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
