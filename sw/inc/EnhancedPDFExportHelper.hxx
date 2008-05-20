@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ class SwTaggedPDFHelper
     const Frm_Info* mpFrmInfo;
     const Por_Info* mpPorInfo;
 
-    void BeginTag( vcl::PDFWriter::StructElement, const String* pUserDefined = 0 );
+    void BeginTag( vcl::PDFWriter::StructElement aTagRole, const String& rTagName );
     void EndTag();
 
     void SetAttributes( vcl::PDFWriter::StructElement eType );
