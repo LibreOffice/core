@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapiuno.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "datauno.hxx"
 #include "miscuno.hxx"
 #include "docsh.hxx"
+#include "tabvwsh.hxx"
 #include "pivot.hxx"
 #include "rangeutl.hxx"
 #include "unoguard.hxx"
@@ -55,10 +56,22 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+#include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+
 #include <comphelper/extract.hxx>
 
 using namespace com::sun::star;
 
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::sheet::DataPilotFieldFilter;
+using ::com::sun::star::sheet::DataPilotTablePositionData;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Any;
 
 //------------------------------------------------------------------------
 
@@ -509,7 +522,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable(GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex)));
+    uno::Reference<sheet::XDataPilotTable2> xTable(GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex)));
     if (xTable.is())
         return uno::makeAny(xTable);
     else
@@ -520,7 +533,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return getCppuType((uno::Reference<sheet::XDataPilotTable>*)0);
+    return getCppuType((uno::Reference<sheet::XDataPilotTable2>*)0);
 }
 
 sal_Bool SAL_CALL ScDataPilotTablesObj::hasElements() throw(uno::RuntimeException)
@@ -536,7 +549,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable(GetObjectByName_Impl(aName));
+    uno::Reference<sheet::XDataPilotTable2> xTable(GetObjectByName_Impl(aName));
     if (xTable.is())
         return uno::makeAny(xTable);
     else
@@ -991,7 +1004,7 @@ ScDataPilotTableObj::~ScDataPilotTableObj()
 uno::Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
-    SC_QUERYINTERFACE( sheet::XDataPilotTable )
+    SC_QUERYINTERFACE( sheet::XDataPilotTable2 )
 
     return ScDataPilotDescriptorBase::queryInterface( rType );
 }
@@ -1018,7 +1031,7 @@ uno::Sequence<uno::Type> SAL_CALL ScDataPilotTableObj::getTypes()
 
         aTypes.realloc( nParentLen + 1 );
         uno::Type* pPtr = aTypes.getArray();
-        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XDataPilotTable>*)0);
+        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XDataPilotTable2>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -1139,6 +1152,70 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(uno::RuntimeException)
         aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
         delete pNew;        // DataPilotUpdate copies settings from "new" object
     }
+}
+
+Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    Sequence< Sequence<Any> > aTabData;
+    ScAddress aAddr2(aAddr.Column, aAddr.Row, aAddr.Sheet);
+    ScDPObject* pObj = GetDPObject();
+    if (!pObj)
+        throw RuntimeException();
+
+    pObj->GetDrillDownData(aAddr2, aTabData);
+    return aTabData;
+}
+
+DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const CellAddress& aAddr)
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    DataPilotTablePositionData aPosData;
+    ScAddress aAddr2(aAddr.Column, aAddr.Row, aAddr.Sheet);
+    ScDPObject* pObj = GetDPObject();
+    if (!pObj)
+        throw RuntimeException();
+
+    pObj->GetPositionData(aAddr2, aPosData);
+    return aPosData;
+}
+
+void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr)
+    throw (RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDPObject* pDPObj = GetDPObject();
+    if (!pDPObj)
+        throw RuntimeException();
+
+    Sequence<DataPilotFieldFilter> aFilters;
+    pDPObj->GetDataFieldPositionData(
+        ScAddress(aAddr.Column, aAddr.Row, aAddr.Sheet), aFilters);
+    GetDocShell()->GetBestViewShell()->ShowDataPilotSourceData(*pDPObj, aFilters);
+}
+
+CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 nType )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (nType < 0 || nType > ::com::sun::star::sheet::DataPilotOutputRangeType::RESULT)
+        throw IllegalArgumentException();
+
+    table::CellRangeAddress aRet;
+    ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
+    if (!pDPObj)
+        return aRet;
+
+    const ScRange aRange = pDPObj->GetOutputRangeByType(nType);
+    aRet.Sheet       = aRange.aStart.Tab();
+    aRet.StartColumn = aRange.aStart.Col();
+    aRet.StartRow    = aRange.aStart.Row();
+    aRet.EndColumn   = aRange.aEnd.Col();
+    aRet.EndRow      = aRange.aEnd.Row();
+
+    return aRet;
 }
 
 //------------------------------------------------------------------------
