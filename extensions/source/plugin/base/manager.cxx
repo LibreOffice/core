@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: manager.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,10 +66,6 @@ void PluginManager::setServiceFactory( const Reference< ::com::sun::star::lang::
 }
 
 PluginManager::PluginManager()
-{
-}
-
-PluginManager::~PluginManager()
 {
 }
 
@@ -167,14 +163,6 @@ XPlugin_Impl* XPluginManager_Impl::getPluginImplementation( const Reference< ::c
     }
 
     return NULL;
-}
-
-XPlugin_Impl* XPluginManager_Impl::getFirstXPlugin()
-{
-    if( PluginManager::get().getPlugins().begin() == PluginManager::get().getPlugins().end() )
-        return NULL;
-
-    return *PluginManager::get().getPlugins().begin();
 }
 
 Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, INT16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
