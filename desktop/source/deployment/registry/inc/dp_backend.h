@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_backend.h,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,7 @@ protected:
     ::rtl::OUString m_displayName;
     const css::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
 
-    void check();
+    void check() const;
     void fireModified();
     virtual void SAL_CALL disposing();
 
