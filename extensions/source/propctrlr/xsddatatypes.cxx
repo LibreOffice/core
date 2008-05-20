@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xsddatatypes.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,23 +187,6 @@ namespace pcr
         }
         return bReturn;
     }
-
-    //--------------------------------------------------------------------
-    Type XSDDataType::getFacetType( const ::rtl::OUString& _rFacetName ) const SAL_THROW(())
-    {
-        Type aReturn;
-        try
-        {
-            if ( m_xFacetInfo.is() )
-                aReturn = m_xFacetInfo->getPropertyByName( _rFacetName ).Type;
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "XSDDataType::getFacetType: caught an exception (did you check with 'hasFacet' before?)!" );
-        }
-        return aReturn;
-    }
-
     //--------------------------------------------------------------------
     Any XSDDataType::getFacet( const ::rtl::OUString& _rFacetName ) SAL_THROW(())
     {
