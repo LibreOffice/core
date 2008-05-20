@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheckconfig.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,6 @@ public:
     UpdateCheckROModel(IByNameAccess& aNameAccess) : m_aNameAccess(aNameAccess) {};
 
     bool isAutoCheckEnabled() const;
-    bool isAutoDownloadEnabled() const;
     bool isDownloadPaused() const;
     rtl::OUString getLocalFileName() const;
     sal_Int64 getDownloadSize() const;
