@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -98,6 +98,7 @@ IDLFILES=\
     DataPilotItem.idl\
     DataPilotItems.idl\
     DataPilotItemsEnumeration.idl\
+    DataPilotOutputRangeType.idl\
     DataPilotSource.idl\
     DataPilotSourceDimension.idl\
     DataPilotSourceDimensions.idl\
@@ -108,6 +109,10 @@ IDLFILES=\
     DataPilotSourceMember.idl\
     DataPilotSourceMembers.idl\
     DataPilotTable.idl\
+    DataPilotTableHeaderData.idl\
+    DataPilotTablePositionData.idl\
+    DataPilotTablePositionType.idl\
+    DataPilotTableResultData.idl\
     DataPilotTables.idl\
     DataPilotTablesEnumeration.idl\
     DataResult.idl\
@@ -241,12 +246,14 @@ IDLFILES=\
     XDataPilotMemberResults.idl\
     XDataPilotResults.idl\
     XDataPilotTable.idl\
+    XDataPilotTable2.idl\
     XDataPilotTables.idl\
     XDataPilotTablesSupplier.idl\
     XDatabaseRange.idl\
     XDatabaseRanges.idl\
     XDimensionsSupplier.idl\
     XDocumentAuditing.idl\
+    XDrillDownDataSupplier.idl\
     XEnhancedMouseClickBroadcaster.idl\
     XExternalSheetName.idl\
     XFillAcrossSheet.idl\
