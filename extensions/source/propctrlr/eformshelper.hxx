@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eformshelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,15 +176,6 @@ namespace pcr
         */
         void    setListSourceBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxListSource ) SAL_THROW(());
 
-        /** creates a new binding for the given target model
-
-            @param _rTargetModel
-                the name of the model to create a binding for. If empty, a default model is chosen from the models
-                available at the document. If this fails, no binding is created.
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                createBindingForFormModel( const ::rtl::OUString& _rTargetModel ) const SAL_THROW(());
-
         /** retrieves a given binding for a given model, or creates a new one
 
             @param _rTargetModel
@@ -260,7 +251,7 @@ namespace pcr
     private:
         void impl_switchBindingListening_throw( bool _bDoListening, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
 
-        /// implementation for both <member>createBindingForFormModel</member> and <member>getOrCreateBindingForModel</member>
+        /// implementation for both <member>getOrCreateBindingForModel</member>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
             implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
 
