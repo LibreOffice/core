@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +49,14 @@ PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 BUILD_DIR=$(CONFIGURE_DIR)
+
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CFLAGS:=$(EXTRA_CFLAGS)
+CXXFLAGS:=$(EXTRA_CFLAGS)
+.EXPORT : CFLAGS CXXFLAGS
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_ACTION=./configure
