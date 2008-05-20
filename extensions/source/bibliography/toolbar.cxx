@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolbar.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,22 +97,9 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
     }
 };
 
-sal_uInt16 BibToolBarListener::GetIndex()
-{
-    return nIndex;
-}
-void BibToolBarListener::SetIndex(sal_uInt16 nId)
-{
-    nIndex=nId;
-}
-
 rtl::OUString   BibToolBarListener::GetCommand()
 {
     return aCommand;
-}
-void BibToolBarListener::SetCommand(const rtl::OUString& aStr)
-{
-    aCommand=aStr;
 }
 
 BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
