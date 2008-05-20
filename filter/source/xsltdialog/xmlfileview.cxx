@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlfileview.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -895,15 +895,6 @@ void XMLFileWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         USHORT nLine = nLineOff+r.nLine; //
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
-}
-
-void XMLFileWindow::SyntaxColorsChanged()
-{
-    for(USHORT i = 0; i < pTextEngine->GetParagraphCount(); i++)
-        aSyntaxLineTable.Insert( i, (void*)(USHORT)1 );
-    if(!aSyntaxIdleTimer.IsActive())
-        aSyntaxIdleTimer.Start();
-
 }
 
 IMPL_LINK( XMLFileWindow, SyntaxTimerHdl, Timer *, pTimer )
