@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.140 $
+ * $Revision: 1.141 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1051,7 +1051,7 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
             SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
-    else if (*pSprm13 <= MAXLEVEL)          // Bereich WW:1..9 -> SW:0..8
+    else if( *pSprm13 > 0 && *pSprm13 <= MAXLEVEL )          // Bereich WW:1..9 -> SW:0..8
     {
         nSwNumLevel = *pSprm13 - 1;             // Gliederung
         // noch nicht definiert
