@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_instance.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,19 +228,6 @@ sal_Bool SoPluginInstance::Connect()
     }
     debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  connect over.\n");
     return bRetval;
-}
-
-void SoPluginInstance::SetPosSize(int x, int y, int w, int h)
-{
-    m_nX = x;
-    m_nY = y;
-    m_nWidth = w;
-    m_nHeight = h;
-}
-
-void SoPluginInstance::Setflag(sal_Int16 n)
-{
-    m_nFlag = n;
 }
 
 sal_Bool SoPluginInstance::SetURL(char* aURL)
@@ -650,11 +637,3 @@ sal_Bool SoPluginInstance::Print(void)
         propertyValue );
     return sal_True;
 }
-
-sal_Bool SoPluginInstance::ShutDown(void)
-{
-    mxRemoteMSF = Reference< XMultiServiceFactory >();
-    mxLocalMSF = Reference< XMultiServiceFactory >();
-    return sal_True;
-}
-
