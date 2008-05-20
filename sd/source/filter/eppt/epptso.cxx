@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.102 $
+ * $Revision: 1.103 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,6 +110,7 @@
 
 //#include <svx/xbtmpit.hxx>
 
+#include "i18npool/mslangid.hxx"
 
 #include <vos/xception.hxx>
 #ifndef _VOS_NO_NAMESPACE
@@ -2019,6 +2020,13 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
 
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) ), bGetPropStateValue ) )
+    {
+        com::sun::star::lang::Locale eLocale;
+        if ( mAny >>= eLocale )
+            meCharLocale = eLocale;
+    }
+
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
         sal_Int16 nVal;
@@ -2991,6 +2999,32 @@ TextObj& TextObj::operator=( TextObj& rTextObj )
     return *this;
 }
 
+void TextObj::WriteTextSpecInfo( SvStream* pStrm )
+{
+    sal_uInt32 nCharactersLeft( Count() );
+    if ( nCharactersLeft >= 1 )
+    {
+        EscherExAtom aAnimationInfoAtom( *pStrm, EPP_TextSpecInfoAtom, 0, 0 );
+        for ( ParagraphObj* pPtr = static_cast < ParagraphObj * >( First() ); nCharactersLeft && pPtr; pPtr = static_cast< ParagraphObj* >( Next() ) )
+        {
+            for ( PortionObj* pPortion = static_cast< PortionObj* >( pPtr->First() ); nCharactersLeft && pPortion; pPortion = static_cast< PortionObj* >( pPtr->Next() ) )
+            {
+                sal_Int32 nPortionSize = pPortion->mnTextSize >= nCharactersLeft ? nCharactersLeft : pPortion->mnTextSize;
+                sal_Int32 nFlags = 7;
+                nCharactersLeft -= nPortionSize;
+                *pStrm  << static_cast< sal_uInt32 >( nPortionSize )
+                        << nFlags
+                        << static_cast< sal_Int16 >( 1 )    // spellinfo -> needs rechecking
+                        << static_cast< sal_Int16 >( MsLangId::convertLocaleToLanguageWithFallback( pPortion->meCharLocale ) )
+                        << static_cast< sal_Int16 >( 0 );   // alt language
+            }
+        }
+        if ( nCharactersLeft )
+            *pStrm << nCharactersLeft << static_cast< sal_Int32 >( 1 ) << static_cast< sal_Int16 >( 1 );
+
+    }
+}
+
 //  -----------------------------------------------------------------------
 
 void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
@@ -3114,10 +3148,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 }
             }
         }
-        // SJ: if this textspecinfoatom is missing, ppt will crash as often as possible
-        // MS documentation : special parsing code is needed to parse this content !?!
-        rOut << (sal_uInt32)( EPP_TextSpecInfoAtom << 16 ) << (sal_uInt32)10            // ??????????????????????????
-             << (sal_uInt32)aTextObj.Count() << (sal_uInt32)2 << (sal_uInt8)9 << (sal_uInt8)8;  // ??????????????????????????
+
+        aTextObj.WriteTextSpecInfo( &rOut );
 
         // Star Office Default TabSizes schreiben ( wenn noetig )
         pPara = aTextObj.First();
