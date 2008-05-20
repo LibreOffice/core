@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: types.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,16 +44,6 @@
 /****************** SvMetaAttribute *************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaAttribute, SvMetaReference );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaAttribute::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*    SvMetaAttribute::SvMetaAttribute()
 |*
@@ -1024,16 +1014,6 @@ void SvMetaAttribute::WriteHelpId( SvIdlDataBase &, SvStream &, Table * )
 /****************** SvMetaType *************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaType, SvMetaExtern );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaType::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*    SvMetaType::SvMetaType()
 |*
@@ -2312,16 +2292,6 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
 /************************************************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypeString, SvMetaType );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaTypeString::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*
 |*    SvMetaTypeString::SvMetaTypeString()
@@ -2347,16 +2317,6 @@ void SvMetaTypeString::Save( SvPersistStream & rStm )
 /************************************************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaEnumValue, SvMetaName );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaEnumValue::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*
 |*    SvMetaEnumValue::SvMetaEnumValue()
@@ -2444,16 +2404,6 @@ void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, USHORT,
 /************************************************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypeEnum, SvMetaType );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaTypeEnum::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*
 |*    SvMetaTypeEnum::SvMetaTypeEnum()
@@ -2658,16 +2608,6 @@ void SvMetaTypeEnum::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
 /************************************************************************/
 /************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypevoid, SvMetaType );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaTypevoid::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*
 |*    SvMetaTypevoid::SvMetaTypevoid()
