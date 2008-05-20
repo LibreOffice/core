@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framectr.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +85,6 @@ friend class BibFrameCtrl_Impl;
 
     sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
 public:
-                                BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent);
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,
                                                         BibDataManager* pDatMan);
                                 ~BibFrameController_Impl();
@@ -94,7 +93,6 @@ public:
     void                        activate();
     void                        deactivate();
 
-    BibDataManager*             GetDataManager();
     void                        ChangeDataSource(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
     void                        RemoveFilter();
 
