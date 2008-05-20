@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@ public:
     void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
-                        const ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
 
     void            MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
     void            RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
