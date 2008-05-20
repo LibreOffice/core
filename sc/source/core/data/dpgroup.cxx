@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpgroup.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,29 @@
 #include "collect.hxx"
 #include "global.hxx"
 #include "document.hxx"
+#include "dpcachetable.hxx"
+#include "dptabsrc.hxx"
+#include "dptabres.hxx"
+
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+
+#include <vector>
+#include <hash_set>
+#include <hash_map>
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+
+using ::std::vector;
+using ::std::hash_set;
+using ::std::hash_map;
 
 #define D_TIMEFACTOR              86400.0
 
@@ -56,7 +78,135 @@ const USHORT SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculat
 const sal_Int32 SC_DP_DATE_FIRST = -1;
 const sal_Int32 SC_DP_DATE_LAST = 10000;
 
-// -----------------------------------------------------------------------
+// ============================================================================
+
+class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
+{
+public:
+    ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
+                        const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
+
+    virtual bool match(const ScDPCacheTable::Cell &rCell) const;
+
+private:
+    ScDPGroupDateFilter(); // disabled
+
+    const Date*             mpNullDate;
+    const ScDPNumGroupInfo* mpNumInfo;
+    double                  mfMatchValue;
+    sal_Int32               mnDatePart;
+};
+
+// ----------------------------------------------------------------------------
+
+ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
+                                 const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo) :
+    mpNullDate(pNullDate),
+    mpNumInfo(pNumInfo),
+    mfMatchValue(fMatchValue),
+    mnDatePart(nDatePart)
+{
+//  fprintf(stdout, "ScDPCacheTable:DateGroupFilter::DateGroupFilter: match value = %g; date part = %ld\n",
+//          mfMatchValue, mnDatePart);
+}
+
+bool ScDPGroupDateFilter::match(const ScDPCacheTable::Cell& rCell) const
+{
+    using namespace ::com::sun::star::sheet;
+    using ::rtl::math::approxFloor;
+    using ::rtl::math::approxEqual;
+
+    if (!rCell.mbNumeric)
+        return false;
+
+    if (!mpNumInfo)
+        return false;
+
+    // Start and end dates are inclusive.  (An end date without a time value
+    // is included, while an end date with a time value is not.)
+
+    if ( rCell.mfValue < mpNumInfo->Start && !approxEqual(rCell.mfValue, mpNumInfo->Start) )
+        return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_FIRST;
+
+    if ( rCell.mfValue > mpNumInfo->End && !approxEqual(rCell.mfValue, mpNumInfo->End) )
+        return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_LAST;
+
+    if (mnDatePart == DataPilotFieldGroupBy::HOURS || mnDatePart == DataPilotFieldGroupBy::MINUTES ||
+        mnDatePart == DataPilotFieldGroupBy::SECONDS)
+    {
+        // handle time
+        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+
+        double time = rCell.mfValue - approxFloor(rCell.mfValue);
+        long seconds = static_cast<long>(approxFloor(time*D_TIMEFACTOR + 0.5));
+
+        switch (mnDatePart)
+        {
+            case DataPilotFieldGroupBy::HOURS:
+            {
+                sal_Int32 hrs = seconds / 3600;
+                sal_Int32 matchHrs = static_cast<sal_Int32>(mfMatchValue);
+                return hrs == matchHrs;
+            }
+            case DataPilotFieldGroupBy::MINUTES:
+            {
+                sal_Int32 minutes = (seconds % 3600) / 60;
+                sal_Int32 matchMinutes = static_cast<sal_Int32>(mfMatchValue);
+                return minutes == matchMinutes;
+            }
+            case DataPilotFieldGroupBy::SECONDS:
+            {
+                sal_Int32 sec = seconds % 60;
+                sal_Int32 matchSec = static_cast<sal_Int32>(mfMatchValue);
+                return sec == matchSec;
+            }
+            default:
+                DBG_ERROR("invalid time part");
+        }
+        return false;
+    }
+
+    Date date = *mpNullDate + static_cast<long>(approxFloor(rCell.mfValue));
+    switch (mnDatePart)
+    {
+        case DataPilotFieldGroupBy::YEARS:
+        {
+            sal_Int32 year = static_cast<sal_Int32>(date.GetYear());
+            sal_Int32 matchYear = static_cast<sal_Int32>(mfMatchValue);
+            return year == matchYear;
+        }
+        case DataPilotFieldGroupBy::QUARTERS:
+        {
+            sal_Int32 qtr =  1 + (static_cast<sal_Int32>(date.GetMonth()) - 1) / 3;
+            sal_Int32 matchQtr = static_cast<sal_Int32>(mfMatchValue);
+            return qtr == matchQtr;
+        }
+        case DataPilotFieldGroupBy::MONTHS:
+        {
+            sal_Int32 month = static_cast<sal_Int32>(date.GetMonth());
+            sal_Int32 matchMonth = static_cast<sal_Int32>(mfMatchValue);
+            return month == matchMonth;
+        }
+        case DataPilotFieldGroupBy::DAYS:
+        {
+            Date yearStart(1, 1, date.GetYear());
+            sal_Int32 days = (date - yearStart) + 1;       // Jan 01 has value 1
+            if (days >= 60 && !date.IsLeapYear())
+            {
+                // This is not a leap year.  Adjust the value accordingly.
+                ++days;
+            }
+            sal_Int32 matchDays = static_cast<sal_Int32>(mfMatchValue);
+            return days == matchDays;
+        }
+        default:
+            DBG_ERROR("invalid date part");
+    }
+
+    return false;
+}
+
+// ============================================================================
 
 void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
 {
@@ -388,6 +538,13 @@ bool ScDPGroupItem::HasCommonElement( const ScDPGroupItem& rOther ) const
     return false;
 }
 
+void ScDPGroupItem::FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) const
+{
+    ScDPItemDataVec::const_iterator itrEnd = aElements.end();
+    for (ScDPItemDataVec::const_iterator itr = aElements.begin(); itr != itrEnd; ++itr)
+        rFilter.addMatchItem(itr->aString, itr->fValue, itr->bHasValue);
+}
+
 // -----------------------------------------------------------------------
 
 ScDPGroupDimension::ScDPGroupDimension( long nSource, const String& rNewName ) :
@@ -504,6 +661,14 @@ const ScDPGroupItem* ScDPGroupDimension::GetGroupForName( const ScDPItemData& rN
             return &*aIter;
 
     return NULL;
+}
+
+const ScDPGroupItem* ScDPGroupDimension::GetGroupByIndex( size_t nIndex ) const
+{
+    if (nIndex >= aItems.size())
+        return NULL;
+
+    return &aItems[nIndex];
 }
 
 void ScDPGroupDimension::DisposeData()
@@ -817,6 +982,7 @@ ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDoc
 {
     DBG_ASSERT( pSource, "ScDPGroupTableData: pSource can't be NULL" );
 
+    CreateCacheTable();
     nSourceCount = pSource->GetColumnCount();               // real columns, excluding data layout
     pNumGroups = new ScDPNumGroupDimension[nSourceCount];
 }
@@ -832,6 +998,7 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     ScDPGroupDimension aNewGroup( rGroup );
     aNewGroup.SetGroupDim( GetColumnCount() );      // new dimension will be at the end
     aGroups.push_back( aNewGroup );
+    aGroupNames.insert( OUString(aNewGroup.GetName()) );
 }
 
 void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )
@@ -964,9 +1131,179 @@ void ScDPGroupTableData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmp
     pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
-void ScDPGroupTableData::ResetIterator()
+void ScDPGroupTableData::CreateCacheTable()
 {
-    pSourceData->ResetIterator();
+    pSourceData->CreateCacheTable();
+}
+
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPDimension*>& rPageDims)
+{
+    pSourceData->FilterCacheTable(rPageDims);
+}
+
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+{
+    typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
+    GroupFieldMapType aGroupFieldIds;
+    {
+        ScDPGroupDimensionVec::const_iterator itrEnd = aGroups.end();
+        for (ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(); itr != itrEnd; ++itr)
+            aGroupFieldIds.insert( hash_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
+    }
+
+    vector<ScDPCacheTable::Criterion> aNewCriteria;
+    aNewCriteria.reserve(rCriteria.size() + aGroups.size());
+
+    // Go through all the filtered field names and process them appropriately.
+
+    vector<ScDPCacheTable::Criterion>::const_iterator itrEnd = rCriteria.end();
+    GroupFieldMapType::const_iterator itrGrpEnd = aGroupFieldIds.end();
+    for (vector<ScDPCacheTable::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
+    {
+        ScDPCacheTable::SingleFilter* pFilter = dynamic_cast<ScDPCacheTable::SingleFilter*>(itr->mpFilter.get());
+        if (!pFilter)
+            // We expect this to be a single filter.
+            continue;
+
+        GroupFieldMapType::const_iterator itrGrp = aGroupFieldIds.find(itr->mnFieldIndex);
+        if (itrGrp == itrGrpEnd)
+        {
+            if (IsNumGroupDimension(itr->mnFieldIndex))
+            {
+                // internal number group field
+                const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
+                const ScDPDateGroupHelper* pDateHelper = rNumGrpDim.GetDateHelper();
+                if (!pDateHelper)
+                {
+                    // What do we do here !?
+                    continue;
+                }
+
+                ScDPCacheTable::Criterion aCri;
+                aCri.mnFieldIndex = itr->mnFieldIndex;
+                aCri.mpFilter.reset(new ScDPGroupDateFilter(
+                    pFilter->getMatchValue(), pDateHelper->GetDatePart(),
+                    pDoc->GetFormatTable()->GetNullDate(), &pDateHelper->GetNumInfo()));
+
+                aNewCriteria.push_back(aCri);
+            }
+            else
+            {
+                // This is a regular source field.
+                aNewCriteria.push_back(*itr);
+            }
+        }
+        else
+        {
+            // This is an ordinary group field or external number group field.
+
+            const ScDPGroupDimension* pGrpDim = itrGrp->second;
+            long nSrcDim = pGrpDim->GetSourceDim();
+            const ScDPDateGroupHelper* pDateHelper = pGrpDim->GetDateHelper();
+
+            if (pDateHelper)
+            {
+                // external number group
+                ScDPCacheTable::Criterion aCri;
+                aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
+                aCri.mpFilter.reset(new ScDPGroupDateFilter(
+                    pFilter->getMatchValue(), pDateHelper->GetDatePart(),
+                    pDoc->GetFormatTable()->GetNullDate(), &pDateHelper->GetNumInfo()));
+
+                aNewCriteria.push_back(aCri);
+            }
+            else
+            {
+                // normal group
+
+                // Note that each group dimension may have multiple group names!
+                size_t nGroupItemCount = pGrpDim->GetItemCount();
+                for (size_t i = 0; i < nGroupItemCount; ++i)
+                {
+                    const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
+                    ScDPItemData aName;
+                    aName.aString   = pFilter->getMatchString();
+                    aName.fValue    = pFilter->getMatchValue();
+                    aName.bHasValue = pFilter->hasValue();
+                    if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
+                        continue;
+
+                    ScDPCacheTable::Criterion aCri;
+                    aCri.mnFieldIndex = nSrcDim;
+                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter);
+                    ScDPCacheTable::GroupFilter* pGrpFilter =
+                        static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
+
+                    pGrpItem->FillGroupFilter(*pGrpFilter);
+                    aNewCriteria.push_back(aCri);
+                }
+            }
+        }
+    }
+
+    pSourceData->GetDrillDownData(aNewCriteria, rData);
+}
+
+void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
+{
+    // This CalcInfo instance is used only to retrive data from the original
+    // data source.
+    CalcInfo aInfoSrc = rInfo;
+    CopyFields(rInfo.aColLevelDims, aInfoSrc.aColLevelDims);
+    CopyFields(rInfo.aRowLevelDims, aInfoSrc.aRowLevelDims);
+    CopyFields(rInfo.aPageDims,     aInfoSrc.aPageDims);
+    CopyFields(rInfo.aDataSrcCols,  aInfoSrc.aDataSrcCols);
+
+    const ScDPCacheTable& rCacheTable = pSourceData->GetCacheTable();
+    sal_Int32 nRowSize = rCacheTable.getRowSize();
+    for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
+    {
+        if (!rCacheTable.isRowActive(nRow))
+            continue;
+
+        CalcRowData aData;
+        FillRowDataFromCacheTable(nRow, rCacheTable, aInfoSrc, aData);
+
+        FillGroupValues(&aData.aColData[0], rInfo.aColLevelDims.size(), &rInfo.aColLevelDims[0]);
+        FillGroupValues(&aData.aRowData[0], rInfo.aRowLevelDims.size(), &rInfo.aRowLevelDims[0]);
+        FillGroupValues(&aData.aPageData[0], rInfo.aPageDims.size(), &rInfo.aPageDims[0]);
+
+        ProcessRowData(rInfo, aData, bAutoShow);
+    }
+}
+
+const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
+{
+    return pSourceData->GetCacheTable();
+}
+
+void ScDPGroupTableData::CopyFields(const vector<long>& rFieldDims, vector<long>& rNewFieldDims)
+{
+    size_t nCount = rFieldDims.size();
+    if (!nCount)
+        return;
+
+    long nGroupedColumns = aGroups.size();
+
+    rNewFieldDims.clear();
+    rNewFieldDims.reserve(nCount);
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        if ( rFieldDims[i] >= nSourceCount )
+        {
+            if ( rFieldDims[i] == nSourceCount + nGroupedColumns )
+                // data layout in source
+                rNewFieldDims.push_back(nSourceCount);
+            else
+            {
+                // original dimension
+                long n = rFieldDims[i] - nSourceCount;
+                rNewFieldDims.push_back(aGroups[n].GetSourceDim());
+            }
+        }
+        else
+            rNewFieldDims.push_back(rFieldDims[i]);
+    }
 }
 
 long* ScDPGroupTableData::CopyFields( const long* pSourceDims, long nCount )
@@ -1045,42 +1382,6 @@ void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, 
             }
         }
     }
-}
-
-BOOL ScDPGroupTableData::GetNextRow( const ScDPTableIteratorParam& rParam )
-{
-    //
-    //  call source with a param containing only dimension numbers valid for source
-    //
-
-    long* pSourceCols = CopyFields( rParam.pCols, rParam.nColCount );
-    long* pSourceRows = CopyFields( rParam.pRows, rParam.nRowCount );
-    long* pSourcePages = CopyFields( rParam.pPages, rParam.nPageCount );
-    long* pSourceDats = CopyFields( rParam.pDats, rParam.nDatCount );
-    //  data fields can't be groups
-
-    ScDPTableIteratorParam aSourceParam( rParam.nColCount, pSourceCols, rParam.pColData,
-                                         rParam.nRowCount, pSourceRows, rParam.pRowData,
-                                         rParam.nPageCount, pSourcePages, rParam.pPageData,
-                                         rParam.nDatCount, pSourceDats, rParam.pValues );
-
-    BOOL bRet = pSourceData->GetNextRow( aSourceParam );
-
-    delete pSourceCols;
-    delete pSourceRows;
-    delete pSourcePages;
-    delete pSourceDats;
-
-    //
-    //  fill values for groups
-    //
-
-    FillGroupValues( rParam.pColData, rParam.nColCount, rParam.pCols );
-    FillGroupValues( rParam.pRowData, rParam.nRowCount, rParam.pRows );
-    FillGroupValues( rParam.pPageData, rParam.nPageCount, rParam.pPages );
-    // data is left unchanged - useful only for count
-
-    return bRet;
 }
 
 BOOL ScDPGroupTableData::IsBaseForGroup(long nDim) const
