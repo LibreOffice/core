@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: object.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,16 +100,6 @@ void SvClassElement::Save( SvPersistStream & rStm )
 
 /****************** SvMetaClass ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
-#ifdef IDL_COMPILER
-SvAttributeList & SvMetaClass::GetAttributeList()
-{
-    if( !pAttribList )
-    {
-        pAttribList = new SvAttributeList();
-    }
-    return *pAttribList;
-}
-#endif
 /*************************************************************************
 |*    SvMetaClass::SvMetaClass()
 |*
