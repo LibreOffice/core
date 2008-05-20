@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impl.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,7 +259,6 @@ private:
     static PluginManager*       pManager;
 
     PluginManager();
-    ~PluginManager();
 public:
 
     static PluginManager& get();
@@ -280,7 +279,6 @@ public:
     virtual ~XPluginManager_Impl();
 
     static XPlugin_Impl* getXPluginFromNPP( NPP );
-    static XPlugin_Impl* getFirstXPlugin();
     static XPlugin_Impl* getPluginImplementation( const Reference< com::sun::star::plugin::XPlugin >& plugin );
 
     virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw();
