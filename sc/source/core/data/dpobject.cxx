@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpobject.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,18 +57,32 @@
 #include "unonames.hxx"
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svtools/zforlist.hxx>     // IsNumberFormat
 
+#include <vector>
+
 using namespace com::sun::star;
+using ::std::vector;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::sheet::DataPilotTableHeaderData;
+using ::com::sun::star::sheet::DataPilotTablePositionData;
 
 // -----------------------------------------------------------------------
 
@@ -473,6 +487,16 @@ void ScDPObject::Output()
     aOutRange = pOutput->GetOutputRange();
 }
 
+const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
+{
+    CreateOutput();
+
+    if (pOutput->HasError())
+        return ScRange(aOutRange.aStart);
+
+    return pOutput->GetOutputRange(nType);
+}
+
 BOOL lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasButton();
@@ -596,11 +620,42 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
         r.SetSheetDesc( *pSheetDesc );
 }
 
-bool ScDPObject::GetDataFieldPositionData( std::vector< sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos )
+void ScDPObject::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
 {
-    CreateOutput();             // create xSource and pOutput if not already done
+    CreateOutput();
+    pOutput->GetPositionData(rPos, rPosData);
+}
 
-    return pOutput->GetDataFieldPositionData( rFilters, rPos );
+bool ScDPObject::GetDataFieldPositionData(
+    const ScAddress& rPos, Sequence<sheet::DataPilotFieldFilter>& rFilters)
+{
+    CreateOutput();
+
+    vector<sheet::DataPilotFieldFilter> aFilters;
+    if (!pOutput->GetDataResultPositionData(aFilters, rPos))
+        return false;
+
+    sal_Int32 n = static_cast<sal_Int32>(aFilters.size());
+    rFilters.realloc(n);
+    for (sal_Int32 i = 0; i < n; ++i)
+        rFilters[i] = aFilters[i];
+
+    return true;
+}
+
+void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any> >& rTableData)
+{
+    CreateOutput();
+
+    Reference<sheet::XDrillDownDataSupplier> xDrillDownData(xSource, UNO_QUERY);
+    if (!xDrillDownData.is())
+        return;
+
+    Sequence<sheet::DataPilotFieldFilter> filters;
+    if (!GetDataFieldPositionData(rPos, filters))
+        return;
+
+    rTableData = xDrillDownData->getDrillDownData(filters);
 }
 
 BOOL ScDPObject::IsDimNameInUse( const String& rName ) const
@@ -798,11 +853,21 @@ void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
         delete pAllData;
 }
 
-void ScDPObject::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos )
+void ScDPObject::GetHeaderPositionData(const ScAddress& rPos, DataPilotTableHeaderData& rData)
 {
+    using namespace ::com::sun::star::sheet::DataPilotTablePositionType;
+
     CreateOutput();             // create xSource and pOutput if not already done
 
-    pOutput->GetPositionData( rData, rPos );
+    // Reset member values to invalid state.
+    rData.Dimension = rData.Hierarchy = rData.Level = -1;
+    rData.Flags = 0;
+
+    DataPilotTablePositionData aPosData;
+    pOutput->GetPositionData(rPos, aPosData);
+    const sal_Int32 nPosType = aPosData.PositionType;
+    if (nPosType == COLUMN_HEADER || nPosType == ROW_HEADER)
+        aPosData.PositionData >>= rData;
 }
 
 // Returns TRUE on success and stores the result in rTarget
@@ -1280,7 +1345,7 @@ BOOL ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
     return bHasData && !bError;
 }
 
-void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestObj )
+void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj)
 {
     CreateObjects();            // create xSource if not already done
 
@@ -1290,10 +1355,10 @@ void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestOb
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
     long nIntCount = xIntDims->getCount();
-    if ( rElemDesc.nDimension < nIntCount )
+    if ( rElemDesc.Dimension < nIntCount )
     {
         uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface(
-                                    xIntDims->getByIndex(rElemDesc.nDimension) );
+                                    xIntDims->getByIndex(rElemDesc.Dimension) );
         xDim = uno::Reference<container::XNamed>( xIntDim, uno::UNO_QUERY );
     }
     DBG_ASSERT( xDim.is(), "dimension not found" );
@@ -1322,8 +1387,8 @@ void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestOb
         nHierCount = xHiers->getCount();
     }
     uno::Reference<uno::XInterface> xHier;
-    if ( rElemDesc.nHierarchy < nHierCount )
-        xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(rElemDesc.nHierarchy) );
+    if ( rElemDesc.Hierarchy < nHierCount )
+        xHier = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(rElemDesc.Hierarchy) );
     DBG_ASSERT( xHier.is(), "hierarchy not found" );
     if ( !xHier.is() ) return;
 
@@ -1337,8 +1402,8 @@ void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestOb
         nLevCount = xLevels->getCount();
     }
     uno::Reference<uno::XInterface> xLevel;
-    if ( rElemDesc.nLevel < nLevCount )
-        xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(rElemDesc.nLevel) );
+    if ( rElemDesc.Level < nLevCount )
+        xLevel = ScUnoHelpFunctions::AnyToInterface( xLevels->getByIndex(rElemDesc.Level) );
     DBG_ASSERT( xLevel.is(), "level not found" );
     if ( !xLevel.is() ) return;
 
@@ -1352,11 +1417,10 @@ void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestOb
 
     if ( xMembers.is() )
     {
-        rtl::OUString aName = rElemDesc.aMemberName;
-        if ( xMembers->hasByName( aName ) )
+        if ( xMembers->hasByName(rElemDesc.MemberName) )
         {
             uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
-                                            xMembers->getByName( aName ) );
+                                            xMembers->getByName(rElemDesc.MemberName) );
             uno::Reference<beans::XPropertySet> xMbrProp( xMemberInt, uno::UNO_QUERY );
             if ( xMbrProp.is() )
             {
@@ -1377,8 +1441,9 @@ void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestOb
     DBG_ASSERT( pModifyData, "no data?" );
     if ( pModifyData )
     {
+        const String aName = rElemDesc.MemberName;
         pModifyData->GetDimensionByName(aDimName)->
-            GetMemberByName(rElemDesc.aMemberName)->SetShowDetails( !bShowDetails );    // toggle
+            GetMemberByName(aName)->SetShowDetails( !bShowDetails );    // toggle
 
         if ( pDestObj )
             pDestObj->InvalidateData();     // re-init source from SaveData
