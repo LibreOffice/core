@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabdat.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +41,19 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+
 #include "dptabdat.hxx"
 #include "global.hxx"
+#include "dpcachetable.hxx"
+#include "dptabres.hxx"
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
+using ::std::vector;
+using ::std::set;
+using ::std::hash_map;
 
 // -----------------------------------------------------------------------
 
@@ -104,29 +115,14 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
         return ScGlobal::pCollator->compareString( rA.aString, rB.aString );
 }
 
-// -----------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-ScDPTableIteratorParam::ScDPTableIteratorParam(
-                            long nCCount, const long* pC, ScDPItemData* pCDat,
-                            long nRCount, const long* pR, ScDPItemData* pRDat,
-                            long nPCount, const long* pP, ScDPItemData* pPDat,
-                            long nDCount, const long* pD, ScDPValueData* pV ) :
-    nColCount( (SCSIZE)nCCount ),
-    pCols    ( pC ),
-    pColData ( pCDat ),
-    nRowCount( (SCSIZE)nRCount ),
-    pRows    ( pR ),
-    pRowData ( pRDat ),
-    nPageCount( (SCSIZE)nPCount ),
-    pPages   ( pP ),
-    pPageData( pPDat ),
-    nDatCount( (SCSIZE)nDCount ),
-    pDats    ( pD ),
-    pValues  ( pV )
+ScDPTableData::CalcInfo::CalcInfo() :
+    bRepeatIfEmpty(false)
 {
 }
 
-// -----------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 ScDPTableData::ScDPTableData()
 {
@@ -184,6 +180,31 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     return nRet;
 }
 
+bool ScDPTableData::IsRepeatIfEmpty()
+{
+    return false;
+}
+
+void ScDPTableData::CreateCacheTable()
+{
+    fprintf(stdout, "ScDPTableData::CreateCacheTable: un-implemented...\n");fflush(stdout);
+}
+
+void ScDPTableData::FilterCacheTable(const vector<ScDPDimension*>& rPageDims)
+{
+    fprintf(stdout, "ScDPTableData::FilterCacheTable: un-implemented...\n");fflush(stdout);
+}
+
+void ScDPTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>&, Sequence< Sequence<Any> >&)
+{
+    fprintf(stdout, "ScDPTableData::GetDrillDownData: un-implemented...\n");fflush(stdout);
+}
+
+void ScDPTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
+{
+    fprintf(stdout, "ScDPTableData::CalcResults: un-implemented...\n");fflush(stdout);
+}
+
 UINT32 ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
@@ -216,6 +237,105 @@ BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
 {
     DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
+}
+
+void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
+                                        const CalcInfo& rInfo, CalcRowData& rData)
+{
+    // column dimensions
+    GetItemData(rCacheTable, nRow, rInfo.aColLevelDims, rData.aColData);
+
+    // row dimensions
+    GetItemData(rCacheTable, nRow, rInfo.aRowLevelDims, rData.aRowData);
+
+    // page dimensions
+    GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
+
+    sal_Int32 n = rInfo.aDataSrcCols.size();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        long nDim = rInfo.aDataSrcCols[i];
+        rData.aValues.push_back( ScDPValueData() );
+        ScDPValueData& rVal = rData.aValues.back();
+        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(nDim, nRow);
+        if (pCell)
+        {
+            rVal.fValue = pCell->mbNumeric ? pCell->mfValue : 0.0;
+            rVal.nType = pCell->mnType;
+        }
+        else
+            rVal.Set(0.0, SC_VALTYPE_EMPTY);
+    }
+}
+
+void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
+{
+    if (!bAutoShow)
+    {
+        rInfo.pColRoot->LateInitFrom(rInfo.aColDims, rInfo.aColLevels, rData.aColData, 0, *rInfo.pInitState);
+        rInfo.pRowRoot->LateInitFrom(rInfo.aRowDims, rInfo.aRowLevels, rData.aRowData, 0, *rInfo.pInitState);
+    }
+
+    if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
+         ( !rInfo.pRowRoot->GetChildDimension() || rInfo.pRowRoot->GetChildDimension()->IsValidEntry(rData.aRowData) ) )
+    {
+        //! single process method with ColMembers, RowMembers and data !!!
+        if (rInfo.pColRoot->GetChildDimension())
+        {
+            vector<ScDPItemData> aEmptyData;
+            rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
+        }
+
+        rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(),
+                                    rData.aColData, rData.aValues);
+    }
+}
+
+void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow)
+{
+    sal_Int32 nRowSize = rCacheTable.getRowSize();
+    for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
+    {
+        if (!rCacheTable.isRowActive(nRow))
+            continue;
+
+        CalcRowData aData;
+        FillRowDataFromCacheTable(nRow, rCacheTable, rInfo, aData);
+        ProcessRowData(rInfo, aData, bAutoShow);
+    }
+}
+
+void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
+                                const vector<long>& rDims, vector<ScDPItemData>& rItemData)
+{
+    sal_Int32 nDimSize = rDims.size();
+    for (sal_Int32 i = 0; i < nDimSize; ++i)
+    {
+        long nDim = rDims[i];
+        rItemData.push_back( ScDPItemData() );
+        ScDPItemData& rData = rItemData.back();
+        if (getIsDataLayoutDimension(nDim))
+        {
+            rData.SetString(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")));
+            continue;
+        }
+
+        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(nDim, nRow, IsRepeatIfEmpty());
+        if (!pCell || pCell->mnType == SC_VALTYPE_EMPTY)
+            continue;
+
+        const String* pString = ScSharedString::getString(pCell->mnStrId);
+        if (!pString)
+            continue;
+
+        rData.aString = *pString;
+        rData.bHasValue = false;
+        if (pCell->mbNumeric)
+        {
+            rData.bHasValue = true;
+            rData.fValue = pCell->mfValue;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
