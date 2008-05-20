@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc3.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include "dbfunc.hxx"
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
@@ -48,13 +49,15 @@
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+#include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
+#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 
-#include <hash_set>
-
-#include "dbfunc.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
@@ -74,8 +77,21 @@
 #include "dpoutput.hxx"
 #include "dptabsrc.hxx"
 #include "editable.hxx"
+#include "docpool.hxx"
+#include "patattr.hxx"
+#include "unonames.hxx"
+#include "cell.hxx"
+
+#include <hash_set>
+#include <memory>
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::XPropertySet;
+using ::std::auto_ptr;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -712,22 +728,21 @@ void ScDBFunc::GetSelectedMemberList( StrCollection& rEntries, long& rDimension 
         for (SCROW nRow=nStartRow; nRow<=nEndRow && bContinue; nRow++)
             for (SCCOL nCol=nStartCol; nCol<=nEndCol && bContinue; nCol++)
             {
-                ScDPPositionData aData;
-                pDPObj->GetPositionData( aData, ScAddress( nCol, nRow, nTab ) );
-
-                if ( aData.nDimension < 0 )
+                sheet::DataPilotTableHeaderData aData;
+                pDPObj->GetHeaderPositionData(ScAddress(nCol, nRow, nTab), aData);
+                if ( aData.Dimension < 0 )
                     bContinue = FALSE;              // not part of any dimension
                 else
                 {
                     if ( nStartDimension < 0 )      // first member?
                     {
-                        nStartDimension = aData.nDimension;
-                        nStartHierarchy = aData.nHierarchy;
-                        nStartLevel     = aData.nLevel;
+                        nStartDimension = aData.Dimension;
+                        nStartHierarchy = aData.Hierarchy;
+                        nStartLevel     = aData.Level;
                     }
-                    if ( aData.nDimension != nStartDimension ||
-                         aData.nHierarchy != nStartHierarchy ||
-                         aData.nLevel     != nStartLevel )
+                    if ( aData.Dimension != nStartDimension ||
+                         aData.Hierarchy != nStartHierarchy ||
+                         aData.Level     != nStartLevel )
                     {
                         bContinue = FALSE;          // cannot mix dimensions
                     }
@@ -736,9 +751,9 @@ void ScDBFunc::GetSelectedMemberList( StrCollection& rEntries, long& rDimension 
                 {
                     // accept any part of a member description, also subtotals,
                     // but don't stop if empty parts are contained
-                    if ( aData.nFlags & sheet::MemberResultFlags::HASMEMBER )
+                    if ( aData.Flags & sheet::MemberResultFlags::HASMEMBER )
                     {
-                        StrData* pNew = new StrData( aData.aMemberName );
+                        StrData* pNew = new StrData( aData.MemberName );
                         if ( !rEntries.Insert( pNew ) )
                             delete pNew;
                     }
@@ -1417,16 +1432,16 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
             // renaming a group (item)?
             // allow only on the item name itself - not on empty cells, not on subtotals
 
-            ScDPPositionData aPosData;
-            pDPObj->GetPositionData( aPosData, rPos );
-            if ( ( aPosData.nFlags & sheet::MemberResultFlags::HASMEMBER ) &&
-                 ! ( aPosData.nFlags & sheet::MemberResultFlags::SUBTOTAL ) &&
+            sheet::DataPilotTableHeaderData aPosData;
+            pDPObj->GetHeaderPositionData(rPos, aPosData);
+            if ( ( aPosData.Flags & sheet::MemberResultFlags::HASMEMBER ) &&
+                 ! ( aPosData.Flags & sheet::MemberResultFlags::SUBTOTAL ) &&
                  aOldText.Len() )
             {
                 if ( aData.GetExistingDimensionData() )
                 {
                     BOOL bIsDataLayout;
-                    String aDimName = pDPObj->GetDimName( aPosData.nDimension, bIsDataLayout );
+                    String aDimName = pDPObj->GetDimName( aPosData.Dimension, bIsDataLayout );
 
                     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
                     ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
@@ -1500,26 +1515,26 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( rSource.aStart.Col(), rSource.aStart.Row(), rSource.aStart.Tab() );
     if ( pDPObj && pDPObj == pDoc->GetDPAtCursor( rDest.Col(), rDest.Row(), rDest.Tab() ) )
     {
-        ScDPPositionData aDestData;
-        pDPObj->GetPositionData( aDestData, rDest );
-        bool bValid = ( aDestData.nDimension >= 0 );        // dropping onto a field
+        sheet::DataPilotTableHeaderData aDestData;
+        pDPObj->GetHeaderPositionData( rDest, aDestData );
+        bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
         // look through the source range
-        std::hash_set< String, ScStringHashCode, std::equal_to<String> > aMembersSet;   // for lookup
-        std::vector<String> aMembersVector;         // members in original order, for inserting
+        std::hash_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
+        std::vector< rtl::OUString > aMembersVector;  // members in original order, for inserting
         aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
                                           static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );
         for (SCROW nRow = rSource.aStart.Row(); bValid && nRow <= rSource.aEnd.Row(); ++nRow )
             for (SCCOL nCol = rSource.aStart.Col(); bValid && nCol <= rSource.aEnd.Col(); ++nCol )
             {
-                ScDPPositionData aSourceData;
-                pDPObj->GetPositionData( aSourceData, ScAddress( nCol, nRow, rSource.aStart.Tab() ) );
-                if ( aSourceData.nDimension == aDestData.nDimension && aSourceData.aMemberName.Len() )
+                sheet::DataPilotTableHeaderData aSourceData;
+                pDPObj->GetHeaderPositionData( ScAddress( nCol, nRow, rSource.aStart.Tab() ), aSourceData );
+                if ( aSourceData.Dimension == aDestData.Dimension && aSourceData.MemberName.getLength() )
                 {
-                    if ( aMembersSet.find( aSourceData.aMemberName ) == aMembersSet.end() )
+                    if ( aMembersSet.find( aSourceData.MemberName ) == aMembersSet.end() )
                     {
-                        aMembersSet.insert( aSourceData.aMemberName );
-                        aMembersVector.push_back( aSourceData.aMemberName );
+                        aMembersSet.insert( aSourceData.MemberName );
+                        aMembersVector.push_back( aSourceData.MemberName );
                     }
                     // duplicates are ignored
                 }
@@ -1530,7 +1545,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
         if ( bValid )
         {
             BOOL bIsDataLayout;
-            String aDimName = pDPObj->GetDimName( aDestData.nDimension, bIsDataLayout );
+            String aDimName = pDPObj->GetDimName( aDestData.Dimension, bIsDataLayout );
             if ( !bIsDataLayout )
             {
                 ScDPSaveData aData( *pDPObj->GetSaveData() );
@@ -1538,7 +1553,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 // get all member names in source order
                 uno::Sequence<rtl::OUString> aMemberNames;
-                pDPObj->GetMembers( aDestData.nDimension, aMemberNames );
+                pDPObj->GetMembers( aDestData.Dimension, aMemberNames );
 
                 bool bInserted = false;
 
@@ -1547,10 +1562,10 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                 {
                     String aMemberStr( aMemberNames[nMemberPos] );
 
-                    if ( !bInserted && aMemberStr == aDestData.aMemberName )
+                    if ( !bInserted && aMemberNames[nMemberPos] == aDestData.MemberName )
                     {
                         // insert dragged items before this item
-                        for ( std::vector<String>::const_iterator aIter = aMembersVector.begin();
+                        for ( std::vector<rtl::OUString>::const_iterator aIter = aMembersVector.begin();
                               aIter != aMembersVector.end(); ++aIter )
                             lcl_MoveToEnd( *pDim, *aIter );
                         bInserted = true;
@@ -1561,7 +1576,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                 }
                 // insert dragged item at end if dest wasn't found (for example, empty)
                 if ( !bInserted )
-                    for ( std::vector<String>::const_iterator aIter = aMembersVector.begin();
+                    for ( std::vector<rtl::OUString>::const_iterator aIter = aMembersVector.begin();
                           aIter != aMembersVector.end(); ++aIter )
                         lcl_MoveToEnd( *pDim, *aIter );
 
@@ -1716,37 +1731,77 @@ void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName 
     }
 }
 
-void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const std::vector<sheet::DataPilotFieldFilter>& rFilters )
+void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet::DataPilotFieldFilter>& rFilters )
 {
-    uno::Reference<sheet::XDimensionsSupplier> xSource = rDPObj.GetSource();
-    ScDPSource* pTabSource = dynamic_cast<ScDPSource*>(xSource.get());
-    DBG_ASSERT( pTabSource, "can't get ScDPSource" );
-    if ( pTabSource )
+    Reference<sheet::XDimensionsSupplier> xDimSupplier = rDPObj.GetSource();
+    Reference<container::XNameAccess> xDims = xDimSupplier->getDimensions();
+    Reference<sheet::XDrillDownDataSupplier> xDDSupplier(xDimSupplier, UNO_QUERY);
+    if (!xDDSupplier.is())
+        return;
+
+    Sequence< Sequence<Any> > aTabData = xDDSupplier->getDrillDownData(rFilters);
+    sal_Int32 nRowSize = aTabData.getLength();
+    if (nRowSize <= 1)
+        // There is no data to show.  Bail out.
+        return;
+
+    sal_Int32 nColSize = aTabData[0].getLength();
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    SCTAB nNewTab = GetViewData()->GetTabNo();
+
+    auto_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
+    pInsDoc->ResetClip( pDoc, nNewTab );
+    for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
-        // output into clipboard document (for easy undo)
-        ScDocument* pDoc = GetViewData()->GetDocument();
-        SCTAB nNewTab = GetViewData()->GetTabNo();
-        ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
-        pInsDoc->ResetClip( pDoc, nNewTab );
-        pTabSource->WriteDrillDownData( pInsDoc, ScAddress( 0, 0, nNewTab ), rFilters );
-        SCCOL nEndCol = 0;
-        SCROW nEndRow = 0;
-        pInsDoc->GetCellArea( nNewTab, nEndCol, nEndRow );
-        pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
-
-        SfxUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
-        String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
-        pMgr->EnterListAction( aUndo, aUndo );
-
-        // insert new sheet and paste result
-        String aNewTabName;
-        pDoc->CreateValidTabName(aNewTabName);
-        if ( InsertTable( aNewTabName, nNewTab ) )
-            PasteFromClip( IDF_ALL, pInsDoc );
-
-        pMgr->LeaveListAction();
-        delete pInsDoc;
+        for (sal_Int32 nCol = 0; nCol < nColSize; ++nCol)
+        {
+            const Any& rAny = aTabData[nRow][nCol];
+            rtl::OUString aStr;
+            double fVal;
+            if (rAny >>= aStr)
+                pInsDoc->PutCell( ScAddress(nCol, nRow, nNewTab), new ScStringCell(String(aStr)) );
+            else if (rAny >>= fVal)
+                pInsDoc->SetValue(nCol, nRow, nNewTab, fVal);
+        }
     }
+
+    // set number format (important for dates)
+    for (sal_Int32 nCol = 0; nCol < nColSize; ++nCol)
+    {
+        rtl::OUString aStr;
+        if (!(aTabData[0][nCol] >>= aStr))
+            continue;
+
+        Reference<XPropertySet> xPropSet(xDims->getByName(aStr), UNO_QUERY);
+        if (!xPropSet.is())
+            continue;
+
+        Any any = xPropSet->getPropertyValue( rtl::OUString::createFromAscii(SC_UNO_NUMBERFO) );
+        sal_Int32 nNumFmt = 0;
+        if (!(any >>= nNumFmt))
+            continue;
+
+        ScPatternAttr aPattern( pInsDoc->GetPool() );
+        aPattern.GetItemSet().Put( SfxUInt32Item(ATTR_VALUE_FORMAT, static_cast<UINT32>(nNumFmt)) );
+        pInsDoc->ApplyPatternAreaTab(nCol, 1, nCol, nRowSize-1, nNewTab, aPattern);
+    }
+
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    pInsDoc->GetCellArea( nNewTab, nEndCol, nEndRow );
+    pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
+
+    SfxUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
+    String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
+    pMgr->EnterListAction( aUndo, aUndo );
+
+    String aNewTabName;
+    pDoc->CreateValidTabName(aNewTabName);
+    if ( InsertTable(aNewTabName, nNewTab) )
+        PasteFromClip( IDF_ALL, pInsDoc.get() );
+
+    pMgr->LeaveListAction();
 }
 
 //
