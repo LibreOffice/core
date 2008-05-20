@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheckconfig.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,14 +124,6 @@ bool
 UpdateCheckROModel::isAutoCheckEnabled() const
 {
     return sal_True == m_aNameAccess.getValue(AUTOCHECK_ENABLED).get< sal_Bool >();
-}
-
-//------------------------------------------------------------------------------
-
-bool
-UpdateCheckROModel::isAutoDownloadEnabled() const
-{
-    return sal_True == m_aNameAccess.getValue(AUTODOWNLOAD_ENABLED).get< sal_Bool >();
 }
 
 //------------------------------------------------------------------------------
