@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lex.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,58 +81,6 @@ ByteString SvToken::GetTokenAsString() const
         case SVTOKEN_HASHID:
             break;
     }
-
-    return aStr;
-}
-
-/*************************************************************************
-|*
-|*    SvToken::Print()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-ByteString SvToken::Print() const
-{
-    ByteString aStr;
-    aStr += "Line = ";
-    aStr += ByteString::CreateFromInt64(nLine);
-    aStr += ", Column = ";
-    aStr += ByteString::CreateFromInt64(nColumn);
-    aStr += ", ";
-    switch( nType )
-    {
-        case SVTOKEN_EMPTY:
-            aStr += "Empty";
-            break;
-        case SVTOKEN_COMMENT:
-            aStr += "Comment = ";
-            break;
-        case SVTOKEN_INTEGER:
-            aStr += "Integer = ";
-            break;
-        case SVTOKEN_STRING:
-            aStr += "ByteString = ";
-            break;
-        case SVTOKEN_BOOL:
-            aStr += "Bool = ";
-            break;
-        case SVTOKEN_IDENTIFIER:
-            aStr += "Identifier = ";
-            break;
-        case SVTOKEN_CHAR:
-            aStr += "char = ";
-            break;
-        case SVTOKEN_RTTIBASE:
-            aStr += "SvRttiBase = ";
-            break;
-        case SVTOKEN_EOF:
-            aStr += "end of file";
-            break;
-        case SVTOKEN_HASHID:
-            break;
-    }
-    aStr += GetTokenAsString();
 
     return aStr;
 }
@@ -262,29 +210,6 @@ SvTokenStream::~SvTokenStream()
 }
 
 /*************************************************************************
-|*    SvTokenStream::GetHexValue()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvTokenStream::GetHexValue( const ByteString & rStr, BigInt * pValue )
-{
-    short   nLog = 16;
-
-    *pValue = 0;
-    char * pStr = (char *)rStr.GetBuffer();
-    while( isxdigit( *pStr ) )
-    {
-        if( isdigit( *pStr ) )
-            *pValue = *pValue * BigInt( nLog ) + BigInt(*pStr - '0');
-        else
-            *pValue = *pValue * BigInt( nLog ) + BigInt(toupper( *pStr ) - 'A' + 10 );
-        pStr++;
-    }
-    return '\0' == *pStr;
-}
-
-
-/*************************************************************************
 |*    SvTokenStream::FillTokenList()
 |*
 |*    Beschreibung
@@ -318,40 +243,6 @@ void SvTokenStream::FillTokenList()
     }
     while( !pToken->IsEof() );
     pCurToken = aTokList.First();
-}
-
-/*************************************************************************
-|*    SvTokenStream::Skip()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvTokenStream::Skip( char cStart, char cEnd, UINT32 * pBegin )
-{
-    SvToken * pTok = GetToken_Next();
-    while( !pTok->IsEof()
-           && (!pTok->IsChar() || cStart != pTok->GetChar()) )
-         pTok = GetToken_Next();
-
-    if( pBegin )
-        *pBegin = Tell() -1;
-    UINT32 nContextCount = 1;
-
-    while( !pTok->IsEof() && nContextCount != 0 )
-    {
-        pTok = GetToken_Next();
-        if( pTok->IsChar() )
-        {
-            if( cEnd == pTok->GetChar() )
-                nContextCount--;
-            if( cStart == pTok->GetChar() )
-                nContextCount++;
-        }
-    }
-    pTok = GetToken();
-    if( cEnd == '}' && pTok->IsChar() && pTok->GetChar() == ';' )
-        // siehe aerger rsc, }; ausgemerzt
-        pTok = GetToken_Next();
-    return nContextCount == 0;
 }
 
 /*************************************************************************
