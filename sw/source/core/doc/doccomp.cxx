@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doccomp.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1635,10 +1635,12 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
         pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetCntntNode(),
                                                 nSaveCnt );
 
-        SwPaM* pTmpPrev = ((_SaveMergeRedlines*)GetPrev())->pDestRedl;
-        if( pTmpPrev && *pTmpPrev->GetPoint() == *pDestRedl->GetPoint() )
-            *pTmpPrev->GetPoint() = *pDestRedl->GetMark();
-
+        if( GetPrev() != this )
+        {
+            SwPaM* pTmpPrev = ((_SaveMergeRedlines*)GetPrev())->pDestRedl;
+            if( pTmpPrev && *pTmpPrev->GetPoint() == *pDestRedl->GetPoint() )
+                *pTmpPrev->GetPoint() = *pDestRedl->GetMark();
+        }
     }
     else
     {
