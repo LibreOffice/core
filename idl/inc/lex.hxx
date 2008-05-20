@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lex.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,6 @@ public:
     SvToken & operator = ( const SvToken & rObj );
 
     ByteString          GetTokenAsString() const;
-    ByteString          Print() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
     void        SetLine( ULONG nLineP )     { nLine = nLineP;       }
@@ -196,7 +195,6 @@ public:
                     SvTokenStream( SvStream & rInStream, const String & rFileName );
                     ~SvTokenStream();
 
-    static BOOL     GetHexValue( const ByteString & rStr, BigInt * pValue );
     const String &  GetFileName() const { return aFileName; }
     SvStream &      GetStream() { return rInStream; }
 
@@ -231,7 +229,6 @@ public:
                         return GetToken_NextAll();
                     }
     SvToken *       GetToken() const { return pCurToken; }
-    BOOL            Skip( char cStart, char cEnd, UINT32 * pBegin );
     BOOL            Read( char cChar )
                     {
                         if( pCurToken->IsChar()
