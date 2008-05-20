@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: alloc_global.c,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,9 +200,15 @@ SAL_CALL rtl_allocateMemory (sal_Size n)
         int index = (size - 1) >> RTL_MEMALIGN_SHIFT;
         OSL_ASSERT(RTL_MEMALIGN >= sizeof(sal_Size));
 
+        if (n >= SAL_MAX_SIZE - (RTL_MEMALIGN + RTL_MEMALIGN - 1))
+        {
+            /* requested size too large for roundup alignment */
+            return 0;
+        }
+
 try_alloc:
         if (index < RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SHIFT)
-            addr = (char*)rtl_cache_alloc(g_alloc_table[index]);
+            addr = (char*)rtl_cache_alloc (g_alloc_table[index]);
         else
             addr = (char*)rtl_arena_alloc (gp_alloc_arena, &size);
 
@@ -234,7 +240,7 @@ void SAL_CALL rtl_freeMemory (void * p)
 
         int index = (size - 1) >> RTL_MEMALIGN_SHIFT;
         if (index < RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SHIFT)
-            rtl_cache_free(g_alloc_table[index], addr);
+            rtl_cache_free (g_alloc_table[index], addr);
         else
             rtl_arena_free (gp_alloc_arena, addr, size);
     }
