@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Dataimport.java,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -243,7 +243,26 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 bgetConnection = CurReportDocument.CurDBMetaData.getConnection(CurProperties);
                 int nCommandType = com.sun.star.sdb.CommandType.COMMAND;
                 boolean bexecute = false;
-                if (bgetConnection){
+                if (bgetConnection)
+                {
+                    // LLA: restored from old 2.3 Version
+                    if ((CurReportDocument.CurDBMetaData.getCommandType() == CommandType.QUERY) &&
+                        (CurReportDocument.CurDBMetaData.Command.equals("")))
+                    {
+                        CurReportDocument.CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
+                        DBMetaData.CommandObject oCommand = CurReportDocument.CurDBMetaData.getQueryByName(sQueryName);
+                        if (CurReportDocument.CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet))
+                        {
+                            CurReportDocument.CurDBMetaData.Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(CurReportDocument.CurDBMetaData.Command);
+                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
+                        }
+                        else
+                        {
+                            nCommandType = com.sun.star.sdb.CommandType.QUERY;
+                            CurReportDocument.CurDBMetaData.Command = sQueryName;
+                        }
+                    }
                     bexecute = CurReportDocument.CurDBMetaData.executeCommand(nCommandType); //sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
                     if (bexecute){
                         bexecute = CurReportDocument.CurDBMetaData.getFields(sFieldNameList, true);
