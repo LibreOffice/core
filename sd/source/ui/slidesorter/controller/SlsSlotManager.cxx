@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -945,7 +945,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         }
     }
 
-    bool bSuccess = ( FALSE != rName.Equals( pPageToRename->GetName()));
+    bool bSuccess = pPageToRename!=NULL && ( FALSE != rName.Equals( pPageToRename->GetName()));
 
     if( bSuccess )
     {
