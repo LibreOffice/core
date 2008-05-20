@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: command.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,6 @@ public:
     String      aDocuFile;
     UINT32      nFlags;
 
-                SvCommand();
                 SvCommand( int argc, char ** argv );
                 ~SvCommand();
 };
