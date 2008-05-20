@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtedt.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -608,7 +608,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, static_cast< xub_StrLen >(nStart), nAttrEnd );
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nAttrEnd );
                         Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
                 }
@@ -625,9 +625,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     *pAttrEnd = nStt;
                     pSwpHints->NoteInHistory( pHt, TRUE );
 
-                    if ( pStyleHandle.get() && nStart < nEnd )
+                    if ( pStyleHandle.get() && nStt < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, static_cast< xub_StrLen >(nStart), nEnd );
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nEnd );
                         Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
