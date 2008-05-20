@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,8 @@ public:
 
     void SetLoadExcelBasicCode( sal_Bool bFlag );
     sal_Bool IsLoadExcelBasicCode() const;
+    void SetLoadExcelBasicExecutable( sal_Bool bFlag );
+    sal_Bool IsLoadExcelBasicExecutable() const;
     void SetLoadExcelBasicStorage( sal_Bool bFlag );
     sal_Bool IsLoadExcelBasicStorage() const;
 
