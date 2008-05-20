@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slot.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,6 +184,9 @@ protected:
 
 public:
             SV_DECL_META_FACTORY1( SvMetaSlot, SvMetaReference, 11 )
+            SvMetaObject *  MakeClone() const;
+            SvMetaSlot *Clone() const { return (SvMetaSlot *)MakeClone(); }
+
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
@@ -271,7 +274,6 @@ public:
     virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
-    void                CompareSlotAttributes( SvMetaSlot *pOther );
 #endif
 };
 SV_DECL_IMPL_REF(SvMetaSlot)
