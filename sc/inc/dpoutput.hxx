@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpoutput.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +35,17 @@
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
+
 #include "global.hxx"
 #include "address.hxx"
 
+#include "dpcachetable.hxx"
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
+    struct DataPilotTablePositionData;
 }}}}
 
 class Rectangle;
@@ -51,19 +55,6 @@ class StrCollection;
 
 struct ScDPOutLevelData;
 
-
-
-
-struct ScDPPositionData
-{
-    long    nDimension;
-    long    nHierarchy;
-    long    nLevel;
-    long    nFlags;
-    String  aMemberName;
-
-    ScDPPositionData() { nDimension = nHierarchy = nLevel = -1; nFlags = 0; }   // invalid
-};
 
 struct ScDPGetPivotDataField
 {
@@ -104,12 +95,15 @@ private:
             com::sun::star::sheet::DataResult> > aData;
     BOOL                    bResultsError;
     String                  aDataDescription;
+
+    // Number format related parameters
     UINT32*                 pColNumFmt;
     UINT32*                 pRowNumFmt;
     long                    nColFmtCount;
     long                    nRowFmtCount;
     UINT32                  nSingleNumFmt;
 
+    // Output geometry related parameters
     BOOL                    bSizesValid;
     BOOL                    bSizeOverflow;
     long                    nColCount;
@@ -133,6 +127,11 @@ private:
                                 BOOL bFrame = TRUE );
     void            CalcSizes();
 
+    /** Query which sub-area of the table the cell is in. See
+        css.sheet.DataPilotTablePositionType for the interpretation of the
+        return value. */
+    sal_Int32       GetPositionType(const ScAddress& rPos);
+
 public:
                     ScDPOutput( ScDocument* pD,
                                 const com::sun::star::uno::Reference<
@@ -143,15 +142,15 @@ public:
     void            SetPosition( const ScAddress& rPos );
 
     void            Output();           //! Refresh?
-    ScRange         GetOutputRange();
+    ScRange         GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
     long            GetHeaderRows();
     BOOL            HasError();         // range overflow or exception from source
 
-    void            GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
+    void            GetPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTablePositionData& rPosData);
 
     /** Get filtering criteria based on the position of the cell within data
         field region. */
-    bool            GetDataFieldPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
+    bool            GetDataResultPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
     BOOL            GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                   const std::vector< ScDPGetPivotDataField >& rFilters );
