@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optfltr.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@ class OfaMSFilterTabPage : public SfxTabPage
     CheckBox        aWBasicStgCB;
     FixedLine       aMSExcelGB;
     CheckBox        aEBasicCodeCB;
+    CheckBox        aEBasicExectblCB;
     CheckBox        aEBasicStgCB;
     FixedLine       aMSPPointGB;
     CheckBox        aPBasicCodeCB;
@@ -56,6 +57,8 @@ class OfaMSFilterTabPage : public SfxTabPage
 
     OfaMSFilterTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage();
+
+    DECL_LINK( LoadExcelBasicCheckHdl_Impl, CheckBox* );
 public:
 
     static SfxTabPage*  Create( Window* pParent,
