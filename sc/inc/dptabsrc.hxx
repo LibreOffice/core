@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabsrc.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +50,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -57,11 +58,18 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
+
 #include "dptabdat.hxx"
 
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace sheet {
+        struct DataPilotFieldFilter;
+    }
+    namespace table {
+        struct CellAddress;
+    }
+}}}
 
 class ScDPResultMember;
 class ScDPResultData;
@@ -91,13 +99,17 @@ class ScDPMembers;
 class ScDPMember;
 
 
-class ScDPSource : public cppu::WeakImplHelper5<
+class ScDPSource : public cppu::WeakImplHelper6<
                             com::sun::star::sheet::XDimensionsSupplier,
                             com::sun::star::sheet::XDataPilotResults,
                             com::sun::star::util::XRefreshable,
+                            com::sun::star::sheet::XDrillDownDataSupplier,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XServiceInfo >
 {
+private:
+    void FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
+
 private:
     ScDPTableData*          pData;              // data source
     ScDPDimensions*         pDimensions;        // api objects
@@ -125,7 +137,6 @@ private:
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
     List                    aColLevelList;
     List                    aRowLevelList;
-    ScSubTotalFunc          eDataFunctions[SC_DAPI_MAXFIELDS];
     BOOL                    bResultOverflow;
 
     void                    CreateRes_Impl();
@@ -166,9 +177,6 @@ public:
 
     void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
 
-    void                    WriteDrillDownData( ScDocument* pDoc, const ScAddress& rPos,
-                                    const ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter > rFilters );
-
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                             SAL_CALL getDimensions(  )
@@ -186,6 +194,12 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XRefreshListener >& l )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XDrillDownDataSupplier
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+        SAL_CALL getDrillDownData(const ::com::sun::star::uno::Sequence<
+                                      ::com::sun::star::sheet::DataPilotFieldFilter >& aFilters )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
@@ -304,7 +318,7 @@ class ScDPDimension : public cppu::WeakImplHelper5<
 {
 private:
     ScDPSource*         pSource;
-    long                nDim;
+    long                nDim;               // dimension index (== column ID)
     ScDPHierarchies*    pHierarchies;
     long                nUsedHier;
     USHORT              nFunction;          // enum GeneralFunction
