@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheck.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -852,20 +852,6 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::dispose()
-{
-    shutdownThread(true);
-
-    osl::MutexGuard aGuard(m_aMutex);
-
-    m_eState = NOT_INITIALIZED;
-    m_xContext.clear();
-    m_xMenuBarUI.clear();
-    m_aUpdateHandler.clear();
-}
-
-//------------------------------------------------------------------------------
-void
 UpdateCheck::cancel()
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
@@ -1586,16 +1572,6 @@ UpdateCheck::createService(const rtl::OUString& rServiceName,
             uno::Reference< uno::XInterface >() );
 
     return xServiceManager->createInstanceWithContext(rServiceName, xContext);
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference< uno::XInterface >
-UpdateCheck::createService(const rtl::OUString& rServiceName) const
-{
-    osl::MutexGuard aGuard(m_aMutex);
-    const uno::Reference<uno::XComponentContext>& xContext(m_xContext);
-    return createService(rServiceName, xContext);
 }
 
 //------------------------------------------------------------------------------
