@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scanner.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,23 +89,9 @@ SEQ( sal_Int8 ) SAL_CALL ScannerManager::getMaskDIB() throw()
 
 // -----------------------------------------------------------------------------
 
-OUString ScannerManager::getImplementationName() throw ()
-{
-    return getImplementationName_Static();
-}
-
-// -----------------------------------------------------------------------------
-
 OUString ScannerManager::getImplementationName_Static() throw()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
-}
-
-// -----------------------------------------------------------------------------
-
-SEQ( OUString ) ScannerManager::getSupportedServiceNames() throw ()
-{
-    return getSupportedServiceNames_Static();
 }
 
 // -----------------------------------------------------------------------------
@@ -117,18 +103,4 @@ SEQ( OUString ) ScannerManager::getSupportedServiceNames_Static() throw ()
     aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.scanner.ScannerManager" ) );
 
     return aSNS;
-}
-
-// -----------------------------------------------------------------------------
-
-BOOL ScannerManager::supportsService( const OUString& ServiceName ) throw ()
-{
-    SEQ( OUString ) aSNL( getSupportedServiceNames() );
-    const OUString* pArray = aSNL.getConstArray();
-
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return TRUE;
-
-    return FALSE;
 }
