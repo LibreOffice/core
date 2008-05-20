@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: browserline.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,9 +102,7 @@ namespace pcr
         String              GetTitle() const;
         void                SetTitleWidth(sal_uInt16);
 
-        void                SetPosPixel(Point aPos);
         void                SetPosSizePixel(Point aPos,Size aSize);
-        Size                GetSizePixel();
         void                Show(sal_Bool bFlag=sal_True);
         void                Hide();
         sal_Bool            IsVisible();
