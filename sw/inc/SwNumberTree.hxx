@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwNumberTree.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,14 +225,6 @@ protected:
     SwNumberTreeNode * GetLastDescendant() const;
 
     /**
-       Returns the greatest descendant of the root that is smaller than
-       this node, aka the predecessor of this node.
-
-       @return the predecessor
-     */
-    SwNumberTreeNode * GetPred() const;
-
-    /**
        Set the last valid child of this node.
 
        @param aItLastValid    iterator pointing to the new last valid child
@@ -390,6 +382,14 @@ public:
        @return the child
     */
     SwNumberTreeNode * GetFirstChild() const;
+
+    /**
+       Returns the greatest descendant of the root that is smaller than
+       this node, aka the predecessor of this node.
+
+       @return the predecessor
+     */
+    SwNumberTreeNode * GetPred( bool bSibling = false ) const;
 
     /**
        Returns the root node of the tree this node is part of.
