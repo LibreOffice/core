@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_ErrorBar_tmpl.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,15 @@
 #define _CHART2_RESOURCE_ERRORBARS_HXX
 
 #include "res_ErrorBar_IDs.hrc"
+#define WORKAROUND \
+StringList [ en-US ] = \
+        { \
+            < "Standard Error" ; CHART_LB_FUNCTION_STD_ERROR ; >; \
+            < "Standard Deviation" ; CHART_LB_FUNCTION_STD_DEV ; >; \
+            < "Variance" ; CHART_LB_FUNCTION_VARIANCE ; >; \
+            < "Error Margin" ; CHART_LB_FUNCTION_ERROR_MARGIN ; >; \
+        };
+
 
 #define RESOURCE_ERRORBARS(availablewidth, yoffset) \
 FixedLine FL_ERROR \
@@ -83,13 +92,7 @@ ListBox LB_FUNCTION \
     Size = MAP_APPFONT ( 94 , 59 ) ; \
     DropDown = TRUE; \
     Border = TRUE; \
-    StringList [ en-US ] = \
-        { \
-            < "Standard Error" ; CHART_LB_FUNCTION_STD_ERROR ; >; \
-            < "Standard Deviation" ; CHART_LB_FUNCTION_STD_DEV ; >; \
-            < "Variance" ; CHART_LB_FUNCTION_VARIANCE ; >; \
-            < "Error Margin" ; CHART_LB_FUNCTION_ERROR_MARGIN ; >; \
-        }; \
+    WORKAROUND\
 }; \
 FixedLine FL_PARAMETERS \
 { \
