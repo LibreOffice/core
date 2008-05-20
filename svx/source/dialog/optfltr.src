@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optfltr.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,63 +45,70 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Microsoft Word 97/2000";
+        Text [ en-US ] = "Microsoft Word 97/2000/XP";
     };
     CheckBox CB_WBAS_CODE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Load Basic ~code to edit";
+        Text [ en-US ] = "Load Basic ~code";
     };
     CheckBox CB_WBAS_STG
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Save ~original Basic code again";
+        Text [ en-US ] = "Save ~original Basic code";
     };
 
     FixedLine GB_EXCEL
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Microsoft Excel 97/2000";
+        Text [ en-US ] = "Microsoft Excel 97/2000/XP";
     };
     CheckBox CB_EBAS_CODE
     {
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Lo~ad Basic code to edit";
+        Text [ en-US ] = "Lo~ad Basic code";
+    };
+    CheckBox CB_EBAS_EXECTBL
+    {
+        Pos = MAP_APPFONT ( 22 , 69 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "E~xecutable code";
     };
     CheckBox CB_EBAS_STG
     {
-        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Sa~ve original Basic code again";
+        Text [ en-US ] = "Sa~ve original Basic code";
     };
 
     FixedLine GB_PPOINT
     {
-        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Microsoft PowerPoint 97/2000";
+        Text [ en-US ] = "Microsoft PowerPoint 97/2000/XP";
     };
     CheckBox CB_PBAS_CODE
-    {
-        Pos = MAP_APPFONT ( 12 , 96 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Load Ba~sic code to edit";
-    };
-    CheckBox CB_PBAS_STG
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Sav~e original Basic code again";
+        Text [ en-US ] = "Load Ba~sic code";
+    };
+    CheckBox CB_PBAS_STG
+    {
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sav~e original Basic code";
     };
 };
 
