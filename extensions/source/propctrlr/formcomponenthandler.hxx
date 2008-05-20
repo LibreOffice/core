@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formcomponenthandler.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -432,9 +432,6 @@ namespace pcr
         static bool impl_hasValidDataSourceSignature_nothrow(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xFormProperties,
                 bool _bAllowEmptyDataSourceName );
-
-        /// determines whether the given name denotes an existent data source
-        bool impl_isValidDataSourceName_nothrow( const ::rtl::OUString& _rDSName ) const;
 
         /** returns the URL of our context document
             @return
