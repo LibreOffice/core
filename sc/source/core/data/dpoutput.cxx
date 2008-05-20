@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpoutput.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,8 @@
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dpoutput.hxx"
+#include "dptabsrc.hxx"
+#include "dpcachetable.hxx"
 #include "document.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
@@ -55,21 +57,38 @@
 #include "stlsheet.hxx"
 #include "collect.hxx"
 #include "scresid.hxx"
+#include "unonames.hxx"
 #include "sc.hrc"
 
-#include <com/sun/star/sheet/XLevelsSupplier.hpp>
-#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
-#include <com/sun/star/sheet/XDataPilotResults.hpp>
-#include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
-#include <com/sun/star/sheet/DataResultFlags.hpp>
-#include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
+#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
+#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
+#include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
+#include <com/sun/star/sheet/XDataPilotResults.hpp>
+#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
+#include <com/sun/star/sheet/XLevelsSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+#include <vector>
 
 using namespace com::sun::star;
+using ::std::vector;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::sheet::DataPilotTablePositionData;
+using ::com::sun::star::sheet::DataPilotTableResultData;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -697,6 +716,49 @@ void ScDPOutput::CalcSizes()
     }
 }
 
+sal_Int32 ScDPOutput::GetPositionType(const ScAddress& rPos)
+{
+    using namespace ::com::sun::star::sheet;
+
+    SCCOL nCol = rPos.Col();
+    SCROW nRow = rPos.Row();
+    SCTAB nTab = rPos.Tab();
+    if ( nTab != aStartPos.Tab() )
+        return DataPilotTablePositionType::NOT_IN_TABLE;
+
+    CalcSizes();
+
+    // Make sure the cursor is within the table.
+    if (nCol < nTabStartCol || nRow < nTabStartRow || nCol > nTabEndCol || nRow > nTabEndRow)
+        return DataPilotTablePositionType::NOT_IN_TABLE;
+
+    // test for result data area.
+    if (nCol >= nDataStartCol && nCol <= nTabEndCol && nRow >= nDataStartRow && nRow <= nTabEndRow)
+        return DataPilotTablePositionType::RESULT;
+
+    bool bInColHeader = (nRow >= nTabStartRow && nRow < nDataStartRow);
+    bool bInRowHeader = (nCol >= nTabStartCol && nCol < nDataStartCol);
+
+    if (bInColHeader && bInRowHeader)
+        // probably in that ugly little box at the upper-left corner of the table.
+        return DataPilotTablePositionType::OTHER;
+
+    if (bInColHeader)
+    {
+        if (nRow == nTabStartRow)
+            // first row in the column header area is always used for column
+            // field buttons.
+            return DataPilotTablePositionType::OTHER;
+
+        return DataPilotTablePositionType::COLUMN_HEADER;
+    }
+
+    if (bInRowHeader)
+        return DataPilotTablePositionType::ROW_HEADER;
+
+    return DataPilotTablePositionType::OTHER;
+}
+
 void ScDPOutput::Output()
 {
     long nField;
@@ -857,12 +919,30 @@ void ScDPOutput::Output()
     lcl_SetFrame( pDoc,nTab, nTabStartCol,nTabStartRow, nTabEndCol,nTabEndRow, 40 );
 }
 
-ScRange ScDPOutput::GetOutputRange()
+ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
 {
+    using namespace ::com::sun::star::sheet;
+
     CalcSizes();
 
+//  fprintf(stdout, "ScDPOutput::GetOutputRange: aStartPos = (%ld, %d)\n", aStartPos.Row(), aStartPos.Col());fflush(stdout);
+//  fprintf(stdout, "ScDPOutput::GetOutputRange: nTabStart (Row = %ld, Col = %ld)\n", nTabStartRow, nTabStartCol);fflush(stdout);
+//  fprintf(stdout, "ScDPOutput::GetOutputRange: nMemberStart (Row = %ld, Col = %ld)\n", nMemberStartRow, nMemberStartCol);fflush(stdout);
+//  fprintf(stdout, "ScDPOutput::GetOutputRange: nDataStart (Row = %ld, Col = %ld)\n", nDataStartRow, nDataStartCol);fflush(stdout);
+//  fprintf(stdout, "ScDPOutput::GetOutputRange: nTabEnd (Row = %ld, Col = %ld)\n", nTabEndRow, nTabStartCol);fflush(stdout);
+
     SCTAB nTab = aStartPos.Tab();
-    return ScRange( aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
+    switch (nRegionType)
+    {
+        case DataPilotOutputRangeType::RESULT:
+            return ScRange(nDataStartCol, nDataStartRow, nTab, nTabEndCol, nTabEndRow, nTab);
+        case DataPilotOutputRangeType::TABLE:
+            return ScRange(aStartPos.Col(), nTabStartRow, nTab, nTabEndCol, nTabEndRow, nTab);
+        default:
+            DBG_ASSERT(nRegionType == DataPilotOutputRangeType::WHOLE, "ScDPOutput::GetOutputRange: unknown region type");
+        break;
+    }
+    return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 
 BOOL ScDPOutput::HasError()
@@ -924,13 +1004,10 @@ void ScDPOutput::GetMemberResultNames( StrCollection& rNames, long nDimension )
     }
 }
 
-//
-//      Methods to find specific parts of the table
-//
 
-void ScDPOutput::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos )
+void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
 {
-    //! preset rData to "invalid" ?
+    using namespace ::com::sun::star::sheet;
 
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -942,57 +1019,122 @@ void ScDPOutput::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos
 
     CalcSizes();
 
-    //  test for column field
-
-    if ( nRow >= nMemberStartRow && nRow < nMemberStartRow + nColFieldCount )
+    rPosData.PositionType = GetPositionType(rPos);
+    switch (rPosData.PositionType)
     {
-        long nField = nRow - nMemberStartRow;
-        const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
-        const sheet::MemberResult* pArray = rSequence.getConstArray();
-        long nThisColCount = rSequence.getLength();
-
-        if ( nCol >= nDataStartCol && nCol < nDataStartCol + nThisColCount )
+        case DataPilotTablePositionType::RESULT:
         {
-            long nItem = nCol - nDataStartCol;
-            //  get origin of "continue" fields
-            while ( nItem > 0 && ( pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE ) )
-                --nItem;
-            rData.aMemberName = String(pArray[nItem].Name);
-            rData.nFlags      = pArray[nItem].Flags;
-            rData.nDimension  = pColFields[nField].nDim;
-            rData.nHierarchy  = pColFields[nField].nHier;
-            rData.nLevel      = pColFields[nField].nLevel;
+            vector<DataPilotFieldFilter> aFilters;
+            GetDataResultPositionData(aFilters, rPos);
+            sal_Int32 nSize = aFilters.size();
+
+            DataPilotTableResultData aResData;
+            aResData.FieldFilters.realloc(nSize);
+            for (sal_Int32 i = 0; i < nSize; ++i)
+                aResData.FieldFilters[i] = aFilters[i];
+
+            aResData.DataFieldIndex = 0;
+            Reference<beans::XPropertySet> xPropSet(xSource, UNO_QUERY);
+            if (xPropSet.is())
+            {
+                sal_Int32 nDataFieldCount;
+                Any any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("DataFieldCount"));
+                if ((any >>= nDataFieldCount) && nDataFieldCount > 0)
+                    aResData.DataFieldIndex = (nRow - nDataStartRow) % nDataFieldCount;
+            }
+
+            // Copy appropriate DataResult object from the cached sheet::DataResult table.
+            if (aData.getLength() > nRow - nDataStartRow &&
+                aData[nRow-nDataStartRow].getLength() > nCol-nDataStartCol)
+                aResData.Result = aData[nRow-nDataStartRow][nCol-nDataStartCol];
+
+            rPosData.PositionData = makeAny(aResData);
             return;
         }
-    }
-
-    //  test for row field
-
-    if ( nCol >= nMemberStartCol && nCol < nMemberStartCol + nRowFieldCount )
-    {
-        long nField = nCol - nMemberStartCol;
-        const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
-        const sheet::MemberResult* pArray = rSequence.getConstArray();
-        long nThisRowCount = rSequence.getLength();
-
-        if ( nRow >= nDataStartRow && nRow < nDataStartRow + nThisRowCount )
+        case DataPilotTablePositionType::COLUMN_HEADER:
         {
+            long nField = nRow - nTabStartRow - 1; // 1st line is used for the buttons
+            if (nField < 0)
+                break;
+
+            const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
+            if (rSequence.getLength() == 0)
+                break;
+            const sheet::MemberResult* pArray = rSequence.getConstArray();
+
+            long nItem = nCol - nDataStartCol;
+            //  get origin of "continue" fields
+            while (nItem > 0 && ( pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
+                --nItem;
+
+            if (nItem < 0)
+                break;
+
+            DataPilotTableHeaderData aHeaderData;
+            aHeaderData.MemberName = OUString(pArray[nItem].Name);
+            aHeaderData.Flags = pArray[nItem].Flags;
+            aHeaderData.Dimension = static_cast<sal_Int32>(pColFields[nField].nDim);
+            aHeaderData.Hierarchy = static_cast<sal_Int32>(pColFields[nField].nHier);
+            aHeaderData.Level     = static_cast<sal_Int32>(pColFields[nField].nLevel);
+
+            rPosData.PositionData = makeAny(aHeaderData);
+            return;
+        }
+        case DataPilotTablePositionType::ROW_HEADER:
+        {
+            long nField = nCol - nTabStartCol;
+            if (nField < 0)
+                break;
+
+            const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
+            if (rSequence.getLength() == 0)
+                break;
+            const sheet::MemberResult* pArray = rSequence.getConstArray();
+
             long nItem = nRow - nDataStartRow;
             //  get origin of "continue" fields
-            while ( nItem > 0 && ( pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE ) )
+            while ( nItem > 0 && (pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
                 --nItem;
-            rData.aMemberName = String(pArray[nItem].Name);
-            rData.nFlags      = pArray[nItem].Flags;
-            rData.nDimension  = pRowFields[nField].nDim;
-            rData.nHierarchy  = pRowFields[nField].nHier;
-            rData.nLevel      = pRowFields[nField].nLevel;
+
+            if (nItem < 0)
+                break;
+
+            DataPilotTableHeaderData aHeaderData;
+            aHeaderData.MemberName = OUString(pArray[nItem].Name);
+            aHeaderData.Flags = pArray[nItem].Flags;
+            aHeaderData.Dimension = static_cast<sal_Int32>(pRowFields[nField].nDim);
+            aHeaderData.Hierarchy = static_cast<sal_Int32>(pRowFields[nField].nHier);
+            aHeaderData.Level     = static_cast<sal_Int32>(pRowFields[nField].nLevel);
+
+            rPosData.PositionData = makeAny(aHeaderData);
             return;
         }
     }
 }
 
-bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
+bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
 {
+    // Check to make sure there is at least one data field.
+    Reference<beans::XPropertySet> xPropSet(xSource, UNO_QUERY);
+    if (!xPropSet.is())
+        return false;
+
+    sal_Int32 nDataFieldCount;
+    Any any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("DataFieldCount"));
+    if (!(any >>= nDataFieldCount) || nDataFieldCount == 0)
+        // No data field is present in this datapilot table.
+        return false;
+
+    bool bColGrand;
+    any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii(SC_UNO_COLGRAND));
+    if (!(any >>= bColGrand))
+        return false;
+
+    bool bRowGrand;
+    any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii(SC_UNO_ROWGRAND));
+    if (!(any >>= bRowGrand))
+        return false;
+
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
     SCTAB nTab = rPos.Tab();
@@ -1008,10 +1150,11 @@ bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilte
         return false;
     }
 
-    rtl::OUString sTotal( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );
+    bool bFilterByCol = !(bColGrand && (nCol == nTabEndCol));
+    bool bFilterByRow = !(bRowGrand && (nRow == nTabEndRow));
 
     // column fields
-    for (SCCOL nColField = 0; nColField < nColFieldCount; ++nColField)
+    for (SCCOL nColField = 0; nColField < nColFieldCount && bFilterByCol; ++nColField)
     {
         sheet::DataPilotFieldFilter filter;
         filter.FieldName = pColFields[nColField].aCaption;
@@ -1019,8 +1162,7 @@ bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilte
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nColField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
-        DBG_ASSERT(nDataStartCol + rSequence.getLength() - 1 == nTabEndCol,
-                    "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+        DBG_ASSERT(nDataStartCol + rSequence.getLength() - 1 == nTabEndCol, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
 
         long nItem = nCol - nDataStartCol;
                 //  get origin of "continue" fields
@@ -1028,12 +1170,11 @@ bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilte
             --nItem;
 
         filter.MatchValue = pArray[nItem].Name;
-        if (pArray[nItem].Name.getLength() > 0 && pArray[nItem].Name != sTotal)
-            rFilters.push_back(filter);
+        rFilters.push_back(filter);
     }
 
     // row fields
-    for (SCROW nRowField = 0; nRowField < nRowFieldCount; ++nRowField)
+    for (SCROW nRowField = 0; nRowField < nRowFieldCount && bFilterByRow; ++nRowField)
     {
         sheet::DataPilotFieldFilter filter;
         filter.FieldName = pRowFields[nRowField].aCaption;
@@ -1041,8 +1182,7 @@ bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilte
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nRowField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
-        DBG_ASSERT(nDataStartRow + rSequence.getLength() - 1 == nTabEndRow,
-                    "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+        DBG_ASSERT(nDataStartRow + rSequence.getLength() - 1 == nTabEndRow, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
 
         long nItem = nRow - nDataStartRow;
             //  get origin of "continue" fields
@@ -1050,8 +1190,7 @@ bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilte
             --nItem;
 
         filter.MatchValue = pArray[nItem].Name;
-        if (pArray[nItem].Name.getLength() > 0 && pArray[nItem].Name != sTotal)
-            rFilters.push_back(filter);
+        rFilters.push_back(filter);
     }
 
     return true;
