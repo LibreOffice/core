@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sane.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,6 @@ private:
                     LoadSymbol( const char* );
     void            Init();
     void            DeInit();
-    void            Stop();
 
     SANE_Status ControlOption( int, SANE_Action, void* );
 
