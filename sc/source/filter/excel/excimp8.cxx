@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.124 $
+ * $Revision: 1.125 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,11 +279,13 @@ void ImportExcel8::ReadBasic( void )
     if( pShell && xRootStrg.Is() && pFilterOpt )
     {
         bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
+        bool bLoadExecutable = pFilterOpt->IsLoadExcelBasicExecutable();
         bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
         if( bLoadCode || bLoadStrg )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, !lcl_hasVBAEnabled() );
+            bool bAsComment = !bLoadExecutable || !lcl_hasVBAEnabled();
+            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }
 }
