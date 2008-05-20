@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thints.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1503,7 +1503,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                             {
                                 if ( bOnlyTxtAttr || *pItem != aFmtSet.Get( nHintWhich ) )
                                 {
-                                    if( nAttrStart > nStart )
+                                    if( nAttrStart > nStt )
                                     {
                                         rSet.InvalidateItem( nHintWhich );
                                         pPrev->mpItem = (SfxPoolItem*)-1;
