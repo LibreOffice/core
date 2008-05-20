@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swfwriter.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,9 +197,9 @@ public:
     void write( SvStream& out );
 
     void addUI32( sal_uInt32 nValue );
-    void addI32( sal_Int32 nValue );
+    //unused as of yet void addI32( sal_Int32 nValue );
     void addUI16( sal_uInt16 nValue );
-    void addI16( sal_Int16 nValue );
+    //unused as of yet void addI16( sal_Int16 nValue );
     void addUI8( sal_uInt8 nValue );
     void addBits( BitStream& rIn );
 
@@ -295,10 +295,6 @@ public:
         The coordinates must be in twips */
     sal_uInt16 defineShape( const Polygon& rPoly, const FillStyle& rFillStyle );
 
-    /** defines a flash shape from a outlined polygon.
-        The coordinates must be in twips */
-    sal_uInt16 defineShape( const Polygon& rPoly, sal_uInt16 nLineWidth, const Color& rLineColor );
-
     /** defines a flash shape from a filled polypolygon.
         The coordinates must be in twips */
     sal_uInt16 defineShape( const PolyPolygon& rPolyPoly, const FillStyle& rFillStyle );
@@ -332,9 +328,6 @@ public:
     /** inserts a show frame tag into the movie stream or the current sprite */
     void showFrame();
 
-    /** sets the background color in the movie stream */
-    void setBackgroundColor( Color& rColor );
-
     /** creates a new sprite and sets it as the current sprite for editing.
         Only one sprite can be edited at one time */
     sal_uInt16 startSprite();
@@ -345,18 +338,12 @@ public:
     /** inserts a doaction tag with an ActionStop */
     void stop();
 
-    /** inserts a doaction tag with an ActionPlay */
-    void play();
-
     /** inserts a doaction tag with an ActionStop, place a button on depth nDepth that
         continues playback on click */
     void waitOnClick( sal_uInt16 nDepth );
 
     /** inserts a doaction tag with an ActionGotoFrame */
     void gotoFrame( sal_uInt16 nFrame );
-
-    /** returns the character of a white rectangle with the dimensions of the document */
-    sal_uInt16 getWhiteBackgroundShapeId();
 
 #ifdef AUGUSTUS
     /** stream out a sound.  Should make it more intelligent so it interleaves with other items.*/
