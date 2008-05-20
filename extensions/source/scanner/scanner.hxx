@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scanner.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,11 +101,8 @@ public:
     virtual SEQ( sal_Int8 ) SAL_CALL        getMaskDIB() throw();
 
     // Misc
-    OUString                                getImplementationName() throw();
     static OUString                         getImplementationName_Static() throw();
-    Sequence< OUString >                    getSupportedServiceNames() throw();
     static Sequence< OUString >             getSupportedServiceNames_Static() throw();
-    BOOL                                    supportsService( const OUString& ServiceName ) throw();
 
     void                                    Lock() { maProtector.acquire(); }
     void                                    Unlock() { maProtector.release(); }
