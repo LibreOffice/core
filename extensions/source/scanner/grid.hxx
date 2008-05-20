@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grid.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,7 +144,6 @@ public:
     double* getOrigYValues() { return m_pOrigYValues; }
     double* getNewYValues() { return m_pNewYValues; }
 
-    void drawPoint( double x, double y );
     void drawLine( double x1, double y1, double x2, double y2 );
 
     virtual void Paint( const Rectangle& rRect );
