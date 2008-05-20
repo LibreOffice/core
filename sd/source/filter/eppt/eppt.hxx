@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.hxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,7 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 
 enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
 
@@ -546,6 +547,7 @@ class PortionObj : public PropStateValue
         ::com::sun::star::beans::PropertyState  meFontName;
         ::com::sun::star::beans::PropertyState  meAsianOrComplexFont;
         ::com::sun::star::beans::PropertyState  meCharEscapement;
+        ::com::sun::star::lang::Locale          meCharLocale;
         sal_uInt16      mnCharAttrHard;
 
         sal_uInt32      mnCharColor;
@@ -673,6 +675,7 @@ class TextObj
         sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };
         int             GetInstance() const { return mpImplTextObj->mnInstance; };
         sal_Bool        HasExtendedBullets(){ return mpImplTextObj->mbHasExtendedBullets; };
+        void            WriteTextSpecInfo( SvStream* pStrm );
 
         TextObj&        operator=( TextObj& rTextObj );
 };
