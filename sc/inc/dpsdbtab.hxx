@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpsdbtab.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,11 @@ namespace com { namespace sun { namespace star {
 }}}
 #include "dptabdat.hxx"
 
+#include <vector>
+#include <set>
+
+class ScDPCacheTable;
+
 // --------------------------------------------------------------------
 //
 //  implementation of ScDPTableData with database data
@@ -67,7 +72,6 @@ private:
     ScDatabaseDPData_Impl* pImpl;
 
     BOOL            OpenDatabase();
-    void            InitAllColumnEntries();
 
 public:
                     ScDatabaseDPData(
@@ -84,8 +88,12 @@ public:
     virtual void                    DisposeData();
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
 
-    virtual void                    ResetIterator();
-    virtual BOOL                    GetNextRow( const ScDPTableIteratorParam& rParam );
+    virtual void                    CreateCacheTable();
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPDimension*>& rPageDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+                                                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
+    virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
+    virtual const ScDPCacheTable&   GetCacheTable() const;
 };
 
 
