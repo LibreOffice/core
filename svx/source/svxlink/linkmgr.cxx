@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkmgr.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -301,7 +301,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if ( !pShell )
         {
             bFirst = FALSE;
-            pShell = SfxObjectShell::GetFirst( &aType );
+            pShell = SfxObjectShell::GetFirst( &aType, sal_False );
         }
 
         while( pShell )
@@ -323,10 +323,10 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             if( bFirst )
             {
                 bFirst = FALSE;
-                pShell = SfxObjectShell::GetFirst( &aType );
+                pShell = SfxObjectShell::GetFirst( &aType, sal_False );
             }
             else
-                pShell = SfxObjectShell::GetNext( *pShell, &aType );
+                pShell = SfxObjectShell::GetNext( *pShell, &aType, sal_False );
 
             sTmp.Erase();
         }
