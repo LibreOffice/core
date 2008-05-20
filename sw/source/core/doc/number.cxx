@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: number.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -721,17 +721,23 @@ BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
 
 void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 {
-    if( !aFmts[ i ] || !(rNumFmt == Get( i )) )
+    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    if( i < MAXLEVEL )
     {
-        delete aFmts[ i ];
-        aFmts[ i ] = new SwNumFmt( rNumFmt );
-        bInvalidRuleFlag = TRUE;
-
+        if( !aFmts[ i ] || !(rNumFmt == Get( i )) )
+        {
+            delete aFmts[ i ];
+            aFmts[ i ] = new SwNumFmt( rNumFmt );
+            bInvalidRuleFlag = TRUE;
+        }
     }
 }
 
 void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
 {
+    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    if( i >= MAXLEVEL )
+        return;
     SwNumFmt* pOld = aFmts[ i ];
     if( !pOld )
     {
