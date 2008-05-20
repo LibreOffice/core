@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ctrltool.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -896,6 +896,7 @@ static ImplFSNameItem aImplSimplifiedChinese[] =
 
 // -----------------------------------------------------------------------
 
+#if 0 // #i89077# disabled by popular request
 static ImplFSNameItem aImplTraditionalChinese[] =
 {
     {  50, "\xe5\x85\xab\xe8\x99\x9f" },
@@ -915,6 +916,7 @@ static ImplFSNameItem aImplTraditionalChinese[] =
     { 360, "\xe5\xb0\x8f\xe5\x88\x9d" },
     { 420, "\xe5\x88\x9d\xe8\x99\x9f" }
 };
+#endif
 
 //------------------------------------------------------------------------
 
@@ -933,6 +935,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
             mnElem = sizeof(aImplSimplifiedChinese) / sizeof(aImplSimplifiedChinese[0]);
             break;
 
+#if 0 // #i89077# disabled by popular request
         case LANGUAGE_CHINESE_HONGKONG:
         case LANGUAGE_CHINESE_SINGAPORE:
         case LANGUAGE_CHINESE_MACAU:
@@ -940,6 +943,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
             mpArray = aImplTraditionalChinese;
             mnElem = sizeof(aImplTraditionalChinese) / sizeof(aImplTraditionalChinese[0]);
             break;
+#endif
 
         default:
             mpArray = NULL;
