@@ -36,25 +36,6 @@
   
   /*===========================================================================*/
   /* Code alignment and C function inlining                                    */
-*** misc/icu/source/common/unicode/rbbi.h	Fri Aug 11 07:46:40 2006
---- misc/build/icu/source/common/unicode/rbbi.h	Mon Jan 28 21:31:50 2008
-***************
-*** 611,622 ****
---- 611,624 ----
-      virtual int32_t getBreakType() const;
-  #endif
-  
-+ public:
-      /**
-        * Set the type of the break iterator.
-        * @internal
-        */
-      virtual void setBreakType(int32_t type);
-  
-+ protected:
-      /**
-        * Common initialization function, used by constructors and bufferClone.
-        *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
 *** misc/icu/source/common/unicode/umachine.h	Tue Feb  7 02:54:16 2006
 --- misc/build/icu/source/common/unicode/umachine.h	Mon Jan 28 21:31:50 2008
 ***************
