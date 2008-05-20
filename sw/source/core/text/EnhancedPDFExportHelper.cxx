@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,12 +137,46 @@ void lcl_DBGCheckStack()
 
 namespace
 {
+// ODF Style Names:
 const String aTableHeadingName  = String::CreateFromAscii("Table Heading");
 const String aQuotations        = String::CreateFromAscii("Quotations");
 const String aCaption           = String::CreateFromAscii("Caption");
 const String aHeading           = String::CreateFromAscii("Heading");
 const String aQuotation         = String::CreateFromAscii("Quotation");
 const String aSourceText        = String::CreateFromAscii("Source Text");
+
+// PDF Tag Names:
+const String aDocumentString = String::CreateFromAscii("Document");
+const String aDivString = String::CreateFromAscii("Div");
+const String aSectString = String::CreateFromAscii("Sect");
+const String aHString = String::CreateFromAscii("H");
+const String aH1String = String::CreateFromAscii("H1");
+const String aH2String = String::CreateFromAscii("H2");
+const String aH3String = String::CreateFromAscii("H3");
+const String aH4String = String::CreateFromAscii("H4");
+const String aH5String = String::CreateFromAscii("H5");
+const String aH6String = String::CreateFromAscii("H6");
+const String aListString = String::CreateFromAscii("L");
+const String aListItemString = String::CreateFromAscii("LI");
+const String aListBodyString = String::CreateFromAscii("LBody");
+const String aBlockQuoteString = String::CreateFromAscii("BlockQuote");
+const String aCaptionString = String::CreateFromAscii("Caption");
+const String aIndexString = String::CreateFromAscii("Index");
+const String aTOCString = String::CreateFromAscii("TOC");
+const String aTOCIString = String::CreateFromAscii("TOCI");
+const String aTableString = String::CreateFromAscii("Table");
+const String aTRString = String::CreateFromAscii("TR");
+const String aTDString = String::CreateFromAscii("TD");
+const String aTHString = String::CreateFromAscii("TH");
+const String aBibEntryString = String::CreateFromAscii("BibEntry");
+const String aQuoteString = String::CreateFromAscii("Quote");
+const String aSpanString = String::CreateFromAscii("Span");
+const String aCodeString = String::CreateFromAscii("Code");
+const String aFigureString = String::CreateFromAscii("Figure");
+const String aFormulaString = String::CreateFromAscii("Formula");
+const String aLinkString = String::CreateFromAscii("Link");
+const String aNoteString = String::CreateFromAscii("Note");
+const String aEmptyString = String::CreateFromAscii("");
 
 // returns true if first paragraph in cell frame has 'table heading' style
 bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
@@ -209,6 +243,38 @@ void* lcl_GetKeyFromFrame( const SwFrm& rFrm )
     return pKey;
 }
 
+bool lcl_HasPreviousParaSameNumRule( const SwTxtNode& rNode )
+{
+    bool bRet = false;
+    SwNodeIndex aIdx( rNode );
+    const SwDoc* pDoc = rNode.GetDoc();
+    const SwNodes& rNodes = pDoc->GetNodes();
+    const SwNode* pNode = &rNode;
+    const SwNumRule* pNumRule = rNode.GetNumRule();
+
+    while (! (pNode == rNodes.DocumentSectionStartNode((SwNode*)&rNode) ) )
+    {
+        --aIdx;
+
+        if (aIdx.GetNode().IsTxtNode())
+        {
+            const SwTxtNode* pPrevTxtNd = aIdx.GetNode().GetTxtNode();
+            const SwNumRule * pPrevNumRule = pPrevTxtNd->GetNumRule();
+
+            // We find the previous text node. Now check, if the previous text node
+            // has the same numrule like rNode:
+            if ( (pPrevNumRule == pNumRule) &&
+                 (!pPrevTxtNd->IsOutline() == !rNode.IsOutline()))
+                bRet = true;
+
+            break;
+        }
+
+        pNode = &aIdx.GetNode();
+    }
+    return bRet;
+}
+
 } // end namespace
 
 /*
@@ -240,7 +306,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else if ( mpPorInfo )
             BeginInlineStructureElements();
         else
-            BeginTag( vcl::PDFWriter::NonStructElement );
+            BeginTag( vcl::PDFWriter::NonStructElement, aEmptyString );
 
 #ifndef PRODUCT
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
@@ -271,7 +337,6 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
     }
 }
 
-
 /*
  * SwTaggedPDFHelper::CheckReopenTag()
  */
@@ -281,57 +346,11 @@ bool SwTaggedPDFHelper::CheckReopenTag()
     sal_Int32 nReopenTag = -1;
     bool bContinue = false; // in some cases we just have to reopen a tag without early returning
 
-    void* pKey = 0;
-
-    if ( mpNumInfo )
-    {
-        const SwFrm& rFrm = mpNumInfo->mrFrm;
-        const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(rFrm);
-        const SwTxtNode* pTxtNd = rTxtFrm.GetTxtNode();
-        const SwNumRule* pNumRule = pTxtNd->GetNumRule();
-        const SwNodeNum* pNodeNum = pTxtNd->GetNum();
-
-        bContinue = true;
-
-        if ( !pTxtNd->IsOutline() && pNodeNum && pNodeNum->GetParent() && pNumRule )
-        {
-            const SwNumberTreeNode* pParent = pNodeNum->GetParent();
-
-            if ( pParent->IsFirst( pNodeNum ) )
-            {
-                if ( pParent->GetParent() )
-                {
-                    NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
-
-                    // get id of list body tag
-                    NumListBodyIdMap::const_iterator aIter;
-
-                    do
-                    {
-                        aIter = rNumListBodyIdMap.find( pParent );
-                    }
-                    while ( aIter == rNumListBodyIdMap.end() && 0 != ( pParent = pParent->GetParent() ) );
-
-                    if ( aIter != rNumListBodyIdMap.end() )
-                        nReopenTag = (*aIter).second;
-                }
-            }
-            else
-            {
-                NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
-                const SwNumberTreeNode* pParentFirstChild = pParent->GetFirstChild();
-
-                // get id of list tag
-                const NumListIdMap::const_iterator aIter =  rNumListIdMap.find( pParentFirstChild );
-                if ( aIter != rNumListIdMap.end() )
-                    nReopenTag = (*aIter).second;
-            }
-        }
-    }
-    else if ( mpFrmInfo )
+    if ( mpFrmInfo )
     {
         const SwFrm& rFrm = mpFrmInfo->mrFrm;
         const SwFrm* pKeyFrm = 0;
+        void* pKey = 0;
 
         // Reopen an existing structure element if
         // - rFrm is not the first page frame (reopen Document tag)
@@ -416,10 +435,10 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 /*
  * SwTaggedPDFHelper::BeginTag()
  */
-void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const String* pString )
+void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const String& rString )
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, pString ? rtl::OUString( *pString ) : rtl::OUString() );
+    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rtl::OUString( rString ) );
     ++nEndStructureElement;
 
 #ifndef PRODUCT
@@ -442,16 +461,13 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const Str
 
         if ( vcl::PDFWriter::List == eType )
         {
-            NumListIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
-            rNumListBodyIdMap[ pNodeNum ] = nId;
+            NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+            rNumListIdMap[ pNodeNum ] = nId;
         }
         else if ( vcl::PDFWriter::LIBody == eType )
         {
-            if ( 0 != pNodeNum->GetFirstChild() )
-            {
-                NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
-                rNumListBodyIdMap[ pNodeNum ] = nId;
-            }
+            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+            rNumListBodyIdMap[ pNodeNum ] = nId;
         }
     }
     else if ( mpFrmInfo )
@@ -847,6 +863,10 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
  */
 void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 {
+    ASSERT( mpNumInfo, "List without mpNumInfo?" )
+    if ( !mpNumInfo )
+        return;
+
     const SwFrm& rFrm = mpNumInfo->mrFrm;
     ASSERT( rFrm.IsTxtFrm(), "numbered only for text frames" )
     const SwTxtFrm& rTxtFrm = static_cast<const SwTxtFrm&>(rFrm);
@@ -857,22 +877,125 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     if ( lcl_IsInNonStructEnv( rTxtFrm ) || rTxtFrm.IsFollow() )
         return;
 
-    // Check if we have to reopen an existing list structure element.
-    if ( CheckReopenTag() )
-        return;
-
     const SwTxtNode* pTxtNd = rTxtFrm.GetTxtNode();
     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
     const SwNodeNum* pNodeNum = pTxtNd->GetNum();
 
-    if ( !pTxtNd->IsOutline() && pNodeNum && pNodeNum->GetParent() && pNumRule )
-    {
-        const SwNumberTreeNode* pParent = pNodeNum->GetParent();
-        if ( pParent->IsFirst( pNodeNum ) )
-            BeginTag( vcl::PDFWriter::List );
+    const bool bNumbered = !pTxtNd->IsOutline() && pNodeNum && pNodeNum->GetParent() && pNumRule;
 
-        BeginTag( vcl::PDFWriter::ListItem );
-        BeginTag( vcl::PDFWriter::LIBody );
+    // Check, if we have to reopen a list or a list body:
+    // First condition:
+    // Paragraph is numbered/bulleted
+    if ( !bNumbered )
+        return;
+
+    const SwNumberTreeNode* pParent = pNodeNum->GetParent();
+    const bool bSameNumbering = lcl_HasPreviousParaSameNumRule(*pTxtNd);
+
+    // Second condition: current numbering is not 'interrupted'
+    if ( bSameNumbering )
+    {
+        sal_Int32 nReopenTag = -1;
+
+        // Two cases:
+        // 1. We have to reopen an existing list body tag:
+        // - If the current node is either the first child of its parent
+        //   and its level > 1 or
+        // - Numbering should restart at the current node and its level > 1
+        // - The current item has no label
+        const bool bNewSubListStart = pParent->GetParent() && (pParent->IsFirst( pNodeNum ) || pTxtNd->IsRestart() );
+        const bool bNoLabel = !pTxtNd->IsCounted() && !pTxtNd->IsRestart();
+        if ( bNewSubListStart || bNoLabel )
+        {
+            // Fine, we try to reopen the appropriate list body
+            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+
+            if ( bNewSubListStart )
+            {
+                // The list body tag associated with the parent has to be reopened
+                // to start a new list inside the list body
+                NumListBodyIdMap::const_iterator aIter;
+
+                do
+                    aIter = rNumListBodyIdMap.find( pParent );
+                while ( aIter == rNumListBodyIdMap.end() && 0 != ( pParent = pParent->GetParent() ) );
+
+                if ( aIter != rNumListBodyIdMap.end() )
+                    nReopenTag = (*aIter).second;
+            }
+            else // if(bNoLabel)
+            {
+                // The list body tag of a 'counted' predecessor has to be reopened
+                const SwNumberTreeNode* pPrevious = pNodeNum->GetPred(true);
+                while ( pPrevious )
+                {
+                    if ( pPrevious->IsCounted())
+                    {
+                        // get id of list body tag
+                        const NumListBodyIdMap::const_iterator aIter =  rNumListBodyIdMap.find( pPrevious );
+                        if ( aIter != rNumListBodyIdMap.end() )
+                        {
+                            nReopenTag = (*aIter).second;
+                            break;
+                        }
+                    }
+                    pPrevious = pPrevious->GetPred(true);
+                }
+            }
+        }
+        // 2. We have to reopen an existing list tag:
+        else if ( !pParent->IsFirst( pNodeNum ) && !pTxtNd->IsRestart() )
+        {
+            // any other than the first node in a list level has to reopen the current
+            // list. The current list is associated in a map with the first child of the list:
+            NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+
+            // Search backwards and check if any of the previous nodes has a list associated with it:
+            const SwNumberTreeNode* pPrevious = pNodeNum->GetPred(true);
+            while ( pPrevious )
+            {
+                // get id of list tag
+                const NumListIdMap::const_iterator aIter =  rNumListIdMap.find( pPrevious );
+                if ( aIter != rNumListIdMap.end() )
+                {
+                    nReopenTag = (*aIter).second;
+                    break;
+                }
+
+                pPrevious = pPrevious->GetPred(true);
+            }
+        }
+
+        if ( -1 != nReopenTag )
+        {
+            nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
+            mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
+
+#ifndef PRODUCT
+            aStructStack.push_back( 99 );
+#endif
+        }
+    }
+    else
+    {
+        // clear list maps in case a list has been interrupted
+        NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+        rNumListIdMap.clear();
+        NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+        rNumListBodyIdMap.clear();
+    }
+
+    // New tags:
+    const bool bNewListTag = (pNodeNum->GetParent()->IsFirst( pNodeNum ) || pTxtNd->IsRestart() || !bSameNumbering);
+    const bool bNewItemTag = bNewListTag || pTxtNd->IsCounted(); // If the text node is not counted, we do not start a new list item:
+
+    if ( bNewListTag )
+        BeginTag( vcl::PDFWriter::List, aListString );
+
+    if ( bNewItemTag )
+    {
+        BeginTag( vcl::PDFWriter::ListItem, aListItemString );
+        BeginTag( vcl::PDFWriter::LIBody, aListBodyString );
     }
 }
 
@@ -895,6 +1018,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
         return;
 
     USHORT nPDFType = USHRT_MAX;
+    String aPDFType;
 
     switch ( pFrm->GetType() )
     {
@@ -907,6 +1031,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Document: Document
             //
             nPDFType = vcl::PDFWriter::Document;
+            aPDFType = aDocumentString;
             break;
 
         case FRM_HEADER :
@@ -922,6 +1047,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Footnote container: Division
             //
             nPDFType = vcl::PDFWriter::Division;
+            aPDFType = aDivString;
             break;
 
         case FRM_FTN :
@@ -931,6 +1057,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = vcl::PDFWriter::Note;
+            aPDFType = aNoteString;
             break;
 
         case FRM_SECTION :
@@ -946,14 +1073,21 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( pTOXBase )
                     {
                         if ( TOX_INDEX == pTOXBase->GetType() )
+                        {
                             nPDFType = vcl::PDFWriter::Index;
+                            aPDFType = aIndexString;
+                        }
                         else
+                        {
                             nPDFType = vcl::PDFWriter::TOC;
+                            aPDFType = aTOCString;
+                        }
                     }
                 }
                 else if ( CONTENT_SECTION == pSection->GetType() )
                 {
                     nPDFType = vcl::PDFWriter::Section;
+                    aPDFType = aSectString;
                 }
             }
             break;
@@ -964,15 +1098,25 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
         case FRM_TXT :
             {
-                bool bUserDefined = true;
-
                 const SwTxtNode* pTxtNd =
                     static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
 
                 const SwFmt* pTxtFmt = pTxtNd->GetFmtColl();
+                const SwFmt* pParentTxtFmt = pTxtFmt->DerivedFrom();
 
                 String sStyleName;
-                SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                String sParentStyleName;
+
+                if ( pTxtFmt)
+                    SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                if ( pParentTxtFmt)
+                    SwStyleNameMapper::FillProgName( pParentTxtFmt->GetName(), sParentStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+
+                // This is the default. If the paragraph could not be mapped to
+                // any of the standard pdf tags, we write a user defined tag
+                // <stylename> with role = P
+                nPDFType = static_cast<USHORT>(vcl::PDFWriter::Paragraph);
+                aPDFType = sStyleName;
 
                 //
                 // Quotations: BlockQuote
@@ -980,16 +1124,25 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( sStyleName == aQuotations )
                 {
                     nPDFType = static_cast<USHORT>(vcl::PDFWriter::BlockQuote);
-                    bUserDefined = false;
+                    aPDFType = aBlockQuoteString;
                 }
 
                 //
                 // Caption: Caption
                 //
-                else if ( sStyleName ==  aCaption )
+                else if ( sStyleName == aCaption)
                 {
                     nPDFType = static_cast<USHORT>(vcl::PDFWriter::Caption);
-                    bUserDefined = false;
+                    aPDFType = aCaptionString;
+                }
+
+                //
+                // Caption: Caption
+                //
+                else if ( sParentStyleName == aCaption)
+                {
+                    nPDFType = static_cast<USHORT>(vcl::PDFWriter::Caption);
+                    aPDFType = sStyleName.Append(aCaptionString);
                 }
 
                 //
@@ -998,7 +1151,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if ( sStyleName == aHeading )
                 {
                     nPDFType = static_cast<USHORT>(vcl::PDFWriter::Heading);
-                    bUserDefined = false;
+                    aPDFType = aHString;
                 }
 
                 //
@@ -1010,7 +1163,27 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  static_cast<USHORT>(vcl::PDFWriter::H1 + nRealLevel);
-                    bUserDefined = false;
+                    switch(nRealLevel)
+                    {
+                        case 0 :
+                            aPDFType = aH1String;
+                            break;
+                        case 1 :
+                            aPDFType = aH2String;
+                            break;
+                        case 2 :
+                            aPDFType = aH3String;
+                            break;
+                        case 3 :
+                            aPDFType = aH4String;
+                            break;
+                        case 4 :
+                            aPDFType = aH5String;
+                            break;
+                        default:
+                            aPDFType = aH6String;
+                            break;
+                    }
                 }
 
                 //
@@ -1027,17 +1200,11 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         const SwTOXBase* pTOXBase = pSection->GetTOXBase();
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
-                            BeginTag( vcl::PDFWriter::TOCI );
-                            bUserDefined = true; // TOCI is grouping element
+                            // Special case: Open additional TOCI tag:
+                            BeginTag( vcl::PDFWriter::TOCI, aTOCIString );
                         }
                     }
                 }
-
-                //
-                // User defined: Style name
-                //
-                if ( bUserDefined )
-                    BeginTag( vcl::PDFWriter::Paragraph, &sStyleName );
             }
             break;
 
@@ -1046,6 +1213,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // TabFrm: Table
             //
             nPDFType = vcl::PDFWriter::Table;
+            aPDFType = aTableString;
 
             {
                 // set up table column data:
@@ -1097,9 +1265,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // RowFrm: TR
             //
             if ( !static_cast<const SwRowFrm*>(pFrm)->IsRepeatedHeadline() )
+            {
                 nPDFType = vcl::PDFWriter::TableRow;
+                aPDFType = aTRString;
+            }
             else
+            {
                 nPDFType = vcl::PDFWriter::NonStructElement;
+            }
             break;
 
         case FRM_CELL :
@@ -1109,9 +1282,15 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 const SwTabFrm* pTable = static_cast<const SwCellFrm*>(pFrm)->FindTabFrm();
                 if ( pTable->IsInHeadline( *pFrm ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrm*>(pFrm) ) )
+                {
                     nPDFType = vcl::PDFWriter::TableHeader;
+                    aPDFType = aTHString;
+                }
                 else
+                {
                     nPDFType = vcl::PDFWriter::TableData;
+                    aPDFType = aTDString;
+                }
             }
             break;
 
@@ -1140,19 +1319,28 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         }
                     }
                     if ( bFormula )
+                    {
                         nPDFType = vcl::PDFWriter::Formula;
+                        aPDFType = aFormulaString;
+                    }
                     else
+                    {
                         nPDFType = vcl::PDFWriter::Figure;
+                        aPDFType = aFigureString;
+                    }
                 }
                 else
+                {
                     nPDFType = vcl::PDFWriter::Division;
+                    aPDFType = aDivString;
+                }
             }
             break;
     }
 
     if ( USHRT_MAX != nPDFType )
     {
-        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType) );
+        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType), aPDFType );
     }
 }
 
@@ -1188,6 +1376,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         return;
 
     USHORT nPDFType = USHRT_MAX;
+    String aPDFType;
 
     switch ( pPor->GetWhichPor() )
     {
@@ -1195,6 +1384,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_HYPHSTR :
         case POR_SOFTHYPHSTR :
             nPDFType = vcl::PDFWriter::Span;
+            aPDFType = aSpanString;
             break;
 
         case POR_LAY :
@@ -1218,15 +1408,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 if( pInetFmtAttr )
                 {
                     nPDFType = vcl::PDFWriter::Link;
+                    aPDFType = aLinkString;
                 }
                 // Check for Quote/Code character style:
                 else if ( sStyleName == aQuotation )
                 {
                     nPDFType = vcl::PDFWriter::Quote;
+                    aPDFType = aQuoteString;
                 }
                 else if ( sStyleName == aSourceText )
                 {
                     nPDFType = vcl::PDFWriter::Code;
+                    aPDFType = aCodeString;
                 }
                 else
                 {
@@ -1242,10 +1435,11 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                          nCurrentLanguage  != nDefaultLang ||
                          sStyleName.Len()  > 0 )
                     {
+                        nPDFType = vcl::PDFWriter::Span;
                         if ( sStyleName.Len() > 0 )
-                            BeginTag( vcl::PDFWriter::Span, &sStyleName );
+                            aPDFType = sStyleName;
                         else
-                            nPDFType = vcl::PDFWriter::Span;
+                            aPDFType = aSpanString;
                     }
                 }
             }
@@ -1253,6 +1447,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         case POR_FTN :
             nPDFType = vcl::PDFWriter::Link;
+            aPDFType = aLinkString;
             break;
 
         case POR_FLD :
@@ -1267,9 +1462,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     pFld = (SwField*)pHint->GetFld().GetFld();
                     if ( RES_GETREFFLD == pFld->Which() )
+                    {
                         nPDFType = vcl::PDFWriter::Link;
+                        aPDFType = aLinkString;
+                    }
                     else if ( RES_AUTHORITY == pFld->Which() )
+                    {
                         nPDFType = vcl::PDFWriter::BibEntry;
+                        aPDFType = aBibEntryString;
+                    }
                 }
             }
             break;
@@ -1284,7 +1485,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
     if ( USHRT_MAX != nPDFType )
     {
-        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType) );
+        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType), aPDFType );
     }
 }
 
