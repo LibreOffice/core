@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: plmodel.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,30 +55,6 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
     return aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( type );
 }
 
-
-// ::com::sun::star::lang::XServiceInfo
-::rtl::OUString PluginModel::getImplementationName() throw()
-
-{
-    return getImplementationName_Static();
-}
-
-// ::com::sun::star::lang::XServiceInfo
-sal_Bool PluginModel::supportsService(const ::rtl::OUString& ServiceName) throw()
-{
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return sal_True;
-    return sal_False;
-}
-
-// ::com::sun::star::lang::XServiceInfo
-Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames(void) throw()
-{
-    return getSupportedServiceNames_Static();
-}
 
 // XPluginManager_Impl
 Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
