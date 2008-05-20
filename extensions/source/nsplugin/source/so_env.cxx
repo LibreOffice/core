@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_env.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,7 +247,7 @@ const char* getNewLibraryPath()
     return pLPATH;
 }
 
-
+#ifdef WNT
 // Return SO executable absolute path, like "/home/build/staroffice/program/soffice"
 const char* findSofficeExecutable()
 {
@@ -278,7 +278,7 @@ int DosToUnixPath(char* sPath)
     return 0;
 
 }
-
+#endif
 // Change Unix path such as program/soffice to program\soffice
 int UnixToDosPath(char* sPath)
 {
