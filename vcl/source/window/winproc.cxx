@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winproc.cxx,v $
- * $Revision: 1.124 $
+ * $Revision: 1.125 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1484,14 +1484,20 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 
     USHORT nMode;
     USHORT nCode = rEvt.mnCode;
+    bool bHorz = rEvt.mbHorz;
     if ( nCode & KEY_MOD1 )
         nMode = COMMAND_WHEEL_ZOOM;
-    else if ( nCode & KEY_SHIFT )
+    else if ( nCode & KEY_MOD2 )
         nMode = COMMAND_WHEEL_DATAZOOM;
     else
+    {
         nMode = COMMAND_WHEEL_SCROLL;
+        // #i85450# interpret shift-wheel as horizontal wheel action
+        if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
+            bHorz = true;
+    }
 
-    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, rEvt.mbHorz );
+    CommandWheelData    aWheelData( rEvt.mnDelta, rEvt.mnNotchDelta, rEvt.mnScrollLines, nMode, nCode, bHorz );
     Point               aMousePos( rEvt.mnX, rEvt.mnY );
     BOOL                bRet = TRUE;
 
