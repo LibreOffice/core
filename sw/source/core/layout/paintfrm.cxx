@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.116 $
+ * $Revision: 1.117 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1488,13 +1488,15 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         pRetoucheFly = 0;
 }
 
-inline BOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
-{
-    //Wenn der Frm vollstaendig rechts neben bzw. unter dem
-    //Rect sitzt ist's genug mit Painten.
-    return rFrmRect.Top() > rRect.Bottom();
-        // PAGES01 || (rFrmRect.Left() > rRect.Right()) );
-}
+// --> OD 2008-05-16 #i84659# - no longer needed
+//inline BOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
+//{
+//    //Wenn der Frm vollstaendig rechts neben bzw. unter dem
+//    //Rect sitzt ist's genug mit Painten.
+//        return rFrmRect.Top() > rRect.Bottom();
+//        // PAGES01 || (rFrmRect.Left() > rRect.Right()) );
+//}
+// <--
 
 //---------------- Ausgabe fuer das BrushItem ----------------
 
@@ -2781,8 +2783,10 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     // #i68597#
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
-
-    while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
+    // --> OD 2008-05-16 #i84659#
+//    while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
+    while ( pPage )
+    // <--
     {
         const bool bPaintRightShadow =  !bBookMode || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
         const bool bRightSidebar = !pPage->MarginSide();
