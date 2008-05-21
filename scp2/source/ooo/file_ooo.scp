@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.244 $
+ * $Revision: 1.245 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2862,7 +2862,6 @@ File gid_File_Config_Javasettingsunopkginstall
   #else
     Styles = (PACKED);
   #endif
-    SolarisGroup = "other";
 End
 
 #if defined( BUILD_SPECIAL )
