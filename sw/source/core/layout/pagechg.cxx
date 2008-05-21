@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1929,24 +1929,31 @@ void SwRootFrm::UnoRemoveAllActions()
     if ( pSh )
         do
         {
-            DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!")
-            BOOL bCrsr = pSh->ISA( SwCrsrShell );
-            BOOL bFE = pSh->ISA( SwFEShell );
-            USHORT nRestore = 0;
-            while( pSh->ActionCount() )
+            // --> OD 2008-05-16 #i84729#
+            // No end action, if <ViewShell> instance is currently in its end action.
+            // Recursives calls to <::EndAction()> are not allowed.
+            if ( !pSh->IsInEndAction() )
             {
-                if( bCrsr )
+                DBG_ASSERT(!pSh->GetRestoreActions(), "Restore action count is already set!")
+                BOOL bCrsr = pSh->ISA( SwCrsrShell );
+                BOOL bFE = pSh->ISA( SwFEShell );
+                USHORT nRestore = 0;
+                while( pSh->ActionCount() )
                 {
-                    ((SwCrsrShell*)pSh)->EndAction();
-                    ((SwCrsrShell*)pSh)->CallChgLnk();
-                    if ( bFE )
-                        ((SwFEShell*)pSh)->SetChainMarker();
+                    if( bCrsr )
+                    {
+                        ((SwCrsrShell*)pSh)->EndAction();
+                        ((SwCrsrShell*)pSh)->CallChgLnk();
+                        if ( bFE )
+                            ((SwFEShell*)pSh)->SetChainMarker();
+                    }
+                    else
+                        pSh->EndAction();
+                    nRestore++;
                 }
-                else
-                    pSh->EndAction();
-                nRestore++;
+                pSh->SetRestoreActions(nRestore);
             }
-            pSh->SetRestoreActions(nRestore);
+            // <--
             pSh->LockView(TRUE);
             pSh = (ViewShell*)pSh->GetNext();
 
