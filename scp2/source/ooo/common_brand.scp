@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +83,6 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Desktophelper_Txt,
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
-             gid_Brand_File_Install_Me,
              gid_Brand_File_Lib_Dbghelp,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
@@ -323,7 +322,7 @@ Unixlink gid_Brand_Unixlink_BasisLink
     // Styles = (LAYERLINK);
     Name = "basis-link";
     Dir = gid_Dir_Brand_Root;
-    Target = "../openoffice.org/basis${OOOBASEVERSION}";
+    Target = "../${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}";
 End
 #endif
 
