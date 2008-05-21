@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.39 $
+# $Revision: 1.40 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -829,6 +829,8 @@ sub put_windows_productpath_into_template
 
     my $locallangs = $$languagestringref;
     $locallangs =~ s/_/ /g;
+    if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
+
     if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . $locallangs . ")"; }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
