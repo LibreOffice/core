@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,8 +232,7 @@ public:
     Thread(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         UpdateDialog & dialog,
-        rtl::Reference< dp_gui::SelectedPackageIterator > const &
-            selectedPackages,
+        rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
         css::uno::Sequence< css::uno::Reference<
             css::deployment::XPackageManager > > const & packageManagers);
 
@@ -289,7 +288,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
-    rtl::Reference< dp_gui::SelectedPackageIterator > m_selectedPackages;
+    rtl::Reference< dp_gui::SelectedPackage > m_selectedPackage;
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > m_packageManagers;
     css::uno::Reference< css::deployment::XUpdateInformationProvider >
@@ -303,12 +302,12 @@ private:
 UpdateDialog::Thread::Thread(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     UpdateDialog & dialog,
-    rtl::Reference< dp_gui::SelectedPackageIterator > const & selectedPackages,
+    rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers):
     m_context(context),
     m_dialog(dialog),
-    m_selectedPackages(selectedPackages),
+    m_selectedPackage(selectedPackage),
     m_packageManagers(packageManagers),
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
@@ -341,22 +340,13 @@ UpdateDialog::Thread::Entry::Entry(
 UpdateDialog::Thread::~Thread() {}
 
 void UpdateDialog::Thread::execute() {
-    OSL_ASSERT(m_selectedPackages.is() != (m_packageManagers.getLength() != 0));
+    OSL_ASSERT(m_selectedPackage.is() != (m_packageManagers.getLength() != 0));
     Map map;
-    if (m_selectedPackages.is()) {
-        for (;;) {
-            css::uno::Reference< css::deployment::XPackage > p;
-            css::uno::Reference< css::deployment::XPackageManager > m;
-            {
-                vos::OGuard g(Application::GetSolarMutex());
-                if (m_stop) {
-                    return;
-                }
-                m_selectedPackages->next(&p, &m);
-            }
-            if (!p.is()) {
-                break;
-            }
+    if (m_selectedPackage.is()) {
+        css::uno::Reference< css::deployment::XPackage > p = m_selectedPackage->getPackage();
+        css::uno::Reference< css::deployment::XPackageManager > m= m_selectedPackage->getPackageManager();
+        if ( p.is() )
+        {
             handle(p, m, &map);
         }
     } else {
@@ -598,8 +588,9 @@ bool UpdateDialog::Thread::update(
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
-    rtl::Reference<dp_gui::DialogImpl> const & extensionManagerDialog ,
-    rtl::Reference< dp_gui::SelectedPackageIterator > const & selectedPackages,
+// TODO: check!
+//    rtl::Reference<dp_gui::DialogImpl> const & extensionManagerDialog ,
+    rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
     std::vector< dp_gui::UpdateData > * updateData):
@@ -637,11 +628,13 @@ UpdateDialog::UpdateDialog(
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
-            context, *this, selectedPackages,
+            context, *this, selectedPackage,
             packageManagers)),
     m_nFirstLineDelta(0),
-    m_nOneLineMissing(0),
-    m_extensionManagerDialog(extensionManagerDialog)
+    m_nOneLineMissing(0)
+    // TODO: check!
+//    ,
+//    m_extensionManagerDialog(extensionManagerDialog)
 
 {
     OSL_ASSERT(updateData != NULL);
@@ -1242,12 +1235,15 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
         OSL_ASSERT(i->aPackageManager->isReadOnly() == sal_False);
+#if 0
+        // TODO: check!
         OSL_ASSERT(m_extensionManagerDialog.get());
         if (RET_CANCEL == m_extensionManagerDialog->continueUpdateForSharedExtension(
             this, i->aPackageManager))
         {
             EndDialog(RET_CANCEL);
         }
+#endif
     }
 
     for (USHORT i = 0; i < m_updates.getItemCount(); ++i) {
