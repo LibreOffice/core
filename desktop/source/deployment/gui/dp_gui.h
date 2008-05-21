@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui.h,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,7 +293,6 @@ struct DialogImpl :
             ::com::sun::star::deployment::XPackageManager> const & xPMgr);
 
 
-    UpdateDialog* m_pUpdateDialog;
     /** The extensions which are passed when the Extension Manager dialog is created.
         This is the case when the Extension Manager is started as a result of a
         "system integration operation", such as double clicking on a oxt file.
@@ -399,6 +398,7 @@ struct DialogImpl :
         ::com::sun::star::lang::EventObject const & evt ) throw (::com::sun::star::uno::RuntimeException);
 };
 
+#if 0
 class SelectedPackageIterator: public salhelper::SimpleReferenceObject {
 public:
     SelectedPackageIterator(DialogImpl::TreeListBoxImpl & list);
@@ -417,6 +417,26 @@ private:
 
     DialogImpl::TreeListBoxImpl & m_list;
     SvLBoxEntry * m_entry;
+};
+#endif
+
+class SelectedPackage: public salhelper::SimpleReferenceObject {
+public:
+    SelectedPackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> &xPackage,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> &xPackageManager )
+    : m_xPackage( xPackage ),
+      m_xPackageManager( xPackageManager )
+    {}
+
+    virtual ~SelectedPackage();
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage() const { return m_xPackage; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> getPackageManager() const { return m_xPackageManager; }
+private:
+    SelectedPackage(SelectedPackage &); // not defined
+    void operator =(SelectedPackage &); // not defined
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
 };
 
 } // namespace dp_gui
