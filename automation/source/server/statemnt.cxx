@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: statemnt.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
 #include <svtools/poolitem.hxx>
+#include <svtools/extensionlistbox.hxx>
 // Hat keinen Includeschutz
 #include <svtools/svtdata.hxx>
 #include <tools/time.hxx>
@@ -659,8 +660,7 @@ BOOL StatementSlot::Execute()
                     if ( static_cast< SlotStatusListener* >(xListener.get())->bEnabled )
                     {
                         if ( bIsSlotInExecute )
-// i79413                   ReportError( GEN_RES_STR0( S_SLOT_IN_EXECUTE ) );
-                            ReportError( CUniString( "Another Slot is being executed already." ) );
+                            ReportError( GEN_RES_STR0( S_SLOT_IN_EXECUTE ) );
                         else
                         {
                             bIsSlotInExecute = TRUE;
@@ -930,6 +930,8 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                     aTypeSuffix.AppendAscii( "/ValueSet", 9 );
                 else if ( dynamic_cast< ORoadmap* >(pBase) )
                     aTypeSuffix.AppendAscii( "/RoadMap", 8 );
+                else if ( dynamic_cast< IExtensionListBox* >(pBase) )
+                    aTypeSuffix.AppendAscii( "/ExtensionListBox" );
                 else
                     aTypeSuffix.AppendAscii( "/Unknown", 8 );
             }
@@ -5593,8 +5595,7 @@ BOOL StatementControl::Execute()
                                     if ( pItem )
                                         pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                     else
-// i79413                               ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
-                                        ReportError( aUId, CUniString( "String does not exist in ($Arg1)" ).Append( ArgString( 1, MethodString( nMethodId ) ) ) );
+                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
                                 }
                             }
                             break;
@@ -5619,8 +5620,7 @@ BOOL StatementControl::Execute()
                                     if ( pItem )
                                         pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                     else
-// i79413                               ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
-                                        ReportError( aUId, CUniString( "String does not exist in ($Arg1)" ).Append( ArgString( 1, MethodString( nMethodId ) ) ) );
+                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
                                 }
                             }
                             break;
@@ -5758,6 +5758,8 @@ BOOL StatementControl::Execute()
                         nRealControlType = CONST_CTValueSet;
                     else if ( dynamic_cast< ORoadmap* >(pControl) )
                         nRealControlType = CONST_CTORoadmap;
+                    else if ( dynamic_cast< IExtensionListBox* >(pControl) )
+                        nRealControlType = CONST_CTIExtensionListBox;
                     else
                         nRealControlType = CONST_CTUnknown;
 
@@ -6017,6 +6019,76 @@ protected:
                                             if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pRM->GetItemCount() ))
                                                 pRet->GenReturn ( RET_Value, aUId, (comm_BOOL)pRM->IsRoadmapItemEnabled( pRM->GetItemID( nNr1-1 ) ) );
                                             break;
+                                        default:
+                                            ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                case CONST_CTIExtensionListBox:
+                                    {
+                                        IExtensionListBox *pELB = dynamic_cast< IExtensionListBox* >(pControl);
+                                        switch ( nMethodId )
+                                        {
+                                        case M_GetItemCount:
+                                            pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getItemCount()));
+                                            break;
+                                        case M_GetItemText:
+                                            if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pELB->getItemCount() ))
+                                                switch ( nNr2 )
+                                                {
+                                                case 1:
+                                                    pRet->GenReturn ( RET_Value, aUId, pELB->getItemName( nNr1 -1 ) );
+                                                    break;
+                                                case 2:
+                                                    pRet->GenReturn ( RET_Value, aUId, pELB->getItemVersion( nNr1 -1 ) );
+                                                    break;
+                                                case 3:
+                                                    pRet->GenReturn ( RET_Value, aUId, pELB->getItemDescription( nNr1 -1 ) );
+                                                    break;
+                                                default:
+                                                    ValueOK( aUId, MethodString( nMethodId ).AppendAscii(" String Number"), nNr2, 3 );
+                                                }
+                                            break;
+                                        case M_Select:
+                                            if ( (nParams & PARAM_USHORT_1) )
+                                            {
+                                                if ( ValueOK( aUId, MethodString( nMethodId ), nNr1, pELB->getItemCount() ))
+                                                {
+                                                    pELB->select( nNr1-1 );
+                                                }
+                                            }
+                                            else if ( (nParams & PARAM_STR_1) )
+                                            {
+                                                pELB->select( aString1 );
+                                                BOOL bSuccess = TRUE;
+                                                if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+                                                    bSuccess = FALSE;
+                                                else
+                                                {
+                                                    if ( !aString1.Equals( String( pELB->getItemName( pELB->getSelIndex() ) ) ) )
+                                                        bSuccess = FALSE;
+                                                }
+                                                if ( !bSuccess )
+                                                    ReportError( aUId, GEN_RES_STR2( S_ENTRY_NOT_FOUND, MethodString( nMethodId ), aString1 ) );
+                                            }
+                                            break;
+                                        case M_GetSelCount :
+                                            if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                            else
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 1 ));
+                                            break;
+                                        case M_GetSelIndex :
+                                            if ( pELB->getSelIndex() == EXTENSION_LISTBOX_ENTRY_NOTFOUND )
+                                                pRet->GenReturn ( RET_Value, aUId, comm_ULONG( 0 ));
+                                            else
+                                                   pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
+                                            break;
+/*                                      xxxcase M_SetNoSelection :
+                                            ((ListBox*)pControl)->SetNoSelection();
+                                            ((ListBox*)pControl)->Select();
+                                            break; */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
                                             break;
