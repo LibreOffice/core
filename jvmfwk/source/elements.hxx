@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,8 +168,8 @@ private:
     ::rtl::OUString getSettingsURL() const;
 
     /** Verifies if the respective settings file exist. In case UNO_JAVA_JFW_INSTALL_DATA
-        is used, the age is checked. If the file is too old the we assume that it does not
-        exist.
+        is used, the age is checked. If the file is too old then we assume that it does not
+        exist and wipe its contents. Then still FILE_DOES_NOT_EXIST is returned.
      */
     jfw::FileStatus checkSettingsFileStatus() const;
 
