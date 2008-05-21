@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabdat.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +190,7 @@ void ScDPTableData::CreateCacheTable()
     fprintf(stdout, "ScDPTableData::CreateCacheTable: un-implemented...\n");fflush(stdout);
 }
 
-void ScDPTableData::FilterCacheTable(const vector<ScDPDimension*>& rPageDims)
+void ScDPTableData::FilterCacheTable(const vector<ScDPDimension*>&)
 {
     fprintf(stdout, "ScDPTableData::FilterCacheTable: un-implemented...\n");fflush(stdout);
 }
@@ -200,7 +200,7 @@ void ScDPTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>&, S
     fprintf(stdout, "ScDPTableData::GetDrillDownData: un-implemented...\n");fflush(stdout);
 }
 
-void ScDPTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
+void ScDPTableData::CalcResults(CalcInfo&, bool)
 {
     fprintf(stdout, "ScDPTableData::CalcResults: un-implemented...\n");fflush(stdout);
 }
