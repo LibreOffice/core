@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sta_list.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +55,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/roadmap.hxx>
+#include <svtools/extensionlistbox.hxx>
 
 #define WINDOW_ANYTYPE WINDOW_BASE
 
@@ -999,6 +1000,8 @@ String StatementList::ClientTree(Window *pBase, int Indent)
             WRITEc("/ValueSet")
         else if ( dynamic_cast< svt::ORoadmap* >(pBase) )
             WRITEc("/RoadMap")
+        else if ( dynamic_cast< svt::IExtensionListBox* >(pBase) )
+            WRITEc("/ExtensionListBox")
         else
             WRITEc("/Unknown")
     }
