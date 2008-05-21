@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testtoolloader.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +98,7 @@ void InitTestToolLib()
     aTestToolModule = osl_loadModuleRelative(
         &thisModule,
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("sts"))).pData,
-        SAL_LOADMODULE_DEFAULT );
+        SAL_LOADMODULE_GLOBAL );
     if ( aTestToolModule )
     {
         oslGenericFunction pInitFunc = osl_getFunctionSymbol(
