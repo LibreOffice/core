@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_service.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@
 
 #include "dp_gui_shared.hxx"
 #include "dp_gui.h"
+#include "dp_gui_theextmgr.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "unotools/configmgr.hxx"
@@ -216,7 +217,7 @@ void ServiceImpl::startExecuteModal(
     bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
     ::std::auto_ptr<Application> app;
     //ToDo: synchronize access to s_dialog !!!
-    if (! dp_gui::DialogImpl::s_dialog.is())
+    if (! dp_gui::TheExtensionManager::s_ExtMgr.is())
     {
         const bool bAppUp = (GetpApp() != 0);
         bool bOfficePipePresent;
@@ -264,24 +265,23 @@ void ServiceImpl::startExecuteModal(
         // the update notification icon in the menu bar. We must not close the extensions
         // dialog after displaying the update dialog when it has been visible before
         if ( m_bShowUpdateOnly )
-            bCloseDialog = false;
+            bCloseDialog = ! dp_gui::TheExtensionManager::s_ExtMgr->isVisible();
     }
 
     {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
-        ::rtl::Reference< ::dp_gui::DialogImpl > dialog(
-            ::dp_gui::DialogImpl::get(
+        ::rtl::Reference< ::dp_gui::TheExtensionManager > dialog(
+            ::dp_gui::TheExtensionManager::get(
                 m_xComponentContext,
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
-                m_extensionURL ? *m_extensionURL : OUString(),
-                m_view ? *m_view : OUString() ) );
+                m_extensionURL ? *m_extensionURL : OUString() ) );
         if (m_initialTitle.getLength() > 0) {
             dialog->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }
         if ( m_bShowUpdateOnly )
         {
-            dialog->checkUpdates( false, true, !bCloseDialog );
+            dialog->checkUpdates( true, !bCloseDialog );
             if ( bCloseDialog )
                 dialog->Close();
             else
