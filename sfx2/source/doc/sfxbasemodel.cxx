@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.142 $
+ * $Revision: 1.143 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2842,7 +2842,14 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPr
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
+    if ( impl_getPrintHelper() )
+    {
+        uno::Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, uno::UNO_QUERY );
+        if ( xPJB.is() )
+            xPJB->addPrintJobListener( xListener );
+    }
+//  else
+//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
@@ -2852,7 +2859,14 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
+    if ( impl_getPrintHelper() )
+    {
+        uno::Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, uno::UNO_QUERY );
+        if ( xPJB.is() )
+            xPJB->removePrintJobListener( xListener );
+    }
+//  else
+//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough
