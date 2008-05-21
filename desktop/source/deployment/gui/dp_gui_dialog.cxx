@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_dialog.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,7 +108,6 @@ DialogImpl::DialogImpl(
     Window * pParent, OUString const & extensionURL,
     Reference<XComponentContext> const & xContext )
     : ModelessDialog( pParent, getResId(RID_DLG_PACKAGE_MANAGER) ),
-      m_pUpdateDialog(NULL),
       m_extensionURL(extensionURL),
 //    m_bAddingExtensions(false),
       m_xComponentContext( xContext ),
@@ -1272,29 +1271,24 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
     //calls to "unopkg gui ext", for example, double-clicking and extension.
     ::osl::MutexGuard actionGuard(ActionMutex::get());
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
-    //Todo: m_pUpdateDialog can never be != NULL. It is not accessed outside of this
-    //function and it will be deleted at the end of this function.
-    if ( m_pUpdateDialog != NULL )
-    {
-        m_pUpdateDialog->ToTop();
-    }
-    else
-    {
-        std::vector<UpdateData> data;
-        Window * pParent = this;
 
-        if ( showUpdateOnly && !parentVisible )
-            pParent = GetParent();
+    UpdateDialog* pUpdateDialog;
+    std::vector<UpdateData> data;
+    Window * pParent = this;
 
-        m_pUpdateDialog = new UpdateDialog( m_xComponentContext, pParent, this,
-                                            ( selected ? new SelectedPackageIterator(*m_treelb.get())
-                                                       : rtl::Reference<SelectedPackageIterator>()),
+    if ( showUpdateOnly && !parentVisible )
+        pParent = GetParent();
+
+    pUpdateDialog = new UpdateDialog( m_xComponentContext, pParent,
+                                            ( /*selected ? new SelectedPackageIterator(*m_treelb.get())
+                                                       : rtl::Reference<SelectedPackageIterator>()),*/
+                                            rtl::Reference<SelectedPackage>()),
                                             ( selected ? Sequence<Reference<deployment::XPackageManager> >()
                                                        : m_packageManagers ),
                                             &data );
-        if ( ( m_pUpdateDialog->Execute() == RET_OK ) && !data.empty() )
+    if ( ( pUpdateDialog->Execute() == RET_OK ) && !data.empty() )
         {
-            m_pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
+        pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
            //If there is at least one directly downloadable dialog then we
             //open the install dialog.
             int countWebsiteDownload = 0;
@@ -1310,10 +1304,10 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
             {
                 ::std::vector<dp_gui::UpdateData> dataDownload(excludeWebsiteDownloads(data));
                 nDialogResult = UpdateInstallDialog( pParent, dataDownload, m_xComponentContext ).Execute();
-                m_pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
+            pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
             }
             else
-                m_pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
+            pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
             //Now start the webbrowser and navigate to the websites where we get the updates
             if (RET_OK == nDialogResult)
              {
@@ -1326,9 +1320,7 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
                 }
             }
         }
-        delete m_pUpdateDialog;
-        m_pUpdateDialog = NULL;
-    }
+    delete pUpdateDialog;
 }
 
 bool DialogImpl::continueUpdateForSharedExtension(
@@ -1510,6 +1502,7 @@ String DialogImpl::getResourceString( USHORT id )
     return ret;
 }
 
+#if 0
 SelectedPackageIterator::SelectedPackageIterator(
     DialogImpl::TreeListBoxImpl & list):
     m_list(list),
@@ -1538,5 +1531,5 @@ void SelectedPackageIterator::next(
         }
     }
 }
-
+#endif
 }
