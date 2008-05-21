@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rcontrol.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -439,6 +439,7 @@
 #define CONST_CTBrowseBox       100
 #define CONST_CTValueSet        103
 #define CONST_CTORoadmap        104
+#define CONST_CTIExtensionListBox 105
 #define CONST_CTUnknown         199
 
 // Konstanten für das ALignment des gesuchten Splitters
