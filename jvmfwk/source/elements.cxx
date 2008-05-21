@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -769,9 +769,12 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                         fprintf(stderr, "[Java framework] Deleting settings file at \n%s\n", s.getStr());
 #endif
                         //delete file
-                        File::RC rc_rem = File::remove(sURL);
-                        if (File::E_None == rc_rem)
-                            ret = FILE_DOES_NOT_EXIST;
+//                        File::RC rc_rem = File::remove(sURL);
+                        File f(sURL);
+                        if (File::E_None == f.open(OpenFlag_Write | OpenFlag_Read)
+                            && File::E_None == f.setPos(0, 0)
+                            && File::E_None == f.setSize(0))
+                                    ret = FILE_DOES_NOT_EXIST;
                         else
                             ret = FILE_INVALID;
                     }
