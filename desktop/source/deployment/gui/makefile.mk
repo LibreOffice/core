@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.18 $
+# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,9 +51,11 @@ DLLPRE =
 SLOFILES = \
         $(SLO)$/dp_gui_service.obj \
         $(SLO)$/dp_gui_dialog.obj \
+        $(SLO)$/dp_gui_dialog2.obj \
+        $(SLO)$/dp_gui_theextmgr.obj \
         $(SLO)$/dp_gui_treelb.obj \
         $(SLO)$/dp_gui_cmdenv.obj \
-    $(SLO)$/license_dialog.obj \
+        $(SLO)$/license_dialog.obj \
         $(SLO)$/dp_gui_dependencydialog.obj \
         $(SLO)$/dp_gui_thread.obj \
         $(SLO)$/dp_gui_updatability.obj \
@@ -62,6 +64,7 @@ SLOFILES = \
         $(SLO)$/dp_gui_autoscrolledit.obj \
         $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_addextensionqueue.obj \
+        $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
@@ -97,6 +100,7 @@ DEF1NAME = $(SHL1TARGET)
 SRS1NAME = $(TARGET)
 SRC1FILES = \
         dp_gui_dialog.src \
+        dp_gui_dialog2.src \
         dp_gui_backend.src \
         dp_gui_dependencydialog.src \
         dp_gui_updatedialog.src \
