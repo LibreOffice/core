@@ -8,7 +8,7 @@
 #
 # $RCSfile: file.pm,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -431,7 +431,7 @@ sub get_filesize
 
 sub get_fileversion
 {
-    my ($fileref, $allvariables) = @_;
+    my ($onefile, $allvariables) = @_;
 
     my $fileversion = "";
 
@@ -439,9 +439,10 @@ sub get_fileversion
     {
         if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
         $fileversion = $allvariables->{'LIBRARYVERSION'} . "\." . $installer::globals::buildid;
+        if ( $onefile->{'FileVersion'} ) { $fileversion = $onefile->{'FileVersion'}; } # overriding FileVersion in scp
     }
 
-    if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version
+    if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version # -> who says so?
 
     return $fileversion;
 }
@@ -711,8 +712,8 @@ sub create_files_table
             if ( ! exists($installer::globals::languageproperties{$property}) ) { $installer::globals::languageproperties{$property} = $value; }
         }
 
-#       if ( $installer::globals::prepare_winpatch )
-#       {
+        if ( $installer::globals::prepare_winpatch )
+        {
             my $path = $onefile->{'sourcepath'};
             if ( $^O =~ /cygwin/i ) { $path = $onefile->{'cyg_sourcepath'}; }
 
@@ -729,7 +730,7 @@ sub create_files_table
                 $i[2] . "\t" .
                 $i[3] . "\n";
             push (@filehashtable, $oneline);
-#       }
+        }
 
         # Saving the sequence number in a hash with uniquefilename as key.
         # This is used for better performance in "save_packorder"
