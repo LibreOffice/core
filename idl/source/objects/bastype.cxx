@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bastype.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,7 +590,7 @@ BOOL SvUUId::WriteSvIdl( SvStream & rOutStm )
 *************************************************************************/
 BOOL SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
-    long n;
+    long n = 0;
 
     UINT32 nTokPos = rInStm.Tell();
     if( ReadRangeSvIdl( SvHash_Version(), rInStm, 0 , 0xFFFF, &n ) )
