@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,9 +91,9 @@ End
 Directory gid_Dir_Ooo_Openofficeorg
     ParentID = PREDEFINED_PROGDIR;
   #ifdef WNT
-    HostName = "OpenOffice.org";
+    HostName = "${BASISROOTNAME}";
   #else
-    HostName = "openoffice.org";
+    HostName = "${UNIXBASISROOTNAME}";
   #endif
 End
 #endif
@@ -1428,6 +1428,7 @@ End
 Directory gid_Dir_Samples_Language
     ParentID = gid_Dir_Samples;
     DIR_ISOLANGUAGE_ALL_LANG_2;
+    Styles = (CREATE);
 End
 
 Directory gid_Dir_Samples_Drawings
