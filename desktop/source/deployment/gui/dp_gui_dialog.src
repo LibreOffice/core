@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_dialog.src,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,22 +254,22 @@ String RID_STR_EXPORT_PACKAGES
 
 String RID_STR_ADDING_PACKAGES
 {
-    Text [ en-US ] = "Adding Extension(s)";
+    Text [ en-US ] = "Adding %EXTENSION_NAME";
 };
 
 String RID_STR_REMOVING_PACKAGES
 {
-    Text [ en-US ] = "Removing Extension(s)";
+    Text [ en-US ] = "Removing %EXTENSION_NAME";
 };
 
 String RID_STR_ENABLING_PACKAGES
 {
-    Text [ en-US ] = "Enabling Extension(s)";
+    Text [ en-US ] = "Enabling %EXTENSION_NAME";
 };
 
 String RID_STR_DISABLING_PACKAGES
 {
-    Text [ en-US ] = "Disabling Extension(s)";
+    Text [ en-US ] = "Disabling %EXTENSION_NAME";
 };
 
 String RID_STR_EXPORTING_PACKAGES
@@ -277,6 +277,25 @@ String RID_STR_EXPORTING_PACKAGES
     Text [ en-US ] = "Exporting Extension(s)";
 };
 
+String RID_STR_INSTALL_FOR_ALL
+{
+    Text [ en-US ] = "~For all users";
+};
+
+String RID_STR_INSTALL_FOR_ME
+{
+    Text [ en-US ] = "~Only for me";
+};
+
+String RID_STR_PUBLISHER_LINK
+{
+    Text [ en-US ] = "Publisher";
+};
+
+String RID_STR_ERROR_UNKNOWN_STATUS
+{
+    Text [ en-US ] = "Error: The status of this extension is unknown";
+};
 
 // Dialog layout
 // ---------------------------------------------------
