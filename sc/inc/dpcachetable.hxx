@@ -8,7 +8,7 @@
  *
  * $RCSfile: dpcachetable.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,6 +156,7 @@ public:
     {
     public:
         GroupFilter();
+        virtual ~GroupFilter(){}
         virtual bool match(const Cell& rCell) const;
 
         void addMatchItem(const String& rStr, double fVal, bool bHasValue);
