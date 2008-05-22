@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.hxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ public:
     void            showProgress( bool bStart );
     void            updateProgress( const ::rtl::OUString &rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
-    void            updateProgress( long nVal );
+    void            updateProgress( const long nProgress );
     void            updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
