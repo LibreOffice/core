@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dpshttab.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 }}}}
 
 class ScDPDimension;
-class ScDPItemData;
+struct ScDPItemData;
 
 // --------------------------------------------------------------------
 //
