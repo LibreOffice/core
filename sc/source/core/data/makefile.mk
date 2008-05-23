@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -122,6 +122,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpdimsave.obj \
     $(SLO)$/dpgroup.obj \
     $(SLO)$/dptabres.obj \
+    $(SLO)$/dptabdat.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table3.obj \
     $(SLO)$/postit.obj \

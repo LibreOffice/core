@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dptabdat.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <cstdio>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
@@ -257,7 +258,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
         long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.push_back( ScDPValueData() );
         ScDPValueData& rVal = rData.aValues.back();
-        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(nDim, nRow);
+        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow));
         if (pCell)
         {
             rVal.fValue = pCell->mbNumeric ? pCell->mfValue : 0.0;
@@ -320,7 +321,7 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
             continue;
         }
 
-        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(nDim, nRow, IsRepeatIfEmpty());
+        const ScDPCacheTable::Cell* pCell = rCacheTable.getCell(static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         if (!pCell || pCell->mnType == SC_VALTYPE_EMPTY)
             continue;
 

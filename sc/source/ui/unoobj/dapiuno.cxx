@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dapiuno.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1159,7 +1159,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const C
 {
     ScUnoGuard aGuard;
     Sequence< Sequence<Any> > aTabData;
-    ScAddress aAddr2(aAddr.Column, aAddr.Row, aAddr.Sheet);
+    ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
         throw RuntimeException();
@@ -1173,7 +1173,7 @@ DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const C
 {
     ScUnoGuard aGuard;
     DataPilotTablePositionData aPosData;
-    ScAddress aAddr2(aAddr.Column, aAddr.Row, aAddr.Sheet);
+    ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
         throw RuntimeException();
@@ -1192,7 +1192,7 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
 
     Sequence<DataPilotFieldFilter> aFilters;
     pDPObj->GetDataFieldPositionData(
-        ScAddress(aAddr.Column, aAddr.Row, aAddr.Sheet), aFilters);
+        ScAddress(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet), aFilters);
     GetDocShell()->GetBestViewShell()->ShowDataPilotSourceData(*pDPObj, aFilters);
 }
 

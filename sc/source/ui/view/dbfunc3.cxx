@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbfunc3.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1752,9 +1752,9 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     auto_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( pDoc, nNewTab );
-    for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
+    for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {
-        for (sal_Int32 nCol = 0; nCol < nColSize; ++nCol)
+        for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
         {
             const Any& rAny = aTabData[nRow][nCol];
             rtl::OUString aStr;
@@ -1767,7 +1767,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     }
 
     // set number format (important for dates)
-    for (sal_Int32 nCol = 0; nCol < nColSize; ++nCol)
+    for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
     {
         rtl::OUString aStr;
         if (!(aTabData[0][nCol] >>= aStr))
