@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: digitalsignaturesdialog.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ namespace
         Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
         if ( aValues.getLength() == 1)
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             if ( aValues[0] >>= nTmp )
                 m_nODF = nTmp;
             else
