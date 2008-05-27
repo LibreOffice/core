@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelperbitmaprender.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPRENDER_HXX
 #include <vclhelperbitmaprender.hxx>
-#endif
-
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
-
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPTRANSFORM_HXX
 #include <vclhelperbitmaptransform.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // support for different kinds of bitmap rendering using vcl

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-06 13:38:51 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

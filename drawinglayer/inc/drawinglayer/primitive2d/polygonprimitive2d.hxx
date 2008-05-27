@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 #include <drawinglayer/attribute/lineattribute.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 #include <drawinglayer/attribute/linestartendattribute.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // PolygonHairlinePrimitive2D class

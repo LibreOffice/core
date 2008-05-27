@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillbitmapattribute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,9 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLBITMAPATTRIBUTE_HXX
 
-#ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
-#endif
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

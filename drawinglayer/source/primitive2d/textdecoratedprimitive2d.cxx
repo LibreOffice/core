@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:43 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,53 +36,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTDECORATEDPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTEFFECTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SHADOWPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

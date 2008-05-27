@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-19 04:35:00 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////

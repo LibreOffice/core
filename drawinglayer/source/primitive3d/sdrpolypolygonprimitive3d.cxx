@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpolypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPOLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrpolypolygonprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrattribute.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +89,11 @@ namespace drawinglayer
                 }
             }
 
+#ifdef DBG_UTIL
             return EventuallyAddTestRange(aRetval);
+#else
+            return aRetval;
+#endif
         }
 
         SdrPolyPolygonPrimitive3D::SdrPolyPolygonPrimitive3D(

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:57 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,21 +39,10 @@
 // the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
 // pre-declarations of com/sun/star namespace), include sal/config.h here
 // where sun is redefined as 'sun' (so i guess the problem is known).
-#ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

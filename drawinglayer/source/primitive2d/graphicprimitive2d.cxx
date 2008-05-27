@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:42 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,64 +36,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 #include <drawinglayer/animation/animationtiming.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ANIMATEDPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_METAFILEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MASKPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // helper class for animated graphics
 
-#ifndef _SV_ANIMATE_HXX
 #include <vcl/animate.hxx>
-#endif
-
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

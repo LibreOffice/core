@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:21:37 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 #include <svtools/optionsdrawinglayer.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

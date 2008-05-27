@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture3d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-16 04:59:59 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 #include <drawinglayer/texture/texture3d.hxx>
-#endif
-
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -234,8 +223,6 @@ namespace drawinglayer
 
         bool GeoTexSvxMultiHatch::impIsOnHatch(const basegfx::B2DPoint& rUV) const
         {
-            double fSmallestDistance();
-
             if(mp0->getDistanceToHatch(rUV) < mfLogicPixelSize)
             {
                 return true;

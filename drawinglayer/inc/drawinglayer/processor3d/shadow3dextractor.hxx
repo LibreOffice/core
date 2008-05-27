@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,45 +36,16 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_SHADOW3DEXTRACTOR_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

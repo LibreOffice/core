@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:07 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,9 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_GROUPPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

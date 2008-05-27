@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:42 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

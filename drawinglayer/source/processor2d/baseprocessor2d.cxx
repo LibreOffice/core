@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

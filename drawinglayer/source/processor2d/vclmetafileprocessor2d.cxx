@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,185 +36,64 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
-#endif
-
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_METAFILEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MASKPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDALPHAPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ALPHAPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRADIENTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPIXELPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
-#endif
-
-#ifndef _STREAM_HXX
 #include <tools/stream.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTRARRAYPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
-#endif
-
-#ifndef _VCL_GRAPHICTOOLS_HXX_
 #include <vcl/graphictools.hxx>
-#endif
-
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTHIERARCHYPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTDECORATEDPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CONTROLPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PAGEPREVIEWPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // for PDFExtOutDevData Graphic support
 
-#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
 #include <toolkit/helper/formpdfexport.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // for Control printing
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // for current chart PrettyPrinting support
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CHARTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // for StructureTagPrimitive support in sd's unomodel.cxx
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_STRUCTURETAGPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

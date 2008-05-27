@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:28 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -111,10 +100,6 @@ namespace drawinglayer
             // the current active transparence texture
             texture::GeoTexSvx*                                 mpTransparenceGeoTexSvx;
 
-            // width and height in target pixels
-            sal_uInt32                                          mnRasterWidth;
-            sal_uInt32                                          mnRasterHeight;
-
             // bitfield
             unsigned                                            mbModulate : 1;
             unsigned                                            mbFilter : 1;
@@ -161,8 +146,6 @@ namespace drawinglayer
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
             bool getSimpleTextureActive() const { return mbSimpleTextureActive; }
-            sal_uInt32 getRasterWidth() const { return mnRasterWidth; }
-            sal_uInt32 getRasterHeight() const { return mnRasterHeight; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:57 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,11 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-
 #include <boost/utility.hpp>
-
-#ifndef _COM_SUN_STAR_GRAPHIC_XPRIMITIVE2D_HPP_
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
-#endif
-
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // defines for DeclPrimitrive2DIDBlock and ImplPrimitrive2DIDBlock

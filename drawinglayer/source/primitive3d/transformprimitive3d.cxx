@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transformprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:45 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

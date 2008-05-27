@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:22:00 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

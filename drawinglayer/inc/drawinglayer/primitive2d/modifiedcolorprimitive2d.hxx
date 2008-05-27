@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modifiedcolorprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:04 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GROUPPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

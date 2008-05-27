@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrextrudeprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -225,12 +205,17 @@ namespace drawinglayer
                 }
             }
 
+#ifdef DBG_UTIL
             return EventuallyAddTestRange(aRetval);
+#else
+            return aRetval;
+#endif
         }
 
         void SdrExtrudePrimitive3D::impCreateSlices()
         {
-            // prepare the polygon
+            // prepare the polygon. No double points, correct orientations and a correct
+            // outmost polygon are needed
             maCorrectedPolyPolygon = getPolyPolygon();
             maCorrectedPolyPolygon.removeDoublePoints();
             maCorrectedPolyPolygon = basegfx::tools::correctOrientations(maCorrectedPolyPolygon);

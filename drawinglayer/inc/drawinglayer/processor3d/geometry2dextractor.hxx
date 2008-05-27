@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometry2dextractor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-01-30 12:26:48 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,11 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

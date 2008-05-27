@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:44 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONTUBEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

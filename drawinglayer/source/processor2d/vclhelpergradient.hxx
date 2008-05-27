@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelpergradient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:17 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERGRADIENT_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERGRADIENT_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
 #include <drawinglayer/attribute/fillattribute.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

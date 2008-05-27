@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-18 15:10:11 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,14 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLMETAFILEPROCESSOR2D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // vcl::PDFExtOutDevData support
 
-#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

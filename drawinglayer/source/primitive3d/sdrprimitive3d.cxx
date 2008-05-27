@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrattribute.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -137,6 +126,7 @@ namespace drawinglayer
             return false;
         }
 
+#ifdef DBG_UTIL
         Primitive3DSequence SdrPrimitive3D::EventuallyAddTestRange(Primitive3DSequence& rTarget) const
         {
             static bool bAddBoundCretsForTest(false);
@@ -161,6 +151,7 @@ namespace drawinglayer
 
             return rTarget;
         }
+#endif
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

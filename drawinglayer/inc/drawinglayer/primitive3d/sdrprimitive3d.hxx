@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:28 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,12 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRPRIMITIVE3D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRALLATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -83,8 +66,10 @@ namespace drawinglayer
             // will use given Slice3Ds and expand by evtl. line width / 2
             basegfx::B3DRange get3DRangeFromSlices(const Slice3DVector& rSlices) const;
 
+#ifdef DBG_UTIL
             // tooling for testing. Eventually adds geometry to visualize the BoundRect of the primitive
             Primitive3DSequence EventuallyAddTestRange(Primitive3DSequence& rTarget) const;
+#endif
 
         public:
             SdrPrimitive3D(

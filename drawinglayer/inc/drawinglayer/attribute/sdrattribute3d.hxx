@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-13 08:21:36 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,46 +36,16 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_NORMALSKIND_HPP_
 #include <com/sun/star/drawing/NormalsKind.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREPROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREKIND2_HPP_
 #include <com/sun/star/drawing/TextureKind2.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_TEXTUREMODE_HPP_
 #include <com/sun/star/drawing/TextureMode.hpp>
-#endif
-
-#ifndef _BGFX_VECTOR_B3DVECTOR_HXX
 #include <basegfx/vector/b3dvector.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#endif
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////

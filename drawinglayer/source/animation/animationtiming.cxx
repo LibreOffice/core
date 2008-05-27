@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:40 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 #include <drawinglayer/animation/animationtiming.hxx>
-#endif
-
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

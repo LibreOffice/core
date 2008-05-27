@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:53 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,53 +36,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -103,9 +68,8 @@ namespace drawinglayer
                 const Primitive3DSequence aSource(getChildren());
                 const sal_uInt32 nSourceCount(aSource.getLength());
                 std::vector< Primitive3DReference > aDestination;
-                sal_uInt32 a, b, c;
 
-                for(a = 0L; a < nSourceCount; a++)
+                for(sal_uInt32 a(0); a < nSourceCount; a++)
                 {
                     // get reference
                     const Primitive3DReference xReference(aSource[a]);
@@ -143,13 +107,13 @@ namespace drawinglayer
                                         basegfx::B3DVector a3X, a3Y;
                                         bool b2N(false), b2X(false), b2Y(false);
 
-                                        for(b = 0L; b < nPolyCount; b++)
+                                        for(sal_uInt32 b(0); b < nPolyCount; b++)
                                         {
                                             const basegfx::B3DPolygon aPartPoly(aFillPolyPolygon.getB3DPolygon(b));
                                             const sal_uInt32 nPointCount(aPartPoly.count());
                                             basegfx::B2DPolygon aTexPolygon;
 
-                                            for(c = 0L; c < nPointCount; c++)
+                                            for(sal_uInt32 c(0); c < nPointCount; c++)
                                             {
                                                 const basegfx::B2DPoint a2Candidate(aPartPoly.getTextureCoordinate(c));
 
@@ -223,9 +187,9 @@ namespace drawinglayer
                                             a2DUnitLine.append(basegfx::B2DPoint(0.0, 0.0));
                                             a2DUnitLine.append(basegfx::B2DPoint(1.0, 0.0));
 
-                                            for(a = 0L; a < aMatrices.size(); a++)
+                                            for(sal_uInt32 c(0); c < aMatrices.size(); c++)
                                             {
-                                                const basegfx::B2DHomMatrix& rMatrix = aMatrices[a];
+                                                const basegfx::B2DHomMatrix& rMatrix = aMatrices[c];
                                                 basegfx::B2DPolygon aNewLine(a2DUnitLine);
                                                 aNewLine.transform(rMatrix);
                                                 a2DHatchLines.append(aNewLine);
@@ -276,9 +240,9 @@ namespace drawinglayer
                                                 // build primitives from this geometry
                                                 const sal_uInt32 nHatchLines(a3DHatchLines.count());
 
-                                                for(a = 0L; a < nHatchLines; a++)
+                                                for(sal_uInt32 d(0); d < nHatchLines; d++)
                                                 {
-                                                    const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(a3DHatchLines.getB3DPolygon(a), aHatchColor));
+                                                    const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(a3DHatchLines.getB3DPolygon(d), aHatchColor));
                                                     aDestination.push_back(xRef);
                                                 }
                                             }
@@ -307,9 +271,9 @@ namespace drawinglayer
                 const sal_uInt32 nDestSize(aDestination.size());
                 aRetval.realloc(nDestSize);
 
-                for(a = 0L; a < nDestSize; a++)
+                for(sal_uInt32 b(0); b < nDestSize; b++)
                 {
-                    aRetval[a] = aDestination[a];
+                    aRetval[b] = aDestination[b];
                 }
             }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-16 10:13:49 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,14 @@ namespace drawinglayer
             if(!rViewInformation.getViewport().isEmpty())
             {
                 rVisibleDiscreteRange.intersect(rViewInformation.getDiscreteViewport());
-            }
 
-            // force to discrete expanded bounds, too
-            rVisibleDiscreteRange.expand(basegfx::B2DTuple(floor(rVisibleDiscreteRange.getMinX()), floor(rVisibleDiscreteRange.getMinY())));
-            rVisibleDiscreteRange.expand(basegfx::B2DTuple(ceil(rVisibleDiscreteRange.getMaxX()), ceil(rVisibleDiscreteRange.getMaxY())));
+                if(!rVisibleDiscreteRange.isEmpty())
+                {
+                    // force to discrete expanded bounds, too
+                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(floor(rVisibleDiscreteRange.getMinX()), floor(rVisibleDiscreteRange.getMinY())));
+                    rVisibleDiscreteRange.expand(basegfx::B2DTuple(ceil(rVisibleDiscreteRange.getMaxX()), ceil(rVisibleDiscreteRange.getMaxY())));
+                }
+            }
 
             if(rVisibleDiscreteRange.isEmpty())
             {
@@ -192,8 +195,8 @@ namespace drawinglayer
                     // create transform for the created bitmap in discrete coordinates first
                     basegfx::B2DHomMatrix aNew2DTransform;
 
-                    aNew2DTransform.set(0, 0, aVisibleDiscreteRange.getWidth());
-                    aNew2DTransform.set(1, 1, aVisibleDiscreteRange.getHeight());
+                    aNew2DTransform.set(0, 0, (double)(aBitmapSizePixel.getWidth() - 1));
+                    aNew2DTransform.set(1, 1, (double)(aBitmapSizePixel.getHeight() - 1));
                     aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 
@@ -352,26 +355,30 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
 
             // get the involved ranges (see helper method calculateDsicreteSizes for details)
-            bool bNeedNewDecomposition(false);
             basegfx::B2DRange aDiscreteRange;
-            basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
-            calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+            bool bNeedNewDecomposition(false);
 
             if(getLocalDecomposition().hasElements())
             {
+                basegfx::B2DRange aVisibleDiscreteRange;
+                calculateDsicreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
+
                 // display has changed and cannot be reused when resolution did change
-                if(!basegfx::fTools::equal(aVisibleDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
-                    !basegfx::fTools::equal(aVisibleDiscreteRange.getHeight(), mfOldDiscreteSizeY))
+                if(!basegfx::fTools::equal(aDiscreteRange.getWidth(), mfOldDiscreteSizeX) ||
+                    !basegfx::fTools::equal(aDiscreteRange.getHeight(), mfOldDiscreteSizeY))
                 {
                     bNeedNewDecomposition = true;
                 }
 
-                // display has changed and cannot be reused when the shown relative part did change
-                if(!bNeedNewDecomposition
-                    && !aUnitVisibleRange.equal(maOldUnitVisiblePart))
+                if(!bNeedNewDecomposition)
                 {
-                    bNeedNewDecomposition = true;
+                    // needs to be painted when the new part is not part of the last
+                    // decomposition
+                    if(!maOldUnitVisiblePart.isInside(aUnitVisibleRange))
+                    {
+                        bNeedNewDecomposition = true;
+                    }
                 }
             }
 
@@ -385,8 +392,8 @@ namespace drawinglayer
             {
                 // remember last used NewDiscreteSize and NewUnitVisiblePart
                 ScenePrimitive2D* pThat = const_cast< ScenePrimitive2D* >(this);
-                pThat->mfOldDiscreteSizeX = aVisibleDiscreteRange.getWidth();
-                pThat->mfOldDiscreteSizeY = aVisibleDiscreteRange.getHeight();
+                pThat->mfOldDiscreteSizeX = aDiscreteRange.getWidth();
+                pThat->mfOldDiscreteSizeY = aDiscreteRange.getHeight();
                 pThat->maOldUnitVisiblePart = aUnitVisibleRange;
             }
 

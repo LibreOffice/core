@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
-#endif
-
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-14 09:21:54 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,65 +36,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_DEFAULTPROCESSOR3D_HXX
 #include <drawinglayer/processor3d/defaultprocessor3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 #include <drawinglayer/texture/texture3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_HATCHTEXTUREPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_MODIFIEDCOLORPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_TRANSFORMPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -232,28 +188,17 @@ namespace drawinglayer
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
                 texture::GeoTexSvx* pOldTex = mpGeoTexSvx;
 
-                // calculate logic pixel size in world coordinates. Check if InvWorldToView
-                // is valid
-                if(maInvWorldToView.isIdentity())
-                {
-                    maInvWorldToView = maWorldToView;
-                    maInvWorldToView.invert();
-                }
+                // calculate logic pixel size in world coordinates. Create transformation view
+                // to world by inverting WorldToView
+                basegfx::B3DHomMatrix aInvWorldToView(maWorldToView);
+                aInvWorldToView.invert();
 
-                const basegfx::B3DPoint aZero(maInvWorldToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
-                const basegfx::B3DPoint aOne(maInvWorldToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
-                const basegfx::B3DVector aLogicPixelSizeWorld(aOne - aZero);
-                double fLogicPixelSizeWorld(fabs(aLogicPixelSizeWorld.getX()));
-
-                if(fabs(aLogicPixelSizeWorld.getY()) > fLogicPixelSizeWorld)
-                {
-                    fLogicPixelSizeWorld = fabs(aLogicPixelSizeWorld.getY());
-                }
-
-                if(fabs(aLogicPixelSizeWorld.getZ()) > fLogicPixelSizeWorld)
-                {
-                    fLogicPixelSizeWorld = fabs(aLogicPixelSizeWorld.getZ());
-                }
+                // back-project discrete coordinates to world coordinates and extract
+                // maximum distance
+                const basegfx::B3DPoint aZero(aInvWorldToView * basegfx::B3DPoint(0.0, 0.0, 0.0));
+                const basegfx::B3DPoint aOne(aInvWorldToView * basegfx::B3DPoint(1.0, 1.0, 1.0));
+                const basegfx::B3DVector aLogicPixel(aOne - aZero);
+                double fLogicPixelSizeWorld(::std::max(::std::max(fabs(aLogicPixel.getX()), fabs(aLogicPixel.getY())), fabs(aLogicPixel.getZ())));
 
                 // calculate logic pixel size in texture coordinates
                 const double fLogicTexSizeX(fLogicPixelSizeWorld / rPrimitive.getTextureSize().getX());
@@ -354,7 +299,7 @@ namespace drawinglayer
 
                 if(a2DRange.overlaps(maRasterRange))
                 {
-                    const attribute::MaterialAttribute3D aMaterial(rPrimitive.getBColor());
+                    const attribute::MaterialAttribute3D aMaterial(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
 
                     rasterconvertB3DPolygon(aMaterial, aHairline);
                 }
@@ -496,7 +441,8 @@ namespace drawinglayer
 
                 // draw it to ZBuffer
                 const attribute::MaterialAttribute3D aMaterial(
-                    aObjectColor, rPrimitive.getMaterial().getSpecular(),
+                    maBColorModifierStack.getModifiedColor(aObjectColor),
+                    rPrimitive.getMaterial().getSpecular(),
                     rPrimitive.getMaterial().getEmission(),
                     rPrimitive.getMaterial().getSpecularIntensity());
 
@@ -509,12 +455,10 @@ namespace drawinglayer
             // remember current transformations
             const basegfx::B3DHomMatrix aLastWorldToView(maWorldToView);
             const basegfx::B3DHomMatrix aLastWorldToEye(maWorldToEye);
-            const basegfx::B3DHomMatrix aLastInvWorldToView(maInvWorldToView);
 
             // create new transformations
             maWorldToView = maWorldToView * rTransformCandidate.getTransformation();
             maWorldToEye = maWorldToEye * rTransformCandidate.getTransformation();
-            maInvWorldToView.identity();
 
             // let break down
             process(rTransformCandidate.getChildren());
@@ -522,7 +466,6 @@ namespace drawinglayer
             // restore transformations
             maWorldToView = aLastWorldToView;
             maWorldToEye = aLastWorldToEye;
-            maInvWorldToView = aLastInvWorldToView;
         }
 
         void DefaultProcessor3D::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rBasePrimitive)
@@ -656,14 +599,11 @@ namespace drawinglayer
             maBColorModifierStack(),
             mpGeoTexSvx(0),
             mpTransparenceGeoTexSvx(0),
-            mnRasterWidth(0),
-            mnRasterHeight(0),
             mbModulate(false),
             mbFilter(false),
             mbSimpleTextureActive(false)
         {
-            // a derivation has to set maWorldToEye, maWorldToView
-            // maRasterRange, mnRasterWidth and mnRasterHeight. Those values are
+            // a derivation has to set maWorldToEye, maWorldToView and maRasterRange. Those values are
             // used in the basic render methods
         }
 

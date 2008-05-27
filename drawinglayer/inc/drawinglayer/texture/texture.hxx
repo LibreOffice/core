@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:33:37 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,9 @@
 #ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////

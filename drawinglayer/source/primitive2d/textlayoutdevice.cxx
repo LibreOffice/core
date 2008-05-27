@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-05 09:15:43 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#endif
-
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-
-#ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
-#endif
-
-#ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
-#endif
-
-//#ifndef _SV_OUTDEV_HXX
-//#include <vcl/outdev.hxx>
-//#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // VDev RevDevice provider

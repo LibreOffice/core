@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:06 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,9 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_POLYPOLYGONPRIMITIVE3D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b3dpolypolygon.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_MATERIALATTRIBUTE3D_HXX
 #include <drawinglayer/attribute/materialattribute3d.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 

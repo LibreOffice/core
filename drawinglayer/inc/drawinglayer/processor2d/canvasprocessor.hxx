@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-18 15:10:11 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,13 @@
 #ifndef _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 #define _DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_BASEPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
-
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 #include <svtools/optionsdrawinglayer.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP_
 #include <com/sun/star/rendering/ViewState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP_
 #include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // forward declaration

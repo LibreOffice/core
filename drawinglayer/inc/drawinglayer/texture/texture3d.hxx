@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texture3d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2008-04-16 04:59:58 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE3D_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 #include <drawinglayer/texture/texture.hxx>
-#endif
-
-#ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

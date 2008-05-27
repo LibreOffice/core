@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudelathetools3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2008-03-19 04:35:22 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,54 +36,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_drawinglayer.hxx"
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDREXTRUDELATHETOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POINT_B3DPOINT_HXX
 #include <basegfx/point/b3dpoint.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B3DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B3DRANGE_HXX
 #include <basegfx/range/b3drange.hxx>
-#endif
-
-#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -649,219 +613,249 @@ namespace drawinglayer
                     }
                 }
 
-                for(a = 0L; a < nLoopCount; a++)
+                if(nLoopCount)
                 {
-                    const Slice3D& rSliceA(rSliceVector[a]);
-                    const Slice3D& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
-                    const bool bAcceptPair(SLICETYPE3D_REGULAR == rSliceA.getSliceType() && SLICETYPE3D_REGULAR == rSliceB.getSliceType());
-                    basegfx::B3DPolyPolygon aPolA(rSliceA.getB3DPolyPolygon());
-                    basegfx::B3DPolyPolygon aPolB(rSliceB.getB3DPolyPolygon());
-
-                    if(bAcceptPair)
+                    for(a = 0L; a < nLoopCount; a++)
                     {
-                        if(bCreateNormals)
-                        {
-                            impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);
-                        }
+                        const Slice3D& rSliceA(rSliceVector[a]);
+                        const Slice3D& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
+                        const bool bAcceptPair(SLICETYPE3D_REGULAR == rSliceA.getSliceType() && SLICETYPE3D_REGULAR == rSliceB.getSliceType());
+                        basegfx::B3DPolyPolygon aPolA(rSliceA.getB3DPolyPolygon());
+                        basegfx::B3DPolyPolygon aPolB(rSliceB.getB3DPolyPolygon());
 
+                        if(bAcceptPair)
                         {
-                            const sal_uInt32 nIndPrev((a + nNumSlices - 1L) % nNumSlices);
-                            const Slice3D& rSlicePrev(rSliceVector[nIndPrev]);
-                            basegfx::B3DPolyPolygon aPrev(rSlicePrev.getB3DPolyPolygon());
-                            basegfx::B3DPolyPolygon aPolAA(rSliceA.getB3DPolyPolygon());
-
-                            if(SLICETYPE3D_FRONTCAP == rSlicePrev.getSliceType())
+                            if(bCreateNormals)
                             {
-                                basegfx::B3DPolyPolygon aFront(rSlicePrev.getB3DPolyPolygon());
-                                const bool bHasSlant(aPolAA != aPrev);
+                                impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);
+                            }
 
-                                if(bCreateTextureCoordinates)
+                            {
+                                const sal_uInt32 nIndPrev((a + nNumSlices - 1L) % nNumSlices);
+                                const Slice3D& rSlicePrev(rSliceVector[nIndPrev]);
+                                basegfx::B3DPolyPolygon aPrev(rSlicePrev.getB3DPolyPolygon());
+                                basegfx::B3DPolyPolygon aPolAA(rSliceA.getB3DPolyPolygon());
+
+                                if(SLICETYPE3D_FRONTCAP == rSlicePrev.getSliceType())
                                 {
-                                    aFront = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
-                                }
+                                    basegfx::B3DPolyPolygon aFront(rSlicePrev.getB3DPolyPolygon());
+                                    const bool bHasSlant(aPolAA != aPrev);
 
-                                if(bCreateNormals)
-                                {
-                                    basegfx::B3DVector aNormal(0.0, 0.0, -1.0);
-
-                                    if(aFront.count())
+                                    if(bCreateTextureCoordinates)
                                     {
-                                        aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                                        aFront = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
                                     }
 
-                                    impSetNormal(aFront, aNormal);
+                                    if(bCreateNormals)
+                                    {
+                                        basegfx::B3DVector aNormal(0.0, 0.0, -1.0);
+
+                                        if(aFront.count())
+                                        {
+                                            aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                                        }
+
+                                        impSetNormal(aFront, aNormal);
+
+                                        if(bHasSlant)
+                                        {
+                                            impCreateInBetweenNormals(aPolAA, aPrev, bSmoothHorizontalNormals);
+
+                                            if(bSmoothNormals)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aPolA, aPolAA, fSmoothNormalsMix);
+                                                aPolAA = aPolA;
+                                            }
+                                            else
+                                            {
+                                                // take over from surface
+                                                aPolAA = aPolA;
+                                            }
+
+                                            if(bSmoothLids)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aFront, aPrev, fSmoothLidsMix);
+                                                aPrev = aFront;
+                                            }
+                                            else
+                                            {
+                                                // take over from front
+                                                aPrev = aFront;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(bSmoothNormals)
+                                            {
+                                                // smooth
+                                                impMixNormals(aPolA, aFront, fSmoothNormalsMix);
+                                            }
+
+                                            if(bSmoothLids)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aFront, aPolA, fSmoothLidsMix);
+                                                aPolA = aFront;
+                                            }
+                                        }
+                                    }
 
                                     if(bHasSlant)
+                                    {
+                                        if(bCreateTextureCoordinates)
+                                        {
+                                            fTexStart = fTexHeightPos * fInvTexHeight;
+                                            fTexStop = (fTexHeightPos - aTexHeightArray[(a + nLoopCount - 1L) % nLoopCount]) * fInvTexHeight;
+                                        }
+
+                                        impAddInBetweenFill(aEdgeRounding, aPolAA, aPrev, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
+                                    }
+
+                                    aFront.flip();
+                                    rFill.push_back(aFront);
+                                }
+                                else
+                                {
+                                    if(bCreateNormals && bSmoothNormals && (nIndPrev != a + 1L))
                                     {
                                         impCreateInBetweenNormals(aPolAA, aPrev, bSmoothHorizontalNormals);
-
-                                        if(bSmoothNormals)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aPolA, aPolAA, fSmoothNormalsMix);
-                                            aPolAA = aPolA;
-                                        }
-                                        else
-                                        {
-                                            // take over from surface
-                                            aPolAA = aPolA;
-                                        }
-
-                                        if(bSmoothLids)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aFront, aPrev, fSmoothLidsMix);
-                                            aPrev = aFront;
-                                        }
-                                        else
-                                        {
-                                            // take over from front
-                                            aPrev = aFront;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if(bSmoothNormals)
-                                        {
-                                            // smooth
-                                            impMixNormals(aPolA, aFront, fSmoothNormalsMix);
-                                        }
-
-                                        if(bSmoothLids)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aFront, aPolA, fSmoothLidsMix);
-                                            aPolA = aFront;
-                                        }
+                                        impMixNormals(aPolA, aPolAA, 0.5);
                                     }
                                 }
+                            }
 
-                                if(bHasSlant)
+                            {
+                                const sal_uInt32 nIndNext((a + 2L) % nNumSlices);
+                                const Slice3D& rSliceNext(rSliceVector[nIndNext]);
+                                basegfx::B3DPolyPolygon aNext(rSliceNext.getB3DPolyPolygon());
+                                basegfx::B3DPolyPolygon aPolBB(rSliceB.getB3DPolyPolygon());
+
+                                if(SLICETYPE3D_BACKCAP == rSliceNext.getSliceType())
                                 {
+                                    basegfx::B3DPolyPolygon aBack(rSliceNext.getB3DPolyPolygon());
+                                    const bool bHasSlant(aPolBB != aNext);
+
                                     if(bCreateTextureCoordinates)
                                     {
-                                        fTexStart = fTexHeightPos * fInvTexHeight;
-                                        fTexStop = (fTexHeightPos - aTexHeightArray[(a + nLoopCount - 1L) % nLoopCount]) * fInvTexHeight;
+                                        aBack = basegfx::tools::applyDefaultTextureCoordinatesParallel(aBack, aTexRangeBack);
                                     }
 
-                                    impAddInBetweenFill(aEdgeRounding, aPolAA, aPrev, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
-                                }
+                                    if(bCreateNormals)
+                                    {
+                                        const basegfx::B3DVector aNormal(aBack.count() ? aBack.getB3DPolygon(0L).getNormal() : basegfx::B3DVector(0.0, 0.0, 1.0));
+                                        impSetNormal(aBack, aNormal);
 
-                                aFront.flip();
-                                rFill.push_back(aFront);
-                            }
-                            else
-                            {
-                                if(bCreateNormals && bSmoothNormals && (nIndPrev != a + 1L))
-                                {
-                                    impCreateInBetweenNormals(aPolAA, aPrev, bSmoothHorizontalNormals);
-                                    impMixNormals(aPolA, aPolAA, 0.5);
-                                }
-                            }
-                        }
+                                        if(bHasSlant)
+                                        {
+                                            impCreateInBetweenNormals(aNext, aPolBB, bSmoothHorizontalNormals);
 
-                        {
-                            const sal_uInt32 nIndNext((a + 2L) % nNumSlices);
-                            const Slice3D& rSliceNext(rSliceVector[nIndNext]);
-                            basegfx::B3DPolyPolygon aNext(rSliceNext.getB3DPolyPolygon());
-                            basegfx::B3DPolyPolygon aPolBB(rSliceB.getB3DPolyPolygon());
+                                            if(bSmoothNormals)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aPolB, aPolBB, fSmoothNormalsMix);
+                                                aPolBB = aPolB;
+                                            }
+                                            else
+                                            {
+                                                // take over from surface
+                                                aPolBB = aPolB;
+                                            }
 
-                            if(SLICETYPE3D_BACKCAP == rSliceNext.getSliceType())
-                            {
-                                basegfx::B3DPolyPolygon aBack(rSliceNext.getB3DPolyPolygon());
-                                const bool bHasSlant(aPolBB != aNext);
+                                            if(bSmoothLids)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aBack, aNext, fSmoothLidsMix);
+                                                aNext = aBack;
+                                            }
+                                            else
+                                            {
+                                                // take over from back
+                                                aNext = aBack;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(bSmoothNormals)
+                                            {
+                                                // smooth
+                                                impMixNormals(aPolB, aBack, fSmoothNormalsMix);
+                                            }
 
-                                if(bCreateTextureCoordinates)
-                                {
-                                    aBack = basegfx::tools::applyDefaultTextureCoordinatesParallel(aBack, aTexRangeBack);
-                                }
-
-                                if(bCreateNormals)
-                                {
-                                    const basegfx::B3DVector aNormal(aBack.count() ? aBack.getB3DPolygon(0L).getNormal() : basegfx::B3DVector(0.0, 0.0, 1.0));
-                                    impSetNormal(aBack, aNormal);
+                                            if(bSmoothLids)
+                                            {
+                                                // smooth and copy
+                                                impMixNormals(aBack, aPolB, fSmoothLidsMix);
+                                                aPolB = aBack;
+                                            }
+                                        }
+                                    }
 
                                     if(bHasSlant)
                                     {
+                                        if(bCreateTextureCoordinates)
+                                        {
+                                            fTexStart = (fTexHeightPos + aTexHeightArray[a] + aTexHeightArray[(a + 1L) % nLoopCount]) * fInvTexHeight;
+                                            fTexStop = (fTexHeightPos + aTexHeightArray[a]) * fInvTexHeight;
+                                        }
+
+                                        impAddInBetweenFill(aEdgeRounding, aNext, aPolBB, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
+                                    }
+
+                                    rFill.push_back(aBack);
+                                }
+                                else
+                                {
+                                    if(bCreateNormals && bSmoothNormals && (nIndNext != a))
+                                    {
                                         impCreateInBetweenNormals(aNext, aPolBB, bSmoothHorizontalNormals);
-
-                                        if(bSmoothNormals)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aPolB, aPolBB, fSmoothNormalsMix);
-                                            aPolBB = aPolB;
-                                        }
-                                        else
-                                        {
-                                            // take over from surface
-                                            aPolBB = aPolB;
-                                        }
-
-                                        if(bSmoothLids)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aBack, aNext, fSmoothLidsMix);
-                                            aNext = aBack;
-                                        }
-                                        else
-                                        {
-                                            // take over from back
-                                            aNext = aBack;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if(bSmoothNormals)
-                                        {
-                                            // smooth
-                                            impMixNormals(aPolB, aBack, fSmoothNormalsMix);
-                                        }
-
-                                        if(bSmoothLids)
-                                        {
-                                            // smooth and copy
-                                            impMixNormals(aBack, aPolB, fSmoothLidsMix);
-                                            aPolB = aBack;
-                                        }
+                                        impMixNormals(aPolB, aPolBB, 0.5);
                                     }
                                 }
-
-                                if(bHasSlant)
-                                {
-                                    if(bCreateTextureCoordinates)
-                                    {
-                                        fTexStart = (fTexHeightPos + aTexHeightArray[a] + aTexHeightArray[(a + 1L) % nLoopCount]) * fInvTexHeight;
-                                        fTexStop = (fTexHeightPos + aTexHeightArray[a]) * fInvTexHeight;
-                                    }
-
-                                    impAddInBetweenFill(aEdgeRounding, aNext, aPolBB, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
-                                }
-
-                                rFill.push_back(aBack);
                             }
-                            else
+
+                            if(bCreateTextureCoordinates)
                             {
-                                if(bCreateNormals && bSmoothNormals && (nIndNext != a))
-                                {
-                                    impCreateInBetweenNormals(aNext, aPolBB, bSmoothHorizontalNormals);
-                                    impMixNormals(aPolB, aPolBB, 0.5);
-                                }
+                                fTexStart = (fTexHeightPos + aTexHeightArray[a]) * fInvTexHeight;
+                                fTexStop = fTexHeightPos * fInvTexHeight;
                             }
+
+                            impAddInBetweenFill(aEdgeRounding, aPolB, aPolA, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
                         }
 
                         if(bCreateTextureCoordinates)
                         {
-                            fTexStart = (fTexHeightPos + aTexHeightArray[a]) * fInvTexHeight;
-                            fTexStop = fTexHeightPos * fInvTexHeight;
+                            fTexHeightPos += aTexHeightArray[a];
                         }
-
-                        impAddInBetweenFill(aEdgeRounding, aPolB, aPolA, fTexStart, fTexStop, bCreateNormals, bCreateTextureCoordinates);
                     }
+                }
+                else
+                {
+                    // no loop, but a single slice (1 == nNumSlices), create a filling from the single
+                    // front plane
+                    const Slice3D& rSlice(rSliceVector[0]);
+                    basegfx::B3DPolyPolygon aFront(rSlice.getB3DPolyPolygon());
 
                     if(bCreateTextureCoordinates)
                     {
-                        fTexHeightPos += aTexHeightArray[a];
+                        aFront = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
                     }
+
+                    if(bCreateNormals)
+                    {
+                        basegfx::B3DVector aNormal(0.0, 0.0, -1.0);
+
+                        if(aFront.count())
+                        {
+                            aNormal = -aFront.getB3DPolygon(0L).getNormal();
+                        }
+
+                        impSetNormal(aFront, aNormal);
+                    }
+
+                    aFront.flip();
+                    rFill.push_back(aFront);
                 }
 
                 if(bCreateTextureCoordinates)

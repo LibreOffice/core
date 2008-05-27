@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-02-07 13:41:57 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,11 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE3D_BASEPRIMITIVE3D_HXX
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
-#endif
-
 #include <boost/utility.hpp>
-
-#ifndef _COM_SUN_STAR_GRAPHIC_XPRIMITIVE3D_HPP_
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
-#endif
-
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B3DRANGE_HXX
 #include <basegfx/range/b3drange.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // defines for DeclPrimitrive3DIDBlock and ImplPrimitrive3DIDBlock

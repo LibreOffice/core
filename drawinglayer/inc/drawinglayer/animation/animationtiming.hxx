@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtiming.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:30:10 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,7 @@
 #ifndef INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 #define INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////

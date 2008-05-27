@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-16 10:22:31 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,16 +593,16 @@ namespace drawinglayer
             const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
             const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
 
-            // generate mnRasterWidth and mnRasterHeight
-            mnRasterWidth = (sal_uInt32)floor(fViewSizeX) + 1;
-            mnRasterHeight = (sal_uInt32)floor(fViewSizeY) + 1;
+            // generate RasterWidth and RasterHeight
+            const sal_uInt32 nRasterWidth((sal_uInt32)basegfx::fround(fViewSizeX) + 1);
+            const sal_uInt32 nRasterHeight((sal_uInt32)basegfx::fround(fViewSizeY) + 1);
 
-            if(mnRasterWidth && mnRasterHeight)
+            if(nRasterWidth && nRasterHeight)
             {
                 // create view unit buffer
                 mpBZPixelRaster = new basegfx::BZPixelRaster(
-                    mnAntiAlialize ? mnRasterWidth * mnAntiAlialize : mnRasterWidth,
-                    mnAntiAlialize ? mnRasterHeight * mnAntiAlialize : mnRasterHeight);
+                    mnAntiAlialize ? nRasterWidth * mnAntiAlialize : nRasterWidth,
+                    mnAntiAlialize ? nRasterHeight * mnAntiAlialize : nRasterHeight);
                 OSL_ENSURE(mpBZPixelRaster, "ZBufferProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
                 basegfx::B3DHomMatrix aDeviceToView;
 

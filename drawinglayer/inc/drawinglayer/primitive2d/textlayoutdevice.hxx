@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 #define INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 
-#ifndef _SAL_TYPES_H_
 #include <sal/types.h>
-#endif
-
-#ifndef _SOLAR_H
 #include <tools/solar.h>
-#endif
-
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////

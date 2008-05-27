@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
+ *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRATTRIBUTE_HXX
 
-#ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#endif
-
-#ifndef _BGFX_COLOR_BCOLOR_HXX
 #include <basegfx/color/bcolor.hxx>
-#endif
-
 #include <vector>
-
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
