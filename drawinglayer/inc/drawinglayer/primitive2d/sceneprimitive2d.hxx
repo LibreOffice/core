@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: thb $ $Date: 2008-05-27 20:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ namespace drawinglayer
             // protected helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
             bool impGetLabel3D(const geometry::ViewInformation2D& rViewInformation) const;
-            void ScenePrimitive2D::calculateDsicreteSizes(
+            void calculateDsicreteSizes(
                 const geometry::ViewInformation2D& rViewInformation,
                 basegfx::B2DRange& rDiscreteRange,
                 basegfx::B2DRange& rVisibleDiscreteRange,

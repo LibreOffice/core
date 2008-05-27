@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ *  last change: $Author: thb $ $Date: 2008-05-27 20:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ namespace drawinglayer
 
             // get the DrawPage which is visualized. Tjhis is needed e.g. for the
             // view-dependent decomposition of PageNumber Fields in Texts
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& ViewInformation2D::getVisualizedPage() const;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getVisualizedPage() const;
 
             // data access with on-demand preparations
             const basegfx::B2DHomMatrix& getInverseViewTransformation() const;
