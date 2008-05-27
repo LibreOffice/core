@@ -131,6 +131,7 @@ common
 		NO_REC_RES
 		no_transex
 		NOSOLAR_JAVA
+		NSIS_PATH
 		ODBCINC
 		ODBCLIB
 		ODBCPATH
