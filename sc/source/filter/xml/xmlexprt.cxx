@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexprt.cxx,v $
- * $Revision: 1.212 $
+ * $Revision: 1.213 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2307,10 +2307,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                 if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                 {
                     const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-                    /* FIXME: when support for ODF 1.2 and ODFF is ready in
-                     * xmloff, this should be XML_NAMESPACE_OF instead of
-                     * XML_NAMESPACE_NONE! */
-                    sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
+                    sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
                     pFormulaCell->GetFormula(sFormula, eGrammar);
                     rtl::OUString sOUFormula(sFormula.makeStringAndClear());
                     if (!bIsMatrix)
@@ -3539,6 +3536,20 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 
     // create ScChangeTrackingExportHelper after document is known
     pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
+
+    // Set the document's storage grammar corresponding to the ODF version that
+    // is to be written.
+    SvtSaveOptions::ODFDefaultVersion meODFDefaultVersion = getDefaultVersion();
+    switch (meODFDefaultVersion)
+    {
+        // ODF 1.0 and 1.1 use GRAM_PODF, everything later or unspecified GRAM_ODFF
+        case SvtSaveOptions::ODFVER_010:
+        case SvtSaveOptions::ODFVER_011:
+            pDoc->SetStorageGrammar( ScGrammar::GRAM_PODF);
+            break;
+        default:
+            pDoc->SetStorageGrammar( ScGrammar::GRAM_ODFF);
+    }
 }
 
 // XFilter
