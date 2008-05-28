@@ -138,7 +138,6 @@ public:
 protected:
     void _resetDocumentState();
     bool _writeTargetDocument(DocumentHandler *pHandler);
-    void _writeBegin();
     void _writeDefaultStyles(DocumentHandler *pHandler);
     void _writeMasterPages(DocumentHandler *pHandler);
     void _writePageMasters(DocumentHandler *pHandler);
