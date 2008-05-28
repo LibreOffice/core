@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -398,9 +398,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, con
         ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
         const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-        /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, this
-         * should be XML_NAMESPACE_OF instead of XML_NAMESPACE_NONE! */
-        sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
+        sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
         String sFormula;
         pFormulaCell->GetFormula(sFormula, eGrammar);
         rtl::OUString sOUFormula(sFormula);
