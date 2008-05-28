@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbgoutsw.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -291,7 +291,7 @@ const String lcl_dbg_out(const SfxItemSet & rSet)
         if (!bFirst)
             aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
 
-        if ((sal_uInt32)pItem != 0xffffffff)
+        if ((sal_uIntPtr)pItem != SAL_MAX_SIZE)
             aStr += lcl_dbg_out(*pItem);
         else
             aStr += String("invalid", RTL_TEXTENCODING_ASCII_US);
