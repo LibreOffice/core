@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newerverwarn.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,22 +41,29 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <rtl/bootstrap.hxx>
 #include <vcl/msgbox.hxx>
+#include <vos/process.hxx>
 
-namespace beans = ::com::sun::star::beans;
-namespace frame = ::com::sun::star::frame;
-namespace lang  = ::com::sun::star::lang;
-namespace uno   = ::com::sun::star::uno;
-namespace util  = ::com::sun::star::util;
+namespace beans  = ::com::sun::star::beans;
+namespace frame  = ::com::sun::star::frame;
+namespace lang   = ::com::sun::star::lang;
+namespace uno    = ::com::sun::star::uno;
+namespace util   = ::com::sun::star::util;
+
+using namespace com::sun::star::system;
 
 namespace sfx2
 {
 
-NewerVersionWarningDialog::NewerVersionWarningDialog( Window* pParent ) :
+NewerVersionWarningDialog::NewerVersionWarningDialog(
+    Window* pParent, const ::rtl::OUString& rVersion ) :
 
     SfxModalDialog( pParent, SfxResId( RID_DLG_NEWER_VERSION_WARNING ) ),
 
@@ -64,7 +71,8 @@ NewerVersionWarningDialog::NewerVersionWarningDialog( Window* pParent ) :
     m_aInfoText     ( this, SfxResId( FT_INFO ) ),
     m_aButtonLine   ( this, SfxResId( FL_BUTTON ) ),
     m_aUpdateBtn    ( this, SfxResId( PB_UPDATE ) ),
-    m_aLaterBtn     ( this, SfxResId( PB_LATER ) )
+    m_aLaterBtn     ( this, SfxResId( PB_LATER ) ),
+    m_sVersion      ( rVersion )
 
 {
     FreeResource();
@@ -81,40 +89,42 @@ NewerVersionWarningDialog::~NewerVersionWarningDialog()
 
 IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
 {
-    uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    try
-    {
-        uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                xSMGR,
-                                DEFINE_CONST_UNICODE("org.openoffice.Office.Addons/"),
-                                DEFINE_CONST_UNICODE("AddonUI/OfficeHelp/UpdateCheckJob"),
-                                DEFINE_CONST_UNICODE("URL"),
-                                ::comphelper::ConfigurationHelper::E_READONLY );
-        util::URL aURL;
-        if ( aVal >>= aURL.Complete )
-        {
-            uno::Reference< util::XURLTransformer > xTransformer(
-                xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer") ),
-                uno::UNO_QUERY_THROW );
-            xTransformer->parseStrict( aURL );
-            uno::Reference < frame::XDesktop > xDesktop(
-                xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ),
-                uno::UNO_QUERY_THROW );
-            uno::Reference< frame::XDispatchProvider > xDispatchProvider(
-                xDesktop->getCurrentFrame(), uno::UNO_QUERY );
-            if ( !xDispatchProvider.is() )
-                xDispatchProvider = uno::Reference < frame::XDispatchProvider > ( xDesktop, uno::UNO_QUERY );
+    // detect execute path
+    ::rtl::OUString sProgramPath;
+    ::vos::OStartupInfo().getExecutableFile( sProgramPath );
+    sal_uInt32 nLastIndex = sProgramPath.lastIndexOf( '/' );
+    if ( nLastIndex > 0 )
+        sProgramPath = sProgramPath.copy( 0, nLastIndex + 1 );
 
-            uno::Reference< frame::XDispatch > xDispatch =
-                xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
-            if ( xDispatch.is() )
-                xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
-        }
-    }
-    catch( const uno::Exception& e )
+    // read keys from soffice.ini (sofficerc)
+    ::rtl::OUString sIniFileName = sProgramPath;
+    sIniFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "version" ) ) );
+    ::rtl::Bootstrap aIniFile( sIniFileName );
+    ::rtl::OUString sNotifyURL;
+    aIniFile.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ODFNotifyURL" ) ), sNotifyURL );
+
+    if ( sNotifyURL.getLength() > 0 )
     {
-         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            sNotifyURL += m_sVersion;
+            if ( xSystemShell.is() && sNotifyURL.getLength() )
+            {
+                xSystemShell->execute(
+                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+            }
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
     }
 
     EndDialog( RET_OK );
