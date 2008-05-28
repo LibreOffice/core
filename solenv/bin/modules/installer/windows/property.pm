@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -266,6 +266,12 @@ sub set_important_properties
     if ( $allvariables->{'BRANDPACKAGEVERSION'} )
     {
         my $onepropertyline = "BRANDPACKAGEVERSION" . "\t" . $allvariables->{'BRANDPACKAGEVERSION'} . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $allvariables->{'BASISROOTNAME'} )
+    {
+        my $onepropertyline = "BASISROOTNAME" . "\t" . $allvariables->{'BASISROOTNAME'} . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 
