@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ure.scp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1030,16 +1030,6 @@ ProfileItem gid_Ure_Profileitem_Version_Productsource
     Key = "ProductSource";
     Value = "<sourceid>";
 End
-
-#ifdef WNT
-ProfileItem gid_Ure_Profileitem_Version_Productcode
-    ProfileID = gid_Profile_Version_Ini_Ure;
-    ModuleID = gid_Module_Root_Ure_Hidden;
-    Section = "Version";
-    Key = "ProductCode";
-    Value = "<productcode>";
-End
-#endif
 
 ProfileItem gid_Ure_Profileitem_Version_Productmajor
     ProfileID = gid_Profile_Version_Ini_Ure;
