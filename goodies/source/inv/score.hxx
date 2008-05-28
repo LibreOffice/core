@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: score.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +37,8 @@ class ScoreWindow : public Window
 {
     private:
         long            nHero;
-        USHORT          nRockets;
-        USHORT          nLives;
+        long            nRockets;
+        long            nLives;
         long            nScore;
         long            nLevel;
         ResMgr*         pRes;
@@ -50,8 +50,8 @@ class ScoreWindow : public Window
                         ~ScoreWindow();
         virtual void    Paint(const Rectangle& rRect);
         void            SetHero(long nName);
-        void            SetRockets(USHORT nWert);
-        void            SetLives(USHORT nWert);
+        void            SetRockets(long nWert);
+        void            SetLives(long nWert);
         void            SetScore(long nWert);
         void            SetLevel(long nWert);
 
