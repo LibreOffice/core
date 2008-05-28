@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: monst.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,7 +92,7 @@ Gegner::~Gegner()
     delete pBitMonst5b;
 }
 
-void Gegner::InsertGegner(USHORT nType, USHORT x, USHORT y)
+void Gegner::InsertGegner(long nType, long x, long y)
 {
     Gegner_Impl* pWork = new Gegner_Impl();
 
