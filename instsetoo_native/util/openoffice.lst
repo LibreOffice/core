@@ -44,6 +44,7 @@ OpenOffice
 			BASEPRODUCTVERSION 3.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -102,6 +103,7 @@ OpenOffice_wJRE
 			BASEPRODUCTVERSION 3.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -165,6 +167,7 @@ OpenOffice_Dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
@@ -217,9 +220,9 @@ URE
             PRODUCTVERSION 1.4
             PACKAGEVERSION 1.4
             PACKAGEREVISION 1
-			PRODUCTEXTENSION 
-			LONG_PRODUCTEXTENSION 
-			SHORT_PRODUCTEXTENSION 
+			PRODUCTEXTENSION
+			LONG_PRODUCTEXTENSION
+			SHORT_PRODUCTEXTENSION
             LICENSENAME LGPL
 			SERVICESPROJEKT 1
 			SETSTATICPATH 1
@@ -293,6 +296,7 @@ BrOffice
 			ABOUTBOXPRODUCTVERSION 3.0.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -351,6 +355,7 @@ BrOffice_wJRE
 			ABOUTBOXPRODUCTVERSION 3.0.0
             REGISTRATIONURL http://registration.services.openoffice.org/OOo3.0Beta/register.html?id=${INSTANCE_URN}&amp;cid=923142
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -414,6 +419,7 @@ BrOffice_Dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			UPDATEURL http://update30.services.openoffice.org/ProductUpdateService/check.Update
+            ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
