@@ -201,11 +201,6 @@ void DocumentCollector::_writeDefaultStyles(DocumentHandler *pHandler)
 
 }
 
-// writes everything up to the automatic styles declarations..
-void DocumentCollector::_writeBegin()
-{
-}
-
 void DocumentCollector::_writeMasterPages(DocumentHandler *pHandler)
 {
         WPXPropertyList xBlankAttrList;
