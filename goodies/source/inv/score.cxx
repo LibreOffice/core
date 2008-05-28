@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: score.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,7 +115,7 @@ void ScoreWindow::SetHero(long nName)
     Invalidate();
 }
 
-void ScoreWindow::SetRockets(USHORT nWert)
+void ScoreWindow::SetRockets(long nWert)
 {
     nRockets = nWert;
 
@@ -123,7 +123,7 @@ void ScoreWindow::SetRockets(USHORT nWert)
     Invalidate();
 }
 
-void ScoreWindow::SetLives(USHORT nWert)
+void ScoreWindow::SetLives(long nWert)
 {
     nLives = nWert;
 
