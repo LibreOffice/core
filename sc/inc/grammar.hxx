@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grammar.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,9 +115,8 @@ public:
         /// Central definition of the default grammar to be used.
         GRAM_DEFAULT        = GRAM_NATIVE_UI,
 
-        /** Central definition of the default storage grammar to be used.
-            If GRAM_PODF switch this to GRAM_ODFF when we're ready. */
-        GRAM_STORAGE_DEFAULT = GRAM_PODF,
+        /// Central definition of the default storage grammar to be used.
+        GRAM_STORAGE_DEFAULT = GRAM_ODFF,
 
         /** OpCodeMap set by external filter and merged with reference
             convention plus English bit on top. Plain value acts as
