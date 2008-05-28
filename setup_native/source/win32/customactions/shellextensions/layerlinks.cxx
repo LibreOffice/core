@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layerlinks.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,13 +101,14 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     if ( IsSetMsiProperty(handle, TEXT("ADMININSTALL")) )
     {
         string sOooBaseVersion = GetMsiProperty(handle, TEXT("OOOBASEVERSION"));
+        string sBasisRootName = GetMsiProperty(handle, TEXT("BASISROOTNAME"));
         if ( IsSetMsiProperty(handle, TEXT("SUNDIREXISTS")) )
         {
-            sBasisInstallPath = TEXT("..\\..\\OpenOffice.org\\Basis ") + sOooBaseVersion;
+            sBasisInstallPath = TEXT("..\\..\\") + sBasisRootName + TEXT("\\Basis ") + sOooBaseVersion;
         }
         else
         {
-            sBasisInstallPath = TEXT("..\\OpenOffice.org\\Basis ") + sOooBaseVersion;
+            sBasisInstallPath = TEXT("..\\") + sBasisRootName + TEXT("\\Basis ") + sOooBaseVersion;
         }
         sUreInstallPath = TEXT("..\\URE");
    }
