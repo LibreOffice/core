@@ -46,8 +46,6 @@ public:
     void writePageMaster(const int iNum, DocumentHandler *pHandler) const;
     void writeMasterPages(const int iStartingNum, const int iPageMasterNum, const bool bLastPageSpan, DocumentHandler *pHandler) const;
     int getSpan() const;
-    float getMarginLeft() const;
-    float getMarginRight() const;
 
     const std::vector<DocumentElement *> * getHeaderContent() const { return mpHeaderContent; }
     void setHeaderContent(std::vector<DocumentElement *> * pHeaderContent) { mpHeaderContent = pHeaderContent; }
