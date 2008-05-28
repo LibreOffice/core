@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.139 $
+ * $Revision: 1.140 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,6 +281,7 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER),GetXMLToken(XML_N_NUMBER),  XML_NAMESPACE_NUMBER );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOW),  GetXMLToken(XML_N_OOOW),    XML_NAMESPACE_OOOW );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC),  GetXMLToken(XML_N_OOOC),    XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( GetXMLToken(XML_NP_OF),    GetXMLToken(XML_N_OF),      XML_NAMESPACE_OF );
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
