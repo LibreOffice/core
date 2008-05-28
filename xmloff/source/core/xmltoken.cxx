@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.cxx,v $
- * $Revision: 1.126 $
+ * $Revision: 1.127 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3011,6 +3011,10 @@ namespace xmloff { namespace token {
         TOKEN( "cell-range" ,           XML_CELL_RANGE ),
         TOKEN( "error-lower-range",     XML_ERROR_LOWER_RANGE ),
         TOKEN( "error-upper-range",     XML_ERROR_UPPER_RANGE ),
+
+        // erAck: 2008-04-09T20:12+0200  OpenFormula aka ODFF
+        TOKEN( "of",                    XML_NP_OF ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:of:1.2",  XML_N_OF ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
