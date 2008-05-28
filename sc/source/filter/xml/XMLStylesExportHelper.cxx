@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLStylesExportHelper.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -295,11 +295,8 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
     }
     if (sCondition.getLength())
     {
-        sal_uInt16 nNamespacePrefix;
         const ScGrammar::Grammar eGrammar = rExport.GetDocument()->GetStorageGrammar();
-        /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, this
-         * should be XML_NAMESPACE_OF instead of XML_NAMESPACE_NONE! */
-        nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_NONE : XML_NAMESPACE_OOOC);
+        sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
         sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, sal_False );
     }
 
