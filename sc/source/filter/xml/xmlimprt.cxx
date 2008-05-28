@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimprt.cxx,v $
- * $Revision: 1.132 $
+ * $Revision: 1.133 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2699,23 +2699,23 @@ bool ScXMLImport::IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
         const rtl::OUString & rValue, ScGrammar::Grammar& rGrammar,
         const ScGrammar::Grammar eStorageGrammar )
 {
-#if 0
-    bool bNamespace_OF = (nFormulaPrefix == XML_NAMESPACE_OF);
-#else
-    /* FIXME: when support for ODF 1.2 and ODFF is ready in xmloff, activate
-     * XML_NAMESPACE_OF. */
-    bool bNamespace_OF = false;
-#endif
-    bool bNamespace_OOOC = (nFormulaPrefix == XML_NAMESPACE_OOOC);
+    switch (nFormulaPrefix)
+    {
+        case XML_NAMESPACE_OF:
+            rGrammar = ScGrammar::GRAM_ODFF;
+            return true;
+        case XML_NAMESPACE_OOOC:
+            rGrammar = ScGrammar::GRAM_PODF;
+            return true;
+    }
+
     // An invalid namespace can occur from a colon in the formula text if no
     // namespace tag was added. First character in string has to be '=' in that
     // case.
     bool bNoNamespace = (nFormulaPrefix == XML_NAMESPACE_NONE ||
             (nFormulaPrefix == XML_NAMESPACE_UNKNOWN && rValue.toChar() == '='));
 
-    if (bNamespace_OF)
-        rGrammar = ScGrammar::GRAM_ODFF;
-    else if (bNamespace_OOOC || (bNoNamespace && eStorageGrammar == ScGrammar::GRAM_PODF))
+    if (bNoNamespace && eStorageGrammar == ScGrammar::GRAM_PODF)
         // There may be documents in the wild that stored no namespace in ODF 1.x
         rGrammar = ScGrammar::GRAM_PODF;
     else if (bNoNamespace)
@@ -2725,5 +2725,5 @@ bool ScXMLImport::IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
         // Whatever ...
         rGrammar = eStorageGrammar;
 
-    return bNamespace_OF || bNamespace_OOOC;
+    return false;
 }
