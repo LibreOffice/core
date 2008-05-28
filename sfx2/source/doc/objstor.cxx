@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objstor.cxx,v $
- * $Revision: 1.211 $
+ * $Revision: 1.212 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -840,27 +840,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
         }
 
-        // --> PB 2007-11-20 #i83653# Give warning if document contains features from new ODF version
-        // Online Update Check enabled?
-        sal_Bool bOnlineUpdateEnabled = sal_False;
-        uno::Any aVal;
-        uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-        try
-        {
-            uno::Reference < container::XNameAccess > xNameAccess(
-                xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.setup.UpdateCheckConfig") ),
-                uno::UNO_QUERY );
-            if ( xNameAccess.is() )
-            {
-                aVal = xNameAccess->getByName( DEFINE_CONST_UNICODE("AutoCheckEnabled") );
-                aVal >>= bOnlineUpdateEnabled;
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            // property "AutoCheckEnabled" not set
-        }
-
         if ( pMedium->GetInteractionHandler().is() && !SFX_APP()->Get_Impl()->bODFVersionWarningLater )
         {
             // scan the generator string (within meta.xml)
@@ -883,14 +862,14 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     // Custom Property "ODFVersion" does not exist
                 }
 
-                ::rtl::OUString sTemp;
-                if ( (aAny >>= sTemp) && sTemp.getLength() )
+                ::rtl::OUString sVersion;
+                if ( (aAny >>= sVersion) && sVersion.getLength() )
                 {
-                    double nVersion = sTemp.toDouble();
+                    double nVersion = sVersion.toDouble();
                     if ( nVersion > 1.20001 )
                     {
                         // ODF version greater than 1.2 - added some decimal places to be safe against floating point conversion errors (hack)
-                        sfx2::NewerVersionWarningDialog aDlg( NULL );
+                        sfx2::NewerVersionWarningDialog aDlg( NULL, sVersion );
                         aDlg.Execute();
                     }
                 }
