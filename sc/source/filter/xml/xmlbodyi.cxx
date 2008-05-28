@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlbodyi.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,8 @@
 
 
 // INCLUDE ---------------------------------------------------------------
+#include <cstdio>
+
 #include "document.hxx"
 
 #include "xmlbodyi.hxx"
@@ -75,6 +77,32 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     bHadCalculationSettings(sal_False),
     pChangeTrackingImportHelper(NULL)
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (pDoc)
+    {
+        // ODF 1.1 and earlier => GRAM_PODF; ODF 1.2 and later => GRAM_ODFF;
+        // no version => earlier than 1.2 => GRAM_PODF.
+        ScGrammar::Grammar eGrammar = ScGrammar::GRAM_ODFF;
+        OUString aVer( rImport.GetODFVersion());
+        sal_Int32 nLen = aVer.getLength();
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "\n ScXMLBodyContext ODFVersion: nLen: %d, str: %s\n",
+                nLen, OUStringToOString( aVer, RTL_TEXTENCODING_UTF8).getStr());
+#endif
+        if (!nLen)
+            eGrammar = ScGrammar::GRAM_PODF;
+        else
+        {
+            // In case there was a micro version, e.g. "1.2.3", this would
+            // still yield major.minor, but pParsedEnd (5th parameter, not
+            // passed here) would point before string end upon return.
+            double fVer = ::rtl::math::stringToDouble( aVer, '.', 0, NULL, NULL);
+            if (fVer < 1.2)
+                eGrammar = ScGrammar::GRAM_PODF;
+        }
+        pDoc->SetStorageGrammar( eGrammar);
+    }
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
