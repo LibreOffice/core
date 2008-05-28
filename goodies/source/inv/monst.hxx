@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: monst.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,7 @@ class Gegner : public GegnerListe
                     Gegner(Fighter* pFighter, Bombe* pBombe, ResMgr* pRes);
                     ~Gegner();
 
-        void        InsertGegner(USHORT nType, USHORT x, USHORT y);
+        void        InsertGegner(long nType, long x, long y);
         void        DrawGegner(OutputDevice* pDev, Point* pStart);
         void        Move();
         void        SetRandWert(long nWert) { nRandWert = nWert; }
