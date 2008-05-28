@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: newerverwarn.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,13 +45,15 @@ namespace sfx2
         PushButton      m_aUpdateBtn;
         CancelButton    m_aLaterBtn;
 
+        ::rtl::OUString m_sVersion;
+
         DECL_LINK(      UpdateHdl, PushButton* );
         DECL_LINK(      LaterHdl, CancelButton* );
 
         void            InitButtonWidth();
 
     public:
-        NewerVersionWarningDialog( Window* pParent );
+        NewerVersionWarningDialog( Window* pParent, const ::rtl::OUString& rVersion );
         ~NewerVersionWarningDialog();
     };
 } // namespace sfx2
