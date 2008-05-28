@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrapper_gpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-04-24 18:36:20 $
+ *  last change: $Author: obo $ $Date: 2008-05-28 12:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -73,7 +73,12 @@ int main(int argc, char **argv)
     globalParams->setupBaseFonts(NULL);
 
     // PDFDoc takes over ownership for all strings below
-    GString* pFileName = new GString(argv[1]);
+    GString* pFileName    = new GString(argv[1]);
+    GString* pTempErrFileName     = new GString("_err.pdf");
+    GString* pTempErrFileNamePath = new GString(argv[0]);
+
+    GString* pErrFileName = new GString(pTempErrFileNamePath,pTempErrFileName);
+
 
     // check for password string(s)
     GString* pOwnerPasswordStr(
@@ -94,42 +99,65 @@ int main(int argc, char **argv)
     PDFDoc aDoc( pFileName,
                  pOwnerPasswordStr,
                  pUserPasswordStr );
-    // Check various permissions.
+
+    PDFDoc aErrDoc( pErrFileName,
+                 pOwnerPasswordStr,
+                 pUserPasswordStr );
+
+
+   // Check various permissions.
    if ( !aDoc.okToPrint() ||
         !aDoc.okToChange()||
         !aDoc.okToCopy()||
-        !aDoc.okToAddNotes() )
+        !aDoc.okToAddNotes()||
+        !aDoc.isOk()||
+        (userPassword[0] != '\001')||
+        (ownerPassword[0] != '\001')
+      )
    {
-       return 1;
+        pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
+
+        // tell receiver early - needed for proper progress calculation
+        pOutDev->setPageNum( aErrDoc.getNumPages() );
+
+        // virtual resolution of the PDF OutputDev in dpi
+        static const int PDFI_OUTDEV_RESOLUTION=7200;
+
+       // do the conversion
+       const int nPages = aErrDoc.getNumPages();
+       for( int i=1; i<=nPages; ++i )
+       {
+          aErrDoc.displayPage( pOutDev,
+                            i,
+                            PDFI_OUTDEV_RESOLUTION,
+                            PDFI_OUTDEV_RESOLUTION,
+                            0, gTrue, gTrue, gTrue );
+          aErrDoc.processLinks( pOutDev, i );
+       }
    }
+   else
+   {
 
+      pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
 
+      // tell receiver early - needed for proper progress calculation
+      pOutDev->setPageNum( aDoc.getNumPages() );
 
-    if( !aDoc.isOk() )
-        return 1;
-    if ((userPassword[0] != '\001')||(ownerPassword[0] != '\001'))
-        return 1;
+      // virtual resolution of the PDF OutputDev in dpi
+      static const int PDFI_OUTDEV_RESOLUTION=7200;
 
-    pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
-
-    // tell receiver early - needed for proper progress calculation
-    pOutDev->setPageNum( aDoc.getNumPages() );
-
-    // virtual resolution of the PDF OutputDev in dpi
-    static const int PDFI_OUTDEV_RESOLUTION=7200;
-
-    // do the conversion
-    const int nPages = aDoc.getNumPages();
-    for( int i=1; i<=nPages; ++i )
-    {
+      // do the conversion
+      const int nPages = aDoc.getNumPages();
+      for( int i=1; i<=nPages; ++i )
+      {
         aDoc.displayPage( pOutDev,
                           i,
                           PDFI_OUTDEV_RESOLUTION,
                           PDFI_OUTDEV_RESOLUTION,
                           0, gTrue, gTrue, gTrue );
         aDoc.processLinks( pOutDev, i );
-    }
-
+      }
+   }
     return 0;
 }
 
