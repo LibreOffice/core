@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedocdlg.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( Window* pParent, ScViewData* pViewData )
     maCbShare.SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
     maFtWarning.Enable( bIsDocShared );
 
-    long nTabs[] = { 2, 10, 122 };
+    long nTabs[] = { 2, 10, 128 };
     maLbUsers.SetTabs( nTabs );
 
     String aHeader( maStrTitleName );
