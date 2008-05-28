@@ -87,22 +87,6 @@ int PageSpan::getSpan() const
         return 0; // should never happen
 }
 
-float PageSpan::getMarginLeft() const
-{
-        if (mxPropList["fo:margin-left"])
-                return mxPropList["fo:margin-left"]->getFloat();
-
-         return 0.0f;
-}
-
-float PageSpan::getMarginRight() const
-{
-        if (mxPropList["fo:margin-right"])
-                return mxPropList["fo:margin-right"]->getFloat();
-
-         return 0.0f;
-}
-
 void PageSpan::writePageMaster(const int iNum, DocumentHandler *pHandler) const
 {
         WPXPropertyList propList;
