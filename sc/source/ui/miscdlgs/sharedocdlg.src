@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sharedocdlg.src,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,59 +35,59 @@ ModalDialog RID_SCDLG_SHAREDOCUMENT
     OutputSize = TRUE ;
     HelpId = SID_SHARE_DOC ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 194 , 182 ) ;
+    Size = MAP_APPFONT ( 204 , 186 ) ;
     Text [ en-US ] = "Share Document" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     CheckBox CB_SHARE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text [ en-US ] = "Share this spreadsheet with other users" ;
     };
     FixedText FT_WARNING
     {
         Pos = MAP_APPFONT ( 15 , 18 ) ;
-        Size = MAP_APPFONT ( 173 , 32 ) ;
+        Size = MAP_APPFONT ( 183 , 48 ) ;
         WordBreak = TRUE ;
-        Text [ en-US ] = "Note: Changes to formatting attributes and drawing objects will not be saved in shared mode. Turn off shared mode to get exklusive access needed for those changes." ;
+        Text [ en-US ] = "Note: Changes to formatting attributes like fonts, colors, and number formats will not be saved and some functionalities like editing charts and drawing objects are not available in shared mode. Turn off shared mode to get exclusive access needed for those changes and functionalities." ;
     };
     FixedLine FL_USERS
     {
-        Pos = MAP_APPFONT ( 6 , 50 ) ;
-        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 192 , 4 ) ;
     };
     FixedText FT_USERS
     {
-        Pos = MAP_APPFONT ( 6 , 60 ) ;
-        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 192 , 8 ) ;
         Text [ en-US ] = "Users currently accessing this spreadsheet" ;
     };
     Control LB_USERS
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
-        Size = MAP_APPFONT ( 182 , 80 ) ;
+        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Size = MAP_APPFONT ( 192 , 72 ) ;
         Border = TRUE ;
     };
     FixedLine FL_END
     {
-        Pos = MAP_APPFONT ( 1 , 152 ) ;
-        Size = MAP_APPFONT ( 194 , 8 ) ;
+        Pos = MAP_APPFONT ( 1 , 156 ) ;
+        Size = MAP_APPFONT ( 204 , 8 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 6 , 162 ) ;
+        Pos = MAP_APPFONT ( 6 , 166 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 82 , 162 ) ;
+        Pos = MAP_APPFONT ( 92 , 166 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 138 , 162 ) ;
+        Pos = MAP_APPFONT ( 148 , 166 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String STR_TITLE_NAME
