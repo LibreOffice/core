@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: invader1.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,8 +292,8 @@ void MyWindow::InitLevel()
     else
         bGetFighter = FALSE;
 
-    USHORT nGegner;
-    USHORT nDummy;
+    long nGegner;
+    long nDummy;
 
     if(nLevel < WAVES*2)
     {
