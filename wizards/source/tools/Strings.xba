@@ -108,41 +108,19 @@ End Function
 &apos; Retrieves an Array out of a String.
 &apos; The fields of the Array are separated by the parameter &apos;Separator&apos;, that is contained
 &apos; in the Array
-&apos; The Array MaxLocindex delivers the highest Index of this Array
-Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as integer)
-Dim i%, OldPos%, Pos%, SepLen%, BigLen%
-Dim CurUbound as Integer
-Dim StartUbound as Integer
-	StartUbound = 50
-	Dim LocList(StartUbound) as String
-	CurUbound = StartUbound	
-	OldPos = 1
-	i = -1
-	SepLen = Len(Separator)
-	BigLen = Len(BigString)
-	Do
-		Pos = Instr(OldPos,BigString, Separator)
-		i = i + 1
-		If Pos = 0 Then
-			LocList(i) = Mid(BigString, OldPos, BigLen - OldPos + 1 )
-		Else
-			LocList(i) = Mid(BigString, OldPos, Pos-OldPos )
-			OldPos = Pos + SepLen
-		End If
-		If i = CurUbound Then
-			CurUbound = CurUbound + StartUbound
-			ReDim Preserve LocList(CurUbound) as String
-		End If
-	Loop until Pos = 0
-	If Not IsMissing(Maxindex) Then
-		MaxIndex = i	
-	End If
-	If i &lt;&gt; -1 Then
-		ReDim Preserve LocList(i) as String
-	Else
-		ReDim LocList() as String
-	End If
-	ArrayOutofString = LocList()
+&apos; The Array MaxIndex delivers the highest Index of this Array
+Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as Integer)
+Dim LocList() as String
+	LocList=Split(BigString,Separator)
+&apos; The following line has no effect because it seems that Optional variables are
+&apos; always passed as ByValue variables. But MaxIndex must remain in the function for
+&apos; compatibility reasons
+&apos; The user of the function can always use ubund on the return value to get the
+&apos; highest index of the array.
+
+&apos;	If not isMissing(MaxIndex) then maxIndex=ubound(LocList())	
+
+	ArrayOutOfString=LocList
 End Function
 
 
@@ -294,21 +272,7 @@ End Function
 &apos; Replaces the string &quot;OldReplace&quot; through the String &quot;NewReplace&quot; in the String
 &apos; &apos;BigString&apos;
 Function ReplaceString(ByVal Bigstring, NewReplace, OldReplace as String)  as String
-Dim i%, OldReplLen%, BigLen%
-
-	If NewReplace &lt;&gt; OldReplace Then
-		OldReplLen = Len(OldReplace)
-		i = 1
-		Do
-			Biglen = Len(BigString)
-			i = Instr(i,BigString,OldReplace)
-			If i &lt;&gt; 0 then
-				BigString = Mid(BigString,1,i-1) &amp; NewReplace &amp; Mid(BigString,i + OldReplLen,BigLen  - i + 1 - OldReplLen
-				i = i + Len(NewReplace)
-			End If
-		Loop until i = 0
-	End If
-	ReplaceString = BigString
+	ReplaceString=join(split(BigString,OldReplace),NewReplace)
 End Function
 
 
@@ -489,4 +453,5 @@ WRONGDATATYPE:
 		Resume NoErr:
 	End If
 NOERR:	
-End Function</script:module>
+End Function
+</script:module>
