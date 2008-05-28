@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: globstr.src,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1699,7 +1699,7 @@ Resource RID_GLOBSTR
     };
     String STR_SHARED_DOC_WARNING
     {
-        Text [ en-US ] = "The spreadsheet is in shared mode. This allows multiple users to access and edit the spreadsheet at the same time.\n\nChanges to formatting attributes and drawing objects will not be saved in shared mode. Turn off shared mode to get exclusive access needed for those changes.";
+        Text [ en-US ] = "The spreadsheet is in shared mode. This allows multiple users to access and edit the spreadsheet at the same time.\n\nChanges to formatting attributes like fonts, colors, and number formats will not be saved and some functionalities like editing charts and drawing objects are not available in shared mode. Turn off shared mode to get exclusive access needed for those changes and functionalities.";
     };
     String STR_FILE_LOCKED_TRY_LATER
     {
