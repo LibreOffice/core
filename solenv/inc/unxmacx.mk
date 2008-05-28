@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacx.mk,v $
 #
-# $Revision: 1.31 $
+# $Revision: 1.32 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -149,10 +149,10 @@ CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
 
-# Once all modules on this platform compile without warnings, set
-# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
-# settings.mk):
-MODULES_WITH_WARNINGS := 
+# All modules on this platform compile without warnings.
+# If you need to set MODULES_WITH_WARNINGS here, comment
+# COMPILER_WARN_ERRORS=TRUE here (see settings.mk):
+COMPILER_WARN_ERRORS=TRUE
 
 #special settings form environment
 CDEFS+=$(EXTRA_CDEFS)
