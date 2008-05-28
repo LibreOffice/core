@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -471,16 +471,6 @@ ProfileItem gid_Basis_Profileitem_Version_Productsource
     Key = "ProductSource";
     Value = "<sourceid>";
 End
-
-#ifdef WNT
-ProfileItem gid_Basis_Profileitem_Version_Productcode
-    ProfileID = gid_Profile_Version_Ini_Basis;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Key = "ProductCode";
-    Value = "<productcode>";
-End
-#endif
 
 ProfileItem gid_Basis_Profileitem_Version_Productmajor
     ProfileID = gid_Profile_Version_Ini_Basis;
