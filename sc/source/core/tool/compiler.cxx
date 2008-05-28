@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.78 $
+ * $Revision: 1.79 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -489,6 +489,59 @@ void dbg_call_generateMappingODFF()
     fflush( stdout);
 }
 #endif  // erGENERATEMAPPING
+
+#ifdef erGENERATEMAPPINGDIFF
+// Run in en-US UI by calling from within gdb.
+void dbg_call_generateMappingDiff()
+{
+    using namespace ::com::sun::star::sheet;
+    ScCompiler::OpCodeMapPtr xPODF = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ODF_11);
+    ScCompiler::OpCodeMapPtr xODFF = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ODFF);
+    ScCompiler::OpCodeMapPtr xENUS = ScCompiler::GetOpCodeMap(
+            FormulaLanguage::ENGLISH);
+    USHORT nPODF = xPODF->getSymbolCount();
+    USHORT nODFF = xODFF->getSymbolCount();
+    USHORT nENUS = xENUS->getSymbolCount();
+    printf( "%s\n", "This is a semicolon separated file, you may import it as such to Calc.");
+    printf( "%s\n", "Spreadsheet functions name differences between PODF (ODF < 1.2) and ODFF (ODF >= 1.2), plus English UI names.");
+    printf( "\nInternal OpCodes; PODF: %d; ODFF: %d; ENUS: %d\n",
+            (int)nPODF, (int)nODFF, (int)nENUS);
+    USHORT nMax = ::std::max( ::std::max( nPODF, nODFF), nENUS);
+#define out(rStr) (ByteString( rStr, RTL_TEXTENCODING_UTF8).GetBuffer())
+    for (USHORT i=0; i < nMax; ++i)
+    {
+        const String& rPODF = xPODF->getSymbol(static_cast<OpCode>(i));
+        const String& rODFF = xODFF->getSymbol(static_cast<OpCode>(i));
+        const String& rENUS = xENUS->getSymbol(static_cast<OpCode>(i));
+        if (rPODF != rODFF)
+            printf( "%d;%s;%s;%s\n", (int)i, out(rPODF), out(rODFF), out(rENUS));
+    }
+    // Actually they should all differ, so we could simply list them all, but
+    // this is correct and we would find odd things, if any.
+    const ScExternalHashMap* pPODF = xPODF->getReverseExternalHashMap();
+    const ScExternalHashMap* pODFF = xODFF->getReverseExternalHashMap();
+    const ScExternalHashMap* pENUS = xENUS->getReverseExternalHashMap();
+    printf( "\n%s\n", "Add-In mapping");
+    for (ScExternalHashMap::const_iterator it = pPODF->begin(); it != pPODF->end(); ++it)
+    {
+        ScExternalHashMap::const_iterator iLookODFF = pODFF->find( (*it).first);
+        ScExternalHashMap::const_iterator iLookENUS = pENUS->find( (*it).first);
+        String aNative( iLookENUS == pENUS->end() ?
+                String::CreateFromAscii( "ENGLISH_SYMBOL_NOT_FOUND") :
+                (*iLookENUS).second);
+        if (iLookODFF == pODFF->end())
+            printf( "NOT FOUND;%s;;%s\n", out((*it).first), out(aNative));
+        else if((*it).second == (*iLookODFF).second)    // upper equal
+            printf( "EQUAL;%s;%s;%s\n", out((*it).first), out((*iLookODFF).second), out(aNative));
+        else
+            printf( ";%s;%s;%s\n", out((*it).first), out((*iLookODFF).second), out(aNative));
+    }
+#undef out
+    fflush( stdout);
+}
+#endif  // erGENERATEMAPPINGDIFF
 
 // static
 void ScCompiler::DeInit()
