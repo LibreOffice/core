@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.109 $
+ * $Revision: 1.110 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,6 +91,7 @@ sal_Char __READONLY_DATA sXML_np__office[] = "_office";
 sal_Char __READONLY_DATA sXML_np__ooo[] = "_ooo";
 sal_Char __READONLY_DATA sXML_np__ooow[] = "_ooow";
 sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
+sal_Char __READONLY_DATA sXML_np__of[] = "_of";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
 sal_Char __READONLY_DATA sXML_np__text[] = "_text";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
@@ -283,6 +284,8 @@ void SvXMLImport::_InitCtor()
                             XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooow ) ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__oooc ) ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__of ) ),
+                            GetXMLToken(XML_N_OF), XML_NAMESPACE_OF );
     }
 
     msPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
