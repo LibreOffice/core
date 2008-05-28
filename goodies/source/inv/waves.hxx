@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: waves.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,7 @@ USHORT ranpos[RANMAX*2+1] =
     170,390,170
 };
 
-USHORT levelpuf[RANMAX*3+2] =
+long levelpuf[RANMAX*3+2] =
 {   0, 0, 0, 0, 0};
 
 BYTE waves[WAVES][MAX_LEN] = {
