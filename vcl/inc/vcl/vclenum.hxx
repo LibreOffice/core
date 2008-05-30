@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclenum.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -303,7 +303,7 @@ typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 #ifndef ENUM_OUTDEVSUPPORT_DECLARED
 #define ENUM_OUTDEVSUPPORT_DECLARED
 
-enum OutDevSupportType { OutDevSupport_TransparentRect };
+enum OutDevSupportType { OutDevSupport_TransparentRect, OutDevSupport_B2DClip, OutDevSupport_B2DDraw };
 
 #endif
 
