@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkgdi.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,7 @@ public:
     virtual void            ResetClipRegion();
     virtual void            BeginSetClipRegion( ULONG nCount );
     virtual BOOL            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
     virtual void            EndSetClipRegion();
 
     // some themes set the background pixmap of our window EVERY time
