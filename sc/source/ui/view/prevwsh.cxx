@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prevwsh.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -437,7 +437,7 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
     pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
     pDlg->EnableSheetRange( false, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets() || GetPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG );
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     if ( nDocPageMax > 0 )
