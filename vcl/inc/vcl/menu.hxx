@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menu.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,16 +187,16 @@ protected:
     // return value is Max( rCheckHeight, rRadioHeight )
     SAL_DLLPRIVATE long             ImplGetNativeCheckAndRadioSize( Window*, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth ) const;
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
-//#endif
 
                             Menu();
                             Menu( BOOL bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
 
+
+    SAL_DLLPRIVATE void ImplSelectWithStart( Menu* pStartMenu = NULL );
 public:
     virtual             ~Menu();
 
@@ -498,6 +498,7 @@ public:
     // Fuer das TestTool
     void                EndExecute( USHORT nSelect = 0 );
     void                SelectEntry( USHORT nId );
+    void                SetSelectedEntry( USHORT nId ); // for use by native submenu only
 
     static BOOL         IsInExecute();
     static PopupMenu*   GetActivePopupMenu();
