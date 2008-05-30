@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,6 +242,7 @@ struct KerningPair
 
 // Antialiasing
 #define ANTIALIASING_DISABLE_TEXT       ((USHORT)0x0001)
+#define ANTIALIASING_ENABLE_B2DDRAW     ((USHORT)0x0002)
 
 // AddFontSubstitute
 #define FONT_SUBSTITUTE_ALWAYS          ((USHORT)0x0001)
