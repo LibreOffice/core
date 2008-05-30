@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.sdi,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,22 @@ interface Annotation : _Annotation
     ]
 
     SID_STYLE_CATALOG  // ole(no) api(play/rec)
+    [
+        StateMethod = StateDisableItems ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+     SID_INSERT_GRAPHIC
     [
         StateMethod = StateDisableItems ;
     ]
