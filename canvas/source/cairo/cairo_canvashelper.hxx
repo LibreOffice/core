@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cairo_canvashelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 
 #include <boost/utility.hpp>
 
@@ -326,7 +327,8 @@ namespace cairocanvas
                     Operation aOperation,
                     ::cairo::Cairo* pCairo,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >* pTextures=NULL,
-                    SpriteCanvas* pDevice=NULL );
+                    SpriteCanvas* pDevice=NULL,
+                    ::com::sun::star::rendering::FillRule eFillrule=::com::sun::star::rendering::FillRule_EVEN_ODD );
     void doOperation( Operation aOperation,
               ::cairo::Cairo* pCairo,
               sal_uInt32 nPolygonIndex=0,
