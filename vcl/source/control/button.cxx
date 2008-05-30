@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: button.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1342,9 +1342,6 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if( GetStyle() & WB_BEVELBUTTON )
             aPBVal.mbBevelButton = true;
 
-        bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                         aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
-
         // draw frame into invisible window to have aInRect modified correctly
         // but do not shift the inner rect for pressed buttons (ie remove BUTTON_DRAW_PRESSED)
         // this assumes the theme has enough visual cues to signalize the button was pressed
@@ -1356,6 +1353,16 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         aInRect.Bottom()-=4;
         aInRect.Left()+=4;
         aInRect.Right()-=4;
+
+        // prepare single line hint (needed on mac to decide between normal push button and
+        // rectangular bevel button look)
+        Size aFontSize( Application::GetSettings().GetStyleSettings().GetPushButtonFont().GetSize() );
+        aFontSize = LogicToPixel( aFontSize, MapMode( MAP_POINT ) );
+        Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
+        aPBVal.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
+
+        bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                         aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
 
         // draw content using the same aInRect as non-native VCL would do
         ImplDrawPushButtonContent( this,
