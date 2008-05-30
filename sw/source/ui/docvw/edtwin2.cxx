@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,31 +280,26 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         break;
 
                         case RES_POSTITFLD:
-                            /*
                             {
-                                SwFmtFld* pSwFmtFld = 0;
-                                SwFieldType* pType = rView.GetDocShell()->GetDoc()->GetFldType(RES_POSTITFLD, aEmptyStr,false);
-                                SwClientIter aIter( *pType );
-                                SwClient * pFirst = aIter.GoStart();
-                                while(pFirst)
-                                {
-                                    pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
-                                    if ( pSwFmtFld->GetFld()==pFld )
-                                        break;
-                                    pFirst = aIter++;
-                                }
-
+                                /*
                                 SwPostItMgr* pMgr = rView.GetPostItMgr();
-                                SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr);
-                                pPostIt->SetReadonly(true);
-                                pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
-                                pPostIt->SetPosSizePixel(rEvt.GetMousePosPixel(),Size(180,70));
-                                pPostIt->Show();
-                                SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
-                                return;
+                                if (pMgr->ShowNotes())
+                                {
+                                    SwFmtFld* pSwFmtFld = 0;
+                                    if (pMgr->ShowPreview(pFld,pSwFmtFld))
+                                    {
+                                        SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
+                                        pPostIt->SetReadonly(true);
+                                        pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
+                                        pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));
+                                        pPostIt->ShowNote();
+                                        SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
+                                    }
+                                    return;
+                                }
+                                */
+                                break;
                             }
-                            */
-                            /* no break */
                         case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
                             bBalloon = TRUE;
                             /* no break */
