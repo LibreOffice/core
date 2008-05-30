@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,7 +477,6 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
     CGContextSaveGState( mrContext );
 
     Rectangle buttonRect = rControlRegion.GetBoundRect();
-    RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );
     HIRect rc = ImplGetHIRectFromRectangle(buttonRect);
 
     /** Scrollbar parts code equivalent **
@@ -813,7 +812,6 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             rc.size.width-=2;
 
             HIThemeDrawTabPane(&rc, &aTabPaneDrawInfo, mrContext, kHIThemeOrientationNormal);
-
             bOK = true;
         }
         break;
@@ -1113,6 +1111,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
     }
 
     CGContextRestoreGState( mrContext );
+    RefreshRect( buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight() );
 
     return bOK;
 }
