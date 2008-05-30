@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textwindowaccessibility.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +161,7 @@ ParagraphImpl::getAccessibleChild(::sal_Int32)
     throw ::css::lang::IndexOutOfBoundsException(
         ::rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "svtools/textwindowaccessibility.cxx:"
+                "textwindowaccessibility.cxx:"
                 " ParagraphImpl::getAccessibleChild")),
         static_cast< ::css::uno::XWeak * >(this));
 }
@@ -312,7 +312,7 @@ void SAL_CALL ParagraphImpl::grabFocus() throw (::css::uno::RuntimeException)
     catch (::css::lang::IndexOutOfBoundsException & rEx)
     {
         OSL_TRACE(
-            "svtools/textwindowaccessibility.cxx: ParagraphImpl::grabFocus:"
+            "textwindowaccessibility.cxx: ParagraphImpl::grabFocus:"
             " caught unexpected %s\n",
             ::rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_UTF8).
             getStr());
@@ -600,6 +600,65 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< :
 }
 
 // virtual
+::sal_Int32 SAL_CALL ParagraphImpl::getLineNumberAtIndex( ::sal_Int32 nIndex )
+    throw (::css::lang::IndexOutOfBoundsException,
+           ::css::uno::RuntimeException)
+{
+    checkDisposed();
+
+    ::sal_Int32 nLineNo = -1;
+    ::css::i18n::Boundary aBoundary =
+        m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
+
+    return nLineNo;
+}
+
+// virtual
+::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineNumber( ::sal_Int32 nLineNo )
+    throw (::css::lang::IndexOutOfBoundsException,
+           ::css::uno::RuntimeException)
+{
+    checkDisposed();
+
+    ::css::i18n::Boundary aBoundary =
+        m_xDocument->retrieveParagraphBoundaryOfLine( this, nLineNo );
+
+    return ::css::accessibility::TextSegment( getTextRange(aBoundary.startPos, aBoundary.endPos),
+        aBoundary.startPos, aBoundary.endPos);
+}
+
+// virtual
+::css::accessibility::TextSegment SAL_CALL ParagraphImpl::getTextAtLineWithCaret(  )
+    throw (::css::uno::RuntimeException)
+{
+    checkDisposed();
+
+    sal_Int32 nLineNo = getNumberOfLineWithCaret();
+
+    try {
+        return ( nLineNo >= 0 ) ?
+            getTextAtLineNumber( nLineNo ) :
+            ::css::accessibility::TextSegment();
+    } catch (const ::css::lang::IndexOutOfBoundsException&) {
+        throw ::css::uno::RuntimeException(
+            ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "textwindowaccessibility.cxx:"
+                    " ParagraphImpl::getTextAtLineWithCaret") ),
+            static_cast< ::css::uno::XWeak * >( this ) );
+    }
+}
+
+// virtual
+::sal_Int32 SAL_CALL ParagraphImpl::getNumberOfLineWithCaret(  )
+    throw (::css::uno::RuntimeException)
+{
+    checkDisposed();
+    return m_xDocument->retrieveParagraphLineWithCursor(this);
+}
+
+
+// virtual
 void SAL_CALL ParagraphImpl::addEventListener(
     ::css::uno::Reference<
     ::css::accessibility::XAccessibleEventListener > const & rListener)
@@ -720,6 +779,7 @@ void ParagraphImpl::implGetLineBoundary( ::css::i18n::Boundary& rBoundary,
         rBoundary.endPos = nIndex;
     }
 }
+
 
 void ParagraphImpl::checkDisposed()
 {
@@ -904,7 +964,7 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
         throw ::css::lang::IndexOutOfBoundsException(
             ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "svtools/textwindowaccessibility.cxx:"
+                    "textwindowaccessibility.cxx:"
                     " Document::retrieveCharacterAttributes")),
             static_cast< ::css::uno::XWeak * >(this));
     ::css::awt::Rectangle aBounds( 0, 0, 0, 0 );
@@ -972,7 +1032,7 @@ Document::retrieveCharacterAttributes(
         throw ::css::lang::IndexOutOfBoundsException(
             ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "svtools/textwindowaccessibility.cxx:"
+                    "textwindowaccessibility.cxx:"
                     " Document::retrieveCharacterAttributes")),
             static_cast< ::css::uno::XWeak * >(this));
 
@@ -1104,7 +1164,7 @@ Document::retrieveRunAttributes(
         throw ::css::lang::IndexOutOfBoundsException(
             ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "svtools/textwindowaccessibility.cxx:"
+                    "textwindowaccessibility.cxx:"
                     " Document::retrieveRunAttributes") ),
             static_cast< ::css::uno::XWeak * >( this ) );
 
@@ -1141,7 +1201,7 @@ void Document::changeParagraphText(ParagraphImpl * pParagraph,
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "svtools/textwindowaccessibility.cxx:"
+                        "textwindowaccessibility.cxx:"
                         " Document::changeParagraphText")),
                 static_cast< ::css::uno::XWeak * >(this));
         changeParagraphText(nNumber, static_cast< ::USHORT >(nBegin),
@@ -1162,7 +1222,7 @@ void Document::copyParagraphText(ParagraphImpl const * pParagraph,
             || nEnd > m_rEngine.GetText(nNumber).Len())
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "svtools/textwindowaccessibility.cxx:"
+                                    "textwindowaccessibility.cxx:"
                                     " Document::copyParagraphText")),
                 static_cast< ::css::uno::XWeak * >(this));
         m_rView.SetSelection(
@@ -1187,7 +1247,7 @@ void Document::changeParagraphAttributes(
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "svtools/textwindowaccessibility.cxx:"
+                        "textwindowaccessibility.cxx:"
                         " Document::changeParagraphAttributes")),
                 static_cast< ::css::uno::XWeak * >(this));
 
@@ -1224,7 +1284,7 @@ void Document::changeParagraphSelection(ParagraphImpl * pParagraph,
             || nEnd > m_rEngine.GetText(nNumber).Len())
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "svtools/textwindowaccessibility.cxx:"
+                                    "textwindowaccessibility.cxx:"
                                     " Document::changeParagraphSelection")),
                 static_cast< ::css::uno::XWeak * >(this));
         m_rView.SetSelection(
@@ -1236,7 +1296,7 @@ void Document::changeParagraphSelection(ParagraphImpl * pParagraph,
 
 ::css::i18n::Boundary
 Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
-                                         ::sal_Int32 nIndex )
+                                         ::sal_Int32 nIndex, ::sal_Int32 *pLineNo )
 {
     ::css::i18n::Boundary aBoundary;
     aBoundary.startPos = nIndex;
@@ -1250,7 +1310,7 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "svtools/textwindowaccessibility.cxx:"
+                        "textwindowaccessibility.cxx:"
                         " Document::retrieveParagraphLineBoundary" ) ),
                 static_cast< ::css::uno::XWeak * >( this ) );
         ::sal_Int32 nLineStart = 0;
@@ -1266,6 +1326,8 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
             {
                 aBoundary.startPos = nLineStart;
                 aBoundary.endPos = nLineEnd;
+                if( pLineNo )
+                    pLineNo[0] = nLine;
                 break;
             }
         }
@@ -1273,6 +1335,55 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
 
     return aBoundary;
 }
+
+::css::i18n::Boundary
+Document::retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
+                                           ::sal_Int32 nLineNo )
+{
+    ::css::i18n::Boundary aBoundary;
+    aBoundary.startPos = 0;
+    aBoundary.endPos = 0;
+
+    ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
+    {
+        ::osl::MutexGuard aInternalGuard( GetMutex() );
+        ::ULONG nNumber = static_cast< ::ULONG >( pParagraph->getNumber() );
+        if ( nLineNo >= m_rEngine.GetLineCount( nNumber ) )
+            throw ::css::lang::IndexOutOfBoundsException(
+                ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "textwindowaccessibility.cxx:"
+                        " Document::retrieveParagraphBoundaryOfLine" ) ),
+                static_cast< ::css::uno::XWeak * >( this ) );
+        ::sal_Int32 nLineStart = 0;
+        ::sal_Int32 nLineEnd = 0;
+        for ( ::USHORT nLine = 0; nLine <= nLineNo; ++nLine )
+        {
+            ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
+                m_rEngine.GetLineLen( nNumber, nLine ) );
+            nLineStart = nLineEnd;
+            nLineEnd += nLineLength;
+        }
+
+        aBoundary.startPos = nLineStart;
+        aBoundary.endPos = nLineEnd;
+    }
+
+    return aBoundary;
+}
+
+sal_Int32 Document::retrieveParagraphLineWithCursor( ParagraphImpl const * pParagraph )
+{
+    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    ::osl::MutexGuard aInternalGuard(GetMutex());
+    ::TextSelection const & rSelection = m_rView.GetSelection();
+    Paragraphs::size_type nNumber = pParagraph->getNumber();
+    TextPaM aEndPaM( rSelection.GetEnd() );
+
+    return aEndPaM.GetPara() == nNumber
+        ? m_rView.GetLineNumberOfCursorInSelection() : -1;
+}
+
 
 ::css::uno::Reference< ::css::accessibility::XAccessibleRelationSet >
 Document::retrieveParagraphRelationSet( ParagraphImpl const * pParagraph )
@@ -1342,7 +1453,7 @@ Document::getAccessibleChild(::sal_Int32 i)
         throw ::css::lang::IndexOutOfBoundsException(
             ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "svtools/textwindowaccessibility.cxx:"
+                    "textwindowaccessibility.cxx:"
                     " Document::getAccessibleChild")),
             static_cast< ::css::uno::XWeak * >(this));
     return getAccessibleChild(m_aVisibleBegin
