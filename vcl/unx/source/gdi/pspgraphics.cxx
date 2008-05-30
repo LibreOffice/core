@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pspgraphics.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -304,6 +304,12 @@ BOOL PspGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
     return (BOOL)m_pPrinterGfx->UnionClipRegion (nX, nY, nDX, nDY);
 }
 
+bool PspGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+    // TODO: implement and advertise OutDevSupport_B2DClip support
+    return false;
+}
+
 void PspGraphics::EndSetClipRegion()
 {
     m_pPrinterGfx->EndSetClipRegion ();
@@ -393,6 +399,18 @@ void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
                                    PCONSTSALPOINT  *pPtAry )
 {
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
+}
+
+bool PspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
+}
+
+bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
 }
 
 sal_Bool PspGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
