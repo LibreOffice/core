@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include "salframe.h"
 #include "vcl/svids.hrc"
 #include "vcl/cmdevt.hxx"
+#include "vcl/floatwin.hxx"
+#include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -273,6 +275,88 @@ AquaSalMenu::~AquaSalMenu()
     }
 }
 
+sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
+{
+    NSArray * elements = [pMenu itemArray];
+    NSEnumerator * it = [elements objectEnumerator];
+    id elem;
+    NSMenuItem * lastDisplayedMenuItem = nil;
+    sal_Int32 drawnItems = 0;
+    bool firstEnabledItemIsNoSeparator = false;
+    while((elem=[it nextObject]) != nil) {
+        NSMenuItem * item = static_cast<NSMenuItem *>(elem);
+        if( (![item isEnabled] && ![item isSeparatorItem]) || ([item isSeparatorItem] && (lastDisplayedMenuItem != nil && [lastDisplayedMenuItem isSeparatorItem])) ) {
+            [[item menu]removeItem:item];
+        } else {
+            if( ! firstEnabledItemIsNoSeparator && [item isSeparatorItem] ) {
+                [[item menu]removeItem:item];
+            } else {
+                firstEnabledItemIsNoSeparator = true;
+                lastDisplayedMenuItem = item;
+                drawnItems++;
+                if( [item hasSubmenu] ) {
+                    removeUnusedItemsRunner( [item submenu] );
+                }
+            }
+        }
+    }
+    if( lastDisplayedMenuItem != nil && [lastDisplayedMenuItem isSeparatorItem]) {
+        [[lastDisplayedMenuItem menu]removeItem:lastDisplayedMenuItem];
+    }
+    return drawnItems;
+}
+
+BOOL AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags)
+{
+    // do not use native popup menu when AQUA_NATIVE_MENUS is set to FALSE
+    if( ! VisibleMenuBar() ) {
+        return FALSE;
+    }
+
+    // set offsets for positioning
+    const float offset = 9.0;
+    const float lineHeight = 17.0;
+
+    // get the pointers
+    AquaSalFrame * pParentAquaSalFrame = (AquaSalFrame *) pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame();
+    NSWindow * pParentNSWindow = pParentAquaSalFrame->mpWindow;
+    NSView * pParentNSView = [pParentNSWindow contentView];
+    NSView * pPopupNSView = ((AquaSalFrame *) pWin->ImplGetWindow()->ImplGetFrame())->mpView;
+    NSRect popupFrame = [pPopupNSView frame];
+
+    // since we manipulate the menu below (removing entries)
+    // let's rather make a copy here and work with that
+    NSMenu* pCopyMenu = [mpMenu copy];
+
+    // filter disabled elements
+    sal_Int32 drawnItems = removeUnusedItemsRunner( pCopyMenu );
+
+    // create frame rect
+    NSRect displayPopupFrame = NSMakeRect( rRect.nLeft+(offset-1), rRect.nTop+(offset+1), popupFrame.size.width, 0 );
+    pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
+
+    // adjust frame rect when necessary
+    USHORT nArrangeIndex;
+    Point position = pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex );
+    if( position.nB < rRect.nTop ) {
+        displayPopupFrame.origin.y += ( lineHeight*drawnItems );
+    }
+    if( position.nA < rRect.nLeft ) {
+        displayPopupFrame.origin.x -= popupFrame.size.width;
+    }
+
+    // open popup menu
+    NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
+    [pPopUpButtonCell setMenu: pCopyMenu];
+    [pPopUpButtonCell selectItem:nil];
+    [pPopUpButtonCell performClickWithFrame:displayPopupFrame inView:pParentNSView];
+    [pPopUpButtonCell release];
+
+    // clean up the copy
+    [pCopyMenu release];
+    return TRUE;
+}
+
 int AquaSalMenu::getItemIndexByPos( USHORT nPos ) const
 {
     int nIndex = 0;
@@ -409,7 +493,7 @@ BOOL AquaSalMenu::VisibleMenuBar()
 
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
 
-    if ( pExperimental && !strcasecmp(pExperimental, "FALSE") )
+    if ( GetSalData()->mbIsTestTool || (pExperimental && !strcasecmp(pExperimental, "FALSE")) )
         return FALSE;
 
     // End of experimental code enable/disable part
