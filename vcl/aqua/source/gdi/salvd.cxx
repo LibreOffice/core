@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvd.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #include "salinst.h"
 #include "salgdi.h"
 #include "saldata.hxx"
+#include "salframe.h"
 
 #include "vcl/sysdata.hxx"
 
@@ -76,6 +77,14 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 
         if( nDX && nDY )
             SetSize( nDX, nDY );
+
+        // inherit resolution from reference window
+        if( pGraphic )
+        {
+            AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
+            if( pFrame )
+                mpGraphics->initResolution( pFrame->mpWindow );
+        }
 
         // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
     }
