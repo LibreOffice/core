@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "vcl/gradient.hxx"
 #include "vcl/mnemonic.hxx"
 #include "vcl/menu.hxx"
+#include "vcl/svapp.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -776,6 +777,40 @@ Window* BackingWindow::GetParentLabeledBy( const Window* pLabeled ) const
     return const_cast<Window*>(pRet);
 }
 
+struct ImplDelayedDispatch
+{
+    Reference< XDispatch >      xDispatch;
+    com::sun::star::util::URL   aDispatchURL;
+    Sequence< PropertyValue >   aArgs;
+
+    ImplDelayedDispatch( const Reference< XDispatch >& i_xDispatch,
+                         const com::sun::star::util::URL& i_rURL,
+                         const Sequence< PropertyValue >& i_rArgs )
+    : xDispatch( i_xDispatch ),
+      aDispatchURL( i_rURL ),
+      aArgs( i_rArgs )
+    {
+    }
+    ~ImplDelayedDispatch() {}
+};
+
+static long implDispatchDelayed( void*, void* pArg )
+{
+    struct ImplDelayedDispatch* pDispatch = reinterpret_cast<ImplDelayedDispatch*>(pArg);
+    try
+    {
+        pDispatch->xDispatch->dispatch( pDispatch->aDispatchURL, pDispatch->aArgs );
+    }
+    catch( Exception )
+    {
+    }
+
+    // clean up
+    delete pDispatch;
+
+    return 0;
+}
+
 void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
                                  const rtl::OUString& rTarget,
                                  const Reference< XDispatchProvider >& i_xProv,
@@ -807,7 +842,12 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
                 );
             // dispatch the URL
             if ( xDispatch.is() )
-                xDispatch->dispatch( aDispatchURL, i_rArgs );
+            {
+                ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
+                ULONG nEventId = 0;
+                if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
+                    delete pDisp; // event could not be posted for unknown reason, at least don't leak
+            }
         }
         catch ( com::sun::star::uno::RuntimeException& )
         {
