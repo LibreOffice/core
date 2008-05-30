@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -318,6 +318,8 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
         if( rClip ) // cleanup clipping
             CGContextRestoreGState( rCGContext );
     }
+    else
+        DBG_ERROR( "UpdateWindow called on uneligible graphics" );
 }
 
 // -----------------------------------------------------------------------
