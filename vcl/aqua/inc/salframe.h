@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.h,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,8 @@ public:
     std::list<AquaBlinker*> maBlinkers;
 
     Rectangle               maInvalidRect;
+
+    ULONG                   mnICOptions;
 public:
     /** Constructor
 
