@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,8 +210,17 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
             }
             case SwContentAtPos::SW_SMARTTAG:
+            {
                 sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
-                break;
+
+                KeyCode aCode( KEY_SPACE );
+                KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
+                String aModStr( aModifiedCode.GetName() );
+                aModStr.SearchAndReplace( aCode.GetName(), String() );
+                aModStr.SearchAndReplaceAllAscii( "+", String() );
+                sTxt.SearchAndReplaceAllAscii( "%s", aModStr );
+            }
+            break;
 
             case SwContentAtPos::SW_FTN:
                 if( aCntntAtPos.pFndTxtAttr && aCntntAtPos.aFnd.pAttr )
