@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwrapper.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -229,7 +229,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         MAP( ::accessibility::AccessibleRole::FOOTNOTE, ATK_ROLE_TEXT ); // - FIXME -
         MAP( ::accessibility::AccessibleRole::FRAME, ATK_ROLE_FRAME );
         MAP( ::accessibility::AccessibleRole::GLASS_PANE, ATK_ROLE_GLASS_PANE );
-        MAP( ::accessibility::AccessibleRole::GRAPHIC, ATK_ROLE_UNKNOWN ); // - FIXME -
+        MAP( ::accessibility::AccessibleRole::GRAPHIC, ATK_ROLE_IMAGE );
         MAP( ::accessibility::AccessibleRole::GROUP_BOX, ATK_ROLE_UNKNOWN ); // - FIXME -
         MAP( ::accessibility::AccessibleRole::HEADER, ATK_ROLE_HEADER );
         MAP( ::accessibility::AccessibleRole::HEADING, ATK_ROLE_HEADER ); // - FIXME -
@@ -281,7 +281,7 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
 /* Roles unimplemented by OO.o / a11y:
   ATK_ROLE_INVALID,      ATK_ROLE_ACCEL_LABEL,    ATK_ROLE_ANIMATION,
   ATK_ROLE_ARROW,        ATK_ROLE_CALENDAR,       ATK_ROLE_DIAL,
-  ATK_ROLE_DRAWING_AREA, ATK_ROLE_HTML_CONTAINER, ATK_ROLE_IMAGE,
+  ATK_ROLE_DRAWING_AREA, ATK_ROLE_HTML_CONTAINER,
   ATK_ROLE_TABLE_COLUMN_HEADER, ATK_ROLE_TABLE_ROW_HEADER, ATK_ROLE_TEAR_OFF_MENU_ITEM,
   ATK_ROLE_TERMINAL,            ATK_ROLE_TREE_TABLE,       ATK_ROLE_RULER,
   ATK_ROLE_APPLICATION,         ATK_ROLE_AUTOCOMPLETE,     ATK_ROLE_EDITBAR */
