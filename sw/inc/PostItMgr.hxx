@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PostItMgr.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@ class SwDoc;
 class SwView;
 class SwPostItField;
 class SwFmtFld;
+class SwField;
 class SfxBroadcaster;
 class SfxHint;
 class SwPostIt;
@@ -98,6 +99,13 @@ struct SwPostItPageItem
 
 };
 
+struct FieldShadowState
+{
+    const SwPostItField* mpShadowFld;
+    bool bCursor;
+    bool bMouse;
+};
+
 class SwPostItMgr: public SfxListener
 {
     private:
@@ -114,6 +122,7 @@ class SwPostItMgr: public SfxListener
         long                            mbLayouting;
         bool                            mbReadOnly;
         bool                            mbDeleteNote;
+        FieldShadowState                mShadowState;
 
         typedef std::list<SwPostItItem*>::iterator  SwPostItItem_iterator;
         typedef std::list<SwPostIt*>::iterator      SwPostIt_iterator;
@@ -187,13 +196,22 @@ class SwPostItMgr: public SfxListener
 
             SwPostIt* GetNextPostIt(USHORT aDirection, SwPostIt* aPostIt);
             long GetNextBorder();
-            SwFmtFld* GetFmtFld(SwPostIt* mpPostIt);
             SwPostIt* GetActivePostIt() { return mpActivePostIt; }
             void      SetActivePostIt( SwPostIt* p);
             sal_Int32 GetMinimumSizeWithMeta() const;
             sal_Int32 GetSidebarScrollerHeight() const;
 
+            SwFmtFld* GetFmtFld(SwPostIt* mpPostIt) const;
+            SwPostIt* GetPostIt(const SwFmtFld* pFld) const;
+            SwPostIt* GetPostIt(const SwPostItField* pFld) const;
+            SwPostIt* GetPostIt(SwFmtFld* pFld) const;
+            SwPostIt* GetPostIt(SwPostItField* pFld) const;
+
+            void SetShadowState(const SwPostItField* pFld,bool bCursor = true);
+
             void SetSpellChecking(bool bEnable);
+
+            bool ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
 };
 
 #endif
