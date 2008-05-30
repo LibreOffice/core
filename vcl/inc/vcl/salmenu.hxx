@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +38,7 @@
 #include <vcl/image.hxx>
 
 struct SystemMenuData;
+class FloatingWindow;
 class SalFrame;
 
 struct SalItemParams
@@ -77,6 +78,7 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
+    virtual BOOL ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
 };
 
 
