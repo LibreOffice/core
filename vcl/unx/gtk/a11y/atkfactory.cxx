@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkfactory.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,9 +113,9 @@ wrapper_factory_get_accessible_type(void)
 }
 
 static AtkObject*
-wrapper_factory_create_accessible( GObject *pObj )
+wrapper_factory_create_accessible( GObject *obj )
 {
-    GtkWidget* parent_widget = gtk_widget_get_parent( GTK_WIDGET( pObj ) );
+    GtkWidget* parent_widget = gtk_widget_get_parent( GTK_WIDGET( obj ) );
 
     // gail_container_real_remove_gtk tries to re-instanciate an accessible
     // for a widget that is about to vanish ..
@@ -125,27 +125,18 @@ wrapper_factory_create_accessible( GObject *pObj )
     GtkSalFrame* pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( parent_widget ) );
     g_return_val_if_fail( pFrame != NULL, NULL );
 
-    /* HACK: if the parent gtk window has an accessible already assigned, use
-     * this one to avoid endless recursion (see atkwindow.cxx).
-     */
-    AtkObject* parent_accessible = (AtkObject *) g_object_get_data(G_OBJECT( parent_widget ),
-        "ooo:tooltip-accessible");
-
-    if( ! parent_accessible )
-        parent_accessible = gtk_widget_get_accessible(parent_widget);
-
     Window* pFrameWindow = pFrame->GetWindow();
     if( pFrameWindow )
     {
-        /*  as we got the frame object from the gtk parent, the corresponding
-         *  accessible is always the (only) child of the window associated
-         *  with the frame.
-         */
+        Window* pWindow = pFrameWindow;
 
-        Window* pWindow = pFrameWindow->GetAccessibleChildWindow(0);
+        // skip accessible objects already exposed by the frame objects
+        if( WINDOW_BORDERWINDOW == pWindow->GetType() )
+            pWindow = pFrameWindow->GetAccessibleChildWindow(0);
+
         if( pWindow )
         {
-            uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible(true));
+             uno::Reference< accessibility::XAccessible > xAccessible = pWindow->GetAccessible(true);
             if( xAccessible.is() )
             {
                 AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );
@@ -153,7 +144,7 @@ wrapper_factory_create_accessible( GObject *pObj )
                 if( accessible )
                     g_object_ref( G_OBJECT(accessible) );
                 else
-                    accessible = atk_object_wrapper_new( xAccessible, parent_accessible );
+                    accessible = atk_object_wrapper_new( xAccessible, gtk_widget_get_accessible(parent_widget) );
 
                 return accessible;
             }
