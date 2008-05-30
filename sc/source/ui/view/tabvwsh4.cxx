@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsh4.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1197,7 +1197,7 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
     pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_CELLS );
-    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets() || pPrinter->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG );
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     for ( SCTAB i=0; i<nTabCount; i++ )
