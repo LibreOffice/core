@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclnsapp.mm,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,6 +241,12 @@
 -(void)removeFallbackMenuItem: (NSMenuItem*)pItem
 {
     AquaSalMenu::removeFallbackMenuItem( pItem );
+}
+
+-(void)addDockMenuItem: (NSMenuItem*)pNewItem
+{
+    NSMenu* pDock = AquaSalInstance::GetDynamicDockMenu();
+    [pDock insertItem: pNewItem atIndex: [pDock numberOfItems]];
 }
 
 @end
