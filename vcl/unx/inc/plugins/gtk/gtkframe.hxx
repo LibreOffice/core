@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.hxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/accessibility/XAccessible.hdl>
 #include <vcl/salframe.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -391,8 +389,6 @@ public:
     virtual void                    EndSetClipRegion();
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
-
-    static AtkRole              GetAtkRole( GtkWindow* window );
 };
 
 
