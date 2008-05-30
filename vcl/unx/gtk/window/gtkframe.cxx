@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -715,83 +715,6 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
 {
     return (GtkSalFrame *) g_object_get_data( G_OBJECT( pWindow ), "SalFrame" );
-}
-
-AtkRole
-GtkSalFrame::GetAtkRole( GtkWindow* window )
-{
-    static AtkRole aDefaultRole = ATK_ROLE_INVALID;
-
-    // Special role for sub-menu and combo-box popups that are exposed directly
-    // by their parents already.
-    if( aDefaultRole == ATK_ROLE_INVALID )
-        aDefaultRole = atk_role_register( "redundant object" );
-
-    AtkRole role = ATK_ROLE_INVALID;
-
-    GtkSalFrame * pFrame = getFromWindow( window );
-    if( pFrame )
-    {
-        role = aDefaultRole;
-
-        Window *pWindow = pFrame->GetWindow();
-        if( pWindow )
-        {
-            // Determine the appropriate role for the GtkWindow
-            switch( pWindow->GetAccessibleRole() )
-            {
-                case accessibility::AccessibleRole::ALERT:
-                    role = ATK_ROLE_ALERT;
-                    break;
-
-                case accessibility::AccessibleRole::DIALOG:
-                    role = ATK_ROLE_DIALOG;
-                    break;
-
-                case accessibility::AccessibleRole::FRAME:
-                    role = ATK_ROLE_FRAME;
-                    break;
-
-                /* Ignore window objects for sub-menus, combo- and list boxes,
-                 *  which are exposed as children of their parents.
-                 */
-                case accessibility::AccessibleRole::WINDOW:
-                {
-                    USHORT type = WINDOW_WINDOW;
-                    bool parentIsMenuFloatingWindow = false;
-
-                    Window *pParent = pWindow->GetParent();
-                    if( pParent ) {
-                        type = pParent->GetType();
-                        parentIsMenuFloatingWindow = ( TRUE == pParent->IsMenuFloatingWindow() );
-                    }
-
-                    if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&
-                        (WINDOW_MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
-                    {
-                        role = ATK_ROLE_WINDOW;
-                    }
-                }
-                break;
-
-                default:
-                {
-                    Window *pChild = pWindow->GetChild( 0 );
-                    if( pChild )
-                    {
-                        if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )
-                        {
-                            role = ATK_ROLE_TOOL_TIP;
-                            pChild->SetAccessibleRole( accessibility::AccessibleRole::LABEL );
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    return role;
 }
 
 void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
