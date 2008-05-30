@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view.cxx,v $
- * $Revision: 1.110 $
+ * $Revision: 1.111 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,6 +163,8 @@
 #include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
+
+#include <fldbas.hxx>
 
 #include <unomid.h>
 
@@ -557,7 +559,7 @@ extern "C"
 
 IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
 {
-    if ( GetEditWin().IsChainMode() )
+     if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( sal_False );
 
     //Opt: Nicht wenn PaintLocked. Beim Unlock wird dafuer nocheinmal ein
@@ -593,6 +595,26 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
             SelectShell();
 
     }
+
+    //#i6193#, change ui if cursor is at a SwPostItField
+    if (mpPostItMgr)
+    {
+        SwRect aFldRect;
+        SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
+        if( pWrtShell->GetContentAtPos( pWrtShell->GetCrsrDocPos(), aCntntAtPos, FALSE, &aFldRect ) )
+        {
+            const SwField* pFld = aCntntAtPos.aFnd.pFld;
+            if (pFld->Which()== RES_POSTITFLD)
+            {
+                mpPostItMgr->SetShadowState(reinterpret_cast<const SwPostItField*>(pFld));
+            }
+            else
+                mpPostItMgr->SetShadowState(0);
+        }
+        else
+            mpPostItMgr->SetShadowState(0);
+    }
+
     return 0;
 }
 
