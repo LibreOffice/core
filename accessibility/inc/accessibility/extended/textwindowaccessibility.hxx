@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textwindowaccessibility.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,11 +49,12 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+#include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase7.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
@@ -136,11 +137,12 @@ private:
 
 typedef ::std::vector< ParagraphInfo > Paragraphs;
 
-typedef ::cppu::WeakAggComponentImplHelper6<
+typedef ::cppu::WeakAggComponentImplHelper7<
     ::css::accessibility::XAccessible,
     ::css::accessibility::XAccessibleContext,
     ::css::accessibility::XAccessibleComponent,
     ::css::accessibility::XAccessibleEditableText,
+    ::css::accessibility::XAccessibleMultiLineText,
     ::css::accessibility::XAccessibleTextAttributes,
     ::css::accessibility::XAccessibleEventBroadcaster > ParagraphBase;
 
@@ -347,6 +349,20 @@ private:
         throw (::css::lang::IndexOutOfBoundsException,
                ::css::uno::RuntimeException);
 
+    virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineNumber( ::sal_Int32 nLineNo )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+               ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtLineWithCaret(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::sal_Int32 SAL_CALL getNumberOfLineWithCaret(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     using cppu::WeakAggComponentImplHelperBase::addEventListener;
     virtual void SAL_CALL addEventListener(
         ::css::uno::Reference<
@@ -539,7 +555,13 @@ public:
 
     ::css::i18n::Boundary
     retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
-                                   ::sal_Int32 nIndex );
+                                   ::sal_Int32 nIndex, ::sal_Int32 *pLineNo = NULL);
+
+    ::css::i18n::Boundary
+    retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
+                                     ::sal_Int32 nIndex );
+
+    sal_Int32 retrieveParagraphLineWithCursor( ParagraphImpl const * pParagraph );
 
     ::css::uno::Reference< ::css::accessibility::XAccessibleRelationSet >
     retrieveParagraphRelationSet( ParagraphImpl const * pParagraph );
