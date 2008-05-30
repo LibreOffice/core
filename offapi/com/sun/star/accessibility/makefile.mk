@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,6 +68,7 @@ IDLFILES=\
     XAccessibleHypertext.idl                        \
     XAccessibleImage.idl                            \
     XAccessibleKeyBinding.idl                       \
+    XAccessibleMultiLineText.idl                    \
     XAccessibleRelationSet.idl                      \
     XAccessibleSelection.idl                        \
     XAccessibleStateSet.idl                         \
