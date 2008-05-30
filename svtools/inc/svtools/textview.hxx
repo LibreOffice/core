@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textview.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,6 +214,12 @@ public:
         attibuted as protected.
      */
     void                SupportProtectAttribute(sal_Bool bSupport);
+
+    /**
+        Returns the number in paragraph of the line in which the cursor is blinking
+        if enabled, -1 otherwise.
+     */
+    sal_Int32           GetLineNumberOfCursorInSelection() const;
 };
 
 #endif // _TEXTVIEW_HXX
