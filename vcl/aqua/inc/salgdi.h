@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +157,7 @@ public:
     void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
+    void                initResolution( NSWindow* );
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
