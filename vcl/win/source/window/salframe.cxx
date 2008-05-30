@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.155 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2580,18 +2580,18 @@ XubString WinSalFrame::GetKeyName( USHORT nKeyCode )
     UINT        nKeyBufLen = 0;
     UINT        nSysCode = 0;
 
-    if ( nKeyCode & KEY_MOD2 )
-    {
-        nSysCode = MapVirtualKey( VK_MENU, 0 );
-        nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
-        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
-    }
-
     if ( nKeyCode & KEY_MOD1 )
     {
         nSysCode = MapVirtualKey( VK_CONTROL, 0 );
         nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Ctrl" );
+    }
+
+    if ( nKeyCode & KEY_MOD2 )
+    {
+        nSysCode = MapVirtualKey( VK_MENU, 0 );
+        nSysCode = (nSysCode << 16) | (((ULONG)1) << 25);
+        ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
     }
 
     if ( nKeyCode & KEY_SHIFT )
