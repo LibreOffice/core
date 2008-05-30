@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sysdata.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,7 +100,7 @@ struct SystemGraphicsData
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
 #elif defined( QUARTZ )
-    CGContextRef            rCGContext;     // QUARTZ graphic context
+    CGContextRef    rCGContext;     // QUARTZ graphic context
 #elif defined( UNX )
     long            hDrawable;      // a drawable
     void*           pRenderFormat;  // render format for drawable
