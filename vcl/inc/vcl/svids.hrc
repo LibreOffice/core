@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svids.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +106,8 @@
 #define SV_STDTEXT_DONTWARNAGAIN            10203
 #define SV_STDTEXT_ABOUT                    10204
 #define SV_STDTEXT_PREFERENCES              10205
-#define SV_STDTEXT_LAST                     SV_STDTEXT_PREFERENCES
+#define SV_MAC_SCREENNNAME                  10206
+#define SV_STDTEXT_LAST                     SV_MAC_SCREENNNAME
 
 #define SV_ACCESSERROR_FIRST                SV_ACCESSERROR_WRONG_VERSION
 #define SV_ACCESSERROR_WRONG_VERSION        10500
