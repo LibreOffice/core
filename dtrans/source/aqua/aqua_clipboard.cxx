@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aqua_clipboard.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,24 +56,29 @@ using namespace comphelper;
 
 -(EventListener*)initWithAquaClipboard: (AquaClipboard*) pcb
 {
-  self = [super init];
+    self = [super init];
 
-  if (self)
-    {
-      pAquaClipboard = pcb;
-    }
+    if (self)
+        pAquaClipboard = pcb;
 
-  return self;
+    return self;
 }
 
 -(void)pasteboard:(NSPasteboard*)sender provideDataForType:(NSString*)type
 {
-  pAquaClipboard->provideDataForType(sender, type);
+    if( pAquaClipboard )
+        pAquaClipboard->provideDataForType(sender, type);
 }
 
 -(void)applicationDidBecomeActive:(NSNotification*)aNotification
 {
-  pAquaClipboard->applicationDidBecomeActive(aNotification);
+    if( pAquaClipboard )
+        pAquaClipboard->applicationDidBecomeActive(aNotification);
+}
+
+-(void)disposing
+{
+    pAquaClipboard = NULL;
 }
 
 @end
@@ -161,6 +166,7 @@ AquaClipboard::~AquaClipboard()
       [[NSNotificationCenter defaultCenter] removeObserver: mEventListener];
     }
 
+  [mEventListener disposing];
   [mEventListener release];
   [mPasteboard release];
 }
