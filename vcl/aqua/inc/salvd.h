@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvd.h,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,9 @@ class AquaSalVirtualDevice : public SalVirtualDevice
 private:
     bool mbGraphicsUsed;             // is Graphics used
     bool mbForeignContext;           // is mxContext from outside VCL
-    CGContextRef mxContext;          // native graphics context
+    CGContextRef mxBitmapContext;
+    int mnBitmapDepth;
+    CGLayerRef mxLayer;              // Quartz layer
     AquaSalGraphics* mpGraphics;     // current VirDev graphics
 
     void Destroy();
