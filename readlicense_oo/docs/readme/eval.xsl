@@ -39,7 +39,7 @@
 	<xsl:template match="Paragraph">
 		<tr>
       <td>
-				<xsl:if test="@os">os=<xsl:value-of select="@os"/></xsl:if><xsl:text> </xsl:text><xsl:if test="@gui">gui=<xsl:value-of select="@os"/></xsl:if>
+				<xsl:if test="@os">os=<xsl:value-of select="@os"/></xsl:if><xsl:text> </xsl:text><xsl:if test="@gui">gui=<xsl:value-of select="@gui"/></xsl:if>
 			</td>
 			<th class="wnt"><xsl:if test="@os='WNT' or @gui='WNT'">WNT</xsl:if></th>
 			<th class="mac"><xsl:if test="@os='MACOSX'">MAC</xsl:if></th>
