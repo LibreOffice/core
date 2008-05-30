@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,7 +369,7 @@ public:
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
     Bitmap                  GetColorTransformedBitmap( BmpColorMode eColorMode ) const;
 
-    static const BitmapPalette& GetGreyPalette( USHORT nEntries );
+    static const BitmapPalette& GetGreyPalette( int nEntries );
 
 public:
 
