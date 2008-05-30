@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docvw.src,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -300,7 +300,7 @@ String STR_TABLE_SELECT_COL
 
 String STR_SMARTTAG_CLICK
 {
-    Text [ en-US ] = "Ctrl-click to open Smart Tag menu" ;
+    Text [ en-US ] = "%s-click to open Smart Tag menu" ;
 };
 
 String STR_POSTIT_TODAY
