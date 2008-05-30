@@ -8,7 +8,7 @@
  *
  * $RCSfile: PostItMgr.cxx,v $
  *
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,11 +145,14 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     // don't check for existance for any of them, don't focus them
     AddPostIts(false,false);
     StartListening(*mpView->GetDocShell());
-    if (!mvPostItFlds.empty())
+    if (!mvPostItFlds.empty() && ShowNotes())
     {
         mbWaitingForCalcRects = true;
         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
     }
+    mShadowState.mpShadowFld = 0;
+    mShadowState.bCursor = false;
+    mShadowState.bMouse = false;
 }
 
 SwPostItMgr::~SwPostItMgr()
@@ -239,7 +242,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         sal_uInt32 nId = ((SfxEventHint&)rHint).GetEventId();
         if ( nId == SW_EVENT_LAYOUT_FINISHED )
         {
-            if ( !mbWaitingForCalcRects && !mvPostItFlds.empty())
+            if ( !mbWaitingForCalcRects && ShowNotes() && !mvPostItFlds.empty())
             {
                 mbWaitingForCalcRects = true;
                 mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
@@ -268,7 +271,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // when a note has focus and the text is changed, we end up here, as the document's modifier is set as well
                     // but we do not want a new layout nor a change of the viewport,
                     // which we would get in CalcRects because of CrsrShell::Pop()
-                    if ( !mbWaitingForCalcRects && !mvPostItFlds.empty() && !GetActivePostIt())
+                    if ( !mbWaitingForCalcRects && ShowNotes() && !mvPostItFlds.empty() && !GetActivePostIt())
                     {
                         mbWaitingForCalcRects = true;
                         mnEventId = Application::PostUserEvent( LINK( this, SwPostItMgr, CalcHdl), 0 );
@@ -358,7 +361,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
                         else
                         {
-                            // when the layout algorithm starts, this postit is created and receives focus
+                                // when the layout algorithm starts, this postit is created and receives focus
                             (*i)->bFocus = true;
                         }
                     }
@@ -386,6 +389,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 bool SwPostItMgr::CalcRects()
 {
+    if (!ShowNotes())
+        return false;
+
     if ( mnEventId )
     {
         // if CalcRects() was forced and an event is still pending: remove it
@@ -400,6 +406,7 @@ bool SwPostItMgr::CalcRects()
     if ( !mvPostItFlds.empty() )
     {
         mpWrtShell->SwCrsrShell::Push();
+        mpWrtShell->SwCrsrShell::ClearMark();
            const BOOL bOldLockView = mpWrtShell->IsViewLocked();
         mpWrtShell->LockView( TRUE );
 
@@ -566,7 +573,7 @@ void SwPostItMgr::LayoutPostIts()
                             long aPostItHeight = 0;
                             if (!pPostIt)
                             {
-                                pPostIt = new SwPostIt(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL,pFmtFld,this);
+                                pPostIt = new SwPostIt(static_cast<Window*>(&mpView->GetEditWin()),WINDOW_CONTROL,pFmtFld,this,0);
                                 pPostIt->SetReadonly(mbReadOnly);
                                 SetColors(pPostIt,static_cast<SwPostItField*>(pFmtFld->GetFld()));
                                 pItem->pPostIt = pPostIt;
@@ -711,9 +718,15 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
 
     SwPostItItem_iterator aItem = mPages[aPage-1]->mList->end();
     --aItem;
-    const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+    DBG_ASSERT ((*aItem)->pPostIt,"BorderOverPageBorder: NULL postIt, should never happen")
+    if ((*aItem)->pPostIt)
+    {
+        const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
         const long aEndValue = mpEditWin->PixelToLogic(Point(0,(*aItem)->pPostIt->GetPosPixel().Y()+(*aItem)->pPostIt->GetSizePixel().Height())).Y();
-    return aEndValue <= mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight;
+        return aEndValue <= mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight;
+    }
+    else
+        return false;
 }
 
 void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
@@ -807,10 +820,10 @@ void SwPostItMgr::MakeVisible(const SwPostIt* pPostIt,long aPage )
             }
         }
     }
-    AutoScroll(pPostIt,aPage);
+    if (aPage!=-1)
+        AutoScroll(pPostIt,aPage);
     Rectangle aNoteRect (Point(pPostIt->GetPosPixel().X(),pPostIt->GetPosPixel().Y()-5),pPostIt->GetSizePixel());
     mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
-    //if this page has a scrollbar, note might be still not visible
 }
 
 bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage) const
@@ -1115,7 +1128,6 @@ void SwPostItMgr::Delete()
         SwPostItItem* pItem = (*i);
         // stop listening, we delete ourselves
         EndListening( *(pItem->pFmtFld) );
-
         // delete the actual SwPostItField
         mpWrtShell->GotoField(*pItem->pFmtFld);
         mpWrtShell->DelRight();
@@ -1199,6 +1211,70 @@ void SwPostItMgr::Sort(const short aType)
                 break;
         }
     }
+}
+
+SwPostIt* SwPostItMgr::GetPostIt(SwFmtFld* pFld) const
+{
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    {
+        if ( (*i)->pFmtFld ==pFld)
+            return (*i)->pPostIt;
+    }
+    return NULL;
+}
+
+SwPostIt* SwPostItMgr::GetPostIt(SwPostItField* pFld) const
+{
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    {
+        if ( (*i)->pFmtFld->GetFld() == pFld)
+            return (*i)->pPostIt;
+    }
+    return NULL;
+}
+
+SwPostIt* SwPostItMgr::GetPostIt( const SwFmtFld* pFld) const
+{
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    {
+        if ( (*i)->pFmtFld ==pFld)
+            return (*i)->pPostIt;
+    }
+    return NULL;
+}
+
+SwPostIt* SwPostItMgr::GetPostIt(const SwPostItField* pFld) const
+{
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    {
+        if ( (*i)->pFmtFld->GetFld() == pFld)
+            return (*i)->pPostIt;
+    }
+    return NULL;
+}
+
+bool SwPostItMgr::ShowPreview(const SwField* pFld, SwFmtFld*& pFmtFld) const
+{
+    for (unsigned long n=0;n<mPages.size();n++)
+    {
+        if (mPages[n]->mList->size()>0)
+        {
+            for(const_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+            {
+                if ((*i)->pFmtFld->GetFld()==pFld)
+                {
+                    pFmtFld = (*i)->pFmtFld;
+                    const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+                    bool bTopPage = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
+                    bool bBottomPage  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()+(*i)->pPostIt->GetSizePixel().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
+                    const bool bTopVis = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() > mpView->GetVisArea().Top();
+                    const bool bBottomVis  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()/*+(*i)->pPostIt->GetSizePixel().Height()*/)).Y() <= mpView->GetVisArea().Bottom();
+                    return !(bBottomPage && bTopPage && bBottomVis && bTopVis);
+                }
+            }
+        }
+    }
+    return false;
 }
 
 SwPostIt* SwPostItMgr::GetNextPostIt(USHORT aDirection, SwPostIt* aPostIt)
@@ -1295,15 +1371,67 @@ long SwPostItMgr::GetNextBorder()
     return -1;
 }
 
-SwFmtFld* SwPostItMgr::GetFmtFld(SwPostIt* mpPostIt)
+SwFmtFld* SwPostItMgr::GetFmtFld(SwPostIt* mpPostIt) const
 {
-    for(SwPostItItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(const_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
     {
         if ( (*i)->pPostIt == mpPostIt)
             return (*i)->pFmtFld;
     }
     DBG_WARNING("SwPostItMgr::GetFmtFld(): PostIt not found, something major must have gone wrong here");
     return NULL;
+}
+
+void SwPostItMgr::SetShadowState(const SwPostItField* pFld,bool bCursor)
+{
+    if (pFld)
+    {
+        if (pFld !=mShadowState.mpShadowFld)
+        {
+            if (mShadowState.mpShadowFld)
+            {
+                // reset old one if still alive
+                // TODO: does not work properly if mouse and cursor was set
+                SwPostIt* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
+                if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
+                    pOldPostIt->SetShadowState(SS_NORMAL);
+            }
+            //set new one, if it is not currently edited
+            SwPostIt* pNewPostIt = GetPostIt(pFld);
+            if (pNewPostIt && pNewPostIt->Shadow() && (pNewPostIt->Shadow()->GetShadowState() != SS_EDIT))
+            {
+                pNewPostIt->SetShadowState(SS_VIEW);
+                //remember our new field
+                mShadowState.mpShadowFld = pFld;
+                mShadowState.bCursor = false;
+                mShadowState.bMouse = false;
+            }
+        }
+        if (bCursor)
+            mShadowState.bCursor = true;
+        else
+            mShadowState.bMouse = true;
+    }
+    else
+    {
+        if (mShadowState.mpShadowFld)
+        {
+            if (bCursor)
+                mShadowState.bCursor = false;
+            else
+                mShadowState.bMouse = false;
+            if (!mShadowState.bCursor && !mShadowState.bMouse)
+            {
+                // reset old one if still alive
+                SwPostIt* pOldPostIt = GetPostIt(mShadowState.mpShadowFld);
+                if (pOldPostIt && pOldPostIt->Shadow() && (pOldPostIt->Shadow()->GetShadowState() != SS_EDIT))
+                {
+                    pOldPostIt->SetShadowState(SS_NORMAL);
+                    mShadowState.mpShadowFld = 0;
+                }
+            }
+        }
+    }
 }
 
 void SwPostItMgr::PrepareView(bool bIgnoreCount)
@@ -1324,7 +1452,7 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
 bool SwPostItMgr::ShowScrollbar(const unsigned long aPage) const
 {
     if (mPages.size() > aPage-1)
-        return mPages[aPage-1]->bScrollbar;
+        return (mPages[aPage-1]->bScrollbar && !mbWaitingForCalcRects);
     else
         return false;
 }
@@ -1533,7 +1661,7 @@ IMPL_LINK( SwPostItMgr, CalcHdl, void*, /* pVoid*/  )
     }
 
     // do not change order, even if it would seem so in the first place, we need the calcrects always
-    if ( CalcRects() || mbLayout )
+    if (CalcRects() || mbLayout)
     {
         mbLayout = false;
         LayoutPostIts();
