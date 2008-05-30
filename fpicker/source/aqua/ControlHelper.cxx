@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ControlHelper.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -310,9 +310,6 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION) {
         aRetval <<= m_bAutoFilenameExtension;
         OSL_TRACE("value is a bool (autoextension): %d", m_bAutoFilenameExtension);
-    }
-    else if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_LINK) {
-        OSL_TRACE(" TEST do nothing");
     }
     else {
         NSControl* pControl = getControl( nControlId );
