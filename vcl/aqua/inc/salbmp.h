@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salbmp.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ class AquaSalBitmap : public SalBitmap
 {
 public:
     CGContextRef                    mxGraphicContext;
+    mutable CGImageRef              mxCachedImage;
     BitmapPalette                   maPalette;
     basebmp::RawMemorySharedArray   maUserBuffer;
     basebmp::RawMemorySharedArray   maContextBuffer;
@@ -68,7 +69,7 @@ public:
 
 public:
     AquaSalBitmap();
-    ~AquaSalBitmap();
+    virtual ~AquaSalBitmap();
 
 public:
 
@@ -88,6 +89,7 @@ public:
 
     bool            GetSystemData( BitmapSystemData& rData );
 
+private:
     // quartz helper
     bool            CreateContext();
     void            DestroyContext();
@@ -97,22 +99,13 @@ public:
                                        sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow, const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
                                        sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData );
 
-    bool            Create( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
-    bool            Create( int nSrcWidth, int nSrcHeight, int nBits,
-                            sal_uInt32 nBytesPerRow, const sal_uInt8* pSrcBuffer,
-                            int nSrcX, int nSrcY, int nBmpWidth, int nBmpHeight,
-                            bool bMirrorVert = true
-                            );
-    bool            Create( CGImageRef& xImage );
+public:
+    bool            Create( CGLayerRef xLayer, int nBitCount, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
 
-    CGImageRef      CreateWithMask( const AquaSalBitmap& rMask, sal_uInt32 nX, sal_uInt32 nY, sal_uInt32 nDX, sal_uInt32 nDY );
+public:
+    CGImageRef      CreateWithMask( const AquaSalBitmap& rMask, int nX, int nY, int nWidth, int nHeight ) const;
     CGImageRef      CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const;
-    CGImageRef      CreateMask( int nX, int nY, int nWidth, int nHeight ) const;
-    CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight );
-    static CGImageRef CreateCroppedImage( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight );
-
-    // helper for basemp methods (e.g. for XOR rendering)
-    basebmp::BitmapDeviceSharedPtr getBitmapDevice() const;
+    CGImageRef      CreateCroppedImage( int nX, int nY, int nWidth, int nHeight ) const;
 };
 
 #endif // _SV_SALBMP_HXX
