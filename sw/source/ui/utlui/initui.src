@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: initui.src,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +145,7 @@ Resource RID_SW_SHELLRES
     };
     String STR_HYPERLINK_CLICK
     {
-        Text [ en-US ] = "Ctrl-click to open hyperlink";
+        Text [ en-US ] = "%s-click to open hyperlink";
     };
 
 
