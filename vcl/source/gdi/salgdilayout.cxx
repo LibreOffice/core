@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdilayout.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -257,6 +257,17 @@ BOOL    SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeigh
     return unionClipRegion( nX, nY, nWidth, nHeight );
 }
 
+bool SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+    return false;
+}
+
+BOOL SalGraphics::UnionClipRegion( const ::basegfx::B2DPolyPolygon& rPoly, const OutputDevice* pOutDev )
+{
+    (void)pOutDev;// TODO: SAL_LAYOUT_BIDI_RTL
+    return unionClipRegion( rPoly );
+}
+
 void    SalGraphics::DrawPixel( long nX, long nY, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
@@ -330,6 +341,24 @@ void    SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
     }
     else
         drawPolyPolygon( nPoly, pPoints, pPtAry );
+}
+bool SalGraphics::DrawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency, const OutputDevice* )
+{
+    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyPolygon - no mirroring implemented");
+    return drawPolyPolygon( rPolyPolygon, fTransparency );
+}
+bool SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double )
+{
+    return false;
+}
+bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& rPolyLine, const ::basegfx::B2DVector& rLineWidths, const OutputDevice* )
+{
+    DBG_ASSERT( !(m_nLayout & SAL_LAYOUT_BIDI_RTL), "DrawPolyLine - no mirroring implemented");
+    return drawPolyLine( rPolyLine, rLineWidths );
+}
+bool SalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& )
+{
+    return false;
 }
 sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
 {
