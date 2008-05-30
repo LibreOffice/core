@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -612,7 +612,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         SvMemoryStream aExtBu( 0x200, 0x200 );
                         if ( !mbEmptyPresObj )
                             ImplGetText();
-                        ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
+                        ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu, NULL );
                         ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
                         maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                         if ( rLayout.bSecOutlinerPossible )
@@ -626,7 +626,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                     SvMemoryStream aTmpStrm( 0x200, 0x200 );
                                     if ( !mbEmptyPresObj )
                                         ImplGetText();
-                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pTempRule, aTmpStrm );
+                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pTempRule, aTmpStrm, NULL );
                                     ImplWriteExtParaHeader( aTmpStrm, nPObjects++, nTextType, i + 0x100 );
                                     maTextRuleList.Insert( (void*)pTempRule, LIST_APPEND );
                                 }
@@ -644,7 +644,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                         SvMemoryStream aExtBu( 0x200, 0x200 );
                         if ( !mbEmptyPresObj )
                             ImplGetText();
-                        ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu );
+                        ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu, NULL );
                         ImplWriteExtParaHeader( aExtBu, nPObjects++, EPP_TEXTTYPE_Title, i + 0x100 );
                         maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                     }
