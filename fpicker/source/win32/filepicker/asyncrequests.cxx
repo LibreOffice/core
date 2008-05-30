@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: asyncrequests.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "asyncrequests.hxx"
+#include <vcl/svapp.hxx>
 
 //-----------------------------------------------------------------------------
 // namespace
@@ -44,6 +45,8 @@ namespace css = ::com::sun::star;
 void lcl_sleep(::osl::Condition& aCondition   ,
                ::sal_Int32       nMilliSeconds)
 {
+    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+
     if (nMilliSeconds < 1)
         aCondition.wait(0);
     else
@@ -53,6 +56,8 @@ void lcl_sleep(::osl::Condition& aCondition   ,
         aTime.Nanosec = (nMilliSeconds % 1000);
         aCondition.wait(&aTime);
     }
+
+    Application::AcquireSolarMutex( nAcquireCount );
 }
 
 //-----------------------------------------------------------------------------
