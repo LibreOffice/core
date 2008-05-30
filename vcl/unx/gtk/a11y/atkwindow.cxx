@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atkwindow.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,10 @@
 #include <vcl/window.hxx>
 
 #include "atkwindow.hxx"
+#include "atkwrapper.hxx"
 #include "atkregistry.hxx"
+
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -45,6 +48,76 @@ extern "C" {
 static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
 static void (* window_real_finalize) (GObject *obj) = NULL;
 static G_CONST_RETURN gchar* (* window_real_get_name) (AtkObject *accessible) = NULL;
+
+static void
+init_from_window( AtkObject *accessible, Window *pWindow )
+{
+    static AtkRole aDefaultRole = ATK_ROLE_INVALID;
+
+    // Special role for sub-menu and combo-box popups that are exposed directly
+    // by their parents already.
+    if( aDefaultRole == ATK_ROLE_INVALID )
+        aDefaultRole = atk_role_register( "redundant object" );
+
+    AtkRole role = aDefaultRole;
+
+    // Determine the appropriate role for the GtkWindow
+    switch( pWindow->GetAccessibleRole() )
+    {
+        case AccessibleRole::ALERT:
+            role = ATK_ROLE_ALERT;
+            break;
+
+        case AccessibleRole::DIALOG:
+            role = ATK_ROLE_DIALOG;
+            break;
+
+        case AccessibleRole::FRAME:
+            role = ATK_ROLE_FRAME;
+            break;
+
+        /* Ignore window objects for sub-menus, combo- and list boxes,
+         *  which are exposed as children of their parents.
+         */
+        case AccessibleRole::WINDOW:
+        {
+            USHORT type = WINDOW_WINDOW;
+            bool parentIsMenuFloatingWindow = false;
+
+            Window *pParent = pWindow->GetParent();
+            if( pParent ) {
+                type = pParent->GetType();
+                parentIsMenuFloatingWindow = ( TRUE == pParent->IsMenuFloatingWindow() );
+            }
+
+            if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&
+                (WINDOW_MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
+            {
+                role = ATK_ROLE_WINDOW;
+            }
+        }
+        break;
+
+        default:
+        {
+            Window *pChild = pWindow->GetChild( 0 );
+            if( pChild )
+            {
+                if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )
+                {
+                    role = ATK_ROLE_TOOL_TIP;
+                    pChild->SetAccessibleRole( AccessibleRole::LABEL );
+                    accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                }
+            }
+            break;
+        }
+    }
+
+    accessible->role = role;
+}
+
+/*****************************************************************************/
 
 static gint
 ooo_window_wrapper_clear_focus(gpointer)
@@ -75,27 +148,28 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
         Window *pWindow = pFrame->GetWindow();
         if( pWindow )
         {
+            init_from_window( obj, pWindow );
+
             Reference< XAccessible > xAccessible( pWindow->GetAccessible(true) );
-            ooo_wrapper_registry_add( xAccessible, obj );
-            g_object_set_data( G_OBJECT(obj), "ooo:registry-key", xAccessible.get() );
+
+            /* We need the wrapper object for the top-level XAccessible to be
+             * in the wrapper registry when atk traverses the hierachy up on
+             * focus events
+             */
+            if( WINDOW_BORDERWINDOW == pWindow->GetType() )
+            {
+                ooo_wrapper_registry_add( xAccessible, obj );
+                g_object_set_data( G_OBJECT(obj), "ooo:atk-wrapper-key", xAccessible.get() );
+            }
+            else
+            {
+                AtkObject *child = atk_object_wrapper_new( xAccessible, obj );
+                child->role = ATK_ROLE_FILLER;
+                if( (ATK_ROLE_DIALOG == obj->role) || (ATK_ROLE_ALERT == obj->role) )
+                    child->role = ATK_ROLE_OPTION_PANE;
+                ooo_wrapper_registry_add( xAccessible, child );
+            }
         }
-    }
-
-    /* GetAtkRole returns ATK_ROLE_INVALID for all non VCL windows, i.e.
-     * native Gtk+ file picker etc.
-     */
-    AtkRole newRole = GtkSalFrame::GetAtkRole( GTK_WINDOW( data ) );
-    if( newRole != ATK_ROLE_INVALID )
-        obj->role = newRole;
-
-    if( obj->role == ATK_ROLE_TOOL_TIP )
-    {
-        /* HACK: Avoid endless loop when get_name is called from
-         * gail_window_new() context, which leads to the code path
-         * showing up in wrapper_factory_create_accessible with no
-         * accessible assigned to the GtkWindow yet.
-         */
-        g_object_set_data( G_OBJECT( data ), "ooo:tooltip-accessible", obj );
     }
 
     g_signal_connect_after( GTK_WIDGET( data ), "focus-out-event",
@@ -105,32 +179,10 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 
 /*****************************************************************************/
 
-static G_CONST_RETURN gchar*
-ooo_window_wrapper_real_get_name(AtkObject *accessible)
-{
-    G_CONST_RETURN gchar* name = NULL;
-
-    if( accessible->role == ATK_ROLE_TOOL_TIP )
-    {
-        AtkObject *child = atk_object_ref_accessible_child(accessible, 0);
-        if( child )
-        {
-            name = atk_object_get_name(child);
-            g_object_unref(child);
-        }
-
-        return name;
-    }
-
-    return window_real_get_name(accessible);
-}
-
-/*****************************************************************************/
-
 static void
 ooo_window_wrapper_real_finalize (GObject *obj)
 {
-    ooo_wrapper_registry_remove( (XAccessible *) g_object_get_data( obj, "ooo:registry-key" ));
+    ooo_wrapper_registry_remove( (XAccessible *) g_object_get_data( obj, "ooo:atk-wrapper-key" ));
     window_real_finalize( obj );
 }
 
@@ -153,9 +205,6 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 
     window_real_initialize = atk_class->initialize;
     atk_class->initialize = ooo_window_wrapper_real_initialize;
-
-    window_real_get_name = atk_class->get_name;
-    atk_class->get_name = ooo_window_wrapper_real_get_name;
 
     gobject_class = G_OBJECT_CLASS (data);
 
