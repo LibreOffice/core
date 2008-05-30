@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: spritehelper.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,6 +167,9 @@ namespace vclcanvas
                     Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint,
                                                                            aOutputSize ) );
 
+                    // bitmasks are much faster than alphamasks on some platforms
+                    // so convert to bitmask if useful
+#ifndef QUARTZ
                     if( aMask.GetBitCount() != 1 )
                     {
                         OSL_ENSURE(false,
@@ -174,6 +177,7 @@ namespace vclcanvas
                                    "monochrome (performance!)");
                         aMask.MakeMono(255);
                     }
+#endif
 
                     // Note: since we retrieved aBmp and aMask
                     // directly from an OutDev, it's already a
