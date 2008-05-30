@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,7 +90,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mnExtStyle( 0 ),
     mePointerStyle( POINTER_ARROW ),
     mnTrackingRectTag( 0 ),
-    mrClippingPath( 0 )
+    mrClippingPath( 0 ),
+    mnICOptions( 0 )
 {
     maSysData.nSize     = sizeof( SystemEnvData );
 
@@ -304,7 +305,7 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
             mpDockMenuEntry = [pDock insertItemWithTitle: pTitle
                                      action: @selector(dockMenuItemTriggered:)
                                      keyEquivalent: @""
-                                     atIndex: [pDock numberOfItems]];
+                                     atIndex: 0];
             [mpDockMenuEntry setTarget: mpWindow];
 
             // TODO: image (either the generic window image or an icon
@@ -602,8 +603,33 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetScreenNumber(unsigned int)
+void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
 {
+    NSArray* pScreens = [NSScreen screens];
+    Rectangle aRet;
+    NSScreen* pScreen = nil;
+    if( pScreens && nScreen < [pScreens count] )
+    {
+        // get new screen frame
+        pScreen = [pScreens objectAtIndex: nScreen];
+        NSRect aNewScreen = [pScreen frame];
+
+        // get current screen frame
+        pScreen = [mpWindow screen];
+        if( pScreen )
+        {
+            NSRect aCurScreen = [pScreen frame];
+            if( aCurScreen.origin.x != aNewScreen.origin.x ||
+                aCurScreen.origin.y != aNewScreen.origin.y )
+            {
+                NSRect aFrameRect = [mpWindow frame];
+                aFrameRect.origin.x += aNewScreen.origin.x - aCurScreen.origin.x;
+                aFrameRect.origin.y += aNewScreen.origin.y - aCurScreen.origin.y;
+                [mpWindow setFrame: aFrameRect display: NO];
+                UpdateFrameGeometry();
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -840,12 +866,15 @@ void AquaSalFrame::Sync()
 void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 {
     if (!pContext)
+    {
+        mnICOptions = 0;
         return;
+    }
+
+    mnICOptions = pContext->mnOptions;
 
     if(!(pContext->mnOptions & SAL_INPUTCONTEXT_TEXT))
         return;
-
-    // FIXME: implementation
 }
 
 // -----------------------------------------------------------------------
@@ -1351,7 +1380,11 @@ void AquaSalFrame::UpdateFrameGeometry()
     // update screen rect
     NSScreen * pScreen = [mpWindow screen];
     if( pScreen )
+    {
         maScreenRect = [pScreen frame];
+        NSArray* pScreens = [NSScreen screens];
+        maGeometry.nScreenNumber = [pScreens indexOfObject: pScreen];
+    }
 
     NSRect aFrameRect = [mpWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
