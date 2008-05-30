@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stdtext.src,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,3 +119,7 @@ WarningBox  SV_EDIT_WARNING_BOX
     Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
 };
 
+String SV_MAC_SCREENNNAME
+{
+    Text [en-US] = "Screen %d";
+};
