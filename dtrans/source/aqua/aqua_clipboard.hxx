@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aqua_clipboard.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +69,7 @@ class AquaClipboard;
 
 -(void)applicationDidBecomeActive:(NSNotification*)aNotification;
 
+-(void)disposing;
 @end
 
 
