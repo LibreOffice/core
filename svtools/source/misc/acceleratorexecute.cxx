@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acceleratorexecute.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -340,6 +340,81 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     }
     catch(const css::container::NoSuchElementException&)
         {}
+
+    // fall back to functional key codes
+    if( aKey.Modifiers == 0 )
+    {
+        switch( aKey.KeyCode )
+        {
+        case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfLine" ) );
+
+        case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfLine" ) );
+
+        case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfPara" ) );
+
+        case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfPara" ) );
+
+        case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfWord" ) );
+
+        case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfWord" ) );
+
+        case com::sun::star::awt::Key::INSERT_LINEBREAK:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertLinebreak" ) );
+
+        case com::sun::star::awt::Key::INSERT_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPara" ) );
+
+        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToPrevWord" ) );
+
+        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToNextWord" ) );
+
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfLine" ) );
+
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfLine" ) );
+
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfPara" ) );
+
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfPara" ) );
+
+        case com::sun::star::awt::Key::SELECT_BACKWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharLeftSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_FORWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharRightSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordLeftSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordRightSel" ) );
+
+        case com::sun::star::awt::Key::SELECT_WORD:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectWord" ) );
+
+        case com::sun::star::awt::Key::SELECT_LINE:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) );
+
+        case com::sun::star::awt::Key::SELECT_PARAGRAPH:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectText" ) );
+
+        case com::sun::star::awt::Key::SELECT_ALL:
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectAll" ) );
+        default:
+            break;
+        }
+    }
 
     return ::rtl::OUString();
 }
