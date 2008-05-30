@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view0.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,7 +275,17 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_TABLEGRID:
                 aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
             case FN_VIEW_NOTES:
-                aBool.SetValue( pOpt->IsPostIts()); break;
+            {
+                aBool.SetValue( pOpt->IsPostIts());
+                if (!GetPostItMgr()->HasNotes())
+                {
+                    aBool.SetWhich( nWhich );
+                    rSet.Put( aBool );
+                    rSet.DisableItem(nWhich);
+                    nWhich = 0;
+                }
+                break;
+            }
             case FN_VIEW_HIDDEN_PARA:
                 aBool.SetValue( pOpt->IsShowHiddenPara()); break;
             case SID_GRID_VISIBLE:
