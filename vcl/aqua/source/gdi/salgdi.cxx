@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,17 +50,18 @@
 #include "vcl/svapp.hxx"
 
 #include "basegfx/range/b2drectangle.hxx"
-#include "basegfx/range/b2irange.hxx"
+//#include "basegfx/range/b2irange.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
-
+/*
 #include "basebmp/color.hxx"
 
 #include <boost/assert.hpp>
 #include <algorithm>
 
 using namespace std;
+*/
 
 
 typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
@@ -271,12 +272,19 @@ bool ImplMacFontData::HasCJKSupport( void ) const
 
 AquaSalGraphics::AquaSalGraphics()
     : mpFrame( NULL )
-    , mrContext( 0 )
+    , mxLayer( NULL )
+    , mrContext( NULL )
+    , mpXorEmulation( NULL )
+    , mnWidth( 0 )
+    , mnHeight( 0 )
+    , mnBitmapDepth( 0 )
     , mnRealDPIX( 0 )
     , mnRealDPIY( 0 )
     , mfFakeDPIScale( 1.0 )
-    , mrClippingPath( 0 )
-    , mbXORMode( false )
+    , mxClipRectsPath( NULL )
+    , mxClipPolysPath( NULL )
+    , maLineColor( COL_WHITE )
+    , maFillColor( COL_BLACK )
     , mpMacFontData( NULL )
     , mnATSUIRotation( 0 )
     , mfFontScale( 1.0 )
@@ -288,14 +296,6 @@ AquaSalGraphics::AquaSalGraphics()
 {
     long nDummyX, nDummyY;
     GetResolution( nDummyX, nDummyY );
-
-    // init colors
-    for(int i=0; i<3; i++)
-    {
-        mpFillColor[i] = 0.0;   // white
-        mpLineColor[i] = 1.0;   // black
-    }
-    mpFillColor[3] = mpLineColor[3] = 1.0; // opaque colors
 
     // create the style object for font attributes
     ATSUCreateStyle( &maATSUStyle );
@@ -311,16 +311,22 @@ AquaSalGraphics::~AquaSalGraphics()
         Application::RemoveUserEvent( mnUpdateGraphicsEvent );
     }
 */
-    CGPathRelease( mrClippingPath );
+    CGPathRelease( mxClipRectsPath );
+    CGPathRelease( mxClipPolysPath );
     ATSUDisposeStyle( maATSUStyle );
 
-    if( mrContext && mbWindow )
+    if( mxLayer )
+        CGLayerRelease( mxLayer );
+    else if( mrContext && mbWindow )
     {
         // destroy backbuffer bitmap context that we created ourself
-        CFRelease( mrContext );
-        mrContext = 0;
+        CGContextRelease( mrContext );
+        mrContext = NULL;
         // memory is freed automatically by maOwnContextMemory
     }
+
+    if( mpXorEmulation )
+        delete mpXorEmulation;
 }
 
 bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
@@ -329,6 +335,8 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
     switch( eType )
     {
     case OutDevSupport_TransparentRect:
+    case OutDevSupport_B2DClip:
+    case OutDevSupport_B2DDraw:
         bRet = true;
         break;
     default: break;
@@ -424,15 +432,65 @@ void AquaSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 
 USHORT AquaSalGraphics::GetBitCount()
 {
-    USHORT nBits = 0;
-    if( CheckContext() )
-    {
-        if( mbPrinter )
-            nBits = 24;
-        else
-            nBits = static_cast<USHORT>(CGBitmapContextGetBitsPerPixel(mrContext));
-    }
+    USHORT nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
     return nBits;
+}
+
+// -----------------------------------------------------------------------
+
+static void AddPolygonToPath( CGMutablePathRef xPath,
+    const ::basegfx::B2DPolygon& rPolygon, bool bPixelSnap )
+{
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolygon.count();
+    if( nPointCount <= 0 )
+        return;
+
+    (void)bPixelSnap; // TODO
+    const CGAffineTransform* pTransform = NULL;
+
+    const bool bHasCurves = rPolygon.areControlPointsUsed();
+    bool bPendingCurve = false;
+    for( int nPointIdx = 0, nPrevIdx = 0; nPointIdx <= nPointCount; nPrevIdx = nPointIdx++ )
+    {
+        const int nClosedIdx = (nPointIdx < nPointCount) ? nPointIdx : 0;
+        const ::basegfx::B2DPoint& rPoint = rPolygon.getB2DPoint( nClosedIdx );
+        if( !nPointIdx )            // first point
+        {
+            CGPathMoveToPoint( xPath, pTransform, rPoint.getX(), rPoint.getY() );
+        }
+        else if( !bPendingCurve )   // line segment
+        {
+            CGPathAddLineToPoint( xPath, pTransform, rPoint.getX(), rPoint.getY() );
+        }
+        else                        // cubic bezier segment
+        {
+            const ::basegfx::B2DPoint& rCP1 = rPolygon.getNextControlPoint( nPrevIdx );
+            const ::basegfx::B2DPoint& rCP2 = rPolygon.getPrevControlPoint( nClosedIdx );
+            CGPathAddCurveToPoint( xPath, pTransform, rCP1.getX(), rCP1.getY(),
+                rCP2.getX(), rCP2.getY(), rPoint.getX(), rPoint.getY() );
+        }
+
+        if( bHasCurves )
+            bPendingCurve = rPolygon.isNextControlPointUsed( nClosedIdx );
+    }
+
+    CGPathCloseSubpath( xPath );
+}
+
+static void AddPolyPolygonToPath( CGMutablePathRef xPath,
+    const ::basegfx::B2DPolyPolygon& rPolyPoly, bool bPixelSnap )
+{
+    // short circuit if there is nothing to do
+    const int nPolyCount = rPolyPoly.count();
+    if( nPolyCount <= 0 )
+        return;
+
+    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    {
+        const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
+        AddPolygonToPath( xPath, rPolygon, bPixelSnap );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -440,10 +498,10 @@ USHORT AquaSalGraphics::GetBitCount()
 void AquaSalGraphics::ResetClipRegion()
 {
     // release old path and indicate no clipping
-    CGPathRelease( mrClippingPath );
-    mrClippingPath = NULL;
-    maXORDevice.reset();
-    maXORClipMask.reset();
+    CGPathRelease( mxClipRectsPath );
+    mxClipRectsPath = NULL;
+    CGPathRelease( mxClipPolysPath );
+    mxClipPolysPath = NULL;
     if( CheckContext() )
         SetState();
 }
@@ -452,44 +510,51 @@ void AquaSalGraphics::ResetClipRegion()
 
 void AquaSalGraphics::BeginSetClipRegion( ULONG nRectCount )
 {
-    // release old path
-    if( mrClippingPath )
+    // release union-of-rectangles clip
+    if( mxClipRectsPath )
     {
-        CGPathRelease( mrClippingPath );
-        mrClippingPath = NULL;
+        CGPathRelease( mxClipRectsPath );
+        mxClipRectsPath = NULL;
     }
-    maXORDevice.reset();
-    maXORClipMask.reset();
-
-    if( maClippingRects.size() > SAL_CLIPRECT_COUNT && nRectCount < maClippingRects.size() )
+    // release complex polygon clip
+    if( !nRectCount )
     {
-        std::vector<CGRect> aEmptyVec;
-        maClippingRects.swap( aEmptyVec );
+        CGPathRelease( mxClipPolysPath );
+        mxClipPolysPath = NULL;
     }
-    maClippingRects.clear();
-    maClippingRects.reserve( nRectCount );
-
 }
 
 // -----------------------------------------------------------------------
 
 BOOL AquaSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
-    if( nWidth && nHeight )
-        maClippingRects.push_back( CGRectMake(nX, nY, nWidth, nHeight) );
+    if( (nWidth <= 0) || (nHeight <= 0) )
+        return TRUE;
 
+    if( !mxClipRectsPath )
+        mxClipRectsPath = CGPathCreateMutable();
+    const CGRect aClipRect = {{nX,nY},{nWidth,nHeight}};
+    CGPathAddRect( mxClipRectsPath, NULL, aClipRect );
     return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPolygon )
+{
+    if( rPolyPolygon.count() <= 0 )
+        return true;
+
+    if( !mxClipPolysPath )
+        mxClipPolysPath = CGPathCreateMutable();
+    AddPolyPolygonToPath( mxClipPolysPath, rPolyPolygon, false );
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::EndSetClipRegion()
 {
-    if( ! maClippingRects.empty() )
-    {
-        mrClippingPath = CGPathCreateMutable();
-        CGPathAddRects( mrClippingPath, NULL, &maClippingRects[0], maClippingRects.size() );
-    }
     if( CheckContext() )
         SetState();
 }
@@ -498,56 +563,32 @@ void AquaSalGraphics::EndSetClipRegion()
 
 void AquaSalGraphics::SetLineColor()
 {
-    mpLineColor[3] = 0.0;   // set alpha component to 0
-
-    CGContextSetStrokeColor( mrContext, mpLineColor );
+    maLineColor.SetAlpha( 0.0 );   // transparent
+    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::SetLineColor( SalColor nSalColor )
 {
-    mpLineColor[0] = (float) SALCOLOR_RED(nSalColor) / 255.0;
-    mpLineColor[1] = (float) SALCOLOR_GREEN(nSalColor) / 255.0;
-    mpLineColor[2] = (float) SALCOLOR_BLUE(nSalColor) / 255.0;
-    mpLineColor[3] = 1.0;   // opaque
-
-    CGContextSetStrokeColor( mrContext, mpLineColor );
+    maLineColor = RGBAColor( nSalColor );
+    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::SetFillColor()
 {
-    mpFillColor[3] = 0.0;   // set alpha component to 0
-
-    CGContextSetFillColor( mrContext, mpFillColor );
+    maFillColor.SetAlpha( 0.0 );   // transparent
+    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::SetFillColor( SalColor nSalColor )
 {
-    mpFillColor[0] = (float) SALCOLOR_RED(nSalColor) / 255.0;
-    mpFillColor[1] = (float) SALCOLOR_GREEN(nSalColor) / 255.0;
-    mpFillColor[2] = (float) SALCOLOR_BLUE(nSalColor) / 255.0;
-    mpFillColor[3] = 1.0;   // opaque
-
-    CGContextSetFillColor( mrContext, mpFillColor );
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalGraphics::SetXORMode( BOOL bSet )
-{
-    if( ! mbPrinter )
-    {
-        mbXORMode = bSet;
-        maXORDevice.reset();
-        maXORClipMask.reset();
-        if( CheckContext() )
-            CGContextSetBlendMode(mrContext, bSet ? kCGBlendModeDifference : kCGBlendModeNormal );
-    }
+    maFillColor = RGBAColor( nSalColor );
+    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -578,135 +619,71 @@ void AquaSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::ImplDrawPixel( long nX, long nY, float pColor[] )
+void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
 {
-    if ( CheckContext() )
-    {
-        if( mbXORMode )
-        {
-            basegfx::B2DRectangle aRect( nX, nY, nX+1, nY+1 );
-            maXORDevice->fillPolyPolygon( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aRect ) ),
-                                      basebmp::Color( static_cast<unsigned int>(pColor[0]*255),
-                                                      static_cast<unsigned int>(pColor[1]*255),
-                                                      static_cast<unsigned int>(pColor[2]*255) ),
-                                      basebmp::DrawMode_XOR,
-                                      maXORClipMask
-                                      );
-        }
-        else
-        {
-            CGContextSetFillColor( mrContext, pColor );
-            // draw 1x1 rect, there is no pixel drawing in Quartz
-            CGContextFillRect( mrContext, CGRectMake (nX, nY, 1, 1) );
-            CGContextSetFillColor( mrContext, mpFillColor );
-        }
-    }
+    if( !CheckContext() )
+        return;
+
+    // overwrite the fill color
+    CGContextSetFillColor( mrContext, rColor.AsArray() );
+    // draw 1x1 rect, there is no pixel drawing in Quartz
+    CGRect aDstRect = {{nX,nY,},{1,1}};
+    CGContextFillRect( mrContext, aDstRect );
+    RefreshRect( aDstRect );
+    // reset the fill color
+    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 void AquaSalGraphics::drawPixel( long nX, long nY )
 {
     // draw pixel with current line color
-    ImplDrawPixel( nX, nY, mpLineColor );
-    RefreshRect( nX, nY, 1, 1 );
+    ImplDrawPixel( nX, nY, maLineColor );
 }
 
 void AquaSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    // draw pixel with specified color
-    float pColor[] =
-    {
-        (float) SALCOLOR_RED(nSalColor) / 255.0,
-        (float) SALCOLOR_GREEN(nSalColor) / 255.0,
-        (float) SALCOLOR_BLUE(nSalColor) / 255.0,
-        1.0   // opaque
-    };
-
-    ImplDrawPixel(nX, nY, pColor);
-    RefreshRect( nX, nY, 1, 1 );
+    const RGBAColor aPixelColor( nSalColor );
+    ImplDrawPixel( nX, nY, aPixelColor );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    if ( CheckContext() )
-    {
-        if( mbXORMode )
-        {
-            maXORDevice->drawLine( basegfx::B2IPoint( nX1, nY1 ),
-                                   basegfx::B2IPoint( nX2, nY2 ),
-                                   basebmp::Color( static_cast<unsigned int>(mpLineColor[0]*255),
-                                                   static_cast<unsigned int>(mpLineColor[1]*255),
-                                                   static_cast<unsigned int>(mpLineColor[2]*255) ),
-                                   basebmp::DrawMode_XOR,
-                                   maXORClipMask
-                                   );
-        }
-        else
-        {
-            CGContextBeginPath( mrContext );
-            CGContextMoveToPoint( mrContext, static_cast<float>(nX1)+0.5, static_cast<float>(nY1)+0.5 );
-            CGContextAddLineToPoint( mrContext, static_cast<float>(nX2)+0.5, static_cast<float>(nY2)+0.5 );
-            CGContextDrawPath( mrContext, kCGPathStroke );
-        }
-    }
+    if( !CheckContext() )
+        return;
+
+    CGContextBeginPath( mrContext );
+    CGContextMoveToPoint( mrContext, static_cast<float>(nX1)+0.5, static_cast<float>(nY1)+0.5 );
+    CGContextAddLineToPoint( mrContext, static_cast<float>(nX2)+0.5, static_cast<float>(nY2)+0.5 );
+    CGContextDrawPath( mrContext, kCGPathStroke );
 
     Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
-    aRefreshRect.Justify();
-    // magical offsets: protect against rounding issues between context and real pixels
-    RefreshRect( aRefreshRect.Left()-1, aRefreshRect.Top()-1, aRefreshRect.GetWidth()+1, aRefreshRect.GetHeight()+1 );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    if ( CheckContext() )
-    {
-        if( mbXORMode )
-        {
-            basegfx::B2DRectangle aRect( nX, nY, nX+nWidth, nY+nHeight );
-            if( mpFillColor[3] > 0.0 )
-            {
-                maXORDevice->fillPolyPolygon( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aRect ) ),
-                                          basebmp::Color( static_cast<unsigned int>(mpFillColor[0]*255),
-                                                          static_cast<unsigned int>(mpFillColor[1]*255),
-                                                          static_cast<unsigned int>(mpFillColor[2]*255) ),
-                                          basebmp::DrawMode_XOR,
-                                          maXORClipMask
-                                          );
-            }
-            if( mpLineColor[3] > 0.0 )
-            {
-                maXORDevice->drawPolygon( basegfx::B2DPolygon( basegfx::tools::createPolygonFromRect( aRect ) ),
-                                          basebmp::Color( static_cast<unsigned int>(mpLineColor[0]*255),
-                                                          static_cast<unsigned int>(mpLineColor[1]*255),
-                                                          static_cast<unsigned int>(mpLineColor[2]*255) ),
-                                          basebmp::DrawMode_XOR,
-                                          maXORClipMask
-                                          );
-            }
-        }
-        else
-        {
-            CGRect aRect( CGRectMake(nX, nY, nWidth, nHeight) );
-            if( ! IsPenTransparent() )
-            {
-                aRect.origin.x      += 0.5;
-                aRect.origin.y      += 0.5;
-                aRect.size.width    -= 1;
-                aRect.size.height -= 1;
-            }
+    if( !CheckContext() )
+        return;
 
-            if( ! IsBrushTransparent() )
-                CGContextFillRect( mrContext, aRect );
+     CGRect aRect( CGRectMake(nX, nY, nWidth, nHeight) );
+     if( IsPenVisible() )
+     {
+         aRect.origin.x      += 0.5;
+         aRect.origin.y      += 0.5;
+         aRect.size.width    -= 1;
+         aRect.size.height -= 1;
+     }
 
-            if( ! IsPenTransparent() )
-                CGContextStrokeRect( mrContext, aRect );
-        }
+     if( IsBrushVisible() )
+         CGContextFillRect( mrContext, aRect );
 
-        RefreshRect( nX, nY, nWidth, nHeight );
-    }
+     if( IsPenVisible() )
+         CGContextStrokeRect( mrContext, aRect );
+
+    RefreshRect( nX, nY, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
@@ -743,252 +720,228 @@ static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_
 
 void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
-    if( (nPoints > 1) && CheckContext() )
+    if( nPoints < 1 )
+        return;
+    if( !CheckContext() )
+        return;
+
+    long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
+
+    float fX, fY;
+
+    CGContextBeginPath( mrContext );
+    alignLinePoint( pPtAry, fX, fY );
+    CGContextMoveToPoint( mrContext, fX, fY );
+    pPtAry++;
+    for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
     {
-        long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-        getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
-        if( mbXORMode )
-        {
-            // build polygon
-            basegfx::B2DPolygon aLine;
-            for( ULONG i = 0; i < nPoints; i++ )
-                aLine.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
-
-            maXORDevice->drawPolygon( aLine,
-                                      basebmp::Color( static_cast<unsigned int>(mpLineColor[0]*255),
-                                                      static_cast<unsigned int>(mpLineColor[1]*255),
-                                                      static_cast<unsigned int>(mpLineColor[2]*255) ),
-                                      basebmp::DrawMode_XOR,
-                                      maXORClipMask
-                                      );
-        }
-        else
-        {
-            float fX, fY;
-
-            CGContextBeginPath( mrContext );
-            alignLinePoint( pPtAry, fX, fY );
-            CGContextMoveToPoint( mrContext, fX, fY );
-            pPtAry++;
-            for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-            {
-                alignLinePoint( pPtAry, fX, fY );
-                CGContextAddLineToPoint( mrContext, fX, fY );
-            }
-            CGContextDrawPath( mrContext, kCGPathStroke );
-        }
-
-        RefreshRect( nX, nY, nWidth, nHeight );
+        alignLinePoint( pPtAry, fX, fY );
+        CGContextAddLineToPoint( mrContext, fX, fY );
     }
+    CGContextDrawPath( mrContext, kCGPathStroke );
+
+    RefreshRect( nX, nY, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawPolygon( CGContextRef& xContext, ULONG nPoints, const SalPoint *pPtAry, float* pFillColor, float* pLineColor )
+void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
 {
+    if( nPoints <= 1 )
+        return;
+    if( !CheckContext() )
+        return;
+
+    long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
+    getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
+
     CGPathDrawingMode eMode;
-    if( pFillColor[3] > 0.0 && pLineColor[3] > 0.0 )
+    if( IsBrushVisible() && IsPenVisible() )
         eMode = kCGPathEOFillStroke;
-    else if( pLineColor[3] > 0.0 )
+    else if( IsPenVisible() )
         eMode = kCGPathStroke;
-    else if( pFillColor[3] > 0.0 )
+    else if( IsBrushVisible() )
         eMode = kCGPathEOFill;
     else
         return;
 
-    CGContextBeginPath( xContext );
+    CGContextBeginPath( mrContext );
 
-    if( pLineColor[3] > 0.0 )
+    if( IsPenVisible() )
     {
         float fX, fY;
         alignLinePoint( pPtAry, fX, fY );
-        CGContextMoveToPoint( xContext, fX, fY );
+        CGContextMoveToPoint( mrContext, fX, fY );
         pPtAry++;
         for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
         {
             alignLinePoint( pPtAry, fX, fY );
-            CGContextAddLineToPoint( xContext, fX, fY );
+            CGContextAddLineToPoint( mrContext, fX, fY );
         }
     }
     else
     {
-        CGContextMoveToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
+        CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
         pPtAry++;
         for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-            CGContextAddLineToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
+            CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
     }
 
-    CGContextDrawPath( xContext, eMode );
-}
-
-void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
-{
-    if( (nPoints > 1) && CheckContext() )
-    {
-        long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-        getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
-        if( mbXORMode )
-        {
-            // build polygon
-            basegfx::B2DPolygon aPoly;
-            for( ULONG i = 0; i < nPoints; i++ )
-                aPoly.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
-
-            if( mpFillColor[3] > 0.0 )
-            {
-                maXORDevice->fillPolyPolygon( basegfx::B2DPolyPolygon( aPoly ),
-                                              basebmp::Color( static_cast<unsigned int>(mpFillColor[0]*255),
-                                                              static_cast<unsigned int>(mpFillColor[1]*255),
-                                                              static_cast<unsigned int>(mpFillColor[2]*255) ),
-                                              basebmp::DrawMode_XOR,
-                                              maXORClipMask
-                                              );
-            }
-            if( mpLineColor[3] > 0.0 )
-            {
-                maXORDevice->drawPolygon( aPoly,
-                                          basebmp::Color( static_cast<unsigned int>(mpLineColor[0]*255),
-                                                          static_cast<unsigned int>(mpLineColor[1]*255),
-                                                          static_cast<unsigned int>(mpLineColor[2]*255) ),
-                                          basebmp::DrawMode_XOR,
-                                          maXORClipMask
-                                          );
-            }
-        }
-        else
-            ImplDrawPolygon( mrContext, nPoints, pPtAry, mpFillColor, mpLineColor );
-
-        RefreshRect( nX, nY, nWidth, nHeight );
-    }
+    CGContextDrawPath( mrContext, eMode );
+    RefreshRect( nX, nY, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, PCONSTSALPOINT  *ppPtAry )
 {
-    if( nPolyCount > 0 && CheckContext() )
+    if( nPolyCount <= 0 )
+        return;
+    if( !CheckContext() )
+        return;
+
+    // find bound rect
+    long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
+    getBoundRect( pPoints[0], ppPtAry[0], leftX, topY, maxWidth, maxHeight );
+    for( ULONG n = 1; n < nPolyCount; n++ )
     {
-        // find bound rect
-        long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
-        getBoundRect( pPoints[0], ppPtAry[0], leftX, topY, maxWidth, maxHeight );
-        for( ULONG n = 1; n < nPolyCount; n++ )
+        long nX = leftX, nY = topY, nW = maxWidth, nH = maxHeight;
+        getBoundRect( pPoints[n], ppPtAry[n], nX, nY, nW, nH );
+        if( nX < leftX )
         {
-            long nX = leftX, nY = topY, nW = maxWidth, nH = maxHeight;
-            getBoundRect( pPoints[n], ppPtAry[n], nX, nY, nW, nH );
-            if( nX < leftX )
-            {
-                maxWidth += leftX - nX;
-                leftX = nX;
-            }
-            if( nY < topY )
-            {
-                maxHeight += topY - nY;
-                topY = nY;
-            }
-            if( nX + nW > leftX + maxWidth )
-                maxWidth = nX + nW - leftX;
-            if( nY + nH > topY + maxHeight )
-                maxHeight = nY + nH - topY;
+            maxWidth += leftX - nX;
+            leftX = nX;
         }
-
-        if( mbXORMode )
+        if( nY < topY )
         {
-            // build Path
-            basegfx::B2DPolyPolygon aPolyPoly;
-            for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
-            {
-                const ULONG nPoints = pPoints[nPoly];
-                if( nPoints > 1 )
-                {
-                    const SalPoint *pPtAry = ppPtAry[nPoly];
-                    basegfx::B2DPolygon aPoly;
-                    for( ULONG i = 0; i < nPoints; i++ )
-                        aPoly.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
-                    aPoly.setClosed( pPtAry[0].mnX == pPtAry[nPoints-1].mnX &&
-                                     pPtAry[0].mnY == pPtAry[nPoints-1].mnY );
-                    aPolyPoly.append( aPoly );
-                }
-            }
-            if( mpFillColor[3] > 0.0 )
-            {
-                maXORDevice->fillPolyPolygon( aPolyPoly,
-                                              basebmp::Color( static_cast<unsigned int>(mpFillColor[0]*255),
-                                                              static_cast<unsigned int>(mpFillColor[1]*255),
-                                                              static_cast<unsigned int>(mpFillColor[2]*255) ),
-                                              basebmp::DrawMode_XOR,
-                                              maXORClipMask
-                                              );
-            }
-            if( mpLineColor[3] > 0.0 )
-            {
-                for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
-                {
-                    maXORDevice->drawPolygon( aPolyPoly.getB2DPolygon( nPoly ),
-                                              basebmp::Color( static_cast<unsigned int>(mpLineColor[0]*255),
-                                                              static_cast<unsigned int>(mpLineColor[1]*255),
-                                                              static_cast<unsigned int>(mpLineColor[2]*255) ),
-                                              basebmp::DrawMode_XOR,
-                                              maXORClipMask
-                                              );
-                }
-            }
+            maxHeight += topY - nY;
+            topY = nY;
         }
-        else
-        {
-            CGPathDrawingMode eMode;
-            if( mpFillColor[3] > 0.0 && mpLineColor[3] > 0.0 )
-                eMode = kCGPathEOFillStroke;
-            else if( mpLineColor[3] > 0.0 )
-                eMode = kCGPathStroke;
-            else if( mpFillColor[3] > 0.0 )
-                eMode = kCGPathEOFill;
-            else
-                return;
-
-            CGContextBeginPath( mrContext );
-            if( mpLineColor[ 3 ] > 0.0 )
-            {
-                for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
-                {
-                    const ULONG nPoints = pPoints[nPoly];
-                    if( nPoints > 1 )
-                    {
-                        const SalPoint *pPtAry = ppPtAry[nPoly];
-                        float fX, fY;
-                        alignLinePoint( pPtAry, fX, fY );
-                        CGContextMoveToPoint( mrContext, fX, fY );
-                        pPtAry++;
-                        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-                        {
-                            alignLinePoint( pPtAry, fX, fY );
-                            CGContextAddLineToPoint( mrContext, fX, fY );
-                        }
-                        CGContextClosePath(mrContext);
-                    }
-                }
-            }
-            else
-            {
-                for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
-                {
-                    const ULONG nPoints = pPoints[nPoly];
-                    if( nPoints > 1 )
-                    {
-                        const SalPoint *pPtAry = ppPtAry[nPoly];
-                        CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
-                        pPtAry++;
-                        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-                            CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
-                        CGContextClosePath(mrContext);
-                    }
-                }
-            }
-
-            CGContextDrawPath( mrContext, eMode );
-        }
-
-        RefreshRect( leftX, topY, maxWidth, maxHeight );
+        if( nX + nW > leftX + maxWidth )
+            maxWidth = nX + nW - leftX;
+        if( nY + nH > topY + maxHeight )
+            maxHeight = nY + nH - topY;
     }
+
+    // prepare drawing mode
+    CGPathDrawingMode eMode;
+    if( IsBrushVisible() && IsPenVisible() )
+        eMode = kCGPathEOFillStroke;
+    else if( IsPenVisible() )
+        eMode = kCGPathStroke;
+    else if( IsBrushVisible() )
+        eMode = kCGPathEOFill;
+    else
+        return;
+
+    // convert to CGPath
+    CGContextBeginPath( mrContext );
+    if( IsPenVisible() )
+    {
+        for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+        {
+            const ULONG nPoints = pPoints[nPoly];
+            if( nPoints > 1 )
+            {
+                const SalPoint *pPtAry = ppPtAry[nPoly];
+                float fX, fY;
+                alignLinePoint( pPtAry, fX, fY );
+                CGContextMoveToPoint( mrContext, fX, fY );
+                pPtAry++;
+                for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                {
+                    alignLinePoint( pPtAry, fX, fY );
+                    CGContextAddLineToPoint( mrContext, fX, fY );
+                }
+                CGContextClosePath(mrContext);
+            }
+        }
+    }
+    else
+    {
+        for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+        {
+            const ULONG nPoints = pPoints[nPoly];
+            if( nPoints > 1 )
+            {
+                const SalPoint *pPtAry = ppPtAry[nPoly];
+                CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+                pPtAry++;
+                for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                    CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+                CGContextClosePath(mrContext);
+            }
+        }
+    }
+
+    CGContextDrawPath( mrContext, eMode );
+
+    RefreshRect( leftX, topY, maxWidth, maxHeight );
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly,
+    double fTransparency )
+{
+    // short circuit if there is nothing to do
+    const int nPolyCount = rPolyPoly.count();
+    if( nPolyCount <= 0 )
+        return true;
+
+    // setup poly-polygon path
+    CGMutablePathRef xPath = CGPathCreateMutable();
+    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    {
+        const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
+        AddPolygonToPath( xPath, rPolygon, false );
+    }
+    CGContextSaveGState( mrContext );
+    CGContextBeginPath( mrContext );
+    CGContextAddPath( mrContext, xPath );
+    const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
+    CGPathRelease( xPath );
+
+    // draw path with antialiased polygon
+    CGContextSetShouldAntialias( mrContext, true );
+    CGContextSetAlpha( mrContext, 1.0 - fTransparency );
+    CGContextDrawPath( mrContext, kCGPathEOFillStroke );
+    CGContextRestoreGState( mrContext );
+
+    // mark modified rectangle as updated
+    RefreshRect( aRefreshRect );
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+    const ::basegfx::B2DVector& rLineWidths )
+{
+    // short circuit if there is nothing to do
+    const int nPointCount = rPolyLine.count();
+    if( nPointCount <= 0 )
+        return true;
+
+    // setup poly-polygon path
+    CGMutablePathRef xPath = CGPathCreateMutable();
+    AddPolygonToPath( xPath, rPolyLine, false );
+    CGContextSaveGState( mrContext );
+    CGContextAddPath( mrContext, xPath );
+    const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
+    CGPathRelease( xPath );
+
+    // draw path with antialiased line
+    // CGContextSetAllowsAntialiasing( mrContext, true );
+    CGContextSetShouldAntialias( mrContext, true );
+    CGContextSetLineWidth( mrContext, rLineWidths.getX() );
+    CGContextDrawPath( mrContext, kCGPathStroke );
+    CGContextRestoreGState( mrContext );
+
+    // mark modified rectangle as updated
+    RefreshRect( aRefreshRect );
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1030,7 +983,20 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         return;
     }
 
-    SalBitmap* pBitmap = static_cast<AquaSalGraphics*>(pSrcGraphics)->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+    // short circuit if there is nothing to do
+    /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
+    const bool bSameGraphics = (this == pSrc) || (mpFrame && (mpFrame == pSrc->mpFrame));
+    if( bSameGraphics
+    &&  (pPosAry->mnSrcX == pPosAry->mnDestX)
+    &&  (pPosAry->mnSrcY == pPosAry->mnDestY)
+    &&  (pPosAry->mnSrcWidth == pPosAry->mnDestWidth)
+    &&  (pPosAry->mnSrcHeight == pPosAry->mnDestHeight))
+        return;
+
+    pSrc->ApplyXorContext();
+
+#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
+    SalBitmap* pBitmap = pSrc->getBitmap( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
 
     if( pBitmap )
     {
@@ -1040,12 +1006,32 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         drawBitmap( &aPosAry, *pBitmap );
         delete pBitmap;
     }
+#else
+    DBG_ASSERT( pSrc->mxLayer!=NULL, "AquaSalGraphics::copyBits() from non-layered graphics" )
+
+    CGContextSaveGState( mrContext );
+    const CGRect aDstRect = { {pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight} };
+    CGContextClipToRect( mrContext, aDstRect );
+
+    // draw at new destination
+    // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
+    if( pSrc->IsFlipped() )
+        { CGContextTranslateCTM( mrContext, 0, +mnHeight ); CGContextScaleCTM( mrContext, +1, -1 ); }
+    // TODO: pSrc->size() != this->size()
+    const CGPoint aDstPoint = { +pPosAry->mnDestX - pPosAry->mnSrcX, pPosAry->mnDestY - pPosAry->mnSrcY };
+    if( !mnBitmapDepth || (aDstPoint.x + pSrc->mnWidth) <= mnWidth ) // workaround a Quartz crasher
+        ::CGContextDrawLayerAtPoint( mrContext, aDstPoint, pSrc->mxLayer );
+    CGContextRestoreGState( mrContext );
+    // mark the destination rectangle as updated
+       RefreshRect( aDstRect );
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, USHORT nFlags )
 {
+#if 0 // TODO: make AquaSalBitmap as fast as the alternative implementation below
     SalBitmap* pBitmap = getBitmap( nSrcX, nSrcY, nSrcWidth, nSrcHeight );
     if( pBitmap )
     {
@@ -1061,34 +1047,50 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
         drawBitmap( &aPosAry, *pBitmap );
         delete pBitmap;
     }
+#else
+    DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" )
+
+    // drawing layer onto its own context means trouble => copy it first
+    const CGSize aSrcSize = { nSrcWidth, nSrcHeight };
+    const CGLayerRef xSrcLayer = CGLayerCreateWithContext( mrContext, aSrcSize, NULL );
+    const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
+    const CGPoint aSrcPoint = { -nSrcX, (nSrcY+nSrcHeight)-mnHeight };
+    ::CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
+
+    // draw at new destination
+    // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
+    CGContextSaveGState( mrContext );
+    if( IsFlipped() )
+        { CGContextTranslateCTM( mrContext, 0, +mnHeight ); CGContextScaleCTM( mrContext, +1, -1 ); }
+    const CGPoint aDstPoint = { +nDstX, mnHeight-(nDstY+nSrcHeight) };
+    ::CGContextDrawLayerAtPoint( mrContext, aDstPoint, xSrcLayer );
+
+    // cleanup
+//  CGContextRelease( xSrcContext );
+    CGLayerRelease( xSrcLayer );
+    CGContextRestoreGState( mrContext );
+
+    // mark the destination rectangle as updated
+    RefreshRect( nDstX, nDstY, nSrcWidth, nSrcHeight );
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
+    if( !CheckContext() )
+        return;
+
     const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
-    if( CheckContext() )
-    {
-        if( mbXORMode )
-        {
-            basebmp::BitmapDeviceSharedPtr aBmp( rBitmap.getBitmapDevice() );
-            maXORDevice->drawBitmap( aBmp,
-                basegfx::B2IRange( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                                   pPosAry->mnSrcX+pPosAry->mnSrcWidth, pPosAry->mnSrcY+pPosAry->mnSrcHeight ),
-                basegfx::B2IRange( pPosAry->mnDestX, pPosAry->mnDestY,
-                                   pPosAry->mnDestX+pPosAry->mnDestWidth, pPosAry->mnDestY+pPosAry->mnDestHeight ),
-                basebmp::DrawMode_XOR,
-                maXORClipMask );
-        }
-        else
-        {
-            CGImageRef xImage = const_cast< AquaSalBitmap& >( rBitmap ).CreateCroppedImage( (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY, (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight );
-            CGContextDrawImage(mrContext, CGRectMake ((int)pPosAry->mnDestX, (int)pPosAry->mnDestY, (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight), xImage);
-            CGImageRelease(xImage);
-        }
-        RefreshRect((int)pPosAry->mnDestX, (int)pPosAry->mnDestY, (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight);
-    }
+    CGImageRef xImage = rBitmap.CreateCroppedImage( (int)pPosAry->mnSrcX, (int)pPosAry->mnSrcY, (int)pPosAry->mnSrcWidth, (int)pPosAry->mnSrcHeight );
+    if( !xImage )
+        return;
+
+    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    CGContextDrawImage( mrContext, aDstRect, xImage );
+    CGImageRelease( xImage );
+    RefreshRect( aDstRect );
 }
 
 // -----------------------------------------------------------------------
@@ -1103,68 +1105,52 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rTransparentBitmap )
 {
-    AquaSalBitmap& rBitmap = const_cast< AquaSalBitmap& >( static_cast<const AquaSalBitmap&>(rSalBitmap) );
-    const AquaSalBitmap& rMask = static_cast<const AquaSalBitmap&>(rTransparentBitmap);
-    if( CheckContext() )
-    {
-        // FIXME: XOR ?
+    if( !CheckContext() )
+        return;
 
-        CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
-        if( xMaskedImage )
-        {
-            CGContextDrawImage(mrContext, CGRectMake (pPosAry->mnDestX, pPosAry->mnDestY, pPosAry->mnDestWidth, pPosAry->mnDestHeight), xMaskedImage);
-            RefreshRect((int)pPosAry->mnDestX, (int)pPosAry->mnDestY, (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight);
-            CGImageRelease(xMaskedImage);
-        }
-    }
+    const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
+    const AquaSalBitmap& rMask = static_cast<const AquaSalBitmap&>(rTransparentBitmap);
+    CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
+    if( !xMaskedImage )
+        return;
+
+    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
+    CGImageRelease( xMaskedImage );
+    RefreshRect( aDstRect );
 }
 
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
 {
+    if( !CheckContext() )
+        return;
+
     const AquaSalBitmap& rBitmap = static_cast<const AquaSalBitmap&>(rSalBitmap);
+    CGImageRef xImage = rBitmap.CreateColorMask( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight, nMaskColor );
+    if( !xImage )
+        return;
 
-    if ( CheckContext() )
-    {
-        if( mbXORMode )
-        {
-            basebmp::BitmapDeviceSharedPtr aMask( rBitmap.getBitmapDevice() );
-            maXORDevice->drawMaskedColor( basebmp::Color( nMaskColor ),
-                                          aMask,
-                                          basegfx::B2IRange( pPosAry->mnSrcX, pPosAry->mnSrcY,
-                                              pPosAry->mnSrcX+pPosAry->mnSrcWidth, pPosAry->mnSrcY+pPosAry->mnSrcHeight ),
-                                          basegfx::B2IPoint( pPosAry->mnDestX, pPosAry->mnDestY ),
-                                          maXORClipMask );
-
-        }
-        else
-        {
-            CGImageRef xImage = rBitmap.CreateColorMask( pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight, nMaskColor );
-            if( xImage )
-            {
-                CGContextDrawImage(mrContext, CGRectMake (pPosAry->mnDestX, pPosAry->mnDestY, pPosAry->mnDestWidth, pPosAry->mnDestHeight), xImage);
-                CGImageRelease(xImage);
-            }
-        }
-        RefreshRect((int)pPosAry->mnDestX, (int)pPosAry->mnDestY, (int)pPosAry->mnDestWidth, (int)pPosAry->mnDestHeight);
-    }
+    const CGRect aDstRect = {{pPosAry->mnDestX, pPosAry->mnDestY}, {pPosAry->mnDestWidth, pPosAry->mnDestHeight}};
+    CGContextDrawImage( mrContext, aDstRect, xImage );
+    CGImageRelease( xImage );
+    RefreshRect( aDstRect );
 }
 
 // -----------------------------------------------------------------------
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    AquaSalBitmap* pBitmap = NULL;
+    DBG_ASSERT( mxLayer, "AquaSalGraphics::getBitmap() with no layer" )
 
-    if( mrContext )
+    ApplyXorContext();
+
+    AquaSalBitmap* pBitmap = new AquaSalBitmap;
+    if( !pBitmap->Create( mxLayer, mnBitmapDepth, nX, nY, nDX, nDY, !mbWindow ) )
     {
-        pBitmap = new AquaSalBitmap;
-        if( !pBitmap->Create( mrContext, nX, nY, nDX, nDY, ! mbWindow ) )
-        {
-            delete pBitmap;
-            pBitmap = 0;
-        }
+        delete pBitmap;
+        pBitmap = NULL;
     }
 
     return pBitmap;
@@ -1211,7 +1197,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
             CGContextFillRect ( mrContext, aCGRect );
         }
         CGContextRestoreGState( mrContext);
-        RefreshRect( nX, nY, nWidth, nHeight );
+        RefreshRect( aCGRect );
     }
 }
 
@@ -1248,10 +1234,10 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
             CGContextSetRGBFillColor( mrContext, 1.0, 1.0, 1.0, 1.0 );
             CGContextFillPath( mrContext );
         }
-        CGRect pRect = CGContextGetClipBoundingBox(mrContext);
+        const CGRect aRect = CGContextGetClipBoundingBox(mrContext);
         CGContextRestoreGState( mrContext);
         delete []  CGpoints;
-        RefreshRect(pRect.origin.x, pRect.origin.y, pRect.size.width, pRect.size.height);
+        RefreshRect( aRect );
     }
 }
 
@@ -1266,7 +1252,6 @@ BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void
 bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {
-
     // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
     if( rAlphaBmp.GetBitCount() > 8 )
         return false;
@@ -1276,27 +1261,21 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     if( rTR.mnDestWidth < 0 || rTR.mnDestHeight < 0 )
         return false;
 
-    // stretched conversion is not implemented yet
-    if( rTR.mnDestWidth != rTR.mnSrcWidth )
+    const AquaSalBitmap& rSrcSalBmp = static_cast<const AquaSalBitmap&>(rSrcBitmap);
+    const AquaSalBitmap& rMaskSalBmp = static_cast<const AquaSalBitmap&>(rAlphaBmp);
+
+    CGImageRef xMaskedImage = rSrcSalBmp.CreateWithMask( rMaskSalBmp, rTR.mnSrcX, rTR.mnSrcY, rTR.mnSrcWidth, rTR.mnSrcHeight );
+    if( !xMaskedImage )
         return false;
-    if( rTR.mnDestHeight!= rTR.mnSrcHeight )
-        return false;
-
-    AquaSalBitmap& pSrcSalBmp = const_cast< AquaSalBitmap& >( static_cast<const AquaSalBitmap&>(rSrcBitmap));
-    const AquaSalBitmap& pMaskSalBmp = static_cast<const AquaSalBitmap &>(rAlphaBmp);
-
-    CGImageRef xMaskedImage=pSrcSalBmp.CreateWithMask( pMaskSalBmp, rTR.mnSrcX, rTR.mnSrcY, rTR.mnSrcWidth, rTR.mnSrcHeight );
-
-    if(!xMaskedImage) return FALSE;
 
     if ( CheckContext() )
     {
-        CGContextDrawImage(mrContext, CGRectMake( rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight), xMaskedImage );
-        RefreshRect(rTR.mnDestX, rTR.mnDestY, rTR.mnDestWidth, rTR.mnDestHeight);
+        const CGRect aDstRect = {{rTR.mnDestX, rTR.mnDestY}, {rTR.mnDestWidth, rTR.mnDestHeight}};
+        CGContextDrawImage( mrContext, aDstRect, xMaskedImage );
+        RefreshRect( aDstRect );
     }
 
     CGImageRelease(xMaskedImage);
-
     return true;
 }
 
@@ -1304,59 +1283,28 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                      long nHeight, sal_uInt8 nTransparency )
 {
-    if ( CheckContext() )
+    if( !CheckContext() )
+        return true;
+
+    // save the current state
+    CGContextSaveGState( mrContext );
+    CGContextSetAlpha( mrContext, (100-nTransparency) * (1.0/100) );
+
+    CGRect aRect = {{nX,nY},{nWidth-1,nHeight-1}};
+    if( IsPenVisible() )
     {
-        CGPathDrawingMode eMode;
-        if( mpFillColor[3] > 0.0 && mpLineColor[3] > 0.0 )
-            eMode = kCGPathEOFillStroke;
-        else if( mpLineColor[3] > 0.0 )
-            eMode = kCGPathStroke;
-        else if( mpFillColor[3] > 0.0 )
-            eMode = kCGPathEOFill;
-        else
-            return false;
-
-        CGRect aRect;
-        aRect.origin.x    = static_cast<float>(nX);
-        aRect.origin.y    = static_cast<float>(nY);
-        aRect.size.width  = nWidth-1;
-        aRect.size.height = nHeight-1;
-
-        // save the current state
-        CGContextSaveGState(mrContext);
-
-        // set transparent fill/line colors
-        if( mpFillColor[3] > 0.0 )
-        {
-            float fOldFillAlpha = mpFillColor[3]; //  save the old alpha
-            // OOo transparency value of 0 corresponds to the Quartz transparency value of 1,
-            // and the OOo transparency value of 100 corresponds to the quartz transparency value of 0
-            mpFillColor[3] =  ((float)100-nTransparency) / 100; //  set the new alpha
-            CGContextSetFillColor( mrContext, mpFillColor ); // using our color and new alpha
-            mpFillColor[3] = fOldFillAlpha; // reset the old value
-        }
-        if( mpLineColor[3] )
-        {
-            float fOldLineAlpha = mpLineColor[3];
-            mpLineColor[3] = ((float)100-nTransparency) / 100;
-            CGContextSetStrokeColor( mrContext, mpLineColor );
-            mpLineColor[3] = fOldLineAlpha;
-
-            aRect.origin.x += 0.5;
-            aRect.origin.y += 0.5;
-        }
-
-        CGContextBeginPath( mrContext );
-        CGContextAddRect( mrContext, aRect );
-        CGContextDrawPath( mrContext, eMode );
-
-        // restore state
-        CGContextRestoreGState(mrContext);
-        RefreshRect(nX, nY, nWidth, nHeight);
-        return TRUE;
+        aRect.origin.x += 0.5;
+        aRect.origin.y += 0.5;
     }
-    else
-        return FALSE;
+
+    CGContextBeginPath( mrContext );
+    CGContextAddRect( mrContext, aRect );
+    CGContextDrawPath( mrContext, kCGPathFill );
+
+    // restore state
+    CGContextRestoreGState(mrContext);
+    RefreshRect( aRect );
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1638,7 +1586,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
 {
     if( mrContext && (mbWindow || mbVirDev) )
     {
-        return CGBitmapContextGetWidth( mrContext );
+        return mnWidth; //CGBitmapContextGetWidth( mrContext );
     }
     else
         return 0;
@@ -2161,3 +2109,189 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
 
 // -----------------------------------------------------------------------
 
+void AquaSalGraphics::SetXORMode( BOOL bSet )
+{
+    // return early if XOR mode doesn't/can't change
+    if( mbPrinter )
+        return;
+    if( (mpXorEmulation == NULL) && !bSet )
+        return;
+    if( (mpXorEmulation != NULL) && (bSet == mpXorEmulation->IsEnabled()) )
+        return;
+    if( !CheckContext() )
+         return;
+
+    // prepare XOR emulation
+    if( !mpXorEmulation )
+        mpXorEmulation = new XorEmulation( mnWidth, mnHeight, mnBitmapDepth );
+
+    // change the XOR mode
+    if( bSet )
+        mrContext = mpXorEmulation->Enable( mrContext, mxLayer );
+    else
+    {
+        mpXorEmulation->UpdateTarget();
+        mrContext = mpXorEmulation->Disable();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+// apply the XOR mask to the target context if active and dirty
+void AquaSalGraphics::ApplyXorContext()
+{
+    if( !mpXorEmulation )
+        return;
+    if( mpXorEmulation->UpdateTarget() )
+        ; // TODO: RefreshRect
+}
+
+// ======================================================================
+
+XorEmulation::XorEmulation( int nWidth, int nHeight, int nTargetDepth )
+:   mxTargetLayer( NULL )
+,   mxTargetContext( NULL )
+,   mxMaskContext( NULL )
+,   mxTempContext( NULL )
+,   mpMaskBuffer( NULL )
+,   mpTempBuffer( NULL )
+,   mnBufferSize( 0 )
+{
+    // prepare creation of matching CGBitmaps
+    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
+    // TODO: use a 16-bit XorMask on 16-bit target graphics
+    int nBitDepth = nTargetDepth;
+    if( !nBitDepth )
+        nBitDepth = 32;
+    int nBytesPerRow = (nBitDepth == 16) ? 2 : 4;
+    const size_t nBitsPerComponent = (nBitDepth == 16) ? 5 : 8;
+    if( nBitDepth <= 8 )
+    {
+        aCGColorSpace = GetSalData()->mxGraySpace;
+        aCGBmpInfo = kCGImageAlphaNone;
+        nBytesPerRow = 1;
+    }
+    nBytesPerRow *= nWidth;
+    mnBufferSize = (nHeight * nBytesPerRow + sizeof(long)-1) / sizeof(long);
+
+    // create a XorMask context
+    mpMaskBuffer = new long[ mnBufferSize ];
+    mxMaskContext = ::CGBitmapContextCreate( mpMaskBuffer,
+        nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
+        aCGColorSpace, aCGBmpInfo );
+
+    // a bitmap context will be needed for manual XORing
+    // create one unless the target context is a bitmap context
+    if( !nTargetDepth )
+    {
+        // create a bitmap context matching to the target context
+        mpTempBuffer = new long[ mnBufferSize ];
+        mxTempContext = ::CGBitmapContextCreate( mpTempBuffer,
+            nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
+            aCGColorSpace, aCGBmpInfo );
+    }
+
+    // initialize XOR mask context for drawing
+    CGContextSetFillColorSpace( mxMaskContext, aCGColorSpace );
+    CGContextSetStrokeColorSpace( mxMaskContext, aCGColorSpace );
+    CGContextSetShouldAntialias( mxMaskContext, false );
+
+    // improve the XorMask's XOR emulation a litte
+    // NOTE: currently only enabled for monochrome contexts
+    if( aCGColorSpace == GetSalData()->mxGraySpace )
+        CGContextSetBlendMode( mxMaskContext, kCGBlendModeDifference );
+
+    // initialize the default XorMask graphics state
+    CGContextSaveGState( mxMaskContext );
+}
+
+// ----------------------------------------------------------------------
+
+XorEmulation::~XorEmulation()
+{
+    Disable();
+
+    CGContextRelease( mxMaskContext );
+    if( mxTempContext != mxTargetContext )
+        CGContextRelease( mxTempContext );
+    delete[] mpMaskBuffer;
+    delete[] mpTempBuffer;
+}
+
+// ----------------------------------------------------------------------
+
+CGContextRef XorEmulation::Enable( CGContextRef xTargetContext, CGLayerRef xTargetLayer )
+{
+#if 0
+    // intialize the transformation matrix to the drawing target
+    const CGAffineTransform aCTM = CGContextGetCTM( xTargetContext );
+    CGContextConcatCTM( mxMaskContext, aCTM );
+#endif
+
+    // retarget drawing operations to the XOR mask
+    mxTargetLayer = xTargetLayer;
+    mxTargetContext = xTargetContext;
+
+    // get the data pointer for bitmap targets
+    if( !mxTempContext )
+        mpTempBuffer = (long*)CGBitmapContextGetData( mxTargetContext );
+
+    // reset the XOR mask to black
+    memset( mpMaskBuffer, sizeof(long)* mnBufferSize, 0 );
+    return mxMaskContext;
+}
+
+// ----------------------------------------------------------------------
+
+CGContextRef XorEmulation::Disable()
+{
+    if( !mxTempContext )
+        mpTempBuffer = NULL;
+
+    // retarget drawing operations to the XOR mask
+    CGContextRef xOrigContext = mxTargetContext;
+    mxTargetContext = NULL;
+    mxTargetLayer = NULL;
+    return xOrigContext;
+}
+
+// ----------------------------------------------------------------------
+
+bool XorEmulation::UpdateTarget()
+{
+    if( !IsEnabled() )
+        return false;
+
+    // update the temp bitmap buffer if needed
+    if( mxTempContext )
+        CGContextDrawLayerAtPoint( mxTempContext, CGPointZero, mxTargetLayer );
+
+    // do a manual XOR with the XorMask
+    // this approach suffices for simple color manipulations
+    // and also the complex-clipping-XOR-trick used in metafiles
+    const long* pSrc = mpMaskBuffer;
+    long* pDst = mpTempBuffer;
+    for( int i = mnBufferSize; --i >= 0; ++pSrc, ++pDst )
+        *pDst ^= *pSrc;
+
+    // write back the XOR results to the target context
+    if( mxTempContext )
+    {
+        CGImageRef xXorImage = CGBitmapContextCreateImage( mxTempContext );
+        const int nWidth  = (int)CGImageGetWidth( xXorImage );
+        const int nHeight = (int)CGImageGetHeight( xXorImage );
+        const CGRect aFullRect = {{0,0},{nWidth,nHeight}};
+        CGContextDrawImage( mxTargetContext, aFullRect, xXorImage );
+        CGImageRelease( xXorImage );
+    }
+
+    // reset the XorMask to black again
+    // TODO: not needed for last update
+    memset( mpMaskBuffer, mnBufferSize * sizeof(long), 0 );
+
+    // TODO: return FALSE if target was not changed
+    return true;
+}
+
+// =======================================================================
