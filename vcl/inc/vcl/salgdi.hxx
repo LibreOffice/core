@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,11 @@ class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
 
-namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx {
+    class B2DVector;
+    class B2DPolygon;
+    class B2DPolyPolygon;
+}
 
 // ---------------------
 // - SalGraphics-Codes -
@@ -104,6 +108,7 @@ public:
 
 protected:
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& ) = 0;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY ) = 0;
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
@@ -112,6 +117,8 @@ protected:
     virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry ) = 0;
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry ) = 0;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
+    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths ) = 0;
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry ) = 0;
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry ) = 0;
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry ) = 0;
@@ -344,6 +351,8 @@ public:
     // non virtual methods; these do eventual coordinate mirroring and
     // then delegate to protected virtual methods
     BOOL                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
+    BOOL                    UnionClipRegion( const ::basegfx::B2DPolyPolygon&, const OutputDevice* );
+
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                    DrawPixel( long nX, long nY, const OutputDevice *pOutDev );
     void                    DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev );
@@ -355,6 +364,8 @@ public:
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry,
                                              const OutputDevice *pOutDev );
+    bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
+    bool                    DrawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths, const OutputDevice* );
     sal_Bool                DrawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry,
