@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdraw.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -780,12 +780,18 @@ sal_Bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
     return bRet;
 }
 
+
+//#i87414# mod
+IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
+{
+    if (pInfo->nCommand == SPELLCMD_STARTSPELLDLG)
+        GetViewFrame()->GetDispatcher()->Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON);
+    return 0;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-
 sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
 {
     sal_Bool bRet = sal_False;
@@ -796,7 +802,8 @@ sal_Bool SwView::ExecDrwTxtSpellPopup(const Point& rPt)
     if (pOLV->IsWrongSpelledWordAtPos( aPos ))
     {
         bRet = sal_True;
-        pOLV->ExecuteSpellPopup( aPos );
+        Link aLink = LINK(this, SwView, OnlineSpellCallback);
+        pOLV->ExecuteSpellPopup( aPos,&aLink );
     }
     return bRet;
 }
