@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,8 @@
 #include <tools/gen.hxx>
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
+
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 class ImplRegion;
 class ImplRegionBand;
@@ -88,6 +90,7 @@ public:
                     Region( const Rectangle& rRect );
                     Region( const Polygon& rPolygon );
                     Region( const PolyPolygon& rPolyPoly );
+                    Region( const basegfx::B2DPolyPolygon& );
                     Region( const Region& rRegion );
                     ~Region();
 
@@ -113,6 +116,7 @@ public:
 
     BOOL            HasPolyPolygon() const;
     PolyPolygon     GetPolyPolygon() const;
+    const basegfx::B2DPolyPolygon GetB2DPolyPolygon() const;
 
     ULONG           GetRectCount() const;
     RegionHandle    BeginEnumRects();
