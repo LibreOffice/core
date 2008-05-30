@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,10 @@
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 
-// #i75163#
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -174,6 +177,16 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
     // TODO(Q3): Change from static to plain method - everybody's
     // calling it with pOutDev=this!
     DBG_TESTSOLARMUTEX();
+
+    if( rRegion.HasPolyPolygon()
+    && pGraphics->supportsOperation( OutDevSupport_B2DClip ) )
+    {
+        const ::basegfx::B2DPolyPolygon& rB2DPolyPolygon = rRegion.GetB2DPolyPolygon();
+        pGraphics->BeginSetClipRegion( 0 );
+        pGraphics->UnionClipRegion( rB2DPolyPolygon, pOutDev );
+        pGraphics->EndSetClipRegion();
+        return true;
+    }
 
     long                nX;
     long                nY;
@@ -521,7 +534,11 @@ OutputDevice::~OutputDevice()
 
 bool OutputDevice::supportsOperation( OutDevSupportType eType ) const
 {
-    return ImplGetGraphics() && mpGraphics->supportsOperation( eType );
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return false;
+    const bool bHasSupport = mpGraphics->supportsOperation( eType );
+    return bHasSupport;
 }
 
 // -----------------------------------------------------------------------
@@ -1419,6 +1436,51 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
         if(!(ImplGetGraphics()))
             return;
 
+    if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
+    {
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPolygon.getB2DPolyPolygon();
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        aB2DPolyPolygon.transform( aTransform );
+
+        // the rPolyPolygon argument is a "triangle thingy"
+        // so convert it to a normal polypolyon first
+        ::basegfx::B2DPolyPolygon aPolyTriangle;
+        const int nPolyCount = aB2DPolyPolygon.count();
+        for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+        {
+            const ::basegfx::B2DPolygon rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+            const int nPointCount = rPolygon.count();
+            for( int nPointIdx = 0; nPointIdx+2 < nPointCount; nPointIdx +=3 )
+            {
+                ::basegfx::B2DPolygon aTriangle;
+                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+0 ) );
+                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+1 ) );
+                aTriangle.append( rPolygon.getB2DPoint( nPointIdx+2 ) );
+                aPolyTriangle.append( aTriangle );
+            }
+        }
+
+        // now set the clip region with the real polypolygon
+        mpGraphics->BeginSetClipRegion( 0 );
+        mpGraphics->UnionClipRegion( aPolyTriangle, this );
+        mpGraphics->EndSetClipRegion();
+
+        // and mark the clip status as ready
+        mbOutputClipped = FALSE;
+        mbClipRegion = TRUE;
+        mbClipRegionSet = TRUE;
+        mbInitClipRegion = FALSE;
+        return;
+    }
+
+    sal_Int32 offset_x = 0;
+    sal_Int32 offset_y = 0;
+    if ( GetOutDevType() == OUTDEV_WINDOW )
+    {
+        offset_x = mnOutOffX+mnOutOffOrigX;
+        offset_y = mnOutOffY+mnOutOffOrigY;
+    }
+
     // first of all we need to know the upper limit
     // of the amount of possible clipping regions.
     sal_Int32 maxy = SAL_MIN_INT32;
@@ -1628,14 +1690,6 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
     // hm, how to say, *picky* if you supply not correctly
     // the amount of regions.
     container.Consolidate();
-
-    sal_Int32 offset_x = 0;
-    sal_Int32 offset_y = 0;
-    if ( GetOutDevType() == OUTDEV_WINDOW )
-    {
-        offset_x = mnOutOffX+mnOutOffOrigX;
-        offset_y = mnOutOffY+mnOutOffOrigY;
-    }
 
     // now forward the spantable to the graphics handler.
     SpanIterator it(container.Iterate());
@@ -2314,10 +2368,8 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-    {
         if ( !ImplGetGraphics() )
             return;
-    }
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
@@ -2326,6 +2378,18 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 
     if ( mbInitLineColor )
         ImplInitLineColor();
+
+    // use b2dpolygon drawing if possible
+    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
+    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    {
+        ::basegfx::B2DPolygon aB2DPolyLine = rPoly.getB2DPolygon();
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        aB2DPolyLine.transform( aTransform );
+        const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+        if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, this ) )
+            return;
+    }
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
@@ -2449,10 +2513,8 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-    {
         if ( !ImplGetGraphics() )
             return;
-    }
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
@@ -2463,6 +2525,17 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         ImplInitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
+
+    // use b2dpolygon drawing if possible
+    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
+    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    {
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon( rPoly.getB2DPolygon() );
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        aB2DPolyPolygon.transform( aTransform );
+        if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
+            return;
+    }
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
@@ -2504,10 +2577,8 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
     // we need a graphics
     if ( !mpGraphics )
-    {
         if ( !ImplGetGraphics() )
             return;
-    }
 
     if ( mbInitClipRegion )
         ImplInitClipRegion();
@@ -2518,6 +2589,17 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         ImplInitLineColor();
     if ( mbInitFillColor )
         ImplInitFillColor();
+
+    // use b2dpolygon drawing if possible
+    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
+    && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    {
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
+        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        aB2DPolyPolygon.transform( aTransform );
+        if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
+            return;
+    }
 
     if ( nPoly == 1 )
     {
