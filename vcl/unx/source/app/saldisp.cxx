@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1115,6 +1115,14 @@ void SalDisplay::ModifierMapping()
 XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
+
+    if( nKeyCode & KEY_MOD1 )
+    {
+        if( aStrMap.Len() )
+            aStrMap += '+';
+        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
+    }
+
 #ifdef MACOSX
     if( nKeyCode & KEY_MOD3 )
     {
@@ -1130,12 +1138,7 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 #endif
         aStrMap += GetKeyNameFromKeySym( nMod1KeySym_ );
     }
-    if( nKeyCode & KEY_MOD1 )
-    {
-        if( aStrMap.Len() )
-            aStrMap += '+';
-        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
-    }
+
     if( nKeyCode & KEY_SHIFT )
     {
         if( aStrMap.Len() )
