@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,10 @@
 #include <vcl/regband.hxx>
 #endif
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+
 // =======================================================================
 //
 // ImplRegionBand
@@ -64,8 +68,8 @@
 
 // =======================================================================
 
-static ImplRegionBase aImplNullRegion   = { 0, 0, NULL };
-static ImplRegionBase aImplEmptyRegion  = { 0, 0, NULL };
+static ImplRegionBase aImplNullRegion( 0 );
+static ImplRegionBase aImplEmptyRegion( 0 );
 
 // =======================================================================
 
@@ -142,17 +146,23 @@ const char* ImplDbgTestRegion( const void* pObj )
 
 inline void Region::ImplPolyPolyRegionToBandRegion()
 {
-    if ( mpImplRegion->mpPolyPoly )
+    if( mpImplRegion->mpPolyPoly || mpImplRegion->mpB2DPolyPoly )
         ImplPolyPolyRegionToBandRegionFunc();
 }
 
 // =======================================================================
 
+ImplRegionBase::ImplRegionBase( int nRefCount )
+:   mnRefCount( nRefCount )
+,   mnRectCount( 0 )
+,   mpPolyPoly( NULL )
+,   mpB2DPolyPoly( NULL )
+{}
+
+// ------------------------------------------------------------------------
+
 ImplRegion::ImplRegion()
 {
-    mnRefCount          = 1;
-    mnRectCount         = 0;
-    mpPolyPoly          = NULL;
     mpFirstBand         = NULL;
     mpLastCheckedBand   = NULL;
 }
@@ -161,25 +171,32 @@ ImplRegion::ImplRegion()
 
 ImplRegion::ImplRegion( const PolyPolygon& rPolyPoly )
 {
-    mnRefCount          = 1;
-    mnRectCount         = 0;
     mpFirstBand         = NULL;
     mpLastCheckedBand   = NULL;
     mpPolyPoly          = new PolyPolygon( rPolyPoly );
 }
 
+// ------------------------------------------------------------------------
+
+ImplRegion::ImplRegion( const basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    mpFirstBand = NULL;
+    mpLastCheckedBand = NULL;
+    mpB2DPolyPoly = new basegfx::B2DPolyPolygon( rPolyPoly );
+}
+
 // -----------------------------------------------------------------------
 
 ImplRegion::ImplRegion( const ImplRegion& rImplRegion )
+:   ImplRegionBase()
 {
-    mnRefCount          = 1;
-    mnRectCount         = rImplRegion.mnRectCount;
-    mpFirstBand         = NULL;
-    mpLastCheckedBand   = NULL;
+    mpFirstBand = NULL;
+    mpLastCheckedBand = NULL;
+
     if ( rImplRegion.mpPolyPoly )
         mpPolyPoly = new PolyPolygon( *rImplRegion.mpPolyPoly );
-    else
-        mpPolyPoly = NULL;
+    else if( rImplRegion.mpB2DPolyPoly )
+        mpB2DPolyPoly = new basegfx::B2DPolyPolygon( *rImplRegion.mpB2DPolyPoly );
 
     // insert band(s) into the list
     ImplRegionBand* pNewBand;
@@ -214,8 +231,14 @@ ImplRegion::~ImplRegion()
         delete pBand;
         pBand = pTempBand;
     }
+}
 
+// -----------------------------------------------------------------------
+
+ImplRegionBase::~ImplRegionBase()
+{
     delete mpPolyPoly;
+    delete mpB2DPolyPoly;
 }
 
 // -----------------------------------------------------------------------
@@ -817,6 +840,16 @@ Region::Region( const PolyPolygon& rPolyPoly )
 
 // -----------------------------------------------------------------------
 
+Region::Region( const basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    DBG_CTOR( Region, ImplDbgTestRegion );
+    DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
+
+    mpImplRegion = new ImplRegion( rPolyPoly );
+}
+
+// -----------------------------------------------------------------------
+
 Region::Region( const Region& rRegion )
 {
     DBG_CTOR( Region, ImplDbgTestRegion );
@@ -900,7 +933,7 @@ void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
 
 void Region::ImplPolyPolyRegionToBandRegionFunc()
 {
-    const PolyPolygon aPolyPoly( *mpImplRegion->mpPolyPoly );
+    const PolyPolygon aPolyPoly = GetPolyPolygon();
 
     if ( mpImplRegion->mnRefCount > 1 )
         mpImplRegion->mnRefCount--;
@@ -982,6 +1015,12 @@ void Region::Move( long nHorzMove, long nVertMove )
 
     if ( mpImplRegion->mpPolyPoly )
         mpImplRegion->mpPolyPoly->Move( nHorzMove, nVertMove );
+    else if( mpImplRegion->mpB2DPolyPoly )
+    {
+        ::basegfx::B2DHomMatrix aTransform;
+        aTransform.translate( nHorzMove, nVertMove );
+        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+    }
     else
     {
         ImplRegionBand* pBand = mpImplRegion->mpFirstBand;
@@ -1019,6 +1058,12 @@ void Region::Scale( double fScaleX, double fScaleY )
 
     if ( mpImplRegion->mpPolyPoly )
         mpImplRegion->mpPolyPoly->Scale( fScaleX, fScaleY );
+    else if( mpImplRegion->mpB2DPolyPoly )
+    {
+        ::basegfx::B2DHomMatrix aTransform;
+        aTransform.scale( fScaleX, fScaleY );
+        mpImplRegion->mpB2DPolyPoly->transform( aTransform );
+    }
     else
     {
         ImplRegionBand* pBand = mpImplRegion->mpFirstBand;
@@ -1587,6 +1632,13 @@ Rectangle Region::GetBoundRect() const
     // PolyPolygon data im Imp structure?
     if ( mpImplRegion->mpPolyPoly )
         return mpImplRegion->mpPolyPoly->GetBoundRect();
+    if( mpImplRegion->mpB2DPolyPoly )
+    {
+        const basegfx::B2DRange aRange = basegfx::tools::getRange( *mpImplRegion->mpB2DPolyPoly );
+        aRect.SetPos( Point( (int)aRange.getMinX(), (int)aRange.getMinY() ) );
+        aRect.SetSize( Size( (int)aRange.getWidth(), (int)aRange.getHeight() ) );
+        return aRect;
+    }
 
     // no band in the list? -> region is empty!
     if ( !mpImplRegion->mpFirstBand )
@@ -1619,7 +1671,13 @@ Rectangle Region::GetBoundRect() const
 BOOL Region::HasPolyPolygon() const
 {
     DBG_CHKTHIS( Region, ImplDbgTestRegion );
-    return( mpImplRegion && mpImplRegion->mpPolyPoly != NULL );
+    if( !mpImplRegion )
+        return false;
+    if( mpImplRegion->mpPolyPoly )
+        return true;
+    if( mpImplRegion->mpB2DPolyPoly )
+        return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1632,6 +1690,34 @@ PolyPolygon Region::GetPolyPolygon() const
 
     if( mpImplRegion->mpPolyPoly )
         aRet = *mpImplRegion->mpPolyPoly;
+    else if( mpImplRegion->mpB2DPolyPoly )
+    {
+        // the polygon needs to be converted
+        aRet = PolyPolygon( *mpImplRegion->mpB2DPolyPoly );
+        // TODO: cache the converted polygon?
+        // mpImplRegion->mpB2DPolyPoly = aRet;
+    }
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+const basegfx::B2DPolyPolygon Region::GetB2DPolyPolygon() const
+{
+    DBG_CHKTHIS( Region, ImplDbgTestRegion );
+
+    basegfx::B2DPolyPolygon aRet;
+
+    if( mpImplRegion->mpB2DPolyPoly )
+        aRet = *mpImplRegion->mpB2DPolyPoly;
+    else if( mpImplRegion->mpPolyPoly )
+    {
+        // the polygon needs to be converted
+        aRet = mpImplRegion->mpPolyPoly->getB2DPolyPolygon();
+        // TODO: cache the converted polygon?
+        // mpImplRegion->mpB2DPolyPoly = aRet;
+    }
 
     return aRet;
 }
