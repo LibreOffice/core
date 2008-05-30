@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: devicehelper.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@ namespace vclcanvas
 
         mpOutputWindow = &rOutputWindow;
         mpSpriteCanvas = &rSpriteCanvas;
+        rOutputWindow.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | rOutputWindow.GetAntialiasing() );
 
         // setup back buffer
         mpBackBuffer.reset( new BackBuffer( rOutputWindow ) );
