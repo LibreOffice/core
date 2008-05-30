@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menu.cxx,v $
- * $Revision: 1.162 $
+ * $Revision: 1.163 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1127,6 +1127,17 @@ void Menu::Select()
             pStartMenu->aSelectHdl.Call( this );
         }
     }
+}
+
+void Menu::ImplSelectWithStart( Menu* pSMenu )
+{
+    Menu* pOldStartedFrom = pStartedFrom;
+    pStartedFrom = pSMenu;
+    Menu* pOldStartedStarted = pOldStartedFrom ? pOldStartedFrom->pStartedFrom : NULL;
+    Select();
+    if( pOldStartedFrom )
+        pOldStartedFrom->pStartedFrom = pOldStartedStarted;
+    pStartedFrom = pOldStartedFrom;
 }
 
 void Menu::RequestHelp( const HelpEvent& )
@@ -3385,6 +3396,11 @@ void PopupMenu::SelectEntry( USHORT nId )
     }
 }
 
+void PopupMenu::SetSelectedEntry( USHORT nId )
+{
+    nSelectedId = nId;
+}
+
 USHORT PopupMenu::Execute( Window* pExecWindow, const Point& rPopupPos )
 {
     return Execute( pExecWindow, Rectangle( rPopupPos, rPopupPos ), POPUPMENU_EXECUTE_DOWN );
@@ -3549,7 +3565,19 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     // pWin->GrabFocus();
     if ( GetItemCount() )
     {
-        pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
+        SalMenu* pMenu = ImplGetSalMenu();
+        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        {
+            pWin->StopExecute(0);
+            pWin->doShutdown();
+            pWindow->doLazyDelete();
+            pWindow = NULL;
+            return nSelectedId;
+        }
+        else
+        {
+            pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
+        }
         if( pSFrom )
         {
             USHORT aPos;
