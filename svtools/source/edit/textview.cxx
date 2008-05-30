@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textview.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +200,7 @@ struct ImpTextView
     BOOL                mbCursorEnabled         : 1;
     BOOL                mbClickedInSelection    : 1;
     BOOL                mbSupportProtectAttribute : 1;
+    bool                mbCursorAtEndOfLine;
 };
 
 // -------------------------------------------------------------------------
@@ -223,6 +224,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow ) :
     mpImpl->mbCursorEnabled = TRUE;
     mpImpl->mbClickedInSelection = FALSE;
     mpImpl->mbSupportProtectAttribute = FALSE;
+    mpImpl->mbCursorAtEndOfLine = false;
 //  mbInSelection = FALSE;
 
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
@@ -1661,6 +1663,16 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
 
     TextPaM aPaM( mpImpl->maSelection.GetEnd() );
     Rectangle aEditCursor = mpImpl->mpTextEngine->PaMtoEditCursor( aPaM, bSpecial );
+
+    // Remember that we placed the cursor behind the last character of a line
+    mpImpl->mbCursorAtEndOfLine = false;
+    if( bSpecial )
+    {
+        TEParaPortion* pParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
+        mpImpl->mbCursorAtEndOfLine =
+            pParaPortion->GetLineNumber( aPaM.GetIndex(), TRUE ) != pParaPortion->GetLineNumber( aPaM.GetIndex(), FALSE );
+    }
+
     if ( !IsInsertMode() && !mpImpl->maSelection.HasRange() )
     {
         TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
@@ -2232,8 +2244,23 @@ Point TextView::GetWindowPos( const Point& rDocPos ) const
     return aPoint;
 }
 
+sal_Int32 TextView::GetLineNumberOfCursorInSelection() const
+{
+ // PROGRESS
+    sal_Int32 nLineNo = -1;
+    if( mpImpl->mbCursorEnabled )
+    {
+        TextPaM aPaM = GetSelection().GetEnd();
+        TEParaPortion* pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
+        nLineNo = pPPortion->GetLineNumber( aPaM.GetIndex(), FALSE );
+        if( mpImpl->mbCursorAtEndOfLine )
+            --nLineNo;
+    }
+    return nLineNo;
+}
 
-// -------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------
 // (+) class TextSelFunctionSet
 // -------------------------------------------------------------------------
 TextSelFunctionSet::TextSelFunctionSet( TextView* pView )
