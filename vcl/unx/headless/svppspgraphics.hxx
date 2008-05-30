@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svppspgraphics.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,6 +105,7 @@ public:
     virtual void            ResetClipRegion();
     virtual void            BeginSetClipRegion( ULONG nCount );
     virtual BOOL            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool                        unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
     virtual void            EndSetClipRegion();
 
     virtual void            SetLineColor();
@@ -153,6 +154,8 @@ public:
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual void            drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void            drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
+    virtual bool                        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
+    virtual bool                        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,6 +189,12 @@ BOOL SvpSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
     }
 
     return TRUE;
+}
+
+bool SvpSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+        // TODO: implement and advertise OutDevSupport_B2DClip support
+        return false;
 }
 
 void SvpSalGraphics::EndSetClipRegion()
@@ -381,6 +387,18 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
         }
     }
     dbgOut( m_aDevice );
+}
+
+bool SvpSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
+}
+
+bool SvpSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
 }
 
 sal_Bool SvpSalGraphics::drawPolyLineBezier( ULONG,
