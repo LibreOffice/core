@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,6 +166,12 @@ static void initNSApp()
                                           selector: @selector(scrollbarSettingsChanged:)
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
+
+    if( AquaSalInstance::isOnCommandLine( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "-enableautomation" ) ) ) )
+    {
+        [NSApp activateIgnoringOtherApps: YES];
+        GetSalData()->mbIsTestTool = true;
+    }
 }
 
 BOOL ImplSVMainHook( BOOL * pbInit )
@@ -408,6 +414,7 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
     ImplGetSVData()->maGDIData.mbPrinterPullModel = true;
+    ImplGetSVData()->maWinData.mbNoSaveBackground = true;
 
     return pInst;
 }
@@ -641,13 +648,21 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         {
             ULONG nCount = ReleaseYieldMutex();
 
-            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: [NSDate distantFuture]
+            NSDate* pDt = AquaSalTimer::pRunningTimer ? [AquaSalTimer::pRunningTimer fireDate] : [NSDate distantFuture];
+            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: pDt
                             inMode: NSDefaultRunLoopMode dequeue: YES];
             if( pEvent )
                 [NSApp sendEvent: pEvent];
             [NSApp updateWindows];
 
             AcquireYieldMutex( nCount );
+
+            // #i86581#
+            // FIXME: sometimes the NSTimer will never fire. Firing it by hand then
+            // fixes the problem even seems to set the correct next firing date
+            // Why oh why ?
+            if( ! pEvent && AquaSalTimer::pRunningTimer )
+                [AquaSalTimer::pRunningTimer fire];
         }
 
         mbWaitingYield = bOldWaitingYield;
