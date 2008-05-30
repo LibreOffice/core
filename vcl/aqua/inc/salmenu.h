@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.h,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
+    virtual BOOL ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
 
     int getItemIndexByPos( USHORT nPos ) const;
     const AquaSalFrame* getFrame() const;
