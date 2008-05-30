@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.157 $
+ * $Revision: 1.158 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1332,6 +1332,16 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
     sal_Unicode aCh = aKeyEvent.GetCharCode();
+
+    // enable switching to notes ankor with Ctrl - Alt - Page Up/Down
+    // pressing this inside a note will switch to next/previous note
+    if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
+    {
+        bool bNext = rKeyCode.GetCode()==KEY_PAGEDOWN ? true : false;
+        SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
+        rSh.MoveFldType( pFldType, bNext );
+        return;
+    }
 
     const SwFrmFmt* pFlyFmt = rSh.GetFlyFrmFmt();
     if( pFlyFmt )
@@ -3666,11 +3676,27 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             bDDINetAttr = FALSE;
             break;
         case 0:
+        {
             if ( pApplyTempl )
-            {
                 UpdatePointer(aDocPt, 0); // evtl. muss hier ein Rahmen markiert werden
-                break;
+
+            //#i6193#, change ui if mouse is over SwPostItField
+            SwRect aFldRect;
+            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD);
+            if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, FALSE, &aFldRect ) )
+            {
+                const SwField* pFld = aCntntAtPos.aFnd.pFld;
+                if (pFld->Which()== RES_POSTITFLD)
+                {
+                    rView.GetPostItMgr()->SetShadowState(reinterpret_cast<const SwPostItField*>(pFld),false);
+                }
+                else
+                    rView.GetPostItMgr()->SetShadowState(0,false);
             }
+            else
+                rView.GetPostItMgr()->SetShadowState(0,false);
+            break;
+        }
         case KEY_SHIFT:
         case KEY_MOD2:
         case KEY_MOD1:
