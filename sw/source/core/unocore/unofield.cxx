@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofield.cxx,v $
- * $Revision: 1.105 $
+ * $Revision: 1.106 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1311,13 +1311,15 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
 
                 DateTime aDateTime;
-                aDateTime.SetYear(m_pProps->pDateTime->Year);
-                aDateTime.SetMonth(m_pProps->pDateTime->Month);
-                aDateTime.SetDay(m_pProps->pDateTime->Day);
-                aDateTime.SetHour(m_pProps->pDateTime->Hours);
-                aDateTime.SetMin(m_pProps->pDateTime->Minutes);
-                aDateTime.SetSec(m_pProps->pDateTime->Seconds);
-
+                if (m_pProps->pDateTime)
+                {
+                    aDateTime.SetYear(m_pProps->pDateTime->Year);
+                    aDateTime.SetMonth(m_pProps->pDateTime->Month);
+                    aDateTime.SetDay(m_pProps->pDateTime->Day);
+                    aDateTime.SetHour(m_pProps->pDateTime->Hours);
+                    aDateTime.SetMin(m_pProps->pDateTime->Minutes);
+                    aDateTime.SetSec(m_pProps->pDateTime->Seconds);
+                }
                 pFld = new SwPostItField((SwPostItFieldType*)pFldType,
                         m_pProps->sPar1, m_pProps->sPar2,aDateTime);
                 if ( m_pTextObject )
