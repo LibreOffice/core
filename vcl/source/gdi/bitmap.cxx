@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bitmap.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +162,7 @@ Bitmap::~Bitmap()
 
 // ------------------------------------------------------------------
 
-const BitmapPalette& Bitmap::GetGreyPalette( USHORT nEntries )
+const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 {
     static BitmapPalette aGreyPalette2;
     static BitmapPalette aGreyPalette4;
@@ -228,6 +228,22 @@ const BitmapPalette& Bitmap::GetGreyPalette( USHORT nEntries )
         DBG_ERROR( "Bitmap::GetGreyPalette: invalid entry count (2/4/16/256 allowed)" );
         return aGreyPalette2;
     }
+}
+
+// ------------------------------------------------------------------
+
+bool BitmapPalette::IsGreyPalette() const
+{
+    // TODO: add an IsGreyPalette flag to BitmapPalette
+    // TODO: unless this causes problems binary compatibility
+    const int nEntryCount = GetEntryCount();
+    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
+        return true;
+    const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
+    if( rGreyPalette == *this )
+        return true;
+    // TODO: is it worth to compare the entries?
+    return false;
 }
 
 // ------------------------------------------------------------------
