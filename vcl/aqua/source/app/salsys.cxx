@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salsys.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "vcl/salsys.hxx"
+#include "tools/rc.hxx"
+#include "vcl/svids.hrc"
+
 #include "salsys.h"
 #include "saldata.hxx"
-
 #include "rtl/ustrbuf.hxx"
 
 using namespace rtl;
@@ -105,13 +106,13 @@ rtl::OUString AquaSalSystem::GetScreenName( unsigned int nScreen )
    OUString aRet;
    if( nScreen < [pScreens count] )
    {
-       OUStringBuffer aBuf( 32 );
-       // screens don't seem to have names on Aqua
-       // FIXME: Screen should be localized,
-       // need to wait for 3.0 line for that
-       aBuf.appendAscii( "Screen " );
-       aBuf.append( sal_Int32(nScreen) );
-       aRet = aBuf.makeStringAndClear();
+        ResMgr* pMgr = ImplGetResMgr();
+        if( pMgr )
+        {
+            String aScreenName( ResId( SV_MAC_SCREENNNAME, *pMgr ) );
+            aScreenName.SearchAndReplaceAllAscii( "%d", String::CreateFromInt32( nScreen ) );
+            aRet = aScreenName;
+        }
    }
    return aRet;
 }
