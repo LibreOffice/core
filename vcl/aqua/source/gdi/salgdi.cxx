@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "salconst.h"
 #include "salgdi.h"
 #include "salbmp.h"
+#include "salframe.h"
 #include "salcolorutils.hxx"
 #include "vcl/impfont.hxx"
 #include "psprint/list.h"
@@ -41,6 +42,8 @@
 #include "osl/file.hxx"
 #include "vos/mutex.hxx"
 #include "osl/process.h"
+#include "rtl/bootstrap.h"
+#include "rtl/strbuf.hxx"
 
 #include "vcl/sallayout.hxx"
 #include "salatsuifontutils.hxx"
@@ -50,6 +53,7 @@
 #include "basegfx/range/b2irange.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
 
 #include "basebmp/color.hxx"
 
@@ -334,45 +338,65 @@ bool AquaSalGraphics::supportsOperation( OutDevSupportType eType ) const
 
 // =======================================================================
 
-/** returns the display id this window is mostly visible on */
-CGDirectDisplayID AquaSalGraphics::GetWindowDisplayID() const
-{
-    // TODO: Find the correct display!
-    return CGMainDisplayID();
-}
-
-// ----------------------------------------------
-
-static void GetDisplayResolution( long& rDPIX, long& rDPIY )
-{
-    // calculate resolution from physical size and pixel count
-    const CGDirectDisplayID nDisplayID = CGMainDisplayID();
-    const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
-    rDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
-    rDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
-
-    // equalize x- and y-resolution if they are close enough to prevent unneeded font stretching
-    if( (rDPIX != rDPIY)
-    &&  (10*rDPIX < 13*rDPIY) && (13*rDPIX > 10*rDPIY) )
-    {
-        rDPIX = rDPIY = (rDPIX + rDPIY + 1) / 2;
-    }
-}
-
 void AquaSalGraphics::updateResolution()
 {
     DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
-    GetDisplayResolution( mnRealDPIX, mnRealDPIY );
+
+    initResolution( (mbWindow && mpFrame) ?  mpFrame->mpWindow : nil );
+}
+
+void AquaSalGraphics::initResolution( NSWindow* pWin )
+{
+    NSScreen* pScreen = nil;
+    if( pWin )
+        pScreen = [pWin screen];
+    if( pScreen == nil )
+        pScreen = [NSScreen mainScreen];
+
+    mnRealDPIX = mnRealDPIY = 96;
+    if( pScreen )
+    {
+        NSDictionary* pDev = [pScreen deviceDescription];
+        if( pDev )
+        {
+            NSNumber* pVal = [pDev objectForKey: @"NSScreenNumber"];
+            if( pVal )
+            {
+                // FIXME: casting a long to CGDirectDisplayID is evil, but
+                // Apple suggest to do it this way
+                const CGDirectDisplayID nDisplayID = (CGDirectDisplayID)[pVal longValue];
+                const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
+                mnRealDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
+                mnRealDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
+            }
+            else
+            {
+                DBG_ERROR( "no resolution found in device description" );
+            }
+        }
+        else
+        {
+            DBG_ERROR( "no device description" );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "no screen found" );
+    }
+
+    // equalize x- and y-resolution if they are close enough to prevent unneeded font stretching
+    if( (mnRealDPIX != mnRealDPIY)
+    &&  (10*mnRealDPIX < 13*mnRealDPIY) && (13*mnRealDPIX > 10*mnRealDPIY) )
+    {
+        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
+    }
     mfFakeDPIScale = 1.0;
 }
 
 void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
     if( !mnRealDPIY )
-    {
-        GetDisplayResolution( mnRealDPIX, mnRealDPIY );
-        mfFakeDPIScale = 1.0;
-    }
+        initResolution( (mbWindow && mpFrame) ? mpFrame->mpWindow : nil );
 
     rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
@@ -1425,30 +1449,11 @@ ULONG AquaSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData*  pKernPairs
 
 // -----------------------------------------------------------------------
 
-static bool AddTempFontDir( void )
+static bool AddTempFontDir( const char* pDir )
 {
-    static bool bFirst = true;
-    if( !bFirst )
-        return false;
-    bFirst = false;
-
-    // determine path for the OOo temporary font files
-    // since we are only interested in fonts that could not be
-    // registered before because of missing administration rights
-    // only the font path of the user installation is needed
-    // TODO: is there an easier way to find the friggin directory name???
-    ::rtl::OUString aExecPath;
-    osl_getExecutableFile( &aExecPath.pData );
-    ::rtl::OUString aUSystemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( aExecPath, aUSystemPath ) );
-    ::rtl::OString aPathName = rtl::OUStringToOString( aUSystemPath, RTL_TEXTENCODING_UTF8 );
-    aPathName = aPathName.copy( 0, aPathName.lastIndexOf('/') );
-    aPathName += "/../share/fonts/truetype/";
-
     FSRef aPathFSRef;
     Boolean bIsDirectory = true;
-    OSStatus eStatus = FSPathMakeRef( (UInt8*)aPathName.getStr(),
-        &aPathFSRef, &bIsDirectory );
+    OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
     if( eStatus != noErr )
         return false;
 
@@ -1471,6 +1476,38 @@ static bool AddTempFontDir( void )
     return true;
 }
 
+static bool AddTempFontDir( void )
+{
+    static bool bFirst = true;
+    if( !bFirst )
+        return false;
+    bFirst = false;
+
+    // add private font files found in brand and base layer
+
+    rtl::OUString aBrandStr( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) );
+    rtl_bootstrap_expandMacros( &aBrandStr.pData );
+    rtl::OUString aBrandSysPath;
+    OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
+
+    rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
+    aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
+    aBrandFontDir.append( "/share/fonts/truetype/" );
+    bool bBrandSuccess = AddTempFontDir( aBrandFontDir.getStr() );
+
+    rtl::OUString aBaseStr( RTL_CONSTASCII_USTRINGPARAM( "$OOO_BASE_DIR" ) );
+    rtl_bootstrap_expandMacros( &aBaseStr.pData );
+    rtl::OUString aBaseSysPath;
+    OSL_VERIFY( osl_getSystemPathFromFileURL( aBaseStr.pData, &aBaseSysPath.pData ) == osl_File_E_None );
+
+    rtl::OStringBuffer aBaseFontDir( aBaseSysPath.getLength()*2 );
+    aBaseFontDir.append( rtl::OUStringToOString( aBaseSysPath, RTL_TEXTENCODING_UTF8 ) );
+    aBaseFontDir.append( "/share/fonts/truetype/" );
+    bool bBaseSuccess = AddTempFontDir( aBaseFontDir.getStr() );
+
+    return bBrandSuccess && bBaseSuccess;
+}
+
 void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
@@ -1481,13 +1518,13 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     // SalData seems to be a good place for this caching. However we have to
     // carefully make the access to the font list thread-safe. If we register
     // a font-change event handler to update the font list in case fonts have
-    // changed on the system we have to lock access to the list.
-    ::vos::OMutex aMutex;
-    aMutex.acquire();
+    // changed on the system we have to lock access to the list. The right
+    // way to do that is the solar mutex since GetDevFontList is protected
+    // through it as should be all event handlers
+
     SalData* pSalData = GetSalData();
     if (pSalData->mpFontList == NULL)
         pSalData->mpFontList = new SystemFontList();
-    aMutex.release();
 
     // Copy all ImplFontData objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontList );
@@ -1530,9 +1567,69 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& )
+// callbacks from ATSUGlyphGetCubicPaths() fore GetGlyphOutline()
+struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
+
+static OSStatus GgoLineToProc( const Float32Point* pPoint, void* pData )
 {
-    return sal_False;
+    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
+    const basegfx::B2DPoint aB2DPoint( pPoint->x, pPoint->y );
+    rPolygon.append( aB2DPoint );
+    return noErr;
+}
+
+static OSStatus GgoCurveToProc( const Float32Point* pCP1, const Float32Point* pCP2,
+    const Float32Point* pPoint, void* pData )
+{
+    basegfx::B2DPolygon& rPolygon = static_cast<GgoData*>(pData)->maPolygon;
+    const sal_uInt32 nPointCount = rPolygon.count();
+    const basegfx::B2DPoint aB2DControlPoint1( pCP1->x, pCP1->y );
+    rPolygon.setNextControlPoint( nPointCount-1, aB2DControlPoint1 );
+    const basegfx::B2DPoint aB2DEndPoint( pPoint->x, pPoint->y );
+    rPolygon.append( aB2DEndPoint );
+    const basegfx::B2DPoint aB2DControlPoint2( pCP2->x, pCP2->y );
+    rPolygon.setPrevControlPoint( nPointCount, aB2DControlPoint2 );
+    return noErr;
+}
+
+static OSStatus GgoClosePathProc( void* pData )
+{
+    GgoData* pGgoData = static_cast<GgoData*>(pData);
+    basegfx::B2DPolygon& rPolygon = pGgoData->maPolygon;
+    if( rPolygon.count() > 0 )
+        pGgoData->mpPolyPoly->append( rPolygon );
+    rPolygon.clear();
+    return noErr;
+}
+
+static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
+{
+    GgoClosePathProc( pData );
+    OSStatus eStatus = GgoLineToProc( pPoint, pData );
+    return eStatus;
+}
+
+BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    GgoData aGgoData;
+    aGgoData.mpPolyPoly = &rPolyPoly;
+    rPolyPoly.clear();
+
+    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback when CWS pdffix02 is integrated
+    OSStatus eGgoStatus = noErr;
+    OSStatus eStatus = ATSUGlyphGetCubicPaths( rATSUStyle, nGlyphId,
+        GgoMoveToProc, GgoLineToProc, GgoCurveToProc, GgoClosePathProc,
+        &aGgoData, &eGgoStatus );
+    if( (eStatus != noErr) ) // TODO: why is (eGgoStatus!=noErr) when curves are involved?
+        return false;
+
+    GgoClosePathProc( &aGgoData );
+    if( mfFontScale != 1.0 ) {
+        basegfx::B2DHomMatrix aScale;
+        aScale.scale( +mfFontScale, +mfFontScale );
+        rPolyPoly.transform( aScale );
+    }
+    return true;
 }
 
 // -----------------------------------------------------------------------
