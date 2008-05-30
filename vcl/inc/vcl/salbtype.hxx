@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salbtype.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,6 +219,7 @@ public:
     inline BitmapColor&         operator[]( USHORT nIndex );
 
     inline USHORT               GetBestIndex( const BitmapColor& rCol ) const;
+    bool                        IsGreyPalette() const;
 };
 
 // ---------------
