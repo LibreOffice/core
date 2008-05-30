@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.111 $
+ * $Revision: 1.112 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -929,6 +929,16 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+            case com::sun::star::awt::Key::SELECT_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_FORWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
@@ -956,13 +966,37 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             case KEY_BACKSPACE:
             case KEY_DELETE:
+            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
-                    BYTE nDel = ( nCode == KEY_DELETE ) ? DEL_RIGHT : DEL_LEFT;
-                    BYTE nMode = rKeyEvent.GetKeyCode().IsMod1() ? DELMODE_RESTOFWORD : DELMODE_SIMPLE;
-                    if ( ( nMode == DELMODE_RESTOFWORD ) && rKeyEvent.GetKeyCode().IsShift() )
+                    BYTE nDel = 0, nMode = 0;
+                    switch( nCode )
+                    {
+                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                        nMode = DELMODE_RESTOFWORD;
+                        nDel = DEL_LEFT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                        nMode = DELMODE_RESTOFWORD;
+                        nDel = DEL_RIGHT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
                         nMode = DELMODE_RESTOFCONTENT;
+                        nDel = DEL_LEFT;
+                        break;
+                    case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+                        nMode = DELMODE_RESTOFCONTENT;
+                        nDel = DEL_RIGHT;
+                        break;
+                    default:
+                        nDel = ( nCode == KEY_DELETE ) ? DEL_RIGHT : DEL_LEFT;
+                        nMode = rKeyEvent.GetKeyCode().IsMod1() ? DELMODE_RESTOFWORD : DELMODE_SIMPLE;
+                        if ( ( nMode == DELMODE_RESTOFWORD ) && rKeyEvent.GetKeyCode().IsShift() )
+                            nMode = DELMODE_RESTOFCONTENT;
+                        break;
+                    }
                     pEditView->pImpEditView->DrawSelection();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
