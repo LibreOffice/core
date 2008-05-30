@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include "vcl/salgdi.hxx"
 #include "aquavcltypes.h"
 
-#include "basebmp/bitmapdevice.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include <vector>
 
@@ -76,6 +76,18 @@ private:
     mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
 };
 
+// abstracting quartz color instead of having to use an CGFloat[] array
+class RGBAColor
+{
+public:
+    RGBAColor( SalColor );
+    RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
+    const float* AsArray() const    { return &mfRed; }
+    bool IsVisible() const          { return (mfAlpha > 0); }
+    void SetAlpha( float fAlpha )   { mfAlpha = fAlpha; }
+private:
+    float mfRed, mfGreen, mfBlue, mfAlpha;
+};
 
 // -------------------
 // - AquaSalGraphics -
@@ -85,8 +97,12 @@ class AquaSalGraphics : public SalGraphics
     friend class ATSLayout;
 protected:
     AquaSalFrame*                           mpFrame;
-    /// graphics context for Quartz 2D
-    CGContextRef                            mrContext;
+    CGLayerRef                              mxLayer;    // Quartz graphics layer
+    CGContextRef                            mrContext;  // Quartz drawing context
+    class XorEmulation*                     mpXorEmulation;
+    int                                     mnWidth;
+    int                                     mnHeight;
+    int                                     mnBitmapDepth;  // zero unless bitmap
     /// device resolution of this graphics
     long                                    mnRealDPIX;
     long                                    mnRealDPIY;
@@ -95,23 +111,18 @@ protected:
     /// so we have to compensate for it with the inverse factor
     double                                  mfFakeDPIScale;
 
-    /// memory for graphics bitmap context (window or virdev)
-    boost::shared_array< sal_uInt8 >        maContextMemory;
-    /// basebmp::BitmapDevice used for XOR rendering
-    basebmp::BitmapDeviceSharedPtr          maXORDevice;
-    basebmp::BitmapDeviceSharedPtr          maXORClipMask;
-
     /// path representing current clip region
-    CGMutablePathRef                        mrClippingPath;
-    std::vector< CGRect >                   maClippingRects;
+    /// 1. the old fashioned union-of-rectangles clip
+    /// TODO: get rid of it, when last caller of unionClipRegion(Rect) is gone
+    CGMutablePathRef                        mxClipRectsPath;
+    /// 2. the modern polypolygon shaped clip
+    CGMutablePathRef                        mxClipPolysPath;
 
     /// Drawing colors
     /// pen color RGBA
-    float                                   mpLineColor[4];
+    RGBAColor                               maLineColor;
     /// brush color RGBA
-    float                                   mpFillColor[4];
-    /// is XOR mode enabled ?
-    bool                                    mbXORMode;
+    RGBAColor                               maFillColor;
 
     // Device Font settings
      const ImplMacFontData*                  mpMacFontData;
@@ -139,14 +150,13 @@ public:
     AquaSalGraphics();
     virtual ~AquaSalGraphics();
 
-    bool                IsPenTransparent() const        { return (mpLineColor[3] == 0.0); }
-    bool                IsBrushTransparent() const      { return (mpFillColor[3] == 0.0); }
+    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
+    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
     void                SetWindowGraphics( AquaSalFrame* pFrame );
     void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
-    void                SetVirDevGraphics( CGContextRef xContext, bool bSCreenCompatible );
+    void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
-    void                initResolution( NSWindow* );
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
@@ -154,15 +164,18 @@ public:
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
     AquaSalFrame*       getGraphicsFrame() const { return mbWindow ? mpFrame : NULL; }
 
-    void                ImplDrawPixel( long nX, long nY, float pColor[] ); // helper to draw single pixels
+    void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool                CheckContext();
     void                UpdateWindow( NSRect& rRect ); // delivered in NSView coordinates
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
+    void                RefreshRect( const CGRect& );
 
     void                SetState();
 
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
+
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
@@ -171,6 +184,8 @@ public:
     virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths );
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
@@ -332,6 +347,56 @@ public:
 
     // Query the platform layer for control support
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+
+private:
+    // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
+    // make some graphics seem to be vertically-mirrored from a VCL perspective
+    bool IsFlipped() const { return (mpFrame != NULL); }
+
+    void ApplyXorContext();
 };
+
+class XorEmulation
+{
+public:
+                    XorEmulation( int nWidth, int nHeight, int nBitmapDepth );
+                    ~XorEmulation();
+
+    CGContextRef    Enable( CGContextRef, CGLayerRef );
+    CGContextRef    Disable();
+    bool            UpdateTarget();
+    bool            IsEnabled() const { return (mxTargetLayer != NULL); }
+
+private:
+    CGLayerRef      mxTargetLayer;
+    CGContextRef    mxTargetContext;
+    CGContextRef    mxMaskContext;
+    CGContextRef    mxTempContext;
+    long*           mpMaskBuffer;
+    long*           mpTempBuffer;
+    int             mnBufferSize;
+};
+
+
+// --- some trivial inlines
+
+inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
+{
+    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
+}
+
+inline RGBAColor::RGBAColor( SalColor nSalColor )
+:   mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
+,   mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
+,   mfBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
+,   mfAlpha( 1.0 )  // opaque
+{}
+
+inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )
+:   mfRed( fRed )
+,   mfGreen( fGreen )
+,   mfBlue( fBlue )
+,   mfAlpha( fAlpha )
+{}
 
 #endif // _SV_SALGDI_H
