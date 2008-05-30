@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.hxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -814,7 +814,11 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_uInt32 nAtomInstance,
-                                TextRuleEntry* pTextRule, SvStream& rExtBu );
+                                TextRuleEntry* pTextRule, SvStream& rExtBu, EscherPropertyContainer* );
+        void                ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropertyContainer& rPropOpt );
+        void                ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& );
+        void                ImplCreateTextShape( EscherPropertyContainer&, EscherSolverContainer&, sal_Bool bFill );
+
         void                ImplWritePage( const PHLayout& rLayout,
                                                 EscherSolverContainer& rSolver,
                                                     PageType ePageType,
