@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saltimer.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,7 @@ void ImplSalStartTimer( ULONG nMS )
     }
     else
     {
+        SalData::ensureThreadAutoreleasePool();
         // post an event so we can get into the main thread
         NSPoint aPt = { 0, 0 };
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
@@ -104,11 +105,12 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
     {
         NSTimeInterval posted = [pEvent timestamp] + NSTimeInterval([pEvent data1])/1000.0;
         NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
-        if( current - posted <= 0.0 )
+        if( (posted - current) <= 0.0 )
+        {
             // timer already elapsed since event posted
             pSVData->mpSalTimer->CallCallback();
-        else
-            ImplSalStartTimer( ULONG( (posted - current) * 1000.0 ) );
+        }
+        ImplSalStartTimer( ULONG( [pEvent data1] ) );
     }
 
 }
