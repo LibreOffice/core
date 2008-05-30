@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datanavi.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +154,7 @@ Window RID_SVXWIN_DATANAVIGATOR
                 {
                     Identifier = MID_MODELS_EDIT ;
                     HelpId = HID_MN_XFORMS_MODELS_EDIT ;
-                    Text [ en-US ] = "~Rename..." ;
+                    Text [ en-US ] = "~Edit..." ;
                 };
                 MenuItem
                 {
@@ -954,6 +954,14 @@ ModalDialog RID_SVXDLG_ADD_MODEL
         Size = MAP_APPFONT ( 114 , 12 ) ;
         Border = TRUE ;
     };
+    CheckBox CB_MODIFIES_DOCUMENT
+    {
+        Pos = MAP_APPFONT( 60, 30 );
+        Size = MAP_APPFONT( 114, 16 );
+        Top = TRUE;
+
+        Text [ en-US ] = "Model data updates change document's modification status";
+    };
     FixedLine FL_DATANAV_BTN
     {
         Pos = MAP_APPFONT ( 4 , 29 ) ;
@@ -980,7 +988,7 @@ ModalDialog RID_SVXDLG_ADD_MODEL
     };
     String STR_EDIT_TEXT
     {
-        Text [ en-US ] = "Rename Model" ;
+        Text [ en-US ] = "Edit Model" ;
     };
 };
 
