@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -473,6 +473,12 @@ BOOL GtkSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
     Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
     m_aClipRegion.Union( aRect );
     return X11SalGraphics::unionClipRegion( nX, nY, nWidth, nHeight );
+}
+
+bool GtkSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+        // TODO: implement and advertise OutDevSupport_B2DClip support
+        return false;
 }
 
 void GtkSalGraphics::EndSetClipRegion()
