@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vclevent.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/vclevent.hxx>
+#include "vcl/vclevent.hxx"
+#include "vcl/svdata.hxx"
 
 TYPEINIT0(VclSimpleEvent);
 TYPEINIT1(VclWindowEvent, VclSimpleEvent);
@@ -42,10 +43,23 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     // Copy the list, because this can be destroyed when calling a Link...
     std::list<Link> aCopy( *this );
     std::list<Link>::iterator aIter( aCopy.begin() );
-    while ( aIter != aCopy.end() )
+    if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
-        (*aIter).Call( pEvent );
-        aIter++;
+        VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
+        ImplDelData aDel( pWinEvent->GetWindow() );
+        while ( aIter != aCopy.end() && ! aDel.IsDead() )
+        {
+            (*aIter).Call( pEvent );
+            aIter++;
+        }
+    }
+    else
+    {
+        while ( aIter != aCopy.end() )
+        {
+            (*aIter).Call( pEvent );
+            aIter++;
+        }
     }
 }
 
