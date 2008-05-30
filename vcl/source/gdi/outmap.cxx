@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outmap.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,11 +50,11 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/outdev.h>
 #include <vcl/salgdi.hxx>
 
-// #i75163#
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vcl/outdev.h>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #define USE_64BIT_INTS
 
@@ -1222,10 +1222,19 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
         return rLogicRegion;
 
     Region          aRegion;
-    PolyPolygon*    pPolyPoly = rLogicRegion.ImplGetImplRegion()->mpPolyPoly;
+    const ImplRegion& rImplRegion = *rLogicRegion.ImplGetImplRegion();
+    const PolyPolygon* pPolyPoly = rImplRegion.mpPolyPoly;
+    const basegfx::B2DPolyPolygon* pB2DPolyPoly = rImplRegion.mpB2DPolyPoly;
 
     if ( pPolyPoly )
         aRegion = Region( LogicToPixel( *pPolyPoly ) );
+    else if( pB2DPolyPoly )
+    {
+        basegfx::B2DPolyPolygon aTransformedPoly = *pB2DPolyPoly;
+        const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+        aTransformedPoly.transform( rTransformationMatrix );
+        aRegion = Region( aTransformedPoly );
+    }
     else
     {
         long                nX;
