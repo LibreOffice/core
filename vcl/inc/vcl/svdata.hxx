@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdata.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -228,6 +228,7 @@ struct ImplSVWinData
     USHORT                  mnAutoScrollFlags;  // auto scroll flags
     BOOL                    mbNoDeactivate;     // TRUE: keine Deactivate durchfuehren
     BOOL                    mbNoSaveFocus;      // TRUE: menues must not save/restore focus
+    BOOL                    mbNoSaveBackground; // TRUE: save background is unnecessary or even less performant
 };
 
 
