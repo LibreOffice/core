@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev4.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,10 @@
 #include "pdfwriter_impl.hxx"
 #include "vcl/window.h"
 #include "vcl/salframe.hxx"
+
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 // -----------
 // - Defines -
@@ -812,6 +816,16 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    if( mbOutputClipped )
+        return;
+
+    if( !mpGraphics )
+        if( !ImplGetGraphics() )
+            return;
+
     if( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() && !( mnDrawMode & DRAWMODE_NOGRADIENT ) )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
@@ -906,7 +920,20 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             aGradient.SetEndColor( aEndCol );
         }
 
-        if( OUTDEV_PRINTER == meOutDevType )
+        if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
+        {
+            ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
+            const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+            aB2DPolyPolygon.transform( aTransform );
+            mpGraphics->BeginSetClipRegion( 0 );
+            mpGraphics->UnionClipRegion( aB2DPolyPolygon, this );
+            mpGraphics->EndSetClipRegion();
+            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+            DrawGradient( aBoundRect, rGradient );
+            mpGraphics->BeginSetClipRegion( 0 );
+            mpGraphics->EndSetClipRegion();
+        }
+        else if( OUTDEV_PRINTER == meOutDevType )
         {
             const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
