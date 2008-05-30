@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,9 @@
 
 #include <tools/shl.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -45,9 +48,7 @@
 #include <svx/widwitem.hxx>
 #include <svx/kernitem.hxx>
 #include <svx/escpitem.hxx>
-#ifndef _SVX_PARAITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
-#endif
 #include <svx/adjitem.hxx>
 #include <svx/crsditem.hxx>
 #include <svx/shdditem.hxx>
@@ -55,21 +56,18 @@
 #include <svx/udlnitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/slstitm.hxx>
 #include <svx/colritem.hxx>
 #include <svx/wghtitem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
-#endif
 #include <svx/postitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/cjkoptions.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svx/flditem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/hlnkitem.hxx>
@@ -83,16 +81,10 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
-#ifndef _PARDLG_HXX
 #include <pardlg.hxx>
-#endif
 #include <swdtflvr.hxx>
-#ifndef _DRWTXTSH_HXX
 #include <drwtxtsh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <initui.hxx>
 #include <edtwin.hxx>
@@ -128,7 +120,13 @@
 #include <svtools/undo.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include "chrdlg.hrc" //CHINA001
+
+#include <cppuhelper/bootstrap.hxx>
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::i18n;
 
 #define SwAnnotationShell
 #ifndef _ITEMDEF_HXX
@@ -172,7 +170,7 @@ SfxUndoManager* SwAnnotationShell::GetUndoManager()
 
 void SwAnnotationShell::Exec( SfxRequest &rReq )
 {
-    //TODO: clean this up!!!
+    //TODO: clean this up!!!!
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
         return;
@@ -484,6 +482,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
             case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
             case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
+            case SID_ATTR_CHAR_LANGUAGE    : nEEWhich = EE_CHAR_LANGUAGE;break;
             case FN_SET_SUPER_SCRIPT:
             case FN_SET_SUB_SCRIPT:
             {
@@ -613,6 +612,28 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
         case SID_PASTE:
             pOLV->Paste();
             break;
+        case FN_PASTESPECIAL:
+            pOLV->PasteSpecial();
+            break;
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+        {
+            ULONG nFormat = 0;
+            const SfxPoolItem* pItem;
+            if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                                    pItem->ISA(SfxUInt32Item) )
+            {
+                nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+            }
+
+            if ( nFormat )
+            {
+                if (SOT_FORMAT_STRING == nFormat)
+                    pOLV->Paste();
+                else
+                    pOLV->PasteSpecial();
+            }
+            break;
+        }
     }
     pPostItMgr->GetActivePostIt()->ResizeIfNeccessary(aOldHeight,pPostItMgr->GetActivePostIt()->GetPostItTextHeight());
 }
@@ -623,10 +644,9 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
     if ( !pPostItMgr || !pPostItMgr->GetActivePostIt() )
         return;
     OutlinerView* pOLV = pPostItMgr->GetActivePostIt()->View();
-    ESelection aSel(pOLV->GetSelection());
-    const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
-                           (aSel.nStartPos != aSel.nEndPos);
 
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
+    bool bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -637,27 +657,33 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
         {
             case SID_CUT:
             case SID_COPY:
-                if( !bCopy )
+            {
+                if( !pOLV->HasSelection() )
                     rSet.DisableItem( nWhich );
                 break;
-
+            }
             case SID_PASTE:
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                &rView.GetEditWin() ) );
-
-                    if( !aDataHelper.GetXTransferable().is() ||
-                        !SwTransferable::IsPaste( rView.GetWrtShell(), aDataHelper ))
-                        rSet.DisableItem( SID_PASTE );
-                }
-                break;
-
             case FN_PASTESPECIAL:
                 {
-                    rSet.DisableItem( FN_PASTESPECIAL );
+                    if( !bPastePossible )
+                        rSet.DisableItem( nWhich );
+                    break;
                 }
-                break;
+            case SID_CLIPBOARD_FORMAT_ITEMS:
+                {
+                    if ( bPastePossible )
+                    {
+                        SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
+                        if ( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                            aFormats.AddClipbrdFormat( SOT_FORMAT_RTF );
+                        if ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) )
+                            aFormats.AddClipbrdFormat( SOT_FORMAT_STRING );
+                        rSet.Put( aFormats );
+                    }
+                    else
+                        rSet.DisableItem( nWhich );
+                    break;
+                }
         }
         nWhich = aIter.NextWhich();
     }
@@ -800,6 +826,80 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             pOLV->StartThesaurus();
             break;
         }
+        case SID_HANGUL_HANJA_CONVERSION:
+            pOLV->StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, sal_True, sal_False );
+            break;
+
+        case SID_CHINESE_CONVERSION:
+            {
+                //open ChineseTranslationDialog
+                Reference< XComponentContext > xContext(
+                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                if(xContext.is())
+                {
+                    Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                    if(xMCF.is())
+                    {
+                        Reference< ui::dialogs::XExecutableDialog > xDialog(
+                                xMCF->createInstanceWithContext(
+                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    , xContext), UNO_QUERY);
+                        Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
+                        if( xInit.is() )
+                        {
+                            //  initialize dialog
+                            Reference< awt::XWindow > xDialogParentWindow(0);
+                            Sequence<Any> aSeq(1);
+                            Any* pArray = aSeq.getArray();
+                            PropertyValue aParam;
+                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Value <<= makeAny(xDialogParentWindow);
+                            pArray[0] <<= makeAny(aParam);
+                            xInit->initialize( aSeq );
+
+                            //execute dialog
+                            sal_Int16 nDialogRet = xDialog->execute();
+                            if( RET_OK == nDialogRet )
+                            {
+                                //get some parameters from the dialog
+                                sal_Bool bToSimplified = sal_True;
+                                sal_Bool bUseVariants = sal_True;
+                                sal_Bool bCommonTerms = sal_True;
+                                Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
+                                if( xProp.is() )
+                                {
+                                    try
+                                    {
+                                        xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
+                                        xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
+                                        xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                    }
+                                    catch( Exception& )
+                                    {
+                                    }
+                                }
+
+                                //execute translation
+                                sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                                sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                                sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                                if( !bCommonTerms )
+                                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                                Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                                            nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+
+                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False, sal_False );
+                            }
+                        }
+                        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
+                        if( xComponent.is() )
+                            xComponent->dispose();
+                    }
+                }
+            }
+            break;
     }
 }
 
@@ -825,13 +925,26 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 const SfxPoolItem &rItem = rView.GetWrtShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
                             GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
-            LanguageType nLang = ((const SvxLanguageItem &)
-                                                    rItem).GetLanguage();
-            uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-            if (!xThes.is() || nLang == LANGUAGE_NONE ||
-                !xThes->hasLocale( SvxCreateLocale( nLang ) ))
-                rSet.DisableItem( FN_THESAURUS_DLG );
+                LanguageType nLang = ((const SvxLanguageItem &)
+                                                        rItem).GetLanguage();
+                uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+                if (!xThes.is() || nLang == LANGUAGE_NONE ||
+                    !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                    rSet.DisableItem( FN_THESAURUS_DLG );
             }
+            break;
+            case SID_HANGUL_HANJA_CONVERSION:
+            case SID_CHINESE_CONVERSION:
+            {
+                if (!SvtCJKOptions().IsAnyEnabled())
+                {
+                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+                    rSet.DisableItem(nWhich);
+                }
+                else
+                    rView.GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
