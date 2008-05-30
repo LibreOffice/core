@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: syswin.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -312,6 +312,9 @@ BYTE SystemWindow::GetZLevel() const
 
 void SystemWindow::EnableSaveBackground( BOOL bSave )
 {
+    if( ImplGetSVData()->maWinData.mbNoSaveBackground )
+        bSave = false;
+
     Window* pWindow = this;
     while ( pWindow->mpWindowImpl->mpBorderWindow )
         pWindow = pWindow->mpWindowImpl->mpBorderWindow;
