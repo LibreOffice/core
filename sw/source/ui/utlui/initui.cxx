@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: initui.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +183,13 @@ ShellResource::ShellResource()
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
 {
     const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
+
+    KeyCode aCode( KEY_SPACE );
+    KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
+    String aModStr( aModifiedCode.GetName() );
+    aModStr.SearchAndReplace( aCode.GetName(), String() );
+    aModStr.SearchAndReplaceAllAscii( "+", String() );
+    aHyperlinkClick.SearchAndReplaceAllAscii( "%s", aModStr );
 
     for(USHORT i = 0; i < nCount; ++i)
     {
