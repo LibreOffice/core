@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -568,6 +568,13 @@ BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool X11SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+        // TODO: implement and advertise OutDevSupport_B2DClip support
+        return false;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::EndSetClipRegion()
 {
     bPenGC_         = FALSE;
@@ -904,6 +911,22 @@ void X11SalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
    if( nPenColor_ != 0xFFFFFFFF )
        for( ULONG i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i] );
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+bool X11SalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+{
+        // TODO: implement and advertise OutDevSupport_B2DDraw support
+        return false;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
