@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewmdi.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,8 +145,15 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
         if( SVX_ZOOM_OPTIMAL == eZoomType )
         {
-            aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
-            lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
+            if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
+            {
+                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
+            }
+            else
+            {
+                aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
+                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
+            }
             nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
         else if(SVX_ZOOM_WHOLEPAGE == eZoomType || SVX_ZOOM_PAGEWIDTH == eZoomType )
@@ -484,8 +491,15 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_POSTIT:
         {
+            SwPostIt* pPostIt = pThis->GetPostItMgr()->GetActivePostIt();
+            if (pPostIt)
+                pThis->GetPostItMgr()->SetActivePostIt(0);
             SwFieldType* pFldType = rSh.GetFldType(0, RES_POSTITFLD);
-            rSh.MoveFldType( pFldType, bNext );
+            if (rSh.MoveFldType(pFldType, bNext))
+                pThis->GetViewFrame()->GetDispatcher()->Execute(FN_POSTIT);
+            else
+                //first/last item
+                pThis->GetPostItMgr()->SetActivePostIt(pPostIt);
         }
         break;
         case NID_SRCH_REP:
