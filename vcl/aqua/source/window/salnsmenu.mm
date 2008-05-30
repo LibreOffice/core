@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnsmenu.mm,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,37 @@
         aMenuEvt.mnId   = mpMenuItem->mnId;
         aMenuEvt.mpMenu = mpMenuItem->mpVCLMenu;
         pFrame->CallCallback(SALEVENT_MENUCOMMAND, &aMenuEvt);
+    }
+    else if( mpMenuItem->mpVCLMenu )
+    {
+        // if an item from submenu was selected. the corresponding Window does not exist because
+        // we use native popup menus, so we have to set the selected menuitem directly
+        // incidentally this of course works for top level popup menus, too
+        PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(mpMenuItem->mpVCLMenu);
+        if( pPopupMenu )
+        {
+            // FIXME: revise this ugly code
+            
+            // select handlers in vcl are dispatch on the original menu
+            // if not consumed by the select handler of the current menu
+            // however since only the starting menu ever came into Execute
+            // the hierarchy is not build up. Workaround this by getting
+            // the menu it should have been
+            
+            // get started from hierarchy in vcl menus
+            AquaSalMenu* pParentMenu = mpMenuItem->mpParentMenu;
+            Menu* pCurMenu = mpMenuItem->mpVCLMenu;
+            while( pParentMenu && pParentMenu->mpVCLMenu )
+            {
+                pCurMenu = pParentMenu->mpVCLMenu;
+                pParentMenu = pParentMenu->mpParentSalMenu;
+            }
+            
+            pPopupMenu->SetSelectedEntry( mpMenuItem->mnId );
+            pPopupMenu->ImplSelectWithStart( pCurMenu );
+        }
+        else
+            DBG_ERROR( "menubar item without frame !" );
     }
 }
 @end
