@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saldata.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ struct SalData
     static oslThreadKey                           s_aAutoReleaseKey;
 
     bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
+    bool              mbIsTestTool;
 
     SalData();
     ~SalData();
