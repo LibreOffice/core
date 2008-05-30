@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ bool AquaSalGraphics::CheckContext()
         const bool bXorEnabled = (mpXorEmulation && mpXorEmulation->IsEnabled());
 
         // check if a new drawing context is needed (e.g. after a resize)
-        if( (mnWidth != nWidth) || (mnHeight != nHeight) )
+        if( (unsigned(mnWidth) != nWidth) || (unsigned(mnHeight) != nHeight) )
         {
             mnWidth = nWidth;
             mnHeight = nHeight;
