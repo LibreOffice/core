@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _annotsh.sdi,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +97,13 @@ interface _Annotation
     FN_PASTESPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -208,6 +215,13 @@ interface _Annotation
     SID_ATTR_CHAR_STRIKEOUT
     [
         ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
