@@ -8,7 +8,7 @@
  *
  * $RCSfile: postit.hxx,v $
  *
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +36,9 @@
 #include <swrect.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 
-//TODO: move to cxx
-// does not work with forward declaration, why??
-#ifndef _LINEINFO_HXX
 #include <vcl/lineinfo.hxx>
-#endif
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/editstat.hxx>
 
 class SwPostItMgr;
 class SwPostItField;
@@ -139,6 +136,37 @@ class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
         virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
 };
 
+enum ShadowState {SS_NORMAL, SS_VIEW, SS_EDIT};
+
+class SwPostItShadow: public sdr::overlay::OverlayObjectWithBasePosition
+{
+    protected:
+        virtual void drawGeometry(OutputDevice& rOutputDevice);
+        virtual void createBaseRange(OutputDevice& rOutputDevice);
+
+    private:
+        basegfx::B2DPoint                       maSecondPosition;
+        ShadowState mShadowState;
+
+    public:
+        SwPostItShadow(const basegfx::B2DPoint& rBasePos, const basegfx::B2DPoint& rSecondPosition, Color aBaseColor,ShadowState aState);
+        virtual ~SwPostItShadow();
+
+        void SetShadowState(ShadowState aState);
+        ShadowState GetShadowState() {return mShadowState;}
+
+        const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
+        void SetSecondPosition(const basegfx::B2DPoint& rNew);
+        void SetPosition(const basegfx::B2DPoint& rPoint1,const basegfx::B2DPoint& rPoint2);
+
+        virtual void Trigger(sal_uInt32 nTime);
+
+        //sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
+        // transform object coordinates. Transforms maBasePosition
+        // and invalidates on change
+        virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
+};
+
 class PostItTxt : public Window
 {
     private:
@@ -169,7 +197,12 @@ class PostItTxt : public Window
             void            SetTextView( OutlinerView* aEditView ) {    mpOutlinerView = aEditView; }
 
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
+            DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
 };
+
+typedef sal_Int64 SwPostItBits;
+
+#define PB_Preview ((SwPostItBits)0x00000001)
 
 class SwPostIt : public Window
 {
@@ -184,6 +217,7 @@ class SwPostIt : public Window
         SwFmtFld*       mpFmtFld;
         SwPostItField*  mpFld;
         SwPostItAnkor*  mpAnkor;
+        SwPostItShadow* mpShadow;
         SwPostItMgr*    mpMgr;
         bool            mbMeta;
         bool            mbReadonly;
@@ -198,6 +232,8 @@ class SwPostIt : public Window
         Rectangle       mPosSize;
         SwRect          mAnkorRect;
         long            mPageBorder;
+        SwPostItBits    nFlags;
+
 
     protected:
 
@@ -207,14 +243,16 @@ class SwPostIt : public Window
         virtual void    Paint( const Rectangle& rRect);
         virtual void    GetFocus();
         void            SetPosAndSize();
+        void            SetSizePixel( const Size& rNewSize );
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
+
         void            InitControls();
         void            CheckMetaText();
 
     public:
-        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr);
+        SwPostIt( Window* pParent, WinBits nBits,SwFmtFld* aField,SwPostItMgr* aMgr,SwPostItBits aBits);
         ~SwPostIt();
 
         void    SetSize( const Size& rNewSize );
@@ -227,6 +265,7 @@ class SwPostIt : public Window
         PostItTxt*      PostItText()    { return mpPostItTxt;}
         ScrollBar*      Scrollbar()     { return mpVScrollbar;}
         SwPostItAnkor*  Ankor()         { return mpAnkor;}
+        SwPostItShadow* Shadow()        { return mpShadow;}
         OutlinerView*   View()          { return mpOutlinerView;}
         SwView*         DocView()       { return mpView;}
         Outliner*       Engine()        { return mpOutliner;}
@@ -261,6 +300,7 @@ class SwPostIt : public Window
         void            SetMarginSide(bool aMarginSide);
         void            SetReadonly(BOOL bSet);
         BOOL            IsReadOnly()        { return mbReadonly;}
+        bool            IsPreview()         { return nFlags & PB_Preview;}
 
         void            SetColor(Color &aColorDark,Color &aColorLight, Color &aColorAnkor);
         Color           ColorDark();
@@ -269,6 +309,8 @@ class SwPostIt : public Window
 
         void            Rescale();
 
+        void            SetShadowState(ShadowState bState);
+
         sal_Int32       GetMetaHeight();
         sal_Int32       GetMinimumSizeWithMeta();
         sal_Int32       GetMinimumSizeWithoutMeta();
@@ -276,6 +318,8 @@ class SwPostIt : public Window
         sal_Int32       GetScrollbarWidth();
 
         void            SetSpellChecking(bool bEnable);
+
+
 
         void            ActivatePostIt();
         void            DeactivatePostIt();
