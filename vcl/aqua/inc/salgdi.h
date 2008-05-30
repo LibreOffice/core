@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,9 +135,6 @@ protected:
     /// is this a window graphics
     bool                                    mbWindow;
 
-private:
-    /** returns the display id this window is mostly visible on */
-    CGDirectDisplayID   GetWindowDisplayID() const;
 public:
     AquaSalGraphics();
     virtual ~AquaSalGraphics();
@@ -149,11 +146,13 @@ public:
     void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void                SetVirDevGraphics( CGContextRef xContext, bool bSCreenCompatible );
 
+    void                initResolution( NSWindow* );
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
     bool                IsPrinterGraphics()     const   { return mbPrinter; }
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
+    AquaSalFrame*       getGraphicsFrame() const { return mbWindow ? mpFrame : NULL; }
 
     void                ImplDrawPixel( long nX, long nY, float pColor[] ); // helper to draw single pixels
 
@@ -223,9 +222,6 @@ public:
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
-
-public:
-    // public SalGraphics methods, the interface to teh independent vcl part
 
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
