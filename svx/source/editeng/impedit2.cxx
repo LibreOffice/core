@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -859,6 +859,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
         */
     }
 
+    bool bKeyModifySelection = aTranslatedKeyEvent.GetKeyCode().IsShift();
     switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM, pEditView );
@@ -877,6 +878,46 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM, pEditView );
                             break;
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+                            aPaM = CursorStartOfLine( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+                            aPaM = CursorEndOfLine( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+                            aPaM = WordLeft( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+                            aPaM = WordRight( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+                            aPaM = CursorStartOfParagraph( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+                            aPaM = CursorEndOfParagraph( aPaM );
+                            bKeyModifySelection = false;
+                            break;
+        case com::sun::star::awt::Key::SELECT_BACKWARD:
+                            aPaM = CursorLeft( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_FORWARD:
+                            aPaM = CursorRight( aPaM, i18n::CharacterIteratorMode::SKIPCELL );
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+                            aPaM = WordLeft( aPaM );
+                            bKeyModifySelection = true;
+                            break;
+        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+                            aPaM = WordRight( aPaM );
+                            bKeyModifySelection = true;
+                            break;
     }
 
     if ( aOldPaM != aPaM )
@@ -893,10 +934,10 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     // Bewirkt evtl. ein CreateAnchor oder Deselection all
     aSelEngine.SetCurView( pEditView );
-    aSelEngine.CursorPosChanging( aTranslatedKeyEvent.GetKeyCode().IsShift(), aTranslatedKeyEvent.GetKeyCode().IsMod1() );
+    aSelEngine.CursorPosChanging( bKeyModifySelection, aTranslatedKeyEvent.GetKeyCode().IsMod1() );
     EditPaM aOldEnd( pEditView->pImpEditView->GetEditSelection().Max() );
     pEditView->pImpEditView->GetEditSelection().Max() = aPaM;
-    if ( aTranslatedKeyEvent.GetKeyCode().IsShift() )
+    if ( bKeyModifySelection )
     {
         // Dann wird die Selektion erweitert...
         EditSelection aTmpNewSel( aOldEnd, aPaM );
