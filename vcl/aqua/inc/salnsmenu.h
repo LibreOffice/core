@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnsmenu.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,10 @@ public:
 
 @interface SalNSMenu : NSMenu
 {
+    /* Caution: SalNSMenu instances occasionally are binary copied
+       in AquaSalMenu::ShowNativePopupMenu. If any members are added,
+       please take this into account !
+    */
     AquaSalMenu*        mpMenu;
 }
 -(id)initWithMenu: (AquaSalMenu*)pMenu;
@@ -55,6 +59,10 @@ public:
 
 @interface SalNSMenuItem : NSMenuItem
 {
+    /* Caution: SalNSMenuItem instances occasionally are binary copied
+       in AquaSalMenu::ShowNativePopupMenu. If any members are added,
+       please take this into account !
+    */
     AquaSalMenuItem*    mpMenuItem;
 }
 -(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem;
