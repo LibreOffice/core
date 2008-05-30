@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdiutils.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,27 +77,41 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
     }
 }
 
-static void nil_free( void* )
-{
-}
-
-void AquaSalGraphics::SetVirDevGraphics( CGContextRef xContext, bool bScreenCompatible )
+void AquaSalGraphics::SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext,
+    int nBitmapDepth )
 {
     mbWindow    = false;
     mbPrinter   = false;
     mbVirDev    = true;
 
-    mrContext   = xContext;
-    sal_uInt8* pMemory = NULL;
-    if( mrContext )
+    // set graphics properties
+    mxLayer = xLayer;
+    mrContext = xContext;
+    mnBitmapDepth = nBitmapDepth;
+
+    if( !mxLayer )
     {
-        pMemory = reinterpret_cast<sal_uInt8*>(CGBitmapContextGetData( mrContext ));
-        CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
-        CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
-        CGContextSaveGState( mrContext );
-        SetState();
+        if( !xContext )
+            return;
+        mnWidth = CGBitmapContextGetWidth( xContext );
+        mnHeight = CGBitmapContextGetHeight( xContext );
     }
-    maContextMemory.reset( pMemory, boost::bind( nil_free, _1 ) );
+    else
+    {
+        const CGSize aSize = CGLayerGetSize( mxLayer );
+        mnWidth = aSize.width;
+        mnHeight = aSize.height;
+    }
+
+    // prepare graphics for drawing
+    DBG_ASSERT( mrContext, "AquaSalVirtualDevice has no drawing context?" );
+    if( !mrContext )
+        return;
+    const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGContextSetFillColorSpace( mrContext, aCGColorSpace );
+    CGContextSetStrokeColorSpace( mrContext, aCGColorSpace );
+    CGContextSaveGState( mrContext );
+    SetState();
 }
 
 // ----------------------------------------------------------------------
@@ -106,69 +120,26 @@ void AquaSalGraphics::SetState()
 {
     CGContextRestoreGState( mrContext );
     CGContextSaveGState( mrContext );
-    // set up clipping area
-    if( mrClippingPath )
+
+    // setup standard clipping (unions of non-intersecting rectangles)
+    if( mxClipRectsPath )
     {
         CGContextBeginPath( mrContext );                // discard any existing path
-        CGContextAddPath( mrContext, mrClippingPath );  // set the current path to the clipping path
+        CGContextAddPath( mrContext, mxClipRectsPath );  // set the current path to the clipping path
         CGContextClip( mrContext );                     // use it for clipping
     }
 
-    // set RGB colorspace and line and fill colors
-    CGContextSetFillColor( mrContext, mpFillColor );
-    CGContextSetStrokeColor( mrContext, mpLineColor );
-    if( mbXORMode && (mbWindow || mbVirDev) )
+    // intersect with complex clipping
+    if( mxClipPolysPath )
     {
-        CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
-        int nWidth  = CGBitmapContextGetWidth(mrContext);
-        int nHeight = CGBitmapContextGetHeight(mrContext);
-        if( ! maXORDevice )
-        {
-            maXORDevice = basebmp::createBitmapDevice( basegfx::B2IVector( nWidth, nHeight ),
-                                                       mbWindow,
-                                                       basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB,
-                                                       maContextMemory,
-                                                       basebmp::PaletteMemorySharedVector() );
-            if( mrClippingPath && maClippingRects.size() == 1 )
-            {
-                /*
-                * optimization: the case with only one clip rectangle is quite common
-                * in this case it is much cheaper to constrain the XOR device to a smaller
-                * area than to clip every pixel with the mask
-                */
-                maXORClipMask.reset();
-                CGRect aBounds( maClippingRects.front() );
-                basegfx::B2IRange aRect( static_cast<sal_Int32>(aBounds.origin.x),
-                      static_cast<sal_Int32>(aBounds.origin.y),
-                                         static_cast<sal_Int32>(aBounds.origin.x+aBounds.size.width),
-                                         static_cast<sal_Int32>(aBounds.origin.y+aBounds.size.height) );
-                maXORDevice = basebmp::subsetBitmapDevice( maXORDevice, aRect );
-            }
-        }
-        if( mrClippingPath )
-        {
-            if( ! maXORClipMask && maClippingRects.size() > 1 )
-            {
-                maXORClipMask = basebmp::createBitmapDevice( basegfx::B2IVector( nWidth, nHeight ),
-                                                             mbWindow,
-                                                             basebmp::Format::ONE_BIT_MSB_GREY );
-                maXORClipMask->clear( basebmp::Color(0xffffffff) );
-                for( std::vector<CGRect>::const_iterator it = maClippingRects.begin(); it != maClippingRects.end(); ++it )
-                {
-                    basegfx::B2DRectangle aRect( it->origin.x, it->origin.y,
-                                                 it->origin.x+it->size.width,
-                                                 it->origin.y+it->size.height );
-                    maXORClipMask->fillPolyPolygon( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aRect ) ),
-                                                    basebmp::Color( 0 ),
-                                                    basebmp::DrawMode_PAINT
-                                                    );
-                }
-            }
-        }
-        else
-            maXORClipMask.reset();
+        CGContextBeginPath( mrContext );
+        CGContextAddPath( mrContext, mxClipPolysPath );
+        CGContextEOClip( mrContext );
     }
 
+    // set RGB colorspace and line and fill colors
+    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
     CGContextSetShouldAntialias( mrContext, false );
 }
 
@@ -182,78 +153,62 @@ bool AquaSalGraphics::CheckContext()
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
 
         CGContextRef rReleaseContext = 0;
-        unsigned int nReleaseContextWidth = 0;
-        unsigned int nReleaseContextHeight = 0;
+        CGLayerRef   rReleaseLayer = NULL;
+        const bool bXorEnabled = (mpXorEmulation && mpXorEmulation->IsEnabled());
 
-        boost::shared_array<sal_uInt8> aOldMem;
-        if( mrContext )
+        // check if a new drawing context is needed (e.g. after a resize)
+        if( (mnWidth != nWidth) || (mnHeight != nHeight) )
         {
-            nReleaseContextWidth = CGBitmapContextGetWidth(mrContext);
-            nReleaseContextHeight = CGBitmapContextGetHeight(mrContext);
-            // check if window size changed and we need to create a new bitmap context
-            if( (nReleaseContextWidth != nWidth)  || (nReleaseContextHeight != nHeight) )
-            {
-                rReleaseContext = mrContext;
-                mrContext = 0;
-                aOldMem = maContextMemory;
-                maXORDevice.reset();
-                maXORClipMask.reset();
-            }
+            mnWidth = nWidth;
+            mnHeight = nHeight;
+            // prepare to release the corresponding resources
+            rReleaseContext = mrContext;
+            rReleaseLayer   = mxLayer;
+            mrContext = NULL;
+            mxLayer = NULL;
+            delete mpXorEmulation;
+            mpXorEmulation = NULL;
         }
 
         if( !mrContext )
         {
-            maContextMemory.reset( reinterpret_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
-                                   boost::bind( rtl_freeMemory, _1 ) );
-            if( maContextMemory )
+            const CGSize aLayerSize = {nWidth,nHeight};
+            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
+            CGContextRef xCGContext = reinterpret_cast<CGContextRef>([pNSGContext graphicsPort]);
+            mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, NULL );
+            if( mxLayer )
+                mrContext = CGLayerGetContext( mxLayer );
+
+            if( mrContext )
             {
-                mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
+                // copy original layer to resized layer
+                if( rReleaseLayer )
+                    CGContextDrawLayerAtPoint( mrContext, CGPointZero, rReleaseLayer );
 
-                if( mrContext )
-                {
-                    // copy bitmap data to new context
-                    if( rReleaseContext )
-                    {
-                        CGRect aBounds;
-                        aBounds.origin.x = aBounds.origin.y = 0;
-                        aBounds.size.width = nReleaseContextWidth;
-                        aBounds.size.height = nReleaseContextHeight;
-                        CGImageRef xImage = CGBitmapContextCreateImage( rReleaseContext );
-                        CGContextDrawImage( mrContext, aBounds, xImage );
-                        CGImageRelease(xImage);
-                    }
+                CGContextTranslateCTM( mrContext, 0, nHeight );
+                CGContextScaleCTM( mrContext, 1.0, -1.0 );
+                CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
+                CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
+                CGContextSaveGState( mrContext );
+                SetState();
 
-                    CGContextTranslateCTM( mrContext, 0, nHeight );
-                    CGContextScaleCTM( mrContext, 1.0, -1.0 );
-                    CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
-                    CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
-                    CGContextSaveGState( mrContext );
-                    SetState();
-                }
-                else
+                // re-enable XOR emulation for the new context
+                if( bXorEnabled )
                 {
-                    maContextMemory.reset(); // free memory again
+                    mpXorEmulation = new XorEmulation( nWidth, nHeight, 0 );
+                    mrContext = mpXorEmulation->Enable( mrContext, mxLayer );
                 }
             }
         }
 
-        if( rReleaseContext ) // released memory runs out of scope and is then freed
-            CFRelease( rReleaseContext );
+        if( rReleaseLayer )
+            CGLayerRelease( rReleaseLayer );
+        else if( rReleaseContext )
+            CGContextRelease( rReleaseContext );
     }
-    if( mrContext )
-    {
-        if( mbXORMode )
-        {
-            if( ! maXORDevice )
-                SetState();
-        }
-        return true;
-    }
-    else
-    {
-        DBG_ERROR("<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
-        return false;
-    }
+
+    DBG_ASSERT( mrContext, "<<<WARNING>>> AquaSalGraphics::CheckContext() FAILED!!!!\n" );
+    return (mrContext != NULL);
 }
 
 
@@ -285,13 +240,15 @@ CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
     return CGpoints;
 }
 
-
 // -----------------------------------------------------------------------
 
 void AquaSalGraphics::UpdateWindow( NSRect& rRect )
 {
+    if( !mpFrame )
+        return;
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-    if( mrContext != NULL && mpFrame != NULL && pContext != nil )
+    // NSGraphicsContext* pContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getWindow()];
+    if( (mxLayer != NULL) && (pContext != NULL) )
     {
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
 
@@ -304,17 +261,9 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
             CGContextClip( rCGContext );
         }
 
-        CGRect aDstRect = { { rRect.origin.x, rRect.origin.y },  { rRect.size.width, rRect.size.height } };
-        CGRect aSrcRect = aDstRect;
-        // flip y-origin since the bitmap is upside-down
-        aSrcRect.origin.y = CGBitmapContextGetHeight(mrContext) - rRect.origin.y - rRect.size.height;
-
-        CGImageRef xFullImage = CGBitmapContextCreateImage( mrContext );
-        CGImageRef xPartImage = CGImageCreateWithImageInRect( xFullImage, aSrcRect );
-        CGContextDrawImage( rCGContext, aDstRect, xPartImage );
-        CGImageRelease( xPartImage );
-        CGImageRelease( xFullImage );
-        //CGContextFlush( rCGContext );
+        if( mxLayer )
+            CGContextDrawLayerAtPoint( rCGContext, CGPointZero, mxLayer );
+        CGContextFlush( rCGContext );
         if( rClip ) // cleanup clipping
             CGContextRestoreGState( rCGContext );
     }
