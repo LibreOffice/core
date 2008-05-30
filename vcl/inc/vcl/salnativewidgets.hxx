@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,8 +377,9 @@ public:
 class PushButtonValue
 {
 public:
-PushButtonValue() : mbBevelButton( false ) {}
+PushButtonValue() : mbBevelButton( false ), mbSingleLine( true ) {}
     bool            mbBevelButton:1;
+    bool            mbSingleLine:1;
 };
 
 /* ImplControlValue:
