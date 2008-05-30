@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salvtables.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +111,11 @@ SalObject::~SalObject()
 SalMenu::~SalMenu()
 {
 }
+
+BOOL SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
+{
+    return FALSE;
+};
 
 SalMenuItem::~SalMenuItem()
 {
