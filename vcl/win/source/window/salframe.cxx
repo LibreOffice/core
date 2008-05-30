@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframe.cxx,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4895,7 +4895,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         Size checkSize( GetSystemMetrics( SM_CXMENUCHECK ), GetSystemMetrics( SM_CYMENUCHECK ) );
 
         pMI->itemWidth = checkSize.Width() + 3 + bmpSize.Width() + 3 + strSize.cx;
-        pMI->itemHeight = max( max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
+        pMI->itemHeight = Max( Max( checkSize.Height(), bmpSize.Height() ), strSize.cy );
         pMI->itemHeight += 4;
 
         DeleteObject( SelectObject(hdc, hfntOld) );
