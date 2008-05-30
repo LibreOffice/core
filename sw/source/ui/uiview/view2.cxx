@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,7 +182,9 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
+
 #include <PostItMgr.hxx>
+#include <postit.hxx>
 
 // #ifndef _FRMMGR_HXX
 // #include <frmmgr.hxx>
@@ -967,7 +969,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_ATTR_LANGUAGE:
+        case SID_ATTR_LANGUAGE  :
         if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, FALSE, &pItem))
         {
             SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
