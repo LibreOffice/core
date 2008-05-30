@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,9 +71,14 @@ struct ImplRegionInfo
 
 struct ImplRegionBase
 {
+public:
+    ImplRegionBase( int nCount = 1 ); // TODO: replace manual refcounting
+    virtual ~ImplRegionBase();
+public:
     ULONG               mnRefCount;
     ULONG               mnRectCount;
     PolyPolygon*        mpPolyPoly;
+    basegfx::B2DPolyPolygon* mpB2DPolyPoly;
 };
 
 class ImplRegion : public ImplRegionBase
@@ -87,6 +92,7 @@ private:
 public:
                         ImplRegion();
                         ImplRegion( const PolyPolygon& rPolyPoly );
+                        ImplRegion( const basegfx::B2DPolyPolygon& );
                         ImplRegion( const ImplRegion& rImplRegion );
                         ~ImplRegion();
 
