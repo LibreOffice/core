@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shutdowniconaqua.mm,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return true;
 }
 
-static NSMenuItem* pDefMenu = nil;
+static NSMenuItem* pDefMenu = nil, *pDockSubMenu = nil;
 static QSMenuExecute* pExecute = nil;
 
 static std::set< OUString > aShortcuts;
@@ -115,7 +115,7 @@ static NSString* getAutoreleasedString( const rtl::OUString& rStr )
     return [[[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()] autorelease];
 }
 
-static void appendMenuItem( NSMenu* pMenu, const rtl::OUString& rTitle, int nTag )
+static void appendMenuItem( NSMenu* pMenu, NSMenu* pDockMenu, const rtl::OUString& rTitle, int nTag )
 {
     if( ! rTitle.getLength() )
         return;
@@ -141,6 +141,16 @@ static void appendMenuItem( NSMenu* pMenu, const rtl::OUString& rTitle, int nTag
     [pItem setTarget: pExecute];
     [pItem setEnabled: YES];
     [pMenu addItem: pItem];
+
+    // create a similar entry in the dock menu
+    pItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( rTitle )
+                                action: @selector(executeMenuItem:)
+                                keyEquivalent: @""
+                        ];
+    [pItem setTag: nTag];
+    [pItem setTarget: pExecute];
+    [pItem setEnabled: YES];
+    [pDockMenu addItem: pItem];
 }
 
 
@@ -167,8 +177,11 @@ void aqua_init_systray()
             
             pExecute = [[QSMenuExecute alloc] init];
             pDefMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: NULL keyEquivalent: @""];
+            pDockSubMenu = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) ) action: NULL keyEquivalent: @""];
             NSMenu* pMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) )];
             [pMenu setAutoenablesItems: NO];
+            NSMenu* pDockMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( pShutdownIcon->GetResString( STR_QUICKSTART_FILE ) )];
+            [pDockMenu setAutoenablesItems: NO];
             
             // collect the URLs of the entries in the File/New menu
             SvtModuleOptions	aModuleOptions;
@@ -216,18 +229,29 @@ void aqua_init_systray()
                     // menu => also let not appear it in the quickstarter
                     continue;
         
-                appendMenuItem( pMenu, pShutdownIcon->GetUrlDescription( sURL ), aMenuItems[i].nMenuTag );
+                appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetUrlDescription( sURL ), aMenuItems[i].nMenuTag );
             }
 
             // insert the remaining menu entries
-            appendMenuItem( pMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), MI_TEMPLATE );
-            appendMenuItem( pMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), MI_OPEN );
+            appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), MI_TEMPLATE );
+            appendMenuItem( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), MI_OPEN );
             
             [pDefMenu setSubmenu: pMenu];
             [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pDefMenu];
+
+            if( [NSApp respondsToSelector: @selector(addFallbackMenuItem:)] )
+            {
+                [pDockSubMenu setSubmenu: pDockMenu];
+                // insert a separator to the dock menu
+                [NSApp performSelector:@selector(addDockMenuItem:) withObject: [NSMenuItem separatorItem]];
+                // and now add the submenu
+                [NSApp performSelector:@selector(addDockMenuItem:) withObject: pDockSubMenu];
+            }
+            else
+                DBG_ERROR( "addDockMenuItem selector failed on NSApp\n" );
         }
         else
-            DBG_ERROR( "selector failed on NSApp\n" );
+            DBG_ERROR( "addFallbackMenuItem selector failed on NSApp\n" );
     }
 }
 
