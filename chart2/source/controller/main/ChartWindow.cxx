@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartWindow.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,8 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
     this->SetSmartHelpId( SmartId( HID_SCH_WIN_DOCUMENT ) );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
+    // chart does not depend on exact pixel painting => enable antialiased drawing
+    SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
 }
 
 ChartWindow::~ChartWindow()
