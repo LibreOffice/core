@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: datanavi.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,6 +175,9 @@
 #define ED_INST_URL             14
 #define PB_FILEPICKER           15
 #define CB_INST_LINKINST        16
+
+// class AddModelDialog
+#define CB_MODIFIES_DOCUMENT    1
 
 #endif //_SVX_DATANAVI_HRC
 
