@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.mm,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 
 #include "vcl/svapp.hxx"
  
-static USHORT ImplGetModifierMask( unsigned int nMask, bool bKeyEvent )
+static USHORT ImplGetModifierMask( unsigned int nMask )
 {
     USHORT nRet = 0;
     if( (nMask & NSShiftKeyMask) != 0 )
@@ -48,7 +48,7 @@ static USHORT ImplGetModifierMask( unsigned int nMask, bool bKeyEvent )
     if( (nMask & NSControlKeyMask) != 0 )
         nRet |= KEY_MOD3;
     if( (nMask & NSAlternateKeyMask) != 0 )
-        nRet |= bKeyEvent ? KEY_MOD3 : KEY_MOD2;
+        nRet |= KEY_MOD2;
     if( (nMask & NSCommandKeyMask) != 0 )
         nRet |= KEY_MOD1;
     return nRet;
@@ -61,7 +61,7 @@ static USHORT ImplMapCharCode( sal_Unicode aCode )
         0, 0, 0, 0, 0, 0, 0, 0,
         KEY_BACKSPACE, KEY_TAB, KEY_RETURN, 0, 0, KEY_RETURN, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, KEY_ESCAPE, 0, 0, 0, 0,
+        0, KEY_TAB, 0, KEY_ESCAPE, 0, 0, 0, 0,
         KEY_SPACE, 0, 0, 0, 0, 0, 0, 0,
         0, 0, KEY_MULTIPLY, KEY_ADD, KEY_COMMA, KEY_SUBTRACT, KEY_POINT, KEY_DIVIDE,
         KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7,
@@ -73,8 +73,16 @@ static USHORT ImplMapCharCode( sal_Unicode aCode )
         KEY_QUOTELEFT, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G,
         KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
         KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
-        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, KEY_TILDE, 0
+        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, KEY_TILDE, KEY_BACKSPACE
     };
+    
+    // Note: the mapping 0x7f should by rights be KEY_DELETE
+    // however if you press "backspace" 0x7f is reported
+    // whereas for "delete" 0xf728 gets reported
+    
+    // Note: the mapping of 0x19 to KEY_TAB is because for unknown reasons
+    // tab alone is reported as 0x09 (as expected) but shift-tab is
+    // reported as 0x19 (end of medium)
     
     static USHORT aFunctionKeyCodeMap[ 128 ] =
     {
@@ -83,7 +91,7 @@ static USHORT ImplMapCharCode( sal_Unicode aCode )
         KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20,
         KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_F26, 0, 0,
         0, 0, 0, 0, 0, 0, 0, KEY_INSERT,
-        0, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
+        KEY_DELETE, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
         0, 0, 0, 0, 0, KEY_MENU, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, KEY_UNDO, KEY_REPEAT, KEY_FIND, KEY_HELP, 0,
@@ -432,7 +440,7 @@ static const struct ExceptionalKey
         NSPoint aPt = [NSEvent mouseLocation];
         pDispatchFrame->CocoaToVCL( aPt );
         
-        USHORT nModMask = ImplGetModifierMask( [pEvent modifierFlags], false );
+        USHORT nModMask = ImplGetModifierMask( [pEvent modifierFlags] );
         // #i82284# emulate ctrl left
         if( nModMask == KEY_MOD3 && nButton == MOUSE_LEFT )
         {
@@ -561,6 +569,20 @@ static const struct ExceptionalKey
         mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
 
+        // merge pending scroll wheel events
+        float dX = 0.0;
+        float dY = 0.0;
+        for(;;)
+        {
+            dX += [pEvent deltaX];
+    	    dY += [pEvent deltaY];
+            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
+                untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
+            if( !pNextEvent )
+                break;
+            pEvent = pNextEvent;
+        }
+
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
 
@@ -568,14 +590,12 @@ static const struct ExceptionalKey
         aEvent.mnTime   = mpFrame->mnLastEventTime;
         aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
         aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags, false ); // FIXME: button code
+        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
 
         // --- RTL --- (mirror mouse pos)
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
-        float dX = [pEvent deltaX];
-        float dY = [pEvent deltaY];
         if( dX != 0.0 )
         {
             aEvent.mnDelta = static_cast<long>(floor(dX));
@@ -736,78 +756,191 @@ static const struct ExceptionalKey
 
 -(void)insertTab: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_TAB character: '\t'];
+    [self sendKeyInputAndReleaseToFrame: KEY_TAB character: '\t' modifiers: 0];
 }
 
 -(void)insertBacktab: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: (KEY_TAB | KEY_SHIFT) character: '\t'];
+    [self sendKeyInputAndReleaseToFrame: (KEY_TAB | KEY_SHIFT) character: '\t' modifiers: 0];
 }
 
 -(void)moveLeft: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0];
+    [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0 modifiers: 0];
+}
+
+-(void)moveLeftAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0 modifiers: NSShiftKeyMask];
+}
+
+-(void)moveBackwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)moveRight: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0];
+    [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0 modifiers: 0];
+}
+
+-(void)moveRightAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0 modifiers: NSShiftKeyMask];
+}
+
+-(void)moveForwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_FORWARD character: 0  modifiers: 0];
+}
+
+-(void)moveWordBackward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
+-(void)moveWordBackwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_BACKWARD character: 0  modifiers: 0];
+}
+
+-(void)moveWordForward: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_WORD_FORWARD character: 0  modifiers: 0];
+}
+
+-(void)moveWordForwardAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD_FORWARD character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToEndOfParagraph: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)moveToBeginningOfParagraph: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
 }
 
 -(void)moveUp: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_UP character: 0];
+    [self sendKeyInputAndReleaseToFrame: KEY_UP character: 0 modifiers: 0];
 }
 
 -(void)moveDown: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_DOWN character: 0];
+    [self sendKeyInputAndReleaseToFrame: KEY_DOWN character: 0 modifiers: 0];
 }
 
 -(void)insertNewline: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n'];
+    [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n' modifiers: 0];
 }
 
 -(void)deleteBackward: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b'];
+    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
 }
 
 -(void)deleteForward: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f];
+    [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f modifiers: 0];
 }
 
 -(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b'];
+    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b' modifiers: 0];
 }
 
 -(void)deleteWordBackward: (id)aSender
 {
-    // FIXME: this is configurable in tools->customize; just entering
-    // the default here. We need a real solution in the long term
-    [self sendKeyInputAndReleaseToFrame: (KEY_MOD1 | KEY_BACKSPACE) character: '\b'];
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_BACKWARD character: 0  modifiers: 0];
 }
 
 -(void)deleteWordForward: (id)aSender
 {
-    // FIXME: this is configurable in tools->customize; just entering
-    // the default here. We need a real solution in the long term
-    [self sendKeyInputAndReleaseToFrame: (KEY_MOD1 | KEY_DELETE) character: 0x7f];
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_WORD_FORWARD character: 0  modifiers: 0];
+}
+
+-(void)deleteToBeginningOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)deleteToEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)deleteToBeginningOfParagraph: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)deleteToEndOfParagraph: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)insertLineBreak: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_LINEBREAK character: 0  modifiers: 0];
+}
+
+-(void)insertParagraphSeparator: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::INSERT_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)selectWord: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_WORD character: 0  modifiers: 0];
+}
+
+-(void)selectLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_LINE character: 0  modifiers: 0];
+}
+
+-(void)selectParagraph: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_PARAGRAPH character: 0  modifiers: 0];
+}
+
+-(void)selectAll: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_ALL character: 0  modifiers: 0];
 }
 
 -(void)cancelOperation: (id)aSender
 {
-    [self sendKeyInputAndReleaseToFrame: KEY_ESCAPE character: 0x1b];
+    [self sendKeyInputAndReleaseToFrame: KEY_ESCAPE character: 0x1b modifiers: 0];
 }
 
 -(void)noop: (id)aSender
 {
+    if( ! mbKeyHandled )
+        [self sendSingleCharacter:mpLastEvent];
 }
 
 -(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
+{
+    [self sendKeyInputAndReleaseToFrame: nKeyCode character: aChar modifiers: mpFrame->mnLastModifierFlags];
+}
+
+-(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar modifiers: (unsigned int)nMod
 {
     YIELD_GUARD;
     
@@ -815,7 +948,7 @@ static const struct ExceptionalKey
     {
         SalKeyEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnCode           = nKeyCode | ImplGetModifierMask( mpFrame->mnLastModifierFlags, true );
+        aEvent.mnCode           = nKeyCode | ImplGetModifierMask( nMod );
         aEvent.mnCharCode       = aChar;
         aEvent.mnRepeat         = FALSE;
         mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
@@ -835,7 +968,10 @@ static const struct ExceptionalKey
         USHORT nKeyCode = ImplMapCharCode( keyChar );
         if( nKeyCode != 0 )
         {
-            [self sendKeyInputAndReleaseToFrame: nKeyCode character: 0];
+            // don't send unicodes in the private use area
+            if( keyChar >= 0xf700 && keyChar < 0xf780 )
+                keyChar = 0;
+            [self sendKeyInputAndReleaseToFrame: nKeyCode character: keyChar];
             mbInKeyInput = false;
 
             return TRUE;
@@ -963,15 +1099,19 @@ static const struct ExceptionalKey
 
 - (void)doCommandBySelector:(SEL)aSelector
 {
-    // check for special characters with OOo way
-    if ( [self sendSingleCharacter:mpLastEvent] )
+    if( AquaSalFrame::isAlive( mpFrame ) )
     {
-        mbKeyHandled = true;
-        return;
+        if( (mpFrame->mnICOptions & SAL_INPUTCONTEXT_TEXT) != 0 &&
+            aSelector != NULL && [self respondsToSelector: aSelector] )
+        {
+            [self performSelector: aSelector];
+        }
+        else
+        {
+            [self sendSingleCharacter:mpLastEvent];
+        }
     }
 
-    // Cocoa way
-    (void)[self performSelector: aSelector];
     mbKeyHandled = true;
 }
 
