@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filedlghelper.cxx,v $
- * $Revision: 1.142 $
+ * $Revision: 1.143 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1255,9 +1255,12 @@ void FileDialogHelper_Impl::preExecute()
     implInitializeFileName( );
     // #106079# / 2002-12-09 / fs@openoffice.org
 
-#if !(defined(MACOSX) && defined(QUARTZ))
+#if !(defined(MACOSX) && defined(QUARTZ)) && !defined(WNT)
     // allow for dialog implementations which need to be executed before they return valid values for
     // current filter and such
+
+    // On Vista (at least SP1) it's the same as on MacOSX, the modal dialog won't let message pass
+    // through before it returns from execution
     mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
 #else
     // However, the Mac OS X implementation's pickers run modally in execute and so the event doesn't
