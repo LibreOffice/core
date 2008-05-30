@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -606,7 +606,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
         {
             // [ FIXME] : instead of use a value, vcl can retrieve corect values on the fly (to be implemented)
             const int PB_Mini_Height = 15;
-            const int PB_Norm_Height = 20;
+            const int PB_Norm_Height = 21;
 
             HIThemeButtonDrawInfo aPushInfo;
             aPushInfo.version = 0;
@@ -626,7 +626,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 aPushInfo.kind = kThemePushButtonMini;
                 nPaintHeight = PB_Mini_Height;
             }
-            else if( rc.size.height < (PB_Norm_Height + PB_Norm_Height/2) )
+            else if( pPBVal->mbSingleLine || rc.size.height < (PB_Norm_Height + PB_Norm_Height/2) )
             {
                 aPushInfo.kind = kThemePushButtonNormal;
                 nPaintHeight = PB_Norm_Height;
