@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salframeview.h,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +103,7 @@
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
 -(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
+-(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
 -(MacOSBOOL)sendSingleCharacter:(NSEvent*)pEvent;
 -(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent;
 /*
@@ -112,9 +113,21 @@
 -(void)insertTab: (id)aSender;
 -(void)insertBacktab: (id)aSender;
 -(void)moveLeft: (id)aSender;
+-(void)moveLeftAndModifySelection: (id)aSender;
+-(void)moveBackwardAndModifySelection: (id)aSender;
 -(void)moveRight: (id)aSender;
+-(void)moveRightAndModifySelection: (id)aSender;
+-(void)moveForwardAndModifySelection: (id)aSender;
 -(void)moveUp: (id)aSender;
 -(void)moveDown: (id)aSender;
+-(void)moveWordBackward: (id)aSender;
+-(void)moveWordBackwardAndModifySelection: (id)aSender;
+-(void)moveWordForward: (id)aSender;
+-(void)moveWordForwardAndModifySelection: (id)aSender;
+-(void)moveToEndOfLine: (id)aSender;
+-(void)moveToBeginningOfLine: (id)aSender;
+-(void)moveToEndOfParagraph: (id)aSender;
+-(void)moveToBeginningOfParagraph: (id)aSender;
 -(void)insertNewline: (id)aSender;
 -(void)deleteBackward: (id)aSender;
 -(void)deleteForward: (id)aSender;
@@ -122,6 +135,16 @@
 -(void)deleteBackwardByDecomposingPreviousCharacter: (id)aSender;
 -(void)deleteWordBackward: (id)aSender;
 -(void)deleteWordForward: (id)aSender;
+-(void)deleteToBeginningOfLine: (id)aSender;
+-(void)deleteToEndOfLine: (id)aSender;
+-(void)deleteToBeginningOfParagraph: (id)aSender;
+-(void)deleteToEndOfParagraph: (id)aSender;
+-(void)insertLineBreak: (id)aSender;
+-(void)insertParagraphSeparator: (id)aSender;
+-(void)selectWord: (id)aSender;
+-(void)selectLine: (id)aSender;
+-(void)selectParagraph: (id)aSender;
+-(void)selectAll: (id)aSender;
 -(void)noop: (id)aSender;
 /* set the correct pointer for our view */
 -(void)resetCursorRects;
