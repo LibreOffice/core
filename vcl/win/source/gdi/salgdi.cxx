@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -938,6 +938,14 @@ BOOL WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
 
 // -----------------------------------------------------------------------
 
+bool WinSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+{
+    // TODO: implement and advertise OutDevSupport_B2DClip support
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
 void WinSalGraphics::EndSetClipRegion()
 {
     // create clip region from ClipRgnData
@@ -1414,6 +1422,22 @@ void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoint
         delete [] pWinPointAry;
     if ( pWinPointAryAry != aWinPointAryAry )
         delete [] pWinPointAryAry;
+}
+
+// -----------------------------------------------------------------------
+
+bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+{
+    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool WinSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/ )
+{
+    // TODO: implement and advertise OutDevSupport_B2DDraw support
+    return false;
 }
 
 // -----------------------------------------------------------------------
