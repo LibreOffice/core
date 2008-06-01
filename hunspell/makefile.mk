@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,7 @@ PATCH_FILE_NAME=hunspell-1.1.12.patch
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --without-ui --without-readline --with-pic
+CONFIGURE_FLAGS= --disable-shared --with-pic
 
 BUILD_ACTION=make && make check
 
