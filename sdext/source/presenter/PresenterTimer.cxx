@@ -8,7 +8,7 @@
  *
  * $RCSfile: PresenterTimer.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -318,7 +318,7 @@ void SAL_CALL TimerScheduler::run (void)
         // Restrict access to the maScheduledTasks member to one, mutext
         // guarded, block.
         SharedTimerTask pTask;
-        sal_Int64 nDifference;
+        sal_Int64 nDifference = 0;
         {
             ::osl::MutexGuard aGuard (maTaskContainerMutex);
 
