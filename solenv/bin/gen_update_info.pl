@@ -12,7 +12,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: gen_update_info.pl,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,7 +39,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 # main
 #
 
-my($product, $buildid, $id, $os, $arch, $lstfile, $languages, $productname, $productversion);
+my($product, $buildid, $id, $os, $arch, $lstfile, $languages, $productname, $productversion, $productextension);
 
 while ($_ = $ARGV[0], /^-/) {
     shift;
@@ -95,6 +95,11 @@ while (<LSTFILE>) {
         s/.*PRODUCTVERSION //;
         $productversion = $_;
     }
+    if( /\bPRODUCTEXTENSION / ) {
+        chomp;
+        s/.*PRODUCTEXTENSION //;
+        $productextension = $_;
+    }
 }
 
 close(LSTFILE);
@@ -119,6 +124,11 @@ while (<SOURCE>) {
    s/buildid></buildid>$buildid</;
    s/os></os>$os</;
    s/arch></arch>$arch</;
+   if ( $productextension ) {
+       s/extension></extension>$productextension</;
+   } else {
+       next if ( /extension></ );
+   }
    s/version></version>$productversion</;
    s/name></name>$productname</;
    print;
