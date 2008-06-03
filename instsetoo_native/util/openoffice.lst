@@ -74,6 +74,7 @@ OpenOffice
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
@@ -134,6 +135,7 @@ OpenOffice_wJRE
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
@@ -199,6 +201,7 @@ OpenOffice_Dev
 			RELATIVE_PATHES_IN_DDF 1
 			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
 			STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
@@ -237,6 +240,7 @@ URE
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
         }
         active 1
         compression 5
@@ -270,6 +274,7 @@ OpenOffice_SDK
             RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
         }
         active 1
         compression 5
@@ -327,6 +332,7 @@ BrOffice
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
@@ -387,6 +393,7 @@ BrOffice_wJRE
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
@@ -451,6 +458,7 @@ BrOffice_Dev
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/getmore?cid=920794
             STARTCENTER_INFO_URL http://www.openoffice.org
+            STARTCENTER_TEMPLREP_URL http://extensions.services.openoffice.org/taxonomy/term/36
 		}
 		active			1
 		compression		5
