@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.66 $
+# $Revision: 1.67 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,10 +73,6 @@ SCPDEFS+=-DGTK_TWO_FOUR
 
 .IF "$(ENABLE_SYSTRAY_GTK)" != ""
 SCPDEFS+=-DENABLE_SYSTRAY_GTK
-.ENDIF
-
-.IF "$(ENABLE_PASF)" != ""
-SCPDEFS+=-DUSE_PASF
 .ENDIF
 
 .IF "$(ENABLE_KDE)" != ""
