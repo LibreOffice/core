@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mox $ $Date: 2008-04-14 20:14:30 $
+#   last change: $Author: mox $ $Date: 2008-06-03 04:20:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ all:
 all:
     @echo "Nothing to do, using system cairo."
 
-.ELIF "$(BUILD_CAIRO)" == "YES"
+.ELIF "$(BUILD_CAIRO)" != ""
 all:
        @echo "Not using prebuilt binaries, building cairo from source."
 
