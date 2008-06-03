@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +135,7 @@ namespace framework
         static const int nItemId_Extensions = 1;
         static const int nItemId_Reg = 2;
         static const int nItemId_Info = 3;
+        static const int nItemId_TplRep = 4;
         static const int nShadowTop = 32;
         static const int nShadowLeft = 35;
         static const int nShadowRight = 45;
