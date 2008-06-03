@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,8 @@
 #define STR_BACKING_REGHELP                 16
 #define BMP_BACKING_INFO                    17
 #define STR_BACKING_INFOHELP                18
+#define BMP_BACKING_TPLREP                  19
+#define STR_BACKING_TPLREP                  20
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 #define RES_BACKING_IMAGES_HC               (DLG_BACKING+2)
