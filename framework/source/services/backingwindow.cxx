@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: backingwindow.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +157,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     String aRegHelpText( FwkResId( STR_BACKING_REGHELP ) );
     BitmapEx aInfoImage( FwkResId( BMP_BACKING_INFO ) );
     String aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
+    BitmapEx aTplRepImage( FwkResId( BMP_BACKING_TPLREP ) );
+    String aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
 
     // clean up resource stack
     FreeResource();
@@ -168,6 +170,12 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maButtonImageSize.Height() += 12;
 
     // insert toolbox items
+    maToolbox.InsertItem( nItemId_TplRep, Image( aTplRepImage ) );
+    maToolbox.SetItemText( nItemId_TplRep, aTplRepHelpText );
+    maToolbox.SetQuickHelpText( nItemId_TplRep, aTplRepHelpText );
+    maToolbox.SetItemCommand( nItemId_TplRep, String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateRepository" ) ) );
+    maToolbox.ShowItem( nItemId_TplRep );
+
     maToolbox.InsertItem( nItemId_Extensions, Image( aExtImage ) );
     maToolbox.SetQuickHelpText( nItemId_Extensions, aExtHelpText );
     maToolbox.SetItemText( nItemId_Extensions, aExtHelpText );
@@ -649,6 +657,11 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
     case nItemId_Info:
         pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
         pNode = "InfoURL";
+        break;
+    case nItemId_TplRep:
+        pNodePath = "/org.openoffice.Office.Common/Help/StartCenter";
+        pNode = "TemplateRepositoryURL";
+        break;
     default:
         break;
     }
