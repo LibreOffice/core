@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcs,v $
- * $Revision: 1.150 $
+ * $Revision: 1.151 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3362,6 +3362,12 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<prop oor:name="InfoURL" oor:type="xs:string">
 					<info>
 						<desc>Contains a string specifying the URL to be browsed for information about the product</desc>
+					</info>
+					<value/>
+				</prop>
+				<prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
+					<info>
+						<desc>Contains a string specifying the URL to be browsed for additional template documents</desc>
 					</info>
 					<value/>
 				</prop>
