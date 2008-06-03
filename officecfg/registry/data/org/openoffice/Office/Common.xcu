@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Common.xcu,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,6 +116,9 @@
         </prop>
         <prop oor:name="InfoURL" oor:type="xs:string">
             <value>${STARTCENTER_INFO_URL}</value>
+        </prop>
+        <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
+            <value>${STARTCENTER_TEMPLREP_URL}</value>
         </prop>
     </node>
     <node oor:name="Registration">
