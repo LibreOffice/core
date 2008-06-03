@@ -57,7 +57,7 @@
 		<Paragraph id="A13">
 		  <Text id="empty" xml:lang="en-US"/>
 			<Text id="A13a" xml:lang="en-US">
-			You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors aand corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</Text>
+			You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</Text>
 			<Text id="A13b" xml:lang="en-US" url="ahead">If you appreciate their efforts, and would like to ensure OpenOffice.org continues into the future, please consider contributing to the project - see </Text>
 			<Text id="A13c" xml:lang="en-US" url="true">http://contributing.openoffice.org</Text>
 			<Text id="A13d" xml:lang="en-US"> for details. Everyone has a contribution to make.</Text>
