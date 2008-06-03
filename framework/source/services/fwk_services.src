@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwk_services.src,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,6 +107,14 @@ Window DLG_BACKING
     String STR_BACKING_INFOHELP
     {
         Text [ en-US ] = "Get more information about %PRODUCTNAME";
+    };
+    Bitmap BMP_BACKING_TPLREP
+    {
+        File = "addtemplate_32.png";
+    };
+    String STR_BACKING_TPLREP
+    {
+        Text [ en-US ] = "Get more templates for %PRODUCTNAME";
     };
 };
 
