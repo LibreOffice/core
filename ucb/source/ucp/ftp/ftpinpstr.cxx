@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ftpinpstr.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +67,8 @@ FTPInputStream::FTPInputStream(FILE* tmpfl)
 
 FTPInputStream::~FTPInputStream()
 {
-    fclose(m_tmpfl);
+    if ( 0 != m_tmpfl)
+        fclose(m_tmpfl);
 }
 
 
