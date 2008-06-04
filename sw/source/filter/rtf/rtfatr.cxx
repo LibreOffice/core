@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1428,7 +1428,7 @@ void ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
     const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
     unsigned long nSize, SwRTFWriter &rWrt)
 {
-    bool bIsWMF = pBLIPType == sRTF_WMETAFILE ? true : false;
+    bool bIsWMF = (const char *)pBLIPType == (const char *)sRTF_WMETAFILE ? true : false;
     if (pBLIPType && nSize && pGraphicAry)
     {
         rWrt.Strm() << '{' << sRTF_PICT;
@@ -1573,7 +1573,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
      the wmf format wrapped in nonshppict, so as to keep wordpad happy. If its
      a wmf already then we don't need any such wrapping
     */
-    bool bIsWMF = pBLIPType == sRTF_WMETAFILE ? true : false;
+    bool bIsWMF = (const sal_Char*)pBLIPType == (const sal_Char*)sRTF_WMETAFILE ? true : false;
     if (!bIsWMF)
         OutComment(rRTFWrt, sRTF_SHPPICT);
 
