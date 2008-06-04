@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filedlghelper.cxx,v $
- * $Revision: 1.143 $
+ * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1062,7 +1062,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
 
 
         //Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 3 );
-        Sequence < Any > aInitArguments( mbSystemPicker ? 1 : 3 );
+        Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 2 : 3 );
 
         // This is a hack. We currently know that the internal file picker implementation
         // supports the extended arguments as specified below.
@@ -1080,18 +1080,19 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
                                     makeAny( nTemplateDescription )
                                 );
 
+            ::rtl::OUString sStandardDirTemp = ::rtl::OUString( sStandardDir );
+
+            aInitArguments[1] <<= NamedValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ),
+                                    makeAny( sStandardDirTemp )
+                                );
             if ( mpPreferredParentWindow )
-                aInitArguments[1] <<= NamedValue(
+                aInitArguments[2] <<= NamedValue(
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
 
-            ::rtl::OUString sStandardDirTemp = ::rtl::OUString( sStandardDir );
 
-            aInitArguments[2] <<= NamedValue(
-                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ),
-                                    makeAny( sStandardDirTemp )
-                                );
         }
 
         try
