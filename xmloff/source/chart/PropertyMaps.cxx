@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PropertyMaps.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLErrorIndicatorPropertyHdl.hxx"
+#include "XMLErrorBarStylePropertyHdl.hxx"
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
 #include <com/sun/star/chart/ChartAxisMarks.hpp>
@@ -100,7 +101,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_ERROR_BAR_STYLE:
                 // here we have a constant rather than an enum
-                pHdl = new XMLEnumPropertyHdl( aXMLChartErrorBarStyleEnumMap,
+                pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
                 break;
 
@@ -409,8 +410,14 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     rProperty.maValue >>= nValue;
                     if((( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE ))
                     {
-                        if(( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
-                            sValueBuffer.append( GetXMLToken( XML_VALUE_AND_PERCENTAGE ));
+                        if( ( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
+                        {
+                            const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                            if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+                                sValueBuffer.append( GetXMLToken( XML_PERCENTAGE ));
+                            else
+                                sValueBuffer.append( GetXMLToken( XML_VALUE_AND_PERCENTAGE ));
+                        }
                         else
                             sValueBuffer.append( GetXMLToken( XML_VALUE ));
                     }
