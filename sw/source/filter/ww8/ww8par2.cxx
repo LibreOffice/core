@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +126,7 @@ struct WW8TabBandDesc
     bool bLEmptyCol;    // SW: Links eine leere Zusatz-Spalte
     bool bREmptyCol;    // SW: dito rechts
     bool bCantSplit;
+    bool bCantSplit90;
     WW8_TCell* pTCs;
     BYTE nOverrideSpacing[MAX_COL + 1];
     short nOverrideValues[MAX_COL + 1][4];
@@ -1616,7 +1617,7 @@ enum wwTableSprm
 {
     sprmNil,
 
-    sprmTTextFlow, sprmTFCantSplit, sprmTJc, sprmTFBiDi, sprmTDefTable,
+    sprmTTextFlow, sprmTFCantSplit, sprmTFCantSplit90,sprmTJc, sprmTFBiDi, sprmTDefTable,
     sprmTDyaRowHeight, sprmTDefTableShd, sprmTDxaLeft, sprmTSetBrc,
     sprmTDxaCol, sprmTInsert, sprmTDelete, sprmTTableHeader,
     sprmTDxaGapHalf, sprmTTableBorders,
@@ -1637,6 +1638,8 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTFCantSplit;
                 case 0x3404:
                     return sprmTTableHeader;
+                case 0x3466:
+                    return sprmTFCantSplit90;
                 case 0x5400:
                     return sprmTJc;
                 case 0x560B:
@@ -1819,6 +1822,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         break;
                     case sprmTFCantSplit:
                         pNewBand->bCantSplit = *pParams;
+                        bClaimLineFmt = true;
+                        break;
+                    case sprmTFCantSplit90:
+                        pNewBand->bCantSplit90 = *pParams;
                         bClaimLineFmt = true;
                         break;
                     case sprmTTableBorders:
@@ -2395,7 +2402,7 @@ void WW8TabDesc::CreateSwTable()
     // da sich die (identischen) Zeilen eines Bandes prima duplizieren lassen
     pTable = pIo->rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, FALSE, FALSE );
+            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, FALSE, TRUE );
 
     ASSERT(pTable && pTable->GetFrmFmt(), "insert table failed");
     if (!pTable || !pTable->GetFrmFmt())
@@ -2525,7 +2532,6 @@ void WW8TabDesc::MergeCells()
             for( short j = 0; j < pActBand->nRows; j++, nRow++ )
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
-                    SwTableBox* pTargetBox;
                     WW8SelBoxInfoPtr pActMGroup = 0;
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
@@ -2627,36 +2633,6 @@ void WW8TabDesc::MergeCells()
 
                         // 3. und in Gruppen-Array eintragen
                         pMergeGroups->Insert(pActMGroup, pMergeGroups->Count());
-
-                        // 4. Target-Box anlegen und als 0. in Merge-Group
-                        // setzen
-                        pIo->rDoc.GetNodes().InsBoxen(pTblNd, pTabLine,
-                            (SwTableBoxFmt*)pTabBox->GetFrmFmt(),
-                            (SwTxtFmtColl*)pIo->rDoc.GetDfltTxtFmtColl(), 0,
-                            nCol );
-
-                        pTargetBox = (*pTabBoxes)[ nCol ];
-
-                        // eingefuegte Box wieder aus der Row entfernen
-                        // (wird vom Merge() dann endgueltig richtig eingebaut)
-                        pTabBoxes->Remove( nCol );
-
-                        // und ab damit in die Merge-Group
-                        pActMGroup->Insert( pTargetBox, pActMGroup->Count() );
-                        //
-                        // 5. Target-Box formatieren
-                        //
-                        pTargetBox->SetUpper( 0 );
-
-                        // eigenes Frame-Format fuer diese Box anlegen
-                        SwFrmFmt* pNewFrmFmt = pTargetBox->ClaimFrmFmt();
-
-                        // Border der O-L-Box der Gruppe wird Border der
-                        // Targetbox
-                        pNewFrmFmt->SetAttr( pTabBox->GetFrmFmt()->GetBox() );
-
-                        pNewFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                            pActMGroup->nGroupWidth ));
                     }
 
                     // ggfs. akt. Box zu einer Merge-Gruppe hinzufuegen (dies
@@ -2731,166 +2707,24 @@ void WW8TabDesc::FinishSwTable()
     if( pMergeGroups )
     {
         // bearbeite alle Merge-Gruppen nacheinander
-        SwTableBox*    pTargetBox;
         WW8SelBoxInfo* pActMGroup;
         USHORT         nActBoxCount;
+
         for (USHORT iGr = 0; iGr < pMergeGroups->Count(); ++iGr)
         {
             pActMGroup   = (*pMergeGroups)[ iGr ];
-            // Anzahl der zu mergenden Boxen PLUS Eins (fuer die TargetBox)
             nActBoxCount = pActMGroup->Count();
 
             if( ( 1 < nActBoxCount ) && pActMGroup && (*pActMGroup)[ 0 ] )
             {
-                // beachten: der 0. Eintrag ist die ebenso wie
-                // die obere, linke Box formatierte Target-Box !!!
-                pTargetBox = (*pActMGroup)[ 0 ];
-                //
-                // Target-Box verschoenern: unteren Rand der letzten Box nehmen
-                //
-                SwFrmFmt* pTargetFrmFmt = pTargetBox->GetFrmFmt();
-                SvxBoxItem aBoxItem( pTargetFrmFmt->GetBox() );
-                aBoxItem.SetLine( (*pActMGroup)[ nActBoxCount-1 ]->
-                    GetFrmFmt()->GetBox().GetBottom(), BOX_LINE_BOTTOM );
-                pTargetFrmFmt->SetAttr( aBoxItem );
-
-                // oeffne Merge-Array mit passender Groesse
-                SwSelBoxes aBoxes( nActBoxCount-1 );
-
-                // alle Boxen dieser Gruppe in aBoxes versammeln
-                aBoxes.Insert( pActMGroup->GetData()+1, nActBoxCount-1 );
-
-                // Sicherheitspruefung: Gruppe mit nur EINER Box fuehrt beim
-                // Mergen zum Programmabsturz, deshalb diesen unsinnigen Fall
-                // abfangen!
-                USHORT nMergeTest;
-                if( 2 == nActBoxCount )
+                const USHORT nRowSpan = pActMGroup->Count();
+                for (USHORT n = 0; n < nRowSpan; ++n)
                 {
-                    // nur 1 Zelle in der Merge-Gruppe: wahrscheinlich Word-Bug
-                    nMergeTest = TBLMERGE_TOOCOMPLEX;
-                }
-                else
-                {   //
-                    // Vorsicht: erstmal austesten,
-                    // ob sich die aBoxes ueberhaupt mergen lassen wuerden...
-                    //
-
-                    // siehe   /SW/INC/TBLSEL.HXX
-                    nMergeTest = CheckMergeSel( aBoxes );
-                    BYTE  nTry = 1;
-                    //
-                    // Falls das Merge so nicht machbar ist,
-                    // pruefen, ob es ginge, wenn wir die letzte Box
-                    // oder die beiden letzten Boxen
-                    // oder gar die drei letzten Boxen
-                    // aus der Merge-Gruppe rausnehmen wuerden
-                    while(     ( TBLMERGE_TOOCOMPLEX == nMergeTest )
-                                    && ( 4 > nTry                          )
-                                    && ( 3 < nActBoxCount /* wichtig ! */  ) )
-                    {
-                        nTry++;
-                        nActBoxCount--;
-                        // letzte Box aus der Gruppe rausnehmen
-                        aBoxes.Remove( nActBoxCount-1 );
-                        // und nachsehen, ob Merge nun moeglich waere
-                        nMergeTest = CheckMergeSel( aBoxes );
-                    }
-                }
-                //
-                // Genug geprueft - wir schreiten zur Tat...
-                //
-                switch( nMergeTest )
-                {
-                case TBLMERGE_OK:
-                    {
-                    //
-                    // You succeed at last...
-                    //
-                    SwTxtNode* pTxtNd;
-                    SwPosition aInsPos( *pTargetBox->GetSttNd() );
-                    SwNodeIndex& rInsPosNd = aInsPos.nNode;
-                    SwPaM aPam( aInsPos );
-
-                    //Move content of cells being merged to new cell
-                    for (USHORT n=1;n<pActMGroup->Count();n++)
-                    {
-                        SwPaM aPamTest( pIo->rDoc.GetNodes() );
-                        //If theres nothing in the cell (after the first) ignore it
-                        if ((n > 1) && (IsEmptyBox( *(*pActMGroup)[n], aPamTest)))
-                            continue;
-                        aPam.GetPoint()->nNode.Assign( *(*pActMGroup)[n]->
-                            GetSttNd()->EndOfSectionNode(), -1 );
-
-                        SwCntntNode* pCNd = aPam.GetCntntNode();
-                        USHORT nL = pCNd ? pCNd->Len() : 0;
-                        aPam.GetPoint()->nContent.Assign( pCNd, nL );
-
-                        SwNodeIndex aSttNdIdx(*(*pActMGroup)[n]->GetSttNd(),1);
-
-                        pIo->AppendTxtNode( *aPam.GetPoint() );
-                        SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
-                        rInsPosNd++;
-
-                        pIo->rDoc.Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
-                        rInsPosNd.Assign( pIo->rDoc.GetNodes(),
-                            rInsPosNd.GetNode().EndOfSectionIndex() - 2 );
-                        pTxtNd = rInsPosNd.GetNode().GetTxtNode();
-                        if( pTxtNd )
-                            aInsPos.nContent.Assign(
-                                    pTxtNd, pTxtNd->GetTxt().Len() );
-                    }
-
-                    SwNodeIndex aIdx( *pTargetBox->GetSttNd()->
-                        EndOfSectionNode(), -1 );
-                    pIo->rDoc.GetNodes().Delete( aIdx, 1 );
-
-                    aPam.GetPoint()->nNode = *pTargetBox->GetSttNd();
-                    aPam.GetPoint()->nContent.Assign( 0, 0 );
-                    SwSelBoxes aDummyBox;
-                    ((SwTable*)pTable)->Merge( &pIo->rDoc, aBoxes, aDummyBox, pTargetBox );
-
-                    }
-                    break;
-                case TBLMERGE_NOSELECTION:
-                    /*NOP*/     // war wohl nix?
-                    break;
-                case TBLMERGE_TOOCOMPLEX:
-                    // Pech: Trotz aller Probiererei geht das Merge immer noch
-                    // nicht!
-                    //
-                    // Beachten: die Daten der Gruppe schlummern bereits in
-                    // der Target-Box. Da kein Merge moeglich ist, setzen wir
-                    // die Target-Box in die Tabelle an die Stelle der oberen
-                    // linken Box.
-                    {
-                        const SwTableBox* pBox  = (*pActMGroup)[ nActBoxCount - 1  ];
-                        SwTableLine*      pLine = (SwTableLine*)pBox->GetUpper();
-
-                        USHORT nPos = pLine->GetTabBoxes().GetPos( pBox );
-
-                        ASSERT( USHRT_MAX != nPos, "GetPos fehlgeschlagen");
-
-                        SwStartNode* pSttNd = (SwStartNode*)pBox->GetSttNd();
-
-                        ASSERT( pSttNd, "Box ohne Start-Node ?!");
-
-                        pTargetBox->ChgFrmFmt(
-                            (SwTableBoxFmt*)pBox->GetFrmFmt() );
-                        pTargetBox->SetUpper(  pLine );
-
-                        // erst die Box loeschen!!
-                        pLine->GetTabBoxes().DeleteAndDestroy( nPos );
-                        // dann die pTargetBox einfuegen
-                        pLine->GetTabBoxes().C40_INSERT( SwTableBox,
-                            pTargetBox, nPos );
-                        // dann die Nodes loeschen!!
-                        pIo->pAnchorStck->Flush();
-                        pIo->rDoc.DeleteSection( pSttNd );
-                    }
-                    break;
-                default:            // was wollen wir denn hier ???
-                    ASSERT(!this,"CheckMergeSel() with undefined return value");
-                    break;
+                    SwTableBox* pCurrentBox = (*pActMGroup)[n];
+                    const long nRowSpanSet = n == 0 ?
+                                               nRowSpan :
+                                             ((-1) * (nRowSpan - n));
+                    pCurrentBox->setRowSpan( nRowSpanSet );
                 }
             }
         }
@@ -3304,7 +3138,14 @@ void WW8TabDesc::AdjustNewBand()
 
     //Word stores 1 for bCantSplit if the row cannot be split, we set true if
     //we can split the row
-    pTabLine->GetFrmFmt()->SetAttr(SwFmtRowSplit(!pActBand->bCantSplit));
+    // bCantSplit: Always true for rows containing merged cells (Word <= 2000 crashes otherwise)
+    // So in case bCantSplit is true, we check for bCantSplit90, which has been introduced for
+    // Word versions >= 2002.
+    bool bSetCantSplit = pActBand->bCantSplit;
+    if(bSetCantSplit)
+        bSetCantSplit = pActBand->bCantSplit90;
+
+    pTabLine->GetFrmFmt()->SetAttr(SwFmtRowSplit(!bSetCantSplit));
 
     short i;    // SW-Index
     short j;    // WW-Index
