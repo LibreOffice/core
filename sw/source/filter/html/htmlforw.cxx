@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlforw.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1012,7 +1012,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     sOut += sOptions;
 
-    if( sHTML_IT_image == pType )
+    if( (const sal_Char *)sHTML_IT_image == (const sal_Char *)pType )
     {
         aTmp = xPropSet->getPropertyValue(
                     OUString::createFromAscii( "ImageURL" ) );
@@ -1077,7 +1077,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         // Wenn Zeichen-Objekte nicht absolut positioniert werden duerfen,
         // das entsprechende Flag loeschen.
-        nFrmOpts |= (sHTML_IT_image == pType
+        nFrmOpts |= ((const sal_Char *)sHTML_IT_image == (const sal_Char *)pType
                             ? HTML_FRMOPTS_IMG_CONTROL_CSS1
                             : HTML_FRMOPTS_CONTROL_CSS1);
     }
@@ -1087,8 +1087,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     if( rHTMLWrt.bCfgOutStyles )
     {
-        sal_Bool bEdit = sHTML_textarea == pTag || sHTML_IT_file == pType ||
-                     sHTML_IT_text == pType;
+        sal_Bool bEdit = sHTML_textarea == pTag || (const sal_Char *)sHTML_IT_file == (const sal_Char *)pType ||
+                     (const sal_Char *)sHTML_IT_text == (const sal_Char *)pType;
 
         SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                              RES_CHRATR_END );
@@ -1317,7 +1317,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         }
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sHTML_textarea, sal_False );
     }
-    else if( sHTML_IT_checkbox == pType || sHTML_IT_radio == pType )
+    else if( (const sal_Char *)sHTML_IT_checkbox == (const sal_Char *)pType || (const sal_Char *)sHTML_IT_radio == (const sal_Char *)pType )
     {
         aTmp = xPropSet->getPropertyValue( OUString::createFromAscii("Label") );
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
