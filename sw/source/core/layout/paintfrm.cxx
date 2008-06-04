@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.117 $
+ * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5611,6 +5611,10 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     {
         return;
     }
+
+    // nothing to do for covered table cells:
+    if( IsCellFrm() && IsCoveredCell() )
+        return;
 
     ViewShell *pSh = pGlobalShell;
 
