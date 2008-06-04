@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docundo.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -747,6 +747,12 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
         sStr = pUndo->GetComment();
     }
 
+    if( sStr.Len() > 82 )
+    {
+        String sTmpStr("...", RTL_TEXTENCODING_ASCII_US);
+        sStr.Erase( 80 );
+        sStr += sTmpStr;
+    }
     return new SwUndoIdAndName(nId, &sStr);
 }
 
