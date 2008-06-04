@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templdlg.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +32,10 @@
 
 #include "svtools/svtdllapi.h"
 
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
+#include <svtools/fixedhyper.hxx>
 
 struct SvtTmplDlg_Impl;
 
@@ -47,6 +46,7 @@ class SvtTemplateWindow;
 class SVT_DLLPUBLIC SvtDocumentTemplateDialog : public ModalDialog
 {
 private:
+    svt::FixedHyperlink aMoreTemplatesLink;
     FixedLine           aLine;
     PushButton          aManageBtn;
     PushButton          aEditBtn;
@@ -63,6 +63,7 @@ private:
     DECL_DLLPRIVATE_LINK(           OKHdl_Impl, PushButton* );
     DECL_DLLPRIVATE_LINK(           OrganizerHdl_Impl, PushButton* );
     DECL_DLLPRIVATE_LINK(           UpdateHdl_Impl, Timer* );
+    DECL_DLLPRIVATE_LINK(           OpenLinkHdl_Impl, svt::FixedHyperlink* );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
