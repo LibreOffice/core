@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appslots.sdi,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,6 +292,10 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl ;
     ]
+        SID_MORE_DICTIONARIES
+        [
+                ExecMethod = OfaExec_Impl ;
+        ]
 }
 
 shell SfxModule
