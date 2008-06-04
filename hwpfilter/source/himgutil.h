@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: himgutil.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* NAME $Id: himgutil.h,v 1.3 2008-04-10 12:04:49 rt Exp $
+/* NAME $Id: himgutil.h,v 1.4 2008-06-04 09:58:33 vg Exp $
  * PURPOSE
  *   WIN32 등의 xv image 라이브러리가 없는 경우,
  *   이미지 파일의 형식을 반환하는데 사용한다.
@@ -70,8 +70,6 @@
 // function declaration
 struct EmPicture;
 
-int  ReadFileType(const char *fname);
-const char *GetPictureFilename(const char *picname);
 /**
  * Extract the name from given object
  * @param empic Object having name to extract

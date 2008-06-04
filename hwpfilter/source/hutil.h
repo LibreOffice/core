@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hutil.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hutil.h,v 1.3 2008-04-10 12:08:30 rt Exp $ */
+/* $Id: hutil.h,v 1.4 2008-06-04 10:00:41 vg Exp $ */
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -47,7 +47,4 @@ void    str2hstr(const char *c, hchar *i);
  */
 int hstrlen(const hchar *s);
 
-#ifndef _WIN32
-char    *strupr(char *str);
-#endif
 #endif                                            /* UTIL_H_*/

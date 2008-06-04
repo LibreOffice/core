@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formula.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,6 @@ private:
      void makePrimary(Node *res);
      void makeIdentifier(Node *res);
      void makeSubSup(Node *res);
-     void makeUnderOver(Node *res);
      void makeFraction(Node *res);
      void makeDecoration(Node *res);
      void makeFunction(Node *res);
@@ -88,8 +87,6 @@ private:
      void makeFence(Node *res);
      void makeBracket(Node *res);
      void makeBlock(Node *res);
-     void makeOperator(Node *res);
-     void makeDelimeter(Node *res);
      void makeBegin(Node *res);
      void makeEnd(Node *res);
 

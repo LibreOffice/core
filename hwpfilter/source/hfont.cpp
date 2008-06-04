@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hfont.cpp,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hfont.cpp,v 1.3 2008-04-10 12:03:32 rt Exp $ */
+/* $Id: hfont.cpp,v 1.4 2008-06-04 09:56:49 vg Exp $ */
 
 #include "precompile.h"
 #include "hwplib.h"
@@ -53,14 +53,6 @@ HWPFont::~HWPFont(void)
         nFonts[ii] = 0;
         delete[]fontnames[ii];
     }
-}
-
-
-int HWPFont::NFonts(int lang)
-{
-    if (!(lang >= 0 && lang < NLanguage))
-        return 0;
-    return nFonts[lang];
 }
 
 

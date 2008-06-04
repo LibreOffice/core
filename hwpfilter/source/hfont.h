@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hfont.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hfont.h,v 1.3 2008-04-10 12:03:48 rt Exp $ */
+/* $Id: hfont.h,v 1.4 2008-06-04 09:57:04 vg Exp $ */
 
 #ifndef _HWPFONTS_H_
 #define _HWPFONTS_H_
@@ -62,11 +62,6 @@ class DLLEXPORT HWPFont
         HWPFont(void);
         ~HWPFont(void);
 
-/**
- * @param lang Language index
- * @returns Count of the font list for given language
- */
-        int       NFonts(int lang);
 /**
  * Adds a font into font list of a language
  * @param lang Language index
