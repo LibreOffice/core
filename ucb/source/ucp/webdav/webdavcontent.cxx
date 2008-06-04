@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavcontent.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2590,6 +2590,18 @@ void Content::transfer(
             sourceURI.SetScheme(
                 rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
         }
+        else if ( aScheme.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
+        {
+            sourceURI.SetScheme(
+                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+        }
+        else if ( aScheme.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
+        {
+            sourceURI.SetScheme(
+                rtl::OUString::createFromAscii( HTTPS_URL_SCHEME ) );
+        }
         else
         {
             if ( !aScheme.equalsAsciiL(
@@ -2610,6 +2622,10 @@ void Content::transfer(
 
         if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+            targetURI.SetScheme(
+                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+        else if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
             targetURI.SetScheme(
                 rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
 
