@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprmap.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,10 +45,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 #define _M_E( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010 }
 
 #define _M_ED( a, p, l, t, c ) \
-    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c }
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010 }
 
 // text properties
 #define MT_E( a, p, l, t, c ) \
@@ -81,7 +81,7 @@ using namespace ::xmloff::token;
     _M_ED( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
 
 #define M_END() \
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
 
 
 XMLPropertyMapEntry aXMLParaPropMap[] =
