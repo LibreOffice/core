@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavprovider.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +59,14 @@ namespace webdav_ucp {
 
 #define HTTPS_URL_SCHEME        "https"
 #define HTTPS_URL_SCHEME_LENGTH 5
+
+#define DAV_URL_SCHEME          "dav"
+#define DAV_URL_SCHEME_LENGTH   3
+
+#define DAVS_URL_SCHEME     "davs"
+#define DAVS_URL_SCHEME_LENGTH  4
+
+
 
 #define FTP_URL_SCHEME "ftp"
 
