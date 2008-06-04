@@ -386,6 +386,8 @@
                     <menu:menuitem menu:id=".uno:ChineseConversion"/>
                     <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
                     <menu:menuitem menu:id=".uno:Hyphenate"/>
+                                        <menu:menuseparator/>
+                                        <menu:menuitem menu:id=".uno:MoreDictionaries"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:WordCountDialog"/>
