@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,3 +47,9 @@
 #define PB_CLOSE        47
 #define ST_NOSUGGESTIONS 48
 #define ST_RESUME       50
+#define ST_SPELLING                 51
+#define ST_SPELLING_AND_GRAMMAR     52
+#define ST_SPELLING_AND_GRAMMAR_VENDORNAME  53
+#define FT_CHECK_GRAMMAR            54
+#define PB_EXPLAIN                  55
+
