@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cfgmerge.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@ ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
 ByteString sActFileName;
+ByteString sFullEntry;
 ByteString sOutputFile;
 ByteString sMergeSrc;
 String sUsedTempFile;
@@ -260,15 +261,16 @@ extern FILE *GetCfgFile()
             // create path to project root
             DirEntry aEntry( String( sInputFileName, RTL_TEXTENCODING_ASCII_US ));
             aEntry.ToAbs();
-            ByteString sFullEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            sFullEntry= ByteString( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
             aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
             aEntry += DirEntry( sPrjRoot );
             ByteString sPrjEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
+//          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-
+//            printf("sActFileName = %s\n",sActFileName.GetBuffer());
             if( !bQuiet )
                 fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
@@ -519,7 +521,10 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             }
             else {
                 ByteString sError( "Missplaced close tag: " );
+                ByteString sInFile(" in file ");
                 sError += sToken;
+                sError += sInFile;
+                sError += sFullEntry;
                 Error( sError );
                 exit ( 13 );
             }
@@ -589,6 +594,9 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
+//  ByteString sError( rError );
+//    sError.Append("Error: In file ");
+//    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
 }
 
