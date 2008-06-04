@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.31 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +59,8 @@ SRC1FILES=\
     optinet2.src    \
     multipat.src    \
     optctl.src      \
-    optchart.src
+    optchart.src    \
+    optimprove.src
 
 #EXCEPTIONSFILES=\
 #	$(SLO)$/optasian.obj		\
