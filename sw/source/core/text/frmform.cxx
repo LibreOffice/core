@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmform.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2147,7 +2147,10 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
         //DBG_LOOP; shadows declaration above.
         //resolved into:
 #if OSL_DEBUG_LEVEL > 1
+#ifndef PRODUCT
+
         DbgLoop aDbgLoop2( (const void*) this );
+#endif
 #endif
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
