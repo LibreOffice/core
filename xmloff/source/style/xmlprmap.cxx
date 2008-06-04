@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlprmap.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     nXMLNameSpace( rMapEntry.mnNameSpace ),
     nType( rMapEntry.mnType ),
     nContextId( rMapEntry.mnContextId ),
+    nEarliestODFVersionForExport( rMapEntry.mnEarliestODFVersionForExport ),
     pHdl( rFactory->GetPropertyHandler( rMapEntry.mnType & MID_FLAG_MASK ) )
 {
 }
@@ -69,6 +70,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     nXMLNameSpace( rEntry.nXMLNameSpace),
     nType( rEntry.nType),
     nContextId( rEntry.nContextId),
+    nEarliestODFVersionForExport( rEntry.nEarliestODFVersionForExport ),
     pHdl( rEntry.pHdl)
 {
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
