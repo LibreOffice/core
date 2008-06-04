@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpaint.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -734,7 +734,9 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
                 //DBG_LOOP; shadows declaration above.
                 //resolved into:
 #if  OSL_DEBUG_LEVEL > 1
+#ifndef PRODUCT
                 DbgLoop aDbgLoop2( (const void*) this );
+#endif
 #endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
