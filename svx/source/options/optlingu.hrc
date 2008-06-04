@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optlingu.hrc,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +36,10 @@
 #define CLB_LINGU_MODULES       112
 #define PB_LINGU_MODULES_EDIT   113
 
-#define FT_LINGU_OPTIONS        121
-#define CLB_LINGU_OPTIONS       122
-#define PB_LINGU_OPTIONS_EDIT   123
+#define FT_LINGU_OPTIONS            121
+#define CLB_LINGU_OPTIONS           122
+#define PB_LINGU_OPTIONS_EDIT       123
+#define FT_LINGU_OPTIONS_MOREDICTS  124
 
 #define STR_CAPITAL_WORDS       201
 #define STR_WORDS_WITH_DIGITS   202
@@ -58,6 +59,8 @@
 #define STR_NUM_POST_BREAK_DLG  215
 #define STR_NUM_MIN_WORDLEN_DLG 216
 
+#define STR_GRAMMAR_AUTO        217
+
 #define STR_WARNING             63
 
 #define PB_OK                               70
@@ -66,6 +69,7 @@
 #define ST_SPELL                            82
 #define ST_HYPH                             83
 #define ST_THES                             84
+#define ST_GRAMMAR                          85
 
 #define FL_NUMVAL_PREBREAK                  305
 #define BT_OK_PREBREAK                      306
@@ -85,4 +89,6 @@
 #define FT_EDIT_MODULES_LANGUAGE            318
 #define LB_EDIT_MODULES_LANGUAGE            319
 #define CLB_EDIT_MODULES_MODULES            320
+#define FT_EDIT_MODULES_NEWDICTSLINK        321
+#define FL_EDIT_MODULES_BUTTONS             322
 
