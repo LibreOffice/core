@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: webdavprovider.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,11 +133,13 @@ ContentProvider::queryContent(
          !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) )
-         &&
+            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) )
-       )
+            RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) &&
+         !aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) &&
+          !aScheme.equalsAsciiL(
+             RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) )       )
         throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
@@ -162,6 +164,24 @@ ContentProvider::queryContent(
                                WEBDAV_URL_SCHEME_LENGTH,
                                rtl::OUString::createFromAscii(
                                                     HTTP_URL_SCHEME ) );
+        bNewId = true;
+    }
+    else if ( aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
+    {
+        aURL = aURL.replaceAt( 0,
+                               DAV_URL_SCHEME_LENGTH,
+                               rtl::OUString::createFromAscii(
+                                                    HTTP_URL_SCHEME ) );
+        bNewId = true;
+    }
+    else if ( aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
+    {
+        aURL = aURL.replaceAt( 0,
+                               DAVS_URL_SCHEME_LENGTH,
+                               rtl::OUString::createFromAscii(
+                                                    HTTPS_URL_SCHEME ) );
         bNewId = true;
     }
 
