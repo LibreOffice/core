@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonSession.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,7 +127,7 @@ RequestDataMap;
 // -------------------------------------------------------------------
 // static members!
 bool NeonSession::m_bGlobalsInited = false;
-
+osl::Mutex NeonSession::m_aGlobalMutex;
 // -------------------------------------------------------------------
 // Helper fuction
 // -------------------------------------------------------------------
@@ -614,18 +614,21 @@ void NeonSession::Init()
 
     if ( m_pHttpSession == 0 )
     {
-        // Ensure that Neon sockets are initialized.
+        // Ensure that Neon sockets are initialize
+
+        // --> tkr #151111# crashed if copy and pasted pictures from the internet
+        // ne_sock_init() was executed by two threads at the same time.
+        osl::Guard< osl::Mutex > theGlobalGuard( m_aGlobalMutex );
+        // <--
         if ( !m_bGlobalsInited )
         {
             if ( ne_sock_init() != 0 )
                 throw DAVException( DAVException::DAV_SESSION_CREATE,
                                     NeonUri::makeConnectionEndPointString(
                                                     m_aHostName, m_nPort ) );
-
             // #122205# - libxml2 needs to be initialized once if used by
             // multithreaded programs like OOo.
             xmlInitParser();
-
             m_bGlobalsInited = true;
         }
 
