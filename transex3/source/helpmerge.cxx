@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: helpmerge.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,8 +148,18 @@ bool HelpParser::CreateSDF(
         sXmlFile = String( sHelpFile , RTL_TEXTENCODING_ASCII_US );
     }
 
+//    ByteString fullFilePath;
+    //DirEntry aFile( sXmlFile );
+    //makeAbsolutePath( sHelpFile , rRoot_in);
+    ByteString fullFilePath = rPrj_in;
+    fullFilePath.Append( "\\" );
+    fullFilePath.Append( makeAbsolutePath( sHelpFile , rRoot_in ) );
+    fullFilePath.SearchAndReplaceAll( "\\", "/" );
 
-    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
+    String strFullPath( fullFilePath.GetBuffer() , RTL_TEXTENCODING_ASCII_US );
+
+    //printf( "%s\n", fullFilePath.GetBuffer() );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( strFullPath , sXmlFile, pXmlFile ) );
 
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
@@ -168,7 +178,9 @@ bool HelpParser::CreateSDF(
         return false;
     }
 
-      DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
+    ByteString sActFileName = makeAbsolutePath( sHelpFile , rRoot_in );
+
+/*    DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
     aEntry.ToAbs();
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
@@ -178,7 +190,7 @@ bool HelpParser::CreateSDF(
     sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
 
     sActFileName.SearchAndReplaceAll( "/", "\\" );
-
+*/
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
@@ -261,6 +273,20 @@ bool HelpParser::CreateSDF(
     return TRUE;
 }
 
+ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in )
+{
+      DirEntry aEntry( String( sHelpFile, RTL_TEXTENCODING_ASCII_US ));
+    aEntry.ToAbs();
+    String sFullEntry = aEntry.GetFull();
+    aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
+    aEntry += DirEntry( rRoot_in );
+    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sActFileName(
+    sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
+
+    sActFileName.SearchAndReplaceAll( "/", "\\" );
+    return sActFileName;
+}
 bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile  ,
         ByteString& sLanguage , MergeDataFile& aMergeDataFile )
 {
@@ -287,8 +313,10 @@ bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinati
     }
 
     OUString sOUHelpFile( sXmlFile );
+    String fullFilePath;
+    DirEntry aFile( sXmlFile );
 
-    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile, new XMLFile( '0' ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
     printf("Dest file %s\n",rDestinationFile.GetBuffer());
     hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , sLanguage , rDestinationFile );
     delete xmlfile;
@@ -370,7 +398,10 @@ bool HelpParser::Merge(
 
 
     OUString sOUHelpFile( sXmlFile );
-    XMLFile* xmlfile = ( aParser.Execute( sOUHelpFile, new XMLFile( '0' ) ) );
+      String fullFilePath;
+    DirEntry aFile( sXmlFile );
+
+    XMLFile* xmlfile = ( aParser.Execute( aFile.GetFull() , sOUHelpFile, new XMLFile( '0' ) ) );
     xmlfile->Extract();
 
     if( xmlfile == NULL)
