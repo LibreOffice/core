@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calc.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
