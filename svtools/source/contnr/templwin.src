@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templwin.src,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +30,10 @@
 
  // includes ------------------------------------------------------------------
 
-#include <svtools/svtools.hrc>
 #include "templwin.hrc"
+#include <svtools/controldims.hrc>
 #include <svtools/helpid.hrc>
+#include <svtools/svtools.hrc>
 
 // Magenta and Grey as mask colors
 #define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
@@ -274,41 +275,48 @@ ModalDialog DLG_DOCTEMPLATE
     HelpId = HID_TEMPLATEDLG_DIALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 320, 234 );
+    Size = MAP_APPFONT( 320, 245 );
     Text [ en-US ] = "Templates and Documents" ;
     Moveable = TRUE ;
+    FixedText FT_DOCTEMPLATE_LINK
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Size = MAP_APPFONT ( 311 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Get more templates online...";
+    };
     FixedLine FL_DOCTEMPLATE
     {
-        Pos = MAP_APPFONT( 0, 208 );
+        Pos = MAP_APPFONT( 0, 219 );
         Size = MAP_APPFONT( 320, 1 );
     };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
-        Pos = MAP_APPFONT( 3, 214 );
+        Pos = MAP_APPFONT( 3, 225 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Organi~ze...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
-        Pos = MAP_APPFONT( 56, 214 );
+        Pos = MAP_APPFONT( 56, 225 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "~Edit";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
-        Pos = MAP_APPFONT( 158, 214 );
+        Pos = MAP_APPFONT( 158, 225 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
         Text [ en-US ] = "~Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
-        Pos = MAP_APPFONT( 211, 214 );
+        Pos = MAP_APPFONT( 211, 225 );
         Size = MAP_APPFONT( 50, 14 );
     };
     HelpButton BTN_DOCTEMPLATE_HELP
     {
-        Pos = MAP_APPFONT( 267, 214 );
+        Pos = MAP_APPFONT( 267, 225 );
         Size = MAP_APPFONT( 50, 14 );
     };
 };
