@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2309,9 +2309,15 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         const SwFmtRowSplit& rSplittable = pLineFmt->GetRowSplit();
         BYTE nCantSplit = (!rSplittable.GetValue()) ? 1 : 0;
         if (rWW8Wrt.bWrtWW8)
+        {
             SwWW8Writer::InsUInt16(aAt, 0x3403);
+            aAt.Insert(nCantSplit, aAt.Count());
+            SwWW8Writer::InsUInt16(aAt, 0x3466); // also write fCantSplit90
+        }
         else
+        {
             aAt.Insert(185, aAt.Count());
+        }
         aAt.Insert(nCantSplit, aAt.Count());
 
 
