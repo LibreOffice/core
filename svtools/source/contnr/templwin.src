@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templwin.src,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
  // includes ------------------------------------------------------------------
 
 #include "templwin.hrc"
-#include <svtools/controldims.hrc>
+#include "controldims.hrc"
 #include <svtools/helpid.hrc>
 #include <svtools/svtools.hrc>
 
