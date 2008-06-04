@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8scan.cxx,v $
- * $Revision: 1.138 $
+ * $Revision: 1.139 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -697,6 +697,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // tap.rgdxaCenter
         {0x3403, 1, L_FIX}, // "sprmTFCantSplit" tap.fCantSplit;1 or 0;byte;
         {0x3404, 1, L_FIX}, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
+        {0x3466, 1, L_FIX}, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
         {0xD605, 0, L_VAR}, // "sprmTTableBorders" tap.rgbrcTable;complex
         {0xD606, 0, L_VAR}, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
