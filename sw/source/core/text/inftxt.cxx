@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.118 $
+ * $Revision: 1.119 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -789,7 +789,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     {
         SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
         if( rPor.InFldGrp() && GetSpaceAdd() < 0 && nAdd )
-            nAdd += GetSpaceAdd();
+            nAdd += GetSpaceAdd() / SPACING_PRECISION_FACTOR;
         aSize.Width() += nAdd;
     }
 
