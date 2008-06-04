@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialogs.hrc,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
-#define RID_SVX_FIRSTFREE                   302
+#define RID_SVX_FIRSTFREE                   303
 
 // ResId fuer die Hintergrund-TabPage
 #define RID_SVXPAGE_BACKGROUND              (RID_SVX_START +   1)
@@ -435,6 +435,7 @@
 #define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
 #define RID_SVXDLG_SECURITY_OPTIONS         (RID_SVX_START + 300)
 #define RID_SVXDLG_WEBCONNECTION_INFO       (RID_SVX_START + 301)
+#define RID_SVXPAGE_IMPROVEMENT             (RID_SVX_START + 302)
 // !!! please update RID_SVX_FIRSTFREE !!! see line 46
 
 // Strings ------------------------------------------------------------------
