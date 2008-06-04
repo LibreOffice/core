@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hwpreader.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,24 +182,16 @@ private:
     void makeFormula(TxtBox *hbox);
     void makeHyperText(TxtBox *hbox);
     void makePicture(Picture *hbox);
-    void makePictureOLE(Picture *hbox);
     void makePictureDRAW(HWPDrawingObject *drawobj, Picture *hbox);
     void makeLine(Line *hbox);
     void makeHidden(Hidden *hbox);
-    void makeHeaderFooter(HeaderFooter *hbox);
     void makeFootnote(Footnote *hbox);
     void makeAutoNum(AutoNum *hbox);
-    void makeNewNum(NewNum *hbox);
     void makeShowPageNum();
-    void makePageNumCtrl(PageNumCtrl *hbox);
     void makeMailMerge(MailMerge *hbox);
-    void makeCompose(Compose *hbox);
-    void makeHyphen(Hyphen *hbox);
     void makeTocMark(TocMark *hbox);
     void makeIndexMark(IndexMark *hbox);
     void makeOutline(Outline *hbox);
-    void makeKeepSpace(KeepSpace *hbox);
-    void makeFixedSpace(FixedSpace *hbox);
 
     /* --------- Styles Parsing ------------ */
     void makePageStyle();
