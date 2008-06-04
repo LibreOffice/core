@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PageMasterStyleMap.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 
 using namespace ::xmloff::token;
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
+#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define PLMAP(name,prefix,token,type,context) \
         _MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context)
 #define HFMAP(name,prefix,token,type,context) \
@@ -189,6 +189,6 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     HFMAP( "FooterBackGraphicURL",      XML_NAMESPACE_STYLE,    XML_BACKGROUND_IMAGE,           XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL ),
     HFMAP( "FooterDynamicSpacing",        XML_NAMESPACE_STYLE,    XML_DYNAMIC_SPACING,           XML_TYPE_BOOL,          CTF_PM_FOOTERFLAG ),
 
-    { 0L, 0, 0, XML_EMPTY, 0, 0 }
+    { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010 }
 };
 
