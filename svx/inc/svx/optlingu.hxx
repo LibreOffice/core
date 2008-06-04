@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optlingu.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,18 +32,11 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
-#endif
-#ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
-#endif
+#include <svtools/fixedhyper.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
@@ -73,11 +66,7 @@ class SvxLinguData_Impl;
 
 class SvxEditModulesDlg : public ModalDialog
 {
-    OKButton            aClosePB;
-    HelpButton          aHelpPB;
-
     FixedLine           aModulesFL;
-
     FixedText           aLanguageFT;
     SvxLanguageBox      aLanguageLB;
 
@@ -85,6 +74,11 @@ class SvxEditModulesDlg : public ModalDialog
     PushButton          aPrioUpPB;
     PushButton          aPrioDownPB;
     PushButton          aBackPB;
+    svt::FixedHyperlink aMoreDictsLink;
+
+    FixedLine           aButtonsFL;
+    HelpButton          aHelpPB;
+    OKButton            aClosePB;
 
     String              sSpell;
     String              sHyph;
@@ -105,6 +99,7 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK( SelectHdlLB_Impl, ListBox * );
     DECL_LINK( LangSelectHdl_Impl, ListBox* );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
+    DECL_LINK( OpenURLHdl_Impl, svt::FixedHyperlink* );
 #endif
 
 public:
@@ -129,6 +124,7 @@ private:
     FixedText           aLinguOptionsFT;
     SvxCheckListBox     aLinguOptionsCLB;
     PushButton          aLinguOptionsEditPB;
+    svt::FixedHyperlink aMoreDictsLink;
 
     String              sCapitalWords;
     String              sWordsWithDigits;
@@ -169,6 +165,7 @@ private:
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox * );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
     DECL_LINK( PostDblClickHdl_Impl, SvTreeListBox * );
+    DECL_LINK( OpenURLHdl_Impl, svt::FixedHyperlink* );
 
     SVX_DLLPRIVATE void                UpdateModulesBox_Impl();
     SVX_DLLPRIVATE void                UpdateDicBox_Impl();
