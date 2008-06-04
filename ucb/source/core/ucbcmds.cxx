@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ucbcmds.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,6 +426,14 @@ static rtl::OUString createDesiredName(
         {
             aName = rSourceURL;
         }
+
+        // query, fragment present?
+    sal_Int32  nPos = aName.indexOf( '?' );
+    if ( nPos == -1 )
+      nPos = aName.indexOf( '#' );
+
+    if ( nPos != -1 )
+      aName = aName.copy( 0, nPos );
     }
     return rtl::OUString( aName );
 }
