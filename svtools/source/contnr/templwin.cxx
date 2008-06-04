@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: templwin.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,8 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vcl/waitobj.hxx>
@@ -1685,13 +1687,14 @@ uno::Reference< util::XOfficeInstallationDirectories > SvtTmplDlg_Impl::getOffic
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* _pParent, SelectOnly ) :
     ModalDialog( _pParent, SvtResId( DLG_DOCTEMPLATE ) ),
 
-    aLine       ( this, SvtResId( FL_DOCTEMPLATE ) ),
-    aManageBtn  ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
-    aEditBtn    ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
-    aOKBtn      ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
-    aCancelBtn  ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
-    aHelpBtn    ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
-    pImpl       ( NULL )
+    aMoreTemplatesLink  ( this, SvtResId( FT_DOCTEMPLATE_LINK ) ),
+    aLine               ( this, SvtResId( FL_DOCTEMPLATE ) ),
+    aManageBtn          ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aEditBtn            ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
+    aOKBtn              ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
+    aCancelBtn          ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
+    aHelpBtn            ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
+    pImpl               ( NULL )
 {
     FreeResource();
     InitImpl( );
@@ -1708,13 +1711,14 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
     ModalDialog( pParent, SvtResId( DLG_DOCTEMPLATE ) ),
 
-    aLine       ( this, SvtResId( FL_DOCTEMPLATE ) ),
-    aManageBtn  ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
-    aEditBtn    ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
-    aOKBtn      ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
-    aCancelBtn  ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
-    aHelpBtn    ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
-    pImpl       ( NULL )
+    aMoreTemplatesLink  ( this, SvtResId( FT_DOCTEMPLATE_LINK ) ),
+    aLine               ( this, SvtResId( FL_DOCTEMPLATE ) ),
+    aManageBtn          ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aEditBtn            ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
+    aOKBtn              ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
+    aCancelBtn          ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
+    aHelpBtn            ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
+    pImpl               ( NULL )
 {
     FreeResource();
     InitImpl( );
@@ -1725,8 +1729,11 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 void SvtDocumentTemplateDialog::InitImpl( )
 {
     pImpl = new SvtTmplDlg_Impl( this );
-
     pImpl->aTitle = GetText();
+
+    aMoreTemplatesLink.SetURL( String(
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/36" ) ) );
+    aMoreTemplatesLink.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OpenLinkHdl_Impl ) );
 
     aManageBtn.SetClickHdl( LINK( this, SvtDocumentTemplateDialog, OrganizerHdl_Impl ) );
     Link aLink = LINK( this, SvtDocumentTemplateDialog, OKHdl_Impl );
@@ -1742,7 +1749,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     long nHeight = pImpl->pWin->CalcHeight();
 
     Size aSize = GetOutputSizePixel();
-    Point aPos = aLine.GetPosPixel();
+    Point aPos = aMoreTemplatesLink.GetPosPixel();
     Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     aPos.Y() -= a6Size.Height();
     long nDelta = aPos.Y() - nHeight;
@@ -1753,6 +1760,9 @@ void SvtDocumentTemplateDialog::InitImpl( )
     aSize.Width() -= a6Size.Width();
     pImpl->pWin->SetPosSizePixel( Point( a6Size.Width() / 2, 0 ), aSize );
 
+    aPos = aMoreTemplatesLink.GetPosPixel();
+    aPos.Y() -= nDelta;
+    aMoreTemplatesLink.SetPosPixel( aPos );
     aPos = aLine.GetPosPixel();
     aPos.Y() -= nDelta;
     aLine.SetPosPixel( aPos );
@@ -1976,6 +1986,35 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
     }
     return 0;
 }
+
+// ------------------------------------------------------------------------
+
+IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
+{
+    ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
+    if ( sURL.getLength() > 0 )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+            EndDialog( RET_CANCEL );
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+    return 0;
+}
+
 /* -----------------27.11.2002 16:54-----------------
  *
  * --------------------------------------------------*/
