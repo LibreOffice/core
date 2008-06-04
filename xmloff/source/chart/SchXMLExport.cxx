@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLExport.cxx,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2537,8 +2537,12 @@ void SchXMLExportHelper::exportSeries(
                                             RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
 
-                                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                                lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                                if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                                {
+                                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                                }
 
                                 if( mxExpPropMapper.is())
                                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
@@ -2802,6 +2806,9 @@ void SchXMLExportHelper::exportRegressionCurve(
             xEquationProperties->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowCorrelationCoefficient" )))
                 >>= bShowRSquared;
             bExportEquation = ( bShowEquation || bShowRSquared );
+            const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+            if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+                bExportEquation=false;
             if( bExportEquation )
             {
                 // number format
@@ -3071,8 +3078,12 @@ void SchXMLExportHelper::exportDataPoints(
                 DBG_ASSERT( xPropSet.is(), "Pie Segments should have properties" );
                 if( xPropSet.is())
                 {
-                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                    {
+                        lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                        lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                     if( aPropertyStates.size() > 0 )
@@ -3130,8 +3141,12 @@ void SchXMLExportHelper::exportDataPoints(
                 }
                 if( xPropSet.is())
                 {
-                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
-                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                    if( nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 )
+                    {
+                        lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                        lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+                    }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                     if( aPropertyStates.size() > 0 )
