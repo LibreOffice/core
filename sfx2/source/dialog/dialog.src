@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dialog.src,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -313,4 +313,10 @@ String STR_PDF_EXPORT_SEND
 {
   Text [ en-US ] = "Send" ;
 };
+
+String STR_RECHECK_DOCUMENT
+{
+  Text [ en-US ] = "Recheck Document" ;
+};
+
 // ******************************************************************* EOF
