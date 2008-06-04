@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optcolor.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,6 +183,10 @@
 #define FT_SMARTTAGS                    168
 #define LB_SMARTTAGS                    169
 #define WN_SMARTTAGS                    170
+
+#define ST_SPELL_CHECK_HIGHLIGHTING     171
+#define ST_GRAMMAR_CHECK_HIGHLIGHTING   172
+
 
 #endif
 

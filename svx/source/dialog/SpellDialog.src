@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SpellDialog.src,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,13 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Size = MAP_APPFONT( 100, 8 );
         Text [ en-US ] = "Dictionary languag~e" ;
     };
+    FixedText FT_CHECK_GRAMMAR
+    {
+        Pos = MAP_APPFONT(  6, 133 );
+        Size = MAP_APPFONT( 100, 8 );
+        Text [ en-US ] = "Check ~grammar" ;
+        Hide = TRUE;
+    };
 
     ListBox LB_LANGUAGE
     {
@@ -132,6 +139,13 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "AutoCor~rect" ;
     };
+    PushButton PB_EXPLAIN
+    {
+        Pos = MAP_APPFONT( 209, 97 );
+        Size = MAP_APPFONT( 55, 14 );
+        Text [ en-US ] = "Explain..." ;
+        Hide = TRUE;
+    };
 
     GroupBox GB_BACKGROUND
     {
@@ -172,6 +186,18 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
     String ST_NOSUGGESTIONS
     {
         Text [en-US] = "(no suggestions)";
+    };
+    String ST_SPELLING
+    {
+        Text[ en-US ] = "Spelling: $LANGUAGE ($LOCATION)";
+    };
+    String ST_SPELLING_AND_GRAMMAR
+    {
+        Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION)";
+    };
+    String ST_SPELLING_AND_GRAMMAR_VENDORNAME
+    {
+        Text[ en-US ] = "Spelling and Grammar: $LANGUAGE ($LOCATION) [$VendorName]";
     };
 };
  // ********************************************************************** EOF
