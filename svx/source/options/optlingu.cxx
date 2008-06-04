@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optlingu.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,11 +66,12 @@
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <svtools/svlbox.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
 #include <sfx2/viewfrm.hxx>
-
 #include <vcl/svapp.hxx>
 #define _SVX_OPTLINGU_CXX
 
@@ -96,6 +97,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
+namespace css = com::sun::star;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define SVX_MAX_USERDICTS 20
@@ -149,6 +151,29 @@ static INT32 lcl_SeqGetEntryPos(
             break;
     }
     return i < nLen ? i : -1;
+}
+
+static void lcl_OpenURL( const ::rtl::OUString& rURL )
+{
+    if ( rURL.getLength() > 0 )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                ::comphelper::getProcessServiceFactory();
+            uno::Reference< css::system::XSystemShellExecute > xSystemShell(
+                xSMGR->createInstance( ::rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
+                uno::UNO_QUERY_THROW );
+            if ( xSystemShell.is() )
+                xSystemShell->execute( rURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+        }
+        catch( const uno::Exception& e )
+        {
+             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
 }
 
 /*--------------------------------------------------
@@ -1044,6 +1069,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsFT     ( this, SVX_RES( FT_LINGU_OPTIONS ) ),
     aLinguOptionsCLB    ( this, SVX_RES( CLB_LINGU_OPTIONS ) ),
     aLinguOptionsEditPB ( this, SVX_RES( PB_LINGU_OPTIONS_EDIT ) ),
+    aMoreDictsLink      ( this, SVX_RES( FT_LINGU_OPTIONS_MOREDICTS ) ),
     sCapitalWords       ( SVX_RES( STR_CAPITAL_WORDS ) ),
     sWordsWithDigits    ( SVX_RES( STR_WORDS_WITH_DIGITS ) ),
     sCapitalization     ( SVX_RES( STR_CAPITALIZATION ) ),
@@ -1088,8 +1114,11 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
+    aMoreDictsLink.SetURL( String(
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/88" ) ) );
+    aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
 
+    xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
     xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
@@ -1599,6 +1628,15 @@ IMPL_LINK( SvxLinguTabPage, PostDblClickHdl_Impl, SvTreeListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxLinguTabPage, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
+{
+    ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
+    lcl_OpenURL( sURL );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
 {
     if (pBox == &aLinguModulesCLB)
@@ -1920,26 +1958,33 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         Size aSize( aLinguOptionsCLB.GetSizePixel() );
         aSize.Height() += nDeltaY;
         aLinguOptionsCLB.SetSizePixel( aSize );
+
+        aSize = GetOutputSizePixel();
+        aSize.Height() += ( aMoreDictsLink.GetSizePixel().Height() * 11 / 8 );
+        SetSizePixel( aSize );
+        aMoreDictsLink.Show();
     }
 }
 /*--------------------------------------------------
 --------------------------------------------------*/
 
 SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) :
-        ModalDialog(pParent, SVX_RES(RID_SVXDLG_EDIT_MODULES )),
-        aClosePB    ( this, SVX_RES( PB_OK ) ),
-        aHelpPB     ( this, SVX_RES( PB_HELP ) ),
-        aModulesFL  ( this, SVX_RES( FL_EDIT_MODULES_OPTIONS ) ),
-        aLanguageFT ( this, SVX_RES( FT_EDIT_MODULES_LANGUAGE ) ),
-        aLanguageLB ( this, SVX_RES( LB_EDIT_MODULES_LANGUAGE ), FALSE ),
-        aModulesCLB ( this, SVX_RES( CLB_EDIT_MODULES_MODULES ) ),
-        aPrioUpPB   ( this, SVX_RES( PB_EDIT_MODULES_PRIO_UP ) ),
-        aPrioDownPB ( this, SVX_RES( PB_EDIT_MODULES_PRIO_DOWN ) ),
-        aBackPB     ( this, SVX_RES( PB_EDIT_MODULES_PRIO_BACK ) ),
-        sSpell( SVX_RES( ST_SPELL)),
-        sHyph( SVX_RES( ST_HYPH)),
-        sThes( SVX_RES( ST_THES)),
-        rLinguData(rData)
+    ModalDialog( pParent, SVX_RES(RID_SVXDLG_EDIT_MODULES ) ),
+    aModulesFL      ( this, SVX_RES( FL_EDIT_MODULES_OPTIONS ) ),
+    aLanguageFT     ( this, SVX_RES( FT_EDIT_MODULES_LANGUAGE ) ),
+    aLanguageLB     ( this, SVX_RES( LB_EDIT_MODULES_LANGUAGE ), FALSE ),
+    aModulesCLB     ( this, SVX_RES( CLB_EDIT_MODULES_MODULES ) ),
+    aPrioUpPB       ( this, SVX_RES( PB_EDIT_MODULES_PRIO_UP ) ),
+    aPrioDownPB     ( this, SVX_RES( PB_EDIT_MODULES_PRIO_DOWN ) ),
+    aBackPB         ( this, SVX_RES( PB_EDIT_MODULES_PRIO_BACK ) ),
+    aMoreDictsLink  ( this, SVX_RES( FT_EDIT_MODULES_NEWDICTSLINK ) ),
+    aButtonsFL      ( this, SVX_RES( FL_EDIT_MODULES_BUTTONS ) ),
+    aHelpPB         ( this, SVX_RES( PB_HELP ) ),
+    aClosePB        ( this, SVX_RES( PB_OK ) ),
+    sSpell          (       SVX_RES( ST_SPELL ) ),
+    sHyph           (       SVX_RES( ST_HYPH ) ),
+    sThes           (       SVX_RES( ST_THES ) ),
+    rLinguData      ( rData )
 {
     pCheckButtonData = NULL;
     FreeResource();
@@ -1959,6 +2004,10 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     // in case of not installed language modules
     aPrioUpPB  .Enable( FALSE );
     aPrioDownPB.Enable( FALSE );
+
+    aMoreDictsLink.SetURL( String(
+        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/taxonomy/term/88" ) ) );
+    aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
 
     //
     //fill language box
@@ -2372,6 +2421,15 @@ IMPL_LINK( SvxEditModulesDlg, BackHdl_Impl, PushButton *, EMPTYARG )
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(0);
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxEditModulesDlg, OpenURLHdl_Impl, svt::FixedHyperlink *, EMPTYARG )
+{
+    ::rtl::OUString sURL( aMoreDictsLink.GetURL() );
+    lcl_OpenURL( sURL );
     return 0;
 }
 
