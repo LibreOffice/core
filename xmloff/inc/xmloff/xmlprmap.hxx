@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlprmap.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +71,7 @@ struct XMLPropertySetMapperEntry_Impl
     sal_uInt16 nXMLNameSpace;
     sal_Int32  nType;
     sal_Int16  nContextId;
+    SvtSaveOptions::ODFDefaultVersion   nEarliestODFVersionForExport;
     const XMLPropertyHandler *pHdl;
 
     XMLPropertySetMapperEntry_Impl(
@@ -144,6 +145,13 @@ public:
     {
         DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return nIndex == -1 ? 0 : aMapEntries[nIndex].nContextId;
+    }
+
+    /** returns the earliest odf version for which this property should be exported. */
+    const SvtSaveOptions::ODFDefaultVersion GetEarliestODFVersionForExport( sal_Int32 nIndex ) const
+    {
+        DBG_ASSERT( (nIndex >= -1) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
+        return nIndex == -1 ? SvtSaveOptions::ODFVER_UNKNOWN : aMapEntries[nIndex].nEarliestODFVersionForExport;
     }
 
     /** Returns the index of an entry with the given XML-name and namespace
