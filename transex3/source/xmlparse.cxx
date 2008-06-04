@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlparse.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -544,7 +544,7 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
         elem=pos->second;
         if ( (*elem)[ language ] )
         {
-            fprintf(stdout,"Error: Entry for language double. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), ByteString( sFileName,RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf(stdout,"Error: Duplicated entry. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), ByteString( sFullName,RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             exit( -1 );
         }
         (*elem)[ language ]=pElement;
@@ -1203,7 +1203,7 @@ void SimpleXMLParser::Default(
 }
 
 /*****************************************************************************/
-XMLFile *SimpleXMLParser::Execute( const String &rFileName, XMLFile* pXMLFileIn )
+XMLFile *SimpleXMLParser::Execute( const String &rFullFileName , const String &rFileName, XMLFile* pXMLFileIn )
 /*****************************************************************************/
 {
 //  printf("DBG: SimpleXMLParser::Execute( %s )", ByteString( rFileName , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
@@ -1226,6 +1226,7 @@ XMLFile *SimpleXMLParser::Execute( const String &rFileName, XMLFile* pXMLFileIn 
 
     pXMLFile = pXMLFileIn;
     pXMLFile->SetName( rFileName );
+    pXMLFile->SetFullName( rFullFileName );
 
     return Execute( &aMemStream );
 }
