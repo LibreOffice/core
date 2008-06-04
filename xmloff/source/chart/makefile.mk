@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,6 +56,7 @@ SLOFILES =	$(SLO)$/ColorPropertySet.obj \
             $(SLO)$/PropertyMaps.obj \
             $(SLO)$/XMLChartStyleContext.obj \
             $(SLO)$/XMLErrorIndicatorPropertyHdl.obj \
+            $(SLO)$/XMLErrorBarStylePropertyHdl.obj \
             $(SLO)$/SchXMLAutoStylePoolP.obj \
             $(SLO)$/XMLChartPropertyContext.obj \
             $(SLO)$/XMLSymbolImageContext.obj \
