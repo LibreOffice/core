@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonSession.hxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@ class NeonSession : public DAVSession
 {
     private:
         osl::Mutex        m_aMutex;
+        static osl::Mutex m_aGlobalMutex;
         rtl::OUString     m_aScheme;
         rtl::OUString     m_aHostName;
         rtl::OUString     m_aProxyName;
