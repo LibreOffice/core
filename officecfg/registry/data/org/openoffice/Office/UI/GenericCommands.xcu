@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: GenericCommands.xcu,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2948,7 +2948,23 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:SpellDialog" oor:op="replace">
+            <node oor:name=".uno:SpellingDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Spelling...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SpellingAndGrammarDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Spelling and Grammar...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SpellDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Spellcheck...</value>
                 </prop>
@@ -5330,6 +5346,11 @@
             <node oor:name=".uno:SetLanguageAllTextMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">For all Text</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MoreDictionaries" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">More Dictionaries Online...</value>
                 </prop>
             </node>
         </node>
