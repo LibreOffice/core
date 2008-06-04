@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: maptype.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <svtools/saveopt.hxx>
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -52,6 +53,7 @@ struct XMLPropertyMapEntry
                                                     additional rules how
                                                     to im/export the porperty */
     sal_Int16       mnContextId;    /// User defined id for context filtering
+    SvtSaveOptions::ODFDefaultVersion   mnEarliestODFVersionForExport;// no export when the used ODF version is lower than this
 };
 
 ///////////////////////////////////////////////////////////////////////////
