@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeFilePicker.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1064,8 +1064,6 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
         // compatibility: one argument, type sal_Int16 , specifies the service type
         _rArguments[0] >>= m_nServiceType;
 
-        // NOTE: _rArguments[1] not used here
-
         for ( int i = 0; i < _rArguments.getLength(); i++)
         {
             NamedValue namedValue;
@@ -1101,6 +1099,13 @@ sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString&
         OSL_VERIFY( _rValue >>= m_nServiceType );
         return sal_True;
     }
+    if ( _rName.equalsAscii( "StandardDir" ) )
+    {
+        OSL_VERIFY( _rValue >>= m_aStandardDir );
+        return sal_True;
+    }
+
+
     return OCommonPicker::implHandleInitializationArgument( _rName, _rValue );
 }
 
