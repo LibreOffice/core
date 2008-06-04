@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optlingu.src,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,52 +27,43 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ------------------------------------------------------------------
-#include <sfx2/sfx.hrc>
-#include "helpid.hrc"
+
+// include ------------------------------------------------------------------
+
 #include "optlingu.hrc"
+#include "helpid.hrc"
+
+#include <svtools/controldims.hrc>
+#include <sfx2/sfx.hrc>
 #include <svx/dialogs.hrc>
- // pragma -------------------------------------------------------------------
 
 // RID_SVXDLG_EDIT_MODULES ---------------------------------------------------
 
 ModalDialog RID_SVXDLG_EDIT_MODULES
 {
-//? HelpID = HID_LNGDLG_NUM_PREBREAK ; pb: why two helpids???
     HelpID = HID_EDIT_MODULES ;
     SVLook = TRUE ;
     Moveable = TRUE ;
-    Size = MAP_APPFONT ( 299 , 175/*135*/ ) ;
-
-    OKButton PB_OK
-    {
-        Pos = MAP_APPFONT ( 246 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "Close";
-    };
-    HelpButton PB_HELP
-    {
-        Pos = MAP_APPFONT ( 246, 26 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
+    Size = MAP_APPFONT ( 240 , 197 ) ;
+    Text [ en-US ] = "Edit Modules";
 
     FixedLine FL_EDIT_MODULES_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 237 , 8 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_FLGR_INNERBORDER_LEFT , RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 240 - 2*RSC_SP_FLGR_INNERBORDER_LEFT , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ en-US ] = "Options";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Size = MAP_APPFONT ( 68 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Language";
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 14 ) ;
+        Pos = MAP_APPFONT ( 83 , 14 ) ;
         Size = MAP_APPFONT ( 95 , 80 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -80,30 +71,53 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Control CLB_EDIT_MODULES_MODULES
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 170 , 136 ) ;
+        Size = MAP_APPFONT ( 166 , 120 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_EDIT_MODULES_PRIO_UP
     {
-        Pos = MAP_APPFONT ( 187 , 32 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184 , 32 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Move Up";
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
-        Pos = MAP_APPFONT ( 187 , 49 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184 , 49 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Move Down";
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
-        Pos = MAP_APPFONT ( 187 , 66 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 184 , 66 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Back";
+    };
+    FixedText FT_EDIT_MODULES_NEWDICTSLINK
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
+        Size = MAP_APPFONT ( 169 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Get more dictionaries online...";
+    };
+    FixedLine FL_EDIT_MODULES_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 166 ) ;
+        Size = MAP_APPFONT ( 240 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 12, 177 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 184 , 177 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "Close";
     };
 
     String ST_SPELL
@@ -118,7 +132,10 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     {
         Text [ en-US ] = "Thesaurus";
     };
-    Text [ en-US ] = "Edit Modules";
+    String ST_GRAMMAR
+    {
+        Text [ en-US ] = "Grammar";
+    };
 };
 
 // RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
@@ -183,7 +200,8 @@ TabPage RID_SFXPAGE_LINGU
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-        FixedLine FL_LINGUISTIC
+    Text [ en-US ] = "Options";
+    FixedLine FL_LINGUISTIC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -266,6 +284,14 @@ TabPage RID_SFXPAGE_LINGU
         TabStop = TRUE ;
         Text [ en-US ] = "Edi~t...";
     };
+    FixedText FT_LINGU_OPTIONS_MOREDICTS
+    {
+        Left = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 182 ) ;
+        Size = MAP_APPFONT ( 182 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Get more dictionaries online...";
+    };
 
     String STR_CAPITAL_WORDS
     {
@@ -290,6 +316,10 @@ TabPage RID_SFXPAGE_LINGU
     String STR_SPELL_AUTO
     {
         Text [ en-US ] = "Check spelling as you type";
+    };
+    String STR_GRAMMAR_AUTO
+    {
+        Text [ en-US ] = "Check grammar as you type";
     };
     String STR_HIDE_MARKINGS
     {
