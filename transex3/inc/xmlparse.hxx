@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlparse.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -246,6 +246,7 @@ public:
     /// returns file name
     const String &GetName() { return sFileName; }
     void          SetName( const String &rFilename ) { sFileName = rFilename; }
+    void          SetFullName( const String &rFullFilename ) { sFullName = rFullFilename; }
     const std::vector<ByteString> getOrder(){ return order; }
 
 protected:
@@ -259,6 +260,7 @@ protected:
 
     // DATA
     String      sFileName;
+    String      sFullName;
 
     const ByteString ID,OLDREF,XML_LANG;
 
@@ -538,6 +540,7 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
+        const String &rFullFileName,
         const String &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
     );
