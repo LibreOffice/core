@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hbox.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,13 +41,6 @@
 #include "hcode.h"
 
 int HBox::boxCount = 0;
-
-HBox::HBox()
-{
-    hh = 0;
-    boxCount++;
-}
-
 
 HBox::HBox(hchar hch)
 {

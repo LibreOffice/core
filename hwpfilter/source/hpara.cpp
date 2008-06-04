@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hpara.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.cpp,v 1.5 2008-04-10 12:06:11 rt Exp $ */
+/* $Id: hpara.cpp,v 1.6 2008-06-04 09:59:35 vg Exp $ */
 
 #include "precompile.h"
 
@@ -85,7 +85,7 @@ HWPPara::~HWPPara(void)
     if (hhstr)
     {
 // virtual destructor
-/* C++은 null에 대해서도 동작한다. */
+/* C++?? null?? ???????? ????????. */
         for (ii = 0; ii < nch; ++ii)
             delete hhstr[ii];
 
@@ -110,12 +110,12 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read1b(&pstyno, 1);
 
 
-/* Paragraph 대표 글자 */
+/* Paragraph ???? ???? */
     cshape.Read(hwpf);
     if (nch > 0)
         hwpf.AddCharShape(&cshape);
 
-/* Paragraph 문단 모양 */
+/* Paragraph ???? ???? */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
@@ -195,17 +195,6 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 HWPPara *HWPPara::Next(void)
 {
     return _next;
-}
-
-
-/* layout을 위한 함수 */
-
-LineInfo *HWPPara::GetLineInfo(int line)
-{
-    if (line < 0 || line >= nline)
-        line = 0;
-    return linfo + line;
-
 }
 
 

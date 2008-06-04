@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hwpfile.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,13 +64,6 @@ static int datecodecount = 0;
 HWPFile::HWPFile(void)
 {
     Init();
-}
-
-
-HWPFile::HWPFile(HStream & stream)
-{
-    Init();
-    Open(stream);
 }
 
 
@@ -179,20 +172,6 @@ int HWPFile::Open(HStream & stream)
         return SetState(HWP_UNSUPPORTED_VERSION);
     }
     return HWP_NoError;
-}
-
-
-void HWPFile::Flush(void)
-{
-    if (hiodev)
-        hiodev->flush();
-}
-
-
-void HWPFile::Close(void)
-{
-    if (hiodev)
-        hiodev->close();
 }
 
 
@@ -424,36 +403,6 @@ bool HWPFile::TagsRead(void)
 }
 
 
-const char *HWPFile::GetFileName() const
-{
-    return fname;
-}
-
-
-bool HWPFile::IsCompressedFile() const
-{
-    return compressed;
-}
-
-
-enum HWPFile::Paper HWPFile::GetPaperKind() const
-{
-    return (enum Paper) (_hwpInfo.paper.paper_kind);
-}
-
-
-void HWPFile::GetPaperSize(hunit & Width, hunit & Height) const
-{
-    Width = _hwpInfo.paper.paper_width;
-    Height = _hwpInfo.paper.paper_height;
-}
-
-
-bool HWPFile::GetPaperOrientation() const
-{
-    return (_hwpInfo.paper.paper_direction != 1);
-}
-
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
     ColumnInfo *cinfo = columnlist.find(num);
@@ -478,18 +427,6 @@ int HWPFile::GetPageMasterNum(int page)
     }
     return i-1;
 }
-
-int HWPFile::GetFontCount(int lang)
-{
-    return _hwpFont.NFonts(lang);
-}
-
-
-const char *HWPFile::GetFontName(int lang, int id)
-{
-    return _hwpFont.GetFontName(lang, id);
-}
-
 
 HyperText *HWPFile::GetHyperText()
 {

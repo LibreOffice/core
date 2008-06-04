@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formula.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -333,57 +333,6 @@ void Formula::makeSubSup(Node *res)
 #endif
 }
 
-void Formula::makeUnderOver(Node *res)
-{
-     Node *tmp = res;
-     if( !tmp ) return;
-
-#ifdef DEBUG
-     inds;
-     if( res->id == ID_SUBEXPR )
-          fprintf(stderr,"<math:munder>\n");
-     else if( res->id == ID_SUPEXPR )
-          fprintf(stderr,"<math:mover>\n");
-     else
-          fprintf(stderr,"<math:munderover>\n");
-#else
-     if( res->id == ID_SUBEXPR )
-          rstartEl(ascii("math:munder"), rList);
-     else if( res->id == ID_SUPEXPR )
-          rstartEl(ascii("math:mover"), rList);
-     else
-          rstartEl(ascii("math:munderover"), rList);
-#endif
-
-     tmp = tmp->child;
-     if( res->id == ID_SUBSUPEXPR ) {
-          makeExpr(tmp);
-          makeBlock(tmp->next);
-          makeBlock(tmp->next->next);
-     }
-     else{
-          makeExpr(tmp);
-          makeExpr(tmp->next);
-     }
-
-#ifdef DEBUG
-     inde;
-     if( res->id == ID_SUBEXPR )
-          fprintf(stderr,"</math:munder>\n");
-     else if( res->id == ID_SUPEXPR )
-          fprintf(stderr,"</math:mover>\n");
-     else
-          fprintf(stderr,"</math:munderover>\n");
-#else
-     if( res->id == ID_SUBEXPR )
-          rendEl(ascii("math:munder"));
-     else if( res->id == ID_SUPEXPR )
-          rendEl(ascii("math:mover"));
-     else
-          rendEl(ascii("math:munderover"));
-#endif
-}
-
 void Formula::makeFraction(Node *res)
 {
      Node *tmp = res;
@@ -632,33 +581,6 @@ void Formula::makeBlock(Node *res)
 #else
      rendEl(ascii("math:mrow"));
 #endif
-}
-
-void Formula::makeOperator(Node *res)
-{
-#ifdef DEBUG
-     inds;
-     fprintf(stderr,"<math:mo>%s</math:mo>\n",getMathMLEntity(res->value, entity));
-     indo;
-#else
-     rstartEl(ascii("math:mo"), rList);
-     runistr(getMathMLEntity(res->value,entity));
-     rendEl(ascii("math:mo"));
-#endif
-}
-void Formula::makeDelimeter(Node *res)
-{
-     if( res->value != NULL ){
-#ifdef DEBUG
-          inds;
-          fprintf(stderr,"<math:mi>%s</math:mi>\n",getMathMLEntity(res->value, entity));
-          indo;
-#else
-          rstartEl(ascii("math:mi"), rList);
-          runistr(getMathMLEntity(res->value, entity));
-          rendEl(ascii("math:mi"));
-#endif
-     }
 }
 
 // DVO: add space to avoid warning

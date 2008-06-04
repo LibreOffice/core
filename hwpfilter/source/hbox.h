@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hbox.h,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hbox.h,v 1.5 2008-04-10 12:02:37 rt Exp $ */
+/* $Id: hbox.h,v 1.6 2008-06-04 09:56:30 vg Exp $ */
 
 #ifndef _HBOX_H_
 #define _HBOX_H_
@@ -52,10 +52,6 @@ struct HBox
     public:
         hchar hh;
 
-/**
- * Construct a HBox object with default value zero.
- */
-        HBox();
 /**
  * Construct a HBox object with parameter hch.
  * @param hch 16bit character being able to have Korean character.

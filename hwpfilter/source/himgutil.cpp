@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: himgutil.cpp,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,44 +37,6 @@
 #include "hwplib.h"
 #include "htags.h"
 #include "himgutil.h"
-
-const char *GetPictureFilename(const char *picname)
-{
-#ifdef _WIN32
-    return picname;
-#else                                         /* UNIX */
-    static char fname[256], *ptr;
-
-    if (picname[1] == ':')
-        ptr = strcpy(fname, picname + 3);
-    else
-        ptr = strcpy(fname, picname);
-
-    while (*ptr)
-    {
-        if (*ptr == '\\')
-            *ptr = DIRSEP;
-        ptr++;
-    }
-    if (access(fname, 0) != -1)
-        return fname;
-    else if ((ptr = strrchr(fname, DIRSEP)) && access(ptr + 1, 0) != -1)
-        return ptr + 1;
-
-/* 소문자로 */
-    ptr = fname;
-    while (*ptr)
-    {
-        *ptr = tolower(*ptr);
-        ptr++;
-    }
-    if (access(fname, 0) != -1)
-        return fname;
-    else if ((ptr = strrchr(fname, '/')) && access(ptr + 1, 0) != -1)
-        return ptr + 1;
-    return 0;
-#endif                                        /* !_WIN32 */
-}
 
 
 static int ImageMagicType(const uchar * magicno)
@@ -137,30 +99,6 @@ static int ImageMagicType(const uchar * magicno)
 
     return rv;
 }
-
-
-int ReadFileType(const char *fname)
-{
-    FILE *fp;
-    uchar magicno[30];                            /* first 30 bytes of file */
-    int n;
-
-    if (!fname)
-        return RFT_ERROR;                         /* shouldn't happen */
-
-    fp = fopen(fname, "rb");
-    if (!fp)
-        return RFT_ERROR;
-
-    n = fread(magicno, 1, 30, fp);
-    fclose(fp);
-
-    if (n < 30)
-        return RFT_UNKNOWN;                       /* files less than 30 bytes long... */
-
-    return ImageMagicType(magicno);
-}
-
 
 const char *GetEmbImgname(const EmPicture * empic)
 {
