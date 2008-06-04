@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyle.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,8 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
-#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 }
+#define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
+#define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
@@ -118,7 +118,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
 //    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
@@ -127,7 +127,7 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
     MAP( "Width", XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
 //  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 const XMLPropertyMapEntry aXMLScRowStylesImportProperties[] =
@@ -142,7 +142,7 @@ const XMLPropertyMapEntry aXMLScRowStylesImportProperties[] =
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_ROW|XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE),
     MAP( "OptimalHeight", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
@@ -150,7 +150,7 @@ const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
     MAP( "Height", XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT),
     MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_ROW|XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE),
     MAP( "OptimalHeight", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
@@ -165,7 +165,7 @@ const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE|XML_TYPE_BOOL, 0 ),
     MAP( "PageStyle", XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, XML_TYPE_PROP_TABLE|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME ),
     MAP( "TableLayout", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE|XML_TYPE_TEXT_WRITING_MODE, 0 ),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
@@ -173,7 +173,7 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE|XML_TYPE_BOOL, 0 ),
     MAP( "PageStyle", XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME, XML_TYPE_PROP_TABLE|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MASTERPAGENAME ),
     MAP( "TableLayout", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE|XML_TYPE_TEXT_WRITING_MODE, 0 ),
-    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0 }
+    MAP_END()
 };
 
 ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
