@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appserv.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,6 +150,8 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+
+namespace css = com::sun::star;
 
 //-------------------------------------------------------------------------
 long QuitAgain_Impl( void* pObj, void* pArg )
@@ -802,6 +804,25 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
                   pDlg->Execute();
                   delete pDlg;
+            }
+            break;
+        }
+
+        case SID_MORE_DICTIONARIES:
+        {
+            try
+            {
+                uno::Reference< lang::XMultiServiceFactory > xSMGR =
+                    ::comphelper::getProcessServiceFactory();
+                uno::Reference< css::system::XSystemShellExecute > xSystemShell(
+                    xSMGR->createInstance( DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute" ) ),
+                    uno::UNO_QUERY_THROW );
+                if ( xSystemShell.is() )
+                    xSystemShell->execute( DEFINE_CONST_UNICODE("http://extensions.services.openoffice.org/taxonomy/term/88"), ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
+                DBG_ERRORFILE( "SfxApplication::OfaExec_Impl(SID_MORE_DICTIONARIES): caught an exception!" );
             }
             break;
         }
