@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.183 $
+ * $Revision: 1.184 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -5930,6 +5930,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //tap.fCantSplit;1 or 0;byte;
         {0x3404, 0},                                 //"sprmTTableHeader"
                                                      //tap.fTableHeader;1 or 0;byte;
+        {0x3466, 0},                                 //"sprmTFCantSplit90"
+                                                     //tap.fCantSplit90;1 or 0;byte;
         {0xD605, 0},                                 //"sprmTTableBorders"
                                                      //tap.rgbrcTable;complex;
                                                      //24 bytes;
