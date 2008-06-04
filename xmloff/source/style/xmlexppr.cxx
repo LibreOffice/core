@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexppr.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -676,7 +676,15 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
             if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
-                pFilterInfo->AddProperty(rAPIName, i);
+            {
+                const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                const SvtSaveOptions::ODFDefaultVersion nEarliestODFVersionForExport(
+                        maPropMapper->GetEarliestODFVersionForExport( i ) );
+                if( nCurrentVersion >= nEarliestODFVersionForExport
+                        || nCurrentVersion == SvtSaveOptions::ODFVER_UNKNOWN
+                        || nEarliestODFVersionForExport == SvtSaveOptions::ODFVER_UNKNOWN )
+                    pFilterInfo->AddProperty(rAPIName, i);
+            }
         }
 
         if( xTypeProv.is() && aImplId.getLength() == 16 )
