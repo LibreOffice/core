@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTableExport.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,10 +69,10 @@ using namespace ::xmloff::token;
 
 // --------------------------------------------------------------------
 
-#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context }
+#define _MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define CMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
-#define MAP_END { 0L, 0, 0, XML_EMPTY, 0, 0 }
+#define MAP_END { 0L, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010 }
 
 // --------------------------------------------------------------------
 
