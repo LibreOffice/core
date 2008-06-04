@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optcolor.src,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -437,6 +437,14 @@ TabPage RID_SVXPAGE_COLORCONFIG
             String ST_EXTENSION
             {
                 Text [ en-US ] = "Colorsettings of the Extensions";
+            };
+            String ST_SPELL_CHECK_HIGHLIGHTING
+            {
+                Text [ en-US ] = "Spell check highlighting";
+            };
+            String ST_GRAMMAR_CHECK_HIGHLIGHTING
+            {
+                Text [ en-US ] = "Grammar check highlighting";
             };
         };
     };
