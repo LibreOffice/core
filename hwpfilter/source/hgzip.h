@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hgzip.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hgzip.h,v 1.4 2008-04-10 12:04:19 rt Exp $ */
+/* $Id: hgzip.h,v 1.5 2008-06-04 09:57:59 vg Exp $ */
 
 #ifndef _HWPGZIP_H_
 #define _HWPGZIP_H_
@@ -108,24 +108,10 @@ int     gz_close    ( gz_stream *file );
  */
 int     gz_read     ( gz_stream *file, voidp  buf, unsigned len );
 /**
- * Writes the given number of uncompressed bytes into the compressed file
- * This exists for future using.
- * @returns The number of bytes actually written
- */
-int     gz_write    ( gz_stream *file, const voidp buf, unsigned len );
-/**
  * Flushes all pending output into the compressed file
  * gz_flush should be called only when strictly necessary because it can
  * degrade compression
  * @param flush Is as in the deflate() function
  */
 int     gz_flush    ( gz_stream *file, int flush );
-/**
- * Not implemented.
- */
-int     gz_seek     ( gz_stream *file, long offset, int whence );
-/**
- * Not implemented.
- */
-long        gz_tell     ( gz_stream *file );
 #endif                                            /* _HWPGZIP_H_ */

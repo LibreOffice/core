@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hwpfile.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,7 @@
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
 //
-// $Id: hwpfile.h,v 1.4 2008-04-10 12:09:35 rt Exp $
+// $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
 //
 
 #ifndef _HWPFILE_H_
@@ -96,11 +96,10 @@ struct ColumnInfo{
  * There are two way to read hwp information from stream, one is to read all at a time
  * to use @ref ReadhwpFile() method like above example, other is to read partial information
  * to use @ref Open(), @ref InfoRead(), @ref FontRead(), @ref StyleRead(), @ref ParaListRead(), @ref TagsRead(),
- * @ref Flush() and @ref Close().
  *
  * @short HWP file management object
  * @author Mizi Reserach
- * @version $Id: hwpfile.h,v 1.4 2008-04-10 12:09:35 rt Exp $
+ * @version $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
  */
 class DLLEXPORT HWPFile
 {
@@ -109,10 +108,6 @@ class DLLEXPORT HWPFile
  * Default constructor
  */
         HWPFile( void );
-/**
- * Create HWPFile object and call @ref Open() method
- */
-        HWPFile( HStream& stream );
 
         ~HWPFile( void );
 
@@ -128,15 +123,6 @@ class DLLEXPORT HWPFile
  * @see State()
  */
         int Open( HStream & );
-/**
- * Flushs the stream of HIODev.
- */
-        void Flush( void );
-
-/**
- * Closes the stream of HIODev.
- */
-        void Close( void );
 
 /**
  * Say current state
@@ -219,16 +205,6 @@ class DLLEXPORT HWPFile
  */
         bool TagsRead(void);
 
-/**
- * Get the name of current file
- */
-        const char *GetFileName(void) const;
-
-/**
- * @returns True if compressed, otherwise false
- */
-        bool IsCompressedFile() const;
-
         enum Paper
         {
             UserPaper = 0,
@@ -254,16 +230,10 @@ class DLLEXPORT HWPFile
         void AddPageNumber(ShowPageNum *);
         void AddTable(Table *);
 
-        enum Paper GetPaperKind() const;
-        void GetPaperSize(hunit& Width, hunit& Height) const;
-        bool GetPaperOrientation() const;
-
         ColumnDef* GetColumnDef(int);
           int GetPageMasterNum(int page);
 
           int getCurrentPage(){ return m_nCurrentPage;}
-        int GetFontCount(int lang);
-        const char *GetFontName(int lang, int id);
         HWPInfo *GetHWPInfo(void) { return &_hwpInfo; }
         HWPFont *GetHWPFont(void) { return &_hwpFont; }
         HWPStyle *GetHWPStyle(void) { return &_hwpStyle; }

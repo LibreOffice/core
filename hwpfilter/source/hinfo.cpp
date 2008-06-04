@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hinfo.cpp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hinfo.cpp,v 1.4 2008-04-10 12:05:04 rt Exp $ */
+/* $Id: hinfo.cpp,v 1.5 2008-06-04 09:58:52 vg Exp $ */
 
 #include    "precompile.h"
 
@@ -144,39 +144,6 @@ bool HWPInfo::Read(HWPFile & hwpf)
     hwpf.SetCompressed(hwpf.compressed);
 
     return (!hwpf.State());
-}
-
-
-hunit HWPInfo::PageWid(void)
-{
-    if (paper.paper_direction & 1)
-        return paper.paper_height;
-    else
-        return paper.paper_width;
-}
-
-
-hunit HWPInfo::PageLen(void)
-{
-    if (paper.paper_direction & 1)
-        return paper.paper_width;
-    else
-        return paper.paper_height;
-}
-
-
-hunit HWPInfo::PageEditWid(void)
-{
-    return PageWid() - paper.left_margin -
-        paper.right_margin - paper.gutter_length;
-}
-
-
-hunit HWPInfo::PageEditLen(void)
-{
-    return PageLen() -
-        (paper.bottom_margin + paper.footer_length) -
-        (paper.top_margin + paper.header_length);
 }
 
 

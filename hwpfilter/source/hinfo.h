@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hinfo.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hinfo.h,v 1.4 2008-04-10 12:05:21 rt Exp $ */
+/* $Id: hinfo.h,v 1.5 2008-06-04 09:59:14 vg Exp $ */
 
 #ifndef _HWPINFO_H_
 #define _HWPINFO_H_
@@ -60,26 +60,26 @@ typedef struct
     hunit     gutter_length;
 } PaperInfo;
 
-/* 페이지 배경색, 배경그림 정보 */
+/* ?????? ??????, ???????? ???? */
 typedef struct
 {
      char type;  // 0- background color, 1 - external image, 2- embeded image
      char reserved1[8];
-     int luminance; /* 밝기 ( -100 ~ 100 ) */
-     int contrast; /* 명암 ( -100 ~ 100 ) */
-     char effect; /* 0-원래그림, 1-그레이스케일, 2-흑백 */
+     int luminance; /* ???? ( -100 ~ 100 ) */
+     int contrast; /* ???? ( -100 ~ 100 ) */
+     char effect; /* 0-????????, 1-????????????, 2-???? */
      char reserved2[8];
      char filename[260 + 1]; // filename
      unsigned char color[3]; //0 - red, 1 - green, 2 - blue
-     unsigned short flag; /* 0 - 바둑판식, 1 - 가운데로, 2 - 쪽크기, 3 - 용지크기 */
-     int range; /* 0-전체, 1-첫페이지, 3-짝수쪽, 4-홀수쪽 */
+     unsigned short flag; /* 0 - ????????, 1 - ????????, 2 - ??????, 3 - ???????? */
+     int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
      char reserved3[27];
      int size;
      char *data;        // image data
      bool isset;
 } PaperBackInfo;
 
-/* 연결인쇄 정보 */
+/* ???????? ???? */
 /**
  * Information of printing for chained page
  */
@@ -90,7 +90,7 @@ typedef struct
     unsigned char chain_filename[CHAIN_MAX_PATH];
 } DocChainInfo;
 
-/* 문서 요약 */
+/* ???? ???? */
 /**
  * Summary of document
  */
@@ -107,13 +107,13 @@ struct HWPSummary
 };
 
 /**
-  HWPInfo class는 HWPFile에 대한 정보를 담고 있는 클래스이다.
-  종이나 여백 등의 레이아웃(layout) 정보는 쪽매기기에서
-  사용하며, 기타 내부 정보를 포함하고 있다. \\
+  HWPInfo class?? HWPFile?? ???? ?????? ???? ???? ??????????.
+  ?????? ???? ???? ????????(layout) ?????? ????????????
+  ????????, ???? ???? ?????? ???????? ????. \\
 
-  HWPInfo 클래스는 HWPFile의 #GetHWPInfo()# 함수를 통해 얻을 수 있다.
+  HWPInfo ???????? HWPFile?? #GetHWPInfo()# ?????? ???? ???? ?? ????.
 
-  @memo Hwp 문서 정보
+  @memo Hwp ???? ????
 */
 /**
  * Contains the basic information of the hwp document:
@@ -148,12 +148,12 @@ class DLLEXPORT HWPInfo
         unsigned char annotation[ANNOTATION_LEN];
         short     encrypted;
 // unsigned char    reserved2[6];
-        short     beginpagenum;                   /* 시작페이지 번호 */
+        short     beginpagenum;                   /* ?????????? ???? */
 /**
  * Information about footnote
  */
-        short     beginfnnum;                     /* 각주시작번호 */
-        short     countfn;                        /* 각주 갯수 */
+        short     beginfnnum;                     /* ???????????? */
+        short     countfn;                        /* ???? ???? */
         hunit     splinetext, splinefn;
         hunit     spfnfn;
         unsigned char fnchar;
@@ -170,7 +170,7 @@ class DLLEXPORT HWPInfo
         unsigned char compressed;
         unsigned char reserved3;
         short     info_block_len;
-/* 여기까지가 128 바이트이다 */
+/* ?????????? 128 ?????????? */
 /**
  * Summary of document
  */
@@ -184,27 +184,9 @@ class DLLEXPORT HWPInfo
         bool Write(CTextOut &txtf);
         bool Write(CHTMLOut &html);
 
-/* 용지 방향을 고려한 종이의 넓이를 계산한다. */
-/**
- * Returns the width of paper regarding page orientation
- */
-        hunit PageWid(void);
-/* 용지 방향을 고려한 종이의 길이를 계산한다. */
-/**
- * Returns the length of paper regarding page orientation
- */
-        hunit PageLen(void);
-/**
- * Returns the edit-enable width of paper
- */
-        hunit PageEditWid(void);
-/**
- * Returns the edit-enable length of paper
- */
-        hunit PageEditLen(void);
 };
 
-/* 글자 모양 구조체 */
+/* ???? ???? ?????? */
 /**
  * @short Style of character
  */
@@ -213,14 +195,14 @@ struct CharShape
 /**
  * Index of character style
  */
-    int       index;                              /* 스타일의 인덱스를 저장. */
+    int       index;                              /* ???????? ???????? ????. */
 /**
  * Font size
  */
     hunit     size;
     unsigned char font[NLanguage];
     unsigned char ratio[NLanguage];
-    signed char   space[NLanguage];               /* 자간 */
+    signed char   space[NLanguage];               /* ???? */
     unsigned char color[2];
     unsigned char shade;
     unsigned char attr;
@@ -229,7 +211,7 @@ struct CharShape
     bool Read(HWPFile &);
 };
 
-/* 탭 설정에 대한 구조체 */
+/* ?? ?????? ???? ?????? */
 
 #define MAXTABS 40
 /**
@@ -261,7 +243,7 @@ struct ParaShape
 /**
  * Index of paragraph style
  */
-    int       index;                              /* 스타일의 인덱스를 저장 */
+    int       index;                              /* ???????? ???????? ???? */
     hunit     left_margin;
     hunit     right_margin;
     hunit     indent;

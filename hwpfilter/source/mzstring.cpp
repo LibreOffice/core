@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mzstring.cpp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* NAME $Id: mzstring.cpp,v 1.4 2008-04-10 12:12:12 rt Exp $
+/* NAME $Id: mzstring.cpp,v 1.5 2008-06-04 10:02:20 vg Exp $
  * PURPOSE
  *   supposed to be used instead of std::string
  * NOTES
@@ -79,61 +79,6 @@ MzString::MzString()
     Data      = 0;
 }
 
-
-MzString::MzString(int init)
-{
-    Length    = 0;
-    Allocated = 0;
-    Data      = 0;
-    allocate(init);
-}
-
-
-MzString::MzString(const char *s)
-{
-    Data      = 0;
-    Allocated = 0;
-    Length    = 0;
-    if (s)
-        copy(s, strlen(s));
-}
-
-
-MzString::MzString(const char *s, int len)
-{
-    Data      = 0;
-    Allocated = 0;
-    Length    = 0;
-    copy(s, len);
-}
-
-
-MzString::MzString(MzString const *s)
-{
-    Data      = 0;
-    Allocated = 0;
-    Length    = 0;
-    if (s)
-        copy(s->Data, s->length());
-}
-
-
-//
-// This can be used for performance reasons if it is known the
-// MzString will need to grow.
-//
-
-/*?
-MzString::MzString(MzString const &s, int len)
-{
-  Data    = 0;
-  Allocated = 0;
-  Length    = 0;
-  if (len == 0) // default
-    len = s.length();
-  copy(s.Data, len);
-}
-*/
 
 MzString::~MzString()
 {
@@ -194,12 +139,6 @@ void MzString::append(const char *s)
 }
 
 
-void MzString::append(const char ch)
-{
-    append(&ch, 1);
-}
-
-
 int MzString::compare(const char *s)
 {
     if (!Data)   return -1;
@@ -210,21 +149,6 @@ int MzString::compare(const char *s)
 }
 
 
-#if 0
-int MzString::find(char *str)
-{
-    if (Data==NULL) return -1;
-    int   len = strlen(str);
-
-    Data[Length] = '\0';
-    for (int ii = 0; ii <= Length - len; ii++)
-    {
-        if (strncmp(Data + ii, str, len) == 0)
-            return ii;
-    }
-    return -1;
-}
-#endif
 int MzString::find(char ch)
 {
     return find(ch,0);
@@ -328,42 +252,6 @@ MzString &MzString::operator << (MzString const &s)
 }
 
 
-/*?
-char MzString::operator >> (char &c)
-{
-  c = '\0';
-  if( Data && *Data ) {
-    c = Data[Length - 1];
-    Data[Length - 1] = '\0';
-    Length--;
-  }
-  return c;
-}
-*/
-
-/*
-char MzString::last()
-{
-  if (Length > 0)
-    return Data[Length - 1];
-  else
-    return 0;
-}
-*/
-
-/*?
-char &MzString::operator [] (int n)
-{
-  static char   null = 0;
-  if( n >= Length )
-    return null;
-  else if (n < 0)
-    return (*this)[Length + n];
-  else
-    return Data[n];
-}
-*/
-
 char MzString::operator [] (int n)
 {
     if (Data && 0 <= n && n < Length)
@@ -377,15 +265,6 @@ void MzString::replace(int pos, char ch)
 {
     if (Data && 0 <= pos && pos < Length)
         Data[pos] = ch;
-}
-
-
-MzString &MzString::chop(int n)
-{
-    Length -= n;
-    if (Length < 0)
-        Length = 0;
-    return *this;
 }
 
 
@@ -435,15 +314,4 @@ bool MzString::allocate(int len)
 bool MzString::resize(int len)
 {
     return allocate(len);
-}
-
-
-void MzString::copy(const char *s, int len)
-{
-    if (s==NULL) return;
-    if (allocate(len))
-    {
-        if (len > 0) memcpy(Data, s, len);
-        Length = len;
-    }
 }

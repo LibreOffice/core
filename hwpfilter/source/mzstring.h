@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mzstring.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,15 +97,10 @@ class MzString
 {
     public:
         MzString();                               // Create an empty string
-        MzString(int init);                       // initial allocated length
-        MzString(const char *s);                  // from null terminated s
-        MzString(const char *s, int len);         // from s with length len
-        MzString(MzString const *s);              // Copy constructor
 // if len = 0, len becomes s.length)
         MzString(MzString const &s, int len = 0);
         ~MzString();
 
-        bool      empty(void) const;
         int       length() const;
         const char*   c_str() const;
         operator  char*()         { return (char *)c_str(); }
@@ -161,10 +156,6 @@ class MzString
         void      append  (MzString const &s);
         void      append  (const char *s);
         void      append  (const char *s, int n);
-        void      append  (const char ch);
-
-/** 스트링의 끝에서 글자를 지운다. */
-        MzString  &chop(int n = 1);
 
     private:
         int       Length;                         // Current Length
@@ -174,17 +165,7 @@ class MzString
 // Allocate some space for the data.
 // Delete Data if it has been allocated.
         bool      allocate(int len);
-        void      copy(const char *s, int len);
 };
-
-//
-// Inline methods.
-//
-inline bool MzString::empty(void) const
-{
-    return Data == 0L || Data[0] == '\0';
-}
-
 
 inline int MzString::length() const
 {

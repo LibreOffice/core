@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hpara.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.h,v 1.4 2008-04-10 12:06:26 rt Exp $ */
+/* $Id: hpara.h,v 1.5 2008-06-04 09:59:48 vg Exp $ */
 
 #ifndef _HWPPARA_H_
 #define _HWPPARA_H_
@@ -136,10 +136,6 @@ class DLLEXPORT HWPPara
         void  SetNext(HWPPara *n) { _next = n; };
 
 /* layout을 위한 함수 */
-/**
- * Get line information of given line
- */
-        LineInfo *GetLineInfo(int line);
 /**
  * Returns the character sytle of paragraph.
  */

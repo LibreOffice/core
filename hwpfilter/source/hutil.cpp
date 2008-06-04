@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hutil.cpp,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-/* $Id: hutil.cpp,v 1.4 2008-04-10 12:08:15 rt Exp $ */
+/* $Id: hutil.cpp,v 1.5 2008-06-04 10:00:16 vg Exp $ */
 
 #include "precompile.h"
 
@@ -102,17 +102,3 @@ int hstrlen(const hchar * s)
         n++;
     return (n);
 }
-
-
-#ifndef _WIN32
-
-char *strupr(char *str)
-{
-    while (*str)
-    {
-        *str = toupper(*str);
-        str++;
-    }
-    return str;
-}
-#endif                                            // _WIN32
