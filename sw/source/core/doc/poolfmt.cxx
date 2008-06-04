@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1229,6 +1229,10 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             Color aCol( COL_BLUE );
             aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
             aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
+            // i40133: patch submitted by rail: set language to 'none' to prevent spell checking:
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CTL_LANGUAGE ) );
         }
         break;
     case RES_POOLCHR_INET_VISIT:
@@ -1236,6 +1240,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             Color aCol( COL_RED );
             aSet.Put( SvxColorItem( aCol, RES_CHRATR_COLOR ) );
             aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE ) );
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_LANGUAGE ) );
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CJK_LANGUAGE ) );
+            aSet.Put( SvxLanguageItem( LANGUAGE_NONE, RES_CHRATR_CTL_LANGUAGE ) );
         }
         break;
     case RES_POOLCHR_JUMPEDIT:
