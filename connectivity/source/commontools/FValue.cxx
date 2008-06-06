@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FValue.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1044,7 +1044,10 @@ sal_Bool ORowSetValue::getBool()    const
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
             case DataType::BIGINT:
-                bRet = *(sal_Int64*)m_aValue.m_pValue != 0.0;
+                if ( m_bSigned )
+                    bRet = *(sal_Int64*)m_aValue.m_pValue != 0;
+                else
+                    bRet = ::rtl::OUString(m_aValue.m_pString).toInt64() != 0;
                 break;
             case DataType::FLOAT:
                 bRet = *(float*)m_aValue.m_pValue != 0.0;
@@ -1096,7 +1099,10 @@ sal_Int8 ORowSetValue::getInt8()    const
                 nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::BIGINT:
-                nRet = sal_Int8(*(sal_Int64*)m_aValue.m_pValue);
+                if ( m_bSigned )
+                    nRet = sal_Int8(*(sal_Int64*)m_aValue.m_pValue);
+                else
+                    nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int8(*(float*)m_aValue.m_pValue);
@@ -1157,7 +1163,10 @@ sal_Int16 ORowSetValue::getInt16()  const
                 nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::BIGINT:
-                nRet = sal_Int16(*(sal_Int64*)m_aValue.m_pValue);
+                if ( m_bSigned )
+                    nRet = sal_Int16(*(sal_Int64*)m_aValue.m_pValue);
+                else
+                    nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
             case DataType::FLOAT:
                 nRet = sal_Int16(*(float*)m_aValue.m_pValue);
@@ -1726,10 +1735,22 @@ void ORowSetValue::setSigned(sal_Bool _bMod)
             switch(m_eTypeKind)
             {
                 case DataType::BIGINT:
-                    if ( m_bSigned )
-                        (*this) = getLong();
+                    if ( m_bSigned ) // now we are signed, so we were unsigned and need to call getString()
+                    {
+                        m_bSigned = !m_bSigned;
+                        const ::rtl::OUString sValue = getString();
+                        free();
+                        m_bSigned = !m_bSigned;
+                        (*this) = sValue;
+                    }
                     else
-                        (*this) = getString();
+                    {
+                        m_bSigned = !m_bSigned;
+                        const sal_Int64 nValue = getLong();
+                        free();
+                        m_bSigned = !m_bSigned;
+                        (*this) = nValue;
+                    }
                     break;
                 case DataType::TINYINT:
                     if ( m_bSigned )
