@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlin2.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -309,8 +309,7 @@ BOOL Outliner::IsExpanded( Paragraph* pPara ) const
 Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const
 {
     DBG_CHKTHIS(Outliner,0);
-    USHORT nRelPos;
-    return pParaList->GetParent( pParagraph, nRelPos );
+    return pParaList->GetParent( pParagraph );
 }
 
 ULONG Outliner::GetChildCount( Paragraph* pParent ) const
