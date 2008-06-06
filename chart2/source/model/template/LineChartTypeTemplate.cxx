@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LineChartTypeTemplate.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,6 +366,7 @@ void SAL_CALL LineChartTypeTemplate::applyStyle(
 
         DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
+        DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
     }
     catch( uno::Exception & ex )
     {
