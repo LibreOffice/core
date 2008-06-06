@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BKeys.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,28 +31,24 @@
 #ifndef _CONNECTIVITY_ADABAS_KEYS_HXX_
 #define _CONNECTIVITY_ADABAS_KEYS_HXX_
 
-#include "connectivity/sdbcx/VCollection.hxx"
+#include "connectivity/TKeys.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "adabas/BTable.hxx"
 namespace connectivity
 {
     namespace adabas
     {
-        class OKeys : public sdbcx::OCollection
+        class OKeys : public OKeysHelper
         {
-            OAdabasTable*   m_pTable;
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
             virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-            virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+
+            virtual ::rtl::OUString getDropForeignKey() const;
         public:
             OKeys(OAdabasTable* _pTable,
                      ::osl::Mutex& _rMutex,
                      const TStringVector &_rVector
-                     ) : sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector,sal_True)
-                ,m_pTable(_pTable)
+                     ) : OKeysHelper(_pTable,_rMutex,_rVector)
             {}
         };
     }
