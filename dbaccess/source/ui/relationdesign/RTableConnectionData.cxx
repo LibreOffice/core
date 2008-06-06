@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RTableConnectionData.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,13 +124,7 @@ BOOL ORelationTableConnectionData::DropRelation()
     ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
     // Relation loeschen
-    Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
-    Reference< XIndexAccess> xKeys;
-    if(xSup.is() )
-        xKeys = xSup->getKeys();
-    else
-        return FALSE;
-
+    Reference< XIndexAccess> xKeys = getReferencingTable()->getKeys();
     if( m_aConnName.Len() && xKeys.is() )
     {
         const sal_Int32 nCount = xKeys->getCount();
@@ -201,12 +195,12 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 // -----------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& _xTable,EConnectionSide _eEConnectionSide) const
+BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XIndexAccess>& _xKeys,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
     USHORT  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
-    ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xTable,KeyType::PRIMARY);
+    ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xKeys,KeyType::PRIMARY);
     if ( vKeyColumns.size() == 1 )
     {
 //      OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
@@ -215,16 +209,16 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
         if ( xKeyColumns.is() )
         {
             aKeyColumns = xKeyColumns->getElementNames();
-            const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
-            const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
+            const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
+            const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
-            for(;pKeyBegin != pKeyEnd;++pKeyBegin)
+            for(;pKeyIter != pKeyEnd;++pKeyIter)
             {
                 OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
                 for(;aIter != m_vConnLineData.end();++aIter)
                 {
                     ++nValidLinesCount;
-                    if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin )
+                    if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
                     {
                         ++nPrimKeysCount;
                         break;
@@ -320,23 +314,14 @@ BOOL ORelationTableConnectionData::Update()
     ////////////////////////////////////////////////////////////
     // Alte Relation loeschen
     {
-        Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
-        Reference< XIndexAccess> xKeys;
-        if ( xSup.is() )
-            xKeys = xSup->getKeys();
-        else
-            return FALSE;
-
         DropRelation();
         if( !IsConnectionPossible() )
             return FALSE;
     }
 
     // reassign the keys because the orientaion could be changed
-    Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
-    Reference< XIndexAccess> xKeys;
-    if ( xSup.is() )
-        xKeys = xSup->getKeys();
+    Reference<XPropertySet> xTableProp(getReferencingTable()->getTable());
+    Reference< XIndexAccess> xKeys ( getReferencingTable()->getKeys());
 
     if ( !xKeys.is() )
         return FALSE;
@@ -349,12 +334,11 @@ BOOL ORelationTableConnectionData::Update()
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
-    if ( xKey.is() )
+    if ( xKey.is() && xTableProp.is() )
     {
         // build a foreign key name
         ::rtl::OUString sSourceName;
-        Reference<XPropertySet> xProp(xSup,UNO_QUERY_THROW);
-        xProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
+        xTableProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
         ::rtl::OUString sKeyName = sSourceName;
         sKeyName += getReferencedTable()->GetTableName();
 
