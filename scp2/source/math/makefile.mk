@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,10 +40,6 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
-.IF "$(WITH_BINFILTER)" == "NO"
-SCPDEFS+=-DWITHOUT_BINFILTER
-.ENDIF
 
 SCP_PRODUCT_TYPE=osl
 PARFILES= \
