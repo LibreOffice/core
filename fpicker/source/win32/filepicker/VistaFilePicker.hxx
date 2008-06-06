@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePicker.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,8 +133,7 @@ public:
         throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setDefaultName( const ::rtl::OUString& sName )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException         );
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& sDirectory )
         throw (css::lang::IllegalArgumentException,
@@ -240,7 +239,8 @@ public:
     // XCancellable
     //------------------------------------------------
 
-    virtual void SAL_CALL cancel( );
+    virtual void SAL_CALL cancel( )
+        throw(css::uno::RuntimeException);
 
     //------------------------------------------------
     // XEventListener

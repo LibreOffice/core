@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePicker.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +35,9 @@
 // includes
 //------------------------------------------------------------------------
 
+#ifdef _MSC_VER
 #pragma warning (disable:4917)
+#endif
 
 #include "VistaFilePicker.hxx"
 #include "WinFileOpenImpl.hxx"
@@ -277,8 +279,7 @@ void SAL_CALL VistaFilePicker::appendFilterGroup(const ::rtl::OUString&         
 
 //-----------------------------------------------------------------------------------------
 void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& /*sName*/)
-    throw (css::lang::IllegalArgumentException,
-           css::uno::RuntimeException         )
+    throw(css::uno::RuntimeException)
 {
 }
 
@@ -634,6 +635,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 //------------------------------------------------------------------------------------
 
 void SAL_CALL VistaFilePicker::cancel()
+    throw(css::uno::RuntimeException)
 {
 }
 
@@ -667,7 +669,7 @@ sal_Bool SAL_CALL VistaFilePicker::supportsService(const ::rtl::OUString& sServi
 //  XServiceInfo
 // -------------------------------------------------
 
-css::uno::Sequence<::rtl::OUString> SAL_CALL VistaFilePicker::getSupportedServiceNames()
+css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
     return VistaFilePicker_getSupportedServiceNames();

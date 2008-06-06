@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerImpl.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +72,7 @@ typedef ::comphelper::SequenceAsVector< ::rtl::OUString > TStringList;
     if ( FAILED(hr) )
         return ::rtl::OUString();
 
-    ::rtl::OUString sURL = ::rtl::OUString(pStr);
+    ::rtl::OUString sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
     CoTaskMemFree (pStr);
     return sURL;
 }
@@ -90,8 +90,8 @@ typedef ::comphelper::SequenceAsVector< ::rtl::OUString > TStringList;
     {
         COMDLG_FILTERSPEC aSpec;
 
-        aSpec.pszName = aFilter.first ;
-        aSpec.pszSpec = aFilter.second;
+        aSpec.pszName = reinterpret_cast<LPCTSTR>(aFilter.first.getStr()) ;
+        aSpec.pszSpec = reinterpret_cast<LPCTSTR>(aFilter.second.getStr());
 
         lList.push_back(aSpec);
     }
@@ -324,7 +324,11 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
         return;
 
     TFileDialog iDialog;
+#ifdef __MINGW32__
+    m_iDialogOpen->QueryInterface(IID_IFileDialog, (void **)(&iDialog));
+#else
     m_iDialogOpen.query(&iDialog);
+#endif
 
     TFileDialogEvents iHandler = m_iEventHandler;
 
@@ -363,7 +367,11 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 
     TFileDialogEvents  iHandler = m_iEventHandler;
     TFileDialog        iDialog;
+#ifdef __MINGW32__
+    m_iDialogSave->QueryInterface(IID_IFileDialog, (void **)(&iDialog));
+#else
     m_iDialogSave.query(&iDialog);
+#endif
 
     aLock.clear();
     // <- SYNCHRONIZED
@@ -486,7 +494,7 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetTitle(sTitle);
+    iDialog->SetTitle(reinterpret_cast<LPCTSTR>(sTitle.getStr()));
 }
 
 //-------------------------------------------------------------------------------
@@ -501,7 +509,11 @@ void VistaFilePickerImpl::impl_sta_SetDirectory(const RequestRef& rRequest)
     // <- SYNCHRONIZED
 
     ComPtr< IShellItem > pFolder;
+#ifdef __MINGW32__
+    HRESULT hResult = SHCreateItemFromParsingName ( reinterpret_cast<LPCTSTR>(sDirectory.getStr()), NULL, IID_IShellItem, (void**)(&pFolder) );
+#else
     HRESULT hResult = SHCreateItemFromParsingName ( sDirectory, NULL, IID_PPV_ARGS(&pFolder) );
+#endif
     if ( FAILED(hResult) )
         return;
 
@@ -655,10 +667,18 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (m_iDialogOpen.is())
+#ifdef __MINGW32__
+        m_iDialogOpen->QueryInterface(IID_IFileDialog, (void**)(&iDialog));
+#else
         m_iDialogOpen.query(&iDialog);
+#endif
     else
     if (m_iDialogSave.is())
+#ifdef __MINGW32__
+        m_iDialogSave->QueryInterface(IID_IFileDialog, (void**)(&iDialog));
+#else
         m_iDialogSave.query(&iDialog);
+#endif
 
     return iDialog;
 }
@@ -672,10 +692,18 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (m_iDialogOpen.is())
+#ifdef __MINGW32__
+        m_iDialogOpen->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustom));
+#else
         m_iDialogOpen.query(&iCustom);
+#endif
     else
     if (m_iDialogSave.is())
+#ifdef __MINGW32__
+        m_iDialogSave->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustom));
+#else
         m_iDialogSave.query(&iCustom);
+#endif
 
     return iCustom;
 }
@@ -744,7 +772,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
                             for (::sal_Int32 i=0; i<lItems.getLength(); ++i)
                             {
                                 const ::rtl::OUString& sItem = lItems[i];
-                                hResult = iCustom->AddControlItem(nId, i, sItem);
+                                hResult = iCustom->AddControlItem(nId, i, reinterpret_cast<LPCTSTR>(sItem.getStr()));
                             }
                         }
                         break;

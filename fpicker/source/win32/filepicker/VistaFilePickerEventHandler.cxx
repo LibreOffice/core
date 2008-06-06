@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VistaFilePickerEventHandler.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -148,7 +148,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* pDialog)
     if ( FAILED(hr) )
         return ::rtl::OUString();
 
-    ::rtl::OUString sURL = ::rtl::OUString(pStr);
+    ::rtl::OUString sURL = ::rtl::OUString(reinterpret_cast<sal_Unicode*>(pStr));
     CoTaskMemFree (pStr);
     return sURL;
 }
@@ -163,8 +163,13 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
     TFileOpenDialog      iOpen     ;
     TFileDialogCustomize iCustomize;
 
+#ifdef __MINGW32__
+    iDialog->QueryInterface(IID_IFileOpenDialog, (void**)(&iOpen));
+    iDialog->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustomize));
+#else
     iDialog.query(&iOpen     );
     iDialog.query(&iCustomize);
+#endif
 
     // make sure version list match to the current selection always ...
     // at least an empty version list will be better then the wrong one .-)
@@ -223,7 +228,7 @@ void lcl_updateVersionListDirectly(IFileDialog* pDialog)
         for (::sal_Int32 i=0; i<lVersions.getLength(); ++i)
         {
             const css::util::RevisionTag& aTag = lVersions[i];
-            iCustomize->AddControlItem(CONTROL_VERSIONLIST, i, aTag.Identifier);
+            iCustomize->AddControlItem(CONTROL_VERSIONLIST, i, reinterpret_cast<LPCTSTR>(aTag.Identifier.getStr()));
         }
         iCustomize->SetSelectedControlItem(CONTROL_VERSIONLIST, 0);
     }

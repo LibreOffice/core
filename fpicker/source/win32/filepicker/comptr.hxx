@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: comptr.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ class ComPtr
         //---------------------------------------------------------------------
         T_INTERFACE* operator=(IUnknown* pIUnknown)
         {
-            if (pIUknown)
+            if (pIUnknown)
                 pIUnknown->QueryInterface(P_IID, (void**)&m_pInterface);
             return m_pInterface;
         }
@@ -185,12 +185,14 @@ class ComPtr
             }
         }
 
+#ifndef __MINGW32__
         //---------------------------------------------------------------------
         template< class T_QUERYINTERFACE >
         HRESULT query(T_QUERYINTERFACE** pQuery)
         {
             return m_pInterface->QueryInterface(__uuidof(T_QUERYINTERFACE), (void**)pQuery);
         }
+#endif
 
         //---------------------------------------------------------------------
         ::sal_Bool equals(IUnknown* pCheck)

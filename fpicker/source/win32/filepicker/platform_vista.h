@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: platform_vista.h,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +46,7 @@
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#endif
 #include <comip.h>
-#if defined _MSC_VER
 #pragma warning(pop)
 #endif
 
