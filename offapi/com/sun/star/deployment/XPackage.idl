@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XPackage.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
 #include <com/sun/star/beans/Optional.idl>
 #include <com/sun/star/beans/Ambiguous.idl>
+#include <com/sun/star/beans/StringPair.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/deployment/XPackageTypeInfo.idl>
 #include <com/sun/star/ucb/CommandFailedException.idl>
@@ -241,6 +242,17 @@ interface XPackage
                 update information URLs
     */
     sequence<string> getUpdateInformationURLs();
+
+    /** returns the publisher info for a package, the strings
+        might be empty, if there are no publisher
+
+        <type scope="::com::sun::star::beans">StringPair</type>::First
+        represents the publisher name and
+        <type scope="::com::sun::star::beans">StringPair</type>::Second
+        represents the URL to the publisher.
+    */
+
+    ::com::sun::star::beans::StringPair getPublisherInfo();
 
     /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
 
