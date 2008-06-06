@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: styleexp.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,9 +264,7 @@ sal_Bool XMLStyleExport::exportStyle(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_STYLE,
                                   sal_True, sal_True );
 
-        SvXMLExportPropertyMapper2* pPropMapper2 = dynamic_cast< SvXMLExportPropertyMapper2* >( rPropMapper.get() );
-        if( pPropMapper2 )
-            pPropMapper2->SetStyleName( sEncodedStyleName );
+        rPropMapper->SetStyleName( sName );
 
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
@@ -274,8 +272,7 @@ sal_Bool XMLStyleExport::exportStyle(
         rPropMapper->exportXML( GetExport(), xPropStates,
                                 XML_EXPORT_FLAG_IGN_WS );
 
-        if( pPropMapper2 )
-            pPropMapper2->SetStyleName( OUString() );
+        rPropMapper->SetStyleName( OUString() );
 
         exportStyleContent( rStyle );
 
