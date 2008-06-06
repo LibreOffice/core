@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wizardmachine.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -346,6 +346,10 @@ namespace svt
         WizardState             getCurrentState() const { return WizardDialog::GetCurLevel(); }
 
         virtual IWizardPage*    getWizardPage(TabPage* _pCurrentPage) const;
+
+        /** retrieves a copy of the state history, i.e. all states we already visited
+        */
+        void    getStateHistory( ::std::vector< WizardState >& _out_rHistory );
 
     public:
         class AccessGuard { friend class WizardTravelSuspension; private: AccessGuard() { } };
