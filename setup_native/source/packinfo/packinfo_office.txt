@@ -160,6 +160,21 @@ packageversion = "%OOOPACKAGEVERSION"
 End
 
 Start
+module = "gid_Module_Optional_Binfilter"
+solarispackagename = "ooobasis%WITHOUTDOTOOOBASEVERSION-binfilter"
+solarisrequires = "ooobasis%WITHOUTDOTOOOBASEVERSION-core01"
+packagename = "ooobasis%OOOBASEVERSION-binfilter"
+freebsdrequires = "ooobasis%OOOBASEVERSION-calc,ooobasis%OOOBASEVERSION-draw,ooobasis%OOOBASEVERSION-impress,ooobasis%OOOBASEVERSION-math,ooobasis%OOOBASEVERSION-writer"
+requires = "ooobasis%OOOBASEVERSION-calc,ooobasis%OOOBASEVERSION-draw,ooobasis%OOOBASEVERSION-impress,ooobasis%OOOBASEVERSION-math,ooobasis%OOOBASEVERSION-writer"
+copyright = "1999-2007 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Legacy filters (e.g. StarOffice 5.2) for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+Start
 module = "gid_Module_Optional_Grfflt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-graphicfilter"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
