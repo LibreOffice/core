@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,7 @@ static const SfxItemPropertyMap* ImplGetSvxCellPropertyMap()
     static const SfxItemPropertyMap aSvxCellPropertyMap[] =
     {
         FILL_PROPERTIES
-        { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
+//      { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
         { MAP_CHAR_LEN("Style"),                        OWN_ATTR_STYLE,                 &::com::sun::star::style::XStyle::static_type(),                                    ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_CHAR_LEN(UNO_NAME_TEXT_WRITINGMODE),      SDRATTR_TEXTDIRECTION,          &::getCppuType( (::com::sun::star::text::WritingMode*) 0 ),                         0,      0},
         { MAP_CHAR_LEN(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
@@ -219,7 +219,7 @@ namespace sdr
 
                     sal_uInt32 nParaCount(pOutliner->GetParagraphCount());
 
-                    for(sal_uInt32 nPara(0L); nPara < nParaCount; nPara++)
+                    for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
@@ -707,61 +707,6 @@ sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell
 }
 
 // -----------------------------------------------------------------------------
-
-/** this method returns true if the outliner para object of this cell has
-    a paragraph with a level > 0 or if there is a paragraph with the EE_PARA_BULLETSTATE
-    set to true. This is needed for xml export to decide if we need to export the
-    level information.
-*/
-sal_Bool Cell::hasLevels()
-{
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
-    if( NULL == pOutlinerParaObject )
-        return sal_False;
-
-    USHORT nParaCount = (USHORT)pOutlinerParaObject->Count();
-    USHORT nPara;
-    for( nPara = 0; nPara < nParaCount; nPara++ )
-    {
-        if( pOutlinerParaObject->GetDepth( nPara ) > 0 )
-            return sal_True;
-    }
-
-    sal_Bool bHadBulletStateOnEachPara = sal_True;
-
-    const EditTextObject& rEditTextObject = pOutlinerParaObject->GetTextObject();
-    const SfxPoolItem* pItem;
-
-    for( nPara = 0; nPara < nParaCount; nPara++ )
-    {
-        SfxItemSet aSet = rEditTextObject.GetParaAttribs( nPara );
-        if( aSet.GetItemState(EE_PARA_BULLETSTATE, sal_False, &pItem) == SFX_ITEM_SET )
-        {
-            if( ((const SfxUInt16Item*) pItem)->GetValue() )
-                return sal_True;
-        }
-        else
-        {
-            bHadBulletStateOnEachPara = sal_False;
-        }
-    }
-
-    // if there was at least one paragraph without a bullet state item we
-    // also need to check the stylesheet for a bullet state item
-    if( !bHadBulletStateOnEachPara && GetStyleSheet() )
-    {
-        const SfxItemSet& rSet = GetStyleSheet()->GetItemSet();
-        if( rSet.GetItemState(EE_PARA_BULLETSTATE, sal_False, &pItem) == SFX_ITEM_SET )
-        {
-            if( ((const SfxUInt16Item*)pItem)->GetValue() )
-                return sal_True;
-        }
-    }
-
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------------
 // XInterface
 // -----------------------------------------------------------------------------
 
@@ -1155,10 +1100,12 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
     {
         switch( pMap->nWID )
         {
+/*
         case OWN_ATTR_HASLEVELS:
         {
             return Any( hasLevels() );
         }
+*/
         case OWN_ATTR_STYLE:
         {
             return Any( Reference< XStyle >( dynamic_cast< SfxUnoStyleSheet* >( GetStyleSheet() ) ) );
@@ -1371,11 +1318,12 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 eState = PropertyState_DEFAULT_VALUE;
             }
         }
-
+/*
         case OWN_ATTR_HASLEVELS:
         {
             return PropertyState_DIRECT_VALUE;
         }
+*/
         case OWN_ATTR_STYLE:
         {
             return PropertyState_DIRECT_VALUE;
@@ -1502,7 +1450,7 @@ void SAL_CALL Cell::setPropertyToDefault( const OUString& PropertyName ) throw(U
             mpProperties->ClearObjectItem( XATTR_FILLBMP_TILE );
             break;
         }
-        case OWN_ATTR_HASLEVELS:
+//      case OWN_ATTR_HASLEVELS:
         case OWN_ATTR_STYLE:
             break;
 
@@ -1542,9 +1490,10 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
         case OWN_ATTR_FILLBMP_MODE:
             return Any(  BitmapMode_NO_REPEAT );
 
+/*
         case OWN_ATTR_HASLEVELS:
             return Any( sal_False );
-
+*/
         case OWN_ATTR_STYLE:
         {
             Reference< XStyle > xStyle;
