@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_def.mk,v $
 #
-# $Revision: 1.47 $
+# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -197,10 +197,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 $(DEF$(TNR)TARGETN): \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
-    @echo just a dummy for UNIX
-    @echo > $@
+    @echo just a dummy for UNIX > $@
 .ENDIF
 .ENDIF			# "$(DEF$(TNR)TARGETN)"!=""
 
