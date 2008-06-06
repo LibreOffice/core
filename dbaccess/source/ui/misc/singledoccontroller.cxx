@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: singledoccontroller.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -628,7 +628,17 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     Reference< XDatabaseMetaData > OSingleDocumentController::getMetaData( ) const
     {
-        return isConnected() ? m_pImpl->m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
+        Reference< XDatabaseMetaData > xMeta;
+        try
+        {
+            if ( isConnected() )
+                xMeta.set( m_pImpl->m_xConnection->getMetaData(), UNO_SET_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return xMeta;
     }
 
     // -----------------------------------------------------------------------------
