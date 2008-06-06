@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScatterChartTypeTemplate.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,6 +244,7 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
 
         DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
+        DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
     }
     catch( uno::Exception & ex )
     {
