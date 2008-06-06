@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,7 @@ PACKAGE=com$/sun$/star$/xml$/xpath
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    XPathException.idl \
     XPathObjectType.idl \
     XXPathObject.idl \
     XXPathAPI.idl \
