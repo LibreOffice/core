@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,12 @@ class OutlinerEditEng : public EditEngine
 {
     Outliner*           pOwner;
 
+protected:
+
+    // derived from EditEngine. Allows Outliner objetcs to provide
+    // bullet access to the EditEngine.
+    virtual const SvxNumberFormat*  GetNumberFormat( USHORT nPara ) const;
+
 public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         ~OutlinerEditEng();
@@ -56,7 +62,6 @@ public:
 
     virtual void        StyleSheetChanged( SfxStyleSheet* pStyle );
     virtual void        ParaAttribsChanged( USHORT nPara );
-    virtual void        ParagraphHeightChanged( USHORT nPara );
     virtual BOOL        SpellNextDocument();
     virtual XubString   GetUndoComment( USHORT nUndoId ) const;
 
@@ -68,6 +73,8 @@ public:
     virtual XubString   CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
 
     virtual Rectangle   GetBulletArea( USHORT nPara );
+
+       virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
 
     // belongs into class Outliner, move there before incompatible update!
     Link                aOutlinerNotifyHdl;
