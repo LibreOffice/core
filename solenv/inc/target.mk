@@ -8,7 +8,7 @@
 #
 # $RCSfile: target.mk,v $
 #
-# $Revision: 1.208 $
+# $Revision: 1.209 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,9 +51,6 @@ ENVINCPRE+=-I$(PRE)$/inc
 UNOINCLUDES=$(SOLARINCDIR)$/offuh
 .ENDIF			# "$(BOOTSTRAP_SERVICE)"!="TRUE" && "$(NO_OFFUH)"==""
 SOLARINC+=$(JDKINCS)
-SOLARINC+=$(ORCLINC)
-SOLARINC+=$(DB2INC)
-SOLARINC+=$(DAOINC)
 # make sure INCLUDE isn't set
 INCLUDE:=
 .EXPORT : INCLUDE
