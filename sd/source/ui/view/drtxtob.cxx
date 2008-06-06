@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,8 +275,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     {
                         // #96250# and #78665#
                         // allow move up if position is 2 or greater OR it
-                        // is a title object (and thus depth==0)
-                        if(pOutl->GetAbsPos(pPara) > 1 || (1 == pOutl->GetAbsPos(pPara) && 0 == pOutl->GetDepth(1)))
+                        // is a title object (and thus depth==1)
+                        if(pOutl->GetAbsPos(pPara) > 1 || ( pPara->HasFlag(PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                         {
                             // Nicht ganz oben
                             bDisableUp = FALSE;
@@ -292,31 +292,24 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         }
                     }
 
-                    USHORT nMinDepth = 0;
-
-                    if (mpViewShell->ISA(DrawViewShell))
-                    {
-                        nMinDepth = 1;
-                    }
-
                     while (pPara)
                     {
-                        USHORT nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+                        sal_Int16 nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
-                        if (nDepth > nMinDepth)
+                        if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pPara->HasFlag( PARAFLAG_ISPAGE )) )
                         {
                             // Nicht minimale Tiefe
                             bDisableLeft = FALSE;
                         }
 
-                        if (nDepth < 9 &&
-                            ( pOutl->GetAbsPos(pPara) != 0 || !bOutlineViewSh ) )
+                        if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
+                            (bOutlineViewSh && (nDepth <= 0) && pPara->HasFlag( PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
                             // Nicht maximale Tiefe und nicht ganz oben
                             bDisableRight = FALSE;
                         }
 
-                        pPara = (Paragraph*) pList->Next();
+                        pPara = static_cast<Paragraph*>( pList->Next() );
                     }
 
                     if ( ( pOutl->GetAbsPos((Paragraph*) pList->Last()) < pOutl->GetParagraphCount() - 1 ) &&
@@ -328,19 +321,15 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                     // #96250# and #78665#
                     // disable when first para and 2nd is not a title
-                    pPara = (Paragraph*) pList->First();
-                    if(!bDisableDown
+                    pPara = static_cast< Paragraph* >( pList->First() );
+                    if(!bDisableDown && bIsOutlineView
                         && pPara
                         && 0 == pOutl->GetAbsPos(pPara)
                         && pOutl->GetParagraphCount() > 1
-                        && 0 != pOutl->GetDepth(1))
+                        && !pOutl->GetParagraph(1)->HasFlag( PARAFLAG_ISPAGE ) )
                     {
-                        // #96539# This is ONLY for OutlineViews
-                        if(bIsOutlineView)
-                        {
-                            // Needs to be disabled
-                            bDisableDown = TRUE;
-                        }
+                        // Needs to be disabled
+                        bDisableDown = TRUE;
                     }
 
                     delete pList;
@@ -432,7 +421,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             long nUpper = 0L;
             for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
-                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
+                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( (USHORT)nPara );
                 const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
                 nUpper = Max( nUpper, (long)rItem.GetUpper() );
             }
@@ -515,6 +504,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 
+/* #i35937#
         if (aAttrSet.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
         {
             SfxUInt16Item aBulletState((const SfxUInt16Item&) aAttrSet.Get(EE_PARA_BULLETSTATE));
@@ -528,7 +518,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, FALSE));
             }
         }
-
+*/
         USHORT nLineSpace = (USHORT) ( (const SvxLineSpacingItem&) aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
