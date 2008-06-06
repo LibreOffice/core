@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSeriesHelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -556,6 +556,21 @@ void switchLinesOnOrOff( const Reference< beans::XPropertySet > & xSeriesPropert
     }
     else
         xSeriesProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+}
+
+void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesProperties, bool bThick )
+{
+    if( !xSeriesProperties.is() )
+        return;
+
+    sal_Int32 nNewValue = bThick ? 88 : 0;
+    sal_Int32 nOldValue = 0;
+    if( (xSeriesProperties->getPropertyValue( C2U( "LineWidth" )) >>= nOldValue ) &&
+        nOldValue != nNewValue )
+    {
+        if( !(bThick && nOldValue>0))
+            xSeriesProperties->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( nNewValue ) );
+    }
 }
 
 void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSeries >& xSeries,
