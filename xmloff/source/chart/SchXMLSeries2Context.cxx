@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLSeries2Context.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -545,9 +545,7 @@ void SchXMLSeries2Context::EndElement()
         }
         else if( !mrFirstFirstDomainAddress.getLength() && !m_bHasDomainContext && mnSeriesIndex==0 )
         {
-            sal_Int32 nBuildId = 0;
-            sal_Int32 nUPD;
-            if( !GetImport().getBuildIds( nUPD, nBuildId ) ) //wrong old chart files:
+            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) ) //wrong old chart files:
             {
                 //for xy charts the first series needs to have a domain
                 //if this by error iss not the case the first series is taken s x values
