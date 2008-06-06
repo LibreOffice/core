@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unonrule.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +33,19 @@
 
 #define PROPERTY_NONE 0
 
-
-#include <svx/brshitem.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase5.hxx>
+
 #include <svtools/itempool.hxx>
 #include <goodies/grfmgr.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/graph.hxx>
@@ -51,20 +55,28 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
+#include <svx/brshitem.hxx>
 #include <svx/unoprnms.hxx>
 #include <svx/numitem.hxx>
 #include <svx/eeitem.hxx>
-#include "unofdesc.hxx"
-#include "unonrule.hxx"
 #include <svx/unotext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/numitem.hxx>
+#include "unofdesc.hxx"
+#include "unonrule.hxx"
 #include "unoapi.hxx"
 
-using namespace ::com::sun::star;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::com::sun::star::util::XCloneable;
+using ::com::sun::star::ucb::XAnyCompare;
+
+
 using namespace ::vos;
 using namespace ::std;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 
 const SvxAdjust aUnoToSvxAdjust[] =
 {
@@ -105,10 +117,7 @@ unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
  * SvxUnoNumberingRules
  ******************************************************************/
 
-#include <cppuhelper/implbase3.hxx>
-
-
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper3< container::XIndexReplace, lang::XUnoTunnel, lang::XServiceInfo >
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper5< XIndexReplace, XAnyCompare, XUnoTunnel, XCloneable, XServiceInfo >
 {
 private:
     SvxNumRule maRule;
@@ -119,24 +128,32 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoNumberingRules )
 
     //XIndexReplace
-    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const uno::Any& Element ) throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const Any& Element ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 
     //XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(uno::RuntimeException) ;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount() throw(RuntimeException) ;
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 
     //XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException);
+    virtual Type SAL_CALL getElementType() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(RuntimeException);
+
+    // XAnyCompare
+    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException);
+
+    // XCloneable
+    virtual Reference< XCloneable > SAL_CALL createClone(  ) throw (RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(uno::RuntimeException);
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
     // intern
-    uno::Sequence<beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
-    void setNumberingRuleByIndex( const uno::Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( uno::RuntimeException, lang::IllegalArgumentException );
+    Sequence<beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
+    void setNumberingRuleByIndex( const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( RuntimeException, IllegalArgumentException );
+
+    static sal_Int16 Compare( const Any& rAny1, const Any& rAny2 );
 
     const SvxNumRule& getNumRule() const { return maRule; }
 };
@@ -154,83 +171,84 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 
 //XIndexReplace
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
-    throw( lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-        Index++;
-
     if( Index < 0 || Index >= maRule.GetLevelCount() )
-        throw lang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
-    uno::Sequence< beans::PropertyValue > aSeq;
+    Sequence< beans::PropertyValue > aSeq;
 
     if( !( Element >>= aSeq) )
-        throw lang::IllegalArgumentException();
+        throw IllegalArgumentException();
     setNumberingRuleByIndex( aSeq, Index );
 }
 
-//XIndexAccess
-sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( uno::RuntimeException )
+// XIndexAccess
+sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    sal_Int32 nCount = maRule.GetLevelCount();
-    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-        nCount -= 1;
-
-    return nCount;
+    return maRule.GetLevelCount();
 }
 
-uno::Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException )
+Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
+    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(maRule.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-        Index++;
-
     if( Index < 0 || Index >= maRule.GetLevelCount() )
-        throw lang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
-    uno::Sequence<beans::PropertyValue> aRet = getNumberingRuleByIndex(Index);
-    return uno::Any( &aRet, getElementType() );
+    return Any( getNumberingRuleByIndex(Index) );
 }
 
 //XElementAccess
-uno::Type SAL_CALL SvxUnoNumberingRules::getElementType()
-    throw( uno::RuntimeException )
+Type SAL_CALL SvxUnoNumberingRules::getElementType()
+    throw( RuntimeException )
 {
-    return ::getCppuType(( const uno::Sequence< beans::PropertyValue >*)0);
+    return ::getCppuType(( const Sequence< beans::PropertyValue >*)0);
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( uno::RuntimeException )
+sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException )
 {
     return sal_True;
+}
+
+// XAnyCompare
+sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 ) throw(RuntimeException)
+{
+    return SvxUnoNumberingRules::Compare( rAny1, rAny2 );
+}
+
+// XCloneable
+Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (RuntimeException)
+{
+    return new SvxUnoNumberingRules(maRule);
 }
 
 // XServiceInfo
 sal_Char pSvxUnoNumberingRulesService[sizeof("com.sun.star.text.NumberingRules")] = "com.sun.star.text.NumberingRules";
 
-OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoNumberingRules" ) );
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
     return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSvxUnoNumberingRulesService ) );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSvxUnoNumberingRulesService ) );
-    uno::Sequence< OUString > aSeq( &aService, 1 );
+    Sequence< OUString > aSeq( &aService, 1 );
     return aSeq;
 }
 
-uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
+Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
     //  NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
@@ -239,7 +257,7 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
     const int nProps = 15;
     beans::PropertyValue* pArray = new beans::PropertyValue[nProps];
 
-    uno::Any aVal;
+    Any aVal;
     {
         aVal <<= rFmt.GetNumberingType();
         beans::PropertyValue aAlignProp( OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
@@ -320,14 +338,14 @@ uno::Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByInde
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     DBG_ASSERT( nIdx <= nProps, "FixMe: Array uebergelaufen!!!! [CL]" );
-    uno::Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
+    Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
 
     delete [] pArray;
     return aSeq;
 }
 
-void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
+void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::PropertyValue >& rProperties, sal_Int32 nIndex)
+    throw( RuntimeException, IllegalArgumentException )
 {
     SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
@@ -335,7 +353,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
     {
         const beans::PropertyValue& rProp = pPropArray[i];
         const OUString& rPropName = rProp.Name;
-        const uno::Any& aVal = rProp.Value;
+        const Any& aVal = rProp.Value;
 
         if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)))
         {
@@ -426,7 +444,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         }
         else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Graphic")))
         {
-            uno::Reference< awt::XBitmap > xBmp;
+            Reference< awt::XBitmap > xBmp;
             if( aVal >>= xBmp )
             {
                 Graphic aGraf( VCLUnoHelper::GetBitmap( xBmp ) );
@@ -514,7 +532,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             continue;
         }
 
-        throw lang::IllegalArgumentException();
+        throw IllegalArgumentException();
     }
 
     // check that we always have a brush item for bitmap numbering
@@ -532,16 +550,16 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
 
 ///////////////////////////////////////////////////////////////////////
 
-const SvxNumRule& SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule ) throw( lang::IllegalArgumentException )
+const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( IllegalArgumentException )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
     if( pRule == NULL )
-        throw lang::IllegalArgumentException();
+        throw IllegalArgumentException();
 
     return pRule->getNumRule();
 }
 
-bool SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule, SvxNumRule& rNumRule )
+bool SvxGetNumRule( Reference< XIndexReplace > xRule, SvxNumRule& rNumRule )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
     if( pRule )
@@ -554,7 +572,7 @@ bool SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule, SvxNumRule
         {
             pRule = new SvxUnoNumberingRules( rNumRule );
 
-            uno::Reference< container::XIndexReplace > xDestRule( pRule );
+            Reference< XIndexReplace > xDestRule( pRule );
 
             const sal_Int32 nCount = min( xRule->getCount(), xDestRule->getCount() );
             sal_Int32 nLevel;
@@ -565,7 +583,7 @@ bool SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule, SvxNumRule
 
             rNumRule = pRule->getNumRule();
         }
-        catch( uno::Exception& )
+        catch( Exception& )
         {
             return false;
         }
@@ -580,7 +598,7 @@ bool SvxGetNumRule( uno::Reference< container::XIndexReplace > xRule, SvxNumRule
 
 ///////////////////////////////////////////////////////////////////////
 
-uno::Reference< container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
+Reference< XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
 {
     DBG_ASSERT( pRule, "No default SvxNumRule!" );
     if( pRule )
@@ -596,7 +614,7 @@ uno::Reference< container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* p
 
 ///////////////////////////////////////////////////////////////////////
 
-uno::Reference< container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
+Reference< XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
     SvxNumRule* pDefaultRule = NULL;
     if( pModel )
@@ -621,19 +639,20 @@ uno::Reference< container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) 
 
 ///////////////////////////////////////////////////////////////////////
 
-#include <cppuhelper/implbase1.hxx>
-
-class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< com::sun::star::ucb::XAnyCompare >
+class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
 public:
-    virtual sal_Int16 SAL_CALL compare( const uno::Any& Any1, const uno::Any& Any2 ) throw(uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException);
 };
 
-sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, const uno::Any& Any2 ) throw(uno::RuntimeException)
+sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException)
 {
-    uno::Reference< container::XIndexReplace > x1, x2;
-    Any1 >>= x1;
-    Any2 >>= x2;
+    return SvxUnoNumberingRules::Compare( Any1, Any2 );
+}
+
+sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
+{
+    Reference< XIndexReplace > x1( Any1, UNO_QUERY ), x2( Any2, UNO_QUERY );
     if( x1.is() && x2.is() )
     {
         if( x1.get() == x2.get() )
@@ -648,25 +667,15 @@ sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, c
                 const SvxNumRule& rRule1 = pRule1->getNumRule();
                 const SvxNumRule& rRule2 = pRule2->getNumRule();
 
-
                 const USHORT nLevelCount1 = rRule1.GetLevelCount();
                 const USHORT nLevelCount2 = rRule2.GetLevelCount();
 
                 if( nLevelCount1 == 0 || nLevelCount2 == 0 )
                     return -1;
 
-                USHORT i1 = 0;
-                USHORT i2 = 0;
-
-                if( rRule1.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING )
-                    i1 = 1;
-
-                if( rRule2.GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING )
-                    i2 = 1;
-
-                for(; (i1 < nLevelCount1) && (i2 < nLevelCount2); i1++, i2++ )
+                for( USHORT i = 0; (i < nLevelCount1) && (i < nLevelCount2); i++ )
                 {
-                    if( rRule1.GetLevel(i1) != rRule2.GetLevel(i2) )
+                    if( rRule1.GetLevel(i) != rRule2.GetLevel(i) )
                         return -1;
                 }
                 return  0;
@@ -677,7 +686,7 @@ sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const uno::Any& Any1, c
     return -1;
 }
 
-uno::Reference< com::sun::star::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw()
+Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
 {
     return new SvxUnoNumberingRulesCompare();
 }
