@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdview.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -682,7 +682,6 @@ sal_Bool View::SdrBeginTextEdit(
     // make draw&impress specific initialisations
     if( pOutl )
     {
-        pOutl->SetMinDepth(0);
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
         ULONG nCntrl = pOutl->GetControlWord();
@@ -708,11 +707,6 @@ sal_Bool View::SdrBeginTextEdit(
             pOutl->SetHyphenator( xHyphenator );
 
         pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
-
-        // in einem Gliederungstext darf nicht auf die 0-te
-        // Ebene ausgerueckt werden
-        if (pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
-            pOutl->SetMinDepth(1);
     }
 
     sal_Bool bReturn = FmFormView::SdrBeginTextEdit(
@@ -769,7 +763,11 @@ SdrEndTextEditKind View::SdrEndTextEdit(BOOL bDontDeleteReally )
     {
         SdrTextObj* pObj = dynamic_cast< SdrTextObj* >( xObj.get() );
         if( pObj && pObj->HasText() )
-            pObj->SetEmptyPresObj( FALSE );
+        {
+            SdrPage* pPage = pObj->GetPage();
+            if( !pPage || !pPage->IsMasterPage() )
+                pObj->SetEmptyPresObj( FALSE );
+        }
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(sd::tools::EventMultiplexerEvent::EID_END_TEXT_EDIT, (void*)xObj.get() );
@@ -1265,6 +1263,65 @@ void View::CheckPossibilities()
 {
     FmFormView::CheckPossibilities();
     maSmartTags.CheckPossibilities();
+}
+
+void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
+{
+}
+
+/** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
+    get the correct style sheet. */
+void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
+{
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
+    SdrOutliner* pOutliner = GetTextEditOutliner();
+    if( pOutliner && pTextObj && pTextObj->GetPage() )
+    {
+        SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
+
+        SfxStyleSheet* pStyleSheet = 0;
+
+        const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
+        if( eKind != PRESOBJ_NONE )
+            pStyleSheet = pPage->GetStyleSheetForPresObj(eKind);
+        else
+            pStyleSheet = pTextObj->GetStyleSheet();
+
+        if( eKind == PRESOBJ_OUTLINE )
+        {
+            // for outline shapes, set the correct outline style sheet for each
+            // new paragraph, depending on the paragraph depth
+            SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
+
+            for ( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            {
+                sal_Int16 nDepth = pOutliner->GetDepth( nPara );
+
+                SfxStyleSheet* pStyle = 0;
+                if( nDepth > 0 )
+                {
+                    String aStyleSheetName( pStyleSheet->GetName() );
+                    aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
+                    aStyleSheetName += String::CreateFromInt32( nDepth );
+                    pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
+                    DBG_ASSERT( pStyle, "sd::View::OnEndPasteOrDrop(), Style not found!" );
+                }
+
+                if( !pStyle )
+                    pStyle = pStyleSheet;
+
+                pOutliner->SetStyleSheet( nPara, pStyle );
+            }
+        }
+        else
+        {
+            // just put the object style on each new paragraph
+            for ( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+            {
+                pOutliner->SetStyleSheet( nPara, pStyleSheet );
+            }
+        }
+    }
 }
 
 } // end of namespace sd
