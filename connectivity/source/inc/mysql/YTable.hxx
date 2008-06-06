@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YTable.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,6 +123,7 @@ namespace connectivity
             void alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
             void dropDefaultValue(const ::rtl::OUString& _sNewDefault);
 
+            virtual ::rtl::OUString getTypeCreatePattern() const;
         };
     }
 }
