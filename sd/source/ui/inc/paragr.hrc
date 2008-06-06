@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paragr.hrc,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,4 +28,9 @@
  *
  ************************************************************************/
 #define TAB_PARAGRAPH   20620
+
+#define CB_NEW_START 1
+#define CB_NUMBER_NEW_START 2
+#define NF_NEW_START 3
+
 
