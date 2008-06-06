@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_shl.mk,v $
 #
-# $Revision: 1.123 $
+# $Revision: 1.124 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -531,6 +531,7 @@ $(SHL$(TNR)IMPLIBN):	\
     -def:$(SHL$(TNR)DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL$(TNR)TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
