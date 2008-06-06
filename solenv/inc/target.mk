@@ -8,7 +8,7 @@
 #
 # $RCSfile: target.mk,v $
 #
-# $Revision: 1.207 $
+# $Revision: 1.208 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -111,6 +111,18 @@ DEPFILE_OBJ+:=$(MISC)$/all_$(TARGET).dpobj
 .ENDIF			# "$(nodep)"==""
 
 .IF "$(depend)" == ""
+
+# remove if .Net 2003 support has expired 
+.IF "$(debug)"!=""
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.IF "$(COMEX)" == "10"
+.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+MAXPROCESS!:=1
+.EXPORT : MAXPROCESS
+.ENDIF			# "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"!=""
+.ENDIF			# "$(COMEX)" == "10"
+.ENDIF			# "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.ENDIF			# "$(debug)"!=""
 
 # -------
 # - ALL -
@@ -733,7 +745,6 @@ UNOTYPES!:=$(strip $(UNOTYPES))
 #moved here to get UNOTYPES from COMPxTYPELIST
 .IF "$(UNOTYPES)" != ""
 UNOUCRHEADER=$(foreach,j,$(subst,.,$/ $(UNOTYPES)) $(UNOUCROUT)$/$(j:+".hpp"))
-UNOUCRTYPEFLAGS=$(foreach,j,$(UNOTYPES) $(UNOUCROUT)$/$(j:+".flag"))
 UNOUCRTARGET:=$(INCCOM)$/$(TARGET)_headergen.done
 .ENDIF			# "$(UNOTYPES)" != ""
 
@@ -1256,40 +1267,41 @@ CPPUMAKERFLAGS*=-L
 MKDEPFLAGS+=-I:$(ENVINCPRE)
 .ENDIF			# "$(ENVINCPRE))"!=""
 .IF "$(OBJFILES)"!=""
-$(OBJFILES) : $(UNOUCRHEADER)
+$(OBJFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(OBJFILES)"!=""
 .IF "$(SLOFILES)"!=""
-$(SLOFILES) : $(UNOUCRHEADER)
+$(SLOFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(DEPOBJFILES)"!=""
-$(DEPOBJFILES) : $(UNOUCRHEADER)
+$(DEPOBJFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(NOOPTTARGET)"!=""
-$(NOOPTTARGET) : $(UNOUCRHEADER)
+$(NOOPTTARGET) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(NOOPTFILES)"!=""
-$(NOOPTFILES) : $(UNOUCRHEADER)
+$(NOOPTFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(EXCEPTIONSFILES)"!=""
-$(EXCEPTIONSFILES) : $(UNOUCRHEADER)
+$(EXCEPTIONSFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(EXCEPTIONSNOOPTTARGET)"!=""
-$(EXCEPTIONSNOOPTTARGET) : $(UNOUCRHEADER)
+$(EXCEPTIONSNOOPTTARGET) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 .IF "$(EXCEPTIONSNOOPTFILES)"!=""
-$(EXCEPTIONSNOOPTFILES) : $(UNOUCRHEADER)
+$(EXCEPTIONSNOOPTFILES) : $(UNOUCRTARGET)
 .ENDIF			# "$(SLOFILES)"!=""
 
-$(UNOUCRHEADER) : $(UNOUCRTARGET)
+$(UNOUCRTARGET) : $(UNOUCRHEADER)
 
-$(UNOUCROUT)$/%.flag :
-    @-$(MKDIRHIER) $(@:d)
-    @$(TOUCH) $@
-
-$(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
+# keep that one to rebuild single misses
+$(UNOUCRHEADER):
+    @noop
+    
+$(UNOUCRTARGET) : $(UNOUCRDEP)
 .IF "$(XML2MK_FILES)"!=""
     @@-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk)
 .ENDIF			# "$(XML2MK_FILES)"!=""
+    @@-$(MKDIRHIER) $(UNOUCROUT)
     $(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && $(TOUCH) $@
 .ENDIF			# "$(UNOTYPES)" != ""
 
