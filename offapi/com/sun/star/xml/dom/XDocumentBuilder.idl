@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDocumentBuilder.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,23 @@
 #ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
 #endif
+
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#include <com/sun/star/xml/sax/SAXException.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+#endif
+#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+#endif
+
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
 module com { module sun { module star { module xml { module dom {
 
 interface XInputStream;
@@ -81,25 +98,30 @@ interface XDocumentBuilder : com::sun::star::uno::XInterface
     Parse the content of the given InputStream as an XML document and
     return a new DOM Document object.
     */
-    XDocument parse([in] com::sun::star::io::XInputStream is);
+    XDocument parse([in] com::sun::star::io::XInputStream is)
+            raises( com::sun::star::xml::sax::SAXException,
+                    com::sun::star::io::IOException );
 
     /**
     Parse the content of the given URI as an XML document and return
     a new DOM Document object.
     */
-    //XDocument parse([in] string uri);
+    XDocument parseURI([in] string uri)
+            raises( com::sun::star::xml::sax::SAXException,
+                    com::sun::star::io::IOException );
 
     /**
     Specify the EntityResolver to be used to resolve entities present
     in the XML document to be parsed.
     */
-    // void setEntityResolver([in] XEntityResolver er);
+    void setEntityResolver([in] com::sun::star::xml::sax::XEntityResolver er);
 
     /**
     Specify the ErrorHandler to be used to report errors present in
     the XML document to be parsed.
     */
-    //void setErrorHandler([in] XErrorHandler eh);
+    void setErrorHandler([in] com::sun::star::xml::sax::XErrorHandler eh);
+
 };
 
 }; }; }; }; };
