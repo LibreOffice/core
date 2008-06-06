@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futempl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -479,6 +479,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         }
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
+
+/* #i35937#
                         if ( rAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
                         {
                             // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
@@ -516,7 +518,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 }
                             }
                         }
-
+*/
                         // check for unique names of named items for xml
                         if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
                         {
