@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Position.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,18 +40,17 @@
 #include "UndoGuard.hxx"
 #include "Strings.hrc"
 #include "ObjectNameProvider.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
+#include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
-
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
+#include <svx/rectenum.hxx>
+#include <svtools/aeitem.hxx>
 #include <svx/svxdlg.hxx>
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
@@ -65,12 +64,14 @@ using namespace ::com::sun::star::chart2;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& rPosAndSize )
+void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& rPosAndSize, const awt::Size aOriginalSize )
 {
     long nPosX(0);
     long nPosY(0);
     long nSizX(0);
     long nSizY(0);
+
+    RECT_POINT eRP = (RECT_POINT)RP_LT;
 
     const SfxPoolItem* pPoolItem=NULL;
     //read position
@@ -83,6 +84,44 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
     if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,TRUE,&pPoolItem))
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,TRUE,&pPoolItem))
+        eRP=(RECT_POINT)((const SfxAllEnumItem*)pPoolItem)->GetValue();
+
+    switch( eRP )
+    {
+        case RP_LT:
+            break;
+        case RP_MT:
+            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
+            break;
+        case RP_RT:
+            nPosX += aOriginalSize.Width - nSizX;
+            break;
+        case RP_LM:
+            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            break;
+        case RP_MM:
+            nPosX += ( aOriginalSize.Width  - nSizX ) / 2;
+            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            break;
+        case RP_RM:
+            nPosX += aOriginalSize.Width - nSizX;
+            nPosY += ( aOriginalSize.Height - nSizY ) / 2;
+            break;
+        case RP_LB:
+            nPosY += aOriginalSize.Height - nSizY;
+            break;
+        case RP_MB:
+            nPosX += ( aOriginalSize.Width - nSizX ) / 2;
+            nPosY += aOriginalSize.Height - nSizY;
+            break;
+        case RP_RB:
+            nPosX += aOriginalSize.Width - nSizX;
+            nPosY += aOriginalSize.Height - nSizY;
+            break;
+        default:
+            break;
+    }
 
     rPosAndSize = Rectangle(Point(nPosX,nPosY),Size(nSizX,nSizY));
 }
@@ -93,6 +132,11 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 
     if( !aCID.getLength() )
         return;
+
+    awt::Size aSelectedSize;
+    ExplicitValueProvider* pProvider( ExplicitValueProvider::getExplicitValueProvider( m_xChartView ) );
+    if( pProvider )
+        aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
 
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -124,7 +168,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             {
                 Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
-                lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect );
+                lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
                 awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
