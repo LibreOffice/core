@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuexpand.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +114,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
         pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
-        pOutl->SetMinDepth(0);
 
         SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
         USHORT nActualPageNum = pActualPage->GetPageNum();
@@ -145,8 +144,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
             while (pPara)
             {
                 ULONG nParaPos = pOutl->GetAbsPos( pPara );
-                USHORT nDepth = pOutl->GetDepth( (USHORT) nParaPos );
-                if ( nDepth == 1 )
+                sal_Int16 nDepth = pOutl->GetDepth( (USHORT) nParaPos );
+                if ( nDepth == 0 )
                 {
                     // Seite mit Titel & Gliederung!
                     SdPage* pPage = (SdPage*) mpDoc->AllocPage(FALSE);
@@ -196,16 +195,15 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
-                    if( pOutlinerParaObject->GetDepth(0) != 0 )
+                    if( pOutlinerParaObject->GetDepth(0) != -1 )
                     {
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_TITLEOBJECT, mpDoc );
 
                         pTempOutl->SetText( *pOutlinerParaObject );
-                        pTempOutl->SetMinDepth(0);
 
                         delete pOutlinerParaObject;
 
-                        pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), 0 );
+                        pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), -1 );
 
                         pOutlinerParaObject = pTempOutl->CreateParaObject();
                         delete pTempOutl;
