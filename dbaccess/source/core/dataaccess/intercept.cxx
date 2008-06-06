@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: intercept.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ OInterceptor::dispatch(
             {
                 m_pContentHolder->saveAs();
             }
-            else
+            else if ( m_xSlaveDispatchProvider.is() )
             {
                 Sequence< PropertyValue > aNewArgs = Arguments;
                 sal_Int32 nInd = 0;
@@ -190,7 +190,7 @@ OInterceptor::dispatch(
                 || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEFRAME]
                 )
         {
-            if ( m_pContentHolder->prepareClose() )
+            if ( m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )
             {
                 Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
                     _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
