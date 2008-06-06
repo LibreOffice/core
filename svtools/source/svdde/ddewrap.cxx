@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ddewrap.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,11 +44,7 @@
 
 //------------------------------------------------------------------------
 
-#ifdef __MINGW32__
-HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPWSTR pszString, int )
-#else
 HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPCWSTR pszString, int )
-#endif
 {
     HSZ     hszResult;
     LPSTR   pszANSIString;
