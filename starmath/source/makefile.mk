@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +41,6 @@ LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -109,10 +108,6 @@ LIB1OBJFILES = \
     $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
-
-.IF "$(GUI)"=="UNX" 
-CDEFS+=-DUSE_POLYGON
-.ENDIF
 
 LOCALIZE_ME =  menu_tmpl.src
 
