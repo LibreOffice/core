@@ -8,7 +8,7 @@
  *
  * $RCSfile: sfxbasemodel.hxx,v $
  *
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -735,16 +735,14 @@ public:
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames()
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Reference< css::frame::XController > SAL_CALL createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& Frame          ,
-                                                                                                      css::uno::Reference< css::awt::XWindow >&  ComponentWindow)
+    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& Frame )
         throw (css::uno::RuntimeException         ,
                css::lang::IllegalArgumentException,
                css::uno::Exception                );
 
-    virtual css::uno::Reference< css::frame::XController > SAL_CALL createViewController(const ::rtl::OUString&                                 ViewName       ,
-                                                                                         const css::uno::Sequence< css::beans::PropertyValue >& Arguments      ,
-                                                                                         const css::uno::Reference< css::frame::XFrame >&       Frame          ,
-                                                                                               css::uno::Reference< css::awt::XWindow >&        ComponentWindow)
+    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController(const ::rtl::OUString&                                 ViewName       ,
+                                                                                          const css::uno::Sequence< css::beans::PropertyValue >& Arguments      ,
+                                                                                          const css::uno::Reference< css::frame::XFrame >&       Frame          )
         throw (css::uno::RuntimeException         ,
                css::lang::IllegalArgumentException,
                css::uno::Exception                );
