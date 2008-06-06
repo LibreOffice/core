@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshtxt.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,7 @@ public:
     void lock();
     void unlock();
 
-    static sal_Bool hasLevels( const SdrObject* pObject );
+//  static sal_Bool hasLevels( const SdrObject* pObject );
 
     // the viewforwarder interface
     virtual BOOL        IsValid() const;
