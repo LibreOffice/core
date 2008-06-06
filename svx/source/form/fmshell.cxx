@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -502,7 +502,7 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     }
     else if ( ( nFeature & FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR ) == FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR )
     {
-        bResult = m_pImpl->IsActiveControl( true );
+        bResult = !GetImpl()->IsReadonlyDoc() && m_pImpl->IsActiveControl( true );
     }
     else if ((nFeature & FM_UI_FEATURE_SHOW_DATANAVIGATOR) == FM_UI_FEATURE_SHOW_DATANAVIGATOR)
     {
