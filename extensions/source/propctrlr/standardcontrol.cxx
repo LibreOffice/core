@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: standardcontrol.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1082,6 +1082,7 @@ namespace pcr
         }
         {
             ::std::auto_ptr<Window> aTemp(m_pImplEdit);
+            SetSubEdit( NULL );
             m_pImplEdit = NULL;
         }
         {
