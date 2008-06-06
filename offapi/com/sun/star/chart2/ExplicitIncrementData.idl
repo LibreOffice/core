@@ -80,6 +80,13 @@ struct ExplicitIncrementData
     iven by the preceding SubIncrement.</p>
     */
     sequence< ::com::sun::star::chart2::ExplicitSubIncrement > SubIncrements;
+
+    /** If ShiftedPosition is false all ticks are set at the positions as described above.
+    E.g. having tickmarks for whole numbers 1, 2 and 3 the ticks are exactly placed on positions for the values 1, 2 and 3.
+    In contrast it is possible to have the tickmarks shifted thus they are placed between the indicated values.
+    So if ShiftedPosition is set to true the tickmarks in the example are placed at 0.5 1.5 2.5 and 3.5.
+    */
+    boolean ShiftedPosition;
 };
 
 //=============================================================================
