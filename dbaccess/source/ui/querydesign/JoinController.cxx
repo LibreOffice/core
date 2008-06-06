@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinController.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -525,14 +525,17 @@ void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
         }
     }
     TTableWindowData::value_type pData = createTableWindowData(sComposedName,sTableName,sWindowName);
-    pData->SetPosition(Point(nX,nY));
-    pData->SetSize( Size( nWidth, nHeight ) );
-    pData->ShowAll(bShowAll);
-    m_vTableData.push_back(pData);
-    if ( m_aMinimumTableViewSize.X() < (nX+nWidth) )
-        m_aMinimumTableViewSize.X() = (nX+nWidth);
-    if ( m_aMinimumTableViewSize.Y() < (nY+nHeight) )
-        m_aMinimumTableViewSize.Y() = (nY+nHeight);
+    if ( pData )
+    {
+        pData->SetPosition(Point(nX,nY));
+        pData->SetSize( Size( nWidth, nHeight ) );
+        pData->ShowAll(bShowAll);
+        m_vTableData.push_back(pData);
+        if ( m_aMinimumTableViewSize.X() < (nX+nWidth) )
+            m_aMinimumTableViewSize.X() = (nX+nWidth);
+        if ( m_aMinimumTableViewSize.Y() < (nY+nHeight) )
+            m_aMinimumTableViewSize.Y() = (nY+nHeight);
+    }
 }
 // -----------------------------------------------------------------------------
 void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
