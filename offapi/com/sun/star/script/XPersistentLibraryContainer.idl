@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XPersistentLibraryContainer.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +71,7 @@ interface XPersistentLibraryContainer
 
         <p>All operations of the library container take place in a location below
         the root location, the so-called container location, whose
-        name is exposed as <member>ContainerStorageName</member>.</p>
+        name is exposed as <member>ContainerLocationName</member>.</p>
 
         @see ContainerLocationName
     */
