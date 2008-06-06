@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshprp.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,7 +166,7 @@
 #define OWN_ATTR_PAGE_NUMBER                    (OWN_ATTR_VALUE_START+65)
 #define OWN_ATTR_THUMBNAIL                      (OWN_ATTR_VALUE_START+66)
 #define OWN_ATTR_PERSISTNAME                    (OWN_ATTR_VALUE_START+67)
-#define OWN_ATTR_HASLEVELS                      (OWN_ATTR_VALUE_START+68)
+//#define OWN_ATTR_HASLEVELS                        (OWN_ATTR_VALUE_START+68)
 #define OWN_ATTR_MEDIA_URL                      (OWN_ATTR_VALUE_START+69)
 #define OWN_ATTR_MEDIA_PREFERREDSIZE            (OWN_ATTR_VALUE_START+70)
 #define OWN_ATTR_MEDIA_LOOP                     (OWN_ATTR_VALUE_START+71)
@@ -305,9 +305,10 @@
     SVX_UNOEDIT_PARA_PROPERTIES,
 
 #define TEXT_PROPERTIES \
-    { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},\
     SVX_UNOEDIT_NUMBERING_PROPERTIE, \
     TEXT_PROPERTIES_DEFAULTS
+
+//  { MAP_CHAR_LEN("HasLevels"),                    OWN_ATTR_HASLEVELS,             &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::READONLY,      0},
 
 #define MISC_OBJ_PROPERTIES_NO_SHEAR \
     { MAP_CHAR_LEN("Transformation"),                   OWN_ATTR_TRANSFORMATION,    &::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 }, \
