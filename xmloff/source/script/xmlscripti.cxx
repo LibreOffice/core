@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlscripti.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include "xmlbasici.hxx"
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 using ::rtl::OUString;
 using namespace com::sun::star;
@@ -58,7 +59,8 @@ using namespace ::xmloff::token;
 class XMLScriptChildContext : public SvXMLImportContext
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts >    m_xDocumentScripts;
     ::rtl::OUString m_aLanguage;
 
 public:
@@ -79,6 +81,7 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx
         const Reference< frame::XModel >& rxModel, const ::rtl::OUString& rLanguage )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
+    ,m_xDocumentScripts( rxModel, UNO_QUERY )
     ,m_aLanguage( rLanguage )
 {
 }
@@ -97,11 +100,14 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    ::rtl::OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-    aBasic += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
+    if ( m_xDocumentScripts.is() )
+    {   // document supports embedding scripts/macros
+        ::rtl::OUString aBasic( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
+        aBasic += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":Basic" ) );
 
-    if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
-        pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
+        if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
+            pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
+    }
 
     if ( !pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
