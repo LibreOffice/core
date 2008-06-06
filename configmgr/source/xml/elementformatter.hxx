@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementformatter.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +36,12 @@
 
 #include <rtl/ref.hxx>
 
+namespace comphelper {
+    class AttributeList;
+}
+
 namespace configmgr
 {
-// -----------------------------------------------------------------------------
-    class AttributeListImpl;
 // -----------------------------------------------------------------------------
     namespace xml
     {
@@ -108,7 +110,7 @@ namespace configmgr
 
         private:
             ElementType::Enum                   m_aElementType;
-            rtl::Reference<AttributeListImpl>   m_xAttributes;
+            rtl::Reference< ::comphelper::AttributeList>   m_xAttributes;
         };
 // -----------------------------------------------------------------------------
 
