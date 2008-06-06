@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: border.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,7 +275,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
 
     SetFieldUnit( aEdShadowSize, eFUnit );
 
-    USHORT nWhich = GetWhich( SID_ATTR_BORDER_INNER );
+    USHORT nWhich = GetWhich( SID_ATTR_BORDER_INNER, sal_False );
     BOOL bIsDontCare = TRUE;
 
     if ( rCoreAttrs.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
@@ -454,7 +454,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     const Color             aColBlack       = RGBCOL(COL_BLACK);
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
-    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER );
+
+
+    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, sal_False );
 
     eCoreUnit = rSet.GetPool()->GetMetric( nWhichBox );
 
@@ -670,7 +672,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
     BOOL                  bPut          = TRUE;
     USHORT                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
-    USHORT                nBoxInfoWhich = GetWhich( SID_ATTR_BORDER_INNER );
+    USHORT                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, sal_False );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
@@ -796,7 +798,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             rCoreAttrs.Put( aBoxItem );
             bAttrsChanged |= TRUE;
         }
-        pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER );
+        pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, sal_False );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {
