@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmitems.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -424,8 +424,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 ),
-    bBulletFI       ( 0 )
+    bAutoFirst      ( 0 )
 {
 }
 
@@ -444,8 +443,7 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
     nPropFirstLineOfst( 100 ),
     nPropLeftMargin( 100 ),
     nPropRightMargin( 100 ),
-    bAutoFirst      ( 0 ),
-    bBulletFI       ( 0 )
+    bAutoFirst      ( 0 )
 {
 }
 
@@ -577,7 +575,6 @@ int SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
         nPropLeftMargin == ((SvxLRSpaceItem&)rAttr).GetPropLeft()  &&
         nPropRightMargin == ((SvxLRSpaceItem&)rAttr).GetPropRight() &&
         nPropFirstLineOfst == ((SvxLRSpaceItem&)rAttr).GetPropTxtFirstLineOfst() &&
-        bBulletFI == ((SvxLRSpaceItem&)rAttr).IsBulletFI() &&
         bAutoFirst == ((SvxLRSpaceItem&)rAttr).IsAutoFirst() );
 }
 
@@ -678,8 +675,7 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
 SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     short nSaveFI = nFirstLineOfst;
-    if ( IsBulletFI() )
-        ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin wird mitmanipuliert, siehe Create()
+    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin wird mitmanipuliert, siehe Create()
 
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
@@ -707,13 +703,11 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
             nAutoFirst |= 0x80;
         rStrm << nAutoFirst;
 
-        if ( IsBulletFI() )
-        {
-            // Ab 6.0 keine Magicnumber schreiben...
-            DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
-            rStrm << (sal_uInt32) BULLETLR_MARKER;
-            rStrm << nSaveFI;
-        }
+        // Ab 6.0 keine Magicnumber schreiben...
+        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
+        rStrm << (sal_uInt32) BULLETLR_MARKER;
+        rStrm << nSaveFI;
+
         if( 0x80 & nAutoFirst )
         {
             rStrm << nLeftMargin;
@@ -721,8 +715,7 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
         }
     }
 
-    if ( IsBulletFI() )
-        ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( nSaveFI );
+    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( nSaveFI );
 
     return rStrm;
 }
