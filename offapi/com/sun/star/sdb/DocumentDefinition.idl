@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DocumentDefinition.idl,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ service DocumentDefinition
         <ul>
             <li><strong>open</strong>: loads the sub document in an own frame. The return value of
                 the <code>execute</code> method is the model of the loaded document.</li>
+            <li><strong>store</strong>: stores the document.</li>
             <li><strong>openDesign</strong>: opens the sub document in an own frame, in design mode.
                 The user can make changes to the document, and save those changes. The return value of
                 the <code>execute</code> method is the model of the loaded document.</li>
