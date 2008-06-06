@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlobj.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +52,7 @@ OutlinerParaObject::OutlinerParaObject( USHORT nParaCount )
     DBG_CTOR(OutlinerParaObject,0);
 
     bIsEditDoc = TRUE;
-    pDepthArr = new USHORT[ nParaCount ];
+    pDepthArr = new sal_Int16[ nParaCount ];
     nCount = nParaCount;
 }
 
@@ -62,8 +62,8 @@ OutlinerParaObject::OutlinerParaObject( const OutlinerParaObject& rObj )
 
     bIsEditDoc = rObj.bIsEditDoc;
     nCount = rObj.nCount;
-    pDepthArr = new USHORT[ nCount ];
-    memcpy( pDepthArr, rObj.pDepthArr, (size_t)(sizeof(USHORT)*nCount) );
+    pDepthArr = new sal_Int16[ nCount ];
+    memcpy( pDepthArr, rObj.pDepthArr, (size_t)(sizeof(sal_Int16)*nCount) );
     pText = rObj.pText->Clone();
 }
 
@@ -74,8 +74,8 @@ OutlinerParaObject::OutlinerParaObject( const EditTextObject& rEditObj )
     bIsEditDoc  = TRUE;
     pText       = rEditObj.Clone();
     nCount      = pText->GetParagraphCount();
-    pDepthArr   = new USHORT[ nCount ];
-    memset( pDepthArr, 0, nCount*sizeof(USHORT) );
+    pDepthArr   = new sal_Int16[ nCount ];
+    memset( pDepthArr, 0, nCount*sizeof(sal_Int16) );
 }
 
 OutlinerParaObject::~OutlinerParaObject()
@@ -221,11 +221,6 @@ OutlinerParaObject* OutlinerParaObject::Create( SvStream& rStream, SfxItemPool* 
             for( USHORT nCur=0; nCur < nCount; nCur++ )
                 rStream >> pPObj->pDepthArr[ nCur ];
             rStream >> pPObj->bIsEditDoc;
-
-            if ( pPObj->pText->GetVersion() < 501 )
-                pPObj->pText->AdjustImportedLRSpaceItems( pPObj->bIsEditDoc );
-
-            // MT: Bei der naechsten Version mal eine Recordlaenge einfuehren!
         }
     }
     return pPObj;
@@ -239,11 +234,6 @@ USHORT OutlinerParaObject::GetOutlinerMode() const
 void OutlinerParaObject::SetOutlinerMode( USHORT n )
 {
     pText->SetUserType( n );
-}
-
-void OutlinerParaObject::SetLRSpaceItemFlags( BOOL bOutlineMode )
-{
-    pText->SetLRSpaceItemFlags( bOutlineMode );
 }
 
 BOOL OutlinerParaObject::RemoveCharAttribs( USHORT nWhich )
@@ -260,23 +250,6 @@ void OutlinerParaObject::MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nS
 {
     pText->MergeParaAttribs( rAttribs, nStart, nEnd );
 }
-
-/* cl removed because not needed anymore since binfilter
-void OutlinerParaObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
-{
-    pText->PrepareStore( pStyleSheetPool );
-}
-
-void OutlinerParaObject::FinishStore()
-{
-    pText->FinishStore();
-}
-
-void OutlinerParaObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
-{
-    pText->FinishLoad( pStyleSheetPool );
-}
-*/
 
 void OutlinerParaObject::SetVertical( BOOL bVertical )
 {
