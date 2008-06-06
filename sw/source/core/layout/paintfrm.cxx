@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.118 $
+ * $Revision: 1.119 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2585,6 +2585,22 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     Insert( aRight, false );
     Insert( aTop, true );
     Insert( aBottom, true );
+
+    const SwRowFrm* pThisRowFrm = dynamic_cast<const SwRowFrm*>(rFrm.GetUpper());
+
+    // special case: #i9860#
+    // first line in follow table without repeated headlines
+    if ( pThisRowFrm &&
+         pThisRowFrm->GetUpper() == &mrTabFrm &&
+         mrTabFrm.IsFollow() &&
+        !mrTabFrm.GetTable()->GetRowsToRepeat() &&
+        (!pThisRowFrm->GetPrev() || static_cast<const SwRowFrm*>(pThisRowFrm->GetPrev())->IsRowSpanLine()) &&
+        !rBoxItem.GetTop() &&
+         rBoxItem.GetBottom() )
+    {
+        SwLineEntry aFollowTop( !bVert ? nTop : nRight, !bVert ? nLeft : nTop, !bVert ? nRight : nBottom, aB );
+        Insert( aFollowTop, !bVert );
+    }
 }
 
 void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
