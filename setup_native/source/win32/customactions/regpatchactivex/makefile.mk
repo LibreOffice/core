@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +55,7 @@ INCPRE+=.\Include
 SLOFILES =	$(SLO)$/regpatchactivex.obj
 
 .IF "$(COM)"=="GCC"
-SHL1STDLIBS=	-lmingw32 -lstdc++ -lgcc -lmingwthrd -lmsvcrt
+SHL1STDLIBS=	-lmingw32 -lstdc++ -lgcc -lmsvcrt
 .ELSE
 SHL1STDLIBS=
 .ENDIF
