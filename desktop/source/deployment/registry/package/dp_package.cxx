@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -206,6 +206,8 @@ class BackendImpl : public ImplBaseT
 
         virtual Sequence<OUString> SAL_CALL getUpdateInformationURLs()
             throw (RuntimeException);
+
+        virtual css::beans::StringPair SAL_CALL getPublisherInfo() throw (css::uno::RuntimeException);
 
         virtual OUString SAL_CALL getDisplayName() throw (RuntimeException);
     };
@@ -712,6 +714,14 @@ Sequence<OUString> BackendImpl::PackageImpl::getUpdateInformationURLs()
     throw (RuntimeException)
 {
     return getDescriptionInfoset().getUpdateInformationUrls();
+}
+
+beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
+    throw (RuntimeException)
+{
+    ::std::pair< ::rtl::OUString, ::rtl::OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
+    beans::StringPair aStrPair( aInfo.first, aInfo.second );
+    return aStrPair;
 }
 
 //______________________________________________________________________________
