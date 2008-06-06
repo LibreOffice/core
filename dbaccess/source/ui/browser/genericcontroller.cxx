@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.cxx,v $
- * $Revision: 1.88 $
+ * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -260,11 +260,6 @@ IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-Reference< XWindow > OGenericUnoController::getComponentWindow() const
-{
-    return VCLUnoHelper::GetInterface( getView() );
-}
-// -----------------------------------------------------------------------------
 void OGenericUnoController::impl_initialize()
 {
 }
@@ -301,28 +296,26 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     }
     try
     {
-        if ( xFrame.is() )
-        {
-            xParent = xFrame->getContainerWindow();
-            VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-            Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
-            if (!pParentWin)
-            {
-                throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
-            }
+        if ( !xFrame.is() )
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "need a frame" ) ), *this, 1 );
 
-            m_aInitParameters.assign( aArguments );
-            Construct( pParentWin );
-            if ( !getView() )
-                throw Exception(::rtl::OUString::createFromAscii("Window is null"),*this);
-        }
-        else
+        xParent = xFrame->getContainerWindow();
+        VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
+        Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
+        if (!pParentWin)
         {
-            OSL_ENSURE(0,"OGenericUnoController::initialize: Frame is null!");
+            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "Parent window is null" ), *this, 1 );
         }
+
+        m_aInitParameters.assign( aArguments );
+        Construct( pParentWin );
+
         ODataView* pView = getView();
-        if ( (m_bReadOnly || m_bPreview) && pView )
-            pView->EnableInput(FALSE);
+        if ( !pView )
+            throw RuntimeException( ::rtl::OUString::createFromAscii( "unable to create a view" ), *this );
+
+        if ( m_bReadOnly || m_bPreview )
+            pView->EnableInput( FALSE );
 
         impl_initialize();
     }
@@ -333,8 +326,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         m_pView = NULL;
         throw e;
     }
-    if ( xFrame.is() )
-        xFrame->setComponent(getComponentWindow(), this);
 }
 
 //------------------------------------------------------------------------------
@@ -385,6 +376,18 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_UNDO);
 }
+// -----------------------------------------------------------------------
+Reference< XWindow > SAL_CALL OGenericUnoController::getComponentWindow() throw (RuntimeException)
+{
+    return VCLUnoHelper::GetInterface( getView() );
+}
+
+// -----------------------------------------------------------------------
+::rtl::OUString SAL_CALL OGenericUnoController::getViewControllerName() throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
+}
+
 // -----------------------------------------------------------------------
 void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) throw( RuntimeException )
 {
