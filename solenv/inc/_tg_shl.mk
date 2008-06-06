@@ -212,6 +212,7 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL1LIBS)"!=""
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
 SHL1LINKLISTPARAM=@$(SHL1LINKLIST)
@@ -219,6 +220,7 @@ $(SHL1LINKLIST) : $(SHL1LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL1LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
 
@@ -668,6 +670,7 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL2LIBS)"!=""
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
 SHL2LINKLISTPARAM=@$(SHL2LINKLIST)
@@ -675,6 +678,7 @@ $(SHL2LINKLIST) : $(SHL2LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL2LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
 
@@ -1124,6 +1128,7 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL3LIBS)"!=""
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
 SHL3LINKLISTPARAM=@$(SHL3LINKLIST)
@@ -1131,6 +1136,7 @@ $(SHL3LINKLIST) : $(SHL3LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL3LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
 
@@ -1580,6 +1586,7 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL4LIBS)"!=""
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
 SHL4LINKLISTPARAM=@$(SHL4LINKLIST)
@@ -1587,6 +1594,7 @@ $(SHL4LINKLIST) : $(SHL4LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL4LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
 
@@ -2036,6 +2044,7 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL5LIBS)"!=""
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
 SHL5LINKLISTPARAM=@$(SHL5LINKLIST)
@@ -2043,6 +2052,7 @@ $(SHL5LINKLIST) : $(SHL5LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL5LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
 
@@ -2492,6 +2502,7 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL6LIBS)"!=""
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
 SHL6LINKLISTPARAM=@$(SHL6LINKLIST)
@@ -2499,6 +2510,7 @@ $(SHL6LINKLIST) : $(SHL6LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL6LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
 
@@ -2948,6 +2960,7 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL7LIBS)"!=""
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
 SHL7LINKLISTPARAM=@$(SHL7LINKLIST)
@@ -2955,6 +2968,7 @@ $(SHL7LINKLIST) : $(SHL7LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL7LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
 
@@ -3404,6 +3418,7 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL8LIBS)"!=""
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
 SHL8LINKLISTPARAM=@$(SHL8LINKLIST)
@@ -3411,6 +3426,7 @@ $(SHL8LINKLIST) : $(SHL8LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL8LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
 
@@ -3860,6 +3876,7 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL9LIBS)"!=""
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
 SHL9LINKLISTPARAM=@$(SHL9LINKLIST)
@@ -3867,6 +3884,7 @@ $(SHL9LINKLIST) : $(SHL9LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL9LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
 
@@ -4316,6 +4334,7 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL10LIBS)"!=""
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
 SHL10LINKLISTPARAM=@$(SHL10LINKLIST)
@@ -4323,6 +4342,7 @@ $(SHL10LINKLIST) : $(SHL10LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL10LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
 
