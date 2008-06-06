@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@ namespace DOM
         nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
         {
-      // CNode *pNode = i->second;
+            // CNode *pNode = i->second;
             CNode::theNodeMap.erase(i);
         }
     }
