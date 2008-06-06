@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,14 +46,14 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.6.17
+LIBXML2VERSION=2.6.31
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-.IF "$(OS)$(COM)"=="WNTGCC"
-PATCH_FILE_NAME=$(TARFILE_NAME)-mingw.patch
-.ELSE
+#.IF "$(OS)$(COM)"=="WNTGCC"
+#PATCH_FILE_NAME=$(TARFILE_NAME)-mingw.patch
+#.ELSE
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
-.ENDIF
+#.ENDIF
 
 # This is only for UNX environment now
 
@@ -102,11 +102,13 @@ OUTDIR2INC=include$/libxml
 EXTRPATH=URELIB
 OUT2LIB+=.libs$/libxml2.*.dylib
 OUT2BIN+=.libs$/xmllint
+OUT2BIN+=xml2-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=.libs$/libxml2*.a
 OUT2BIN+=.libs$/libxml2*.dll
 OUT2BIN+=.libs$/xmllint.exe
+OUT2BIN+=xml2-config
 .ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll
@@ -115,6 +117,7 @@ OUT2BIN+=win32$/bin.msvc$/xmllint.exe
 .ELSE
 OUT2LIB+=.libs$/libxml2.so*
 OUT2BIN+=.libs$/xmllint
+OUT2BIN+=xml2-config
 .ENDIF
 
 # --- Targets ------------------------------------------------------
