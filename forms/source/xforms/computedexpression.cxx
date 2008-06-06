@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: computedexpression.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +64,7 @@ using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XXPathExtension;
 using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::uno::RuntimeException;
+using com::sun::star::uno::Exception;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::xpath::XPathObjectType_XPATH_UNDEFINED;
 using com::sun::star::util::SearchOptions;
@@ -155,7 +156,7 @@ bool ComputedExpression::_evaluate(
         mxResult = _getXPathAPI(rContext)->eval( rContext.mxContextNode,
                                                  sExpression );
     }
-    catch( const RuntimeException& )
+    catch( const Exception& )
     {
         ; // ignore exception -> mxResult will be empty
     }
