@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AccessibleEmptyEditSource.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,8 +167,8 @@ namespace accessibility
         sal_Bool        Delete( const ESelection& ) { return sal_False; }
         sal_Bool        InsertText( const String&, const ESelection& ) { return sal_False; }
         sal_Bool        QuickFormatDoc( BOOL ) { return sal_True; }
-        USHORT          GetDepth( USHORT ) const { return 0; }
-        sal_Bool        SetDepth( USHORT, USHORT ) { return 0; }
+        sal_Int16       GetDepth( USHORT ) const { return -1; }
+        sal_Bool        SetDepth( USHORT, sal_Int16 ) { return sal_True; }
 
         Rectangle       GetVisArea() const { return Rectangle(); }
         Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const { return rPoint; }
