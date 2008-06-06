@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DrawViewWrapper.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,9 +349,18 @@ void DrawViewWrapper::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, con
     if( pSdrModel && pSdrModel->isLocked() )
         return;
 
+    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+
+    //#i76053# do nothing when only changes on the hidden draw page were made ( e.g. when the symbols for the dialogs are created )
+    SdrPageView* pSdrPageView = this->GetPageView();
+    if( pSdrHint && pSdrPageView )
+    {
+        if( pSdrPageView->GetPage() != pSdrHint->GetPage() )
+            return;
+    }
+
     E3dView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
 
-    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
     if( pSdrHint != 0 )
     {
         SdrHintKind eKind = pSdrHint->GetKind();
