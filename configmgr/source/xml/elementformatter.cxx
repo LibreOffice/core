@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elementformatter.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,9 @@
 #include "elementformatter.hxx"
 #include "xmlstrings.hxx"
 #include "typeconverter.hxx"
-#include "attributelist.hxx"
+
+#include <comphelper/attributelist.hxx>
+
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/configuration/backend/SchemaAttribute.hpp>
@@ -75,7 +77,7 @@ void ElementFormatter::addAttribute(OUString const & _anAttributeName, OUString 
 {
     OSL_PRECOND(m_xAttributes.is(),"Trying to add an attribute to a non-existing list");
 
-    m_xAttributes->addAttribute(_anAttributeName,
+    m_xAttributes->AddAttribute(_anAttributeName,
                                 XML_ATTRTYPE_CDATA,
                                 _aValue);
 }
@@ -85,7 +87,7 @@ void ElementFormatter::addAttribute(OUString const & _anAttributeName, bool _bVa
 {
     OSL_PRECOND(m_xAttributes.is(),"Trying to add an attribute to a non-existing list");
 
-    m_xAttributes->addAttribute(_anAttributeName,
+    m_xAttributes->AddAttribute(_anAttributeName,
                                 XML_ATTRTYPE_CDATA,
                                 _bValue ? ATTR_VALUE_TRUE : ATTR_VALUE_FALSE);
 }
@@ -104,11 +106,11 @@ void ElementFormatter::prepareElement(ElementInfo const& _aInfo)
 {
     if (!m_xAttributes.is())
     {
-        m_xAttributes.set( new AttributeListImpl() );
+        m_xAttributes.set( new ::comphelper::AttributeList() );
         addNamespaces();
     }
     else
-        m_xAttributes->clear();
+        m_xAttributes->Clear();
 
     m_aElementType = _aInfo.type;
 
@@ -122,11 +124,11 @@ void ElementFormatter::prepareSimpleElement(ElementType::Enum _eType)
 {
     if (!m_xAttributes.is())
     {
-        m_xAttributes.set( new AttributeListImpl() );
+        m_xAttributes.set( new ::comphelper::AttributeList() );
         addNamespaces();
     }
     else
-        m_xAttributes->clear();
+        m_xAttributes->Clear();
 
     m_aElementType = _eType;
 }
