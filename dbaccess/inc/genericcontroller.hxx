@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericcontroller.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -190,7 +190,7 @@ namespace dbaui
                                                 ,   ::com::sun::star::lang::XInitialization
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::frame::XDispatchInformationProvider
-                                                ,   ::com::sun::star::frame::XController
+                                                ,   ::com::sun::star::frame::XController2
                                                 ,   ::com::sun::star::frame::XTitle
                                                 ,   ::com::sun::star::frame::XTitleChangeBroadcaster
                                                 >   OGenericUnoController_Base;
@@ -396,8 +396,6 @@ namespace dbaui
         ODataView* getView() const { return m_pView; }
         // shows a error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);
-        // temp
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getComponentWindow() const;
 
         // if xListener is NULL the change will be forwarded to all listeners to the given ::com::sun::star::util::URL
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
@@ -444,7 +442,11 @@ namespace dbaui
         virtual void SAL_CALL acquire(  ) throw ();
         virtual void SAL_CALL release(  ) throw ();
 
-        // ::com::sun::star::frame::XController
+        // ::com::sun::star::frame::XController2
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
+
+        // ::com::sun::star::frame::XController2
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException ) = 0;
