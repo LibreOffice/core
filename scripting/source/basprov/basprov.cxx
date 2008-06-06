@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basprov.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -417,8 +417,11 @@ namespace basprov
                 if ( !pBasic )
                 {
                     USHORT nId = pBasicMgr->GetLibId( aLibrary );
-                    pBasicMgr->LoadLib( nId );
-                    pBasic = pBasicMgr->GetLib( aLibrary );
+                    if ( nId != LIB_NOTFOUND )
+                    {
+                        pBasicMgr->LoadLib( nId );
+                        pBasic = pBasicMgr->GetLib( aLibrary );
+                    }
                 }
                 if ( pBasic )
                 {
