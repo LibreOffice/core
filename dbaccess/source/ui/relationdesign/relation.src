@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: relation.src,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,7 @@
 
 String STR_QUERY_REL_EDIT_RELATION
 {
-    Text [ en-US ] = "This relation already exsits. Do you want to edit it or create a new one?" ;
+    Text [ en-US ] = "This relation already exists. Do you want to edit it or create a new one?" ;
 };
 String STR_QUERY_REL_EDIT
 {
