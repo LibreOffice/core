@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit2.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3029,10 +3029,11 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
     for ( USHORT nPara = 0; nPara < nParas; nPara++ )
     {
         ParaPortion* pPortion = GetParaPortions().GetObject( nPara );
-        const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
-
         if ( pPortion->IsVisible() )
         {
+            const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
+            sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
+
             // --------------------------------------------------
             // Ueber die Zeilen des Absatzes...
             // --------------------------------------------------
@@ -3046,14 +3047,14 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
                 // Papierbreite ab, hier nicht erwuenscht.
                 // Am besten generell nicht auf StartPosX verlassen,
                 // es muss auch die rechte Einrueckung beruecksichtigt werden!
-                nCurWidth = GetXValue( rLRItem.GetTxtLeft() );
+                nCurWidth = GetXValue( rLRItem.GetTxtLeft() + nSpaceBeforeAndMinLabelWidth );
                 if ( nLine == 0 )
                 {
                     long nFI = GetXValue( rLRItem.GetTxtFirstLineOfst() );
-                    nCurWidth += nFI;
+                    nCurWidth -= nFI;
                     if ( pPortion->GetBulletX() > nCurWidth )
                     {
-                        nCurWidth -= nFI;   // LI?
+                        nCurWidth += nFI;   // LI?
                         if ( pPortion->GetBulletX() > nCurWidth )
                             nCurWidth = pPortion->GetBulletX();
                     }
