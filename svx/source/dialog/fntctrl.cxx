@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntctrl.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,7 +142,9 @@ class FontPrevWin_Impl
                                     bUseResText     : 1,
                                     bTwoLines       : 1,
                                     bIsCJKUI        : 1,
-                                    bIsCTLUI        : 1;
+                                    bIsCTLUI        : 1,
+                                    bUseFontNameAsText : 1,
+                                    bTextInited     : 1;
 
     void                _CheckScript();
 public:
@@ -152,7 +154,8 @@ public:
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
         bTwoLines( FALSE ),
-        bIsCJKUI( FALSE ), bIsCTLUI( FALSE )
+        bIsCJKUI( FALSE ), bIsCTLUI( FALSE ),
+        bUseFontNameAsText( FALSE ), bTextInited( FALSE )
         {
             Invalidate100PercentFontWidth();
         }
@@ -539,6 +542,21 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
 
 // -----------------------------------------------------------------------
 
+void SvxFontPrevWindow::SetPreviewText( const ::rtl::OUString& rString )
+{
+    pImpl->aText = rString;
+    pImpl->bTextInited = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFontPrevWindow::SetFontNameAsPreviewText()
+{
+    pImpl->bUseFontNameAsText = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
 void SvxFontPrevWindow::SetFont( const SvxFont& rOutFont )
 {
     setFont( rOutFont, pImpl->aFont );
@@ -614,11 +632,11 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
     if ( pImpl->bUseResText )
         pImpl->aText = GetText();
-    else if ( !pImpl->bSelection )
+    else if ( !pImpl->bSelection && !pImpl->bTextInited )
     {
         SfxViewShell* pSh = SfxViewShell::Current();
 
-        if ( pSh && !pImpl->bGetSelection )
+        if ( pSh && !pImpl->bGetSelection && !pImpl->bUseFontNameAsText )
         {
             pImpl->aText = pSh->GetSelectionText();
             pImpl->bGetSelection = TRUE;
@@ -626,7 +644,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
         }
 
-        if ( !pImpl->bSelection )
+        if ( !pImpl->bSelection || pImpl->bUseFontNameAsText )
         {
             pImpl->aText = rFont.GetName();
             if( pImpl->bIsCJKUI )
