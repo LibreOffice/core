@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RadioButtons.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,9 @@ package integration.forms;
 import com.sun.star.uno.*;
 import com.sun.star.util.*;
 import com.sun.star.lang.*;
-import com.sun.star.accessibility.*;
 import com.sun.star.container.*;
 import com.sun.star.beans.*;
+import com.sun.star.awt.XRadioButton;
 
 import integration.forms.dbfTools;
 import integration.forms.DocumentHelper;
@@ -315,13 +315,10 @@ public class RadioButtons extends complexlib.ComplexTestCase
     private void checkRadio( String groupName, String refValue, XPropertySet form ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
         XPropertySet xRadio = getRadioModel( groupName, refValue, form );
-        XAccessible accessible = (XAccessible)UnoRuntime.queryInterface(
-            XAccessible.class, m_document.getCurrentView().getControl( xRadio ) );
 
-        XAccessibleValue xValue = (XAccessibleValue)UnoRuntime.queryInterface(
-            XAccessibleValue.class, accessible.getAccessibleContext() );
-
-        xValue.setCurrentValue( new Short( (short)1 ) );
+        XRadioButton radioButton = (XRadioButton)UnoRuntime.queryInterface(
+            XRadioButton.class, m_document.getCurrentView().getControl( xRadio ) );
+        radioButton.setState( true );
     }
 
     /* ------------------------------------------------------------------ */
@@ -337,15 +334,33 @@ public class RadioButtons extends complexlib.ComplexTestCase
     }
 
     /* ------------------------------------------------------------------ */
+    private String stateString( short[] states )
+    {
+        StringBuffer buf = new StringBuffer();
+        for ( int i=0; i<states.length; ++i )
+            buf.append( states[i] );
+        return buf.toString();
+    }
+
+    /* ------------------------------------------------------------------ */
     /** verifies a number of radio buttons for their states
      */
-    private boolean verifyRadios( XPropertySet[] radios, short[] states, String errorMessage ) throws com.sun.star.uno.Exception
+    private boolean verifyRadios( XPropertySet[] radios, short[] expectedStates, String errorMessage ) throws com.sun.star.uno.Exception
     {
+        short[] actualStates = new short[radios.length];
+
+        // collect all current states. This is just to be able to emit them, in case of a failure
         for ( int i = 0; i<radios.length; ++i )
         {
-            if ( ((Short)radios[i].getPropertyValue( "State" )).shortValue() != states[i] )
+            actualStates[i] = ((Short)radios[i].getPropertyValue( "State" )).shortValue();
+        }
+
+        // now actually check the states
+        for ( int i = 0; i<radios.length; ++i )
+        {
+            if ( actualStates[i] != expectedStates[i] )
             {
-                failed( errorMessage );
+                failed( errorMessage + " (expected: " + stateString( expectedStates ) + ", found: " + stateString( actualStates ) + ")" );
                 return false;
             }
         }
