@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.pmk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,7 +33,7 @@ XSLDIR=$(SOLARXMLDIR)$/processing
 XCSROOT=$(SOLARXMLDIR)
 ABSXCSROOT=$(SOLARXMLDIR)
 DTDDIR=$(SOLARXMLDIR)
-PROCESSOUT=$(MISC)
+PROCESSOUT=$(MISC)$/$(EXTNAME)
 PROCESSORDIR=$(SOLARBINDIR)
 
 # no validation by inspector class
@@ -46,8 +46,13 @@ JAVAPREPRO=-jdk11
 .IF "$(PRODUCT)" != ""
 JAVAPREPRO=$(JAVAPREPRO) + " -product"
 .ENDIF
+
 # --- Settings -----------------------------------------------------
+
+EXTENSIONNAME:=sun-report-builder
+
 .INCLUDE :  settings.mk
+
 NOUNODOC=
 BUILD_URD_ONLY=TRUE
 LOCALIDLFILES=TRUE
