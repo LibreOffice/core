@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CacheSet.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -483,7 +483,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 }
 // -------------------------------------------------------------------------
 void OCacheSet::setParameter(sal_Int32 nPos
-                             ,Reference< XParameters > _xParameter
+                             ,const Reference< XParameters >& _xParameter
                              ,const ORowSetValue& _rValue
                              ,sal_Int32 _nType
                              ,sal_Int32 _nScale)
