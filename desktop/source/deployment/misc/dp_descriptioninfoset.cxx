@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,9 +152,12 @@ DescriptionInfoset::~DescriptionInfoset() {}
 ::rtl::OUString DescriptionInfoset::getNodeValueFromExpression(::rtl::OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNode > n;
-    if (m_element.is())
-    {
-        n = m_xpath->selectSingleNode(m_element, expression);
+    if (m_element.is()) {
+        try {
+            n = m_xpath->selectSingleNode(m_element, expression);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
     }
     return n.is() ? getNodeValue(n) : ::rtl::OUString();
 }
@@ -206,11 +209,15 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getSupportedPlaforms()
 
 css::uno::Reference< css::xml::dom::XNodeList >
 DescriptionInfoset::getDependencies() const {
-    return m_element.is()
-        ? m_xpath->selectNodeList(
-            m_element,
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:dependencies/*")))
-        : new EmptyNodeList;
+    if (m_element.is()) {
+        try {
+            return m_xpath->selectNodeList(m_element, ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("desc:dependencies/*")));
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
+    }
+    return new EmptyNodeList;
 }
 
 css::uno::Sequence< ::rtl::OUString >
@@ -255,7 +262,11 @@ css::uno::Reference< css::xml::xpath::XXPathAPI > DescriptionInfoset::getXpath()
 {
     css::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
-        n = m_xpath->selectSingleNode(m_element, expression);
+        try {
+            n = m_xpath->selectSingleNode(m_element, expression);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
     }
     return n.is()
         ? ::boost::optional< ::rtl::OUString >(getNodeValue(n))
@@ -267,7 +278,11 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
 {
     css::uno::Reference< css::xml::dom::XNodeList > ns;
     if (m_element.is()) {
-        ns = m_xpath->selectNodeList(m_element, expression);
+        try {
+            ns = m_xpath->selectNodeList(m_element, expression);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
     }
     css::uno::Sequence< ::rtl::OUString > urls(ns.is() ? ns->getLength() : 0);
     for (::sal_Int32 i = 0; i < urls.getLength(); ++i) {
@@ -286,13 +301,23 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
     if (node.is())
     {
         const ::rtl::OUString exp1(RTL_CONSTASCII_USTRINGPARAM("text()"));
-        css::uno::Reference< css::xml::dom::XNode > xPathName = m_xpath->selectSingleNode(node, exp1);
+        css::uno::Reference< css::xml::dom::XNode > xPathName;
+        try {
+            xPathName = m_xpath->selectSingleNode(node, exp1);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
         OSL_ASSERT(xPathName.is());
         if (xPathName.is())
             sPublisherName = xPathName->getNodeValue();
 
         const ::rtl::OUString exp2(RTL_CONSTASCII_USTRINGPARAM("@xlink:href"));
-        css::uno::Reference< css::xml::dom::XNode > xURL = m_xpath->selectSingleNode(node, exp2);
+        css::uno::Reference< css::xml::dom::XNode > xURL;
+        try {
+            xURL = m_xpath->selectSingleNode(node, exp2);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
         OSL_ASSERT(xURL.is());
         if (xURL.is())
            sURL = xURL->getNodeValue();
@@ -313,7 +338,12 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
     if (node.is())
     {
         const ::rtl::OUString exp(RTL_CONSTASCII_USTRINGPARAM("text()"));
-        css::uno::Reference< css::xml::dom::XNode > xtext = m_xpath->selectSingleNode(node, exp);
+        css::uno::Reference< css::xml::dom::XNode > xtext;
+        try {
+            xtext = m_xpath->selectSingleNode(node, exp);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
         if (xtext.is())
             return xtext->getNodeValue();
     }
@@ -333,8 +363,12 @@ DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
     if ( ! m_element.is() || !sParent.getLength())
         return css::uno::Reference< css::xml::dom::XNode > ();
 
-    css::uno::Reference< css::xml::dom::XNode > xParent =
-        m_xpath->selectSingleNode(m_element, sParent);
+    css::uno::Reference< css::xml::dom::XNode > xParent;
+    try {
+        xParent = m_xpath->selectSingleNode(m_element, sParent);
+    } catch (css::xml::xpath::XPathException &) {
+        // ignore
+    }
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
     if (xParent.is())
     {
@@ -367,7 +401,12 @@ DescriptionInfoset::matchFullLocale(css::uno::Reference< css::xml::dom::XNode >
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
         + sLocale +
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
-    return m_xpath->selectSingleNode(xParent, exp1);
+    try {
+        return m_xpath->selectSingleNode(xParent, exp1);
+    } catch (css::xml::xpath::XPathException &) {
+        // ignore
+        return 0;
+    }
 }
 
 css::uno::Reference<css::xml::dom::XNode>
@@ -387,7 +426,11 @@ DescriptionInfoset::matchCountryAndLanguage(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
             + sLangCountry +
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
-        nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+        try {
+            nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
 
         //try to match in strings that also have a variant, for example en-US matches in
         //en-US-montana
@@ -397,7 +440,11 @@ DescriptionInfoset::matchCountryAndLanguage(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[starts-with(@lang,\""))
                 + sLangCountry +
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
-            nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+            try {
+                nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+            } catch (css::xml::xpath::XPathException &) {
+                // ignore
+            }
         }
     }
 
@@ -417,7 +464,11 @@ DescriptionInfoset::matchLanguage(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
         + officeLocale.Language
         + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
-    nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+    try {
+        nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+    } catch (css::xml::xpath::XPathException &) {
+        // ignore
+    }
 
     //try to match in strings that also have a country and/orvariant, for example en  matches in
     //en-US-montana, en-US, en-montana
@@ -427,7 +478,11 @@ DescriptionInfoset::matchLanguage(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[starts-with(@lang,\""))
             + officeLocale.Language
             + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
-        nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+        try {
+            nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
     }
     return nodeMatch;
 }
@@ -439,9 +494,13 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
     OSL_ASSERT(xParent.is());
     if (xParent->getNodeName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simple-license"))))
     {
-        css::uno::Reference<css::xml::dom::XNode> nodeDefault =
-            m_xpath->selectSingleNode(xParent, ::rtl::OUString(
+        css::uno::Reference<css::xml::dom::XNode> nodeDefault;
+        try {
+            nodeDefault = m_xpath->selectSingleNode(xParent, ::rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("@default-license-id")));
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
         if (nodeDefault.is())
         {
             //The old way
@@ -449,12 +508,21 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:license-text[@license-id = \""))
                 + nodeDefault->getNodeValue()
                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
-            return m_xpath->selectSingleNode(xParent, exp1);
+            try {
+                return m_xpath->selectSingleNode(xParent, exp1);
+            } catch (css::xml::xpath::XPathException &) {
+                // ignore
+            }
         }
     }
 
     const ::rtl::OUString exp2(RTL_CONSTASCII_USTRINGPARAM("*[1]"));
-    return m_xpath->selectSingleNode(xParent, exp2);
+    try {
+        return m_xpath->selectSingleNode(xParent, exp2);
+    } catch (css::xml::xpath::XPathException &) {
+        // ignore
+        return 0;
+    }
 }
 
 ::rtl::OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
@@ -470,7 +538,12 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         if (out_bParentExists)
             *out_bParentExists = true;
         const ::rtl::OUString exp(RTL_CONSTASCII_USTRINGPARAM("@xlink:href"));
-        css::uno::Reference< css::xml::dom::XNode > xURL = m_xpath->selectSingleNode(node, exp);
+        css::uno::Reference< css::xml::dom::XNode > xURL;
+        try {
+            xURL = m_xpath->selectSingleNode(node, exp);
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
         OSL_ASSERT(xURL.is());
         if (xURL.is())
             sURL = xURL->getNodeValue();
