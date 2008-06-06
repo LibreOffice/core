@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_shl.mk,v $
 #
-# $Revision: 1.124 $
+# $Revision: 1.125 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -245,6 +245,7 @@ $(SHL$(TNR)TARGETN) : $(LINKINCTARGETS)
 .ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"=="name"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(SHL$(TNR)LIBS)"!=""
 SHL$(TNR)LINKLIST=$(MISC)$/$(SHL$(TNR)TARGET)_link.lst
 SHL$(TNR)LINKLISTPARAM=@$(SHL$(TNR)LINKLIST)
@@ -252,6 +253,7 @@ $(SHL$(TNR)LINKLIST) : $(SHL$(TNR)LIBS)
     @@-$(RM) $@
     $(SED) -f $(SOLARENV)$/bin$/chrel.sed $(foreach,i,$(SHL$(TNR)LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF          # "$(SHL$(TNR)LIBS)"!=""
+.ENDIF          # "$(COM)"!="GCC"
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"=="name"
 
