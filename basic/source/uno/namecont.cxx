@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
+#include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef INCLUDED_COMPHELPER_ANYTOSTRING_HXX
 #include <comphelper/anytostring.hxx>
@@ -65,6 +66,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/script/LibraryNotLoadedException.hpp>
 #include <comphelper/storagehelper.hxx>
 #ifndef _RTL_USTRING_HXX_
 #include <comphelper/anytostring.hxx>
@@ -496,7 +498,10 @@ void SAL_CALL SfxLibraryContainer::storeLibraries(  ) throw (WrappedTargetExcept
     LibraryContainerMethodGuard aGuard( *this );
     try
     {
-        storeLibraries_Impl( mxStorage, sal_False );
+        storeLibraries_Impl( mxStorage, mxStorage.is()  );
+        // we need to store *all* libraries if and only if we are based on a storage:
+        // in this case, storeLibraries_Impl will remove the source storage, after loading
+        // all libraries, so we need to force them to be stored, again
     }
     catch( const Exception& )
     {
@@ -870,7 +875,15 @@ sal_Bool SfxLibraryContainer::init_Impl(
                         }
                         catch( uno::Exception& )
                         {
-                            OSL_ENSURE( 0, "### couln't open sub storage for library\n" );
+                        #if OSL_DEBUG_LEVEL > 0
+                            Any aError( ::cppu::getCaughtException() );
+                            ::rtl::OStringBuffer aMessage;
+                            aMessage.append( "couln't open sub storage for library '" );
+                            aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
+                            aMessage.append( "'.\n\nException:" );
+                            aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                        #endif
                         }
                     }
 
@@ -1275,43 +1288,51 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
             aStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
 
             Any aElement = pLib->getByName( aElementName );
-            if( isLibraryElementValid( aElement ) )
+            if( !isLibraryElementValid( aElement ) )
             {
-                try {
-                    uno::Reference< io::XStream > xElementStream = xStorage->openStreamElement(
-                                                                        aStreamName,
-                                                                        embed::ElementModes::READWRITE );
-                    //if ( !xElementStream.is() )
-                    //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
+            #if OSL_DEBUG_LEVEL > 0
+                ::rtl::OStringBuffer aMessage;
+                aMessage.append( "invalid library element '" );
+                aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                aMessage.append( "'." );
+                OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+            #endif
+                continue;
+            }
+            try {
+                uno::Reference< io::XStream > xElementStream = xStorage->openStreamElement(
+                                                                    aStreamName,
+                                                                    embed::ElementModes::READWRITE );
+                //if ( !xElementStream.is() )
+                //    throw uno::RuntimeException(); // TODO: method must either return the stream or throw an exception
 
-                    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
 
-                    uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
-                    OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
-                    //if ( !xProps.is() ) //TODO
-                    //    throw uno::RuntimeException();
+                uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
+                OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
+                //if ( !xProps.is() ) //TODO
+                //    throw uno::RuntimeException();
 
-                    if ( xProps.is() )
-                    {
-                        xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
-
-                        // #87671 Allow encryption
-//REMOVE                            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
-                        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
-                        xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
-
-                        Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
-                        writeLibraryElement( aElement, aElementName, xOutput );
-                        // writeLibraryElement closes the stream
-                        // xOutput->closeOutput();
-                    }
-                }
-                catch( uno::Exception& )
+                if ( xProps.is() )
                 {
-                    OSL_ENSURE( sal_False, "Problem during storing of library!\n" );
-                    // TODO: error handling?
+                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+
+                    // #87671 Allow encryption
+//REMOVE                            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
+                    aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
+                    xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
+
+                    Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
+                    writeLibraryElement( aElement, aElementName, xOutput );
+                    // writeLibraryElement closes the stream
+                    // xOutput->closeOutput();
                 }
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Problem during storing of library!\n" );
+                // TODO: error handling?
             }
         }
 
@@ -1356,26 +1377,35 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 String aElementPath( aElementInetObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 Any aElement = pLib->getByName( aElementName );
-                if( isLibraryElementValid( aElement ) )
+                if( !isLibraryElementValid( aElement ) )
                 {
-                    // TODO: Check modified
-                    try
-                    {
-                        if( xSFI->exists( aElementPath ) )
-                            xSFI->kill( aElementPath );
-                        Reference< XOutputStream > xOutput = xSFI->openFileWrite( aElementPath );
-                        writeLibraryElement( aElement, aElementName, xOutput );
-                        xOutput->closeOutput();
-                    }
-                    catch( Exception& )
-                    {
-                        if( bExport )
-                            throw;
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "invalid library element '" );
+                    aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                #endif
+                    continue;
+                }
 
-                        SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aElementPath );
-                        ULONG nErrorCode = ERRCODE_IO_GENERAL;
-                        ErrorHandler::HandleError( nErrorCode );
-                    }
+                // TODO: Check modified
+                try
+                {
+                    if( xSFI->exists( aElementPath ) )
+                        xSFI->kill( aElementPath );
+                    Reference< XOutputStream > xOutput = xSFI->openFileWrite( aElementPath );
+                    writeLibraryElement( aElement, aElementName, xOutput );
+                    xOutput->closeOutput();
+                }
+                catch( Exception& )
+                {
+                    if( bExport )
+                        throw;
+
+                    SfxErrorContext aEc( ERRCTX_SFX_SAVEDOC, aElementPath );
+                    ULONG nErrorCode = ERRCODE_IO_GENERAL;
+                    ErrorHandler::HandleError( nErrorCode );
                 }
             }
         }
@@ -1683,26 +1713,27 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
 
         // Don't write if only empty standard lib exists
-        if( nNameCount == 1 )
+        if ( ( nNameCount == 1 ) && ( aNames[0].equalsAscii( "Standard" ) ) )
         {
-            // Must be standard lib
             Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;
             aLibAny >>= xNameAccess;
-            if( aNames[0].equalsAscii( "Standard" ) && !xNameAccess->hasElements() )
+            if ( !xNameAccess->hasElements() )
                 return;
         }
 
         try {
-            xLibrariesStor = xStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
-            if ( !xLibrariesStor.is() )
-                throw uno::RuntimeException();
+            xLibrariesStor.set( xStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE ), UNO_QUERY_THROW );
         }
         catch( uno::Exception& )
         {
-            uno::Any exc( cppu::getCaughtException() ); // cppuhelper/exc_hlp.hxx
-            ::rtl::OUString msg( ::comphelper::anyToString(exc) ); // comphelper/anytostring.hxx
-            OSL_ENSURE( 0, rtl::OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        #if OSL_DEBUG_LEVEL > 0
+            Any aError( ::cppu::getCaughtException() );
+            ::rtl::OStringBuffer aMessage;
+            aMessage.append( "couln't open source library storage.\n\nException:" );
+            aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+        #endif
             return;
         }
 
@@ -1748,7 +1779,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     xSourceLibrariesStor->copyElementTo( rLib.aName, xLibrariesStor, rLib.aName );
                 } catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Problem during storing of libraries!\n" );
+                    DBG_UNHANDLED_EXCEPTION();
                     // TODO: error handling?
                 }
             }
@@ -1757,14 +1788,23 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 uno::Reference< embed::XStorage > xLibraryStor;
                 if( bStorage )
                 {
-                    try {
+                    try
+                    {
                         xLibraryStor = xLibrariesStor->openStorageElement(
                                                                         rLib.aName,
                                                                         embed::ElementModes::READWRITE );
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( 0, "### couln't create sub storage for library\n" );
+                    #if OSL_DEBUG_LEVEL > 0
+                        Any aError( ::cppu::getCaughtException() );
+                        ::rtl::OStringBuffer aMessage;
+                        aMessage.append( "couln't create sub storage for library '" );
+                        aMessage.append( ::rtl::OUStringToOString( rLib.aName, osl_getThreadTextEncoding() ) );
+                        aMessage.append( "'.\n\nException:" );
+                        aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                        OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    #endif
                         return;
                     }
                 }
@@ -1783,16 +1823,12 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 if( bStorage )
                 {
                     try {
-                        uno::Reference< embed::XTransactedObject > xTransact( xLibraryStor, uno::UNO_QUERY );
-                        OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
-                        if ( !xTransact.is() )
-                            throw uno::RuntimeException();
-
+                        uno::Reference< embed::XTransactedObject > xTransact( xLibraryStor, uno::UNO_QUERY_THROW );
                         xTransact->commit();
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Problem during storing of libraries!\n" );
+                        DBG_UNHANDLED_EXCEPTION();
                         // TODO: error handling
                     }
                 }
@@ -2115,7 +2151,15 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( 0, "### couln't open sub storage for library\n" );
+            #if OSL_DEBUG_LEVEL > 0
+                Any aError( ::cppu::getCaughtException() );
+                ::rtl::OStringBuffer aMessage;
+                aMessage.append( "couln't open sub storage for library '" );
+                aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
+                aMessage.append( "'.\n\nException:" );
+                aMessage.append( ::rtl::OUStringToOString( ::comphelper::anyToString( aError ), osl_getThreadTextEncoding() ) );
+                OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+            #endif
                 return;
             }
         }
@@ -2159,7 +2203,13 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
                 if ( !xInStream.is() )
                 {
-                    OSL_ENSURE( 0, "### couln't open library element stream\n" );
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "couln't open library element stream - attempted to open library '" );
+                    aMessage.append( ::rtl::OUStringToOString( Name, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                #endif
                     return;
                 }
             }
@@ -2694,6 +2744,8 @@ sal_Bool SfxLibrary::hasElements()
 Any SfxLibrary::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
+    impl_checkLoaded();
+
     Any aRetAny = maNameContainer.getByName( aName ) ;
     return aRetAny;
 }
@@ -2721,11 +2773,27 @@ void SfxLibrary::impl_checkReadOnly()
         );
 }
 
+void SfxLibrary::impl_checkLoaded()
+{
+    if ( !mbLoaded )
+        throw WrappedTargetException(
+            ::rtl::OUString(),
+            *this,
+            makeAny( LibraryNotLoadedException(
+                ::rtl::OUString(),
+                *this
+            ) )
+        );
+}
+
 // Methods XNameReplace
 void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     impl_checkReadOnly();
+    impl_checkLoaded();
+
+    OSL_ENSURE( isLibraryElementValid( aElement ), "SfxLibrary::replaceByName: replacing element is invalid!" );
 
     maNameContainer.replaceByName( aName, aElement );
     implSetModified( sal_True );
@@ -2737,6 +2805,9 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     impl_checkReadOnly();
+    impl_checkLoaded();
+
+    OSL_ENSURE( isLibraryElementValid( aElement ), "SfxLibrary::insertByName: to-be-inserted element is invalid!" );
 
     maNameContainer.insertByName( aName, aElement );
     implSetModified( sal_True );
@@ -2746,6 +2817,7 @@ void SfxLibrary::removeByName( const OUString& Name )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     impl_checkReadOnly();
+    impl_checkLoaded();
 
     maNameContainer.removeByName( Name );
     implSetModified( sal_True );
