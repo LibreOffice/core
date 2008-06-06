@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zforfind.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1196,6 +1196,12 @@ input for the following reasons:
                                     // M D
                                     pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
                                     pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                    if ( !pCal->isValid() )             // 2nd try
+                                    {                                   // M Y
+                                        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
+                                        pCal->setValue( CalendarFieldIndex::MONTH, ImplGetMonth(0) );
+                                        pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(1) );
+                                    }
                                     break;
                                 case DMY:
                                     // D M
