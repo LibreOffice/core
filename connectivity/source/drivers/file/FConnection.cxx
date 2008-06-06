@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FConnection.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +72,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bShowDeleted(sal_False)
                          ,m_bCaseSensitiveExtension( sal_True )
                          ,m_bCheckSQL92(sal_False)
+                         ,m_bDefaultTextEncoding(false)
 {
     m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
 }
@@ -156,6 +157,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         //m_nTextEncoding = osl_getTextEncodingFromLocale(NULL);
         m_nTextEncoding = osl_getThreadTextEncoding();
+        m_bDefaultTextEncoding = true;
     }
 
     if ( aExt.getLength() )
