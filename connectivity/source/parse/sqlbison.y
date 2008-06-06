@@ -9,7 +9,7 @@
 //
 // $RCSfile: sqlbison.y,v $
 //
-// $Revision: 1.63 $
+// $Revision: 1.64 $
 //
 // This file is part of OpenOffice.org.
 //
@@ -97,7 +97,7 @@
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4701)
+#pragma warning(disable:4273 4701 4706)
 #endif
 
 static ::rtl::OUString aEmptyString;
