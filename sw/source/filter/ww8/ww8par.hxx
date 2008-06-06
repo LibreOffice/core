@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.155 $
+ * $Revision: 1.156 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1371,6 +1371,11 @@ private:
         {return !maFieldStack.empty() ? maFieldStack.back().mnFieldId == 95 : false; };
 
     void StoreMacroCmds();
+
+    // --> OD 2008-04-10 #i84783#
+    // determine object attribute "Layout in Table Cell"
+    bool IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const;
+    // <--
 
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
