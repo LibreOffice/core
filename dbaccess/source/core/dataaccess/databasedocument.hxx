@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,8 +259,8 @@ public:
 // ::com::sun::star::frame::XModel2
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL getControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL createDefaultViewController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& ComponentWindow ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL createViewController( const ::rtl::OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& ComponentWindow ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createDefaultViewController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createViewController( const ::rtl::OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
 
 // ::com::sun::star::frame::XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
@@ -403,19 +403,15 @@ private:
 
     /** creates a storage for the given URL, truncating it if a file with this name already exists
 
-        @throws IOException
-            if the storage could not be created, and the error causing this could not be handled
-            by the document's interaction handler. The message of the IOException will note the failure,
-            and also the message of the originally thrown exception.
+        @throws Exception
+            if creating the storage failed
 
         @return
-            <TRUE/> if and only if the storage could be created. If <FALSE/> is returned, then the storage
-            could not be created, but the error had successfully been handled by the document's
-            interaction handler.
+            the newly created storage for the file at the given URL
     */
-    bool    impl_createStorageFor_throw(
-                const ::rtl::OUString& _rURL,
-                ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _out_rxStorage
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+            impl_createStorageFor_throw(
+                const ::rtl::OUString& _rURL
             ) const;
 
     /** clears the guard before notifying.
