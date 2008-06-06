@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtstyli.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -440,6 +440,7 @@ void XMLTextStyleContext::FillPropertySet(
             { CTF_COMBINED_CHARACTERS_FIELD, -1 },
             { CTF_KEEP_TOGETHER, -1 },
             { CTF_BORDER_MODEL, -1 },
+            { CTF_TEXT_DISPLAY, -1 },
             { CTF_FONTFAMILYNAME, -1 },
             { CTF_FONTFAMILYNAME_CJK, -1 },
             { CTF_FONTFAMILYNAME_CTL, -1 },
@@ -518,8 +519,8 @@ void XMLTextStyleContext::FillPropertySet(
         if (!xInfo.is())
             xInfo.set(rPropSet->getPropertySetInfo());
 
-        // iterate over aContextIDs entries 1..3
-        for ( sal_Int32 i = 2; i < 5; i++ )
+        // iterate over aContextIDs entries 3..6
+        for ( sal_Int32 i = 3; i < 7; i++ )
         {
             nIndex = aContextIDs[i].nIndex;
             if ( nIndex != -1 )
@@ -528,6 +529,30 @@ void XMLTextStyleContext::FillPropertySet(
                 struct XMLPropertyState& rState = GetProperties()[nIndex];
                 Any rAny = rState.maValue;
                 sal_Int32 nMapperIndex = rState.mnIndex;
+                if( i == 3 )
+                {
+                    if( SvXMLImport::OOo_2x != GetImport().getGeneratorVersion() )
+                        continue;
+                    sal_Bool bHidden;
+                    rAny >>= bHidden;
+                    bHidden = !bHidden;
+                    Any aAny( rAny );
+                    aAny <<= bHidden;
+                    // get property set mapper
+                    UniReference<XMLPropertySetMapper> rPropMapper =
+                        xImpPrMap->getPropertySetMapper();
+
+                    // set property
+                    OUString rPropertyName(
+                        rPropMapper->GetEntryAPIName(nMapperIndex) );
+                    if( !xInfo.is() )
+                        xInfo = rPropSet->getPropertySetInfo();
+                    if ( xInfo->hasPropertyByName( rPropertyName ) )
+                    {
+                        rPropSet->setPropertyValue( rPropertyName, aAny );
+                    }
+                    continue;
+                }
 
                 // Now check for font name in rState and set corrected value,
                 // if necessary.
