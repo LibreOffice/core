@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob1.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,7 +159,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
                     SfxItemSet aAttr( pOLV->GetOutliner()->GetStyleSheet( nPara )->GetItemSet() );
-                    SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
+                    SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (USHORT) nPara ) );
                     aAttr.Put( aTmpSet, FALSE ); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
@@ -187,7 +187,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     SfxItemSet aNewAttrs( aAttr );
                     aNewAttrs.Put( *pNewItem );
                     delete pNewItem;
-                    pOLV->GetOutliner()->SetParaAttribs( nPara, aNewAttrs );
+                    pOLV->GetOutliner()->SetParaAttribs( (USHORT)nPara, aNewAttrs );
                 }
             }
             else
@@ -305,6 +305,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             Invalidate();
             mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
         }
+        break;
+
+        case FN_NUM_BULLET_ON:
+            if( pOLV )
+                pOLV->ToggleBullets();
         break;
 
 
@@ -467,7 +472,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                             aNewAttr.Put( *pPoolItem );
                     }
                     break;
-
+/* #i35937#
                     case FN_NUM_BULLET_ON:
                     {
                         if (aEditAttr.GetItemState(EE_PARA_BULLETSTATE) == SFX_ITEM_ON)
@@ -492,6 +497,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         }
                     }
                     break;
+*/
                 }
 
                 rReq.Done( aNewAttr );
@@ -560,5 +566,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     Invalidate( SID_OUTLINE_UP );
     Invalidate( SID_OUTLINE_DOWN );
 }
+
 
 } // end of namespace sd
