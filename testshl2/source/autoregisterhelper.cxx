@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autoregisterhelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,3 +134,10 @@ void AutomaticRegisterHelper::CallAll(hTestResult _hResult) const
     }
 }
 
+AutomaticRegisterHelper::~AutomaticRegisterHelper()
+{
+    if (getOptions().hasOpt("-verbose"))
+    {
+        fprintf(stderr, "Dtor AutomaticRegisterHelper.\n");
+    }
+}
