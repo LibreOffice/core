@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interaction.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,21 @@ namespace comphelper
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
+
+    //=========================================================================
+    //= OInteractionPassword
+    //=========================================================================
+    //--------------------------------------------------------------------
+    void SAL_CALL OInteractionPassword::setPassword( const ::rtl::OUString& _Password ) throw (RuntimeException)
+    {
+        m_sPassword = _Password;;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException)
+    {
+        return m_sPassword;
+    }
 
     //=========================================================================
     //= OInteractionRequest
