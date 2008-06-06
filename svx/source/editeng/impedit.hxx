@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit.hxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +103,8 @@ class SvtCTLOptions;
 
 
 class SvUShorts;
+class SvxNumberFormat;
+
 
 namespace com {
 namespace sun {
@@ -987,6 +989,9 @@ public:
 
     void                SetEditTextObjectPool( SfxItemPool* pP )    { pTextObjectPool = pP; }
     SfxItemPool*        GetEditTextObjectPool() const               { return pTextObjectPool; }
+
+    const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
+    sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = 0, sal_Int32 *pnMinLabelWidth = 0 ) const;
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
     SvxAdjust               GetJustification( USHORT nPara ) const;
