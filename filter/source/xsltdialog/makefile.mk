@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,7 +54,6 @@ SRC1FILES =	xmlfiltersettingsdialog.src							\
             xmlfilterdialogstrings.src
 
 SLOFILES=	$(SLO)$/typedetectionimport.obj						\
-            $(SLO)$/attributelist.obj							\
             $(SLO)$/typedetectionexport.obj						\
             $(SLO)$/xmlfilterjar.obj							\
             $(SLO)$/xmlfilterdialogcomponent.obj				\
