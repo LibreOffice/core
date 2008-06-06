@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxdocumenthandler.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxdocumenthandler.hxx>
 #include <macros/debug.hxx>
-#include <xml/attributelist.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -59,6 +58,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -661,7 +662,8 @@ OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     m_xWriteDocumentHandler( rWriteDocumentHandler ),
     m_rItemAccess( rItemAccess )
 {
-    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
+    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
     m_aAttributeType    = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
     m_aXMLXlinkNS       = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
     m_aXMLToolbarNS     = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR_PREFIX ));
@@ -700,19 +702,19 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
         }
     }
 
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_TOOLBAR )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_TOOLBAR )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_TOOLBAR )) );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
     if ( aUIName.getLength() > 0 )
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_UINAME )),
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_UINAME )),
                              m_aAttributeType,
                              aUIName );
 
@@ -765,7 +767,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     sal_Bool        bVisible )
 throw ( SAXException, RuntimeException )
 {
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
     if ( m_aAttributeURL.getLength() == 0 )
@@ -775,32 +777,32 @@ throw ( SAXException, RuntimeException )
     }
 
     // save required attribute (URL)
-    pList->addAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
+    pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
     if ( rLabel.getLength() > 0 )
     {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TEXT )),
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TEXT )),
                              m_aAttributeType,
                              rLabel );
     }
 
     if ( bVisible == sal_False )
     {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_VISIBLE )),
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_VISIBLE )),
                              m_aAttributeType,
                              OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BOOLEAN_FALSE )) );
     }
 
     if ( rHelpURL.getLength() > 0 )
     {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
                              m_aAttributeType,
                              rHelpURL );
     }
 
     if ( nWidth > 0 )
     {
-        pList->addAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
+        pList->AddAttribute( m_aXMLToolbarNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_WIDTH )),
                              m_aAttributeType,
                              OUString::valueOf( sal_Int32( nWidth )) );
     }
