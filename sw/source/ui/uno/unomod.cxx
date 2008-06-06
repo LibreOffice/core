@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unomod.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,11 +73,13 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_FIELD_COMMANDS,
     HANDLE_VIEWSET_FOOTNOTE_BACKGROUND,
     HANDLE_VIEWSET_GRAPHICS,
+    HANDLE_VIEWSET_HIDDEN_CHARACTERS,
     HANDLE_VIEWSET_HIDDEN_PARAGRAPHS,
     HANDLE_VIEWSET_HIDDEN_TEXT,
     HANDLE_VIEWSET_HRULER,
     HANDLE_VIEWSET_HSCROLL,
     HANDLE_VIEWSET_INDEX_MARK_BACKGROUND,
+    HANDLE_VIEWSET_NONPRINTING_CHARACTERS,
     HANDLE_VIEWSET_ONLINE_LAYOUT,
     HANDLE_VIEWSET_PARA_BREAKS,
     HANDLE_VIEWSET_PROTECTED_SPACES,
@@ -143,11 +145,13 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "ShowFieldCommands"),    HANDLE_VIEWSET_FIELD_COMMANDS       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowFootnoteBackground"),HANDLE_VIEWSET_FOOTNOTE_BACKGROUND , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowGraphics"),         HANDLE_VIEWSET_GRAPHICS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenCharacters"), HANDLE_VIEWSET_HIDDEN_CHARACTERS    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenParagraphs"), HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenText"),       HANDLE_VIEWSET_HIDDEN_TEXT          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriRuler"),        HANDLE_VIEWSET_HRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriScrollBar"),    HANDLE_VIEWSET_HSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowIndexMarkBackground"),HANDLE_VIEWSET_INDEX_MARK_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowNonprintingCharacters"),HANDLE_VIEWSET_NONPRINTING_CHARACTERS, CPPUTYPE_BOOLEAN,PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowOnlineLayout"),     HANDLE_VIEWSET_ONLINE_LAYOUT        , CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID,   0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowParaBreaks"),       HANDLE_VIEWSET_PARA_BREAKS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowProtectedSpaces"),  HANDLE_VIEWSET_PROTECTED_SPACES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
@@ -644,6 +648,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);  break;
         case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);  break;
         case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);  break;
+        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   mpViewOption->SetViewMetaChars( bVal ); break;
         case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE); break;
         case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);    break;
         case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);    break;
@@ -653,6 +658,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(bVal);  break;
         case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(bVal);  break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, TRUE);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
@@ -813,6 +819,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_FIELD_COMMANDS        :   bBoolVal = mpConstViewOption->IsFldName();   break;
         case  HANDLE_VIEWSET_ANNOTATIONS           :   bBoolVal = mpConstViewOption->IsPostIts();   break;
         case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings();   break;
+        case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   bBoolVal = mpConstViewOption->IsViewMetaChars(); break;
         case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = SwViewOption::IsFieldShadings();  break;
         case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = SwViewOption::IsFieldShadings(); break;
         case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(sal_True); break;
@@ -822,6 +829,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);   break;
         case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(sal_True); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
