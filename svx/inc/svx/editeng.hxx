@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +63,7 @@ class SvxBulletItem;
 class SvxLRSpaceItem;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+class SvxNumberFormat;
 
 #include <vos/ref.hxx>
 #include <vector>
@@ -119,6 +120,9 @@ private:
 //#if 0 // _SOLAR__PRIVATE
     SVX_DLLPRIVATE BOOL             PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView );
 //#endif
+
+protected:
+
 
 public:
                     EditEngine( SfxItemPool* pItemPool );
@@ -236,8 +240,8 @@ public:
     void            SetText( USHORT nPara, const EditTextObject& rTxtObj );
     void            SetText( USHORT nPara, const String& rText);
 
-    void                SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
-    const SfxItemSet&   GetParaAttribs( USHORT nPara ) const;
+    virtual void                SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual const SfxItemSet&   GetParaAttribs( USHORT nPara ) const;
 
     void                GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
 
@@ -433,6 +437,10 @@ public:
     virtual void    FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
     virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+
+    // to be overloaded if access to bullet information needs to be provided
+    virtual const SvxNumberFormat * GetNumberFormat( USHORT nPara ) const;
+
     virtual Rectangle GetBulletArea( USHORT nPara );
 
     static SfxItemPool* CreatePool( BOOL bLoadRefCounts = TRUE );
