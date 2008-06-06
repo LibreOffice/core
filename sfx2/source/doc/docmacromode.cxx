@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docmacromode.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -484,25 +484,27 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    void DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& _rxInteraction )
+    sal_Bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& _rxInteraction )
     {
+        sal_Bool bAllow = sal_False;
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
             // no macro should be executed at all
-            disallowMacroExecution();
+            bAllow = disallowMacroExecution();
         }
         else
         {
             if ( m_pData->rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() )
             {
-                adjustMacroMode( _rxInteraction );
+                bAllow = adjustMacroMode( _rxInteraction );
             }
             else if ( !isMacroExecutionDisallowed() )
             {
                 // if macros will be added by the user later, the security check is obsolete
-                allowMacroExecution();
+                bAllow = allowMacroExecution();
             }
         }
+        return bAllow;
     }
 
 //........................................................................
