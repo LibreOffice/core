@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TTableHelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +32,9 @@
 #define CONNECTIVITY_TABLEHELPER_HXX
 
 #include "connectivity/sdbcx/VTable.hxx"
+#include "connectivity/sdbcx/VKey.hxx"
 #include "connectivity/StdTypeDefs.hxx"
+#include <comphelper/stl_types.hxx>
 
 namespace connectivity
 {
@@ -40,13 +42,16 @@ namespace connectivity
 
     ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
+    DECLARE_STL_USTRINGACCESS_MAP( sdbcx::TKeyProperties , TKeyMap);
+
     class OTableHelper : public OTable_TYPEDEF
     {
+        TKeyMap  m_aKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
 
-        void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
-        void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
+        void refreshPrimaryKeys(TStringVector& _rKeys);
+        void refreshForgeinKeys(TStringVector& _rKeys);
 
     protected:
         /** creates the column collection for the table
@@ -109,6 +114,12 @@ namespace connectivity
         virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         // XNamed
         virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+
+        // helper method to get key properties
+        sdbcx::TKeyProperties getKeyProperties(const ::rtl::OUString& _sName) const;
+        void addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
+
+        virtual ::rtl::OUString getTypeCreatePattern() const;
     };
 }
 #endif // CONNECTIVITY_TABLEHELPER_HXX
