@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CachedDataSequence.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,7 +188,7 @@ void CachedDataSequence::registerProperties()
                       & m_sRole,
                       ::getCppuType( & m_sRole ) );
 
-    registerProperty( C2U( "Hidden" ),
+    registerProperty( C2U( "IsHidden" ),
                       PROP_HIDDEN,
                       0,   // PropertyAttributes
                       & m_bIsHidden,
