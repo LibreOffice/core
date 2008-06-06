@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvsh.cxx,v $
- * $Revision: 1.89 $
+ * $Revision: 1.90 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,9 +42,7 @@
 
 #include <sfx2/objface.hxx>
 #include <sot/exchange.hxx>
-#ifndef _SVX_RULE_HXX //autogen
 #include <svx/ruler.hxx>
-#endif
 #include <svx/zoomitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
@@ -64,9 +62,7 @@
 #include <sot/formats.hxx>
 #include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
-#endif
 #include <svx/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/outlobj.hxx>
@@ -96,9 +92,7 @@
 #include "SdUnoOutlineView.hxx"
 #include "SpellDialogChildWindow.hxx"
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 #include "AccessibleOutlineView.hxx"
-#endif
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
@@ -350,6 +344,8 @@ void OutlineViewShell::ArrangeGUIElements ()
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
 
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
+//      aWin.nLeft = pOlView->GetPageNumberWidthPixel();
+
         aWin = pWindow->PixelToLogic(aWin);
         pOutlinerView->SetOutputArea(aWin);
 
@@ -893,13 +889,16 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
 
-    USHORT nDepth;
-    USHORT nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+    sal_Int16 nDepth;
+    sal_Int16 nTmpDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+    bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE );
     while (pPara)
     {
         nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmpDepth )
+            bUnique = FALSE;
+        if( bPage != pPara->HasFlag( PARAFLAG_ISPAGE ) )
             bUnique = FALSE;
         if (!pOutl->IsExpanded(pPara) && pOutl->HasChilds(pPara))
             bDisableExpand = FALSE;
@@ -1163,6 +1162,7 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     pOutlinerView->Scroll(-nDelta, 0);
     pOutlinerView->ShowCursor(FALSE);
 
+    pOlView->InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -1191,6 +1191,8 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
     pOutlinerView->ShowCursor(FALSE);
+
+    pOlView->InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -1411,15 +1413,15 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
     ::sd::Window*       pWin        = GetActiveWindow();
     OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
-    ::Outliner*       pOutliner   = pOlView->GetOutliner();
+//  ::Outliner*       pOutliner   = pOlView->GetOutliner();
     List*           pSelList    = (List*)pActiveView->CreateSelectionList();
     Paragraph*      pFirstPara  = (Paragraph*)pSelList->First();
     Paragraph*      pLastPara   = (Paragraph*)pSelList->Last();
 
-    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pFirstPara ) ) > 0 )
+    if( !pFirstPara->HasFlag(PARAFLAG_ISPAGE) )
         pFirstPara = pOlView->GetPrevTitle( pFirstPara );
 
-    if( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pLastPara ) ) > 0 )
+    if( !pLastPara->HasFlag(PARAFLAG_ISPAGE) )
         pLastPara = pOlView->GetPrevTitle( pLastPara );
 
     delete pSelList;                // die wurde extra fuer uns erzeugt
@@ -1782,7 +1784,7 @@ String OutlineViewShell::GetPageRangeString()
 {
     ::sd::Window*      pWin             = GetActiveWindow();
     OutlinerView*  pActiveView      = pOlView->GetViewByWindow(pWin);
-    ::Outliner*      pOutl            = pActiveView->GetOutliner();
+//  ::Outliner*      pOutl            = pActiveView->GetOutliner();
     List*          pSelList         = (List*)pActiveView->CreateSelectionList();
     Paragraph*     pPara            = (Paragraph*)pSelList->First();
 
@@ -1799,7 +1801,7 @@ String OutlineViewShell::GetPageRangeString()
 
     while ( pPara )
     {
-        if ( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
+        if ( !pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             pPara = pOlView->GetPrevTitle(pPara);
         }
@@ -2000,7 +2002,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     ULONG nPara          = nTitlePara + 1;
     ULONG nParasInLayout = 0L;
     pPara = pOutliner->GetParagraph( nPara );
-    while( pPara && pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) != 0 )
+    while( pPara && !pPara->HasFlag(PARAFLAG_ISPAGE) )
     {
         nParasInLayout++;
         pPara = pOutliner->GetParagraph( ++nPara );
@@ -2085,29 +2087,43 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 
 ULONG OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, USHORT eFormat)
 {
-    OutlineViewPageChangesGuard aGuard( pOlView );
+    ULONG bRet = 0;
 
     ::Outliner* pOutl = pOlView->GetOutliner();
 
-    ULONG bRet = pOutl->Read( rInput, rBaseURL, eFormat, GetDocSh()->GetHeaderAttributes() );
+    {
+    OutlineViewPageChangesGuard aGuard( pOlView );
+    OutlineViewModelChangeGuard aGuard2( *pOlView );
+
+    bRet = pOutl->Read( rInput, rBaseURL, eFormat, GetDocSh()->GetHeaderAttributes() );
 
     SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PK_STANDARD) - 1, PK_STANDARD );;
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
     SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
-    ULONG nParaCount = pOutl->GetParagraphCount();
 
+    USHORT nParaCount = (USHORT)pOutl->GetParagraphCount();
     if ( nParaCount > 0 )
     {
-        for ( ULONG nPara = 0; nPara < nParaCount; nPara++ )
+        for ( USHORT nPara = 0; nPara < nParaCount; nPara++ )
         {
-            USHORT nDepth = pOutl->GetDepth( (USHORT) nPara );
+            pOlView->UpdateParagraph( nPara );
 
-            if( nDepth == 0 )
+            sal_Int16 nDepth = pOutl->GetDepth( nPara );
+
+            if( (nDepth == 0) || !nPara )
             {
+                Paragraph* pPara = pOutl->GetParagraph( nPara );
+                pOutl->SetDepth(pPara, -1);
+                pPara->SetFlag(PARAFLAG_ISPAGE);
+
                 pOutl->SetStyleSheet( nPara, pTitleSheet );
+
+                if( nPara ) // first slide already exists
+                    pOlView->InsertSlideForParagraph( pPara );
             }
             else
             {
+                pOutl->SetDepth( pOutl->GetParagraph( nPara ), nDepth - 1 );
                 String aStyleSheetName( pOutlSheet->GetName() );
                 aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
                 aStyleSheetName += String::CreateFromInt32( nDepth );
@@ -2119,6 +2135,9 @@ ULONG OutlineViewShell::Read(SvStream& rInput, const String& rBaseURL, USHORT eF
             }
         }
     }
+    }
+
+    pOutl->GetUndoManager().Clear();
 
     return( bRet );
 }
