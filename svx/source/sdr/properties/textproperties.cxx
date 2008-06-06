@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textproperties.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ namespace sdr
 
                     sal_uInt32 nParaCount(pOutliner->GetParagraphCount());
 
-                    for(sal_uInt32 nPara(0L); nPara < nParaCount; nPara++)
+                    for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
@@ -264,7 +264,7 @@ namespace sdr
 
                     if(nParaCount)
                     {
-                        for(sal_uInt32 nPara(0L); nPara < nParaCount; nPara++)
+                        for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
                         {
                             SfxItemSet* pTempSet = 0L;
 
@@ -281,7 +281,8 @@ namespace sdr
                                 {
                                     String aNewStyleSheetName(GetStyleSheet()->GetName());
                                     aNewStyleSheetName.Erase(aNewStyleSheetName.Len() - 1, 1);
-                                    aNewStyleSheetName += String::CreateFromInt32(rOutliner.GetDepth((sal_uInt16)nPara));
+                                    sal_Int16 nDepth = rOutliner.GetDepth((sal_uInt16)nPara);
+                                    aNewStyleSheetName += String::CreateFromInt32( nDepth <= 0 ? 1 : nDepth + 1);
 
                                     SdrModel* pModel = rObj.GetModel();
                                     SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;
@@ -424,7 +425,7 @@ namespace sdr
                     {
                         sal_Bool bBurnIn(sal_False);
 
-                        for(sal_uInt32 nPara(0L); nPara < nParaCount; nPara++)
+                        for(sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
                         {
                             SfxStyleSheet* pSheet = pOutliner->GetStyleSheet(nPara);
 
