@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianAxis.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1302,8 +1302,17 @@ void SAL_CALL VCartesianAxis::createShapes()
     //create tick mark line shapes
     if(2==m_nDimension)
     {
-        ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = m_aAllTickInfos.begin();
-        const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
+        ::std::vector< ::std::vector< TickInfo > > aAllShiftedTickInfos;
+        if( m_aIncrement.ShiftedPosition )
+        {
+            pTickmarkHelper2D->getAllTicksShifted( aAllShiftedTickInfos );
+            pTickmarkHelper2D->updateScreenValues( aAllShiftedTickInfos );
+            pTickmarkHelper2D->hideIdenticalScreenValues( aAllShiftedTickInfos );
+        }
+        ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos = m_aIncrement.ShiftedPosition ? aAllShiftedTickInfos : m_aAllTickInfos;
+
+        ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAllTickInfos.begin();
+        const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
 
         if(aDepthIter == aDepthEnd)//no tickmarks at all
             return;
