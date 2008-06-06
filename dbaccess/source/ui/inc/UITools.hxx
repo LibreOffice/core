@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.hxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@ namespace com { namespace sun { namespace star {
     namespace container
     {
         class XNameAccess;
+        class XIndexAccess;
         class XHierarchicalNameContainer;
         class XNameContainer;
     }
@@ -150,7 +151,7 @@ namespace dbaui
     */
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> >
-        getKeyColumns(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
+        getKeyColumns(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxKeys,
                         sal_Int32 _nKeyType);
 
     /** fills a map and a vector with localized type names
