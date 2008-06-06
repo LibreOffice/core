@@ -1262,11 +1262,6 @@
                     <value xml:lang="en-US">To End of Next Page</value>
                 </prop>
             </node>
-            <node oor:name=".uno:ObjectBackOne" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Bring Forward</value>
-                </prop>
-            </node>
             <node oor:name=".uno:GoToStartOfPrevPage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">To Begin of Previous Page</value>
@@ -1275,11 +1270,6 @@
             <node oor:name=".uno:JumpDownThisLevel" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">To Next Paragraph in Level</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:ObjectForwardOne" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Send Backward</value>
                 </prop>
             </node>
             <node oor:name=".uno:MoveUp" oor:op="replace">
