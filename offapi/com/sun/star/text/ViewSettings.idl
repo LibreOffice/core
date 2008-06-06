@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ViewSettings.idl,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,6 +325,21 @@ published service ViewSettings
      */
     [optional, property] long RasterResolutionY;
 
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, hidden characters are displayed
+
+        @since OOo 3.0.0
+     */
+    [optional, property] boolean ShowHiddenCharacters;
+    //-------------------------------------------------------------------------
+    /** If this proeperty is <TRUE/>, the settings of nonprinting characters are applied.
+
+        <p>This option controls the use of the settings ShowHiddenCharacters,
+        ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>
+
+        @since OOo 3.0.0
+     */
+    [optional, property] boolean ShowNonprintingCharacters;
 };
 
 //=============================================================================
