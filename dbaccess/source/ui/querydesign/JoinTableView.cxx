@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: JoinTableView.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -350,7 +350,12 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     try
     {
         if ( !pData->init(pParent->getController()->getConnection(),allowQueries()) )
-            onNoColumns_throw();
+        {
+            if ( pData->isValid() )
+                onNoColumns_throw();
+            else
+                pData.reset();
+        }
     }
     catch ( const SQLException& )
     {
