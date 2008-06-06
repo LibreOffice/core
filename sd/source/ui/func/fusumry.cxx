@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fusumry.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,7 +181,6 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
                     pStyle = pSummaryPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
                     pOutl->SetStyleSheet( 0, pStyle );
-                    pOutl->SetMinDepth(0);
                 }
 
                 /**************************************************************
@@ -207,7 +206,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
             pOutl->SetStyleSheet( nPara, pStyle );
             pOutl->QuickRemoveCharAttribs(nPara);
             pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
-            pOutl->SetDepth(pOutl->GetParagraph(nPara), 1);
+            pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
         }
 
         pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
