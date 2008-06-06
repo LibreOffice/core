@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,8 +259,8 @@ public:
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
 
-    virtual USHORT          GetDepth( USHORT nPara ) const;
-    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
+    virtual sal_Int16       GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
 
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
     // implementation functions for XParagraphAppend and XTextPortionAppend
