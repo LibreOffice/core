@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: string.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,6 +76,13 @@ COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplaceAsciiL(
     rtl::OUString const & source, char const * from, sal_Int32 fromLength,
     rtl::OUString const & to, sal_Int32 beginAt = 0,
     sal_Int32 * replacedAt = NULL);
+
+/** replaces, in the given source string, all occurences of a given ASCII pattern
+    with another ASCII pattern
+*/
+COMPHELPER_DLLPUBLIC ::rtl::OUString searchAndReplaceAllAsciiWithAscii(
+    const ::rtl::OUString& source, const sal_Char* from, const sal_Char* to,
+    const sal_Int32 beginAt = 0 );
 
 /** does an in-place replacement of the first occurance of a sub string with
     another string
