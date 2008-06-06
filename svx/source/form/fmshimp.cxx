@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1859,7 +1859,7 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
     m_aCurrentSelection = _rSelection;
 
     // determine the form which all the selected objécts belong to, if any
-    m_xCurrentForm = NULL;
+    Reference< XForm > xNewCurrentForm;
     for ( InterfaceBag::const_iterator loop = m_aCurrentSelection.begin();
           loop != m_aCurrentSelection.end();
           ++loop
@@ -1868,26 +1868,20 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         Reference< XForm > xThisRoundsForm( GetForm( *loop ) );
         OSL_ENSURE( xThisRoundsForm.is(), "FmXFormShell::setCurrentSelection: *everything* should belong to a form!" );
 
-        if ( !m_xCurrentForm.is() )
+        if ( !xNewCurrentForm.is() )
         {   // the first form we encounterd
-            m_xCurrentForm = xThisRoundsForm;
+            xNewCurrentForm = xThisRoundsForm;
         }
-        else if ( m_xCurrentForm != xThisRoundsForm )
+        else if ( xNewCurrentForm != xThisRoundsForm )
         {   // different forms -> no "current form" at all
-            m_xCurrentForm.clear();
+            xNewCurrentForm.clear();
             break;
         }
     }
-    // and tell this to the page
-    // #i39134# / 2004-12-16 / frank.schoenheit@sun.com
-    FmFormPage* pPage = m_pShell->GetCurPage();
-    if ( pPage && m_xCurrentForm.is() )
-        pPage->GetImpl()->setCurForm( m_xCurrentForm );
+
+    impl_updateCurrentForm( xNewCurrentForm );
 
     // ensure some slots are updated
-    for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
-        InvalidateSlot( DlgSlotMap[i], sal_False );
-
     for ( size_t i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
         InvalidateSlot( SelObjectSlotMap[i], sal_False);
 
@@ -1906,11 +1900,25 @@ void FmXFormShell::forgetCurrentForm()
     if ( !m_xCurrentForm.is() )
         return;
 
-    m_xCurrentForm.clear();
+    // reset ...
+    impl_updateCurrentForm( NULL );
+
+    // ... and try finding a new current form
+    // #i88186# / 2008-04-12 / frank.schoenheit@sun.com
+    impl_defaultCurrentForm_nothrow();
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurForm )
+{
+    m_xCurrentForm = _rxNewCurForm;
+
+    // propagate to the FormPage(Impl)
     FmFormPage* pPage = m_pShell->GetCurPage();
     if ( pPage )
         pPage->GetImpl()->setCurForm( m_xCurrentForm );
 
+    // ensure the UI which depends on the current form is up-to-date
     for ( size_t i = 0; i < sizeof( DlgSlotMap ) / sizeof( DlgSlotMap[0] ); ++i )
         InvalidateSlot( DlgSlotMap[i], sal_False );
 }
@@ -3816,6 +3824,39 @@ void FmXFormShell::viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncActi
     {
         m_nActivationEvent = Application::PostUserEvent( LINK( this, FmXFormShell, OnFirstTimeActivation ) );
         setHasBeenActivated();
+    }
+
+    // find a default "current form", if there is none, yet
+    // #i88186# / 2008-04-12 / frank.schoenheit@sun.com
+    impl_defaultCurrentForm_nothrow();
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::impl_defaultCurrentForm_nothrow()
+{
+    if ( m_xCurrentForm.is() )
+        // no action required
+        return;
+
+    FmFormView* pFormView = m_pShell->GetFormView();
+    SdrPageView* pCurPageView = pFormView ? pFormView->GetSdrPageView() : NULL;
+    FmFormPage* pPage = pCurPageView ? PTR_CAST( FmFormPage, pCurPageView->GetPage() ) : NULL;
+
+    try
+    {
+        if ( !pPage )
+            return;
+
+        Reference< XIndexAccess > xForms( pPage->GetForms( false ), UNO_QUERY );
+        if ( !xForms.is() || !xForms->hasElements() )
+            return;
+
+        Reference< XForm > xNewCurrentForm( xForms->getByIndex(0), UNO_QUERY_THROW );
+        impl_updateCurrentForm( xNewCurrentForm );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
