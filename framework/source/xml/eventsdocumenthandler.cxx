@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventsdocumenthandler.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <xml/eventsdocumenthandler.hxx>
 #include <macros/debug.hxx>
-#include <xml/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -57,6 +56,8 @@
 #include <sal/config.h>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+
+#include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -446,7 +447,8 @@ OWriteEventsDocumentHandler::OWriteEventsDocumentHandler(
     m_aItems( aItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
+    m_xEmptyList        = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
     m_aAttributeType    = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
     m_aXMLXlinkNS       = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
     m_aXMLEventNS       = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT_PREFIX ));
@@ -471,13 +473,13 @@ void OWriteEventsDocumentHandler::WriteEventsDocument() throw
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_EVENT )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_EVENT )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_EVENT )) );
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
@@ -508,7 +510,7 @@ void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const 
 {
     if ( aPropertyValues.getLength() > 0 )
     {
-        AttributeListImpl* pList = new AttributeListImpl;
+        ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
         Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
         if ( m_aAttributeURL.getLength() == 0 )
@@ -527,7 +529,7 @@ void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const 
             m_aAttributeName += OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NAME ));
         }
 
-        pList->addAttribute( m_aAttributeName, m_aAttributeType, aEventName );
+        pList->AddAttribute( m_aAttributeName, m_aAttributeType, aEventName );
 
         sal_Bool    bURLSet = sal_False;
         OUString    aValue;
@@ -538,22 +540,22 @@ void OWriteEventsDocumentHandler::WriteEvent( const OUString& aEventName, const 
         {
             aPropertyValues[i].Value >>= aValue;
             if ( aPropertyValues[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PROP_EVENT_TYPE )))
-                pList->addAttribute( m_aAttributeLanguage, m_aAttributeType, aValue );
+                pList->AddAttribute( m_aAttributeLanguage, m_aAttributeType, aValue );
             else if ( aPropertyValues[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PROP_MACRO_NAME )) &&
                       aValue.getLength() > 0 )
-                pList->addAttribute( m_aAttributeMacroName, m_aAttributeType, aValue );
+                pList->AddAttribute( m_aAttributeMacroName, m_aAttributeType, aValue );
             else if ( aPropertyValues[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PROP_LIBRARY )) &&
                       aValue.getLength() > 0 )
-                pList->addAttribute( m_aAttributeLibrary, m_aAttributeType, aValue );
+                pList->AddAttribute( m_aAttributeLibrary, m_aAttributeType, aValue );
             else if ( aPropertyValues[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PROP_SCRIPT )))
             {
-                pList->addAttribute( m_aAttributeURL, m_aAttributeType, aValue );
+                pList->AddAttribute( m_aAttributeURL, m_aAttributeType, aValue );
                 bURLSet = sal_True;
             }
         }
 
         if ( bURLSet )
-            pList->addAttribute( m_aAttributeLinkType, m_aAttributeType, OUString( RTL_CONSTASCII_USTRINGPARAM( "simple" )) );
+            pList->AddAttribute( m_aAttributeLinkType, m_aAttributeType, OUString( RTL_CONSTASCII_USTRINGPARAM( "simple" )) );
 
         m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_EVENT )), xList );
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
