@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -364,44 +364,39 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
 void FmXPageViewWinRec::updateTabOrder( const Reference< XControl > & xControl,
                                        const Reference< XControlContainer >& /*_rxCC*/ )
 {
-    // Das TabControllerModel der ::com::sun::star::form ermitteln, in der das Control
-    // enthalten ist ...
-    Reference< XFormComponent >  xFormComp(xControl->getModel(), UNO_QUERY);
-    if (!xFormComp.is())
-        return;
-
-    Reference< XForm >  xForm(xFormComp->getParent(), UNO_QUERY);
-    if (!xForm.is())
-        return;
-
-    Reference< XTabController >  xTabCtrl(getController( xForm ), UNO_QUERY);
-    // Wenn es fuer dieses Formular noch keinen Tabcontroller gibt,
-    // dann einen neuen anlegen
-    if (!xTabCtrl.is())
+    try
     {
-        // ist es ein Unterformular?
-        // dann muss ein Tabcontroller fuer den Parent existieren
-        // wichtig da ein hierarchischer Aufbau vorliegt
-        Reference< XForm >  xParentForm(Reference< XChild > (xForm, UNO_QUERY)->getParent(), UNO_QUERY);
-        FmXFormController* pFormController = NULL;
-        // zugehoerigen controller suchen
-        if (xParentForm.is())
-            xTabCtrl = Reference< XTabController >(getController(xParentForm), UNO_QUERY);
+        Reference< XFormComponent > xControlModel( xControl->getModel(), UNO_QUERY_THROW );
+        Reference< XForm > xForm( xControlModel->getParent(), UNO_QUERY_THROW );
 
-        if (xTabCtrl.is())
-        {
-            Reference< XUnoTunnel > xTunnel(xTabCtrl,UNO_QUERY);
-            DBG_ASSERT(xTunnel.is(), "FmPropController::ChangeFormatProperty : xTunnel is invalid!");
-            if(xTunnel.is())
-            {
-                pFormController = reinterpret_cast<FmXFormController*>(xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId()));
-            }
-            //  ::comphelper::getImplementation(pFormController, xTunnel);
+        Reference< XTabController > xTabCtrl( getController( xForm ), UNO_QUERY );
+        if ( xTabCtrl.is() )
+        {   // if there already is a TabController for this form, then delegate the "updateTabOrder" request
+            xTabCtrl->activateTabOrder();
         }
+        else
+        {   // otherwise, create a TabController
 
-        // Es gibt noch keinen TabController fuer das Formular, also muss
-        // ein neuer angelegt werden.
-        setController( xForm, pFormController );
+            // if it's a sub form, then we must ensure there exist TabControllers
+            // for all its ancestors, too
+            Reference< XForm > xParentForm( xForm->getParent(), UNO_QUERY );
+            FmXFormController* pFormController = NULL;
+            // there is a parent form -> look for the respective controller
+            if ( xParentForm.is() )
+                xTabCtrl = Reference< XTabController >( getController( xParentForm ), UNO_QUERY );
+
+            if ( xTabCtrl.is() )
+            {
+                Reference< XUnoTunnel > xTunnel( xTabCtrl, UNO_QUERY_THROW );
+                pFormController = reinterpret_cast< FmXFormController* >( xTunnel->getSomething( FmXFormController::getUnoTunnelImplementationId() ) );
+            }
+
+            setController( xForm, pFormController );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
