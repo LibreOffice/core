@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CacheSet.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,7 @@ namespace dbaccess
         virtual ~OCacheSet();
 
         void setParameter(sal_Int32 nPos
-                            ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >& _xParameter
                             ,const connectivity::ORowSetValue& _rValue
                             ,sal_Int32 _nType
                             ,sal_Int32 _nScale
