@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlsheet.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +66,7 @@
 #include "glob.hxx"
 #include "helpids.h"
 #include "../ui/inc/DrawViewShell.hxx"
+#include "../ui/inc/ViewShellBase.hxx"
 
 using ::rtl::OUString;
 using ::osl::MutexGuard;
@@ -409,7 +410,12 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     SdStyleSheet* pRealStyle = NULL;
     SdDrawDocument* pDoc = ((SdStyleSheetPool&) rPool).GetDoc();
 
-    ::sd::DrawViewShell* pDrawViewShell = dynamic_cast< ::sd::DrawViewShell* >( SfxViewShell::Current() );
+    ::sd::DrawViewShell* pDrawViewShell = 0;
+
+    ::sd::ViewShellBase* pBase = dynamic_cast< ::sd::ViewShellBase* >( SfxViewShell::Current() );
+    if( pBase )
+        pDrawViewShell = dynamic_cast< ::sd::DrawViewShell* >( pBase->GetMainViewShell().get() );
+
     if (pDrawViewShell && pDrawViewShell->GetDoc() == pDoc)
     {
         SdPage* pPage = pDrawViewShell->getCurrentPage();
