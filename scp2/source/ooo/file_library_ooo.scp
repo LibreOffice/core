@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.287 $
+ * $Revision: 1.288 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1135,7 +1135,7 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
 
 File gid_File_Lib_Mozab_2
     TXT_FILE_BODY;
@@ -1157,7 +1157,7 @@ STD_UNO_LIB_FILE(gid_File_Lib_T602Filter,t602filter)
 
 STD_UNO_LIB_FILE(gid_File_Lib_Writerfilter,writerfilter)
 
-#if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)
 
 File gid_File_Lib_Mozabdrv
     TXT_FILE_BODY;
