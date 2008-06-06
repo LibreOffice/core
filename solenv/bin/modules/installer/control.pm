@@ -8,7 +8,7 @@
 #
 # $RCSfile: control.pm,v $
 #
-# $Revision: 1.39 $
+# $Revision: 1.40 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +59,7 @@ sub check_system_path
 
     if( $^O =~ /cygwin/i )
     {   # When using cygwin's perl the PATH variable is POSIX style and ...
-        $pathvariable = qx{cygpath -dp "$pathvariable"} ;
+        $pathvariable = qx{cygpath -mp "$pathvariable"} ;
         # has to be converted to DOS style for further use.
         $local_pathseparator = ';';
     }
