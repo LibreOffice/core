@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpathapi.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/xpath/XXPathExtension.hpp>
 #include <com/sun/star/xml/xpath/Libxml2ExtensionHandle.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -110,35 +111,34 @@ namespace XPath
         Use an XPath string to select a nodelist.
         */
         virtual Reference< XNodeList > SAL_CALL selectNodeList(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         /**
         Use an XPath string to select a nodelist.
         */
         virtual Reference< XNodeList > SAL_CALL selectNodeListNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         /**
         Use an XPath string to select a single node.
         */
         virtual Reference< XNode > SAL_CALL selectSingleNode(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         /**
         Use an XPath string to select a single node.
         */
         virtual Reference< XNode > SAL_CALL selectSingleNodeNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         virtual Reference< XXPathObject > SAL_CALL eval(const Reference< XNode >& contextNode, const OUString& str)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         virtual Reference< XXPathObject > SAL_CALL evalNS(const Reference< XNode >& contextNode, const OUString& str, const Reference< XNode >&  namespaceNode)
-            throw (RuntimeException);
+            throw (RuntimeException, XPathException);
 
         virtual void SAL_CALL registerExtension(const OUString& aName) throw (RuntimeException);
         virtual void SAL_CALL registerExtensionInstance(const Reference< XXPathExtension>& aExtension) throw (RuntimeException);
-
 
     };
 }
