@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +44,6 @@
 namespace jfw
 {
 
-xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName);
-
 /** gets the value of the updated element from the javavendors.xml.
  */
 rtl::OString getElementUpdated();
@@ -69,11 +67,6 @@ class CNodeJavaInfo
 public:
     CNodeJavaInfo();
     ~CNodeJavaInfo();
-    /**
-       sUpdated is the value from the <updated> element from the
-       javavendors.xml.
-     */
-    CNodeJavaInfo(const JavaInfo * pInfo);
 
     /** if true, then javaInfo is empty. When writeToNode is called
         then all child elements are deleted.
@@ -322,8 +315,6 @@ public:
 
     const ::rtl::OUString & getUserClassPath() const;
 
-    const ::std::vector< ::rtl::OUString>& getVmParameters() const;
-
     ::std::vector< ::rtl::OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
         /java/javaInfo. Every time a new JavaInfo structure is created
@@ -336,12 +327,14 @@ public:
      */
     ::rtl::OString const & getJavaInfoAttrVendorUpdate() const;
 
+#ifdef WNT
     /** returns the javaInfo@autoSelect attribute.
         Before calling this function loadFromSettings must be called.
         It uses the javaInfo@autoSelect attribute  to determine
         the return value;
      */
     bool getJavaInfoAttrAutoSelect() const;
+#endif
 
     /** returns an array.
         Caller must free the strings and the array.
