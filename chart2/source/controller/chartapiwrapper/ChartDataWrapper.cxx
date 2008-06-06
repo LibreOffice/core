@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartDataWrapper.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -636,8 +636,7 @@ void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, boo
             eStackMode = StackMode_Z_STACKED;
         else if( bPercent )
             eStackMode = StackMode_Y_STACKED_PERCENT;
-        bool bOnlyAtFirstChartType = false;
-        DiagramHelper::setStackMode( xDia, eStackMode, bOnlyAtFirstChartType );
+        DiagramHelper::setStackMode( xDia, eStackMode );
     }
 
     // notify listeners
