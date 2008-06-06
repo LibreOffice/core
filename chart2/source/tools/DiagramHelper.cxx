@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,7 +274,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
 void DiagramHelper::setStackMode(
     const Reference< XDiagram > & xDiagram,
     StackMode eStackMode,
-    bool bOnlyAtFirstChartType /* = false */
+    bool bOnlyAtFirstChartType /* = true */
 )
 {
     try
