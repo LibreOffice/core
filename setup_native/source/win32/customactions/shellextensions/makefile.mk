@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 NO_DEFAULT_STL=TRUE
 DYNAMIC_CRT=
 USE_DEFFILE=TRUE
+MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
@@ -64,7 +65,6 @@ SLOFILES = \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/registerextensions.obj
-
 
 STDSHL += \
     $(ADVAPI32LIB)\
