@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_lang_template.scp,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,14 +87,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Pdffilter,
              gid_File_Res_Preload,
              gid_File_Res_San,
-             gid_File_Res_Bf_Sch,
-             gid_File_Res_Bf_Svx,
-             gid_File_Res_Bf_Svt,
-             gid_File_Res_Bf_Frm,
-             gid_File_Res_Bf_Ofa,
-             gid_File_Res_Bf_Sd,
-             gid_File_Res_Bf_Sw,
-             gid_File_Res_Bf_Sfx,
              gid_File_Res_Productregistration,
              gid_File_Res_Sb,
              gid_File_Res_Sd,
