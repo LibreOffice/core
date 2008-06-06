@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fetab.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1471,13 +1471,16 @@ USHORT SwFEShell::GetCurTabColNum() const
         } while ( !pFrm->IsCellFrm() );
         SWRECTFN( pFrm )
 
+        const SwPageFrm* pPage = pFrm->FindPageFrm();
+
         //TabCols besorgen, den nur ueber diese erreichen wir die Position.
         SwTabCols aTabCols;
         GetTabCols( aTabCols );
 
         if( pFrm->FindTabFrm()->IsRightToLeft() )
         {
-            long nX = (pFrm->Frm().*fnRect->fnGetRight)();
+            long nX = (pFrm->Frm().*fnRect->fnGetRight)() - (pPage->Frm().*fnRect->fnGetLeft)();
+
             const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();;
 
             if ( !::IsSame( nX, nRight ) )
@@ -1493,7 +1496,9 @@ USHORT SwFEShell::GetCurTabColNum() const
         }
         else
         {
-            const long nX = (pFrm->Frm().*fnRect->fnGetLeft)();
+            const long nX = (pFrm->Frm().*fnRect->fnGetLeft)() -
+                            (pPage->Frm().*fnRect->fnGetLeft)();
+
             const long nLeft = aTabCols.GetLeftMin();
 
             if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
