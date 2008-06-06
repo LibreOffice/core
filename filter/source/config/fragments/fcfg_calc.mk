@@ -1,27 +1,5 @@
 all_fragments+=calc
 
-.IF "$(WITH_BINFILTER)" != "NO"
-T4_CALC_BINFILTER = \
-    calc_StarCalc_10 \
-    calc_StarCalc_30 \
-    calc_StarCalc_30_VorlageTemplate \
-    calc_StarCalc_40 \
-    calc_StarCalc_40_VorlageTemplate \
-    calc_StarCalc_50 \
-    calc_StarCalc_50_VorlageTemplate
-F4_CALC_BINFILTER = \
-    StarCalc_1_0 \
-    StarCalc_3_0 \
-    StarCalc_3_0_Vorlage_Template \
-    StarCalc_4_0 \
-    StarCalc_4_0_Vorlage_Template \
-    StarCalc_5_0 \
-    StarCalc_5_0_Vorlage_Template
-.ELSE
-T4_CALC_BINFILTER =
-F4_CALC_BINFILTER =
-.ENDIF
-
 # -----------------------------------------------
 # count = 27
 T4_CALC = \
@@ -39,7 +17,6 @@ T4_CALC = \
     calc_MS_Excel_97_VorlageTemplate \
     writer_Rich_Text_Format \
     calc_SYLK \
-    $(T4_CALC_BINFILTER) \
     calc_StarOffice_XML_Calc \
     calc_Text_txt_csv_StarCalc \
     calc_StarOffice_XML_Calc_Template \
@@ -70,7 +47,6 @@ F4_CALC = \
     MS_Excel_97_Vorlage_Template \
     Rich_Text_Format__StarCalc_ \
     SYLK \
-    $(F4_CALC_BINFILTER) \
     StarOffice_XML__Calc_ \
     Text___txt___csv__StarCalc_ \
     calc_HTML_WebQuery \
@@ -86,16 +62,13 @@ F4_CALC = \
     calc_MS_Excel_2007_Binary_Template
 
 # -----------------------------------------------
-# count = 14
+# count = 12
 F4_UI_CALC = \
     HTML__StarCalc__ui \
     MS_Excel_4_0_Vorlage_Template_ui \
     MS_Excel_5_0_95_Vorlage_Template_ui \
     MS_Excel_95_Vorlage_Template_ui \
     MS_Excel_97_Vorlage_Template_ui \
-    StarCalc_3_0_Vorlage_Template_ui \
-    StarCalc_4_0_Vorlage_Template_ui \
-    StarCalc_5_0_Vorlage_Template_ui \
     StarOffice_XML__Calc__ui \
     Text___txt___csv__StarCalc__ui \
     calc_HTML_WebQuery_ui \
