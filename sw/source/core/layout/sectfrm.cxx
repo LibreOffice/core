@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sectfrm.cxx,v $
- * $Revision: 1.53 $
+ * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1539,7 +1539,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
         return (SwLayoutFrm*)((SwLayoutFrm*)GetUpper()->GetUpper()->GetNext())->Lower();
     // Innerhalb von Bereichen in Tabellen oder Bereichen in Kopf/Fusszeilen kann
     // nur ein Spaltenwechsel erfolgen, eine der oberen Abkuerzungen haette zuschlagen muessen
-    if( ( IsInTab() && !IsTabFrm() ) || FindFooterOrHeader() )
+    if( GetUpper()->IsInTab() || FindFooterOrHeader() )
         return 0;
 
 //MA 03. Feb. 99: Warum GetUpper()? Das knallt mit Buch.sgl weil im
