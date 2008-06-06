@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +81,6 @@
 #include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
