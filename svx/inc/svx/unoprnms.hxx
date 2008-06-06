@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,7 +267,7 @@
 #define UNO_NAME_3D_CLOSE_FRONT                 "D3DCloseFront"
 #define UNO_NAME_3D_CLOSE_BACK                  "D3DCloseBack"
 
-#define UNO_NAME_NUMBERING                      "IsNumbering"
+#define UNO_NAME_NUMBERING                      "NumberingIsNumber"
 #define UNO_NAME_NUMBERING_RULES                "NumberingRules"
 #define UNO_NAME_NUMBERING_LEVEL                "NumberingLevel"
 
