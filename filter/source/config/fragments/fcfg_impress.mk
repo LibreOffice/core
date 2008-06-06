@@ -1,39 +1,11 @@
 all_fragments+=impress
 
-
-.IF "$(WITH_BINFILTER)" != "NO"
-T4_IMPRESS_BINFILTER = \
-    draw_StarDraw_30 \
-    draw_StarDraw_30_Vorlage \
-    draw_StarDraw_50 \
-    draw_StarDraw_50_Vorlage \
-    impress_StarImpress_40 \
-    impress_StarImpress_40_Vorlage \
-    impress_StarImpress_50 \
-    impress_StarImpress_50_Vorlage \
-    impress_StarImpress_50_packed
-F4_IMPRESS_BINFILTER = \
-    StarDraw_3_0_Vorlage__StarImpress_ \
-    StarDraw_3_0__StarImpress_ \
-    StarDraw_5_0_Vorlage__StarImpress_ \
-    StarDraw_5_0__StarImpress_ \
-    StarImpress_4_0 \
-    StarImpress_4_0_Vorlage \
-    StarImpress_5_0 \
-    StarImpress_5_0_Vorlage \
-    StarImpress_5_0__packed_
-.ELSE
-T4_IMPRESS_BINFILTER =
-F4_IMPRESS_BINFILTER =
-.ENDIF
-
 # -----------------------------------------------
 # count = 19
 T4_IMPRESS = \
     draw_StarOffice_XML_Draw \
     impress_MS_PowerPoint_97 \
     impress_MS_PowerPoint_97_Vorlage \
-    $(T4_IMPRESS_BINFILTER) \
     impress_StarOffice_XML_Impress \
     impress_StarOffice_XML_Impress_Template \
     pdf_Portable_Document_Format \
@@ -49,7 +21,6 @@ T4_IMPRESS = \
 F4_IMPRESS = \
     MS_PowerPoint_97 \
     MS_PowerPoint_97_Vorlage \
-    $(F4_IMPRESS_BINFILTER) \
     impress_StarOffice_XML_Draw \
     StarOffice_XML__Impress_ \
     impress_StarOffice_XML_Impress_Template \
@@ -65,12 +36,7 @@ F4_IMPRESS = \
 # count = 12
 F4_UI_IMPRESS = \
     MS_PowerPoint_97_Vorlage_ui \
-    StarDraw_3_0_Vorlage__StarImpress__ui \
-    StarDraw_5_0_Vorlage__StarImpress__ui \
     impress_StarOffice_XML_Draw_ui \
-    StarImpress_4_0_Vorlage_ui \
-    StarImpress_5_0_Vorlage_ui \
-    StarImpress_5_0__packed__ui \
     StarOffice_XML__Impress__ui \
     impress_StarOffice_XML_Impress_Template_ui \
     impress8_ui \
