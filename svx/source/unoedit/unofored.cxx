@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unofored.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -489,16 +489,16 @@ sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelectio
     return sal_True;
 }
 
-USHORT SvxEditEngineForwarder::GetDepth( USHORT ) const
+sal_Int16 SvxEditEngineForwarder::GetDepth( USHORT ) const
 {
     // EditEngine does not support outline depth
-    return 0;
+    return -1;
 }
 
-sal_Bool SvxEditEngineForwarder::SetDepth( USHORT, USHORT nNewDepth )
+sal_Bool SvxEditEngineForwarder::SetDepth( USHORT, sal_Int16 nNewDepth )
 {
     // EditEngine does not support outline depth
-    return nNewDepth == 0 ? sal_True : sal_False;
+    return nNewDepth == -1 ? sal_True : sal_False;
 }
 
 const SfxItemSet * SvxEditEngineForwarder::GetEmptyItemSetPtr()
