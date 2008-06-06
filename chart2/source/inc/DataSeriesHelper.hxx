@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataSeriesHelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,6 +161,9 @@ void switchLinesOnOrOff(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & xSeriesProperties,
     bool bLinesOn );
+
+void makeLinesThickOrThin( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet > & xSeriesProperties, bool bThick );
 
 void setPropertyAlsoToAllAttributedDataPoints(
     const ::com::sun::star::uno::Reference<
