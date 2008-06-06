@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedxv.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@ class OutlinerView;
 class EditStatus;
 class EditFieldInfo;
 class ImpSdrEditPara;
+struct PasteOrDropInfos;
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -143,6 +144,9 @@ protected:
 
     void ImpMacroUp(const Point& rUpPos);
     void ImpMacroDown(const Point& rDownPos);
+
+       DECL_LINK( BeginPasteOrDropHdl, PasteOrDropInfos* );
+    DECL_LINK( EndPasteOrDropHdl, PasteOrDropInfos* );
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -280,6 +284,11 @@ public:
     virtual void MarkListHasChanged();
 
     rtl::Reference< sdr::SelectionController > getSelectionController() const { return mxSelectionController; }
+
+protected:
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
+
 };
 
 #endif //_SVDEDXV_HXX
