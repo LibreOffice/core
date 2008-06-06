@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgcont.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,12 +120,9 @@ Any SAL_CALL SfxDialogLibraryContainer::createEmptyLibraryElement( void )
     return aRetAny;
 }
 
-sal_Bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid( Any aElement )
+bool SAL_CALL SfxDialogLibraryContainer::isLibraryElementValid( Any aElement ) const
 {
-    Reference< XInputStreamProvider > xISP;
-    aElement >>= xISP;
-    sal_Bool bRet = xISP.is();
-    return bRet;
+    return SfxDialogLibrary::containsValidDialog( aElement );
 }
 
 bool writeOasis2OOoLibraryElement(
@@ -642,6 +639,18 @@ Reference< resource::XStringResourceResolver >
 
     Reference< resource::XStringResourceResolver > xRet( m_xStringResourcePersistence, UNO_QUERY );
     return xRet;
+}
+
+bool SfxDialogLibrary::containsValidDialog( const ::com::sun::star::uno::Any& aElement )
+{
+    Reference< XInputStreamProvider > xISP;
+    aElement >>= xISP;
+    return xISP.is();
+}
+
+bool SAL_CALL SfxDialogLibrary::isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const
+{
+    return SfxDialogLibrary::containsValidDialog( aElement );
 }
 
 }
