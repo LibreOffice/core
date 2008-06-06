@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.29 $
+# $Revision: 1.30 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,8 +59,6 @@ SLOFILES=\
         $(SLO)$/BGroup.obj						\
         $(SLO)$/BUser.obj						\
         $(SLO)$/BUsers.obj						\
-        $(SLO)$/BKeyColumns.obj					\
-        $(SLO)$/BKey.obj						\
         $(SLO)$/BKeys.obj						\
         $(SLO)$/BColumns.obj					\
         $(SLO)$/BIndex.obj						\
