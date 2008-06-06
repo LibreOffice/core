@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FResultSet.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1162,6 +1162,109 @@ Error:
     return sal_False;
 }
 // -------------------------------------------------------------------------
+void OResultSet::sortRows()
+{
+    if (!m_pSQLAnalyzer->hasRestriction() && m_aOrderbyColumnNumber.size() == 1)
+    {
+        // Ist nur ein Feld fuer die Sortierung angegeben
+        // Und diese Feld ist indiziert, dann den Index ausnutzen
+        Reference<XIndexesSupplier> xIndexSup;
+        m_pTable->queryInterface(::getCppuType((const Reference<XIndexesSupplier>*)0)) >>= xIndexSup;
+        //  Reference<XIndexesSupplier> xIndexSup(m_pTable,UNO_QUERY);
+        Reference<XIndexAccess> xIndexes;
+        if(xIndexSup.is())
+        {
+            xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
+            Reference<XPropertySet> xColProp;
+            if(m_aOrderbyColumnNumber[0] < xIndexes->getCount())
+            {
+                xColProp.set(xIndexes->getByIndex(m_aOrderbyColumnNumber[0]),UNO_QUERY);
+                // iterate through the indexes to find the matching column
+                const sal_Int32 nCount = xIndexes->getCount();
+                for(sal_Int32 i=0; i < nCount;++i)
+                {
+                    Reference<XColumnsSupplier> xIndex(xIndexes->getByIndex(i),UNO_QUERY);
+                    Reference<XNameAccess> xIndexCols = xIndex->getColumns();
+                    if(xIndexCols->hasByName(comphelper::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
+                    {
+                        m_pFileSet = new OKeySet();
+
+                        if(fillIndexValues(xIndex))
+                            return;
+                    }
+                }
+            }
+        }
+    }
+
+    OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
+    ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
+    for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+    {
+        OSL_ENSURE((sal_Int32)m_aRow->size() > *aOrderByIter,"Invalid Index");
+        switch ((*(m_aRow->begin()+*aOrderByIter))->getValue().getTypeKind())
+        {
+        case DataType::CHAR:
+            case DataType::VARCHAR:
+                eKeyType[i] = SQL_ORDERBYKEY_STRING;
+                break;
+
+            case DataType::OTHER:
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+            case DataType::REAL:
+            case DataType::DOUBLE:
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BIT:
+                eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
+                break;
+
+        // Andere Typen sind nicht implementiert (und damit immer FALSE)
+            default:
+                eKeyType[i] = SQL_ORDERBYKEY_NONE;
+                OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
+                break;
+        }
+        (*m_aEvaluateRow)[*aOrderByIter]->setBound(sal_True);
+    }
+
+    m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
+
+    if (m_pEvaluationKeySet)
+    {
+        m_aEvaluateIter = m_pEvaluationKeySet->begin();
+
+        while (m_aEvaluateIter != m_pEvaluationKeySet->end())
+        {
+            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
+            ++m_aEvaluateIter;
+        }
+    }
+    else
+    {
+        while (ExecuteRow(IResultSetHelper::NEXT,1,TRUE))
+        {
+        }
+    }
+
+    // Sortiertes Keyset erzeugen
+    //  DELETEZ(m_pEvaluationKeySet);
+    m_pEvaluationKeySet = NULL;
+    m_pFileSet = NULL;
+    m_pFileSet = m_pSortIndex->CreateKeySet();
+    //  if(!bDistinct)
+        //  SetRowCount(pFileSet->count());
+    DELETEZ(m_pSortIndex);
+    // Nun kann ueber den Index sortiert zugegriffen werden.
+}
+
+
+// -------------------------------------------------------------------------
 BOOL OResultSet::OpenImpl()
 {
     OSL_ENSURE(m_pSQLAnalyzer,"No analyzer set with setSqlAnalyzer!");
@@ -1262,122 +1365,29 @@ BOOL OResultSet::OpenImpl()
                 BOOL bDistinct = FALSE;
                 BOOL bWasSorted = FALSE;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
+                ::std::vector<sal_Int32>                aOrderbyColumnNumberSave;
+                ::std::vector<TAscendingOrder>          aOrderbyAscendingSave;
+
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT )
                 {
-                    if(!IsSorted())
+                    // Sort on all columns, saving original order for later
+                    if(IsSorted())
                     {
-                        m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
-                        m_aOrderbyAscending.push_back(SQL_DESC);
-                    }
-                    else
+                        aOrderbyColumnNumberSave = m_aOrderbyColumnNumber;// .assign(m_aOrderbyColumnNumber.begin(), m_aOrderbyColumnNumber.end());
+                        aOrderbyAscendingSave.assign(m_aOrderbyAscending.begin(), m_aOrderbyAscending.end());
                         bWasSorted = TRUE;
+                    }
+
+                    // the first column is the bookmark column
+                    ::std::vector<sal_Int32>::iterator aColStart = (m_aColMapping.begin()+1);
+                    ::std::copy(aColStart, m_aColMapping.end(),::std::back_inserter(m_aOrderbyColumnNumber));
+//                  m_aOrderbyColumnNumber.assign(aColStart, m_aColMapping.end());
+                    m_aOrderbyAscending.assign(m_aColMapping.size()-1, SQL_ASC);
                     bDistinct = TRUE;
                 }
 
-                OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-                for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
-                {
-                    OSL_ENSURE((sal_Int32)m_aRow->size() > *aOrderByIter,"Invalid Index");
-                    switch ((*(m_aRow->begin()+*aOrderByIter))->getValue().getTypeKind())
-                    {
-                    case DataType::CHAR:
-                        case DataType::VARCHAR:
-                            eKeyType[i] = SQL_ORDERBYKEY_STRING;
-                            break;
-
-                        case DataType::OTHER:
-                        case DataType::TINYINT:
-                        case DataType::SMALLINT:
-                        case DataType::INTEGER:
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::REAL:
-                        case DataType::DOUBLE:
-                        case DataType::DATE:
-                        case DataType::TIME:
-                        case DataType::TIMESTAMP:
-                        case DataType::BIT:
-                            eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
-                            break;
-
-                    // Andere Typen sind nicht implementiert (und damit immer FALSE)
-                        default:
-                            eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
-                            break;
-                    }
-                    (*m_aEvaluateRow)[*aOrderByIter]->setBound(sal_True);
-                }
-
-                // Nur wenn Sortierung gewuenscht, ueber alle Datensaetze iterieren und
-                // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
                 if (IsSorted())
-                {
-                    if (!m_pSQLAnalyzer->hasRestriction() && m_aOrderbyColumnNumber.size() == 1)
-                    {
-                        // Ist nur ein Feld fuer die Sortierung angegeben
-                        // Und diese Feld ist indiziert, dann den Index ausnutzen
-                        Reference<XIndexesSupplier> xIndexSup;
-                        m_pTable->queryInterface(::getCppuType((const Reference<XIndexesSupplier>*)0)) >>= xIndexSup;
-                        //  Reference<XIndexesSupplier> xIndexSup(m_pTable,UNO_QUERY);
-                        Reference<XIndexAccess> xIndexes;
-                        if(xIndexSup.is())
-                        {
-                            xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
-                            Reference<XPropertySet> xColProp;
-                            if(m_aOrderbyColumnNumber[0] < xIndexes->getCount())
-                            {
-                                xColProp.set(xIndexes->getByIndex(m_aOrderbyColumnNumber[0]),UNO_QUERY);
-                                // iterate through the indexes to find the matching column
-                                const sal_Int32 nCount = xIndexes->getCount();
-                                for(sal_Int32 i=0; i < nCount;++i)
-                                {
-                                    Reference<XColumnsSupplier> xIndex(xIndexes->getByIndex(i),UNO_QUERY);
-                                    Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                                    if(xIndexCols->hasByName(comphelper::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
-                                    {
-                                        m_pFileSet = new OKeySet();
-
-                                        if(fillIndexValues(xIndex))
-                                            goto DISTINCT;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
-
-                    sal_Bool bOK = sal_True;
-                    if (m_pEvaluationKeySet)
-                    {
-                        if (m_pEvaluationKeySet->size())
-                            m_aEvaluateIter = m_pEvaluationKeySet->begin();
-
-                    }
-                    while (bOK)
-                    {
-                        if (m_pEvaluationKeySet)
-                        {
-                            ExecuteRow(IResultSetHelper::BOOKMARK,(*m_aEvaluateIter),TRUE);
-                            ++m_aEvaluateIter;
-                            bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
-                        }
-                        else
-                            bOK = ExecuteRow(IResultSetHelper::NEXT,1,TRUE);
-                    }
-
-                    // Sortiertes Keyset erzeugen
-                    //  DELETEZ(m_pEvaluationKeySet);
-                    m_pEvaluationKeySet = NULL;
-                    m_pFileSet = NULL;
-                    m_pFileSet = m_pSortIndex->CreateKeySet();
-                    //  if(!bDistinct)
-                        //  SetRowCount(pFileSet->count());
-                    DELETEZ(m_pSortIndex);
-                    // Nun kann ueber den Index sortiert zugegriffen werden.
-                }
+                    sortRows();
 
                 if (!m_pFileSet.isValid())
                 {
@@ -1395,7 +1405,8 @@ BOOL OResultSet::OpenImpl()
                     }
                 }
                 OSL_ENSURE(m_pFileSet.isValid(),"Kein KeySet vorhanden! :-(");
-    DISTINCT:   if(bDistinct && m_pFileSet.isValid())   // sicher ist sicher
+
+                if(bDistinct && m_pFileSet.isValid())   // sicher ist sicher
                 {
                     OValueRow aSearchRow = new OValueVector(m_aRow->size());
                     OValueRefVector::iterator aRowIter = m_aRow->begin();
@@ -1405,66 +1416,47 @@ BOOL OResultSet::OpenImpl()
                             ++aRowIter,++aSearchIter)
                                 aSearchIter->setBound((*aRowIter)->isBound());
 
-                    INT32 nPos;
                     size_t nMaxRow = m_pFileSet->size();
+
                     if (nMaxRow)
                     {
     #if OSL_DEBUG_LEVEL > 1
                         INT32 nFound=0;
     #endif
-                        ::std::vector<sal_Int16> nWasAllwaysFound(nMaxRow,0);
-                        INT32 nPrev_i;
-                        for( size_t j = nMaxRow; j > 0; )
+                        INT32 nPos;
+                        INT32 nKey;
+
+                        for( size_t j = nMaxRow-1; j > 0; --j)
                         {
-                            --j;
-
-                            nPos = (*m_pFileSet)[j]; // aktuell zu loeschender Key
-                            if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
-                            {
-                                ExecuteRow(IResultSetHelper::BOOKMARK,nPos,FALSE);
-                                m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
-                                { // copy row values
-                                    OValueRefVector::iterator copyFrom = m_aSelectRow->begin();
-                                    OValueVector::iterator copyTo = aSearchRow->begin();
-                                    for (   ++copyFrom,++copyTo;    // the first column is the bookmark column
-                                            copyFrom != m_aSelectRow->end();
-                                            ++copyFrom,++copyTo)
-                                                *copyTo = *(*copyFrom);
-                                    // *aSearchRow = *m_aRow;
-                                }
-
-                                // jetzt den Rest nach doppelten durchsuchen
-                                INT32 nKey;
-                                nPrev_i = j;
-                                for(INT32 i = j-1; i >= 0 ;i--)
-                                {
-                                    nKey = (*m_pFileSet)[i];
-                                    ExecuteRow(IResultSetHelper::BOOKMARK,nKey,FALSE);
-                                    if(!nWasAllwaysFound[i])
-                                    {
-                                        m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
-                                        OValueRefVector::iterator loopInRow = m_aSelectRow->begin();
-                                        OValueVector::iterator existentInSearchRow = aSearchRow->begin();
-                                        for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
-                                                loopInRow != m_aSelectRow->end();
-                                                ++loopInRow,++existentInSearchRow)
-                                        {
-                                            if ( (*loopInRow)->isBound() && !( *(*loopInRow) == *existentInSearchRow) )
-                                                break;
-                                        }
-                                        if(loopInRow == m_aSelectRow->end())
-                                        {
-                                            // gefunden
-                                            // Key an der Stelle 0 setzen.
-                                            (*m_pFileSet)[nPrev_i] = 0;
-                                            // und altes i merken
-                                            nPrev_i = i;
-                                            nPos = nKey; // auf naechste gueltige Position setzen
-                                            nWasAllwaysFound[i] = 1;
-                                        }
-                                    }
-                                }
+                            nPos = (*m_pFileSet)[j];
+                            ExecuteRow(IResultSetHelper::BOOKMARK,nPos,FALSE);
+                            m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+                            { // copy row values
+                                OValueRefVector::iterator copyFrom = m_aSelectRow->begin();
+                                OValueVector::iterator copyTo = aSearchRow->begin();
+                                for (   ++copyFrom,++copyTo;    // the first column is the bookmark column
+                                        copyFrom != m_aSelectRow->end();
+                                        ++copyFrom,++copyTo)
+                                            *copyTo = *(*copyFrom);
+                                // *aSearchRow = *m_aRow;
                             }
+
+                            // compare with next row
+                            nKey = (*m_pFileSet)[j-1];
+                            ExecuteRow(IResultSetHelper::BOOKMARK,nKey,FALSE);
+                            m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+                            OValueRefVector::iterator loopInRow = m_aSelectRow->begin();
+                            OValueVector::iterator existentInSearchRow = aSearchRow->begin();
+                            for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
+                                    loopInRow != m_aSelectRow->end();
+                                    ++loopInRow,++existentInSearchRow)
+                            {
+                                if ( (*loopInRow)->isBound() && !( *(*loopInRow) == *existentInSearchRow) )
+                                    break;
+                            }
+
+                            if(loopInRow == m_aSelectRow->end())
+                                (*m_pFileSet)[j] = 0; // Rows match -- Mark for deletion by setting key to 0
     #if OSL_DEBUG_LEVEL > 1
                             else
                                 nFound++;
@@ -1475,7 +1467,17 @@ BOOL OResultSet::OpenImpl()
                                                             ::std::bind2nd(::std::equal_to<sal_Int32>(),0))
                                           ,m_pFileSet->end());
 
-                        if (!bWasSorted)
+                        if (bWasSorted)
+                        {
+                            // Re-sort on original requested order
+                            m_aOrderbyColumnNumber = aOrderbyColumnNumberSave;
+                            m_aOrderbyAscending.assign(aOrderbyAscendingSave.begin(), aOrderbyAscendingSave.end());
+
+                            TIntVector aEvaluationKeySet(*m_pFileSet);
+                            m_pEvaluationKeySet = &aEvaluationKeySet;
+                            sortRows();
+                        }
+                        else
                         {
                             m_aOrderbyColumnNumber.clear();
                             m_aOrderbyAscending.clear();
