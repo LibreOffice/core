@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_calc.scp,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@ Module gid_Module_Prg_Calc
     Styles =(APPLICATIONMODULE);
 End
 
-// #110743# Added gid_File_Lib_Bf_Sc and gid_File_Res_Bf_Sc for binfilter
 Module gid_Module_Prg_Calc_Bin
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_CALC_BIN );
@@ -50,7 +49,7 @@ Module gid_Module_Prg_Calc_Bin
     gid_File_Lib_Solver,gid_File_Lib_Lpsolve,
     gid_File_Oo_Office_Ui_Calccommands_Xcs,gid_File_Oo_Office_Ui_Calccommands_Xcu,gid_File_Oo_Office_Ui_Calcwindowstate_Xcs,
     gid_File_Registry_Spool_Oo_Common_Calc_Xcu,gid_File_Registry_Spool_Oo_Setup_Calc_Xcu, gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu,
-    gid_File_Lib_Bf_Sc,gid_File_Oo_Office_Ui_Calcwindowstate_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu, gid_File_Tmp_Userinstall_Calc_Inf);
+    gid_File_Oo_Office_Ui_Calcwindowstate_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Calc_Filters_Xcu, gid_File_Tmp_Userinstall_Calc_Inf);
 End
 
 // Module gid_Module_Prg_Calc_Help
@@ -89,7 +88,6 @@ Module gid_Module_Langpack_Calc_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Help_Scalc_Zip,
              gid_File_Res_Analysis,
-             gid_File_Res_Bf_Sc,
              gid_File_Res_Date,
              gid_File_Res_Sc,
              gid_File_Res_Solver);
