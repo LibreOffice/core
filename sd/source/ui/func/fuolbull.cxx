@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuolbull.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                 case RET_OK:
                 {
                     SfxItemSet aSet( *pDlg->GetOutputItemSet() );
-
+/* i35937
                     if (mpView->ISA(DrawViewShell) )
                     {
                         if( mpView->GetMarkedObjectList().GetMarkCount() == 0)
@@ -110,7 +110,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                             aSet.Put(aBulletState);
                         }
                     }
-
+*/
                     rReq.Done( aSet );
                     pArgs = rReq.GetArgs();
                 }
@@ -132,8 +132,10 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     // Vorlage umleiten kann
     mpView->SetAttributes(*pArgs);
 
+/* #i35937#
     // evtl. Betroffene Felder invalidieren
     mpViewShell->Invalidate( FN_NUM_BULLET_ON );
+*/
 }
 
 
