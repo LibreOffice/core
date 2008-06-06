@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doctemplateslocal.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +50,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
+#include <comphelper/attributelist.hxx>
+
 #include "doctemplateslocal.hxx"
-#include "attributelist.hxx"
 
 using namespace ::com::sun::star;
 
@@ -86,7 +87,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
     ::rtl::OUString aWhiteSpace( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
     // write the namespace
-    AttributeList* pRootAttrList = new AttributeList;
+    ::comphelper::AttributeList* pRootAttrList = new ::comphelper::AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "xmlns" ) ),
@@ -98,7 +99,7 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
     for ( sal_Int32 nInd = 0; nInd < aSequence.getLength(); nInd++ )
     {
-        AttributeList *pAttrList = new AttributeList;
+        ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
         pAttrList->AddAttribute( aNameAttr, aCDATAString, aSequence[nInd].First );
         pAttrList->AddAttribute( aUINameAttr, aCDATAString, aSequence[nInd].Second );
