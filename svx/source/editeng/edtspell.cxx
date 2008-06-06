@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtspell.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@
 #include <svx/flditem.hxx>
 #include <fontitem.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/eitem.hxx>
 #include <unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -643,13 +644,13 @@ const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )
     sal_uInt16 nPos = rNodes.GetPos( pCurNode );
 
     // Sonderbehandlung: Bullet => Absatzanfang => einfach NULL returnen...
-    const SfxUInt16Item& rBulletState = (const SfxUInt16Item&)
+    const SfxBoolItem& rBulletState = (const SfxBoolItem&)
             pImpEE->GetParaAttrib( nPos, EE_PARA_BULLETSTATE );
     sal_Bool bBullet = rBulletState.GetValue() ? sal_True : sal_False;
     if ( !bBullet && ( pImpEE->aStatus.GetControlWord() & EE_CNTRL_OUTLINER ) )
     {
         // Der Outliner hat im Gliederungsmodus auf Ebene 0 immer ein Bullet.
-        const SfxUInt16Item& rLevel = (const SfxUInt16Item&)
+        const SfxInt16Item& rLevel = (const SfxInt16Item&)
                 pImpEE->GetParaAttrib( nPos, EE_PARA_OUTLLEVEL );
         if ( rLevel.GetValue() == 0 )
             bBullet = sal_True;
