@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabdlg.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -384,7 +384,7 @@ BOOL SfxTabPage::IsReadOnly() const
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot )
+const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep )
 
 /*  [Beschreibung]
 
@@ -395,7 +395,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot )
 
 {
     const SfxItemPool* pPool = rSet.GetPool();
-    USHORT nWh = pPool->GetWhich( nSlot );
+    USHORT nWh = pPool->GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = 0;
 #ifdef DEBUG
     SfxItemState eState;
@@ -411,7 +411,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot )
 // -----------------------------------------------------------------------
 
 const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
-                                           USHORT nSlot )
+                                           USHORT nSlot, sal_Bool bDeep )
 
 /*  [Beschreibung]
 
@@ -421,7 +421,7 @@ const SfxPoolItem* SfxTabPage::GetOldItem( const SfxItemSet& rSet,
 
 {
     const SfxItemSet& rOldSet = GetItemSet();
-    USHORT nWh = GetWhich( nSlot );
+    USHORT nWh = GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = 0;
 
     if ( pImpl->mbStandard && rOldSet.GetParent() )
