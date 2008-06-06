@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: InterfaceContainer.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +107,15 @@ OInterfaceContainer::OInterfaceContainer(
         ,m_aElementType(_rElementType)
         ,m_xServiceFactory(_rxFactory)
 {
-    m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
-    OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::OInterfaceContainer: no event attacher manager! (corrupt installation?)" );
+    try
+    {
+        m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
+        OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::OInterfaceContainer: no event attacher manager!" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 OInterfaceContainer::~OInterfaceContainer() {}
@@ -478,8 +485,15 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     }
     else
     {
-        m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xServiceFactory );
-        OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::read: could not create an event attacher manager!" );
+        try
+        {
+            m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xServiceFactory );
+            OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::read: could not create an event attacher manager!" );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 }
 
