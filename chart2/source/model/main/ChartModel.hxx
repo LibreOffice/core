@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartModel.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -66,9 +66,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_18)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_18
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 18
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 19
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
@@ -90,7 +90,7 @@ namespace impl
     class ImplChartModel;
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper18<
+typedef ::comphelper::WeakImplHelper19<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -99,7 +99,6 @@ typedef ::comphelper::WeakImplHelper18<
 //      ,::com::sun::star::view::XPrintable     //(optional interface)
 //      ,::com::sun::star::document::XEventBroadcaster      //(optional interface)
 //      ,::com::sun::star::document::XEventsSupplier        //(optional interface)
-//      ,::com::sun::star::document::XDocumentInfoSupplier  //(optional interface)
 //      ,::com::sun::star::document::XViewDataSupplier      //(optional interface)
     //  ,::com::sun::star::uno::XWeak           // implemented by WeakImplHelper(optional interface)
     //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
@@ -121,6 +120,7 @@ typedef ::comphelper::WeakImplHelper18<
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::datatransfer::XTransferable
         ,::com::sun::star::chart2::XUndoSupplier
+        ,::com::sun::star::document::XDocumentPropertiesSupplier
         >
     ChartModel_Base;
 }
@@ -139,6 +139,7 @@ private:
 
     ::rtl::OUString                                                             m_aResource;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aMediaDescriptor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > m_xDocumentProperties;
 
     ::cppu::OInterfaceContainerHelper                                           m_aControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
@@ -395,6 +396,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
         getTypes() throw (::com::sun::star::uno::RuntimeException);
 
+    // ____ document::XDocumentPropertiesSupplier ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL
+        getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+
 /*
     //-----------------------------------------------------------------
     // ::com::sun::star::view::XPrintable (optional interface)
@@ -434,13 +439,6 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL
         getEvents()         throw (::com::sun::star::uno::RuntimeException);
-
-    //-----------------------------------------------------------------
-    // ::com::sun::star::document::XDocumentInfoSupplier (optional interface)
-    //-----------------------------------------------------------------
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo > SAL_CALL
-        getDocumentInfo()   throw (::com::sun::star::uno::RuntimeException);
 
     //-----------------------------------------------------------------
     // ::com::sun::star::document::XViewDataSupplier (optional interface)
