@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numitem.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -958,7 +958,10 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
 const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
 {
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
-    return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
+    if( nLevel < SVX_MAX_NUM )
+        return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
+    else
+        return 0;
 }
 /* -----------------02.11.98 09:10-------------------
  *
@@ -972,9 +975,10 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
     }
 
     DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
-    return aFmts[nLevel] ?
-        *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
-                                                    *pStdNumFmt : *pStdOutlineNumFmt;
+
+    return ( ( nLevel < SVX_MAX_NUM ) && aFmts[nLevel] ) ?
+            *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
+                                                        *pStdNumFmt : *pStdOutlineNumFmt;
 }
 
 /* -----------------29.10.98 09:08-------------------
@@ -982,7 +986,9 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsValid )
 {
-    if( !aFmtsSet[i] || !(rNumFmt == *Get( i )) )
+    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" )
+
+    if( (i < SVX_MAX_NUM) && (!aFmtsSet[i] || !(rNumFmt == *Get( i ))) )
     {
         delete aFmts[ i ];
         aFmts[ i ] = new SvxNumberFormat( rNumFmt );
@@ -995,13 +1001,18 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
  * --------------------------------------------------*/
 void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
 {
-    aFmtsSet[nLevel] = 0 != pFmt;
-    if(pFmt)
-        SetLevel(nLevel, *pFmt);
-    else
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" )
+
+    if( nLevel < SVX_MAX_NUM )
     {
-        delete aFmts[nLevel];
-        aFmts[nLevel] = 0;
+        aFmtsSet[nLevel] = 0 != pFmt;
+        if(pFmt)
+            SetLevel(nLevel, *pFmt);
+        else
+        {
+            delete aFmts[nLevel];
+            aFmts[nLevel] = 0;
+        }
     }
 }
 /* -----------------28.10.98 15:38-------------------
@@ -1220,18 +1231,8 @@ SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevels, SvxNumRu
     const USHORT nSrcLevels = pRule->GetLevelCount();
     SvxNumRule* pNewRule = new SvxNumRule( pRule->GetFeatureFlags(), nLevels, pRule->IsContinuousNumbering(), eType );
 
-    // move all levels one level up if the destination is a presentation numbering and the source is not
-    const sal_Bool bConvertUp = pRule->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING &&
-                                  eType == SVX_RULETYPE_PRESENTATION_NUMBERING;
-
-    // move all levels one level down if the source is a presentation numbering and the destination is not
-    const sal_Bool bConvertDown = pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING &&
-                                  eType != SVX_RULETYPE_PRESENTATION_NUMBERING;
-
-    USHORT nSrcLevel = bConvertDown ? 1 : 0;
-    USHORT nDstLevel = bConvertUp ? 1 : 0;
-    for( ; (nDstLevel < nLevels) && (nSrcLevel < nSrcLevels); nSrcLevel++, nDstLevel++ )
-        pNewRule->SetLevel( nDstLevel, pRule->GetLevel( nSrcLevel ) );
+    for( USHORT nLevel = 0; (nLevel < nLevels) && (nLevel < nSrcLevels); nLevel++ )
+        pNewRule->SetLevel( nLevel, pRule->GetLevel( nLevel ) );
 
     return pNewRule;
 }
