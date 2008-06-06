@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.67 $
+# $Revision: 1.68 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -129,10 +129,6 @@ SCPDEFS+=-DWITH_LDAP
 
 .IF "$(SYSTEM_CURL)" == "YES"
 SCPDEFS+=-DSYSTEM_CURL
-.ENDIF
-
-.IF "$(WITH_BINFILTER)" == "NO"
-SCPDEFS+=-DWITHOUT_BINFILTER
 .ENDIF
 
 .IF "$(SYSTEM_STDLIBS)" == "YES"
