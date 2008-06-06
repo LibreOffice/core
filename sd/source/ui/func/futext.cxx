@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,11 +171,7 @@ void FuText::disposing()
         ::Outliner* pOutliner = mpView->GetTextEditOutliner();
 
         if (pOutliner)
-        {
-            pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)
-                        mpDoc->GetStyleSheetPool());
-            pOutliner->SetMinDepth(0);
-        }
+            pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
     }
 }
 
