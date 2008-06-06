@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eerdll.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,19 +113,15 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         SvxNumRule aTmpNumRule( 0, 0, FALSE );
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
-#ifndef SVX_LIGHT
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
-#else
-        ppDefItems[1]  = new SfxVoidItem( EE_PARA_XMLATTRIBS );
-#endif // #ifndef SVX_LIGHT
         ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
         ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
         ppDefItems[4]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
         ppDefItems[5]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
         ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, FALSE );
-        ppDefItems[7]  = new SfxUInt16Item( EE_PARA_BULLETSTATE, 0 );
+        ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, TRUE );
         ppDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
-        ppDefItems[9]  = new SfxUInt16Item( EE_PARA_OUTLLEVEL );
+        ppDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
         ppDefItems[10]  = new SvxBulletItem( EE_PARA_BULLET );
         ppDefItems[11]  = new SvxLRSpaceItem( EE_PARA_LRSPACE );
         ppDefItems[12]  = new SvxULSpaceItem( EE_PARA_ULSPACE );
