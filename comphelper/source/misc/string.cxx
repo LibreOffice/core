@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: string.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +55,28 @@ rtl::OUString searchAndReplaceAsciiL(
     return n == -1 ? source : source.replaceAt(n, fromLength, to);
 }
 
-COMPHELPER_DLLPUBLIC ::rtl::OUString& searchAndReplaceAsciiI(
+::rtl::OUString searchAndReplaceAllAsciiWithAscii(
+    const ::rtl::OUString& _source, const sal_Char* _from, const sal_Char* _to,
+    const sal_Int32 _beginAt )
+{
+    sal_Int32 fromLength = strlen( _from );
+    sal_Int32 n = _source.indexOfAsciiL( _from, fromLength, _beginAt );
+    if ( n == -1 )
+        return _source;
+
+    ::rtl::OUString dest( _source );
+    ::rtl::OUString to( ::rtl::OUString::createFromAscii( _to ) );
+    do
+    {
+        dest = dest.replaceAt( n, fromLength, to );
+        n = dest.indexOfAsciiL( _from, fromLength, n + to.getLength() );
+    }
+    while ( n != -1 );
+
+    return dest;
+}
+
+::rtl::OUString& searchAndReplaceAsciiI(
     ::rtl::OUString & _source, sal_Char const * _asciiPattern, ::rtl::OUString const & _replace,
     sal_Int32 _beginAt, sal_Int32 * _replacedAt )
 {
