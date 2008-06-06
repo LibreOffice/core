@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeHelper.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@ public:
     static sal_Bool isSupportingRightAngledAxes(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static bool     isSupportingAxisSideBySide(      const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static bool     isSupportingStartingAngle(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static bool     shiftTicksAtXAxisPerDefault(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
     //returns sequence of ::com::sun::star::chart::DataLabelPlacement
     static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
