@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,6 +55,7 @@ CFLAGSCXX += -fno-omit-frame-pointer
 CFLAGSNOOPT=-O0
 
 SLOFILES= \
+    $(SLO)$/dllinit.obj		\
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj \
