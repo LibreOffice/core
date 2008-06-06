@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pathexpression.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,6 @@
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -62,7 +61,6 @@ using com::sun::star::xml::dom::XNodeList;
 using com::sun::star::xml::dom::events::XEventListener;
 using com::sun::star::xml::dom::events::XEventTarget;
 using com::sun::star::container::XNameContainer;
-using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::UNO_QUERY;
