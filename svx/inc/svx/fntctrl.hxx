@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fntctrl.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,10 @@
 #include <vcl/window.hxx>
 #include <svx/svxfont.hxx>
 #include "svx/svxdllapi.h"
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 // forward ---------------------------------------------------------------
 
@@ -79,6 +83,9 @@ public:
     void                SetFontWidthScale( UINT16 nScaleInPercent );
 
     void                AutoCorrectFontColor( void );
+
+    void                SetPreviewText( const ::rtl::OUString& rString );
+    void                SetFontNameAsPreviewText();
 };
 
 #endif // #ifndef _SVX_FNTCTRL_HXX
