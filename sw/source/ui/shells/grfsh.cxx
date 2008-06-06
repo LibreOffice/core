@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grfsh.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +114,17 @@ void SwGrfShell::Execute(SfxRequest &rReq)
     USHORT nSlot = rReq.GetSlot();
     switch(nSlot)
     {
+        case FN_SAVE_GRAPHIC:
+        {
+            const Graphic *pGraphic;
+            if(0 != (pGraphic = rSh.GetGraphic()))
+            {
+                String sGrfNm, sFilterNm;
+                rSh.GetGrfNms( &sGrfNm, &sFilterNm );
+                ExportGraphic( *pGraphic, sGrfNm, sGrfNm );
+            }
+        }
+        break;
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
@@ -525,7 +536,10 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         {
         case FN_FORMAT_GRAFIC_DLG:
             break;
-
+        case FN_SAVE_GRAPHIC:
+            if( rSh.GetGraphicType() == GRAPHIC_NONE )
+                bDisable = sal_True;
+        break;
         case SID_COLOR_SETTINGS:
         {
             if ( bParentCntProt || !bIsGrfCntnt )
