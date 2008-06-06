@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdbg.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +126,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         break;
         case EE_PARA_BULLETSTATE:
             aDebStr += "ShowBullet=";
-            aDebStr += ByteString::CreateFromInt32( ((SfxUInt16Item&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( ((SfxBoolItem&)rItem).GetValue() );
         break;
         case EE_PARA_HYPHENATE:
             aDebStr += "Hyphenate=";
@@ -134,7 +134,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         break;
         case EE_PARA_OUTLLEVEL:
             aDebStr += "Level=";
-            aDebStr += ByteString::CreateFromInt32( ((SfxUInt16Item&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( ((SfxInt16Item&)rItem).GetValue() );
         break;
         case EE_PARA_ULSPACE:
             aDebStr += "SB=";
