@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +48,7 @@
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLoadEventListener.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -57,10 +57,9 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -101,7 +100,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::embed;
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
-namespace css = ::com::sun::star;
 using ::com::sun::star::awt::XWindow;
 
 // -------------------------------------------------------------------------
@@ -141,34 +139,34 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
 {
     try
     {
-        ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-        Reference< XInputStream > xInStream = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")), Reference< XInputStream >() );
-
-        Reference<XPropertySet> xProp;
+        ::comphelper::NamedValueCollection aMedia( Descriptor );
+        Reference< XInputStream > xInStream( aMedia.getOrDefault( "InputStream",  Reference< XInputStream >() ) );
+        Reference< XPropertySet > xStorageProperties;
         if ( xInStream.is() )
         {
-            xProp.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
+            xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
                 xInStream, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
         }
         else
         {
-            ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),::rtl::OUString());
+            ::rtl::OUString sURL = aMedia.getOrDefault( "URL", ::rtl::OUString() );
+            ::rtl::OUString sSalvagedURL( aMedia.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
 
-            if ( sTemp.getLength() )
+            ::rtl::OUString sFileLocation( sSalvagedURL.getLength() ? sSalvagedURL : sURL );
+            if ( sFileLocation.getLength() )
             {
-                INetURLObject aURL(sTemp);
-                xProp.set( ::comphelper::OStorageHelper::GetStorageFromURL(
-                    sTemp, ElementModes::READ, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
+                xStorageProperties.set( ::comphelper::OStorageHelper::GetStorageFromURL(
+                    sFileLocation, ElementModes::READ, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
             }
         }
 
-        if ( xProp.is() )
+        if ( xStorageProperties.is() )
         {
             ::rtl::OUString sMediaType;
-            xProp->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
+            xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
             if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) || sMediaType.equalsAscii(MIMETYPE_VND_SUN_XML_BASE_ASCII) )
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
-            ::comphelper::disposeComponent(xProp);
+            ::comphelper::disposeComponent(xStorageProperties);
         }
     } catch(Exception&){}
     return ::rtl::OUString();
@@ -396,7 +394,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
-
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
     sal_Bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
@@ -429,47 +426,49 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
-    /* special mode: use already loaded model ...
-        In such case no filter name will be selected and no URL will be given!
-        Such informations are not neccessary. We have to create a new view only
-        and call setComponent() at the corresponding frame. */
+    // it's allowed to pass an existing document
+    Reference< XOfficeDatabaseDocument > xExistentDBDoc;
+    xModel.set( aMediaDesc.getOrDefault( "Model", xExistentDBDoc ), UNO_QUERY );
+    aMediaDesc.remove( "Model" );
+
+    // also, it's allowed to specify the type of view which should be created
+    ::rtl::OUString sViewName = aMediaDesc.getOrDefault( "ViewName", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) ) );
+    aMediaDesc.remove( "ViewName" );
+
+    sal_Bool bInteractive = sal_False;
     if ( !xModel.is() )
     {
         Reference< XSingleServiceFactory > xDatabaseContext;
-        if ( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xDatabaseContext ) )
+        if ( !m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xDatabaseContext ) )
+            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "css.sdb.DatabaseContext not available" ) ), NULL );
+
+        ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
+        bCreateNew = sFactoryName.match(_rURL);
+        Sequence<Any> aCreationArgs;
+        if ( !bCreateNew )
         {
-            sal_Bool bInteractive = sal_False;
+            aCreationArgs.realloc(1);
+            aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
+        }
+        else
+            bInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
 
-            ::rtl::OUString sFactoryName = SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_DATABASE);
-            bCreateNew = sFactoryName.match(_rURL);
-            Sequence<Any> aCreationArgs;
-            if ( !bCreateNew )
+        Reference< XDocumentDataSource > xDocumentDataSource;
+        xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
+        xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
+        if ( xModel.is() )
+        {
+            const ::rtl::OUString sURL = xModel->getURL();
+            if ( bCreateNew )
             {
-                aCreationArgs.realloc(1);
-                aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
+                xModel->attachResource( sURL, aMediaDesc.getPropertyValues() );
             }
-            else
-                bInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
 
-            Reference< XDocumentDataSource > xDocumentDataSource;
-            xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
-            xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
-            if ( xModel.is() )
+            if ( bInteractive )
             {
-                const ::rtl::OUString sURL = xModel->getURL();
-                if ( bCreateNew )
-                {
-                    Sequence< PropertyValue > aDocResource;
-                    aMediaDesc >>= aDocResource;
-                    xModel->attachResource( sURL, aDocResource );
-                }
-
-                if ( bInteractive )
-                {
-                    bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
-                    if ( sURL != xModel->getURL() )
-                        bDidLoadExisting = sal_True;
-                }
+                bSuccess = impl_executeNewDatabaseWizard( xModel, bStartTableWizard );
+                if ( sURL != xModel->getURL() )
+                    bDidLoadExisting = sal_True;
             }
         }
     }
@@ -486,9 +485,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         try
         {
             aMediaDesc.put( "FileName", _rURL );
-            Sequence< PropertyValue > aDocResource;
-            aMediaDesc >>= aDocResource;
-            xModel->attachResource( _rURL, aDocResource );
+            xModel->attachResource( _rURL, aMediaDesc.getPropertyValues() );
         }
         catch(const Exception&)
         {
@@ -497,53 +494,32 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    Reference< XController > xController;
+    Reference< XController2 > xController;
     if ( bSuccess )
     {
-        bSuccess = m_aContext.createComponent( "org.openoffice.comp.dbu.OApplicationController", xController );
-        if ( bSuccess )
+        try
         {
-            xController->attachModel(xModel);
-            xModel->setCurrentController(xController);
+            Reference< XModel2 > xModel2( xModel, UNO_QUERY_THROW );
+            xController = xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame );
 
-            ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-            // and initialize
-            try
+            bSuccess = xController.is();
+            if ( bSuccess )
             {
-                Sequence< PropertyValue > aLoadArgs;
-                aMediaDesc >>= aLoadArgs;
-
-                Reference<XInitialization > xIni(xController,UNO_QUERY);
-                Sequence< Any > aInitArgs( aLoadArgs.getLength() + 1 );
-
-                Any* pArgIter = aInitArgs.getArray();
-                Any* pEnd   = pArgIter + aInitArgs.getLength();
-                *pArgIter++ <<= PropertyValue(
-                            ::rtl::OUString::createFromAscii( "Frame" ),
-                            0,
-                            makeAny( rFrame ),
-                            PropertyState_DIRECT_VALUE );
-
-                const PropertyValue* pIter = aLoadArgs.getConstArray();
-                for(++pArgIter;pArgIter != pEnd;++pArgIter,++pIter)
-                {
-                    *pArgIter <<= *pIter;
-                }
-
-                xIni->initialize(aInitArgs);
+                xController->attachModel( xModel );
+                rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+                xModel->setCurrentController( xController.get() );
+                xController->attachFrame( rFrame );
             }
-            catch(Exception&)
-            {
-                bSuccess = sal_False;
-            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            bSuccess = sal_False;
         }
     }
 
     if (bSuccess)
     {
-        if ( xController.is() && rFrame.is() )
-            xController->attachFrame(rFrame);
         try
         {
             Reference< css::container::XSet > xModelCollection;
@@ -583,6 +559,18 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
         if ( rListener.is() )
             rListener->loadFinished(this);
+
+        if ( bCreateNew && bInteractive )
+        {
+            Reference< css::view::XSelectionSupplier >  xDocView( xModel->getCurrentController(), UNO_QUERY );
+            if ( xDocView.is() )
+            {
+                Sequence< NamedValue > aSelection(1);
+                aSelection[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
+                aSelection[0].Value <<= sal_Int32(0);
+                xDocView->select(makeAny(aSelection));
+            }
+        }
 
         if ( bStartTableWizard )
         {
