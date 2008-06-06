@@ -34,3 +34,9 @@ mkdir: %_DEST%\inc%_EXT%\testshl
 ..\%__SRC%\lib\cppunit.lib %_DEST%\lib%_EXT%\cppunit.lib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 
+# The follows is a testshl2 selftest library, which must be delivered for tests.
+# But per default this library doesn't exists.
+# For more information see workben/selftest
+..\%__SRC%\bin\delivertest.dll      %_DEST%\bin%_EXT%\testshl2_deliver_test.dll
+..\%__SRC%\lib\libdelivertest.so    %_DEST%\lib%_EXT%\libtestshl2_deliver_test.so
+..\%__SRC%\lib\libdelivertest.dylib %_DEST%\lib%_EXT%\libtestshl2_deliver_test.dylib
