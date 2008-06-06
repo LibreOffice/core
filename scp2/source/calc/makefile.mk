@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,10 +40,6 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
-.IF "$(WITH_BINFILTER)" == "NO"
-SCPDEFS+=-DWITHOUT_BINFILTER
-.ENDIF
 
 .IF "$(SYSTEM_LPSOLVE)" == "YES"
 SCPDEFS+=-DSYSTEM_LPSOLVE
