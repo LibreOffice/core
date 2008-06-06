@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: saxnamespacefilter.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,9 @@
 #include <stdio.h>
 
 #include <xml/saxnamespacefilter.hxx>
-#include <xml/attributelist.hxx>
+
+#include <comphelper/attributelist.hxx>
+
 #include <vcl/svapp.hxx>
 
 using namespace ::rtl;
@@ -94,7 +96,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     if ( m_aNamespaceStack.size() > 0 )
         aXMLNamespaces = m_aNamespaceStack.top();
 
-    AttributeListImpl* pNewList = new AttributeListImpl();
+    ::comphelper::AttributeList* pNewList = new ::comphelper::AttributeList();
 
     // examine all namespaces for this level
     ::std::vector< sal_Int16 > aAttributeIndexes;
@@ -122,7 +124,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
             OUString aAttributeName          = xAttribs->getNameByIndex( *i );
             OUString aValue                  = xAttribs->getValueByIndex( *i );
             OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
-            pNewList->addAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
+            pNewList->AddAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
         }
     }
     catch ( SAXException& e )
