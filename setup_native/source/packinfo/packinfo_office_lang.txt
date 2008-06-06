@@ -167,6 +167,21 @@ packageversion = "%OOOPACKAGEVERSION"
 End
 
 Start
+module = "gid_Module_Langpack_Binfilter"
+solarispackagename = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+solarisrequires = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
+packagename = "ooobasis%OOOBASEVERSION-%LANGUAGESTRING-binfilter"
+provides = "ooobasis%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
+requires = "ooobasis%OOOBASEVERSION-%LANGUAGESTRING"
+copyright = "1999-2007 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Legacy filters (e.g. StarOffice 5.2) for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+Start
 module = "gid_Module_Langpack_Onlineupdate"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-onlineupd"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
