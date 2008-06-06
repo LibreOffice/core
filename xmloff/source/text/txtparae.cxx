@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.144 $
+ * $Revision: 1.145 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2779,7 +2779,7 @@ void XMLTextParagraphExport::exportAlternativeText(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
-    // svg:desc
+    // svg:title
     if( rPropSetInfo->hasPropertyByName( sAlternativeText  ) )
     {
         OUString sAltText;
@@ -2787,7 +2787,7 @@ void XMLTextParagraphExport::exportAlternativeText(
         if( sAltText.getLength() )
         {
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
-                                      XML_DESC, sal_True, sal_False );
+                                      XML_TITLE, sal_True, sal_False );
             GetExport().Characters( sAltText );
         }
     }
