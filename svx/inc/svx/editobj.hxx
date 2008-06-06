@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editobj.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,14 +86,6 @@ public:
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
     void                    Skip( SvStream& rIStream );
 
-    // Zur 5.1 hat sich die Bedeutung des LRSpaceItems fuer den Outliner geaendert...
-    virtual void            SetLRSpaceItemFlags( BOOL bOutlineMode );
-    virtual void            AdjustImportedLRSpaceItems( BOOL bTurnOfBullets );
-/* cl removed because not needed anymore since binfilter
-    virtual void            PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
-    virtual void            FinishStore();
-    virtual void            FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
-*/
     virtual USHORT      GetParagraphCount() const;
 
     virtual XubString   GetText( USHORT nParagraph ) const;
