@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +36,10 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/ucb/XAnyCompare.hpp>
 #include "XMLTextNumRuleInfo.hxx"
+
+#include <xmloff/xmlexp.hxx>
 
 using ::rtl::OUString;
 
@@ -46,15 +49,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
-XMLTextNumRuleInfo::XMLTextNumRuleInfo() :
-    sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")),
-    sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")),
-    sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue")),
-    sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart")),
-    sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType")),
-    sIsNumbering(RTL_CONSTASCII_USTRINGPARAM("IsNumbering")),
-    sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber")),
-    sNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
+XMLTextNumRuleInfo::XMLTextNumRuleInfo()
+: sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"))
+, sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel"))
+, sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"))
+, sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"))
+, sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"))
+, sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"))
+, sNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
 {
     Reset();
 }
@@ -71,18 +73,22 @@ void XMLTextNumRuleInfo::Set(
     // <--
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-
-    Any aAny;
+    Reference< XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
     // check if this paragraph supports a numbering
     if( !xPropSetInfo->hasPropertyByName( sNumberingLevel ) )
         return;
 
-    if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
+    if( xPropSet->getPropertyValue( sNumberingLevel ) >>= nLevel )
     {
-        aAny = xPropSet->getPropertyValue( sNumberingRules );
-        aAny >>= xNumRules;
+        if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
+            xPropSet->getPropertyValue( sNumberingRules ) >>= xNumRules;
+    }
+    else
+    {
+        // in applications using the outliner we always have a numbering rule,
+        // so a void property no numbering
+        nLevel = 0;
     }
 
     // --> OD 2006-09-27 #i69627#
@@ -90,14 +96,13 @@ void XMLTextNumRuleInfo::Set(
     {
         if ( !mbOutlineStyleAsNormalListStyle )
         {
-            BOOL bIsOutline = FALSE;
+            sal_Bool bIsOutline = sal_False;
             Reference<XPropertySet> xNumRulesProps(xNumRules, UNO_QUERY);
             if (xNumRulesProps.is() &&
                 xNumRulesProps->getPropertySetInfo()->
                 hasPropertyByName( sNumberingIsOutline ) )
             {
-                aAny = xNumRulesProps->getPropertyValue( sNumberingIsOutline );
-                bIsOutline = *(sal_Bool*)aAny.getValue();
+                xNumRulesProps->getPropertyValue( sNumberingIsOutline ) >>= bIsOutline;
                 bSuppressListStyle = bIsOutline ? true : false;
             }
         }
@@ -113,32 +118,24 @@ void XMLTextNumRuleInfo::Set(
             sName = xNamed->getName();
         }
 
-        aAny = xPropSet->getPropertyValue( sNumberingLevel );
-        aAny >>= nLevel;
-
-        bIsNumbered = sal_True;
         if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
         {
-            aAny = xPropSet->getPropertyValue( sNumberingIsNumber );
-            OSL_ENSURE( aAny.hasValue(),
-                        "numbered paragraph without number info" );
-            if( !aAny.hasValue() )
+            if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= bIsNumbered ) )
+            {
+                OSL_ENSURE( false, "numbered paragraph without number info" );
                 bIsNumbered = sal_False;
-            else
-                bIsNumbered = *(sal_Bool *)aAny.getValue();
+            }
         }
 
         if( bIsNumbered )
         {
             if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
             {
-                aAny = xPropSet->getPropertyValue( sParaIsNumberingRestart );
-                bIsRestart = *(sal_Bool *)aAny.getValue();
+                xPropSet->getPropertyValue( sParaIsNumberingRestart ) >>= bIsRestart;
             }
             if( xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
             {
-                aAny = xPropSet->getPropertyValue( sNumberingStartValue );
-                aAny >>= nStartValue;
+                xPropSet->getPropertyValue( sNumberingStartValue ) >>= nStartValue;
             }
         }
 
@@ -149,9 +146,9 @@ void XMLTextNumRuleInfo::Set(
             return;
         }
 
-        aAny = xNumRules->getByIndex( nLevel );
         Sequence<PropertyValue> aProps;
-        aAny >>= aProps;
+        xNumRules->getByIndex( nLevel ) >>= aProps;
+
         const PropertyValue* pPropArray = aProps.getConstArray();
         sal_Int32 nCount = aProps.getLength();
         for( sal_Int32 i=0; i<nCount; i++ )
@@ -174,5 +171,17 @@ void XMLTextNumRuleInfo::Set(
     }
 }
 
+sal_Bool XMLTextNumRuleInfo::HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
+{
+    if( bIsNamed && rCmp.bIsNamed )
+        return rCmp.sName == sName;
+
+    if(rCmp.xNumRules == xNumRules)
+        return sal_True;
+
+    uno::Reference< ucb::XAnyCompare > xNumRuleCompare( rCmp.xNumRules, UNO_QUERY );
+
+    return xNumRuleCompare.is() && (xNumRuleCompare->compare( Any( rCmp.xNumRules ), Any( xNumRules ) ) == 0);
+}
 
 
