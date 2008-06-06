@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,16 +51,14 @@ LIBXSLTVERSION=1.1.16
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES=libxml2-config
-
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
+CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="$(xslt_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd"  LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(GUI)$(COM)"=="WNTGCC"
@@ -98,9 +96,9 @@ LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ld
 xslt_CFLAGS+=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
 CONFIGURE_DIR=
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
+CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xslt_CFLAGS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB)
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
@@ -111,11 +109,13 @@ OUT2INC=libxslt$/*.h
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
 OUT2BIN+=xsltproc$/.libs$/xsltproc
+OUT2BIN+=xslt-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2BIN+=libxslt$/.libs$/*.dll
 OUT2BIN+=libexslt$/.libs$/*.dll
 OUT2BIN+=xsltproc$/.libs$/*.exe*
+OUT2BIN+=xslt-config
 .ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll
@@ -125,6 +125,7 @@ OUT2BIN+=win32$/bin.msvc$/*.exe*
 OUT2LIB+=libxslt$/.libs$/libxslt.so*
 OUT2LIB+=libexslt$/.libs$/libexslt.so*
 OUT2BIN+=xsltproc$/.libs$/xsltproc
+OUT2BIN+=xslt-config
 .ENDIF
 
 # --- Targets ------------------------------------------------------
