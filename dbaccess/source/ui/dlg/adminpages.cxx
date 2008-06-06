@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adminpages.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -320,7 +320,7 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
                 }
-                OSQLMessageBox aMsg(this,sTitle,aMessage);
+                OSQLMessageBox aMsg(this,sTitle,aMessage,eImage);
                 aMsg.Execute();
             }
             if ( !bSuccess )
