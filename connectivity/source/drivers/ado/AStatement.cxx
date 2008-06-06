@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AStatement.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-
+using namespace ::std;
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
@@ -224,7 +224,7 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
     sal_Int32 prec = -1;
     OTypeInfo aInfo;
     aInfo.nType = (sal_Int16)sqlType;
-    if (m_aTypeInfo.size())
+    if (!m_aTypeInfo.empty())
     {
         ::std::vector<OTypeInfo>::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         for(;aIter != m_aTypeInfo.end();++aIter)
