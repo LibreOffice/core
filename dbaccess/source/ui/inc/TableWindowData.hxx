@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowData.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,7 @@
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 #include <boost/shared_ptr.hpp>
@@ -50,6 +51,7 @@ namespace dbaui
     protected:
         // the columns of the table
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable; // can either be a table or a query
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
 
         ::rtl::OUString m_aTableName;
@@ -59,6 +61,7 @@ namespace dbaui
         Size            m_aSize;
         sal_Bool        m_bShowAll;
         bool            m_bIsQuery;
+        bool            m_bIsValid;
 
     public:
         explicit OTableWindowData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
@@ -83,6 +86,7 @@ namespace dbaui
         inline Size GetSize()                       const { return m_aSize; }
         inline BOOL IsShowAll()                     const { return m_bShowAll; }
         inline bool isQuery()                       const { return m_bIsQuery; }
+        inline bool isValid()                       const { return m_bIsValid; } // it is either a table or query but it is known
         BOOL HasPosition()  const;
         BOOL HasSize()      const;
 
@@ -92,6 +96,7 @@ namespace dbaui
         inline void ShowAll( BOOL bAll )                                { m_bShowAll = bAll; }
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
 
         // OEventListenerAdapter
