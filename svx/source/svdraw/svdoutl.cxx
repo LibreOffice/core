@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdoutl.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,8 +129,3 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
 {
     return static_cast< SdrTextObj* >( mpTextObj.get() );
 }
-
-
-
-
-
