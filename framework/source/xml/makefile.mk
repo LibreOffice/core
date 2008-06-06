@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,7 +40,7 @@ ENABLE_EXCEPTIONS=	TRUE
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=		$(SLO)$/attributelist.obj							\
+SLOFILES=		\
                 $(SLO)$/eventsconfiguration.obj				\
                 $(SLO)$/eventsdocumenthandler.obj			\
                 $(SLO)$/imagesconfiguration.obj				\
