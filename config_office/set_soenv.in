@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.187 $
-# Date:        $Date: 2008-05-14 14:56:22 $
+# Version:     $Revision: 1.188 $
+# Date:        $Date: 2008-06-06 12:05:45 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
+my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS,
@@ -255,7 +255,6 @@ if ( $platform =~ m/solaris/ )
    $COMPATH        = '@COMPATH@'; 
    $GUI            = "UNX";
    $GUIBASE        = "unx";
-   $GUIENV         = "sal";
    $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
    $OS             = "SOLARIS";
@@ -307,7 +306,6 @@ elsif ( $platform =~ m/netbsd/ )
       $COMPATH        = '@COMPATH@'; 
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
       $OS             = "NETBSD";
@@ -320,7 +318,6 @@ elsif ( $platform =~ m/freebsd/ )
       $CVER           = "C300";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
@@ -377,7 +374,6 @@ elsif ( $platform =~ m/linux/ )
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
@@ -588,7 +584,6 @@ elsif ( $platform =~ m/osf1/ )
       $CVER           = "C62";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $OUTPATH        = "unxt64";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -617,7 +612,6 @@ elsif ( $platform =~ m/irix/ )
       $CPUNAME        = "MIPS";
       $GUI            = "UNX";
       $GUIBASE        = "unx";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
       $OS             = "IRIX";
@@ -641,7 +635,6 @@ elsif ( $platform =~ m/cygwin/ )
       $CPU            = "I";
       $GUI            = "WNT";
       $GUIBASE        = "WIN";
-      $GUIENV         = "WNT";
       $GVER           = "NT351";
       $OS             = "WNT";
       $DYNAMIC_CRT    = "TRUE";
@@ -721,7 +714,6 @@ elsif ( $platform =~ m/os2/ )
       $CPU            = "I";
       $GUI            = "OS2";
       $GUIBASE        = "os2";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $OS             = "OS2";
       $DYNAMIC_CRT    = "TRUE";
@@ -772,7 +764,6 @@ elsif ( $platform =~ m/darwin/ )
 	  $CVER           = "C300";
       }
       $GUI            = "UNX";
-      $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
       $OS             = "MACOSX";
@@ -800,7 +791,6 @@ elsif ( $platform =~ m/aix/ )
    $COMPATH        = '@COMPATH@'; 
    $GUI            = "UNX";
    $GUIBASE        = "unx";
-   $GUIENV         = "sal";
    $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
    $OS             = "AIX";
@@ -1788,7 +1778,6 @@ ToFile( "CVER",              $CVER,              "e" );
 ToFile( "GUI",               $GUI,               "e" );
 ToFile( "GLIBC",             $GLIBC,             "e" );
 ToFile( "GUIBASE",           $GUIBASE,           "e" );
-ToFile( "GUIENV",            $GUIENV,            "e" );
 ToFile( "GVER",              $GVER,              "e" );
 ToFile( "OS",                $OS,                "e" );
 ToFile( "EXCEPTIONS",        $EXCEPTIONS,        "e" );
@@ -1926,6 +1915,7 @@ ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
 ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
+ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "WITH_FONTOOO",      "@WITH_FONTOOO@",     "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
