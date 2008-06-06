@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.159 $
+ * $Revision: 1.160 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2393,7 +2393,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
     {
         UINT32 nDestinationInstance = pTextObj->GetDestinationInstance() ;
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
-        rOutliner.SetMinDepth( 0 );
         if ( ( pText->GetObjInventor() == SdrInventor ) && ( pText->GetObjIdentifier() == OBJ_TITLETEXT ) ) // Outliner-Style fuer Titel-Textobjekt?!? (->von DL)
             rOutliner.Init( OUTLINERMODE_TITLEOBJECT );             // Outliner reset
 
@@ -2448,7 +2447,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-                rOutliner.Insert( String(), nParaIndex, pPara->GetLevel( pTextObj->GetDestinationInstance() ) );
+                rOutliner.Insert( String(), nParaIndex, pPara->pParaSet->mnDepth );
                 rOutliner.QuickInsertText( String( pParaText, (UINT16)nCurrentIndex ), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
@@ -2494,9 +2493,15 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
                 pPara->ApplyTo( aParagraphAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pPreviousParagraph );
+
+                UINT32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
+                pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
+                if ( !nIsBullet2 )
+                    rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
+
                 pPreviousParagraph = pPara;
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
-                    aParagraphAttribs.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, FALSE ) );
+                    rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
                 delete[] pParaText;
@@ -2504,7 +2509,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
         }
         OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
         rOutliner.Clear();
-        rOutliner.SetMinDepth( 0 );
         rOutliner.SetUpdateMode( bOldUpdateMode );
         pText->SetOutlinerParaObject( pNewText );
     }
@@ -4428,14 +4432,13 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 eNumRuleType = SVX_RULETYPE_NUMBERING;
             break;
             case TSS_TYPE_SUBTITLE :
-                nLevels = 9;
+                nLevels = 10;
                 eNumRuleType = SVX_RULETYPE_NUMBERING;
             break;
             case TSS_TYPE_BODY :
             case TSS_TYPE_HALFBODY :
             case TSS_TYPE_QUARTERBODY :
-                nDepth = 1;
-                nLevels = 9;
+                nLevels = 10;
                 eNumRuleType = SVX_RULETYPE_PRESENTATION_NUMBERING;
             break;
             default :
@@ -4449,8 +4452,6 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         SvxNumRule aRule( NUM_BULLET_REL_SIZE | NUM_BULLET_COLOR |
                         NUM_CHAR_TEXT_DISTANCE | NUM_SYMBOL_ALIGNMENT,
                         nLevels, FALSE, eNumRuleType );
-        if ( eNumRuleType == SVX_RULETYPE_PRESENTATION_NUMBERING )
-            nLevels++;
         for ( UINT16 nCount = 0; nDepth < nLevels; nCount++ )
         {
             const PPTParaLevel& rParaLevel = mpParaSheet[ i ]->maParaLevel[ nCount ];
@@ -6146,7 +6147,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
     UINT32  nVal, nUpperDist, nLowerDist;
     UINT32  nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : mnInstance;
 
-    if ( ( nDestinationInstance != 0xffffffff ) || ( GetLevel( nInstance ) <= 1 ) )
+    if ( ( nDestinationInstance != 0xffffffff ) || ( pParaSet->mnDepth <= 1 ) )
     {
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
@@ -6159,31 +6160,17 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
                 SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();
                 if ( pRule )
                 {
-                    pRule->SetLevel( GetLevel( nInstance ), aNumberFormat );
+                    pRule->SetLevel( pParaSet->mnDepth, aNumberFormat );
                     if ( nDestinationInstance == 0xffffffff )
                     {
                         sal_uInt16 i, n;
-                        for ( i = 1; i < pRule->GetLevelCount(); i++ )
+                        for ( i = 0; i < pRule->GetLevelCount(); i++ )
                         {
-                            n = ( i > 4 ) ? 4 : i;
+                            n = i > 4 ? 4 : i;
 
-                            sal_uInt32 nInst = nInstance;
-                            switch( nInst )
-                            {
-                                case TSS_TYPE_BODY :
-                                case TSS_TYPE_HALFBODY :
-                                case TSS_TYPE_QUARTERBODY :
-                                {
-                                    if ( !n )
-                                        nInst = 0;
-                                    else
-                                        n -= 1;
-                                }
-                                break;
-                            }
                             SvxNumberFormat aNumberFormat2( pRule->GetLevel( i ) );
-                            const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInst ]->maParaLevel[ n ];
-                            const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInst ]->maCharLevel[ n ];
+                            const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInstance ]->maParaLevel[ n ];
+                            const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInstance ]->maCharLevel[ n ];
                             sal_uInt32 nColor;
                             if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
                                 nColor = rParaLevel.mnBulletColor;
@@ -6198,17 +6185,27 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             }
         }
     }
-    UINT32 nIsBullet2;
-    GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
-    rSet.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, nIsBullet2 == 0 ? 0 : 1 ) );
 
-    if ( GetAttrib( PPT_ParaAttr_TextOfs, nVal, nDestinationInstance ) )
+    UINT32 nIsBullet2, _nTextOfs, _nBulletOfs, nHardAttribute = 0;
+    GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
+    nHardAttribute += GetAttrib( PPT_ParaAttr_TextOfs, _nTextOfs, nDestinationInstance );
+    nHardAttribute += GetAttrib( PPT_ParaAttr_BulletOfs, _nBulletOfs, nDestinationInstance );
+    if ( !nIsBullet2 )
     {
         SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-        aLRSpaceItem.SetLeft( (UINT16)(((UINT32) nVal * 2540 ) / ( 72 * 8 ) ) );
+        UINT16 nAbsLSpace = (UINT16)( ( (UINT32)_nTextOfs * 2540 ) / 576 );
+        UINT16 nFirstLineOffset = nAbsLSpace - (UINT16)( ( (UINT32)_nBulletOfs * 2540 ) / 576 );
+        aLRSpaceItem.SetLeft( nAbsLSpace );
+        aLRSpaceItem.SetTxtFirstLineOfstValue( -nFirstLineOffset );
         rSet.Put( aLRSpaceItem );
     }
-
+    else
+    {
+        SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
+        aLRSpaceItem.SetLeft( 0 );
+        aLRSpaceItem.SetTxtFirstLineOfstValue( 0 );
+        rSet.Put( aLRSpaceItem );
+    }
     if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )
     {
         if ( nVal <= 3 )
@@ -6335,19 +6332,6 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         }
         rSet.Put( aTabItem );
     }
-}
-
-sal_uInt16 PPTParagraphObj::GetLevel( sal_uInt32 nMappedInstance )
-{
-    sal_uInt16 nRetValue = pParaSet->mnDepth;
-    switch ( nMappedInstance )
-    {
-        case TSS_TYPE_BODY :
-        case TSS_TYPE_HALFBODY :
-        case TSS_TYPE_QUARTERBODY :
-            nRetValue++;
-    }
-    return nRetValue;
 }
 
 UINT32 PPTParagraphObj::GetTextSize()
