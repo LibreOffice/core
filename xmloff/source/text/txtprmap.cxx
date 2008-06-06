@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtprmap.cxx,v $
- * $Revision: 1.103 $
+ * $Revision: 1.104 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,7 +261,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaRegisterModeActive", STYLE,  REGISTER_TRUE,  XML_TYPE_BOOL, 0 ),
     // RES_PARATR_NUMRULE
     MP_E( "NumberingStyleName", STYLE,  LIST_STYLE_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STYLENAME, CTF_NUMBERINGSTYLENAME ),
-    MP_E( "IsNumbering",            TEXT,   ENABLE_NUMBERING,   XML_TYPE_BOOL, 0 ),
+    MP_E( "NumberingRules",     TEXT,   ENABLE_NUMBERING,   MID_FLAG_NO_PROPERTY|XML_TYPE_BOOL, CTF_ALIEN_ATTRIBUTE_IMPORT ),
 
     // RES_FILL_ORDER
     // not required
