@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namedvaluecollection.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 /** === end UNO includes === **/
 
 #include <memory>
+#include <algorithm>
 
 //........................................................................
 namespace comphelper
@@ -280,6 +281,14 @@ namespace comphelper
             return aValues;
         }
 
+        /** returns a Sequence< Any >, as to be used for i.e. XInitialization::initialize
+        */
+        inline ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+                getWrappedPropertyValues() const
+        {
+            return impl_wrap< ::com::sun::star::beans::PropertyValue >();
+        }
+
         /** transforms the collection into a sequence of NamedValues
         */
         inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
@@ -309,6 +318,21 @@ namespace comphelper
         bool    impl_put( const ::rtl::OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue );
 
         bool    impl_remove( const ::rtl::OUString& _rValueName );
+
+        template< class VALUE_TYPE >
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > impl_wrap() const
+        {
+            ::com::sun::star::uno::Sequence< VALUE_TYPE > aValues;
+            *this >>= aValues;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aWrappedValues( aValues.getLength() );
+            ::std::transform(
+                aValues.getConstArray(),
+                aValues.getConstArray() + aValues.getLength(),
+                aWrappedValues.getArray(),
+                ::com::sun::star::uno::makeAny< VALUE_TYPE >
+            );
+            return aWrappedValues;
+        }
     };
 
 //........................................................................
