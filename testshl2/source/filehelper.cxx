@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: filehelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +91,7 @@ std::string getTempPath()
 rtl::OUString convertPath( rtl::OUString const& _suSysPath )
 {
     // PRE: String should contain a filename, relativ or absolut
-    rtl::OUString fURL;
+    rtl::OUString suURL;
     bool bRelativ = false;
 #ifdef WNT
     sal_Char cFileSep[] = "\\";
@@ -115,13 +115,20 @@ rtl::OUString convertPath( rtl::OUString const& _suSysPath )
         // filepath contains '..' so it's a relative path make it absolut.
         rtl::OUString curDirPth;
         osl_getProcessWorkingDir( &curDirPth.pData );
-        osl::FileBase::getAbsoluteFileURL( curDirPth, _suSysPath, fURL );
+
+        // rtl::OString sCurDirPath = rtl::OUStringToOString(curDirPth, RTL_TEXTENCODING_ASCII_US);
+        // fprintf(stderr, "Current Dir '%s'.\n", sCurDirPath.getStr());
+
+        osl::FileBase::getAbsoluteFileURL( curDirPth, _suSysPath, suURL );
+
+        // rtl::OString sURL = rtl::OUStringToOString(suURL, RTL_TEXTENCODING_ASCII_US);
+        // fprintf(stderr, "  File URL: '%s'.\n", sURL.getStr());
     }
     else
     {
-        osl::FileBase::getFileURLFromSystemPath( _suSysPath, fURL );
+        osl::FileBase::getFileURLFromSystemPath( _suSysPath, suURL );
     }
-    return fURL;
+    return suURL;
 }
 // -----------------------------------------------------------------------------
 rtl::OUString convertPath( rtl::OString const& sysPth )
