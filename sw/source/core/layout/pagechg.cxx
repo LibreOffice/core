@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -822,7 +822,10 @@ SwPageDesc *SwPageFrm::FindPageDesc()
 
     //3. und 3.1
     if ( !pRet && IsEmptyPage() )
-        pRet = GetPrev() ? ((SwPageFrm*)GetPrev())->GetPageDesc()->GetFollow() :
+            // FME 2008-03-03 #i81544# lijian/fme: an empty page should have
+            // the same page description as its prev, just like after construction
+            // of the empty page.
+        pRet = GetPrev() ? ((SwPageFrm*)GetPrev())->GetPageDesc() :
                GetNext() ? ((SwPageFrm*)GetNext())->GetPageDesc() : 0;
 
     //2.
