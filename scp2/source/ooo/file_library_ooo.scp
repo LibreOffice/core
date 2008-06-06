@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.289 $
+ * $Revision: 1.290 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1175,9 +1175,9 @@ End
 #ifdef WNT
 #if defined(_gcc3)
 
-File GID_FILE_LIB_MINGWM10
+File gid_File_Lib_Mingwm10
     BIN_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Program;
     Name = "mingwm10.dll";
 End
