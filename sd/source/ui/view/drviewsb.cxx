@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drviewsb.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,8 +584,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 Outliner* pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
                 USHORT nOutlMode = pOutl->GetMode();
-                USHORT nMinDepth = pOutl->GetMinDepth();
-                pOutl->SetMinDepth( 0 );
                 pOutl->SetStyleSheet( 0, NULL );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
@@ -611,7 +609,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 pRectObj->SetOutlinerParaObject( pOutlParaObject );
                 mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
                 pOutl->Init( nOutlMode );
-                pOutl->SetMinDepth( nMinDepth );
             }
 
             delete pFieldItem;
