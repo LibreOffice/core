@@ -11,7 +11,6 @@ oor:package="org.openoffice.Office.UI">
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Minimizer</value>
-     <value xml:lang="de">Minimierer</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
