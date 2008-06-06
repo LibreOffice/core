@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: imagesdocumenthandler.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <xml/imagesdocumenthandler.hxx>
 #include <macros/debug.hxx>
-#include <xml/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -56,6 +55,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -652,7 +653,8 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_aImageListsItems( aItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
+    m_xEmptyList            = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
     m_aAttributeType        = OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
     m_aXMLImageNS           = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE_PREFIX ));
     m_aXMLXlinkNS           = OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK_PREFIX ));
@@ -679,14 +681,14 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_IMAGE )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_IMAGE )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_IMAGE )) );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_XLINK )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_XLINK )) );
 
@@ -722,31 +724,31 @@ void OWriteImagesDocumentHandler::WriteImagesDocument() throw
 void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor* pImageList ) throw
 ( SAXException, RuntimeException )
 {
-    AttributeListImpl*          pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
     // save required attributes
-    pList->addAttribute( m_aAttributeXlinkType,
+    pList->AddAttribute( m_aAttributeXlinkType,
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
-    pList->addAttribute( m_aXMLXlinkNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
+    pList->AddAttribute( m_aXMLXlinkNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
                          m_aAttributeType,
                          pImageList->aURL );
 
     if ( pImageList->nMaskMode == ImageMaskMode_Bitmap )
     {
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
                              m_aAttributeType,
                              OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_BITMAP )) );
 
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKURL )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKURL )),
                              m_aAttributeType,
                              pImageList->aMaskURL );
 
         if ( pImageList->aHighContrastMaskURL.Len() > 0 )
         {
-            pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTMASKURL )),
+            pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTMASKURL )),
                                  m_aAttributeType,
                                  pImageList->aHighContrastMaskURL );
         }
@@ -759,18 +761,18 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
         aColorStrBuffer.appendAscii( "#" );
         aColorStrBuffer.append( OUString::valueOf( nValue, 16 ));
 
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKCOLOR )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKCOLOR )),
                              m_aAttributeType,
                              aColorStrBuffer.makeStringAndClear() );
 
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE )),
                              m_aAttributeType,
                              OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_MASKMODE_COLOR )) );
     }
 
     if ( pImageList->aHighContrastURL.Len() > 0 )
     {
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTURL )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HIGHCONTRASTURL )),
                              m_aAttributeType,
                              pImageList->aHighContrastURL );
     }
@@ -792,14 +794,14 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
 void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage ) throw
 ( SAXException, RuntimeException )
 {
-    AttributeListImpl*          pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BITMAPINDEX )),
+    pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_BITMAPINDEX )),
                          m_aAttributeType,
                          OUString::valueOf( (sal_Int32)pImage->nIndex ) );
 
-    pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
+    pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
                          m_aAttributeType,
                          pImage->aCommandURL );
 
@@ -830,24 +832,24 @@ void OWriteImagesDocumentHandler::WriteExternalImageList( const ExternalImageIte
 void OWriteImagesDocumentHandler::WriteExternalImage( const ExternalImageItemDescriptor* pExternalImage ) throw
 ( SAXException, RuntimeException )
 {
-    AttributeListImpl*          pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
     // save required attributes
-    pList->addAttribute( m_aAttributeXlinkType,
+    pList->AddAttribute( m_aAttributeXlinkType,
                          m_aAttributeType,
                          m_aAttributeValueSimple );
 
     if ( pExternalImage->aURL.Len() > 0 )
     {
-        pList->addAttribute( m_aXMLXlinkNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
+        pList->AddAttribute( m_aXMLXlinkNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HREF )),
                              m_aAttributeType,
                              pExternalImage->aURL );
     }
 
     if ( pExternalImage->aCommandURL.Len() > 0 )
     {
-        pList->addAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
+        pList->AddAttribute( m_aXMLImageNS + OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_COMMAND )),
                              m_aAttributeType,
                              pExternalImage->aCommandURL );
     }
