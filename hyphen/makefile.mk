@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,15 @@ OUT2INC += hyphen.h
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS= --disable-shared --with-pic
+
+BUILD_ACTION=make
+
+.ELSE
 BUILD_ACTION=dmake
+.ENDIF # "$(COM)"=="GCC"
 OUT2INC += hyphen.h
 .ENDIF # "$(GUI)"=="WNT"
 
