@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlvw.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,7 +151,7 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
                     if( aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                     {
                         Paragraph* pNext = pOwner->pParaList->GetParagraph( aSel.nEndPara+1 );
-                        if( pNext && pNext->GetDepth() == 0 )
+                        if( pNext && pNext->HasFlag(PARAFLAG_ISPAGE) )
                         {
                             if( !pOwner->ImpCanDeleteSelectedPages( this, aSel.nEndPara, 1 ) )
                                 return FALSE;
@@ -524,41 +524,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 
     ParaRange aSel = ImpGetSelectedParagraphs( FALSE );
 
-    if ( rAttrs.GetItemState( EE_PARA_LRSPACE) == SFX_ITEM_ON )
-    {
-        // Erstmal ohne LRSpace einstellen, damit Konvertierung ins
-        // NumBulletItem nur dann, wenn geaendert.
-        SfxItemSet aSet( rAttrs );
-        aSet.ClearItem( EE_PARA_LRSPACE );
-        pEditView->SetAttribs( aSet );
-
-        // Jetzt ggf. LRSpace in NumBulletItem mergen...
-        EditEngine* pEditEng = pOwner->pEditEngine;
-        const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&) rAttrs.Get( EE_PARA_LRSPACE );
-        for ( USHORT n = aSel.nStartPara; n <= aSel.nEndPara; n++ )
-        {
-            SfxItemSet aAttribs = pEditEng->GetParaAttribs( n );
-            if ( !( rLR == pEditEng->GetParaAttrib( (USHORT)n, EE_PARA_LRSPACE ) ) )
-            {
-                // Use Item from Style/ParaAttribs, ImplGetNumBulletItem could return a pool default in OutlineView on Level 0
-                const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEng->GetParaAttrib( (USHORT)n, EE_PARA_NUMBULLET );
-                Paragraph* pPara = pOwner->pParaList->GetParagraph( n );
-                if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
-                {
-                    SvxNumBulletItem* pNewNumBullet = (SvxNumBulletItem*) rNumBullet.Clone();
-                    EditEngine::ImportBulletItem( *pNewNumBullet, pPara->GetDepth(), NULL, &rLR );
-                    aAttribs.Put( *pNewNumBullet );
-                    delete pNewNumBullet;
-                }
-            }
-            aAttribs.Put( rLR );
-            pEditEng->SetParaAttribs( (USHORT)n, aAttribs );
-        }
-    }
-    else
-    {
-        pEditView->SetAttribs( rAttrs );
-    }
+    pEditView->SetAttribs( rAttrs );
 
     // Bullet-Texte aktualisieren
     for( USHORT nPara= aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
@@ -566,10 +532,8 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
         pOwner->ImplCheckNumBulletItem( nPara );
         pOwner->ImplCalcBulletText( nPara, FALSE, FALSE );
 
-#ifndef SVX_LIGHT
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
             pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
-#endif
     }
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
@@ -612,6 +576,7 @@ void OutlinerView::Indent( short nDiff )
     if( !nDiff || ( ( nDiff > 0 ) && ImpCalcSelectedPages( TRUE ) && !pOwner->ImpCanIndentSelectedPages( this ) ) )
         return;
 
+    const bool bOutlinerView = pOwner->pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER;
     BOOL bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode( FALSE );
 
@@ -620,24 +585,48 @@ void OutlinerView::Indent( short nDiff )
     if( bUndo )
         pOwner->UndoActionStart( OLUNDO_DEPTH );
 
-    USHORT nMinDepth = 0xFFFF;  // Optimierung: Nicht unnoetig viele Absatze neu berechnen
+    sal_Int16 nMinDepth = -1;   // Optimierung: Nicht unnoetig viele Absatze neu berechnen
 
     ParaRange aSel = ImpGetSelectedParagraphs( TRUE );
     for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        if ( !nPara && !pPara->GetDepth() && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
+
+        sal_Int16 nOldDepth = pPara->GetDepth();
+        sal_Int16 nNewDepth = nOldDepth + nDiff;
+
+        if( bOutlinerView && nPara )
         {
-            // Seite 0 nicht einruecken.
-            // Absatz muss neu gepaintet werden (wg. doppeltem Highlight beim Painten der Selektion )
-            pOwner->pEditEngine->QuickMarkInvalid( ESelection( 0, 0, 0, 0 ) );
-            continue;
+            const bool bPage = pPara->HasFlag(PARAFLAG_ISPAGE);
+            if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
+            {
+                // App benachrichtigen
+                pOwner->nDepthChangedHdlPrevDepth = (sal_Int16)nOldDepth;
+                pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
+                pOwner->pHdlParagraph = pPara;
+
+                if( bPage )
+                    pPara->RemoveFlag( PARAFLAG_ISPAGE );
+                else
+                    pPara->SetFlag( PARAFLAG_ISPAGE );
+
+                pOwner->DepthChangedHdl();
+                pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
+
+                if( bUndo )
+                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nPara, pOwner->mnDepthChangeHdlPrevFlags, pPara->nFlags ) );
+
+                continue;
+            }
         }
 
-        USHORT nOldDepth = pPara->GetDepth();
-        USHORT nNewDepth = nOldDepth + nDiff;
-        if ( ( nDiff < 0 ) && ( nOldDepth < (-nDiff) ) )
-            nNewDepth = 0;
+        // do not switch off numeration with tab
+        if( (nOldDepth == 0) && (nNewDepth == -1) )
+            continue;
+
+        // do not indent if there is no numeration enabled
+        if( nOldDepth == -1 )
+            continue;
 
         if ( nNewDepth < pOwner->nMinDepth )
             nNewDepth = pOwner->nMinDepth;
@@ -667,15 +656,18 @@ void OutlinerView::Indent( short nDiff )
                 {
                     // Vorgaenger ist eingeklappt und steht auf gleicher Ebene
                     // => naechsten sichtbaren Absatz suchen und expandieren
-                    USHORT _nDummy;
-                    pPrev = pOwner->pParaList->GetParent( pPrev, _nDummy );
+                    pPrev = pOwner->pParaList->GetParent( pPrev );
                     while( !pPrev->IsVisible() )
-                        pPrev = pOwner->pParaList->GetParent( pPrev, _nDummy );
+                        pPrev = pOwner->pParaList->GetParent( pPrev );
 
                     pOwner->Expand( pPrev );
                     pOwner->InvalidateBullet( pPrev, pOwner->pParaList->GetAbsPos( pPrev ) );
                 }
             }
+
+            pOwner->nDepthChangedHdlPrevDepth = (sal_Int16)nOldDepth;
+            pOwner->mnDepthChangeHdlPrevFlags = pPara->nFlags;
+            pOwner->pHdlParagraph = pPara;
 
             pOwner->ImplInitDepth( nPara, nNewDepth, TRUE, FALSE );
             pOwner->ImplCalcBulletText( nPara, FALSE, FALSE );
@@ -684,8 +676,6 @@ void OutlinerView::Indent( short nDiff )
                 pOwner->ImplSetLevelDependendStyleSheet( nPara );
 
             // App benachrichtigen
-            pOwner->nDepthChangedHdlPrevDepth = (USHORT)nOldDepth;
-            pOwner->pHdlParagraph = pPara;
             pOwner->DepthChangedHdl();
         }
         else
@@ -738,7 +728,6 @@ void OutlinerView::AdjustDepth( Paragraph* pPara, short nDX, BOOL bWithChilds)
     pEditView->SetSelection( aSel );
     AdjustDepth( nDX );
 }
-
 
 void OutlinerView::AdjustHeight( Paragraph* pPara, long nDY, BOOL bWithChilds )
 {
@@ -1018,11 +1007,8 @@ void OutlinerView::PasteSpecial()
         pOwner->UndoActionStart( OLUNDO_INSERT );
 
         pOwner->pEditEngine->SetUpdateMode( FALSE );
-//      ULONG nStart, nParaCount;
-//      nParaCount = pOwner->pEditEngine->GetParagraphCount();
         pOwner->bPasting = TRUE;
         pEditView->PasteSpecial();
-//      ImpPasted( nStart, nParaCount, nSize);
 
         pEditView->SetEditEngineUpdateMode( TRUE );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
@@ -1150,7 +1136,7 @@ USHORT OutlinerView::ImpCalcSelectedPages( BOOL bIncludeFirstSelected )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         DBG_ASSERT(pPara, "ImpCalcSelectedPages: ungueltige Selection? ");
-        if( pPara->GetDepth() == 0 )
+        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             nPages++;
             if( nFirstPage == 0xFFFF )
@@ -1169,35 +1155,50 @@ USHORT OutlinerView::ImpCalcSelectedPages( BOOL bIncludeFirstSelected )
 }
 
 
-void OutlinerView::ShowBullets( BOOL bShow, BOOL bAffectLevel0 )
+void OutlinerView::ToggleBullets()
 {
-    pOwner->UndoActionStart( OLUNDO_ATTR );
+    pOwner->UndoActionStart( OLUNDO_DEPTH );
 
     ESelection aSel( pEditView->GetSelection() );
     aSel.Adjust();
 
-    BOOL bUpdate = pOwner->pEditEngine->GetUpdateMode();
+    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode( FALSE );
+
+    sal_Int16 nDepth = -2;
 
     for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "ShowBullets: ungueltige Selection? ");
-        if( pPara && ( bAffectLevel0 || pPara->GetDepth() ) )
+        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
+
+        if( pPara )
         {
-            SfxItemSet aAttribs( pOwner->pEditEngine->GetParaAttribs( nPara ) );
-            BOOL bVis = ((const SfxUInt16Item&)aAttribs.Get( EE_PARA_BULLETSTATE )).
-                                GetValue() ? TRUE : FALSE;
-            if ( bVis != bShow )
+            if( nDepth == -2 )
+                nDepth = (pOwner->GetDepth(nPara) == -1) ? 0 : -1;
+
+            pOwner->SetDepth( pPara, nDepth );
+
+            if( nDepth == -1 )
             {
-                aAttribs.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, bShow ? 1 : 0 ) );
-                pOwner->pEditEngine->SetParaAttribs( nPara, aAttribs );
+                const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
+                if(rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET)
+                {
+                    SfxItemSet aAttrs(rAttrs);
+                    aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+                    pOwner->SetParaAttribs( nPara, aAttrs );
+                }
             }
         }
     }
+
+    USHORT nParaCount = (USHORT) (pOwner->pParaList->GetParagraphCount()-1);
+    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
+
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
-    pOwner->UndoActionEnd( OLUNDO_ATTR );
+    pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
 void OutlinerView::RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs )
@@ -1543,7 +1544,7 @@ ULONG OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextForma
         {
             USHORT nDepth = 0;
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( n );
-            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
+            const SfxInt16Item& rLevel = (const SfxInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
             nDepth = rLevel.GetValue();
             pOwner->ImplInitDepth( n, nDepth, FALSE );
         }
@@ -1560,13 +1561,11 @@ ULONG OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextForma
     return nRet;
 }
 
-#ifndef SVX_LIGHT
 ULONG OutlinerView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->Write( rOutput, eFormat );
 }
-#endif
 
 void OutlinerView::SetBackgroundColor( const Color& rColor )
 {
