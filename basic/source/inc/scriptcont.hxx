@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptcont.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +51,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
         ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
           const ::rtl::OUString& StorageURL, sal_Bool ReadOnly );
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void );
-    virtual sal_Bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement );
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
     virtual void SAL_CALL writeLibraryElement
     (
         ::com::sun::star::uno::Any aElement,
@@ -169,6 +169,11 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xSFI,
         const ::rtl::OUString& aLibInfoFileURL, const ::rtl::OUString& aStorageURL, sal_Bool ReadOnly
     );
+
+    static bool containsValidModule( const ::com::sun::star::uno::Any& _rElement );
+
+protected:
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const;
 };
 
 }   // namespace base
