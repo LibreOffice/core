@@ -1,4 +1,4 @@
-#  unroll begin
+# unroll begin
 
 .IF "$(SHL1TARGETN)"!=""
 
@@ -4595,6 +4595,7 @@ $(SHL1IMPLIBN):	\
     -def:$(SHL1DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL1TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4641,6 +4642,7 @@ $(SHL2IMPLIBN):	\
     -def:$(SHL2DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL2TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4687,6 +4689,7 @@ $(SHL3IMPLIBN):	\
     -def:$(SHL3DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL3TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4733,6 +4736,7 @@ $(SHL4IMPLIBN):	\
     -def:$(SHL4DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL4TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4779,6 +4783,7 @@ $(SHL5IMPLIBN):	\
     -def:$(SHL5DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL5TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4825,6 +4830,7 @@ $(SHL6IMPLIBN):	\
     -def:$(SHL6DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL6TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4871,6 +4877,7 @@ $(SHL7IMPLIBN):	\
     -def:$(SHL7DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL7TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4917,6 +4924,7 @@ $(SHL8IMPLIBN):	\
     -def:$(SHL8DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL8TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -4963,6 +4971,7 @@ $(SHL9IMPLIBN):	\
     -def:$(SHL9DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL9TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
@@ -5009,6 +5018,7 @@ $(SHL10IMPLIBN):	\
     -def:$(SHL10DEF) )
 .ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL10TARGETN) creates $@
+    @$(TOUCH) $@
 .ENDIF			# "$(USE_DEFFILE)==""
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE
