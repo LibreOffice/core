@@ -8,7 +8,7 @@
 #
 # $RCSfile: wntgcci6.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -132,24 +132,18 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=-Wl,--start-group CPPRUNTIME -lgcc
-STDLIBCUIST=-Wl,--start-group CPPRUNTIME -lgcc
 STDLIBGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
 STDLIBCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
-STDSHLGUIST=-Wl,--start-group CPPRUNTIME -lgcc
-STDSHLCUIST=-Wl,--start-group CPPRUNTIME -lgcc
 STDSHLGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
 STDSHLCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+.IF  "$(MINGW_NODLL)"==""
 STDLIBGUIMT+=-lmingwthrd
 STDLIBCUIMT+=-lmingwthrd
 STDSHLGUIMT+=-lmingwthrd
 STDSHLCUIMT+=-lmingwthrd
-STDLIBGUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
-STDLIBCUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+.ENDIF
 STDLIBGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
-STDSHLGUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
-STDSHLCUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
 
