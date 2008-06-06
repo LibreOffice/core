@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OutlineView.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +31,9 @@
 #ifndef SD_OUTLINE_VIEW_HXX
 #define SD_OUTLINE_VIEW_HXX
 
+#include <vcl/image.hxx>
+#include <svx/lrspitem.hxx>
 #include "View.hxx"
-
 
 class SdPage;
 class SdrPage;
@@ -41,6 +42,8 @@ class Paragraph;
 class SdrTextObj;
 class Outliner;
 class SfxProgress;
+struct PaintFirstLineInfo;
+struct PasteOrDropInfos;
 
 namespace sd { namespace tools {
 class EventMultiplexerEvent;
@@ -96,7 +99,7 @@ public:
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
     SdPage*         GetActualPage();
-    SdPage*         GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara );
+    SdPage*         GetPageForParagraph( Paragraph* pPara );
     Paragraph*      GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
@@ -119,8 +122,9 @@ public:
     DECL_LINK( IndentingPagesHdl, OutlinerView * );
     DECL_LINK( BeginDropHdl, void * );
     DECL_LINK( EndDropHdl, void * );
+    DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
 
-    ULONG         GetPaperWidth() const { return 21000; }  // DIN A4 Breite
+    ULONG         GetPaperWidth() const { return 2*21000; }  // DIN A4 Breite
 
     BOOL          PrepareClose(BOOL bUI = TRUE);
 
@@ -161,6 +165,19 @@ public:
     */
     void IgnoreCurrentPageChanges (bool bIgnore);
 
+    sal_Int32 GetPageNumberWidthPixel();
+
+    void InvalidateSlideNumberArea();
+
+    /** creates and inserts an empty slide for the given paragraph. */
+    SdPage* InsertSlideForParagraph( Paragraph* pPara );
+
+    void UpdateParagraph( USHORT nPara );
+
+protected:
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
+
 private:
     /** call this method before you do anything that can modify the outliner
         and or the drawing document model. It will create needed undo actions */
@@ -175,9 +192,6 @@ private:
 
     /** updates all changes in the outliner model to the draw model */
     void UpdateDocument();
-
-    /** creates and inserts an empty slide for the given paragraph */
-    SdPage* InsertSlideForParagraph( Paragraph* pPara );
 
     OutlineViewShell*   mpOutlineViewShell;
     SdrOutliner*        mpOutliner;
@@ -217,6 +231,13 @@ private:
 
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::auto_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
+
+    Font maPageNumberFont;
+    sal_Int32 mnPageNumberWidthPixel;
+    Font maBulletFont;
+
+    SvxLRSpaceItem maLRSpaceItem;
+    Image maSlideImage;
 };
 
 // calls IgnoreCurrentPageChangesLevel with true in ctor and with false in dtor
