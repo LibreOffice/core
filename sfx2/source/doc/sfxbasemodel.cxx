@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.143 $
+ * $Revision: 1.144 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3721,24 +3721,22 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
 
 //=============================================================================
 // css::frame::XModel2
-css::uno::Reference< css::frame::XController > SAL_CALL SfxBaseModel::createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& /*Frame          */,
-                                                                                                        css::uno::Reference< css::awt::XWindow >&  /*ComponentWindow*/)
+css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& /*Frame*/)
     throw (css::uno::RuntimeException         ,
            css::lang::IllegalArgumentException,
            css::uno::Exception                )
 {
-    return css::uno::Reference< css::frame::XController >();
+    return css::uno::Reference< css::frame::XController2 >();
 }
 
 //=============================================================================
 // css::frame::XModel2
-css::uno::Reference< css::frame::XController > SAL_CALL SfxBaseModel::createViewController(const ::rtl::OUString&                                 /*ViewName       */,
-                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& /*Arguments      */,
-                                                                                           const css::uno::Reference< css::frame::XFrame >&       /*Frame          */,
-                                                                                                 css::uno::Reference< css::awt::XWindow >&        /*ComponentWindow*/)
+css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createViewController(const ::rtl::OUString&                                 /*ViewName*/,
+                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& /*Arguments*/,
+                                                                                           const css::uno::Reference< css::frame::XFrame >&       /*Frame    */)
     throw (css::uno::RuntimeException         ,
            css::lang::IllegalArgumentException,
            css::uno::Exception                )
 {
-    return css::uno::Reference< css::frame::XController >();
+    return css::uno::Reference< css::frame::XController2 >();
 }
