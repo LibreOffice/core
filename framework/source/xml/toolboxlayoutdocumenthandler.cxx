@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: toolboxlayoutdocumenthandler.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <xml/toolboxlayoutdocumenthandler.hxx>
 #include <macros/debug.hxx>
-#include <xml/attributelist.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
 //_________________________________________________________________________________________________________________
