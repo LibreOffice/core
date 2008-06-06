@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +42,9 @@ PACKAGE=org.openoffice.Office
 XCUFILES= \
     DataAccess.xcu \
     ReportDesign.xcu
+
+LOCALIZEDFILES= \
+    DataAccess.xcu
 
 MODULEFILES=
 
