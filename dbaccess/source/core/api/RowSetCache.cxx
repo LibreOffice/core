@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSetCache.cxx,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,6 +164,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     sal_Bool bAllKeysFound = sal_False;
     sal_Int32 nTablesCount = 0;
 
+    Reference< XIndexAccess> xUpdateTableKeys;
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
     if(_xAnalyzer.is())
@@ -193,15 +194,15 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
                 if(xKeys.is())
                 {
-                    Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-                    if ( xKeyIndex.is() )
+                    xUpdateTableKeys = xKeys->getKeys();
+                    if ( xUpdateTableKeys.is() )
                     {
                         Reference<XColumnsSupplier> xColumnsSupplier;
                         // search the one and only primary key
-                        for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                        const sal_Int32 nCount = xUpdateTableKeys->getCount();
+                        for(sal_Int32 i = 0 ; i < nCount ; ++i)
                         {
-                            Reference<XPropertySet> xProp;
-                            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
+                            Reference<XPropertySet> xProp(xUpdateTableKeys->getByIndex(i),UNO_QUERY);
                             sal_Int32 nKeyType = 0;
                             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                             if(KeyType::PRIMARY == nKeyType)
@@ -327,7 +328,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,aUpdateTableName ,_xAnalyzer);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer);
             try
             {
                 m_pCacheSet = pKeySet;
