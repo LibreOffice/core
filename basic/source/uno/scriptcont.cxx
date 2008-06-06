@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scriptcont.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/digest.h>
+#include <rtl/strbuf.hxx>
 
 // For password functionality
 #include <tools/urlobj.hxx>
@@ -179,12 +180,9 @@ Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement( void )
     return aRetAny;
 }
 
-sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid( Any aElement )
+bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid( Any aElement ) const
 {
-    OUString aMod;
-    aElement >>= aMod;
-    sal_Bool bRet = (aMod.getLength() > 0);
-    return bRet;
+    return SfxScriptLibrary::containsValidModule( aElement );
 }
 
 void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
@@ -580,36 +578,45 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             if( pLib->mbPasswordVerified || pLib->mbDoc50Password )
             {
                 Any aElement = pLib->getByName( aElementName );
-                if( isLibraryElementValid( aElement ) )
+                if( !isLibraryElementValid( aElement ) )
                 {
-                    OUString aSourceStreamName = aElementName;
-                    aSourceStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "invalid library element '" );
+                    aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                #endif
+                    continue;
+                }
 
-                    try {
-                        uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
-                                                                    aSourceStreamName,
-                                                                    embed::ElementModes::READWRITE );
-                        uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
-                        if ( !xProps.is() )
-                            throw uno::RuntimeException();
+                OUString aSourceStreamName = aElementName;
+                aSourceStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
 
-                        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                        OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-                        xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+                try {
+                    uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
+                                                                aSourceStreamName,
+                                                                embed::ElementModes::READWRITE );
+                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
+                    if ( !xProps.is() )
+                        throw uno::RuntimeException();
 
-                        // Set encryption key
-                        setStreamKey( xSourceStream, pLib->maPassword );
+                    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
-                        Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
-                        writeLibraryElement( aElement, aElementName, xOutput );
-                        // writeLibraryElement should have the stream already closed
-                        // xOutput->closeOutput();
-                    }
-                    catch( uno::Exception& )
-                    {
-                        OSL_ENSURE( sal_False, "Problem on storing of password library!\n" );
-                        // TODO: error handling
-                    }
+                    // Set encryption key
+                    setStreamKey( xSourceStream, pLib->maPassword );
+
+                    Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
+                    writeLibraryElement( aElement, aElementName, xOutput );
+                    // writeLibraryElement should have the stream already closed
+                    // xOutput->closeOutput();
+                }
+                catch( uno::Exception& )
+                {
+                    OSL_ENSURE( sal_False, "Problem on storing of password library!\n" );
+                    // TODO: error handling
                 }
             }
             else    // !mbPasswordVerified
@@ -656,96 +663,105 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 Any aElement = pLib->getByName( aElementName );
-                if( isLibraryElementValid( aElement ) )
+                if( !isLibraryElementValid( aElement ) )
                 {
-                    try {
-                        uno::Reference< embed::XStorage > xElementRootStorage =
-                                                                ::comphelper::OStorageHelper::GetStorageFromURL(
-                                                                        aElementPath,
-                                                                        embed::ElementModes::READWRITE );
-                        if ( !xElementRootStorage.is() )
-                            throw uno::RuntimeException();
-
-                        // Write binary image stream
-                        SbModule* pMod = pBasicLib->FindModule( aElementName );
-                        if( pMod )
-                        {
-                            OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
-
-                            uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
-                                                aCodeStreamName,
-                                                embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
-
-                            SvMemoryStream aMemStream;
-                            /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
-
-                            sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
-                            Sequence< sal_Int8 > aBinSeq( nSize );
-                            sal_Int8* pData = aBinSeq.getArray();
-                            ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
-
-                            Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
-                            if ( xOut.is() )
-                            {
-                                xOut->writeBytes( aBinSeq );
-                                xOut->closeOutput();
-                            }
-                        }
-
-                        // Write encrypted source stream
-                        OUString aSourceStreamName( RTL_CONSTASCII_USTRINGPARAM("source.xml") );
-
-                        uno::Reference< io::XStream > xSourceStream;
-                        try
-                        {
-                            xSourceStream = xElementRootStorage->openStreamElement(
-                                aSourceStreamName,
-                                embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
-
-                            // #87671 Allow encryption
-                            uno::Reference< embed::XEncryptionProtectedSource > xEncr( xSourceStream, uno::UNO_QUERY );
-                            OSL_ENSURE( xEncr.is(),
-                                        "StorageStream opened for writing must implement XEncryptionProtectedSource!\n" );
-                            if ( !xEncr.is() )
-                                throw uno::RuntimeException();
-                            xEncr->setEncryptionPassword( pLib->maPassword );
-                        }
-                        catch( ::com::sun::star::packages::WrongPasswordException& )
-                        {
-                            xSourceStream = xElementRootStorage->openEncryptedStreamElement(
-                                aSourceStreamName,
-                                embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,
-                                pLib->maPassword );
-                        }
-
-                        uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
-                        if ( !xProps.is() )
-                            throw uno::RuntimeException();
-                        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-                        OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-                        xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
-
-                        Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
-                        writeLibraryElement( aElement, aElementName, xOut );
-                        // i50568: sax writer already closes stream
-                        // xOut->closeOutput();
-
-                        uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY );
-                        OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
-                        if ( !xTransact.is() )
-                            throw uno::RuntimeException();
-
-                        xTransact->commit();
-                    }
-                    catch( uno::Exception& )
-                    {
-                        // TODO: handle error
-                    }
-
-                    // Storage Dtor commits too, that makes problems
-                    // xElementRootStorage->Commit();
+                #if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OStringBuffer aMessage;
+                    aMessage.append( "invalid library element '" );
+                    aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
+                    aMessage.append( "'." );
+                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                #endif
+                    continue;
                 }
 
+                try
+                {
+                    uno::Reference< embed::XStorage > xElementRootStorage =
+                                                            ::comphelper::OStorageHelper::GetStorageFromURL(
+                                                                    aElementPath,
+                                                                    embed::ElementModes::READWRITE );
+                    if ( !xElementRootStorage.is() )
+                        throw uno::RuntimeException();
+
+                    // Write binary image stream
+                    SbModule* pMod = pBasicLib->FindModule( aElementName );
+                    if( pMod )
+                    {
+                        OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
+
+                        uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
+                                            aCodeStreamName,
+                                            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+
+                        SvMemoryStream aMemStream;
+                        /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
+
+                        sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
+                        Sequence< sal_Int8 > aBinSeq( nSize );
+                        sal_Int8* pData = aBinSeq.getArray();
+                        ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
+
+                        Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
+                        if ( xOut.is() )
+                        {
+                            xOut->writeBytes( aBinSeq );
+                            xOut->closeOutput();
+                        }
+                    }
+
+                    // Write encrypted source stream
+                    OUString aSourceStreamName( RTL_CONSTASCII_USTRINGPARAM("source.xml") );
+
+                    uno::Reference< io::XStream > xSourceStream;
+                    try
+                    {
+                        xSourceStream = xElementRootStorage->openStreamElement(
+                            aSourceStreamName,
+                            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
+
+                        // #87671 Allow encryption
+                        uno::Reference< embed::XEncryptionProtectedSource > xEncr( xSourceStream, uno::UNO_QUERY );
+                        OSL_ENSURE( xEncr.is(),
+                                    "StorageStream opened for writing must implement XEncryptionProtectedSource!\n" );
+                        if ( !xEncr.is() )
+                            throw uno::RuntimeException();
+                        xEncr->setEncryptionPassword( pLib->maPassword );
+                    }
+                    catch( ::com::sun::star::packages::WrongPasswordException& )
+                    {
+                        xSourceStream = xElementRootStorage->openEncryptedStreamElement(
+                            aSourceStreamName,
+                            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,
+                            pLib->maPassword );
+                    }
+
+                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
+                    if ( !xProps.is() )
+                        throw uno::RuntimeException();
+                    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                    xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
+
+                    Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
+                    writeLibraryElement( aElement, aElementName, xOut );
+                    // i50568: sax writer already closes stream
+                    // xOut->closeOutput();
+
+                    uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY );
+                    OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
+                    if ( !xTransact.is() )
+                        throw uno::RuntimeException();
+
+                    xTransact->commit();
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO: handle error
+                }
+
+                // Storage Dtor commits too, that makes problems
+                // xElementRootStorage->Commit();
             }
         }
         catch( Exception& )
@@ -1139,6 +1155,18 @@ void SfxScriptLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Ref
 {
     // No resources
     (void)xStorage;
+}
+
+bool SfxScriptLibrary::containsValidModule( const Any& aElement )
+{
+    OUString sModuleText;
+    aElement >>= sModuleText;
+    return ( sModuleText.getLength() > 0 );
+}
+
+bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const
+{
+    return SfxScriptLibrary::containsValidModule( aElement );
 }
 
 //============================================================================
