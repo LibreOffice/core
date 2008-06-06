@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -144,6 +144,7 @@ sub getparameter
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-quiet") { $installer::globals::quiet = 1; }
+        elsif ($param eq "-verbose") { $installer::globals::quiet = 0; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
         elsif ($param eq "-tab") { $installer::globals::tab = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
