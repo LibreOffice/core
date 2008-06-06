@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuparagr.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <svx/svxids.hrc>
 #include <svx/editdata.hxx>
 #include <svx/lrspitem.hxx>
+#include <svx/svdoutl.hxx>
 
 #include "app.hrc"
 #include "View.hxx"
@@ -50,6 +51,8 @@
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 #include "paragr.hrc"
+#include "sdattr.hrc"
+
 namespace sd {
 
 TYPEINIT1( FuParagraph, FuPoor );
@@ -81,6 +84,9 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
+    OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
+    ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+
     if( !pArgs )
     {
         SfxItemSet aEditAttr( mpDoc->GetPool() );
@@ -89,6 +95,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SfxItemSet aNewAttr( *pPool,
                              EE_ITEMS_START, EE_ITEMS_END,
                              SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
+                             ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
                              0 );
 
         aNewAttr.Put( aEditAttr );
@@ -98,6 +105,13 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         // Umrechnung, da TabulatorTabPage immer von Twips ausgeht !
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
+
+        if( pOutlView && pOutliner )
+        {
+            ESelection eSelection = pOutlView->GetSelection();
+            aNewAttr.Put( SfxInt16Item( ATTR_NUMBER_NEWSTART_AT, pOutliner->GetNumberingStartValue( eSelection.nStartPara ) ) );
+            aNewAttr.Put( SfxBoolItem( ATTR_NUMBER_NEWSTART, pOutliner->IsParaIsNumberingRestart( eSelection.nStartPara ) ) );
+        }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0;
@@ -125,6 +139,24 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
     }
     mpView->SetAttributes( *pArgs );
+
+    if( pOutlView && pOutliner )
+    {
+        ESelection eSelection = pOutlView->GetSelection();
+
+        const SfxPoolItem *pItem = 0;
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, sal_False, &pItem ) )
+        {
+            const sal_Bool bNewStart = ((SfxBoolItem*)pItem)->GetValue() ? sal_True : sal_False;
+            pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
+        }
+
+        if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART_AT, sal_False, &pItem ) )
+        {
+            const sal_Int16 nStartAt = ((SfxInt16Item*)pItem)->GetValue();
+            pOutliner->SetNumberingStartValue( eSelection.nStartPara, nStartAt );
+        }
+    }
 
     // invalidieren der Slots
     static USHORT SidArray[] = {
