@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartTypeHelper.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -370,6 +370,18 @@ bool ChartTypeHelper::isSupportingStartingAngle( const uno::Reference< chart2::X
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return true;
+    }
+    return false;
+}
+
+bool ChartTypeHelper::shiftTicksAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
+{
+    if(xChartType.is())
+    {
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
             return true;
     }
     return false;
