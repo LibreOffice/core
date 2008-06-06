@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,9 +53,6 @@ SLOFILES=	\
         $(SLO)$/CRowSetColumn.obj				\
         $(SLO)$/querycomposer.obj				\
         $(SLO)$/CIndexes.obj					\
-        $(SLO)$/CKey.obj						\
-        $(SLO)$/CKeys.obj						\
-        $(SLO)$/CKeyColumns.obj					\
         $(SLO)$/BookmarkSet.obj					\
         $(SLO)$/KeySet.obj						\
         $(SLO)$/StaticSet.obj					\
