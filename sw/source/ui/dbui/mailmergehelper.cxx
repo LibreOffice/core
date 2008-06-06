@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmergehelper.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -767,7 +767,7 @@ uno::Reference< uno::XComponentContext> getCurrentCmpCtx(
 
   -----------------------------------------------------------------------*/
 SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType) :
-    cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
+    cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_sBody( rBody ),
     m_bIsBody( true )
@@ -778,7 +778,7 @@ SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OU
   -----------------------------------------------------------------------*/
 SwMailTransferable::SwMailTransferable(const rtl::OUString& rURL,
                 const rtl::OUString& rName, const rtl::OUString& rMimeType) :
-    cppu::WeakComponentImplHelper1< datatransfer::XTransferable >(m_aMutex),
+    cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_aURL(rURL),
     m_aName( rName ),
@@ -846,6 +846,68 @@ sal_Bool SwMailTransferable::isDataFlavorSupported(
 {
     return (aFlavor.MimeType == ::rtl::OUString(m_aMimeType));
 }
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    return uno::Reference< beans::XPropertySetInfo >();
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailTransferable::setPropertyValue( const ::rtl::OUString& , const uno::Any& )
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
+          lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyName )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+    if( rPropertyName.equalsAscii( "URL" ) )
+        aRet <<= m_aURL;
+    return aRet;
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailTransferable::addPropertyChangeListener(
+    const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >&  )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailTransferable::removePropertyChangeListener(
+    const ::rtl::OUString&,
+    const uno::Reference< beans::XPropertyChangeListener >& )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailTransferable::addVetoableChangeListener(
+    const ::rtl::OUString&,
+    const uno::Reference< beans::XVetoableChangeListener >& )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+/*-- 28.04.2004 09:52:05---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwMailTransferable::removeVetoableChangeListener(
+    const ::rtl::OUString& ,
+    const uno::Reference< beans::XVetoableChangeListener >&  )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+}
+
 /*-- 22.06.2004 16:46:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
