@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexppr.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,8 @@ class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public UniRefBase
 
 protected:
     UniReference< XMLPropertySetMapper > maPropMapper;
+
+    rtl::OUString maStyleName;
 
     /** Filter all properties we don't want to export:
         Take all properties of the XPropertySet which are also found in the
@@ -199,17 +201,7 @@ public:
     inline const UniReference< XMLPropertySetMapper >&
         getPropertySetMapper() const { return maPropMapper; }
 
-};
-/** added to make fix issue 36217 not incompatible */
-class SvXMLExportPropertyMapper2 : public SvXMLExportPropertyMapper
-{
-public:
-    SvXMLExportPropertyMapper2( const UniReference< XMLPropertySetMapper >& rMapper ) : SvXMLExportPropertyMapper( rMapper ) {}
-
     void SetStyleName( const rtl::OUString& rStyleName ) { maStyleName = rStyleName; }
-
-protected:
-    rtl::OUString maStyleName;
 };
 
 #endif  //  _XMLOFF_XMLEXPPR_HXX
