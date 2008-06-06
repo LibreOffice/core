@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.167 $
+# $Revision: 1.168 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.167 $ ';
+    $id_str = ' $Revision: 1.168 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -219,11 +219,7 @@
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command = $ENV{DELIVER};
-    if ($dlv_switch) {
-        $deliver_command .= ' '. $dlv_switch;
-    } elsif (!$html) {
-        $deliver_command .= " -quiet";
-    }
+    $deliver_command .= ' '. $dlv_switch if ($dlv_switch);
     $ENV{mk_tmp}++;
     %prj_platform = ();
     $check_error_string = '';
@@ -1787,10 +1783,8 @@ sub print_announce {
     } else {
         $text = "Building module $Prj\n";
     };
-    print $new_line;
     print $echo . "=============\n";
     print $echo . $text;
-    print $echo . "=============\n";
 };
 
 sub are_all_dependent {
