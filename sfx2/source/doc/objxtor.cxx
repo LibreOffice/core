@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: objxtor.cxx,v $
- * $Revision: 1.83 $
+ * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,7 @@ public:
     virtual void SAL_CALL disposing( const lang::EventObject& )
         throw ( uno::RuntimeException );
     virtual void SAL_CALL modified( const lang::EventObject& )
-        throw (uno::RuntimeException );
+        throw ( uno::RuntimeException );
 };
 
 void SAL_CALL SfxDocInfoListener_Impl::modified( const lang::EventObject& )
@@ -480,15 +480,6 @@ sal_Bool SfxObjectShell::Close()
 
         pImp->bClosing = sal_True;
         Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
-
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            GetModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<util::XModifyBroadcaster> xMB(
-            xDPS->getDocumentProperties(), uno::UNO_QUERY);
-        if (xMB.is()) {
-            xMB->removeModifyListener(pImp->m_xDocInfoListener);
-        }
-        pImp->m_xDocInfoListener.clear();
 
         if ( xCloseable.is() )
         {
