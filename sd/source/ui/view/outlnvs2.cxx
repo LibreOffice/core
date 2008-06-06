@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlnvs2.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,20 +116,6 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                         break;
                     default:
                         break;
-
-                    /* Gibt es hier z.Z. nicht
-                    case SVX_ZOOM_OPTIMAL:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON );
-                        break;
-
-                    case SVX_ZOOM_PAGEWIDTH:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SFX_CALLMODE_ASYNCHRON );
-                        break;
-
-                    case SVX_ZOOM_WHOLEPAGE:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON );
-                        break;
-                    */
                 }
                 rReq.Done();
             }
