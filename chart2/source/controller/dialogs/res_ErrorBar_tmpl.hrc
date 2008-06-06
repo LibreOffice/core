@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: res_ErrorBar_tmpl.hrc,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +74,7 @@ RadioButton RB_PERCENT \
 }; \
 RadioButton RB_FUNCTION \
 { \
+    HelpID = HID_SCH_STATISTIK_FUNCTION; \
     Pos = MAP_APPFONT ( 12 , 48 + yoffset  ) ; \
     Size = MAP_APPFONT ( 12 , 10 ) ; \
     Text [ en-US ] = "" ; \
@@ -81,6 +82,7 @@ RadioButton RB_FUNCTION \
 }; \
 RadioButton RB_RANGE \
 { \
+    HelpID = HID_SCH_STATISTIK_RANGE; \
     Pos = MAP_APPFONT( 12, 62 + yoffset ) ; \
     Size = MAP_APPFONT( 110, 10 ) ; \
     Text [ en-US ] = "Cell ~Range" ; \
@@ -88,6 +90,7 @@ RadioButton RB_RANGE \
 }; \
 ListBox LB_FUNCTION \
 { \
+    HelpID = HID_SCH_STATISTIK_FUNCTION_LB; \
     Pos = MAP_APPFONT ( 22 , 46 + yoffset  ) ; \
     Size = MAP_APPFONT ( 94 , 59 ) ; \
     DropDown = TRUE; \
@@ -108,6 +111,7 @@ FixedText FT_POSITIVE \
 }; \
 MetricField MF_POSITIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_POSITIVE_VALUE; \
     Border = TRUE ; \
     Pos = MAP_APPFONT ( 60 , 92 + yoffset  ) ; \
     Size = MAP_APPFONT ( 56 , 12 ) ; \
@@ -122,6 +126,7 @@ MetricField MF_POSITIVE \
 }; \
 Edit ED_RANGE_POSITIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_POSITIVE_RANGE; \
     Border = TRUE ; \
     Hide = TRUE; \
     Pos = MAP_APPFONT ( 60 , 92 + yoffset  ) ; \
@@ -129,6 +134,7 @@ Edit ED_RANGE_POSITIVE \
 }; \
 ImageButton IB_RANGE_POSITIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_POSITIVE_RANGE_CHOOSER; \
     Hide = TRUE; \
     Pos = MAP_APPFONT ( 152 , 91 + yoffset  ) ; \
     Size = MAP_APPFONT ( 14 , 14 ) ; \
@@ -142,6 +148,7 @@ FixedText FT_NEGATIVE \
 }; \
 MetricField MF_NEGATIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_NEGATIVE_VALUE; \
     Border = TRUE ; \
     Pos = MAP_APPFONT ( 60 , 108 + yoffset  ) ; \
     Size = MAP_APPFONT ( 56 , 12 ) ; \
@@ -156,6 +163,7 @@ MetricField MF_NEGATIVE \
 }; \
 Edit ED_RANGE_NEGATIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_NEGATIVE_RANGE; \
     Border = TRUE ; \
     Hide = TRUE; \
     Pos = MAP_APPFONT ( 60 , 108 + yoffset  ) ; \
@@ -163,6 +171,7 @@ Edit ED_RANGE_NEGATIVE \
 }; \
 ImageButton IB_RANGE_NEGATIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_NEGATIVE_RANGE_CHOOSER; \
     Hide = TRUE; \
     Pos = MAP_APPFONT ( 152 , 107 + yoffset  ) ; \
     Size = MAP_APPFONT ( 14 , 14 ) ; \
@@ -170,7 +179,7 @@ ImageButton IB_RANGE_NEGATIVE \
 }; \
 CheckBox CB_SYN_POS_NEG \
 { \
-    HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION; \
+    HelpID = HID_SCH_STATISTIK_SAME_FOR_BOTH; \
     Pos = MAP_APPFONT ( 12 , 126 + yoffset  ); \
     Size = MAP_APPFONT ( 80 , 10 ); \
     TabStop = TRUE; \
@@ -184,18 +193,21 @@ FixedLine FL_INDICATE \
 }; \
 RadioButton RB_BOTH \
 { \
+    HelpID = HID_SCH_STATISTIK_SHOW_BOTH; \
     Pos = MAP_APPFONT ( 154 , 22  ); \
     Size = MAP_APPFONT ( 90 , 10 ); \
     Text[ en-US ] = "Positive ~and Negative"; \
 }; \
 RadioButton RB_POSITIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_SHOW_POSITIVE; \
     Pos = MAP_APPFONT ( 154 , 43  ); \
     Size = MAP_APPFONT ( 90 , 10 ); \
     Text[ en-US ] = "Pos~itive"; \
 }; \
 RadioButton RB_NEGATIVE \
 { \
+    HelpID = HID_SCH_STATISTIK_SHOW_NEGATIVE; \
     Pos = MAP_APPFONT ( 154 , 64  ); \
     Size = MAP_APPFONT ( 90 , 10 ); \
     Text[ en-US ] = "Ne~gative"; \
