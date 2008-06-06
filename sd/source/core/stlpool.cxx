@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -290,7 +290,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
             ULONG nFontSize = 20;
             short nFirstIndent = -600;
-            USHORT nIndent = nLevel * 1200;
+//          USHORT nIndent = nLevel * 1200;
             USHORT nLower = 100;
 
             switch (nLevel)
@@ -333,21 +333,24 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             rOutlineSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( nFontSize ), 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
             // Einzuege
+/* i35937
             aSvxLRSpaceItem.SetTxtFirstLineOfst(nFirstIndent);
             aSvxLRSpaceItem.SetTxtLeft(nIndent);
             aSvxLRSpaceItem.SetRight(0);
             aSvxLRSpaceItem.SetBulletFI(TRUE);
             pSheet->GetItemSet().Put(aSvxLRSpaceItem);
-
+*/
             // Zeilendurchschuss (Abstand nach unten)
             aSvxULSpaceItem.SetLower(nLower);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
 
+/* i35937
             if (nLevel == 1)
             {
                 SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 1); // Bullets sichtbar
                 pSheet->GetItemSet().Put(aBulletStateItem);
             }
+*/
         }
     }
 
@@ -413,7 +416,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-        rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+//      rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
         rTitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
@@ -458,7 +461,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-        rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+//      rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
         aSvxLRSpaceItem.SetTxtLeft(0);
@@ -504,17 +507,19 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
         rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
-        rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
+//      rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
+/* #i35937#
         SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rNotesSet.Get(EE_PARA_NUMBULLET) );
 
         EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
                                 &(const SvxLRSpaceItem&) rNotesSet.Get( EE_PARA_LRSPACE ) );
 
         ( (SfxItemSet&) rNotesSet).Put( aNumBullet );
+*/
 
     }
 
@@ -1065,7 +1070,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetFirstLineOffset( 0 );
             aNumRule.SetLevel( 0, aNumberFormat );
 
-            for( USHORT i = 1; i < 10; i++ )
+            for( USHORT i = 1; i < aNumRule.GetLevelCount(); i++ )
             {
                 const short nLSpace = (i + 1) * 600;
                 aNumberFormat.SetLSpace(nLSpace);
@@ -1089,7 +1094,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 
             if(pDefaultRule)
             {
-                SvxNumRule aNumRule(pDefaultRule->GetFeatureFlags(), 9, FALSE);
+                SvxNumRule aNumRule(pDefaultRule->GetFeatureFlags(), 10, FALSE);
                 for(USHORT i=0; i < aNumRule.GetLevelCount(); i++)
                 {
                     SvxNumberFormat aFrmt( pDefaultRule->GetLevel(i) );
@@ -1116,12 +1121,12 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
             SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,
-                                 10, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
-            for( UINT16 i = 0; i < 10; i++ )
+                                 10, FALSE );
+            for( UINT16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
                 aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
                 aNumberFormat.SetBulletRelSize(45);
-                const short nLSpace = i ? i * 1200 : 1200;
+                const short nLSpace = (i + 1) * 1200;
                 aNumberFormat.SetLSpace(nLSpace);
                 aNumberFormat.SetAbsLSpace(nLSpace);
                 short nFirstLineOffset = -600;
