@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbloader.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XLoadEventListener.hpp>
@@ -211,11 +211,12 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         ServiceNameToImplName( URL_COMPONENT_DATASOURCEBROWSER,     "org.openoffice.comp.dbu.ODatasourceBrowser"   ),
         ServiceNameToImplName( URL_COMPONENT_QUERYDESIGN,           "org.openoffice.comp.dbu.OQueryDesign"         ),
         ServiceNameToImplName( URL_COMPONENT_TABLEDESIGN,           "org.openoffice.comp.dbu.OTableDesign"         ),
-        ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN,        "org.openoffice.comp.dbu.ORelationDesign"      )
+        ServiceNameToImplName( URL_COMPONENT_RELATIONDESIGN,        "org.openoffice.comp.dbu.ORelationDesign"      ),
+        ServiceNameToImplName( URL_COMPONENT_VIEWDESIGN,            "org.openoffice.comp.dbu.OViewDesign"          )
     };
 
     INetURLObject aParser( rURL );
-    Reference< XController > xController;
+    Reference< XController2 > xController;
 
     const ::rtl::OUString sComponentURL( aParser.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
     for ( size_t i=0; i < sizeof( aImplementations ) / sizeof( aImplementations[0] ); ++i )
@@ -268,8 +269,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             if ( xController.is() )
             {
                 xController->attachModel( xReportModel );
-                xReportModel->connectController( xController );
-                xReportModel->setCurrentController( xController );
+                xReportModel->connectController( xController.get() );
+                xReportModel->setCurrentController( xController.get() );
             }
         }
     }
@@ -329,7 +330,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if ( bSuccess )
     {
         if ( xController.is() && rFrame.is() )
+        {
+            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
             xController->attachFrame(rFrame);
+        }
 
         if ( xDatabaseDocument.is() )
         {
