@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editobj2.hxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,8 +241,6 @@ public:
     void                    SetScriptType( USHORT nType );
 
     USHORT                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
-    void                    SetLRSpaceItemFlags( BOOL bOutlineMode );
-    void                    AdjustImportedLRSpaceItems( BOOL bTurnOfBullets );
 
     ContentInfo*            CreateAndInsertContent();
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, USHORT nStart, USHORT nEnd );
