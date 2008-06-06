@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,8 @@ namespace com { namespace sun { namespace star {
 } } }
 #include <sal/types.h>
 
+class SvXMLExport;
+
 class XMLTextNumRuleInfo
 {
     const ::rtl::OUString sNumberingRules;
@@ -50,6 +52,7 @@ class XMLTextNumRuleInfo
     const ::rtl::OUString sNumberingIsNumber;
     const ::rtl::OUString sNumberingIsOutline;
 
+
     ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace > xNumRules;
 
@@ -57,13 +60,13 @@ class XMLTextNumRuleInfo
     sal_Int16           nStartValue;
     sal_Int16           nLevel;
 
-    sal_Bool            bIsNumbered : 1;
-    sal_Bool            bIsOrdered : 1;
-    sal_Bool            bIsRestart : 1;
-    sal_Bool            bIsNamed : 1;
+    sal_Bool            bIsNumbered;
+    sal_Bool            bIsOrdered;
+    sal_Bool            bIsRestart;
+    sal_Bool            bIsNamed;
 
     // --> OD 2006-09-27 #i69627#
-    sal_Bool mbOutlineStyleAsNormalListStyle : 1;
+    sal_Bool mbOutlineStyleAsNormalListStyle;
     // <--
 
 public:
@@ -93,7 +96,7 @@ public:
     sal_Bool IsRestart() const { return bIsRestart; }
     sal_Bool IsNamed() const { return bIsNamed; }
 
-    inline sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const;
+    sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const;
 };
 
 inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
@@ -125,13 +128,6 @@ inline void XMLTextNumRuleInfo::Reset()
     bIsNumbered = bIsOrdered = bIsRestart = bIsNamed =
     mbOutlineStyleAsNormalListStyle = sal_False;
     // <--
-}
-
-inline sal_Bool XMLTextNumRuleInfo::HasSameNumRules(
-                        const XMLTextNumRuleInfo& rCmp ) const
-{
-    return (bIsNamed && rCmp.bIsNamed) ? (rCmp.sName == sName)
-                                   : (rCmp.xNumRules == xNumRules);
 }
 
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
