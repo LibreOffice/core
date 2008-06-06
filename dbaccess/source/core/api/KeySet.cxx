@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KeySet.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,12 +153,14 @@ namespace
 DBG_NAME(OKeySet)
 // -------------------------------------------------------------------------
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
+                 const Reference< XIndexAccess>& _xTableKeys,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer)
             :m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
             ,m_pForeignColumnNames(NULL)
             ,m_xTable(_xTable)
+            ,m_xTableKeys(_xTableKeys)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
             ,m_bRowCountFinal(sal_False)
@@ -874,10 +876,14 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
+
+    Reference<XIndexAccess> xKeys = m_xTableKeys;
+    if ( !xKeys.is() )
+    {
+        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+        if(xKeySup.is())
+            xKeys = xKeySup->getKeys();
+    }
 
     Reference<XColumnsSupplier> xKeyColsSup;
     Reference<XNameAccess> xKeyColumns;
