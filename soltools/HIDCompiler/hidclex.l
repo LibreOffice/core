@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hidclex.l,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,7 @@
 #pragma warning(push, 1)
 #endif
 
-static char const Revision[]     = "$Revision: 1.7 $" ;
+static char const Revision[]     = "$Revision: 1.8 $" ;
 
 /*
 
@@ -78,6 +78,10 @@ static int nInputFileDepth = 0;
 #include <string.h>
 
 #include <ctype.h>
+
+#if defined _MSC_VER
+#include <io.h>
+#endif
 
 char* lower(char* str)
 {
