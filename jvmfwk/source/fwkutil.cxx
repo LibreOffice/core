@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkutil.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,21 +203,13 @@ rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
     return rtl::OUString(usFilePath.getStr(), index);
 }
 
-rtl::OUString getFileFromURL(const rtl::OUString& sFileURL)
-{
-    sal_Int32 index= sFileURL.lastIndexOf('/');
-    if (index == -1)
-        return sFileURL;
-    return sFileURL.copy(index + 1);
-}
-
 rtl::OUString getExecutableDirectory()
 {
     rtl_uString* sExe = NULL;
     if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
         throw FrameworkException(
             JFW_E_ERROR,
-            "[Java framework] Error in function getApplicationBase (fwkutil.cxx)");
+            "[Java framework] Error in function getExecutableDirectory (fwkutil.cxx)");
 
     rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
     return getDirFromFile(ouExe);

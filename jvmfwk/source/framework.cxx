@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1154,10 +1154,6 @@ void CJavaInfo::attach(::JavaInfo * info)
     pInfo = NULL;
     return tmp;
 }
-CJavaInfo::CJavaInfo(const ::JavaInfo* info): pInfo(0)
-{
-    pInfo = copyJavaInfo(info);
-}
 
 CJavaInfo::~CJavaInfo()
 {
@@ -1243,14 +1239,6 @@ rtl::OUString CJavaInfo::getLocation() const
         return rtl::OUString();
 }
 
-rtl::OUString CJavaInfo::getVersion() const
-{
-    if (pInfo)
-        return rtl::OUString(pInfo->sVersion);
-    else
-        return rtl::OUString();
-}
-
 sal_uInt64 CJavaInfo::getFeatures() const
 {
     if (pInfo)
@@ -1259,19 +1247,4 @@ sal_uInt64 CJavaInfo::getFeatures() const
         return 0l;
 }
 
-sal_uInt64 CJavaInfo::getRequirements() const
-{
-    if (pInfo)
-        return pInfo->nRequirements;
-    else
-        return 0l;
-}
-
-rtl::ByteSequence CJavaInfo::getVendorData() const
-{
-    if (pInfo)
-        return rtl::ByteSequence(pInfo->arVendorData);
-    else
-        return rtl::ByteSequence();
-}
 }
