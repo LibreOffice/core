@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -100,6 +100,7 @@ IDLFILES=\
     XComponentRegistry.idl\
     XConfigManager.idl\
     XController.idl\
+    XController2.idl\
     XControlNotificationListener.idl\
     XControllerBorder.idl\
     XDesktop.idl\
