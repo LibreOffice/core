@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartController_Window.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -926,6 +926,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             uno::Any aNewSelection;
             if( aNewCID.getLength()>0 && !ObjectHierarchy::isRootNode( aNewCID ))
                 aNewSelection <<= aNewCID;
+            if( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewCID, m_aModel->getModel() ) )
+                m_eDragMode = SDRDRAG_MOVE;
             bReturn = select( aNewSelection );
         }
     }
