@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuinsfil.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -530,7 +530,6 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         aLayoutName.Erase(aLayoutName.SearchAscii(SD_LT_SEPARATOR));
 
         pOutliner->SetPaperSize(pPage->GetSize());
-        pOutliner->SetMinDepth(0);
 
         SvStream* pStream = pMedium->GetInStream();
         DBG_ASSERT( pStream, "Kein InStream!" );
@@ -639,7 +638,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     Paragraph*     pPara     = (Paragraph*)pList->First();
 
     // wo soll eingefuegt werden?
-    while ( pDocliner->GetDepth( (USHORT) pDocliner->GetAbsPos( pPara ) ) != 0)
+    while( !pPara->HasFlag( PARAFLAG_ISPAGE ) )
     {
         pPara = pDocliner->GetParent(pPara);
     }
@@ -651,7 +650,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     while (pPara)
     {
         ULONG nPos = pDocliner->GetAbsPos( pPara );
-        if ( pDocliner->GetDepth( (USHORT) nPos ) == 0 )
+        if ( pPara->HasFlag( PARAFLAG_ISPAGE ) )
             nPage++;
         pPara = pDocliner->GetParagraph( nPos - 1 );
     }
@@ -695,7 +694,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pPara)
         {
             ULONG nPos = pOutliner->GetAbsPos( pPara );
-            if( pOutliner->GetDepth( (USHORT) nPos ) == 0 )
+            if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
                 nNewPages++;
             pPara = pOutliner->GetParagraph( ++nPos );
         }
@@ -717,7 +716,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         while (pSourcePara)
         {
             ULONG nPos = pOutliner->GetAbsPos( pSourcePara );
-            USHORT nDepth = pOutliner->GetDepth( (USHORT) nPos );
+            sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nPos );
 
             // den letzte Absatz nur uebernehmen, wenn er gefuellt ist
             if (nSourcePos < nParaCount - 1 ||
@@ -726,13 +725,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 pDocliner->Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
                 String aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName.Erase( aStyleSheetName.Len()-1, 1 );
-                aStyleSheetName += String::CreateFromInt32( nDepth );
+                aStyleSheetName += String::CreateFromInt32( nDepth <= 0 ? 1 : nDepth+1 );
                 SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
                 SfxStyleSheet* pOutlStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() );
                 pDocliner->SetStyleSheet( nTargetPos, pOutlStyle );
             }
 
-            if ( nDepth == 0 )
+            if( pSourcePara->HasFlag( PARAFLAG_ISPAGE ) )
             {
                 nNewPages++;
                 if( pProgress )
