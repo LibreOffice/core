@@ -8,7 +8,7 @@
 #
 # $RCSfile: wntmsci10.mk,v $
 #
-# $Revision: 1.43 $
+# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -147,7 +147,7 @@ CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
 CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
-CFLAGSDEBUG=-Zi -Fd$(MISC)$/$(@:b).pdb
+CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
 CFLAGSOPT=-Oxs -Oy-
