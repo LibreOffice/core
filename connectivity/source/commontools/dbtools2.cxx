@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtools2.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,7 @@ namespace dbtools
     using namespace connectivity;
     using namespace comphelper;
 
-::rtl::OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection)
+::rtl::OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sCreatePattern)
 {
 
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
@@ -106,7 +106,7 @@ namespace dbtools
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
     // look if we have to use precisions
     sal_Bool bUseLiteral = sal_False;
-    ::rtl::OUString sPreFix,sPostFix;
+    ::rtl::OUString sPreFix,sPostFix,sCreateParams;
     {
         Reference<XResultSet> xRes = xMetaData->getTypeInfo();
         if(xRes.is())
@@ -118,7 +118,7 @@ namespace dbtools
                 sal_Int32 nType = xRow->getShort(2);
                 sPreFix = xRow->getString (4);
                 sPostFix = xRow->getString (5);
-                ::rtl::OUString sCreateParams = xRow->getString(6);
+                sCreateParams = xRow->getString(6);
                 // first identical type will be used if typename is empty
                 if ( !sTypeName.getLength() && nType == nDataType )
                     sTypeName = sTypeName2Cmp;
@@ -154,10 +154,10 @@ namespace dbtools
         if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
         {
             aSql += ::rtl::OUString::valueOf(nPrecision);
-            if ( nScale > 0 )
+            if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1) )
                 aSql += ::rtl::OUString::createFromAscii(",");
         }
-        if ( nScale > 0 || nDataType == DataType::TIMESTAMP )
+        if ( (nScale > 0) || (_sCreatePattern.getLength() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
             aSql += ::rtl::OUString::valueOf(nScale);
 
         if ( nParenPos == -1 )
@@ -188,7 +188,7 @@ namespace dbtools
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection)
+::rtl::OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sCreatePattern)
 {
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
@@ -220,7 +220,7 @@ namespace dbtools
     {
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
-            aSql += createStandardColumnPart(xColProp,_xConnection);
+            aSql += createStandardColumnPart(xColProp,_xConnection,_sCreatePattern);
             aSql += ::rtl::OUString::createFromAscii(",");
         }
     }
@@ -360,9 +360,10 @@ namespace
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
-                                                const Reference< XConnection>& _xConnection)
+                                                const Reference< XConnection>& _xConnection,
+                                                const ::rtl::OUString& _sCreatePattern)
 {
-    ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection);
+    ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection,_sCreatePattern);
     ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
     if ( sKeyStmt.getLength() )
         aSql += sKeyStmt;
