@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsrch.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,6 +139,8 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             nSlot = 0;
         }
     }
+    if( pWrtShell->IsBlockMode() )
+        pWrtShell->LeaveBlockMode();
     switch (nSlot)
     {
     // erstmal Nichts tun
