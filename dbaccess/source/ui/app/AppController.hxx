@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppController.hxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,8 +69,6 @@ class SfxFilter;
 
 FORWARD_DECLARE_INTERFACE(container,XNameContainer)
 FORWARD_DECLARE_INTERFACE(container,XContainer)
-FORWARD_DECLARE_INTERFACE(util,XNumberFormatter)
-FORWARD_DECLARE_INTERFACE(util,XCloseable)
 FORWARD_DECLARE_INTERFACE(ucb,XContent)
 
 //........................................................................
