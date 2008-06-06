@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acceleratorconfigurationwriter.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +34,7 @@
 
 //_______________________________________________
 // own includes
-#include <xml/attributelist.hxx>
-
-#ifndef __FRAMEWORK_ACCELERATORCONST_H_
 #include <acceleratorconst.h>
-#endif
 #include <threadhelp/readguard.hxx>
 
 //_______________________________________________
@@ -51,6 +47,9 @@
 // other includes
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <comphelper/attributelist.hxx>
+
 
 //_______________________________________________
 // namespace
@@ -85,11 +84,11 @@ void AcceleratorConfigurationWriter::flush()
     // <- SAFE ----------------------------------
 
     // prepare attribute list
-    AttributeListImpl*                                   pAttribs = new AttributeListImpl;
+    ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs(static_cast< css::xml::sax::XAttributeList* >(pAttribs), css::uno::UNO_QUERY);
 
-    pAttribs->addAttribute(AL_XMLNS_ACCEL, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_ACCEL);
-    pAttribs->addAttribute(AL_XMLNS_XLINK, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_XLINK);
+    pAttribs->AddAttribute(AL_XMLNS_ACCEL, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_ACCEL);
+    pAttribs->AddAttribute(AL_XMLNS_XLINK, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_XLINK);
 
     // generate xml
     xCFG->startDocument();
@@ -129,23 +128,23 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
                                                                  const ::rtl::OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
 {
-    AttributeListImpl*                                   pAttribs = new AttributeListImpl;
+    ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs (static_cast< css::xml::sax::XAttributeList* >(pAttribs) , css::uno::UNO_QUERY_THROW);
 
     ::rtl::OUString sKey = m_rKeyMapping->mapCodeToIdentifier(aKey.KeyCode);
     // TODO check if key is empty!
 
-    pAttribs->addAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
-    pAttribs->addAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
+    pAttribs->AddAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
+    pAttribs->AddAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
 
     if ((aKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT)
-        pAttribs->addAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD1) == css::awt::KeyModifier::MOD1)
-        pAttribs->addAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD2) == css::awt::KeyModifier::MOD2)
-        pAttribs->addAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString::createFromAscii("true"));
 
     xConfig->ignorableWhitespace(::rtl::OUString());
     xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);
