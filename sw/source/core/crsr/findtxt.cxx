@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: findtxt.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -512,11 +512,17 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
                 ++nStart;
             }
             xub_StrLen nEnd = aStr.Len();
+            bool bDeleteLastX = false;
             if( pPam->End()->nContent < (static_cast<const SwTxtNode*>(pTxtNode))->GetTxt().Len() )
+            {
                 aStr.Insert( sX );
+                bDeleteLastX = true;
+            }
             SearchResult aResult;
             if( aSTxt.SearchFrwrd( aStr, &nStart, &nEnd, &aResult ) )
             {
+                if( bDeleteLastX )
+                    aStr.Erase( aStr.Len() - 1 );
                 aSTxt.ReplaceBackReferences( aReplaceStr, aStr, aResult );
                 pRet = new String( aReplaceStr );
             }
