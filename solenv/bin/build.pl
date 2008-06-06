@@ -11,7 +11,7 @@
 #
 # $RCSfile: build.pl,v $
 #
-# $Revision: 1.168 $
+# $Revision: 1.169 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -76,7 +76,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.168 $ ';
+    $id_str = ' $Revision: 1.169 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1685,6 +1685,10 @@ sub build_actual_queue {
 sub run_job {
     my ($job, $path, $registered_name) = @_;
     my $job_to_do = $job;
+    if ( $show ) {
+        print "$job_to_do\n";
+        return 0;
+    }
     $job_to_do = $deliver_command if ($job eq 'deliver');
     $registered_name = $path if (!defined $registered_name);
     chdir $path;
