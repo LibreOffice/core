@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -421,8 +421,6 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
         ::com::sun::star::container::XNameAccess > xObjects;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XAnyCompare > xNumRuleCompare;
 
     SvXMLImport& rSvXMLImport;
 
