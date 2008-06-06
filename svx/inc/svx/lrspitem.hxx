@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lrspitem.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,6 @@ class SVX_DLLPUBLIC SvxLRSpaceItem : public SfxPoolItem
 
     USHORT  nPropFirstLineOfst, nPropLeftMargin, nPropRightMargin;
     BOOL    bAutoFirst  : 1;    // Automatische Berechnung der Erstzeileneinzugs
-    BOOL    bBulletFI   : 1;    // FI = Bullet...
 
     void   AdjustLeft();        // nLeftMargin und nTxtLeft werden angepasst.
 
@@ -141,10 +140,6 @@ public:
                     { return nPropFirstLineOfst; }
     inline void SetTxtFirstLineOfstValue( const short nValue )
                     { nFirstLineOfst = nValue; }
-
-    // Outliner-Umstellung...
-    void        SetBulletFI( BOOL b ) { bBulletFI = b; }
-    BOOL        IsBulletFI() const { return bBulletFI; }
 };
 
 inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )
@@ -156,7 +151,6 @@ inline SvxLRSpaceItem &SvxLRSpaceItem::operator=( const SvxLRSpaceItem &rCpy )
     nPropFirstLineOfst = rCpy.nPropFirstLineOfst;
     nPropLeftMargin = rCpy.nPropLeftMargin;
     nPropRightMargin = rCpy.nPropRightMargin;
-    bBulletFI = rCpy.bBulletFI;
     bAutoFirst = rCpy.bAutoFirst;
     return *this;
 }
