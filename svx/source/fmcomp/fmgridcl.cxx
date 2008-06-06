@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmgridcl.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1262,7 +1262,10 @@ void FmGridControl::DeleteSelectedRows()
         Any aBookmark;
         sal_Bool bNewPos = sal_False;
         // if the current row isn't selected we take the row as row after deletion
-        if (!IsRowSelected(GetCurrentPos()) && !IsCurrentAppending())
+        OSL_ENSURE( GetCurrentRow().Is(), "FmGridControl::DeleteSelectedRows: no current row here?" );
+            // crash reports suggest it can happen we don't have a current row - how?
+            // #154303# / 2008-04-23 / frank.schoenheit@sun.com
+        if ( !IsRowSelected( GetCurrentPos() ) && !IsCurrentAppending() && GetCurrentRow().Is() )
         {
             aBookmark = GetCurrentRow()->GetBookmark();
             bNewPos   = sal_True;
