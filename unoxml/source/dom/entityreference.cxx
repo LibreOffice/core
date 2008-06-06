@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: entityreference.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +33,10 @@
 
 namespace DOM
 {
-  CEntityReference::CEntityReference(const xmlNodePtr /*aNodePtr*/)
+  CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
     {
         m_aNodeType = NodeType_ENTITY_REFERENCE_NODE;
-        init_node(m_aNodePtr);
+        init_node(aNodePtr);
     }
     OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException)
     {
