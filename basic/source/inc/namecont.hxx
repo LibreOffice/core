@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: namecont.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,7 +280,7 @@ protected:
         ( const ::rtl::OUString& aName, const ::rtl::OUString& aLibInfoFileURL,
           const ::rtl::OUString& StorageURL, sal_Bool ReadOnly ) = 0;
     virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement( void ) = 0;
-    virtual sal_Bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) = 0;
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
         ::com::sun::star::uno::Any aElement,
@@ -571,7 +571,11 @@ protected:
 private:
     /** checks whether the lib is readonly, or a readonly link, throws an IllegalArgumentException if so
     */
-    void impl_checkReadOnly();
+    void    impl_checkReadOnly();
+    /** checks whether the library is loaded, throws a LibraryNotLoadedException (wrapped in a WrappedTargetException),
+        if not.
+    */
+    void    impl_checkLoaded();
 
 public:
     SfxLibrary(
@@ -643,6 +647,9 @@ public:
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XContainerListener >& xListener )
             throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
 };
 
 
