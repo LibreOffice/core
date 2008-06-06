@@ -755,18 +755,20 @@ Dim oLibrary as Object
 		MaxLibIndex = Ubound(oBasicLibraries.ElementNames())
 		For n = 0 To MaxLibIndex
 			LibName = oBasicLibraries.ElementNames(n)
-			oLibrary = oBasicLibraries.getbyName(LibName)
-			If oLibrary.hasElements() Then
-				MaxModuleIndex = Ubound(oLibrary.ElementNames())
-				For m = 0 To MaxModuleIndex
-					ModuleName = oLibrary.ElementNames(m)
-					sBasicCode = oLibrary.getbyName(ModuleName)
-					If sBasicCode &lt;&gt; &quot;&quot; Then
-						ConcatComment(sComment, sReeditMacro)
-						CheckIfMacroExists() = True
-						Exit Function
-					End If
-				Next m
+            If oBasicLibraries.isLibraryLoaded(LibName) Then
+    			oLibrary = oBasicLibraries.getbyName(LibName)
+    			If oLibrary.hasElements() Then
+    				MaxModuleIndex = Ubound(oLibrary.ElementNames())
+    				For m = 0 To MaxModuleIndex
+    					ModuleName = oLibrary.ElementNames(m)
+    					sBasicCode = oLibrary.getbyName(ModuleName)
+    					If sBasicCode &lt;&gt; &quot;&quot; Then
+    						ConcatComment(sComment, sReeditMacro)
+    						CheckIfMacroExists() = True
+    						Exit Function
+    					End If
+    				Next m
+                End If
 			End If
 		Next n
 	End If
