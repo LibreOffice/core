@@ -1,4 +1,5 @@
 #ifdef __MINGW32__
+#define _GDI32_
 #include "macros.h"
 #include <multimon.h>
 extern "C" {
@@ -16,7 +17,7 @@ EXTERN_C void WINAPI ResolveThunk_UNICOWS( FARPROC *lppfn, LPCSTR lpLibFileName,
 }
 
 static void GetProcAddress_Thunk();
-EXTERN_C _declspec( dllexport ) FARPROC kernel32_GetProcAddress_Ptr = (FARPROC)GetProcAddress_Thunk;
+EXTERN_C { _declspec( dllexport ) FARPROC kernel32_GetProcAddress_Ptr = (FARPROC)GetProcAddress_Thunk; }
 static FARPROC WINAPI GetProcAddress_Failure (HINSTANCE,LPCSTR);
 static void GetProcAddress_Thunk()
 {
@@ -38,7 +39,7 @@ static FARPROC WINAPI GetProcAddress_Failure (HINSTANCE,LPCSTR)
 
 #define DEFINE_UNICOWS_THUNK( module, rettype, calltype, func, params ) \
 static void func##_Thunk(); \
-EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
+EXTERN_C { _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; } \
 static rettype calltype func##_##Failure params; \
 static void func##_Thunk() \
 { \
@@ -123,7 +124,7 @@ DEFINE_UNICOWS_THUNK( kernel32, HANDLE, WINAPI, CreateWaitableTimerW, (LPSECURIT
 DEFINE_UNICOWS_THUNK( user32, HWND, WINAPI, CreateWindowExW, (DWORD,LPCWSTR,LPCWSTR,DWORD,int,int,int,int,HWND,HMENU,HINSTANCE,LPVOID) )
 DEFINE_UNICOWS_THUNK( user32, HCONV, WINAPI, DdeConnect, (DWORD,HSZ,HSZ,PCONVCONTEXT) )
 DEFINE_UNICOWS_THUNK( user32, HCONVLIST, WINAPI, DdeConnectList, (DWORD,HSZ,HSZ,HCONVLIST,PCONVCONTEXT) )
-DEFINE_UNICOWS_THUNK( user32, HSZ, WINAPI, DdeCreateStringHandleW, (DWORD,LPWSTR,int) )
+DEFINE_UNICOWS_THUNK( user32, HSZ, WINAPI, DdeCreateStringHandleW, (DWORD,LPCWSTR,int) )
 DEFINE_UNICOWS_THUNK( user32, UINT, WINAPI, DdeInitializeW, (PDWORD,PFNCALLBACK,DWORD,DWORD) )
 DEFINE_UNICOWS_THUNK( user32, UINT, WINAPI, DdeQueryConvInfo, (HCONV,DWORD,PCONVINFO) )
 DEFINE_UNICOWS_THUNK( user32, DWORD, WINAPI, DdeQueryStringW, (DWORD,HSZ,LPWSTR,DWORD,int) )
