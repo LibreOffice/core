@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: PrintManager.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -906,9 +906,6 @@ void PrintManager::PrintOutline (
     USHORT nOutlMode = pOutliner->GetMode();
     BOOL bOldUpdateMode = pOutliner->GetUpdateMode();
 
-    if (rInfo.mrViewShell.ISA(OutlineViewShell))
-        pOutliner->SetMinDepth(0);
-
     Size aPaperSize = pOutliner->GetPaperSize();
     pOutliner->SetPaperSize(aOutRect.GetSize());
     pOutliner->SetUpdateMode(TRUE);
@@ -990,8 +987,8 @@ void PrintManager::PrintOutline (
                         for (ULONG nPara = nParaCount1; nPara < nParaCount2; nPara++)
                         {
                             Paragraph* pP = pOutliner->GetParagraph(nPara);
-                            if(pP && pOutliner->GetDepth( (USHORT) nPara ) !=1 )
-                                pOutliner->SetDepth(pP, 1);
+                            if(pP && pOutliner->GetDepth( (USHORT) nPara ) > 0 )
+                                pOutliner->SetDepth(pP, 0);
                         }
                     }
 
