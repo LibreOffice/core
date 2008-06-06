@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdedxv.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -655,6 +655,8 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
         aOldCalcFieldValueLink=pTextEditOutliner->GetCalcFieldValueHdl();
         // Der FieldHdl muss von SdrBeginTextEdit gesetzt sein, da dor ein UpdateFields gerufen wird.
         pTextEditOutliner->SetCalcFieldValueHdl(LINK(this,SdrObjEditView,ImpOutlinerCalcFieldValueHdl));
+        pTextEditOutliner->SetBeginPasteOrDropHdl(LINK(this,SdrObjEditView,BeginPasteOrDropHdl));
+        pTextEditOutliner->SetEndPasteOrDropHdl(LINK(this,SdrObjEditView, EndPasteOrDropHdl));
 
         // we set a SdrPaintInfoRec temporarely at the outliner so the calc field value hdl from
         // the application knows the context
@@ -794,6 +796,9 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
         {
             bBrk = sal_True;
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
+            pTextEditOutliner->SetBeginPasteOrDropHdl(Link());
+            pTextEditOutliner->SetEndPasteOrDropHdl(Link());
+
         }
     }
     if (pTextEditOutliner != NULL)
@@ -882,6 +887,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             // Den alten CalcFieldValue-Handler wieder setzen
             // Muss vor Obj::EndTextEdit() geschehen, da dort ein UpdateFields() gemacht wird.
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
+            pTEOutliner->SetBeginPasteOrDropHdl(Link());
+            pTEOutliner->SetEndPasteOrDropHdl(Link());
 
             XubString aObjName;
             pTEObj->TakeObjNameSingul(aObjName);
@@ -1898,3 +1905,26 @@ void SdrObjEditView::MarkListHasChanged()
         }
     }
 }
+
+IMPL_LINK( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+{
+    OnEndPasteOrDrop( pInfos );
+    return 0;
+}
+
+IMPL_LINK( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+{
+    OnBeginPasteOrDrop( pInfos );
+    return 0;
+}
+
+void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )
+{
+    // applications can derive from these virtual methods to do something before a drop or paste operation
+}
+
+void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
+{
+    // applications can derive from these virtual methods to do something before a drop or paste operation
+}
+
