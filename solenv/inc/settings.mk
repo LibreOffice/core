@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.231 $
+# $Revision: 1.232 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -364,6 +364,14 @@ product*=$(PRODUCT)
 
 .IF "$(product)"!=""
 PRODUCT*=$(product)
+.ENDIF
+
+.IF "$(VERBOSE)"!=""
+verbose*=$(VERBOSE)
+.ENDIF
+
+.IF "$(verbose)"!=""
+VERBOSE*=$(verbose)
 .ENDIF
 
 .IF "$(SOLARLANG)" != ""
@@ -1146,10 +1154,6 @@ environment_confusion:
 .ENDIF          # "$(JDKPATH)"!=""
 .ENDIF          # "$(DISABLE_JAVA)"==""
 
-.IF "$(WORK_STAMP)"!=""
-CDEFS+=-D$(WORK_STAMP)=$(WORK_STAMP)
-.ENDIF
-
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
 
 # Once all modules on a given platform compile without warnings, the specific
@@ -1209,21 +1213,6 @@ LINKC*=$(LINK)
 LINKCFLAGS*=$(LINKFLAGS)
 LINKFLAGS+=$(LINKFLAGSADD)
 LINKCFLAGS+=$(LINKFLAGSADD)
-
-#to be removed soon!!!
-.IF "$(TF_CNTEX)"=="$(WORK_STAMP)"
-CDEFS+= -DTF_CNTEX
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_CAPELLA)"!=""
-CDEFS+= -DTF_CAPELLA
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_NEWEX)"!=""
-CDEFS+= -DTF_NEWEX
-.ENDIF
 
 #defaults for UCR HEADER
 UNOUCRBASE*=UCR
