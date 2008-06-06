@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: button.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1753,6 +1753,11 @@ void PushButton::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_STYLE )
     {
         SetStyle( ImplInitStyle( GetWindow( WINDOW_PREV ), GetStyle() ) );
+
+        bool bIsDefButton = ( GetStyle() & WB_DEFBUTTON ) != 0;
+        bool bWasDefButton = ( GetPrevStyle() & WB_DEFBUTTON ) != 0;
+        if ( bIsDefButton != bWasDefButton )
+            ImplSetDefButton( bIsDefButton );
 
         if ( IsReallyVisible() && IsUpdateMode() )
         {
