@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bulmaper.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,15 +41,10 @@ class SvxNumRule;
 class SdBulletMapper
 {
 public:
-/*
-    static SvxNumberFormat MapBulletToNumBulletItem( const SvxBulletItem& aBullet );
-    static void MapNumBulletToBulletItem( const SvxNumberFormat& aNumBullet, SvxBulletItem& aBullet, SfxItemSet& rSet );
-    static void MapNumBulletToBulletItem( const SvxNumRule& aNumRule, USHORT nLevel, SvxBulletItem& aBullet, SfxItemSet& rSet );
-*/
-
+/* #i35937#
     static void PreMapNumBulletForDialog( SfxItemSet& rSet );
     static void PostMapNumBulletForDialog( SfxItemSet& rSet );
-
+*/
     static void MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet );
 
 };
