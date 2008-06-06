@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgolbul.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,8 +163,6 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
     }
 
-    SdBulletMapper::PreMapNumBulletForDialog( aInputSet );
-
     SetInputSet( &aInputSet );
 
     if(!bTitle)
@@ -223,11 +221,15 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     {
         SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
 
+/* #i35937#
         SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 1 );
         pOutputSet->Put(aBulletState);
+*/
     }
 
+/* #i35937#
     SdBulletMapper::PostMapNumBulletForDialog( *pOutputSet );
+*/
 
     if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,TRUE) == SFX_ITEM_ON )
     {
