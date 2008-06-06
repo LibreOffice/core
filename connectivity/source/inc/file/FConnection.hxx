@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FConnection.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +81,7 @@ namespace connectivity
             sal_Bool                    m_bShowDeleted;
             sal_Bool                    m_bCaseSensitiveExtension;
             sal_Bool                    m_bCheckSQL92;
+            bool                        m_bDefaultTextEncoding;
 
 
             void throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage);
@@ -143,6 +144,7 @@ namespace connectivity
             inline OFileDriver*     getDriver()                 const { return m_pDriver; }
             inline sal_Bool         showDeleted()               const { return m_bShowDeleted; }
             inline sal_Bool         isCheckEnabled()            const { return m_bCheckSQL92; }
+            inline bool             isTextEncodingDefaulted()   const { return m_bDefaultTextEncoding; }
 
         public:
             struct GrantAccess
