@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextFrameContext.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1508,9 +1508,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else if( m_xImplContext->ISA( XMLTextFrameContext_Impl ) )
     {
         // the child is a writer frame
-        if( XML_NAMESPACE_SVG == p_nPrefix && IsXMLToken( rLocalName, XML_DESC ) )
+        if( XML_NAMESPACE_SVG == p_nPrefix )
         {
-            pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
+            bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
+            if( IsXMLToken( rLocalName, bOld ? XML_DESC : XML_TITLE ) )
+                pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                             xAttrList, m_sDesc );
         }
         else if( XML_NAMESPACE_DRAW == p_nPrefix )
