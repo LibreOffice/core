@@ -163,8 +163,8 @@ public class CellBinding extends complexlib.ComplexTestCase
     public void checkStringRadioBinding( ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
         // two radio buttons
-        XPropertySet primaryRadio = createRadio( 46, "radio button A", "radio group", "primary" );
-        XPropertySet secondaryRadio = createRadio( 51, "radio button B", "radio group", "secodary" );
+        XPropertySet primaryRadio = createRadio( 46, "radio button A", "radio ref group", "primary" );
+        XPropertySet secondaryRadio = createRadio( 51, "radio button B", "radio ref group", "secodary" );
 
         // give the ref values
         String refValueA = new String( "ref value A" );
