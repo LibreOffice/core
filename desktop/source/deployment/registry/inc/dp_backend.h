@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_backend.h,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,6 +217,9 @@ public:
         throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
     getUpdateInformationURLs() throw (css::uno::RuntimeException);
+
+    virtual css::beans::StringPair SAL_CALL getPublisherInfo() throw (css::uno::RuntimeException);
+
     virtual css::uno::Reference<css::deployment::XPackageTypeInfo> SAL_CALL
     getPackageType() throw (css::uno::RuntimeException);
     virtual void SAL_CALL exportTo(
