@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,8 +48,9 @@ CDEFS+=-DUNICODE
 #CDEFS+=-DWIN32_LEAN_AND_MEAN
 #CDEFS+=-DWIN32
 
-CDEFS+=-Ic:\progra~1\micros~3\windows\v6.0\include
-CDEFS+=-If:\lu\n\msvc8p\atlmfc\include
+.IF "$(COM)"=="GCC"
+CDEFS+=-UWINVER -DWINVER=0x500
+.ENDIF
 
 # --- Resources ----------------------------------------------------
 
