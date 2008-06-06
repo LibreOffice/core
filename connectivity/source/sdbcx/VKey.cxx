@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VKey.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,25 +81,34 @@ sal_Bool SAL_CALL OKey::supportsService( const ::rtl::OUString& _rServiceName ) 
 // -------------------------------------------------------------------------
 OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
             ,   ODescriptor(ODescriptor_BASE::rBHelper,_bCase,sal_True)
+            ,   m_aProps(new KeyProperties())
             ,   m_pColumns(NULL)
 {
 }
 // -------------------------------------------------------------------------
-OKey::OKey( const ::rtl::OUString& _Name,
-            const ::rtl::OUString& _ReferencedTable,
-            sal_Int32       _Type,
-            sal_Int32       _UpdateRule,
-            sal_Int32       _DeleteRule,
-            sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
-                        ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
-                        ,m_ReferencedTable(_ReferencedTable)
-                        ,m_Type(_Type)
-                        ,m_UpdateRule(_UpdateRule)
-                        ,m_DeleteRule(_DeleteRule)
-                        ,m_pColumns(NULL)
+OKey::OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
+: ODescriptor_BASE(m_aMutex)
+ ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+ ,m_aProps(_rProps)
+ ,m_pColumns(NULL)
 {
     m_Name = _Name;
 }
+//OKey::OKey(   const ::rtl::OUString& _Name,
+//          const ::rtl::OUString& _ReferencedTable,
+//          sal_Int32       _Type,
+//          sal_Int32       _UpdateRule,
+//          sal_Int32       _DeleteRule,
+//          sal_Bool _bCase) :  ODescriptor_BASE(m_aMutex)
+//                      ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
+//                      ,m_ReferencedTable(_ReferencedTable)
+//                      ,m_Type(_Type)
+//                      ,m_UpdateRule(_UpdateRule)
+//                      ,m_DeleteRule(_DeleteRule)
+//                        ,m_pColumns(NULL)
+//{
+//  m_Name = _Name;
+//}
 // -------------------------------------------------------------------------
 OKey::~OKey( )
 {
@@ -134,10 +143,10 @@ void OKey::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE), PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_ReferencedTable, ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),                PROPERTY_ID_TYPE,               nAttrib,&m_Type,            ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),      PROPERTY_ID_UPDATERULE,         nAttrib,&m_UpdateRule,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_DeleteRule,      ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE), PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_aProps->m_ReferencedTable,   ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,               nAttrib,&m_aProps->m_Type,          ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),      PROPERTY_ID_UPDATERULE,         nAttrib,&m_aProps->m_UpdateRule,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_aProps->m_DeleteRule,        ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKey::disposing()
