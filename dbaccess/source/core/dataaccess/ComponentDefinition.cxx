@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComponentDefinition.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,12 +97,14 @@ public:
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException)
     {
-        m_pComponent->notifyDataSourceModified();
+        if ( m_pComponent )
+            m_pComponent->notifyDataSourceModified();
     }
     // XEventListener
     virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
     {
     }
+    void clear() { m_pComponent = NULL; }
 };
 DBG_NAME(OComponentDefinition_Impl)
 OComponentDefinition_Impl::OComponentDefinition_Impl()
@@ -122,7 +124,7 @@ DBG_NAME(OComponentDefinition)
 //--------------------------------------------------------------------------
 void OComponentDefinition::registerProperties()
 {
-    m_xColumnPropertyListener = new OColumnPropertyListener(this);
+    m_xColumnPropertyListener = ::comphelper::ImplementationReference<OColumnPropertyListener,XPropertyChangeListener>(new OColumnPropertyListener(this));
     OComponentDefinition_Impl& rDefinition( getDefinition() );
     ODataSettings::registerPropertiesFor( &rDefinition );
 
@@ -215,9 +217,10 @@ Reference< XInterface > OComponentDefinition::Create( const Reference< XComponen
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
-    m_xColumnPropertyListener.clear();
     if ( m_pColumns.get() )
         m_pColumns->disposing();
+    m_xColumnPropertyListener->clear();
+    m_xColumnPropertyListener.dispose();
 }
 // -----------------------------------------------------------------------------
 IPropertyArrayHelper& OComponentDefinition::getInfoHelper()
@@ -267,7 +270,7 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
     if ( aFind != rDefinition.end() )
     {
-        aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener);
+        aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
         return new OTableColumnWrapper( aFind->second, aFind->second, sal_True );
     }
     return new OTableColumn( _rName );
