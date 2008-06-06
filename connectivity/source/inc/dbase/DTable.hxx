@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTable.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,15 +51,16 @@ namespace connectivity
         {
             // der Typ einer dBase datei wird mit dem ersten Byte bestimmt
         public:
-            enum DBFType  { dBaseIII = 0x03,
-                            dBaseIV  = 0x04,
-                            dBaseV   = 0x05,
-                            dBaseFS  = 0x43,
-                            dBaseFSMemo  = 0xB3,
-                            dBaseIIIMemo = 0x83,
-                            dBaseIVMemo = 0x8B,
-                            dBaseIVMemoSQL = 0x8E,
-                            FoxProMemo = 0xF5
+            enum DBFType  { dBaseIII         = 0x03,
+                            dBaseIV          = 0x04,
+                            dBaseV           = 0x05,
+                            VisualFoxPro     = 0x30,
+                            dBaseFS          = 0x43,
+                            dBaseFSMemo      = 0xB3,
+                            dBaseIIIMemo     = 0x83,
+                            dBaseIVMemo      = 0x8B,
+                            dBaseIVMemoSQL   = 0x8E,
+                            FoxProMemo       = 0xF5
                           };
             enum DBFMemoType {  MemodBaseIII = 0,
                                 MemodBaseIV,
@@ -97,6 +98,7 @@ namespace connectivity
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
+            rtl_TextEncoding m_eEncoding;
             sal_Bool        m_bWriteableMemo;
 
             void alterColumn(sal_Int32 index,
