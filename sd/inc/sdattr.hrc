@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdattr.hrc,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -238,5 +238,11 @@
 #define ATTR_PACKNGO_SPANNING           ATTR_PACKNGO_START + 2
 #define ATTR_PACKNGO_MEDIUMSIZE         ATTR_PACKNGO_START + 3
 #define ATTR_PACKNGO_END                ATTR_PACKNGO_MEDIUMSIZE
+
+// paragraph numbering attributes
+#define ATTR_PARANUMBERING_START        ATTR_PACKNGO_MEDIUMSIZE + 1
+#define ATTR_NUMBER_NEWSTART            ATTR_PARANUMBERING_START
+#define ATTR_NUMBER_NEWSTART_AT         ATTR_PARANUMBERING_START + 1
+#define ATTR_PARANUMBERING_END          ATTR_NUMBER_NEWSTART_AT
 
 #endif // _SDATTR_HRC
