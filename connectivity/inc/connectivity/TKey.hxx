@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TKey.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +44,9 @@ namespace connectivity
         virtual void refreshColumns();
     public:
         OTableKeyHelper(    OTableHelper* _pTable);
-        OTableKeyHelper(    OTableHelper* _pTable,
-                const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _ReferencedTable,
-                sal_Int32       _Type,
-                sal_Int32       _UpdateRule,
-                sal_Int32       _DeleteRule
+        OTableKeyHelper(    OTableHelper* _pTable
+                ,const ::rtl::OUString& _Name
+                ,const sdbcx::TKeyProperties& _rProps
             );
         inline OTableHelper* getTable() const { return m_pTable; }
     };
