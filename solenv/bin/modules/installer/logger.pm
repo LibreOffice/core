@@ -8,7 +8,7 @@
 #
 # $RCSfile: logger.pm,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -264,7 +264,8 @@ sub print_message
 {
     my $message = shift;
     chomp $message;
-    print "$message\n" if ( ! $installer::globals::quiet );
+    my $force = shift || 0;
+    print "$message\n" if ( $force || ! $installer::globals::quiet );
     return;
 }
 
