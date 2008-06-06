@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,7 +52,6 @@ SLOFILES=	\
         $(SLO)$/configunoreg.obj	\
         $(SLO)$/serviceinfohelper.obj \
         $(SLO)$/bootstrapcontext.obj	\
-        $(SLO)$/attributelist.obj	\
         $(SLO)$/anypair.obj	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/mergechange.obj \
