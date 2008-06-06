@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdmod1.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -342,9 +342,12 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
                         pHelper->RequestView(
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
-                        pHelper->RunOnConfigurationEvent(
-                            ::rtl::OUString::createFromAscii("ConfigurationUpdateEnd"),
-                                OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
+
+                        pHelper->RunOnResourceActivation(
+                            FrameworkHelper::CreateResourceId(
+                            FrameworkHelper::msOutlineViewURL,
+                            FrameworkHelper::msCenterPaneURL),
+                            OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
                     }
                 }
             }
@@ -1002,8 +1005,7 @@ void OutlineToImpressFinalizer::operator() (bool)
 {
     // Fetch the new outline view shell.
     ::sd::OutlineViewShell* pOutlineShell
-        = dynamic_cast<sd::OutlineViewShell*>(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+        = dynamic_cast<sd::OutlineViewShell*>(FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
 
     if (pOutlineShell != NULL && mpStream.get() != NULL)
     {
@@ -1012,12 +1014,14 @@ void OutlineToImpressFinalizer::operator() (bool)
         // have any information about a BaseURL!
         if ( pOutlineShell->Read(*mpStream, String(), EE_FORMAT_RTF) == 0 )
         {
+/*
             sd::OutlineViewPageChangesGuard aGuard( pView );
 
             // Remove the first empty pages
             USHORT nPageCount = mrDocument.GetPageCount();
             mrDocument.RemovePage( --nPageCount );  // notes page
             mrDocument.RemovePage( --nPageCount );  // standard page
+*/
         }
 
         // Call UpdatePreview once for every slide to resync the
