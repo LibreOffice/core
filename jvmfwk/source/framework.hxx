@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: framework.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,6 @@ public:
 
 
     CJavaInfo();
-    explicit CJavaInfo(const ::JavaInfo* pInfo);
     CJavaInfo(const CJavaInfo &);
     ~CJavaInfo();
     CJavaInfo& operator =(const ::JavaInfo* info);
@@ -110,10 +109,7 @@ public:
 
     rtl::OUString getVendor() const;
     rtl::OUString getLocation() const;
-    rtl::OUString getVersion() const;
     sal_uInt64 getFeatures() const;
-    sal_uInt64 getRequirements() const;
-    rtl::ByteSequence getVendorData() const;
 };
 
 class FrameworkException
