@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prhdlfac.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -412,8 +412,8 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_TEXT_HIDDEN_AS_DISPLAY:
             pPropHdl = new XMLNamedBoolPropertyHdl(
-                GetXMLToken(XML_TRUE),
-                GetXMLToken(XML_NONE) );
+                GetXMLToken(XML_NONE),
+                GetXMLToken(XML_TRUE) );
             break;
         case XML_TYPE_STYLENAME :
             pPropHdl = new XMLStyleNamePropHdl;
