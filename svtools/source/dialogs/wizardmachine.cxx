@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wizardmachine.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -672,6 +672,17 @@ namespace svt
     {
         OWizardPage* pPage = dynamic_cast< OWizardPage* >( _pCurrentPage );
         return pPage;
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardMachine::getStateHistory( ::std::vector< WizardState >& _out_rHistory )
+    {
+        ::std::stack< WizardState > aHistoryCopy( m_pImpl->aStateHistory );
+        while ( !aHistoryCopy.empty() )
+        {
+            _out_rHistory.push_back( aHistoryCopy.top() );
+            aHistoryCopy.pop();
+        }
     }
 
     //---------------------------------------------------------------------
