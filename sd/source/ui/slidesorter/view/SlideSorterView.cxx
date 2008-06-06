@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlideSorterView.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +61,7 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 
+#include <svtools/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xoutx.hxx>
@@ -109,6 +110,7 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
 
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
+    maPageModel.GetItemPool().FreezeIdRanges();
 
     LocalModelHasChanged();
 }
