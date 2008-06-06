@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.17 $
+# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,12 +36,14 @@ TARGET2=$(TARGET)ui
 # USE_DEFFILE=TRUE
 GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
-# ???
-no_common_build_zip=true
 
 # --- Settings ----------------------------------
-.INCLUDE :  settings.mk
+.INCLUDE :  makefile.pmk
+
 # ------------------------------------------------------------------
+# calready set in util$/makefile.pmk
+# EXTENSIONNAME:=sun-report-builder
+EXTENSION_ZIPNAME:=sun-report-builder
 
 # --- reportdesign core (rpt) -----------------------------------
 
@@ -200,111 +202,61 @@ DEF3NAME=$(SHL3TARGET)
 
 .IF "$(SOLAR_JAVA)"!=""
 
-ZIP1TARGET=sun-report-builder
-ZIP1FLAGS=-r
-ZIP1DIR=$(MISC)$/zip
-ZIP1LIST=*
-ZIP1EXT=.oxt
-
-XMLFILES := $(ZIP1DIR)$/description.xml \
-            $(ZIP1DIR)$/META-INF$/manifest.xml
+XMLFILES = $(EXTENSIONDIR)$/description.xml \
+            $(EXTENSIONDIR)$/META-INF$/manifest.xml
             
-XCU_FILES := $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
-             $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu
+COMPONENT_MERGED_XCU= \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
+            $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ReportDesign.xcu
 
-.IF "$(WITH_LANG)"!=""
-XCU_TMP := $(MISC)$/merge$/org$/openoffice$/Office$/DataAccess.xcu
-.ELSE //"$(WITH_LANG)" != ""
-XCU_TMP := $(MISC)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu
-.ENDIF //"$(WITH_LANG)" != ""
+COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
+            $(EXTENSIONDIR)$/readme_en-US.html \
+            $(EXTENSIONDIR)$/readme_en-US.txt
 
-HTMLFILES := $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html \
-            $(ZIP1DIR)$/readme_en-US.html \
-            $(ZIP1DIR)$/readme_en-US.txt
+COMPONENT_JARFILES = \
+    $(EXTENSIONDIR)$/sun-report-builder.jar
 
-.IF "$(GUI)"!="WNT"
-TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/LICENSE_$i)
-LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,LICENSE_, $(i:f))" license-id="$(subst,LICENSE_, $(i:f))" />)
-.ELSE   # "$(GUI)"!="WNT"
-TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/license_$i.txt)
-LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" license-id="$(subst,.txt, $(subst,license_, $(i:f)))" />)
-.ENDIF  # "$(GUI)"!="WNT"
+# .jar files from solver
+COMPONENT_EXTJARFILES = \
+    $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar							\
+    $(EXTENSIONDIR)$/jcommon-1.0.10.jar										\
+    $(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar							\
+    $(EXTENSIONDIR)$/libfonts-0.3.3.jar										\
+    $(EXTENSIONDIR)$/libformula-0.1.14.jar									\
+    $(EXTENSIONDIR)$/liblayout-0.2.8.jar										\
+    $(EXTENSIONDIR)$/libloader-0.3.6.jar										\
+    $(EXTENSIONDIR)$/librepository-0.1.4.jar									\
+    $(EXTENSIONDIR)$/libxml-0.9.9.jar										\
+    $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
+    $(EXTENSIONDIR)$/sac.jar
 
-REPORTJARFILES := \
-    $(ZIP1DIR)$/flute-1.3-jfree-20061107.jar							\
-    $(ZIP1DIR)$/jcommon-1.0.10.jar										\
-    $(ZIP1DIR)$/jcommon-serializer-0.2.0.jar							\
-    $(ZIP1DIR)$/libfonts-0.3.3.jar										\
-    $(ZIP1DIR)$/libformula-0.1.14.jar									\
-    $(ZIP1DIR)$/liblayout-0.2.8.jar										\
-    $(ZIP1DIR)$/libloader-0.3.6.jar										\
-    $(ZIP1DIR)$/librepository-0.1.4.jar									\
-    $(ZIP1DIR)$/libxml-0.9.9.jar										\
-    $(ZIP1DIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
-    $(ZIP1DIR)$/sac.jar													\
-    $(ZIP1DIR)$/sun-report-builder.jar
+COMPONENT_MANIFEST_GENERIC:=TRUE
+COMPONENT_MANIFEST_SEARCHDIR:=registry
+
+# make sure to add your custom files here
+EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES)
 
 # --- Targets ----------------------------------
+
+.INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
-
-.IF "$(ZIP1TARGETN)"!=""
-$(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPORTJARFILES)
-.ENDIF          # "$(ZIP1TARGETN)"!="
-
-$(MISC)$/update_report.flag : $(XCU_FILES)
-    $(TOUCH) $@
-
-$(ZIP1DIR)$/description.xml : pre.xml post.xml
-    @@-$(MKDIRHIER) $(@:d)
-    @@-$(RM) $(ZIP1DIR)$/description.xml
-    $(TYPE) pre.xml > $@
-    $(TYPE) $(mktmp  $(LICLINES)) >> $@
-    $(TYPE) post.xml >> $@
-
-$(ZIP1DIR)$/registration$/license_%.txt : $(SOLARBINDIR)$/osl$/license_%.txt
-     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(ZIP1DIR)$/registration$/LICENSE_% : $(SOLARBINDIR)$/osl$/LICENSE_%
-     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(ZIP1DIR)$/%.xml : %.xml
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/%.xcu : $(MISC)$/registry$/data$/org$/openoffice$/Office$/%.xcu
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(ZIP1DIR)$/merge$/org$/openoffice$/Office$/%.xcu : $(XCU_TMP)
-    @@-$(MKDIRHIER) $(@:d)
-    echo $(XCU_TMP)
-    $(COPY) $< $@
+.INCLUDE : extension_post.mk
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-$(ZIP1DIR)$/%.jar : $(JFREEREPORT_JAR:d:d)$/%.jar
+$(EXTENSIONDIR)$/%.jar : $(JFREEREPORT_JAR:d:d)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .ELSE
-$(ZIP1DIR)$/%.jar : $(SOLARBINDIR)$/%.jar
+$(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .ENDIF
 
-$(ZIP1DIR)$/%.jar : $(CLASSDIR)$/%.jar
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@    
-
-$(ZIP1DIR)$/META-INF$/manifest.xml : manifest.xml $(MISC)$/update_report.flag
-    @@-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)$/bin$/makemani.pl $(PRJ)$/util$/manifest.xml $(ZIP1DIR) registry $(@:d:d)
-
-$(ZIP1DIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
+$(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
      @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
+$(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
