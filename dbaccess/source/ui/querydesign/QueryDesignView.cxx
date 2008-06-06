@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryDesignView.cxx,v $
- * $Revision: 1.92 $
+ * $Revision: 1.93 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1533,7 +1533,11 @@ namespace
 
                 OTableFieldDescRef aDragLeft = new OTableFieldDesc();
                 if ( eOk == ( eErrorCode = FillDragInfo(_pView,pValueExp,aDragLeft) ))
+                {
+                    if ( bHaving )
+                        aDragLeft->SetGroupBy(sal_True);
                     _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
+                }
             }
             else if(SQL_ISRULEOR2(pValueExp,general_set_fct ,set_fct_spec)          ||
                             SQL_ISRULEOR2(pValueExp,position_exp,extract_exp)   ||
@@ -1572,7 +1576,11 @@ namespace
                 ::rtl::OUString sCondition = ParseCondition(pController,pCondition,sDecimal,aLocale,1);
                 OTableFieldDescRef  aDragLeft = new OTableFieldDesc();
                 if ( eOk == ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft)) )
+                {
+                    if ( bHaving )
+                        aDragLeft->SetGroupBy(sal_True);
                     _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
+                }
             }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
