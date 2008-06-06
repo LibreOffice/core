@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: HelpIds.hrc,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,7 @@
 #define CHART_HELPIDS_HRC
 
 #include <svtools/solar.hrc>
-//next is 102
+//next is 115
 
 //see old chart: schhids.h
 
@@ -163,6 +163,21 @@
 #define HID_SCH_TRENDLINE_RB_POWER        (HID_SCH_START +  99)
 #define HID_SCH_TRENDLINE_SHOW_EQUATION   (HID_SCH_START + 100)
 #define HID_SCH_TRENDLINE_SHOW_R_SQUARED  (HID_SCH_START + 101)
+
+#define HID_SCH_STATISTIK_FUNCTION                  (HID_SCH_START + 102)
+#define HID_SCH_STATISTIK_RANGE                     (HID_SCH_START + 103)
+#define HID_SCH_STATISTIK_FUNCTION_LB               (HID_SCH_START + 104)
+#define HID_SCH_STATISTIK_POSITIVE_VALUE            (HID_SCH_START + 105)
+#define HID_SCH_STATISTIK_POSITIVE_RANGE            (HID_SCH_START + 106)
+#define HID_SCH_STATISTIK_POSITIVE_RANGE_CHOOSER    (HID_SCH_START + 107)
+#define HID_SCH_STATISTIK_NEGATIVE_VALUE            (HID_SCH_START + 108)
+#define HID_SCH_STATISTIK_NEGATIVE_RANGE            (HID_SCH_START + 109)
+#define HID_SCH_STATISTIK_NEGATIVE_RANGE_CHOOSER    (HID_SCH_START + 110)
+#define HID_SCH_STATISTIK_SAME_FOR_BOTH             (HID_SCH_START + 111)
+#define HID_SCH_STATISTIK_SHOW_BOTH                 (HID_SCH_START + 112)
+#define HID_SCH_STATISTIK_SHOW_POSITIVE             (HID_SCH_START + 113)
+#define HID_SCH_STATISTIK_SHOW_NEGATIVE             (HID_SCH_START + 114)
+
 
 // HID_SCH_START should be 63280 (checked 25.Nov 2002)
 
