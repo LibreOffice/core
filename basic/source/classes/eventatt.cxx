@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eventatt.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +41,7 @@
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
@@ -417,8 +418,8 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
         SbUnoObject* pDlgLibContUnoObj = (SbUnoObject*)(SbxBase*)pDlgLibContVar;
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
 
-        Reference< XNameAccess > xDlgLibContNameAccess;
-        aDlgLibContAny >>= xDlgLibContNameAccess;
+        Reference< XLibraryContainer > xDlgLibContNameAccess( aDlgLibContAny, UNO_QUERY );
+        OSL_ENSURE( xDlgLibContNameAccess.is(), "implFindDialogLibForDialog: no lib container for the given dialog!" );
         if( xDlgLibContNameAccess.is() )
         {
             Sequence< OUString > aLibNames = xDlgLibContNameAccess->getElementNames();
@@ -427,10 +428,14 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 
             for( sal_Int32 iLib = 0 ; iLib < nLibNameCount ; iLib++ )
             {
+                if ( !xDlgLibContNameAccess->isLibraryLoaded( pLibNames[ iLib ] ) )
+                    // if the library isn't loaded, then the dialog cannot originate from this lib
+                    continue;
+
                 Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
 
-                Reference< XNameAccess > xDlgLibNameAccess;
-                aDlgLibAny >>= xDlgLibNameAccess;
+                Reference< XNameAccess > xDlgLibNameAccess( aDlgLibAny, UNO_QUERY );
+                OSL_ENSURE( xDlgLibNameAccess.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
                 if( xDlgLibNameAccess.is() )
                 {
                     Sequence< OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
