@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,12 +47,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0_out.def testinput.pdf
     $(BIN)$/xpdfimport -f $(MISC)$/binary_0_out testinput.pdf > $(MISC)$/text_0_out
-    diff $(MISC)$/binary_0_out binary_0_out.def
-    diff $(MISC)$/text_0_out text_0_out.def
+    diff --strip-trailing-cr $(MISC)$/binary_0_out binary_0_out.def
+    diff --strip-trailing-cr $(MISC)$/text_0_out text_0_out.def
     $(TOUCH) $@
 
 $(MISC)$/test_1_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_1_out.def text_1_out.def book.pdf
     $(BIN)$/xpdfimport -f $(MISC)$/binary_1_out book.pdf > $(MISC)$/text_1_out
-    diff $(MISC)$/binary_1_out binary_1_out.def
-    diff $(MISC)$/text_1_out text_1_out.def
+    diff --strip-trailing-cr $(MISC)$/binary_1_out binary_1_out.def
+    diff --strip-trailing-cr $(MISC)$/text_1_out text_1_out.def
     $(TOUCH) $@
