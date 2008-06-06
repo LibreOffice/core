@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc4.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,8 +289,8 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetSymbol( 0x25CF );                    // Punkt
     rISet.Put(aBulletItem);
 
-    SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
-    rISet.Put(aBulletStateItem);
+//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
+//  rISet.Put(aBulletStateItem);
 
     // Neues BulletItem
     pSSPool->PutNumBulletItem( pSheet, aBulletFont );
@@ -395,11 +395,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     aLRSpaceItem.SetTxtFirstLineOfst(600);      // Erstzeileneinzug 6mm, rechts 0
     pISet->Put(aLRSpaceItem);
 
+/* #i35937#
     // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
     SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) pISet->Get(EE_PARA_NUMBULLET) );
     EditEngine::ImportBulletItem( aNumBullet, 0, NULL, &aLRSpaceItem );
     pISet->Put( aNumBullet );
-
+*/
     // ---- Titel ---------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE));
@@ -458,10 +459,13 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
     pISet->Put( aLRSpItem );    // Erstzeileneinzug 0 mm, links und rechts 2 mm
+
+/* #i35937#
     // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
     SvxNumBulletItem aNmBullet( (const SvxNumBulletItem&) pISet->Get(EE_PARA_NUMBULLET) );
     EditEngine::ImportBulletItem( aNmBullet, 0, NULL, &aLRSpItem );
     pISet->Put( aNmBullet );
+*/
 
     pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Absatzrand oben/unten 1 mm
 
@@ -991,7 +995,6 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             ((SdrTextObj*) pObj)->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
             nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
-            pOutl->SetMinDepth(1);
         }
         pOutl->Init( nOutlMode );
 
@@ -1400,8 +1403,8 @@ void SdDrawDocument::SetTextDefaults() const
     pItemPool->SetPoolDefaultItem( aBulletItem );
 
     // Bullets nicht sichtbar
-    SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
-    pItemPool->SetPoolDefaultItem( aBulletStateItem );
+//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
+//  pItemPool->SetPoolDefaultItem( aBulletStateItem );
 
     // Neues BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
@@ -1412,14 +1415,14 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
-    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
+    SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10, FALSE);
 
     aNumberFormat.SetLSpace( 0 );
     aNumberFormat.SetAbsLSpace( 0 );
     aNumberFormat.SetFirstLineOffset( 0 );
     aNumRule.SetLevel( 0, aNumberFormat );
 
-    for( USHORT i = 1; i < 10; i++ )
+    for( USHORT i = 1; i < aNumRule.GetLevelCount(); i++ )
     {
         const short nLSpace = (i + 1) * 600;
         aNumberFormat.SetLSpace(nLSpace);
