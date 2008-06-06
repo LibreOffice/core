@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationTableView.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,7 +259,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
     // die Anzahl der PKey-Felder in der Quelle
 
-    ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetTable(),KeyType::PRIMARY);
+    ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetData()->getKeys(),KeyType::PRIMARY);
     bool bAskUser = aPkeys.size() == 1 && Reference< XIndexAccess>(aPkeys[0],UNO_QUERY)->getCount() > 1;
 
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
