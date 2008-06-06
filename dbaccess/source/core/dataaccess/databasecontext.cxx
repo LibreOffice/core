@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasecontext.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,7 +341,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
         Reference< XModel > xModel = pExistent->createNewModel_deliverOwnership();
         DBG_ASSERT( xModel.is(), "ODatabaseContext::loadObjectFromURL: no model?" );
-        // calls registerPrivate in attachResource
+
         xModel->attachResource( _sURL, aArgs.getPropertyValues() );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
@@ -349,7 +349,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
     setTransientProperties( _sURL, *pExistent );
 
-    return pExistent->getDataSource();
+    return pExistent->getDataSource().get();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
