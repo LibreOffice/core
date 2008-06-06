@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VKey.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,12 +41,31 @@
 #include "connectivity/sdbcx/VDescriptor.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace connectivity
 {
     namespace sdbcx
     {
 
+        struct KeyProperties
+        {
+            ::rtl::OUString m_ReferencedTable;
+            sal_Int32       m_Type;
+            sal_Int32       m_UpdateRule;
+            sal_Int32       m_DeleteRule;
+            KeyProperties(const ::rtl::OUString& _ReferencedTable,
+                          sal_Int32     _Type,
+                          sal_Int32     _UpdateRule,
+                          sal_Int32     _DeleteRule)
+                          :m_ReferencedTable(_ReferencedTable),
+                          m_Type(_Type),
+                          m_UpdateRule(_UpdateRule),
+                          m_DeleteRule(_DeleteRule)
+            {}
+            KeyProperties():m_Type(0),m_UpdateRule(0),m_DeleteRule(0){}
+        };
+        typedef ::boost::shared_ptr< KeyProperties > TKeyProperties;
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 
@@ -58,11 +77,7 @@ namespace connectivity
                                 public OKey_BASE
         {
         protected:
-            ::rtl::OUString m_ReferencedTable;
-            sal_Int32       m_Type;
-            sal_Int32       m_UpdateRule;
-            sal_Int32       m_DeleteRule;
-
+            TKeyProperties   m_aProps;
             OCollection*    m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
@@ -72,12 +87,13 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OKey(sal_Bool _bCase);
-            OKey(   const ::rtl::OUString& _Name,
+            OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase);
+            /*OKey( const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _ReferencedTable,
                     sal_Int32       _Type,
                     sal_Int32       _UpdateRule,
                     sal_Int32       _DeleteRule,
-                    sal_Bool _bCase);
+                    sal_Bool _bCase);*/
 
             virtual ~OKey( );
 
