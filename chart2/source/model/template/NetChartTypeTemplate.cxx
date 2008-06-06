@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NetChartTypeTemplate.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,6 +95,7 @@ void SAL_CALL NetChartTypeTemplate::applyStyle(
 
         DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
+        DataSeriesHelper::makeLinesThickOrThin( xProp, true );
     }
     catch( uno::Exception & ex )
     {
