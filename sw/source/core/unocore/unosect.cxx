@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosect.cxx,v $
- * $Revision: 1.59 $
+ * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -980,7 +980,7 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                     case WID_SECT_DDE_AUTOUPDATE:
                     {
                         // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                        if ( pSect->IsLinkType() && pSect->IsConnected() )
+                        if ( pSect && pSect->IsLinkType() && pSect->IsConnected() )  // lijian i73247
                         {
                             sal_Bool bTemp =
                                 (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
@@ -1089,6 +1089,8 @@ uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
                     case FN_UNO_REDLINE_NODE_START:
                     case FN_UNO_REDLINE_NODE_END:
                     {
+                        if(!pFmt)
+                            break;      // lijian i73247
                         SwNode* pSectNode = pFmt->GetSectionNode();
                         if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
                             pSectNode = pSectNode->EndOfSectionNode();
