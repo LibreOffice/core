@@ -8,7 +8,7 @@
 #
 # $RCSfile: pre2par.pl,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,7 +45,6 @@ use pre2par::work;
 
 pre2par::parameter::getparameter();
 pre2par::parameter::control_parameter();
-pre2par::parameter::outputparameter();
 
 pre2par::directory::check_directory($pre2par::globals::parfilename);
 
