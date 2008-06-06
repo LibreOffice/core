@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuprobjs.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,18 +101,26 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
     BOOL    bUnique = FALSE;
-    USHORT  nDepth, nTmp;
+    sal_Int16   nDepth, nTmp;
     OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) mpWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
     nDepth = pOutl->GetDepth((USHORT)pOutl->GetAbsPos( pPara ) );
+    bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE );
+
     while( pPara )
     {
         nTmp = pOutl->GetDepth((USHORT) pOutl->GetAbsPos( pPara ) );
 
         if( nDepth != nTmp )
+        {
+            bUnique = FALSE;
+            break;
+        }
+
+        if( pPara->HasFlag( PARAFLAG_ISPAGE ) != bPage )
         {
             bUnique = FALSE;
             break;
@@ -129,7 +137,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
         USHORT nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
         PresentationObjects ePO;
 
-        if( nDepth == 0 )
+        if( bPage )
         {
             ePO = PO_TITLE;
             String aStr(SdResId( STR_LAYOUT_TITLE ));
