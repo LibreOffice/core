@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmergechildwindow.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,13 +275,28 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
 /*-- 23.06.2004 12:30:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage >& /*xMessage*/ )
+void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage )
 {
-//DBG_ERROR("SwMailDispatcherListener_Impl::DeleteAttachments not implemented")
-//    uno::Sequence< mail::MailAttachmentDescriptor > aAttachments = xMessage->getAttachments();
-//    for(sal_Int32 nFile = 0; nFile < aAttachments.getLength(); ++nFile)
-//        if(aAttachments[nFile].FileUrl.getLength())
-//            SWUnoHelper::UCB_DeleteFile( aAttachments[nFile].FileUrl );
+    uno::Sequence< mail::MailAttachment > aAttachments = xMessage->getAttachments();
+
+    for(sal_Int32 nFile = 0; nFile < aAttachments.getLength(); ++nFile)
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xTransferableProperties( aAttachments[nFile].Data, uno::UNO_QUERY_THROW);
+            if( xTransferableProperties.is() )
+            {
+                ::rtl::OUString sURL;
+                xTransferableProperties->getPropertyValue( ::rtl::OUString::createFromAscii("URL") ) >>= sURL;
+                if(sURL.getLength())
+                    SWUnoHelper::UCB_DeleteFile( sURL );
+            }
+        }
+        catch( const uno::Exception& rEx )
+        {
+            (void)rEx;
+        }
+    }
 }
 /*-- 07.07.2004 13:45:51---------------------------------------------------
 
