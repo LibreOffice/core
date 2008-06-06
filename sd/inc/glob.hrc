@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: glob.hrc,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,5 +150,6 @@
 
 #define DLG_TABLEDESIGNPANE                     RID_GLOB_START+224
 #define STR_TABLEOBJECTBARSHELL                 RID_GLOB_START+225
+#define RID_TABPAGE_PARA_NUMBERING              RID_GLOB_START+226
 
 
