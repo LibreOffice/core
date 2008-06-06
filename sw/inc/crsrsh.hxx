@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.hxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -351,6 +351,11 @@ public:
     void CrsrToBlockCrsr();
     // leave block mode, change block cursor into normal cursor
     void BlockCrsrToCrsr();
+
+    // SelAll() selects the document body content
+    // if ExtendedSelect() is called afterwards, the whole nodes array is selected
+    // only for usage in special cases allowed!
+    void ExtendedSelectAll();
 
     SwPaM* GetCrsr( BOOL bMakeTblCrsr = TRUE ) const;
     inline SwCursor* GetSwCrsr( BOOL bMakeTblCrsr = TRUE ) const;
