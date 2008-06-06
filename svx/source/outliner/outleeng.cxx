@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outleeng.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <outliner.hrc>
 #include <svtools/itemset.hxx>
 #include <svx/eeitem.hxx>
+#include "editstat.hxx"
 
 OutlinerEditEng::OutlinerEditEng( Outliner* pEngOwner, SfxItemPool* pPool )
  : EditEngine( pPool )
@@ -50,10 +51,24 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::PaintingFirstLine( USHORT nPara, const Point& rStartPos, long /*nBaseLineY*/, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
+void OutlinerEditEng::PaintingFirstLine( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
 {
+    if( GetControlWord() && EE_CNTRL_OUTLINER )
+    {
+        PaintFirstLineInfo aInfo( nPara, rStartPos, nBaseLineY, rOrigin, nOrientation, pOutDev );
+        pOwner->maPaintFirstLineHdl.Call( &aInfo );
+    }
     pOwner->PaintBullet( nPara, rStartPos, rOrigin, nOrientation, pOutDev );
 }
+
+const SvxNumberFormat* OutlinerEditEng::GetNumberFormat( USHORT nPara ) const
+{
+    const SvxNumberFormat* pFmt = NULL;
+    if (pOwner)
+        pFmt = pOwner->GetNumberFormat( nPara );
+    return pFmt;
+}
+
 
 Rectangle OutlinerEditEng::GetBulletArea( USHORT nPara )
 {
@@ -90,13 +105,6 @@ void OutlinerEditEng::ParaAttribsChanged( USHORT nPara )
     pOwner->ParaAttribsChanged( nPara );
 }
 
-void OutlinerEditEng::ParagraphHeightChanged( USHORT nPara )
-{
-    pOwner->ParagraphHeightChanged( nPara );
-
-    EditEngine::ParagraphHeightChanged( nPara );
-}
-
 BOOL OutlinerEditEng::SpellNextDocument()
 {
     return pOwner->SpellNextDocument();
@@ -109,7 +117,6 @@ BOOL OutlinerEditEng::ConvertNextDocument()
 
 XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
 {
-#ifndef SVX_LIGHT
     switch( nUndoId )
     {
         case OLUNDO_DEPTH:
@@ -130,10 +137,6 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
         default:
             return EditEngine::GetUndoComment( nUndoId );
     }
-#else // SVX_LIGHT
-    XubString aString;
-    return aString;
-#endif
 }
 
 // #101498#
@@ -170,3 +173,22 @@ XubString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, USHORT nP
 {
     return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
+
+void OutlinerEditEng::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
+{
+    Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+    if( pPara )
+    {
+        if ( !IsInUndo() && IsUndoEnabled() )
+            pOwner->UndoActionStart( OLUNDO_ATTR );
+
+        EditEngine::SetParaAttribs( (USHORT)nPara, rSet );
+
+        pOwner->ImplCheckNumBulletItem( (USHORT)nPara );
+        pOwner->ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pOwner->pParaList->GetParagraphCount()-1) );
+
+        if ( !IsInUndo() && IsUndoEnabled() )
+            pOwner->UndoActionEnd( OLUNDO_ATTR );
+    }
+}
+
