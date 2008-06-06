@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.184 $
+ * $Revision: 1.185 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2980,6 +2980,14 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
     SetToggleAttr( nI, bOn );
 }
 
+void SwWW8ImplReader::Read_Bidi(USHORT, const BYTE*, short nLen)
+{
+    if (nLen > 0)
+        bBidi = true;
+    else
+        bBidi = false;
+}
+
 // Read_BoldUsw for BiDi Italic, Bold
 void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
     short nLen)
@@ -5759,7 +5767,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //1 or 0;bit;
         {0x2859, &SwWW8ImplReader::Read_TxtAnim},    //"sprmCSfxText" chp.sfxtText;
                                                      //text animation;byte;
-        {0x085A, 0},                                 //"sprmCFBiDi"
+        {0x085A, &SwWW8ImplReader::Read_Bidi},                                 //"sprmCFBiDi"
         {0x085B, 0},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
