@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: prltempl.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,11 +129,11 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                     aInputSet.Put( *pItem );
         }
 
+/* #i35937#
         // Jetzt noch das mapping von 10er auf 9er und des lrspace.
         if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE) )
         {
             SdBulletMapper::PreMapNumBulletForDialog( aInputSet );
-
             SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET);
             SvxNumRule* pRule = pBulletItem->GetNumRule();
             if(pRule)
@@ -150,6 +150,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                 aInputSet.Put(aLRItem);
             }
         }
+*/
 
         // gewaehlte Ebene im Dialog vorselektieren
         aInputSet.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, 1<<GetOutlineLevel()));
@@ -386,6 +387,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
 
+/* #i35937#
         // Wenn das lrspace geaendert wurde muss die Aenderung in das
         // Bullet Item gemapt werden...
         if( SFX_ITEM_SET == pOutSet->GetItemState( EE_PARA_LRSPACE, FALSE ) )
@@ -415,6 +417,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
         }
 
         SdBulletMapper::PostMapNumBulletForDialog( *pOutSet );
+*/
 
         return pOutSet;
     }
