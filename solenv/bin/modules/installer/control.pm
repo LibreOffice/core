@@ -8,7 +8,7 @@
 #
 # $RCSfile: control.pm,v $
 #
-# $Revision: 1.40 $
+# $Revision: 1.41 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -350,10 +350,11 @@ sub check_logfile
 
     installer::logger::include_header_into_logfile("Summary:");
 
+    my $force = 1; # print this message even in 'quiet' mode
     for ( my $i = 0; $i <= $#output; $i++ )
     {
         my $line = "$output[$i]";
-        installer::logger::print_message( "$line" );
+        installer::logger::print_message( "$line", $force );
         push( @installer::globals::logfileinfo, $line);
         push( @installer::globals::errorlogfileinfo, $line);
     }
