@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TColumnsHelper.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,7 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
     aSql += ::rtl::OUString::createFromAscii(" ADD ");
-    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection());
+    aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )
