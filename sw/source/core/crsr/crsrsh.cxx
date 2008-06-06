@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.cxx,v $
- * $Revision: 1.72 $
+ * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -555,6 +555,17 @@ BOOL SwCrsrShell::SttEndDoc( BOOL bStt )
     return bRet;
 }
 
+void SwCrsrShell::ExtendedSelectAll()
+{
+    SwNodes& rNodes = GetDoc()->GetNodes();
+    SwPosition* pPos = pCurCrsr->GetPoint();
+    pPos->nNode = rNodes.GetEndOfPostIts();
+    pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
+    pPos = pCurCrsr->GetMark();
+    pPos->nNode = rNodes.GetEndOfContent();
+    SwCntntNode* pCNd = rNodes.GoPrevious( &pPos->nNode );
+    pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
+}
 
 
 BOOL SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
