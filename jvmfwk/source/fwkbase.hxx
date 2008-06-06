@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkbase.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,14 +132,6 @@ JFW_MODE getMode();
    @throws FrameworkException
  */
 ::rtl::OString getSharedSettingsPath();
-
-/* Determines the application base which is either the BaseInstallation
-   (see getBaseInstallation) or the directory where the executable is resides.
-
-   This function always returns a URL or throws an exception.
-*/
-::rtl::OUString getApplicationBase();
-
 
 /* returns a valid string or throws an exception.
    @throws FrameworkException
