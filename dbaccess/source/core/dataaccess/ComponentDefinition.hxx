@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComponentDefinition.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +70,7 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
 #endif
+#include <comphelper/implementationreference.hxx>
 
 #include <memory>
 //........................................................................
@@ -116,7 +117,7 @@ namespace dbaccess
         }
     };
 
-
+class OColumnPropertyListener;
 //=========================================================================
 //= OComponentDefinition - a database "document" which describes a query
 //=========================================================================
@@ -130,7 +131,7 @@ class OComponentDefinition  :public OContentHelper
 
 protected:
     ::std::auto_ptr< OColumns >     m_pColumns;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>
+    ::comphelper::ImplementationReference< OColumnPropertyListener,::com::sun::star::beans::XPropertyChangeListener>
                                     m_xColumnPropertyListener;
     sal_Bool                        m_bTable;
 
