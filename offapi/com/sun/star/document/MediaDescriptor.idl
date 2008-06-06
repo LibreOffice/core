@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MediaDescriptor.idl,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -554,6 +554,22 @@ published service MediaDescriptor
      */
     [optional,property] short UpdateDocMode;
 
+    //-------------------------------------------------------------------------
+    /** specifies the name of the view controller to create when loading a document
+
+        <p>If this property is used when loading a document into a frame, then it
+        specifies the name of the view controller to create. That is, the property
+        is passed to the document's <member scope="com::sun::star::frame">XModel2::createViewController</member>
+        method.<br/>
+        If the loaded document does not support the <code>XModel2</code> interface,
+        the property is ignored.</p>
+
+        @see ::com::sun::star::frame::XModel2::createViewController
+        @see ::com::sun::star::frame::XController2::ViewControllerName
+
+        @since OOo 3.0
+     */
+    [optional,property] string ViewControllerName;
 };
 
 //=============================================================================
