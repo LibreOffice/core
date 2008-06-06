@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,22 +44,9 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/sdbc/XDriverManager.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -100,7 +87,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::reflection;
-using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;
@@ -453,7 +439,7 @@ namespace
     }
 
     // .........................................................................
-    bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const SharedStorage& _rxContainerStorage )
+    bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const Reference< XStorage >& _rxContainerStorage )
     {
         bool bSomeDocHasMacros = false;
 
@@ -491,8 +477,15 @@ namespace
 
         try
         {
-            SharedStorage xContainerStorage( _rModel.getStorage(
-                _rModel.getObjectContainerStorageName( _eType ), ElementModes::READ ) );
+            Reference< XStorage > xContainerStorage( _rModel.getStorage(
+                _rModel.getObjectContainerStorageName( _eType ), ElementModes::READWRITE ) );
+            // note the READWRITE here: If the storage already existed before, then the OpenMode will
+            // be ignored, anyway.
+            // If the storage did not yet exist, then it will be created. If the database document
+            // is read-only, the OpenMode will be automatically downgraded to READ. Otherwise,
+            // the storage will in fact be created as READWRITE. While this is not strictly necessary
+            // for this particular use case here, it is required since the storage is *cached*, and
+            // later use cases will need the READWRITE mode.
 
             if ( xContainerStorage.is() )
                 bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rObjectDefinitions, xContainerStorage );
@@ -520,7 +513,7 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
         if ( !_rxContainerStorage->hasByName( _rPersistentName ) )
             return false;
 
-        SharedStorage xObjectStor( _rxContainerStorage->openStorageElement(
+        Reference< XStorage > xObjectStor( _rxContainerStorage->openStorageElement(
             _rPersistentName, ElementModes::READ ) );
 
         bHasMacros = ::sfx2::DocumentMacroMode::storageHasMacros( xObjectStor );
@@ -720,7 +713,7 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
     if ( !m_xDocumentStorage.is() )
     {
         Reference< XSingleServiceFactory> xStorageFactory = createStorageFactory();
-        if ( xStorageFactory.is() && m_sDocumentURL.getLength() )
+        if ( xStorageFactory.is() )
         {
             Any aSource;
             ::comphelper::NamedValueCollection aArgs( m_aArgs );
@@ -728,8 +721,9 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
             aSource = aArgs.get( "Stream" );
             if ( !aSource.hasValue() )
                 aSource = aArgs.get( "InputStream" );
-            if ( !aSource.hasValue() && m_sDocumentURL.getLength() )
-                aSource <<= m_sDocumentURL;
+            if ( !aSource.hasValue() && m_sDocFileLocation.getLength() )
+                aSource <<= m_sDocFileLocation;
+            // TODO: shouldn't we also check URL?
 
             OSL_ENSURE( aSource.hasValue(), "ODatabaseModelImpl::getOrCreateRootStorage: no source to create the storage from!" );
 
@@ -1066,12 +1060,6 @@ TContentPtr& ODatabaseModelImpl::getObjectContainer( ObjectType _eType )
 }
 
 // -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
-{
-    return m_aMacroMode.adjustMacroMode( NULL );
-}
-
-// -----------------------------------------------------------------------------
 void ODatabaseModelImpl::revokeDataSource() const
 {
     if ( m_pDBContext && m_sDocumentURL.getLength() )
@@ -1079,12 +1067,18 @@ void ODatabaseModelImpl::revokeDataSource() const
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::checkMacrosOnLoading()
+bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
+{
+    return m_aMacroMode.adjustMacroMode( NULL );
+}
+
+// -----------------------------------------------------------------------------
+bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
     ::comphelper::NamedValueCollection aArgs( m_aArgs );
     Reference< XInteractionHandler > xInteraction;
     xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
-    m_aMacroMode.checkMacrosOnLoading( xInteraction );
+    return m_aMacroMode.checkMacrosOnLoading( xInteraction );
 }
 
 // -----------------------------------------------------------------------------
@@ -1179,6 +1173,22 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    static void lcl_rebaseScriptStorage_throw( const Reference< XStorageBasedLibraryContainer >& _rxContainer,
+        const Reference< XStorage >& _rxNewRootStorage )
+    {
+        if ( _rxContainer.is() )
+        {
+            if ( _rxNewRootStorage.is() )
+                _rxContainer->setRootStorage( _rxNewRootStorage );
+            else
+                ;   // TODO: what to do here? dispose the container?
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Reference< XStorage >& _rxNewRootStorage )
 {
     // stop listening for modifications at the old storage
@@ -1191,10 +1201,8 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
     lcl_modifyListening( *this, m_xDocumentStorage.getTyped(), m_pStorageModifyListener, true );
 
     // forward new storage to Basic and Dialog library containers
-    if ( m_xBasicLibraries.is() )
-        m_xBasicLibraries->setRootStorage( m_xDocumentStorage.getTyped() );
-    if ( m_xDialogLibraries.is() )
-        m_xDialogLibraries->setRootStorage( m_xDocumentStorage.getTyped() );
+    lcl_rebaseScriptStorage_throw( m_xBasicLibraries, m_xDocumentStorage.getTyped() );
+    lcl_rebaseScriptStorage_throw( m_xDialogLibraries, m_xDocumentStorage.getTyped() );
 
     m_bReadOnly = !lcl_storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
     // TODO: our data source, if it exists, must broadcast the change of its ReadOnly property
@@ -1222,7 +1230,7 @@ void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation,
     }
 
     // remember both
-    m_sDocFileLocation = _rDocumentLocation;
+    m_sDocFileLocation = _rDocumentLocation.getLength() ? _rDocumentLocation : _rDocumentURL;
     m_sDocumentURL = _rDocumentURL;
 }
 
