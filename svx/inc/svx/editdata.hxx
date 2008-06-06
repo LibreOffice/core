@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdata.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,14 +317,9 @@ struct PasteOrDropInfos
     USHORT  nAction;
     USHORT  nStartPara;
     USHORT  nEndPara;
-    SfxStyleSheet* pLevel0Style;
-    SfxStyleSheet* pLevelNStyle;
 
-    PasteOrDropInfos()
-        {   nStartPara = 0xFFFF; nEndPara = 0xFFFF;
-            pLevel0Style = NULL; pLevelNStyle = NULL; nAction = 0; }
+    PasteOrDropInfos() : nAction(0), nStartPara(0xFFFF), nEndPara(0xFFFF)  {}
 };
-
 
 enum EENotifyType
 {
