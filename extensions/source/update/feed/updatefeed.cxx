@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatefeed.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -769,7 +769,12 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
                                         const rtl::OUString& rName)
 {
     OSL_ASSERT(m_xXPathAPI.is());
-    return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
+    try {
+        return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
+    } catch (xml::xpath::XPathException &) {
+        // ignore
+        return 0;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -806,8 +811,13 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
                     else
                         aXPathExpression = UNISTRING("//atom:entry");
 
-                    uno::Reference< xml::dom::XNodeList > xNodeList =
-                        m_xXPathAPI->selectNodeList(xDocument.get(), aXPathExpression);
+                    uno::Reference< xml::dom::XNodeList > xNodeList;
+                    try {
+                        xNodeList = m_xXPathAPI->selectNodeList(xDocument.get(),
+                            aXPathExpression);
+                    } catch (xml::xpath::XPathException &) {
+                        // ignore
+                    }
 
                     return new UpdateInformationEnumeration(xNodeList, this);
                 }
