@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwtxtex.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -572,7 +572,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             pOutliner->SetControlWord(nCtrl);
 
-            SW_MOD()->ExecuteSlot(rReq);
+            rView.ExecuteSlot(rReq);
         }
         break;
         case SID_HYPERLINK_SETLINK:
@@ -1082,7 +1082,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             case SID_AUTOSPELL_MARKOFF:
             case SID_AUTOSPELL_CHECK:
             {
-                const SfxPoolItem* pState = SW_MOD()->GetSlotState(nWhich);
+                const SfxPoolItem* pState = rView.GetSlotState(nWhich);
                 if (pState)
                     rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
                 else
