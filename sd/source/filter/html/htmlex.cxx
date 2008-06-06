@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlex.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1203,7 +1203,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
             ULONG nCount = pOutliner->GetParagraphCount();
 
             Paragraph* pPara = NULL;
-            USHORT nActDepth = 0;
+            sal_Int16 nActDepth = -1;
 
             String aParaText;
             for (ULONG nPara = 0; nPara < nCount; nPara++)
@@ -1212,7 +1212,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                 if(pPara == 0)
                     continue;
 
-                const USHORT nDepth = (USHORT) pOutliner->GetDepth( (USHORT) nPara );
+                const sal_Int16 nDepth = (USHORT) pOutliner->GetDepth( (USHORT) nPara );
                 aParaText = ParagraphToHTMLString(pOutliner,nPara,rBackgroundColor);
 
                 if(aParaText.Len() == 0)
@@ -1224,7 +1224,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                     {
                         aStr.AppendAscii( "</ul>" );
                         nActDepth--;
-                        if( nActDepth )
+                        if( nActDepth >= 0 )
                             aStr.AppendAscii( "</li>" );
                     }
                     while(nDepth < nActDepth);
@@ -1233,7 +1233,7 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                 {
                     do
                     {
-                        if( nActDepth )
+                        if( nActDepth >= 0 )
                             aStr.AppendAscii( "<li>" );
                         aStr.AppendAscii( "<ul>" );
                         nActDepth++;
@@ -1241,26 +1241,25 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                     while( nDepth > nActDepth );
                 }
 
-                if(nActDepth > 0 )
+                if(nActDepth >= 0 )
                     aStr.AppendAscii( "<li>" );
-                if(nActDepth == 1 && bHeadLine)
+                if(nActDepth == 0 && bHeadLine)
                     aStr.AppendAscii( "<h2>" );
                 aStr += aParaText;
-                if(nActDepth == 1 && bHeadLine)
+                if(nActDepth == 0 && bHeadLine)
                     aStr.AppendAscii( "</h2>" );
-                if(nActDepth > 0 )
+                if(nActDepth >= 0 )
                     aStr.AppendAscii( "</li>" );
                 aStr.AppendAscii( "\r\n" );
             }
 
-            if( nActDepth > 0 ) do
+            while( nActDepth >= 0 )
             {
                 aStr.AppendAscii( "</ul>" );
                 nActDepth--;
-                if( nActDepth )
+                if( nActDepth >= 0 )
                     aStr.AppendAscii( "</li>" );
-            }
-            while( nActDepth );
+            };
         }
     }
 
