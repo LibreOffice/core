@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TokenWriter.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +94,7 @@ namespace dbaui
     {
     private:
         void disposing();
+        void impl_initializeRowMember_throw();
 
     protected:
         typedef ::utl::SharedUNOComponent   <   ::com::sun::star::frame::XModel
@@ -101,6 +102,7 @@ namespace dbaui
                                             >   SharedModel;
 
     protected:
+        ::com::sun::star::lang::Locale                                                  m_aLocale;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
         SvStream*                                                                       m_pStream;
         ::com::sun::star::awt::FontDescriptor                                           m_aFont;
@@ -109,6 +111,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow; //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >   m_xRowSetColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
         SharedModel                                                                     m_aKeepModelAlive;
@@ -129,6 +132,7 @@ namespace dbaui
 
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
+        rtl_TextEncoding    m_eDestEnc;
         sal_Bool            m_bInInitialize;
         sal_Bool            m_bCheckOnly;
 
