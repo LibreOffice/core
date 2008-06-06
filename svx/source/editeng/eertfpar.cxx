@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eertfpar.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,7 +356,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     ContentNode* pEN = aEndPaM.GetNode();
     USHORT nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
     USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
-    USHORT nOutlLevel = 0xFF;
+    sal_Int16 nOutlLevel = 0xff;
 
     if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
@@ -410,12 +410,12 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     }
 
     // OutlLevel...
-    if ( nOutlLevel != 0xFF )
+    if ( nOutlLevel != 0xff )
     {
         for ( USHORT n = nStartNode; n <= nEndNode; n++ )
         {
             ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( n );
-            pNode->GetContentAttribs().GetItems().Put( SfxUInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
+            pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
         }
     }
 }
