@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.cxx,v $
  *
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_shared.hxx"
 #include "dp_gui_theextmgr.hxx"
+#include "dp_misc.h"
 
 #include "vcl/ctrl.hxx"
 #include "vcl/menu.hxx"
@@ -58,6 +59,8 @@
 #include "comphelper/processfactory.hxx"
 #include "ucbhelper/content.hxx"
 #include "unotools/collatorwrapper.hxx"
+
+#include "com/sun/star/beans/StringPair.hpp"
 
 #include "com/sun/star/i18n/CollatorOptions.hpp"
 
@@ -128,6 +131,7 @@ struct Entry_Impl
     String          m_sVersion;
     String          m_sDescription;
     String          m_sPublisher;
+    String          m_sPublisherURL;
     String          m_sErrorText;
     Image           m_aIcon;
     svt::FixedHyperlink *m_pPublisher;
@@ -163,23 +167,22 @@ Entry_Impl::Entry_Impl( Window * pParent,
     m_sTitle = xPackage->getDisplayName();
     m_sVersion = xPackage->getVersion();
     m_sDescription = xPackage->getDescription();
-#if 0   // doesn't work yet
-    m_sPublisher = OUSTR("Testing");
+
+    beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
+    m_sPublisher = aInfo.First;
+    m_sPublisherURL = aInfo.Second;
 
     if ( m_sPublisher.Len() )
     {
         m_pPublisher = new svt::FixedHyperlink( pParent );
         m_pPublisher->SetBackground();
         m_pPublisher->SetPaintTransparent( true );
-        m_pPublisher->SetURL( m_sPublisher );
-        m_pPublisher->SetDescription( ExtMgrDialog::getResourceString( RID_STR_PUBLISHER_LINK ) );
+        m_pPublisher->SetURL( m_sPublisherURL );
+        m_pPublisher->SetDescription( m_sPublisher );
         Size aSize = FixedText::CalcMinimumTextSize( m_pPublisher );
         m_pPublisher->SetSizePixel( aSize );
-        m_pPublisher->Show();
     }
-#else
-    (void)pParent;
-#endif
+
     m_bLocked = m_xPackageManager->isReadOnly();
 
     if ( ( eState != REGISTERED ) && ( eState != NOT_REGISTERED ) )
@@ -290,6 +293,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     DECL_DLLPRIVATE_LINK( HandleOptionsBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleEnableBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
 
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
@@ -819,6 +823,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     // Draw publisher link
     if ( pEntry->m_pPublisher )
     {
+        pEntry->m_pPublisher->Show();
         aPos = rRect.TopLeft() + Point( ICON_OFFSET + nMaxTitleWidth + (2*SPACE_BETWEEN), TOP_OFFSET );
         pEntry->m_pPublisher->SetPosPixel( aPos );
     }
@@ -985,6 +990,8 @@ void ExtensionBox_Impl::Paint( const Rectangle &rPaintRect )
         const Rectangle aEntryRect( aStart, aSize );
         if ( aEntryRect.IsOver( rPaintRect ) )
             DrawRow( Rectangle( aStart, aSize ), *iIndex );
+        else if ( (*iIndex)->m_pPublisher )
+            (*iIndex)->m_pPublisher->Hide();
         aStart.Y() += aSize.Height();
     }
 }
@@ -1200,6 +1207,9 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     PackageState eState = m_pManager->getPackageState( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( this, xPackage, xPackageManager, eState ) );
+
+    if ( pEntry->m_pPublisher )
+        pEntry->m_pPublisher->SetClickHdl( LINK( this, ExtensionBox_Impl, HandleHyperlink ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
@@ -1466,6 +1476,14 @@ IMPL_LINK( ExtensionBox_Impl, HandleRemoveBtn, void*, EMPTYARG )
     return 1;
 }
 
+// -----------------------------------------------------------------------
+IMPL_LINK( ExtensionBox_Impl, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
+{
+    m_pParent->openWebBrowser( pHyperlink->GetURL() );
+    return 1;
+}
+
+
 //------------------------------------------------------------------------------
 //                             ExtMgrDialog
 //------------------------------------------------------------------------------
@@ -1500,7 +1518,7 @@ ExtMgrDialog::ExtMgrDialog( Window *pParent, TheExtensionManager *pManager ) :
 
     m_aAddBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleAddBtn ) );
     m_aUpdateBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleUpdateBtn ) );
-    m_aGetExtensions.SetClickHdl( LINK( this, ExtMgrDialog, HandleGetExtensions ) );
+    m_aGetExtensions.SetClickHdl( LINK( this, ExtMgrDialog, HandleHyperlink ) );
     m_aCancelBtn.SetClickHdl( LINK( this, ExtMgrDialog, HandleCancelBtn ) );
 
     // resize update button
@@ -1918,9 +1936,9 @@ IMPL_LINK( ExtMgrDialog, HandleUpdateBtn, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( ExtMgrDialog, HandleGetExtensions, svt::FixedHyperlink*, pGetExtensions )
+IMPL_LINK( ExtMgrDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 {
-    openWebBrowser( pGetExtensions->GetURL() );
+    openWebBrowser( pHyperlink->GetURL() );
 
     return 1;
 }
