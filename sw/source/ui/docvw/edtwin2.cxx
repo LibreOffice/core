@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,8 +191,20 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
-
-
+                //#i63832# remove the link target type
+                xub_StrLen nFound = sTxt.Search(cMarkSeperator);
+                if( nFound != STRING_NOTFOUND && (++nFound) < sTxt.Len() )
+                {
+                    String sSuffix( sTxt.Copy(nFound) );
+                    if( sSuffix.EqualsAscii( pMarkToTable ) ||
+                        sSuffix.EqualsAscii( pMarkToFrame ) ||
+                        sSuffix.EqualsAscii( pMarkToRegion ) ||
+                        sSuffix.EqualsAscii( pMarkToOutline ) ||
+                        sSuffix.EqualsAscii( pMarkToText ) ||
+                        sSuffix.EqualsAscii( pMarkToGraphic ) ||
+                        sSuffix.EqualsAscii( pMarkToOLE ))
+                    sTxt = sTxt.Copy( 0, nFound - 1);
+                }
                 // --> OD 2007-07-26 #i80029#
                 BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
