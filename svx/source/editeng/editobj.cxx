@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editobj.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -561,32 +561,6 @@ USHORT EditTextObject::GetVersion() const
     return 0;
 }
 
-void EditTextObject::SetLRSpaceItemFlags( BOOL )
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-}
-
-void EditTextObject::AdjustImportedLRSpaceItems( BOOL )
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-}
-
-/* cl removed because not needed anymore since binfilter
-void EditTextObject::PrepareStore( SfxStyleSheetPool* )
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-}
-
-void EditTextObject::FinishStore()
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-}
-
-void EditTextObject::FinishLoad( SfxStyleSheetPool* )
-{
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
-}
-*/
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const
 {
     return static_cast< const BinTextObject* >( this )->operator==( static_cast< const BinTextObject& >( rCompare ) );
@@ -1130,16 +1104,6 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
         // Symbols?
         BOOL bSymbolPara = FALSE;
-/* cl removed because not needed anymore since binfilter
-
-        if ( pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->bSymbolParagraph_Store )
-        {
-            DBG_ASSERT( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON, "Why bSymbolParagraph_Store?" );
-            aText = ByteString( pC->GetText(), RTL_TEXTENCODING_SYMBOL );
-            bSymbolPara = TRUE;
-        }
-        else
-*/
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
@@ -1215,10 +1179,6 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
             DestroyFontToSubsFontConverter( hConv );
 
-/* cl removed because not needed anymore since binfilter
-            if ( pC->GetLoadStoreTempInfos() )
-                pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store = NULL;
-*/
         }
 
 
@@ -1378,19 +1338,6 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
                 }
             }
         }
-
-        // Symbol-Conversion neccessary?
-        // All Strings are converted with the SourceCharSet in CreateData()...
-
-/* cl removed because not needed anymore since binfilter
-        // Keep old ByteString, maybe Symbol-Conversion neccessary, will be
-        // checked in FinishLoad(), I need the StyleSheetPool for this...
-        if ( pC->GetStyle().Len() && ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) )
-        {
-            pC->CreateLoadStoreTempInfos();
-            pC->GetLoadStoreTempInfos()->aOrgString_Load = aByteString;
-        }
-*/
 
         // But check for paragraph and character symbol attribs here,
         // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
@@ -1568,233 +1515,6 @@ USHORT BinTextObject::GetVersion() const
     return nVersion;
 }
 
-void BinTextObject::SetLRSpaceItemFlags( BOOL bOutlineMode )
-{
-    for ( USHORT nPara = GetContents().Count(); nPara; )
-    {
-        ContentInfo* pC = GetContents().GetObject( --nPara );
-        for ( USHORT n = 0; n <=1; n++ )
-        {
-            USHORT nItemId = n ? EE_PARA_LRSPACE : EE_PARA_OUTLLRSPACE;
-            if ( pC->GetParaAttribs().GetItemState( nItemId ) == SFX_ITEM_ON )
-            {
-                const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&) pC->GetParaAttribs().Get( nItemId );
-                if ( rItem.IsBulletFI() != bOutlineMode )
-                {
-                    SvxLRSpaceItem aNewItem( rItem );
-                    aNewItem.SetBulletFI( bOutlineMode );
-                    pC->GetParaAttribs().Put( aNewItem );
-                }
-            }
-        }
-    }
-}
-
-/*
-void BinTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
-{
-    // Some Items must be generated for the 5.0 file format,
-    // because we don't have a special format for 5.x or 6.x
-    USHORT nParas = GetContents().Count();
-    const SvxNumBulletItem** ppNumBulletItems = new const SvxNumBulletItem*[nParas];
-    for ( USHORT nPara = nParas; nPara; )
-    {
-        ContentInfo* pC = GetContents().GetObject( --nPara );
-        const SvxNumBulletItem* pSvxNumBulletItem = NULL;
-        const SfxPoolItem* pTmpItem = NULL;
-        if ( pC->GetParaAttribs().GetItemState(EE_PARA_NUMBULLET, FALSE, &pTmpItem ) == SFX_ITEM_ON )
-        {
-            pSvxNumBulletItem = (const SvxNumBulletItem*)pTmpItem;
-        }
-        else if ( pStyleSheetPool && pC->GetStyle().Len() )
-        {
-            SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
-            if ( pStyle )
-                pSvxNumBulletItem = &(const SvxNumBulletItem&)pStyle->GetItemSet().Get(EE_PARA_NUMBULLET);
-        }
-
-        ppNumBulletItems[nPara] = pSvxNumBulletItem;
-
-        if ( pSvxNumBulletItem )
-        {
-            // Check if Item allready used, don't create a new one in this case.
-            BOOL bInserted = FALSE;
-            for ( USHORT nP = nPara+1; nP < nParas; nP++ )
-            {
-                if ( ppNumBulletItems[nP] == pSvxNumBulletItem )
-                {
-                    ContentInfo* pTmpC = GetContents().GetObject( nP );
-                    pC->GetParaAttribs().Put( pTmpC->GetParaAttribs().Get( EE_PARA_BULLET ) );
-                    bInserted = TRUE;
-                    break;
-                }
-            }
-            if ( !bInserted )
-            {
-                SvxBulletItem aNewBullet( EE_PARA_BULLET );
-                const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pC->GetParaAttribs().Get( EE_PARA_OUTLLEVEL );
-                lcl_CreateBulletItem( *pSvxNumBulletItem, rLevel.GetValue(), aNewBullet );
-                pC->GetParaAttribs().Put( aNewBullet );
-            }
-        }
-
-        // SymbolConvertion because of StyleSheet?
-        // Cannot be checked in StoreData, no StyleSheetPool, so do it here...
-
-        pC->DestroyLoadStoreTempInfos();    // Maybe old infos, if somebody is not calling FinishLoad after CreateData, but PrepareStore...
-
-        if ( ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) && pC->aStyle.Len() && pStyleSheetPool )
-        {
-            SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
-            if ( pStyle )
-            {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)pStyle->GetItemSet().Get( EE_CHAR_FONTINFO );
-                if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-                {
-                    if ( !pC->GetLoadStoreTempInfos() )
-                        pC->CreateLoadStoreTempInfos();
-                    pC->GetLoadStoreTempInfos()->bSymbolParagraph_Store = TRUE;
-                }
-
-                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-                if ( hConv )
-                {
-                    // #88414# Convert StarSymbol back to StarBats
-                    if ( !pC->GetLoadStoreTempInfos() )
-                        pC->CreateLoadStoreTempInfos();
-                    pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store = hConv;
-                }
-            }
-        }
-     }
-
-    delete[] ppNumBulletItems;
-}
-
-void BinTextObject::FinishStore()
-{
-    for ( USHORT nPara = GetContents().Count(); nPara; )
-    {
-        ContentInfo* pC = GetContents().GetObject( --nPara );
-        pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
-
-        pC->DestroyLoadStoreTempInfos();
-    }
-}
-
-void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
-{
-    BOOL bCreateNumBulletItem = nVersion && ( nVersion < 501 );
-    for ( USHORT nPara = GetContents().Count(); nPara; )
-    {
-        ContentInfo* pC = GetContents().GetObject( --nPara );
-
-        if( GetUserType() == 0x0003 ) // !! OUTLINERMODE_OUTLINEOBJECT !!
-        {
-            if ( pC->GetParaAttribs().GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-            {
-                SvxNumBulletItem* pNumBullet = (SvxNumBulletItem*) &pC->GetParaAttribs().Get( EE_PARA_NUMBULLET );
-                if( pNumBullet->GetNumRule()->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING )
-                {
-                    pNumBullet->GetNumRule()->SetNumRuleType( SVX_RULETYPE_PRESENTATION_NUMBERING );
-                    pC->GetParaAttribs().Put( *pNumBullet, EE_PARA_NUMBULLET );
-                }
-            }
-        }
-
-        if ( bCreateNumBulletItem )
-        {
-            BOOL bBulletInPara = pC->GetParaAttribs().GetItemState( EE_PARA_BULLET ) == SFX_ITEM_ON;
-            BOOL bLRSpaceInPara = pC->GetParaAttribs().GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON;
-
-            // Nur wenn ein Attribut hart gesetzt, ansonsten muss es in den Vorlagen
-            // richtig konvertiert sein.
-
-            if ( bBulletInPara || bLRSpaceInPara )
-            {
-                const SvxBulletItem* pBullet = NULL;
-                const SvxLRSpaceItem* pLRSpace = NULL;
-                SvxNumBulletItem* pNumBullet = NULL;
-                SfxStyleSheet* pStyle = NULL;
-
-                if ( pC->GetStyle().Len() )
-                    pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
-
-                const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pC->GetParaAttribs().Get( EE_PARA_OUTLLEVEL );
-                USHORT nLevel = rLevel.GetValue();
-
-                if ( !pStyle || bBulletInPara )
-                    pBullet = (const SvxBulletItem*) &pC->GetParaAttribs().Get( EE_PARA_BULLET );
-                else
-                    pBullet = (const SvxBulletItem*) &pStyle->GetItemSet().Get( EE_PARA_BULLET );
-
-                if ( !pStyle || bLRSpaceInPara )
-                    pLRSpace = (const SvxLRSpaceItem*) &pC->GetParaAttribs().Get( EE_PARA_LRSPACE );
-                else
-                    pLRSpace = (const SvxLRSpaceItem*) &pStyle->GetItemSet().Get( EE_PARA_LRSPACE );
-
-                if ( !pStyle || ( pC->GetParaAttribs().GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON ) )
-                    pNumBullet = (SvxNumBulletItem*) &pC->GetParaAttribs().Get( EE_PARA_NUMBULLET );
-                else
-                    pNumBullet = (SvxNumBulletItem*) &pStyle->GetItemSet().Get( EE_PARA_NUMBULLET );
-
-                SvxNumBulletItem aNumBullet( *pNumBullet );
-                EditEngine::ImportBulletItem( aNumBullet, nLevel, pBullet, pLRSpace );
-                pC->GetParaAttribs().Put( aNumBullet );
-
-                if ( bLRSpaceInPara )
-                    pC->GetParaAttribs().ClearItem( EE_PARA_LRSPACE );
-            }
-        }
-
-        // Symbol-Convertion because of StyleSheet?
-        if ( pStyleSheetPool && pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->aOrgString_Load.Len() )
-        {
-            SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
-            if ( pStyle )
-            {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)pStyle->GetItemSet().Get( EE_CHAR_FONTINFO );
-                if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-                {
-                    String aConverted( pC->GetLoadStoreTempInfos()->aOrgString_Load, RTL_TEXTENCODING_SYMBOL );
-
-                    // Replace only Parts without hard font attribute, other symbol encoding
-                    // is already done in CreateData()...
-
-                    USHORT nLastEnd = 0;
-                    for ( USHORT nAttr = 0; nAttr < pC->GetAttribs().Count(); nAttr++ )
-                    {
-                        XEditAttribute* pAttr = pC->GetAttribs().GetObject( nAttr );
-                        if ( pAttr->GetItem()->Which() == EE_CHAR_FONTINFO )
-                        {
-                            if ( nLastEnd < pAttr->GetStart() )
-                            {
-                                USHORT nLen = pAttr->GetStart() - nLastEnd;
-                                pC->GetText().Erase( nLastEnd, nLen );
-                                pC->GetText().Insert( aConverted, nLastEnd, nLen, nLastEnd );
-                            }
-                            nLastEnd = pAttr->GetEnd();
-
-                        }
-                    }
-                    if ( nLastEnd < pC->GetText().Len() )
-                    {
-                        USHORT nLen = pC->GetText().Len() - nLastEnd;
-                        pC->GetText().Erase( nLastEnd, nLen );
-                        pC->GetText().Insert( aConverted, nLastEnd, nLen, nLastEnd );
-                    }
-                }
-            }
-        }
-
-        pC->DestroyLoadStoreTempInfos();
-
-        // MT 07/00: EE_PARA_BULLET no longer needed
-        pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
-    }
-}
-*/
-
 bool BinTextObject::operator==( const BinTextObject& rCompare ) const
 {
     if( this == &rCompare )
@@ -1817,54 +1537,6 @@ bool BinTextObject::operator==( const BinTextObject& rCompare ) const
 
     return true;
 }
-
-void BinTextObject::AdjustImportedLRSpaceItems( BOOL bTurnOfBullets )
-{
-    for ( USHORT nPara = GetContents().Count(); nPara; )
-    {
-        ContentInfo* pC = GetContents().GetObject( --nPara );
-        if ( !bTurnOfBullets )
-        {
-            for ( USHORT n = 0; n <=1; n++ )
-            {
-                USHORT nItemId = n ? EE_PARA_LRSPACE : EE_PARA_OUTLLRSPACE;
-                if ( pC->GetParaAttribs().GetItemState( nItemId ) == SFX_ITEM_ON )
-                {
-                    const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&) pC->GetParaAttribs().Get( nItemId );
-                    if ( !rItem.GetTxtFirstLineOfst() )
-                    {
-                        SvxLRSpaceItem aNewItem( rItem );
-                        aNewItem.SetTxtFirstLineOfst( (short) -1200 ); // Outliner im Draw mit MAP100TH_MM
-                        if( pC->GetParaAttribs().GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-                        {
-                            const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pC->GetParaAttribs().Get( EE_PARA_NUMBULLET );
-                            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pC->GetParaAttribs().Get( EE_PARA_OUTLLEVEL );
-                            const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( rLevel.GetValue() );
-                            if ( pFmt )
-                                aNewItem.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-                        }
-                        pC->GetParaAttribs().Put( aNewItem );
-                    }
-                }
-            }
-        }
-
-        // Wurden in alten Versionen vom Outliner mal am Absatz gesetzt, soll nicht mehr sein
-        if ( !bTurnOfBullets && ( nVersion < 500 ) )
-        {
-            for ( USHORT nW = EE_CHAR_START; nW <= EE_CHAR_END; nW++  )
-                pC->GetParaAttribs().ClearItem( nW );
-        }
-
-        if ( bTurnOfBullets )
-        {
-            SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
-            pC->GetParaAttribs().Put( aBulletState );
-        }
-    }
-}
-
-
 
 #define CHARSETMARKER   0x9999
 
