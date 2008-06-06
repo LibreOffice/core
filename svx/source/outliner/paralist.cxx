@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paralist.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +37,14 @@
 
 DBG_NAME(Paragraph)
 
-Paragraph::Paragraph( USHORT nDDepth )
-    : aBulSize( -1, -1)
+Paragraph::Paragraph( sal_Int16 nDDepth )
+: aBulSize( -1, -1)
+, mnNumberingStartValue( -1 )
+, mbParaIsNumberingRestart( sal_False )
 {
     DBG_CTOR( Paragraph, 0 );
 
-    DBG_ASSERT( ( nDDepth < SVX_MAX_NUM ) || ( nDDepth == 0xFFFF ), "Paragraph-CTOR: nDepth invalid!" );
+    DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
 
     nDepth = nDDepth;
     nFlags = 0;
@@ -50,8 +52,10 @@ Paragraph::Paragraph( USHORT nDDepth )
 }
 
 Paragraph::Paragraph( const Paragraph& rPara )
-:   aBulText( rPara.aBulText )
-,   aBulSize( rPara.aBulSize )
+: aBulText( rPara.aBulText )
+, aBulSize( rPara.aBulSize )
+, mnNumberingStartValue( -1 )
+, mbParaIsNumberingRestart( sal_False )
 {
     DBG_CTOR( Paragraph, 0 );
 
@@ -65,6 +69,15 @@ Paragraph::~Paragraph()
     DBG_DTOR( Paragraph, 0 );
 }
 
+void Paragraph::SetNumberingStartValue( sal_Int16 nNumberingStartValue )
+{
+    mnNumberingStartValue = nNumberingStartValue;
+}
+
+void Paragraph::SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart )
+{
+    mbParaIsNumberingRestart = bParaIsNumberingRestart;
+}
 void ParagraphList::Clear( BOOL bDestroyParagraphs )
 {
     if ( bDestroyParagraphs )
@@ -171,15 +184,15 @@ ULONG ParagraphList::GetChildCount( Paragraph* pParent ) const
     return nChildCount;
 }
 
-Paragraph* ParagraphList::GetParent( Paragraph* pParagraph, USHORT& rRelPos ) const
+Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const
 {
-    rRelPos = 0;
+    /* rRelPos = 0 */;
     ULONG n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
-        if ( pPrev->GetDepth() == pParagraph->GetDepth() )
-            rRelPos++;
+//      if ( pPrev->GetDepth() == pParagraph->GetDepth() )
+//          rRelPos++;
         pPrev = GetParagraph( --n );
     }
 
