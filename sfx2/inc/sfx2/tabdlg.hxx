@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabdlg.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,9 +241,9 @@ protected:
 
     USHORT              GetSlot( USHORT nWhich ) const
                             { return pSet->GetPool()->GetSlotId( nWhich ); }
-    USHORT              GetWhich( USHORT nSlot ) const
-                            { return pSet->GetPool()->GetWhich( nSlot ); }
-    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot );
+    USHORT              GetWhich( USHORT nSlot, sal_Bool bDeep = sal_True ) const
+                            { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
+    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
     const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
     SfxTabDialog*       GetTabDialog() const { return pTabDlg; }
 
@@ -282,7 +282,7 @@ public:
     virtual void        FillUserData();
     virtual BOOL        IsReadOnly() const;
     virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
-    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot );
+    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();
