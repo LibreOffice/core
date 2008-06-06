@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UITools.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -487,24 +487,18 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 }
 
 // -----------------------------------------------------------------------------
-::std::vector< Reference<XNameAccess> > getKeyColumns(const Reference<XPropertySet >& _rxTable,
+::std::vector< Reference<XNameAccess> > getKeyColumns(const Reference<XIndexAccess >& _rxKeys,
                                                       sal_Int32 _nKeyType)
 {
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(_rxTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
     ::std::vector< Reference<XNameAccess> > vRet;
-
-    if(xKeys.is())
+    if(_rxKeys.is())
     {
         Reference<XPropertySet> xProp;
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        for(sal_Int32 i=0;i< _rxKeys->getCount();++i)
         {
-            xKeys->getByIndex(i) >>= xProp;
+            _rxKeys->getByIndex(i) >>= xProp;
             sal_Int32 nKeyType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(_nKeyType == nKeyType)
