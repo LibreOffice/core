@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outliner.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +101,7 @@ namespace basegfx { class B2DPolyPolygon; }
 #define PARAFLAG_DROPTARGET_EMPTY   0x2000
 #define PARAFLAG_HOLDDEPTH          0x4000
 #define PARAFLAG_SETBULLETTEXT      0x8000
+#define PARAFLAG_ISPAGE             0x0100
 
 // Undo-Action-Ids
 #define OLUNDO_DEPTH            EDITUNDO_USER
@@ -126,26 +127,40 @@ private:
     friend class OutlinerEditEng;
     friend class OLUndoDepth;
     friend class OutlinerUndoCheckPara;
+    friend class OutlinerUndoChangeParaFlags;
 
     Paragraph& operator=(const Paragraph& rPara );
 
     USHORT              nFlags;
-    USHORT              nDepth;
+    sal_Int16           nDepth;
     XubString           aBulText;
     Size                aBulSize;
     BOOL                bVisible;
+    sal_Int16           mnNumberingStartValue;
+    sal_Bool            mbParaIsNumberingRestart;
 
     BOOL                IsVisible() const { return bVisible; }
     void                SetText( const XubString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
     void                Invalidate() { aBulSize.Width() = -1; }
-    void                SetDepth( USHORT nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
+    void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
     const XubString&    GetText() const { return aBulText; }
 
-                        Paragraph( USHORT nDepth );
+                        Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& );
                         ~Paragraph();
 
-    USHORT              GetDepth() const { return nDepth; }
+    sal_Int16           GetDepth() const { return nDepth; }
+
+    sal_Int16           GetNumberingStartValue() const { return mnNumberingStartValue; }
+    void                SetNumberingStartValue( sal_Int16 nNumberingStartValue );
+
+    sal_Bool            IsParaIsNumberingRestart() const { return mbParaIsNumberingRestart; }
+    void                SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart );
+
+public:
+    bool                HasFlag( USHORT nFlag ) const { return (nFlags & nFlag) != 0; }
+    void                SetFlag( USHORT nFlag ) { nFlags |= nFlag; }
+    void                RemoveFlag( USHORT nFlag ) { nFlags &= ~nFlag; }
 };
 
 struct ParaRange
@@ -355,7 +370,10 @@ public:
     const SvxFieldItem* GetFieldUnderMousePointer( USHORT& nPara, xub_StrLen& nPos ) const;
     const SvxFieldItem* GetFieldAtSelection() const;
 
-    void        ShowBullets( BOOL bShow, BOOL bAffectLevel0 );
+    /** enables numbering for the selected paragraphs if the numbering of the first paragraph is off
+        or disables numbering for the selected paragraphs if the numbering of the first paragraph is on
+    */
+    void        ToggleBullets();
 
     BOOL        IsCursorAtWrongSpelledWord( BOOL bMarkIfWrong = FALSE );
     BOOL        IsWrongSpelledWordAtPos( const Point& rPosPixel, BOOL bMarkIfWrong = FALSE );
@@ -402,6 +420,20 @@ public:
             nTextStart = nTxtStart;
             nTextLen = nTxtLen;
         }
+};
+
+struct SVX_DLLPUBLIC PaintFirstLineInfo
+{
+    USHORT mnPara;
+    const Point& mrStartPos;
+    long mnBaseLineY;
+    const Point& mrOrigin;
+    short mnOrientation;
+    OutputDevice* mpOutDev;
+
+    PaintFirstLineInfo( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
+        : mnPara( nPara ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mnOrientation( nOrientation ), mpOutDev( pOutDev )
+    {}
 };
 
 class SdrPage;
@@ -501,6 +533,7 @@ class SVX_DLLPUBLIC Outliner
     friend class OLUndoExpand;
     friend class OutlinerUndoChangeDepth;
     friend class OutlinerUndoCheckPara;
+    friend class OutlinerUndoChangeParaFlags;
 
     OutlinerEditEng*    pEditEngine;
 
@@ -521,10 +554,14 @@ class SVX_DLLPUBLIC Outliner
     Link                aRemovingPagesHdl;
     Link                aFieldClickedHdl;
     Link                aCalcFieldValueHdl;
+    Link                maPaintFirstLineHdl;
+    Link                maBeginPasteOrDropHdl;
+    Link                maEndPasteOrDropHdl;
 
-    USHORT              nDepthChangedHdlPrevDepth;
-    USHORT              nMaxDepth;
-    USHORT              nMinDepth;
+    sal_Int16           nDepthChangedHdlPrevDepth;
+    USHORT              mnDepthChangeHdlPrevFlags;
+    sal_Int16           nMaxDepth;
+    const sal_Int16     nMinDepth;
     USHORT              nFirstPage;
 
     USHORT              nOutlinerMode;
@@ -534,8 +571,6 @@ class SVX_DLLPUBLIC Outliner
     BOOL                bBlockInsCallback;
     BOOL                bStrippingPortions;
     BOOL                bPasting;
-
-    SvxNumberFormat*    pOverwriteLevel0Bullet;
 
     ULONG               nDummy;
 
@@ -549,12 +584,12 @@ class SVX_DLLPUBLIC Outliner
     DECL_LINK(              EditEngineNotifyHdl, EENotify* );
     void                    ImplCheckParagraphs( USHORT nStart, USHORT nEnd );
     BOOL                    ImplHasBullet( USHORT nPara ) const;
-    const SvxNumberFormat*  ImplGetBullet( USHORT nPara ) const;
     Size                    ImplGetBulletSize( USHORT nPara );
+    sal_uInt16              ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pParaFmt );
     void                    ImplCalcBulletText( USHORT nPara, BOOL bRecalcLevel, BOOL bRecalcChilds );
     String                  ImplGetBulletText( USHORT nPara );
     void                    ImplCheckNumBulletItem( USHORT nPara );
-    void                    ImplInitDepth( USHORT nPara, USHORT nDepth, BOOL bCreateUndo, BOOL bUndoAction = FALSE );
+    void                    ImplInitDepth( USHORT nPara, sal_Int16 nDepth, BOOL bCreateUndo, BOOL bUndoAction = FALSE );
     void                    ImplSetLevelDependendStyleSheet( USHORT nPara, SfxStyleSheet* pLevelStyle = NULL );
 
     void                    ImplBlockInsertionCallbacks( BOOL b );
@@ -564,11 +599,9 @@ class SVX_DLLPUBLIC Outliner
 
     const SvxBulletItem& ImpGetBullet( ULONG nPara, USHORT& );
     void        ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara );
-    void        ImpConvertOutToEdt( Paragraph* pPara, ULONG nPara );
-    BOOL        ImpConvertEdtToOut( Paragraph* pPara, ULONG nPara, EditView* pView = 0 );
+    bool        ImpConvertEdtToOut( sal_uInt32 nPara, EditView* pView = 0 );
 
     void        ImpTextPasted( ULONG nStartPara, USHORT nCount );
-    void        ImpDropped( OutlinerView* pView );
     long        ImpCalcMaxBulletWidth( USHORT nPara, const SvxBulletItem& rBullet );
     Font        ImpCalcBulletFont( USHORT nPara ) const;
     Rectangle   ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnPaperPos );
@@ -578,14 +611,13 @@ class SVX_DLLPUBLIC Outliner
     BOOL        ImpCanDeleteSelectedPages( OutlinerView* pCurView, USHORT nFirstPage, USHORT nPages );
 
     USHORT      ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
-    void        ImplCheckDepth( USHORT& rnDepth ) const;
+    void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 #endif
 
 protected:
     void            ParagraphInserted( USHORT nParagraph );
     void            ParagraphDeleted( USHORT nParagraph );
     void            ParaAttribsChanged( USHORT nParagraph );
-    void            ParagraphHeightChanged( USHORT nParagraph );
 
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
 
@@ -593,6 +625,10 @@ protected:
     void        PaintBullet( USHORT nPara, const Point& rStartPos,
                     const Point& rOrigin, short nOrientation,
                     OutputDevice* pOutDev );
+
+    // used by OutlinerEditEng. Allows Outliner objects to provide
+    // bullet access to the EditEngine.
+    virtual const SvxNumberFormat*  GetNumberFormat( USHORT nPara ) const;
 
 public:
 
@@ -629,8 +665,7 @@ public:
     OutlinerView*   GetView( ULONG nIndex ) const;
     ULONG           GetViewCount() const;
 
-    Paragraph*      Insert( const String& rText, ULONG nAbsPos = LIST_APPEND,
-                                USHORT nDepth = 0 );
+    Paragraph*      Insert( const String& rText, ULONG nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject& );
     void            SetText( const String& rText, Paragraph* pParagraph );
@@ -646,11 +681,10 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
-    void            SetMinDepth( USHORT nDepth, BOOL bCheckParas = FALSE );
-    USHORT          GetMinDepth() const { return nMinDepth; }
+    sal_Int16       GetMinDepth() const { return -1; }
 
-    void            SetMaxDepth( USHORT nDepth, BOOL bCheckParas = FALSE );
-    USHORT          GetMaxDepth() const { return nMaxDepth; }
+    void            SetMaxDepth( sal_Int16 nDepth, BOOL bCheckParas = FALSE );
+    sal_Int16          GetMaxDepth() const { return nMaxDepth; }
 
     void            SetUpdateMode( BOOL bUpdate );
     BOOL            GetUpdateMode() const;
@@ -671,8 +705,8 @@ public:
 //  ULONG           GetRelPos( Paragraph* pParent, Paragraph* pPara ) const;
     ULONG           GetAbsPos( Paragraph* pPara );
 
-    USHORT          GetDepth( ULONG nPara ) const;
-    void            SetDepth( Paragraph* pParagraph, USHORT nNewDepth );
+    sal_Int16       GetDepth( ULONG nPara ) const;
+    void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
 
     void            SetVisible( Paragraph* pPara, BOOL bVisible );
     BOOL            IsVisible( Paragraph* pPara ) const { return pPara->IsVisible(); }
@@ -705,7 +739,8 @@ public:
     virtual void    DepthChangedHdl();
     void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
     Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
-    USHORT          GetPrevDepth() const { return nDepthChangedHdlPrevDepth; }
+    sal_Int16       GetPrevDepth() const { return nDepthChangedHdlPrevDepth; }
+    USHORT          GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
     virtual long    RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
@@ -726,6 +761,9 @@ public:
 
     void            SetDrawPortionHdl(const Link& rLink){aDrawPortionHdl=rLink;}
     Link            GetDrawPortionHdl() const { return aDrawPortionHdl; }
+
+    void            SetPaintFirstLineHdl(const Link& rLink) { maPaintFirstLineHdl = rLink; }
+    Link            GetPaintFirstLineHdl() const { return maPaintFirstLineHdl; }
 
     void            SetModifyHdl( const Link& rLink );
     Link            GetModifyHdl() const;
@@ -769,7 +807,6 @@ public:
     void            ForceAutoColor( BOOL b );
     BOOL            IsForceAutoColor() const;
 
-    void            OverwriteLevel0Bullet( const SvxNumberFormat& rNumberFormat );
     EBulletInfo     GetBulletInfo( USHORT nPara );
 
     void        SetWordDelimiters( const String& rDelimiters );
@@ -795,8 +832,8 @@ public:
     void            SetStyleSheet( ULONG nPara, SfxStyleSheet* pStyle );
     SfxStyleSheet*  GetStyleSheet( ULONG nPara );
 
-    void            SetParaAttribs( ULONG nPara, const SfxItemSet&, bool bApiCall = false );
-    SfxItemSet      GetParaAttribs( ULONG nPara );
+    void            SetParaAttribs( USHORT nPara, const SfxItemSet& );
+    SfxItemSet      GetParaAttribs( USHORT nPara );
 
     void            Remove( Paragraph* pPara, ULONG nParaCount );
     BOOL            Expand( Paragraph* );
@@ -939,6 +976,20 @@ public:
     /** sets a link that is called at the end of a drag operation at an edit view */
     void            SetEndDropHdl( const Link& rLink );
     Link            GetEndDropHdl() const;
+
+    /** sets a link that is called before a drop or paste operation. */
+    void            SetBeginPasteOrDropHdl( const Link& rLink );
+    Link            GetBeginPasteOrDropHdl() const { return maBeginPasteOrDropHdl; }
+
+    /** sets a link that is called after a drop or paste operation. */
+    void            SetEndPasteOrDropHdl( const Link& rLink );
+    Link            GetEndPasteOrDropHdl() const { return maEndPasteOrDropHdl; }
+
+    virtual sal_Int16 GetNumberingStartValue( sal_uInt16 nPara );
+    virtual void SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
+
+    virtual sal_Bool IsParaIsNumberingRestart( sal_uInt16 nPara );
+    virtual void SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart );
 };
 
 #endif
