@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numpages.cxx,v $
- * $Revision: 1.62 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1672,7 +1672,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         for(USHORT i = nFmtCount; i; i--)
         {
             USHORT nEntryData = (USHORT)(ULONG)aFmtLB.GetEntryData(i - 1);
-            if(SVX_NUM_NUMBER_NONE == nEntryData ||
+            if(/*SVX_NUM_NUMBER_NONE == nEntryData ||*/
                 ((SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData))
                 aFmtLB.RemoveEntry(i - 1);
         }
