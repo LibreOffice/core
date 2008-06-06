@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: QueryTableView.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,20 +138,17 @@ using namespace ::com::sun::star::accessibility;
 namespace
 {
     // -----------------------------------------------------------------------------
-    sal_Bool isColumnInKeyType(const Reference<XKeysSupplier>& _rxKeys,const ::rtl::OUString& _rColumnName,sal_Int32 _nKeyType)
+    sal_Bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const ::rtl::OUString& _rColumnName,sal_Int32 _nKeyType)
     {
         sal_Bool bReturn = sal_False;
         if(_rxKeys.is())
         {
-            Reference< XIndexAccess> xKeyIndex = _rxKeys->getKeys();
-            if ( !xKeyIndex.is() )
-                return sal_False;
             Reference<XColumnsSupplier> xColumnsSupplier;
             // search the one and only primary key
-            for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+            const sal_Int32 nCount = _rxKeys->getCount();
+            for(sal_Int32 i=0;i< nCount;++i)
             {
-                Reference<XPropertySet> xProp;
-                ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
+                Reference<XPropertySet> xProp(_rxKeys->getByIndex(i),UNO_QUERY);
                 if(xProp.is())
                 {
                     sal_Int32 nKeyType = 0;
@@ -253,17 +250,17 @@ namespace
         OQueryTableConnectionData* pNewConnData = new OQueryTableConnectionData( _rSource.GetData(), _rDest.GetData() );
         TTableConnectionData::value_type aNewConnData(pNewConnData);
 
-        Reference<XKeysSupplier> xReferencedKeys( _rDest.GetTable(), UNO_QUERY );
+        Reference<XIndexAccess> xReferencedKeys( _rDest.GetData()->getKeys());
         ::rtl::OUString sRelatedColumn;
 
         // iterate through all foreignkey columns to create the connections
         Sequence< ::rtl::OUString> aElements(_rxSourceForeignKeyColumns->getElementNames());
-        const ::rtl::OUString* pBegin = aElements.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aElements.getLength();
-        for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+        const ::rtl::OUString* pIter = aElements.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aElements.getLength();
+        for(sal_Int32 i=0;pIter != pEnd;++pIter,++i)
         {
             Reference<XPropertySet> xColumn;
-            if ( !( _rxSourceForeignKeyColumns->getByName(*pBegin) >>= xColumn ) )
+            if ( !( _rxSourceForeignKeyColumns->getByName(*pIter) >>= xColumn ) )
             {
                 OSL_ENSURE( false, "addConnections: invalid foreign key column!" );
                 continue;
@@ -275,7 +272,7 @@ namespace
             pNewConnData->SetFieldType(JTCS_TO,isColumnInKeyType(xReferencedKeys,sRelatedColumn,KeyType::PRIMARY) ? TAB_PRIMARY_FIELD : TAB_NORMAL_FIELD);
 
             {
-                Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),*pBegin,sal_True));
+                Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),*pIter,sal_True));
                 if(aFind.getLength())
                     pNewConnData->SetFieldIndex(JTCS_FROM,aFind[0]+1);
                 else
@@ -291,7 +288,7 @@ namespace
                 else
                     OSL_ENSURE(0,"Column not found!");
             }
-            pNewConnData->AppendConnLine(*pBegin,sRelatedColumn);
+            pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 
             // dann die Conn selber dazu
             OQueryTableConnection aNewConn(_pView, aNewConnData);
@@ -511,19 +508,18 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
 }
 // -----------------------------------------------------------------------------
 // find the table which has a foreign key with this referencedTable name
-Reference<XPropertySet> getKeyReferencedTo(const Reference<XKeysSupplier>& _rxKeys,const ::rtl::OUString& _rReferencedTable)
+Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKeys,const ::rtl::OUString& _rReferencedTable)
 {
     if(!_rxKeys.is())
         return Reference<XPropertySet>();
 
-    Reference< XIndexAccess> xKeyIndex = _rxKeys->getKeys();
-    if ( !xKeyIndex.is() )
+    if ( !_rxKeys.is() )
         return Reference<XPropertySet>();
     // search the one and only primary key
-    for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+    const sal_Int32 nCount = _rxKeys->getCount();
+    for(sal_Int32 i=0;i<nCount ;++i)
     {
-        Reference<XPropertySet> xKey;
-        ::cppu::extractInterface(xKey,xKeyIndex->getByIndex(i));
+        Reference<XPropertySet> xKey(_rxKeys->getByIndex(i),UNO_QUERY);
         if(xKey.is())
         {
             sal_Int32 nKeyType = 0;
@@ -603,11 +599,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         {
             //////////////////////////////////////////////////////////////////////
             // find relations between the table an the tables already inserted
-            Reference< XPropertySet > xTable( pNewTabWin->GetTable(), UNO_QUERY_THROW );
-            Reference< XKeysSupplier > xKeys( xTable, UNO_QUERY );
-            if ( !xKeys.is() )
-                break;
-            Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
+            Reference< XIndexAccess> xKeyIndex = pNewTabWin->GetData()->getKeys();
             if ( !xKeyIndex.is() )
                 break;
 
@@ -615,7 +607,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
             ::rtl::OUString aReferencedTable;
             Reference<XColumnsSupplier> xColumnsSupplier;
 
-            sal_Int32 nKeyCount = xKeyIndex->getCount();
+            const sal_Int32 nKeyCount = xKeyIndex->getCount();
             for ( sal_Int32 i=0; i<nKeyCount ; ++i )
             {
                 Reference< XPropertySet > xProp( xKeyIndex->getByIndex(i), UNO_QUERY_THROW );
@@ -663,8 +655,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                             continue;
 
                         OSL_ENSURE(pTabWinTmp,"TableWindow is null!");
-                        Reference< XKeysSupplier > xSupKeys( pTabWinTmp->GetTable(), UNO_QUERY );
-                        Reference< XPropertySet > xFKKey = getKeyReferencedTo( xSupKeys, pNewTabWin->GetComposedName() );
+                        Reference< XPropertySet > xFKKey = getKeyReferencedTo( pTabWinTmp->GetData()->getKeys(), pNewTabWin->GetComposedName() );
                         if ( !xFKKey.is() )
                             continue;
 
