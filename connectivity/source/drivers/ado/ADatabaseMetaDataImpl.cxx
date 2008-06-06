@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ADatabaseMetaDataImpl.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -454,11 +454,11 @@ void OAdoKey::fillPropertyValues()
 {
     if(m_aKey.IsValid())
     {
-        m_Type              = MapKeyRule(m_aKey.get_Type());
-        m_Name              = m_aKey.get_Name();
-        m_ReferencedTable   = m_aKey.get_RelatedTable();
-        m_UpdateRule        = MapRule(m_aKey.get_UpdateRule());
-        m_DeleteRule        = MapRule(m_aKey.get_DeleteRule());
+        m_aProps->m_Type            = MapKeyRule(m_aKey.get_Type());
+        m_Name                      = m_aKey.get_Name();
+        m_aProps->m_ReferencedTable = m_aKey.get_RelatedTable();
+        m_aProps->m_UpdateRule      = MapRule(m_aKey.get_UpdateRule());
+        m_aProps->m_DeleteRule      = MapRule(m_aKey.get_DeleteRule());
     }
 }
 // -------------------------------------------------------------------------
