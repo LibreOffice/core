@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editeng.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -971,6 +971,36 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
+                    // check if we are behind a bullet and using the backspace key
+                    ContentNode *pNode = aCurSel.Min().GetNode();
+                    const SvxNumberFormat *pFmt = pImpEditEngine->GetNumberFormat( pNode );
+                    if (pFmt && nCode == KEY_BACKSPACE &&
+                        !aCurSel.HasRange() && aCurSel.Min().GetIndex() == 0)
+                    {
+                        // if the bullet is still visible just do not paint it from
+                        // now on and that will be all. Otherwise continue as usual.
+                        // ...
+
+                        USHORT nPara = pImpEditEngine->GetEditDoc().GetPos( pNode );
+                        SfxBoolItem aBulletState( (const SfxBoolItem&) pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
+                        bool bBulletIsVisible = aBulletState.GetValue() ? true : false;
+
+                        // just toggling EE_PARA_BULLETSTATE should be fine for both cases...
+                        aBulletState.SetValue( !bBulletIsVisible );
+                        SfxItemSet aSet( pImpEditEngine->GetParaAttribs( nPara ) );
+                        aSet.Put( aBulletState );
+                        pImpEditEngine->SetParaAttribs( nPara, aSet );
+
+                        // have this and the following paragraphs formatted and repainted.
+                        // (not painting a numbering in the list may cause the following
+                        // numberings to have different numbers than before and thus the
+                        // length may have changed as well )
+                        pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
+
+                        if (bBulletIsVisible)   // bullet just turned invisible...
+                            break;
+                    }
+
                     BYTE nDel = 0, nMode = 0;
                     switch( nCode )
                     {
@@ -997,6 +1027,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                             nMode = DELMODE_RESTOFCONTENT;
                         break;
                     }
+
                     pEditView->pImpEditView->DrawSelection();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
@@ -1387,6 +1418,7 @@ void EditEngine::SetEndMovingParagraphsHdl( const Link& rLink )
 void EditEngine::SetBeginPasteOrDropHdl( const Link& rLink )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+
     pImpEditEngine->aBeginPasteOrDropHdl = rLink;
 }
 
@@ -1815,11 +1847,26 @@ Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-            aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+            sal_Int32 nSpaceBefore = 0;
+            pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
+            short nX = (short)(rLRItem.GetTxtLeft()
+                            + rLRItem.GetTxtFirstLineOfst()
+                            + nSpaceBefore);
+            aPoint.X() = pImpEditEngine->GetXValue( nX
+                             );
         }
         aPoint.Y() = pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
     }
     return aPoint;
+}
+
+const SvxNumberFormat* EditEngine::GetNumberFormat( USHORT nPara ) const
+{
+    // derived objects may overload this function to give access to
+    // bullet information (see Outliner)
+    (void) nPara;
+    return 0;
 }
 
 BOOL EditEngine::IsRightToLeft( USHORT nPara ) const
@@ -2689,9 +2736,10 @@ sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 }
 
 // Mal in den Outliner schieben...
-void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLevel,
-                                    const SvxBulletItem* pOldBullet, const SvxLRSpaceItem* pOldLRSpace )
+void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 /*nLevel*/,
+                                    const SvxBulletItem* /*pOldBullet*/, const SvxLRSpaceItem* /*pOldLRSpace*/ )
 {
+/* TL_NFLR
     if ( pOldBullet || pOldLRSpace )
     {
         // Numberformat dynamisch, weil Zuweisungsoperator nicht implementiert.
@@ -2763,17 +2811,18 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
         }
 
         // Einzug und Erstzeileneinzug
-        if ( pOldLRSpace )
-        {
-            short nLSpace = (short)pOldLRSpace->GetTxtLeft();
-            pNumberFormat->SetLSpace( nLSpace );
-            pNumberFormat->SetAbsLSpace( nLSpace );
-            pNumberFormat->SetFirstLineOffset( pOldLRSpace->GetTxtFirstLineOfst() );
-        }
+//TL_NFLR       if ( pOldLRSpace )
+//TL_NFLR       {
+//TL_NFLR           short nLSpace = (short)pOldLRSpace->GetTxtLeft();
+//TL_NFLR           pNumberFormat->SetLSpace( nLSpace );
+//TL_NFLR           pNumberFormat->SetAbsLSpace( nLSpace );
+//TL_NFLR           pNumberFormat->SetFirstLineOffset( pOldLRSpace->GetTxtFirstLineOfst() );
+//TL_NFLR       }
 
         rNumBullet.GetNumRule()->SetLevel( nLevel, *pNumberFormat );
         delete pNumberFormat;
     }
+*/
 }
 
 BOOL EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
