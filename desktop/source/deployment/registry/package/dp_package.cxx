@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -579,9 +579,13 @@ bool BackendImpl::PackageImpl::checkDependencies(
         css::uno::Reference<css::xml::xpath::XXPathAPI> xPath =
             getDescriptionInfoset().getXpath();
 
-        css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
-            xPath->selectSingleNode(xRoot,
+        css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic;
+        try {
+            nodeSimpleLic = xPath->selectSingleNode(xRoot,
             OUSTR("/desc:description/desc:registration/desc:simple-license"));
+        } catch (css::xml::xpath::XPathException &) {
+            // ignore
+        }
 
         if (!nodeSimpleLic.is())
             return true;
