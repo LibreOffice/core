@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableController.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -861,7 +861,20 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup,sal_Boo
         return; // the database doesn't support keys
 
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
-    Reference<XDataDescriptorFactory> xKeyFactory(_rxSup->getKeys(),UNO_QUERY);
+    Reference<XIndexAccess> xKeys(_rxSup->getKeys(),UNO_QUERY);
+    Reference<XPropertySet> xProp;
+    const sal_Int32 nCount = xKeys->getCount();
+    for(sal_Int32 i=0;i< nCount ;++i)
+    {
+        xKeys->getByIndex(i) >>= xProp;
+        sal_Int32 nKeyType = 0;
+        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+        if(KeyType::PRIMARY == nKeyType)
+        {
+            return; // primary key already exists after appending a column
+        }
+    }
+    Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
     if ( !xKeyFactory.is() )
         return;
