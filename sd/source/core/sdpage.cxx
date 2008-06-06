@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpage.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -404,7 +404,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
             USHORT nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
-            pOutliner->SetMinDepth(0);
             pOutliner->SetStyleSheet( 0, NULL );
             pOutliner->SetVertical( bVertical );
 
@@ -2073,7 +2072,6 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner( TRUE );
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
-            pOutl->SetMinDepth(1, TRUE);
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
@@ -2134,7 +2132,6 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
-            pOutl->SetMinDepth(0, TRUE);
             pOutlParaObj = pOutl->CreateParaObject();
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
@@ -2363,13 +2360,11 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *( (SdDrawDocument*) GetModel() )->GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
             pOutl->SetStyleSheetPool((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
-            pOutl->SetMinDepth(0);
             pOutl->EnableUndo(FALSE);
             pOutl->SetUpdateMode( FALSE );
         }
 
         USHORT nOutlMode = pOutl->GetMode();
-        USHORT nMinDepth = pOutl->GetMinDepth();
         Size aPaperSize = pOutl->GetPaperSize();
         BOOL bUpdateMode = pOutl->GetUpdateMode();
         pOutl->SetUpdateMode(FALSE);
@@ -2389,7 +2384,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             case PRESOBJ_OUTLINE:
             {
                 pOutl->Init( OUTLINERMODE_OUTLINEOBJECT );
-                pOutl->SetMinDepth(1);
 
                 aString += sal_Unicode( '\t' );
                 aString += rString;
@@ -2427,7 +2421,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             case PRESOBJ_TITLE:
             {
                 pOutl->Init( OUTLINERMODE_TITLEOBJECT );
-                pOutl->SetMinDepth(0);
                 aString += rString;
             }
             break;
@@ -2435,7 +2428,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             default:
             {
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-                pOutl->SetMinDepth(0);
                 aString += rString;
 
                 // check if we need to add a text field
@@ -2475,9 +2467,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         if( aString.Len() )
             pOutl->SetText( aString, pOutl->GetParagraph( 0 ) );
 
-        // MT: Wird nicht gebraucht...
-        // pOutl->SetUpdateMode(TRUE);
-
         ( (SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
         if (!pOutliner)
@@ -2491,7 +2480,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
             pOutl->Init( nOutlMode );
             pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
             pOutl->SetUpdateMode( bUpdateMode );
-            pOutl->SetMinDepth( nMinDepth );
             pOutl->SetPaperSize( aPaperSize );
         }
     }
