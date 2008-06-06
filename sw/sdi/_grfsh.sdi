@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _grfsh.sdi,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,13 @@ interface BaseTextGraphic
         ExecMethod = Execute ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    FN_SAVE_GRAPHIC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
     ]
 
     SID_INSERT_GRAPHIC // zeigt auf FN_FORMAT_GRAFIC_DLG
