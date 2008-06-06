@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawdoc.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -682,7 +682,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
     ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-       rDrawOutliner.SetMinDepth(0);
     ULONG nCntrl = rDrawOutliner.GetControlWord();
     if (mbOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -694,17 +693,14 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // aber nicht den globalen Outliner, den der ist ja nicht
     // dokumentspezifisch wie StyleSheetPool und StyleRequestHandler
     pHitTestOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-       pHitTestOutliner->SetMinDepth(0);
 
     if(mpOutliner)
     {
         mpOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-        mpOutliner->SetMinDepth(0);
     }
     if(mpInternalOutliner)
     {
         mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-        mpInternalOutliner->SetMinDepth(0);
     }
 
     if ( eMode == DOC_LOADED )
@@ -859,7 +855,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if (aString.Len())
                     {
                         sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
-                        pInternalOutl->SetMinDepth(0);
                         pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
                         pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
                         pInternalOutl->Clear();
@@ -892,7 +887,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         mpOutliner->SetDefTab( nDefaultTabulator );
         mpOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-        mpOutliner->SetMinDepth(0);
     }
 
     return(mpOutliner);
@@ -924,7 +918,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         mpInternalOutliner->SetDefTab( nDefaultTabulator );
         mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-        mpInternalOutliner->SetMinDepth(0);
     }
 
     DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == FALSE ) , "InternalOutliner: UpdateMode = TRUE !" );
