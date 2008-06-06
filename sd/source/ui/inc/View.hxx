@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: View.hxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,6 +214,9 @@ public:
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );
+
+    virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfos );
+    virtual void OnEndPasteOrDrop( PasteOrDropInfos* pInfos );
 
     SdDrawDocument*         mpDoc;
     DrawDocShell*           mpDocSh;
