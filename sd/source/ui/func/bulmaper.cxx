@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bulmaper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,10 @@
 
 #include "bulmaper.hxx"
 
+
 #define GetWhich(nSlot) rSet.GetPool()->GetWhich( nSlot )
+
+/* #i35937#
 
 void SdBulletMapper::PreMapNumBulletForDialog( SfxItemSet& rSet )
 {
@@ -75,7 +78,7 @@ void SdBulletMapper::PreMapNumBulletForDialog( SfxItemSet& rSet )
             SvxNumRule aNewRule( pRule->GetFeatureFlags(), 9, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
 
             for( USHORT i = 0; i < 9; i++ )
-                aNewRule.SetLevel(i, pRule->GetLevel(i+1));
+                aNewRule.SetLevel(i, pRule->GetLevel(i));
 
             rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
         }
@@ -97,13 +100,14 @@ void SdBulletMapper::PostMapNumBulletForDialog( SfxItemSet& rSet )
                 SvxNumRule aNewRule( pRule->GetFeatureFlags(), 10, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
 
                 for( USHORT i = 0; i < 9; i++ )
-                    aNewRule.SetLevel(i+1, pRule->GetLevel(i));
+                    aNewRule.SetLevel(i, pRule->GetLevel(i));
 
                 rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
             }
         }
     }
 }
+*/
 
 void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet )
 {
