@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_gui_dialog2.hxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +94,7 @@ class ExtMgrDialog : public ModelessDialog
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleCancelBtn, void * );
-    DECL_DLLPRIVATE_LINK( HandleGetExtensions, svt::FixedHyperlink * );
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlink * );
     DECL_DLLPRIVATE_LINK( TimeOutHdl, Timer* );
     DECL_DLLPRIVATE_LINK( startProgress, ::osl::Condition * );
 
