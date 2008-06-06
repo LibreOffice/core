@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotest.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,9 +75,14 @@ namespace unotest
                     CPPUNIT_ASSERT_MESSAGE("can't get sax::Parser", xParser.is());
                 }
             }
+        void ctor_002()
+            {
+                CPPUNIT_ASSERT_MESSAGE("Simple testshl2 test, MUST fail.", sal_False);
+            }
 
         CPPUNIT_TEST_SUITE(ctor);
         CPPUNIT_TEST(ctor_001);
+        CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST_SUITE_END();
     };
 
