@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accessibility.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1448,16 +1448,16 @@ sal_Bool SmTextForwarder::QuickFormatDoc( BOOL /*bFull*/ )
     return bRes;
 }
 
-USHORT SmTextForwarder::GetDepth( USHORT /*nPara*/ ) const
+sal_Int16 SmTextForwarder::GetDepth( USHORT /*nPara*/ ) const
 {
     // math has no outliner...
-    return 0;
+    return -1;
 }
 
-sal_Bool SmTextForwarder::SetDepth( USHORT /*nPara*/, USHORT nNewDepth )
+sal_Bool SmTextForwarder::SetDepth( USHORT /*nPara*/, sal_Int16 nNewDepth )
 {
     // math has no outliner...
-    return 0 == nNewDepth;  // is it the value from 'GetDepth' ?
+    return -1 == nNewDepth;  // is it the value from 'GetDepth' ?
 }
 
 sal_Bool SmTextForwarder::Delete( const ESelection& rSelection )
