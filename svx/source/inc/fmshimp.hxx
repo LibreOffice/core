@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmshimp.hxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -532,6 +532,15 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
             getControlContainerForView();
+
+    /** finds and sets a default for m_xCurrentForm, if it is currently NULL
+    */
+    void    impl_defaultCurrentForm_nothrow();
+
+    /** sets m_xCurrentForm to the provided form, and udpates everything which
+        depends on the current form
+    */
+    void    impl_updateCurrentForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxNewCurForm );
 
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling
