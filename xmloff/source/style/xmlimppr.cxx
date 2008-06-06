@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimppr.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,8 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlerror.hxx"
 #include <tools/debug.hxx>
+
+#include "xmloff/contextid.hxx"
 
 // STL includes
 #include <algorithm>
@@ -168,6 +170,7 @@ void SvXMLImportPropertyMapper::importXML(
         // for better error reporting: this should be set true if no
         // warning is needed
         sal_Bool bNoWarning = sal_False;
+        bool bAlienImport = false;
 
         do
         {
@@ -180,89 +183,100 @@ void SvXMLImportPropertyMapper::importXML(
                 // create a XMLPropertyState with an empty value
 
                 nFlags = maPropMapper->GetEntryFlags( nIndex );
-                if( ( nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT ) == 0 )
+                if( (( nFlags & MID_FLAG_NO_PROPERTY ) == MID_FLAG_NO_PROPERTY) && (maPropMapper->GetEntryContextId( nIndex ) == CTF_ALIEN_ATTRIBUTE_IMPORT) )
                 {
-                    XMLPropertyState aNewProperty( nIndex );
-                    sal_Int32 nReference = -1;
-
-                    // if this is a multi attribute check if another attribute already set
-                    // this any. If so use this as a initial value
-                    if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
+                    bAlienImport = true;
+                    nIndex = -1;
+                }
+                else
+                {
+                    if( ( nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT ) == 0 )
                     {
-                        const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
-                        const sal_Int32 nSize = rProperties.size();
-                        for( nReference = 0; nReference < nSize; nReference++ )
+                        XMLPropertyState aNewProperty( nIndex );
+                        sal_Int32 nReference = -1;
+
+                        // if this is a multi attribute check if another attribute already set
+                        // this any. If so use this as a initial value
+                        if( ( nFlags & MID_FLAG_MERGE_PROPERTY ) != 0 )
                         {
-                            sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
-                            if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
-                                (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
+                            const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
+                            const sal_Int32 nSize = rProperties.size();
+                            for( nReference = 0; nReference < nSize; nReference++ )
                             {
-                                aNewProperty = rProperties[nReference];
-                                aNewProperty.mnIndex = nIndex;
-                                break;
+                                sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
+                                if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
+                                    (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
+                                {
+                                    aNewProperty = rProperties[nReference];
+                                    aNewProperty.mnIndex = nIndex;
+                                    break;
+                                }
+                            }
+
+                            if( nReference == nSize )
+                                nReference = -1;
+                        }
+
+                        sal_Bool bSet = sal_False;
+                        if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
+                        {
+                            // let the XMLPropertySetMapper decide how to import the value
+                            bSet = maPropMapper->importXML( rValue, aNewProperty,
+                                                     rUnitConverter );
+                        }
+                        else
+                        {
+                            sal_uInt32 nOldSize = rProperties.size();
+
+                            bSet = handleSpecialItem( aNewProperty, rProperties,
+                                                      rValue, rUnitConverter,
+                                                         rNamespaceMap );
+
+                            // no warning if handleSpecialItem added properties
+                            bNoWarning |= ( nOldSize != rProperties.size() );
+                        }
+
+                        // no warning if we found could set the item. This
+                        // 'remembers' bSet across multi properties.
+                        bNoWarning |= bSet;
+
+                        // store the property in the given vector
+                        if( bSet )
+                        {
+                            if( nReference == -1 )
+                                rProperties.push_back( aNewProperty );
+                            else
+                                rProperties[nReference] = aNewProperty;
+                        }
+                        else
+                        {
+                            // warn about unknown value. Unless it's a
+                            // multi property: Then we get another chance
+                            // to set the value.
+                            if( !bNoWarning &&
+                                ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
+                            {
+                                Sequence<OUString> aSeq(2);
+                                aSeq[0] = rAttrName;
+                                aSeq[1] = rValue;
+                                rImport.SetError( XMLERROR_FLAG_WARNING |
+                                                  XMLERROR_STYLE_ATTR_VALUE,
+                                                  aSeq );
                             }
                         }
-
-                        if( nReference == nSize )
-                            nReference = -1;
                     }
-
-                    sal_Bool bSet = sal_False;
-                    if( ( nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT ) == 0 )
-                    {
-                        // let the XMLPropertySetMapper decide how to import the value
-                        bSet = maPropMapper->importXML( rValue, aNewProperty,
-                                                 rUnitConverter );
-                    }
-                    else
-                    {
-                        sal_uInt32 nOldSize = rProperties.size();
-
-                        bSet = handleSpecialItem( aNewProperty, rProperties,
-                                                  rValue, rUnitConverter,
-                                                     rNamespaceMap );
-
-                        // no warning if handleSpecialItem added properties
-                        bNoWarning |= ( nOldSize != rProperties.size() );
-                    }
-
-                    // no warning if we found could set the item. This
-                    // 'remembers' bSet across multi properties.
-                    bNoWarning |= bSet;
-
-                    // store the property in the given vector
-                    if( bSet )
-                    {
-                        if( nReference == -1 )
-                            rProperties.push_back( aNewProperty );
-                        else
-                            rProperties[nReference] = aNewProperty;
-                    }
-                    else
-                    {
-                        // warn about unknown value. Unless it's a
-                        // multi property: Then we get another chance
-                        // to set the value.
-                        if( !bNoWarning &&
-                            ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
-                        {
-                            Sequence<OUString> aSeq(2);
-                            aSeq[0] = rAttrName;
-                            aSeq[1] = rValue;
-                            rImport.SetError( XMLERROR_FLAG_WARNING |
-                                              XMLERROR_STYLE_ATTR_VALUE,
-                                              aSeq );
-                        }
-                    }
+                    bFound = sal_True;
+                    continue;
                 }
-                bFound = sal_True;
             }
-            else if( !bFound )
+
+            if( !bFound )
             {
-                if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) )
+                if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) || bAlienImport )
                 {
                     OSL_ENSURE( XML_NAMESPACE_NONE == nPrefix ||
-                                (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix),
+                                (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
+                                bAlienImport,
                                 "unknown attribute - might be a new feature?" );
                     if( !xAttrContainer.is() )
                     {
