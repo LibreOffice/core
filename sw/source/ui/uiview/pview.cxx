@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pview.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1065,17 +1065,22 @@ void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
             bCallBase = FALSE;
         break;
 
-       case COMMAND_WHEEL:
-       case COMMAND_STARTAUTOSCROLL:
-       case COMMAND_AUTOSCROLL:
-       {
-           const CommandWheelData* pData = rCEvt.GetWheelData();
-           const CommandWheelData aDataNew(pData->GetDelta(),pData->GetNotchDelta(),COMMAND_WHEEL_PAGESCROLL,
-               pData->GetMode(),pData->GetModifier(),pData->IsHorz());
-           const CommandEvent aEvent( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),rCEvt.IsMouseEvent(),&aDataNew);
-           bCallBase = !mrView.HandleWheelCommands( aEvent );
-           break;
+        case COMMAND_WHEEL:
+        case COMMAND_STARTAUTOSCROLL:
+        case COMMAND_AUTOSCROLL:
+        {
+            const CommandWheelData* pData = rCEvt.GetWheelData();
+            if( pData )
+            {
+                const CommandWheelData aDataNew(pData->GetDelta(),pData->GetNotchDelta(),COMMAND_WHEEL_PAGESCROLL,
+                    pData->GetMode(),pData->GetModifier(),pData->IsHorz());
+                const CommandEvent aEvent( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),rCEvt.IsMouseEvent(),&aDataNew);
+                    bCallBase = !mrView.HandleWheelCommands( aEvent );
+            }
+            else
+                bCallBase = !mrView.HandleWheelCommands( rCEvt );
        }
+       break;
        default:
            // OD 17.12.2002 #103492# - delete assertion
            ;
