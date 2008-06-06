@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartModel.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include "ControllerLockGuard.hxx"
 #include "ObjectIdentifier.hxx"
 #include <comphelper/InlineContainer.hxx>
+#include <comphelper/processfactory.hxx>
 
 // header for class SvNumberFormatsSupplierObj
 #include <svtools/numuno.hxx>
@@ -647,6 +648,22 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     return impl::ChartModel_Base::getTypes();
 }
 
+//-----------------------------------------------------------------
+// document::XDocumentPropertiesSupplier
+//-----------------------------------------------------------------
+uno::Reference< document::XDocumentProperties > SAL_CALL
+        ChartModel::getDocumentProperties() throw (uno::RuntimeException)
+{
+    if ( !m_xDocumentProperties.is() )
+    {
+        uno::Reference< document::XDocumentProperties > xDocProps(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                C2U("com.sun.star.document.DocumentProperties") ), uno::UNO_QUERY );
+        m_xDocumentProperties.set(xDocProps);
+    }
+    return m_xDocumentProperties;
+}
+
 /*
 //-----------------------------------------------------------------
 // view::XPrintable (optional interface)
@@ -697,16 +714,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 
         uno::Reference< container::XNameReplace > SAL_CALL ChartModel
 ::getEvents() throw(uno::RuntimeException)
-{
-    //@todo
-}
-
-//-----------------------------------------------------------------
-// document::XDocumentInfoSupplier (optional interface)
-//-----------------------------------------------------------------
-
-        uno::Reference< document::XDocumentInfo > SAL_CALL ChartModel
-::getDocumentInfo() throw(uno::RuntimeException)
 {
     //@todo
 }
