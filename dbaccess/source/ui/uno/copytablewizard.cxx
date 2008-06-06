@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: copytablewizard.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -374,7 +374,7 @@ private:
         ,m_aContext( _rxORB )
         ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
         ,m_sDestinationTable()
-        ,m_aPrimaryKeyName()
+        ,m_aPrimaryKeyName( sal_False, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) ))
         ,m_xSourceConnection()
         ,m_nCommandType( CommandType::COMMAND )
         ,m_pSourceObject()
