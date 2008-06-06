@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,11 +566,13 @@ private:
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
     sal_Int32 m_nMaxAxisIndex;
+    bool m_bShiftXAxisTicks;
 };
 
 SeriesPlotterContainer::SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList )
         : m_rVCooSysList( rVCooSysList )
         , m_nMaxAxisIndex(0)
+        , m_bShiftXAxisTicks(false)
 {
 }
 
@@ -661,6 +663,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
         {
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+
+            if(nT==0)
+                m_bShiftXAxisTicks = ChartTypeHelper::shiftTicksAtXAxisPerDefault( xChartType );
 
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount );
             if( !pPlotter )
@@ -903,7 +908,11 @@ void SeriesPlotterContainer::doAutoScaling()
             rAxisUsage.aScaleAutomatism.calculateExplicitScaleAndIncrement( aExplicitScale, aExplicitIncrement );
 
             for( nC=0; nC < aVCooSysList_X.size(); nC++)
+            {
+                if( m_bShiftXAxisTicks )
+                    aExplicitIncrement.ShiftedPosition = true;
                 aVCooSysList_X[nC]->setExplicitScaleAndIncrement( 0, nAxisIndex, aExplicitScale, aExplicitIncrement );
+            }
             for( nC=0; nC < aVCooSysList_Z.size(); nC++)
                 aVCooSysList_Z[nC]->setExplicitScaleAndIncrement( 2, nAxisIndex, aExplicitScale, aExplicitIncrement );
         }
@@ -2358,6 +2367,13 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             break;
         default:
             break;
+    }
+
+    if(bShapeChanged)
+    {
+        //#i76053# do not send view modified notifications for changes on the hidden page which contains e.g. the symbols for the dialogs
+        if( ChartView::getSdrPage() != pSdrHint->GetPage() )
+            bShapeChanged=false;
     }
 
     if(!bShapeChanged)
