@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: databasedocument.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,6 @@
 #include "module_dba.hxx"
 
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/numberedcollection.hxx>
@@ -142,6 +141,8 @@ using namespace ::com::sun::star::ui;
 using namespace ::cppu;
 using namespace ::osl;
 
+using ::com::sun::star::awt::XWindow;
+
 //........................................................................
 namespace dbaccess
 {
@@ -188,8 +189,8 @@ ODatabaseDocument::~ODatabaseDocument()
         dispose();
     }
 }
-//------------------------------------------------------------------------------
-Any SAL_CALL ODatabaseDocument::queryInterface(const Type& _rType) throw (RuntimeException)
+// -----------------------------------------------------------------------------
+Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
     // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
     // which already contains macros. In this case, the database document itself is not
@@ -293,7 +294,10 @@ namespace
 {
     static void lcl_stripLoadArguments( ::comphelper::NamedValueCollection& _rArguments, Sequence< PropertyValue >& _rArgs )
     {
+        OSL_ENSURE( !_rArguments.has( "Model" ), "lcl_stripLoadArguments: this is suspicious (1)!" );
+        OSL_ENSURE( !_rArguments.has( "ViewName" ), "lcl_stripLoadArguments: this is suspicious (2)!" );
         _rArguments.remove( "Model" );
+        _rArguments.remove( "ViewName" );
         _rArguments >>= _rArgs;
     }
 
@@ -321,14 +325,13 @@ namespace
 
     static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const Sequence< PropertyValue >& _rDescriptor, const ::rtl::OUString _rURL )
     {
-        Sequence< PropertyValue > aMediaDescriptor( _rDescriptor );
+        ::comphelper::NamedValueCollection aMediaDescriptor( _rDescriptor );
         if ( _rURL.getLength() )
         {
-            aMediaDescriptor.realloc( _rDescriptor.getLength() + 1 );
-            aMediaDescriptor[ _rDescriptor.getLength() ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
-            aMediaDescriptor[ _rDescriptor.getLength() ].Value <<= _rURL;
+            aMediaDescriptor.put( "FileName", _rURL );
+            aMediaDescriptor.put( "URL", _rURL );
         }
-        return aMediaDescriptor;
+        return aMediaDescriptor.getPropertyValues();
     }
 }
 
@@ -406,16 +409,15 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 
     // now that somebody (perhaps) told us an macro execution mode, remember it as
     // ImposedMacroExecMode
-    ::comphelper::NamedValueCollection aArgs( m_pImpl->m_aArgs );
     m_pImpl->setImposedMacroExecMode(
-        aArgs.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
+        aResource.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
 
-    ::rtl::OUString sDocumentURL( aResource.getOrDefault( "SalvagedFile", _rURL ) );
-    if ( !sDocumentURL.getLength() )
+    ::rtl::OUString sDocumentLocation( aResource.getOrDefault( "SalvagedFile", _rURL ) );
+    if ( !sDocumentLocation.getLength() )
         // this indicates "the document is being recovered, but _rURL already is the real document URL,
         // not the temporary document location"
-        sDocumentURL = _rURL;
-    m_pImpl->switchToURL( _rURL, sDocumentURL );
+        sDocumentLocation = _rURL;
+    m_pImpl->switchToURL( sDocumentLocation, _rURL );
 
     bool bSuccess =
         (   m_pImpl->getOrCreateRootStorage().is()
@@ -602,10 +604,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
     if ( bLocationChanged )
     {
         // create storage for target URL
-        Reference< XStorage > xTargetStorage;
-        if ( !impl_createStorageFor_throw( _rURL, xTargetStorage ) )
-            // failed, but handled by an interaction handler
-            return;
+        Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
 
         if ( m_pImpl->isEmbeddedDatabase() )
             m_pImpl->clearConnections();
@@ -652,70 +651,14 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 }
 
 // -----------------------------------------------------------------------------
-bool ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL, Reference< XStorage >& _out_rxStorage ) const
+Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
-    _out_rxStorage.clear();
-
     Sequence<Any> aParam(2);
     aParam[0] <<= _rURL;
     aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
 
-    Any aOriginalError;
-    try
-    {
-        Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
-        _out_rxStorage.set( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
-    }
-    catch ( const Exception& )
-    {
-        aOriginalError = ::cppu::getCaughtException();
-    }
-
-    if ( _out_rxStorage.is() )
-        return true;
-
-    // try handling the error with the interaction handler
-    ::comphelper::NamedValueCollection aArgs( m_pImpl->m_aArgs );
-    Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
-    if ( xHandler.is() )
-    {
-        ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( aOriginalError ) );
-        ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
-        pRequest->addContinuation( pApprove.get() );
-
-        try
-        {
-            xHandler->handle( pRequest.get() );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-
-        if ( pApprove->wasSelected() )
-            return false;
-    }
-
-    Exception aException;
-    OSL_VERIFY( aOriginalError >>= aException );
-    ::rtl::OUString sOriginalExceptionType = aOriginalError.getValueTypeName();
-    ::rtl::OUString sOriginalExceptionMessage = aException.Message;
-
-    // TODO: resource
-    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( "Could not create a storage for '" );
-    sMessage += _rURL;
-    sMessage += ::rtl::OUString::createFromAscii( "'." );
-    if ( sOriginalExceptionMessage.getLength() )
-    {
-        sMessage += ::rtl::OUString::createFromAscii( "\noriginal error message: " );
-        sMessage += sOriginalExceptionMessage;
-    }
-    if ( sOriginalExceptionType.getLength() )
-    {
-        sMessage += ::rtl::OUString::createFromAscii( "\noriginal error type: " );
-        sMessage += sOriginalExceptionType;
-    }
-    throw IOException( sMessage, *const_cast< ODatabaseDocument* >( this ) );
+    Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory(), UNO_SET_THROW );
+    return Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
 }
 
 // -----------------------------------------------------------------------------
@@ -769,10 +712,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
     ModifyLock aLock( *this );
 
     // create storage for target URL
-    Reference< XStorage > xTargetStorage;
-    if ( !impl_createStorageFor_throw( _rURL, xTargetStorage ) )
-        // failed, but handled by an interaction handler
-        return;
+    Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
 
     // extend media descriptor with URL
     Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
@@ -1444,15 +1384,40 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getAvailableViewControll
     return aNames;
 }
 // -----------------------------------------------------------------------------
-Reference< XController > SAL_CALL ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& /*Frame*/, Reference< ::com::sun::star::awt::XWindow >& /*ComponentWindow*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
+Reference< XController2 > SAL_CALL ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    return Reference< XController >();
+    return createViewController(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Default" ) ),
+        Sequence< PropertyValue >(),
+        _Frame
+    );
 }
+
 // -----------------------------------------------------------------------------
-Reference< XController > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& /*ViewName*/, const Sequence< PropertyValue >& /*Arguments*/, const Reference< XFrame >& /*Frame*/, Reference< ::com::sun::star::awt::XWindow >& /*ComponentWindow*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
+Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& _ViewName, const Sequence< PropertyValue >& _Arguments, const Reference< XFrame >& _Frame ) throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    return Reference< XController >();
+    if ( !_ViewName.equalsAscii( "Default" ) && !_ViewName.equalsAscii( "Preview" ) )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+    if ( !_Frame.is() )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 3 );
+
+    ModelMethodGuard aGuard( *this );
+    ::comphelper::ComponentContext aContext( m_pImpl->m_aContext );
+    aGuard.clear();
+
+    Reference< XController2 > xController;
+    aContext.createComponent( "org.openoffice.comp.dbu.OApplicationController", xController );
+
+    ::comphelper::NamedValueCollection aInitArgs( _Arguments );
+    aInitArgs.put( "Frame", _Frame );
+    if ( _ViewName.equalsAscii( "Preview" ) )
+        aInitArgs.put( "Preview", sal_Bool( sal_True ) );
+    Reference< XInitialization > xInitController( xController, UNO_QUERY_THROW );
+    xInitController->initialize( aInitArgs.getWrappedPropertyValues() );
+
+    return xController;
 }
+
 // -----------------------------------------------------------------------------
 //=============================================================================
 Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
