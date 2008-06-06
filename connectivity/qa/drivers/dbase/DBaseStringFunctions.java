@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBaseStringFunctions.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ import java.io.*;
 
 public class DBaseStringFunctions {
 
-        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR04'";
+        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
         private XMultiServiceFactory m_xORB;
         private DBaseDriverTest testcase;
         public DBaseStringFunctions(XMultiServiceFactory _xORB,DBaseDriverTest _testcase){
@@ -191,6 +191,10 @@ public class DBaseStringFunctions {
         XRow row = execute(xRowRes,"lower('TEST'),LCASE('TEST') ");
         assure("lower('TEST') failed!",row.getString(1).equals("test"));
         assure("lcase('TEST') failed!",row.getString(2).equals("test"));
+        final String t = where;
+        where = "FROM \"biblio\" \"biblio\" where LOWER(\"Identifier\") like 'bor%'";
+        row = execute(xRowRes,"lower('TEST'),LCASE('TEST') ");
+        where = t;
     }
 
     private void acsii(XRowSet xRowRes) throws com.sun.star.uno.Exception,com.sun.star.beans.UnknownPropertyException {

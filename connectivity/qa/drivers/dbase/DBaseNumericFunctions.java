@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DBaseNumericFunctions.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ import java.io.*;
 
 public class DBaseNumericFunctions {
 
-        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR04'";
+        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
         private XMultiServiceFactory m_xORB;
         private DBaseDriverTest testcase;
         public DBaseNumericFunctions(XMultiServiceFactory _xORB,DBaseDriverTest _testcase){
