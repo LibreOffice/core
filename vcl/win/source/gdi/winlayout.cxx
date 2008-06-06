@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: winlayout.cxx,v $
- * $Revision: 1.112 $
+ * $Revision: 1.113 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1221,13 +1221,13 @@ static bool InitUSP()
     if( pModuleFileCStr )
     {
         DWORD nHandle;
-        DWORD nBufSize = ::GetFileVersionInfoSizeW( pModuleFileCStr, &nHandle );
+        DWORD nBufSize = ::GetFileVersionInfoSizeW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), &nHandle );
         char* pBuffer = (char*)alloca( nBufSize );
-        WIN_BOOL bRC = ::GetFileVersionInfoW( pModuleFileCStr, nHandle, nBufSize, pBuffer );
+        WIN_BOOL bRC = ::GetFileVersionInfoW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), nHandle, nBufSize, pBuffer );
         VS_FIXEDFILEINFO* pFixedFileInfo = NULL;
         UINT nFixedFileSize = 0;
         if( bRC )
-            ::VerQueryValueW( pBuffer, L"\\", (void**)&pFixedFileInfo, &nFixedFileSize );
+            ::VerQueryValueW( pBuffer, const_cast<LPWSTR>(L"\\"), (void**)&pFixedFileInfo, &nFixedFileSize );
         if( pFixedFileInfo && pFixedFileInfo->dwSignature == 0xFEEF04BD )
             nUspVersion = HIWORD(pFixedFileInfo->dwProductVersionMS) * 10000
                         + LOWORD(pFixedFileInfo->dwProductVersionMS);
