@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MNSFolders.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::mozilla;
 
 namespace
 {
-    #if defined(XP_MAC) || defined(XP_MACOSX)
+    #if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX)
         #define APP_REGISTRY_NAME "Application Registry"
     #elif defined(XP_WIN) || defined(XP_OS2)
         #define APP_REGISTRY_NAME "registry.dat"
@@ -79,6 +79,10 @@ namespace
         { "Mozilla/", NULL, NULL },
         { "Mozilla/Firefox/", NULL, NULL },
         { "Thunderbird/", "Mozilla/Thunderbird/", NULL }
+    #elif(MACOSX)
+        { "../Mozilla/", NULL, NULL },
+        { "Firefox/", NULL, NULL },
+        { "../Thunderbird/", NULL, NULL }
     #else
         { ".mozilla/", NULL, NULL },
         { ".mozilla/firefox/", NULL, NULL },
