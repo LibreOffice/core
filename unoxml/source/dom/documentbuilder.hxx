@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentbuilder.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,17 +41,22 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
+#include <com/sun/star/xml/sax/XEntityResolver.hpp>
+#include <com/sun/star/xml/sax/XErrorHandler.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "libxml/tree.h"
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
+using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::io;
 
 namespace DOM
@@ -61,6 +66,8 @@ namespace DOM
     {
     private:
         Reference< XMultiServiceFactory > m_aFactory;
+        Reference< XEntityResolver > m_aEntityResolver;
+        Reference< XErrorHandler > m_aErrorHandler;
 
     public:
 
@@ -117,25 +124,36 @@ namespace DOM
         return a new DOM Document object.
         */
         virtual Reference< XDocument > SAL_CALL parse(const Reference< XInputStream >& is)
-            throw (RuntimeException);
+            throw (RuntimeException, SAXParseException, IOException);
 
         /**
         Parse the content of the given URI as an XML document and return
         a new DOM Document object.
         */
-        //virtual XDocument SAL_CALL parse(const string& uri);
+        virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)
+            throw (RuntimeException, SAXParseException, IOException);
+
+        virtual Reference< XDocument > SAL_CALL parseSource(const InputSource& is)
+            throw (RuntimeException, SAXParseException, IOException);
+
 
         /**
         Specify the EntityResolver to be used to resolve entities present
         in the XML document to be parsed.
         */
-        // virtual void SAL_CALL setEntityResolver(const XEntityResolver& er);
+        virtual void SAL_CALL setEntityResolver(const Reference< XEntityResolver >& er)
+            throw (RuntimeException);
+
+        virtual Reference< XEntityResolver > SAL_CALL getEntityResolver()
+            throw (RuntimeException);
+
 
         /**
         Specify the ErrorHandler to be used to report errors present in
         the XML document to be parsed.
         */
-        //virtual void SAL_CALL setErrorHandler(const XErrorHandler& eh);
+        virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler >& eh)
+            throw (RuntimeException);
     };
 }
 
