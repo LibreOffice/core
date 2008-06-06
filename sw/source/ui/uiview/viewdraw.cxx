@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewdraw.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -614,6 +614,8 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin, 
             Color aBackground(pSh->GetShapeBackgrd());
             pView->SetBackgroundColor(aBackground);
         }
+        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+        pView->SetSelection(aNewSelection);
     }
 
     return bRet;
