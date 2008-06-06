@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VCartesianGrid.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,7 +237,10 @@ void SAL_CALL VCartesianGrid::createShapes()
     std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
     TickmarkHelper& aTickmarkHelper = *apTickmarkHelper.get();
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
-    aTickmarkHelper.getAllTicks( aAllTickInfos );
+    if( m_aIncrement.ShiftedPosition )
+        aTickmarkHelper.getAllTicksShifted( aAllTickInfos );
+    else
+        aTickmarkHelper.getAllTicks( aAllTickInfos );
 
     //-----------------------------------------
     //create tick mark line shapes
