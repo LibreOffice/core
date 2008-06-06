@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlobj.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +50,7 @@ class SVX_DLLPUBLIC OutlinerParaObject
     friend class Outliner;
 
     EditTextObject*             pText;
-    USHORT*                     pDepthArr;
+    sal_Int16*                  pDepthArr;
     sal_uInt32                  nCount;
     BOOL                        bIsEditDoc;
                                 OutlinerParaObject( USHORT nParaCount );
@@ -69,7 +69,7 @@ public:
     void                        SetVertical( BOOL bVertical );
 
     sal_uInt32                  Count() const                   { return nCount; }
-    USHORT                      GetDepth( USHORT nPara ) const  { return pDepthArr[nPara]; }
+    sal_Int16                   GetDepth( USHORT nPara ) const  { return pDepthArr[nPara]; }
     const EditTextObject&       GetTextObject() const           { return *pText; }
     void                        ClearPortionInfo();
     BOOL                        IsEditDoc() const               { return bIsEditDoc; }
@@ -84,14 +84,7 @@ public:
     BOOL                        RemoveCharAttribs( USHORT nWhich = 0 );
     BOOL                        RemoveParaAttribs( USHORT nWhich = 0 );
 
-    void                        SetLRSpaceItemFlags( BOOL bOutlineMode );
     void                        MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
-
-/* cl removed because not needed anymore since binfilter
-    void                        PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
-    void                        FinishStore();
-    void                        FinishLoad( SfxStyleSheetPool* pStyleSheetPool );
-*/
 };
 
 #endif
