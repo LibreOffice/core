@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TokenWriter.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +121,10 @@
 #ifndef _RTFOUT_HXX
 #include <svtools/rtfout.hxx>
 #endif
+#include <svx/htmlcfg.hxx>
+#include <connectivity/formattedcolumnvalue.hxx>
+#include <svtools/syslocale.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -164,8 +168,9 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
-
     DBG_CTOR(ODatabaseImportExport,NULL);
+
+    m_eDestEnc = osl_getThreadTextEncoding();
 
     osl_incrementInterlockedCount( &m_refCount );
     impl_initFromDescriptor( _aDataDescriptor, false );
@@ -193,6 +198,15 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_bCheckOnly(sal_False)
 {
     DBG_CTOR(ODatabaseImportExport,NULL);
+    m_eDestEnc = osl_getThreadTextEncoding();
+    try
+    {
+        SvtSysLocale aSysLocale;
+        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+    }
+    catch(Exception&)
+    {
+    }
 }
 //-------------------------------------------------------------------
 ODatabaseImportExport::~ODatabaseImportExport()
@@ -277,6 +291,15 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
 
     if ( _bPlusDefaultInit )
         initialize();
+
+    try
+    {
+        SvtSysLocale aSysLocale;
+        m_aLocale = aSysLocale.GetLocaleData().getLocale();
+    }
+    catch(Exception&)
+    {
+    }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
@@ -350,12 +373,7 @@ void ODatabaseImportExport::initialize()
                 m_xObject->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
 
             // the result set may be already set with the datadescriptor
-            if ( m_xResultSet.is() )
-            {
-                m_xRow.set(m_xResultSet,UNO_QUERY);
-                m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
-            }
-            else
+            if ( !m_xResultSet.is() )
             {
                 m_xResultSet.set(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
                 Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
@@ -366,12 +384,11 @@ void ODatabaseImportExport::initialize()
                     xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
                     Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
                     xRowSet->execute();
-                    m_xRow.set(xRowSet,UNO_QUERY);
-                    m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
                 }
                 else
                     OSL_ENSURE(sal_False, "ODatabaseImportExport::initialize: could not instantiate a rowset!");
-            }
+            } // if ( !m_xResultSet.is() )
+            impl_initializeRowMember_throw();
         }
         catch(Exception& )
         {
@@ -392,6 +409,17 @@ void ODatabaseImportExport::initialize()
     }
 
     m_bInInitialize = sal_False;
+}
+// -----------------------------------------------------------------------------
+void ODatabaseImportExport::impl_initializeRowMember_throw()
+{
+    if ( !m_xRow.is() && m_xResultSet.is() )
+    {
+        m_xRow.set(m_xResultSet,UNO_QUERY);
+        m_xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xRow,UNO_QUERY)->getMetaData();
+        Reference<XColumnsSupplier> xSup(m_xResultSet,UNO_QUERY_THROW);
+        m_xRowSetColumns.set(xSup->getColumns(),UNO_QUERY_THROW);
+    }
 }
 //======================================================================
 BOOL ORTFImportExport::Write()
@@ -579,6 +607,8 @@ BOOL ORTFImportExport::Write()
         (*m_pStream) << ODatabaseImportExport::sNewLine << '}';
         (*m_pStream) << ODatabaseImportExport::sNewLine;
 
+        ::comphelper::ComponentContext aContext(m_xFactory);
+        Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
         sal_Int32 kk=0;
         m_xResultSet->beforeFirst(); // set back before the first row
@@ -616,9 +646,13 @@ BOOL ORTFImportExport::Write()
 
                     try
                     {
-                        ::rtl::OUString sValue = m_xRow->getString(i);
-                        if (!m_xRow->wasNull())
-                            RTFOutFuncs::Out_String(*m_pStream,sValue,eDestEnc);
+                        Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
+                        dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
+                        ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
+                        // m_xRow->getString(i);
+                        //if (!m_xRow->wasNull())
+                        if ( sValue.getLength() )
+                            RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
                     }
                     catch (Exception&)
                     {
@@ -699,6 +733,9 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
     ,m_bCheckFont(FALSE)
 #endif
 {
+    // set HTML configuration
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
+    m_eDestEnc = pHtmlOptions->GetTextEncoding();
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
@@ -911,7 +948,8 @@ void OHTMLImportExport::WriteTables()
         TAG_ON_LF( sHTML_tbody );
 
         // 2. und jetzt die Daten
-
+        ::comphelper::ComponentContext aContext(m_xFactory);
+        Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 j=1;
         sal_Int32 kk=0;
         m_xResultSet->beforeFirst(); // set back before the first row
@@ -931,8 +969,10 @@ void OHTMLImportExport::WriteTables()
                     String aValue;
                     try
                     {
-                        ::rtl::OUString sValue = m_xRow->getString(i);
-                        if (!m_xRow->wasNull())
+                        Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
+                        dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
+                        ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
+                        if (sValue.getLength())
                         {
                             aValue = sValue;
                         }
@@ -966,11 +1006,9 @@ void OHTMLImportExport::WriteTables()
     IncIndent(-1); TAG_OFF_LF( sHTML_table );
 }
 //-----------------------------------------------------------------------
-void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,const String& rValue,const char* pHtmlTag)
+void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,
+                                   const String& rValue,const char* pHtmlTag)
 {
-    BOOL bValueData;
-    bValueData = FALSE;
-
     ::rtl::OString aStrTD = pHtmlTag;
 
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
@@ -1005,12 +1043,12 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
             ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, bValueData, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, FALSE, fVal,nFormat, *pFormatter );
         }
         catch(Exception&)
         {
             ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, bValueData, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, FALSE, fVal,nFormat, *pFormatter );
         }
     }
 
@@ -1031,7 +1069,8 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     if ( !rValue.Len() )
         TAG_ON( sHTML_linebreak );      // #42573# keine komplett leere Zelle
     else
-        OUT_STR( rValue );
+        HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
+
 
     if ( bStrikeout )   TAG_OFF( sHTML_strike );
     if ( bUnderline )   TAG_OFF( sHTML_underline );
