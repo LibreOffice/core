@@ -11,7 +11,7 @@
 #
 # $RCSfile: makemani.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,7 +61,7 @@ sub usage
 {
     print STDERR "\n$0 - append *.xcu file entries to .oxt manifest.xml\n\n";
     print STDERR "usage: $0 <static_part> <start dir> <search dir> <destination dir>\n\n";
-    print STDERR "  staic part - file containig all other content for mainfest.xml\n";
+    print STDERR "  static part - file containig all other content for mainfest.xml\n";
     print STDERR "  start dir - directory to change to before starting search\n";
     print STDERR "  out dir - destination directory to write manifes.xml to\n\n";
     exit 1;
