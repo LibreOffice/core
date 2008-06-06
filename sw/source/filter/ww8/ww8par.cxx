@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.190 $
+ * $Revision: 1.191 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -298,6 +298,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
 
         // process user (== Winword) defined parameters in 0xF122 record
+        // --> OD 2008-04-10 #i84783#
+        // set special value to determine, if property is provided or not.
+        pImpRec->nLayoutInTableCell = 0xFFFFFFFF;
+        // <--
         if(    maShapeRecords.SeekToContent( rSt,
                                              DFF_msofbtUDefProp,
                                              SEEK_FROM_CURRENT_AND_RESTART )
