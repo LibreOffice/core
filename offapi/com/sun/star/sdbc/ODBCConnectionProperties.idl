@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ODBCConnectionProperties.idl,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,9 +69,12 @@ service ODBCConnectionProperties
     */
     [optional, property] boolean UseCatalog;
 
-    /** which charset should be used to fetch data.
+    /** specifies the encoding to use to translate the backend data
+
+        <p>See the <a href="http://www.iana.org/assignments/character-sets">IANA character set list</a>
+        for a list of valid values.</p>
     */
-    [optional, property] long Charset;
+    [optional, property] string CharSet;
 
     /** specifies if retrieving of auto generated values should be enabled or not.
         If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
