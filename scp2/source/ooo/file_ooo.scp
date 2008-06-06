@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.245 $
+ * $Revision: 1.246 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2703,15 +2703,6 @@ File gid_File_Txt_Patchfiles
     Name = "patchlist.txt";
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
-End
-#endif
-
-#ifndef WITHOUT_BINFILTER
-File gid_Starregistry_Legacy_Binfilters_Rdb
-    TXT_FILE_BODY;
-    Name = "legacy_binfilters.rdb";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
 End
 #endif
 
