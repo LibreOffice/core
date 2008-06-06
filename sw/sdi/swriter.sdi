@@ -3437,6 +3437,30 @@ SfxVoidItem GraphicDialog FN_FORMAT_GRAFIC_DLG
     ToolBoxConfig = TRUE,
     GroupId = GID_GRAPHIC;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem SaveGraphic FN_SAVE_GRAPHIC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_GRAPHIC;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem Grow FN_GROW_FONT_SIZE
@@ -6176,7 +6200,7 @@ SfxBoolItem NumberOrNoNumber FN_NUM_OR_NONUM
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ObjectBackOne FN_FRAME_UP
+SfxVoidItem ObjectBackOne FN_FRAME_DOWN
 ()
 [
     /* flags: */
@@ -6201,7 +6225,7 @@ SfxVoidItem ObjectBackOne FN_FRAME_UP
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ObjectForwardOne FN_FRAME_DOWN
+SfxVoidItem ObjectForwardOne FN_FRAME_UP
 ()
 [
     /* flags: */
