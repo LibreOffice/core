@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -64,8 +64,13 @@ CXXFLAGS:=$(EXTRA_CFLAGS)
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
+.ELSE
 CONFIGURE_ACTION=
 BUILD_ACTION= cmd.exe /c ms_make.bat
+.ENDIF
 .ENDIF
 
 CONVERTFILES=ms_make.bat
@@ -84,10 +89,17 @@ OUT2LIB= \
     goo$/lib*.a \
     xpdf$/lib*.a
 .ELSE
+.IF "$(COM)"=="GCC"
+OUT2LIB= \
+    fofi$/lib*.a \
+    goo$/lib*.a \
+    xpdf$/lib*.a
+.ELSE
 OUT2LIB= \
     fofi$/*.lib \
     goo$/*.lib \
     xpdf$/*.lib
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
