@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindowData.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
@@ -68,6 +69,7 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_aSize( Size(-1,-1) )
     ,m_bShowAll( TRUE )
     ,m_bIsQuery(false)
+    ,m_bIsValid(true)
 {
     DBG_CTOR(OTableWindowData,NULL);
     if( !m_aWinName.getLength() )
@@ -81,6 +83,10 @@ OTableWindowData::~OTableWindowData()
 {
     DBG_DTOR(OTableWindowData,NULL);
     Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
+    if ( xComponent.is() )
+        stopComponentListening( xComponent );
+    // obtain the columns
+    xComponent.set( m_xColumns, UNO_QUERY );
     if ( xComponent.is() )
         stopComponentListening( xComponent );
 }
@@ -123,9 +129,8 @@ bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _
         m_xTable.set( xQueries->getByName( m_sComposedName ), UNO_QUERY_THROW );
     else if ( bIsKnownTable )
         m_xTable.set( xTables->getByName( m_sComposedName ), UNO_QUERY_THROW );
-    else {
-        DBG_ERROR( "OTableWindow::Init: this is neither a query (or no queries are allowed) nor a table!" );
-    }
+    else
+        m_bIsValid = false;
 
     // if we survived so far, we know whether it's a query
     m_bIsQuery = bIsKnownQuery;
@@ -152,6 +157,10 @@ void OTableWindowData::listen()
         xComponent.set( m_xColumns, UNO_QUERY );
         if ( xComponent.is() )
             startComponentListening( xComponent );
+
+        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+        if ( xKeySup.is() )
+            m_xKeys = xKeySup->getKeys();
     }
 }
 // -----------------------------------------------------------------------------
