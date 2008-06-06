@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.230 $
+# $Revision: 1.231 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -61,6 +61,11 @@ SCRIPTEXT=
 .ENDIF          # "$(GUI)"=="WNT"
 
 .INCLUDE : minor.mk
+
+.INCLUDE .IGNORE : rtlbootstrap.mk
+
+PLATFORMID = $(RTL_OS:l)_$(RTL_ARCH:l)
+EXTNAME*=$(EXTENSIONNAME)_in
 
 .IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
