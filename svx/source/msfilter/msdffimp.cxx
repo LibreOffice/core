@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msdffimp.cxx,v $
- * $Revision: 1.154 $
+ * $Revision: 1.155 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3789,7 +3789,6 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
     {
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
         rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-        rOutliner.SetMinDepth( 0 );
 
         BOOL bOldUpdateMode = rOutliner.GetUpdateMode();
         rOutliner.SetUpdateMode( FALSE );
@@ -3831,14 +3830,13 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
 
             SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
             if ( !aSelection.nStartPos )
-                aParagraphAttribs.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, FALSE ) );
+                aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, FALSE ) );
             aSelection.nStartPos = 0;
             rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             nParaIndex++;
         }
         OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
         rOutliner.Clear();
-        rOutliner.SetMinDepth( 0 );
         rOutliner.SetUpdateMode( bOldUpdateMode );
         pText->SetOutlinerParaObject( pNewText );
     }
@@ -3863,7 +3861,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 //          UINT16 nIdent=pText->GetObjIdentifier();
 
             SdrOutliner& rOutliner=pText->ImpGetDrawOutliner();
-            USHORT nMinDepth = rOutliner.GetMinDepth();
+//          sal_Int16 nMinDepth = rOutliner.GetMinDepth();
             USHORT nOutlMode = rOutliner.GetMode();
 
             { // Wohl 'nen kleiner Bug der EditEngine, das die
@@ -3884,7 +3882,6 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                 }
             }
             rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-            rOutliner.SetMinDepth(0);
 
 //          ULONG nFilePosMerker=rSt.Tell();
             ////////////////////////////////////
@@ -4013,7 +4010,6 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
             }
             OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
             rOutliner.Init( nOutlMode );
-            rOutliner.SetMinDepth(nMinDepth);
             pText->NbcSetOutlinerParaObject(pNewText);
         }
         else
@@ -4814,7 +4810,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 if ( pModel )
                                     rOutliner.SetStyleSheetPool( (SfxStyleSheetPool*)pModel->GetStyleSheetPool() );
                                 rOutliner.SetUpdateMode( FALSE );
-                                rOutliner.SetMinDepth( 0 );
                                 rOutliner.SetText( *pParaObj );
                                 VirtualDevice aVirDev( 1 );
                                 aVirDev.SetMapMode( MAP_100TH_MM );
@@ -4827,9 +4822,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                         BOOL bIsRTL = aVirDev.GetTextIsRTL( rOutliner.GetText( rOutliner.GetParagraph( i ) ), 0, STRING_LEN );
                                         if ( bIsRTL )
                                         {
-                                            SfxItemSet aSet2( rOutliner.GetParaAttribs( i ) );
+                                            SfxItemSet aSet2( rOutliner.GetParaAttribs( (USHORT)i ) );
                                             aSet2.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-                                            rOutliner.SetParaAttribs( i, aSet2, false );
+                                            rOutliner.SetParaAttribs( (USHORT)i, aSet2 );
                                             bCreateNewParaObject = sal_True;
                                         }
                                     }
@@ -4841,7 +4836,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                     }
                                 }
                                 rOutliner.Clear();
-                                rOutliner.SetMinDepth( 0 );
                                 rOutliner.SetUpdateMode( bOldUpdateMode );
                             }
                         }
