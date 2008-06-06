@@ -277,8 +277,8 @@
             <menu:menu menu:id=".uno:ArrangeMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:BringToFront"/>
-                    <menu:menuitem menu:id=".uno:ObjectBackOne"/>
                     <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+                    <menu:menuitem menu:id=".uno:ObjectBackOne"/>
                     <menu:menuitem menu:id=".uno:SendToBack"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
