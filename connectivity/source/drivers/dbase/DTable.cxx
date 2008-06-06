@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DTable.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +34,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#ifndef _COM_SUN_STAR_SQLC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
 #include <svtools/converter.hxx>
 #include "dbase/DConnection.hxx"
 #include "dbase/DColumns.hxx"
@@ -54,15 +52,11 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/property.hxx>
-#ifndef _UNOTOOLS_TEMPIFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
-#endif
 #include "connectivity/dbtools.hxx"
 #include "connectivity/FValue.hxx"
 #include "connectivity/dbconversion.hxx"
@@ -85,6 +79,9 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+// stored as the Field Descriptor terminator
+#define FIELD_DESCRIPTOR_TERMINATOR 0x0D
 
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
@@ -130,12 +127,43 @@ void ODbaseTable::readHeader()
             case dBaseIII:
             case dBaseIV:
             case dBaseV:
+            case VisualFoxPro:
             case dBaseFS:
             case dBaseFSMemo:
             case dBaseIVMemoSQL:
             case dBaseIIIMemo:
-            case dBaseIVMemo:
             case FoxProMemo:
+                m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                if ( m_aHeader.db_frei[17] != 0x00
+                    && !m_aHeader.db_frei[18] && !m_aHeader.db_frei[19] && getConnection()->isTextEncodingDefaulted() )
+                {
+                    switch(m_aHeader.db_frei[17])
+                    {
+                        case 0x01: m_eEncoding = RTL_TEXTENCODING_IBM_437; break;       // DOS USA  code page 437
+                        case 0x02: m_eEncoding = RTL_TEXTENCODING_IBM_850; break;       // DOS Multilingual code page 850
+                        case 0x03: m_eEncoding = RTL_TEXTENCODING_MS_1252; break;       // Windows ANSI code page 1252
+                        case 0x04: m_eEncoding = RTL_TEXTENCODING_APPLE_ROMAN; break;   // Standard Macintosh
+                        case 0x64: m_eEncoding = RTL_TEXTENCODING_IBM_852; break;       // EE MS-DOS    code page 852
+                        case 0x65: m_eEncoding = RTL_TEXTENCODING_IBM_865; break;       // Nordic MS-DOS    code page 865
+                        case 0x66: m_eEncoding = RTL_TEXTENCODING_IBM_866; break;       // Russian MS-DOS   code page 866
+                        case 0x67: m_eEncoding = RTL_TEXTENCODING_IBM_861; break;       // Icelandic MS-DOS
+                        //case 0x68: m_eEncoding = ; break;     // Kamenicky (Czech) MS-DOS
+                        //case 0x69: m_eEncoding = ; break;     // Mazovia (Polish) MS-DOS
+                        case 0x6A: m_eEncoding = RTL_TEXTENCODING_IBM_737; break;       // Greek MS-DOS (437G)
+                        case 0x6B: m_eEncoding = RTL_TEXTENCODING_IBM_857; break;       // Turkish MS-DOS
+                        case 0x96: m_eEncoding = RTL_TEXTENCODING_APPLE_CYRILLIC; break;    // Russian Macintosh
+                        case 0x97: m_eEncoding = RTL_TEXTENCODING_APPLE_CENTEURO; break;    // Eastern European Macintosh
+                        case 0x98: m_eEncoding = RTL_TEXTENCODING_APPLE_GREEK; break;   // Greek Macintosh
+                        case 0xC8: m_eEncoding = RTL_TEXTENCODING_MS_1250; break;       // Windows EE   code page 1250
+                        case 0xC9: m_eEncoding = RTL_TEXTENCODING_MS_1251; break;       // Russian Windows
+                        case 0xCA: m_eEncoding = RTL_TEXTENCODING_MS_1254; break;       // Turkish Windows
+                        case 0xCB: m_eEncoding = RTL_TEXTENCODING_MS_1253; break;       // Greek Windows
+                        default:
+                            break;
+                    }
+                }
+                break;
+            case dBaseIVMemo:
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 break;
             default:
@@ -175,12 +203,15 @@ void ODbaseTable::fillColumns()
     static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
     const sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
 
-    for (sal_Int32 i = 0; i < nFieldCount; i++)
+    sal_Int32 i = 0;
+    for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
         m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
+        if ( FIELD_DESCRIPTOR_TERMINATOR == aDBFColumn.db_fnm[0] ) // 0x0D stored as the Field Descriptor terminator.
+            break;
 
-        const String aColumnName((const char *)aDBFColumn.db_fnm,getConnection()->getTextEncoding());
+        const String aColumnName((const char *)aDBFColumn.db_fnm,m_eEncoding);
 
         sal_Int32 nPrecision = aDBFColumn.db_flng;
         sal_Int32 eType;
@@ -251,7 +282,8 @@ void ODbaseTable::fillColumns()
                                                     sal_False,
                                                     bCase);
         m_aColumns->push_back(xCol);
-    }
+    } // for (; i < nFieldCount; i++)
+    OSL_ENSURE(i,"No columns in table!");
 }
 // -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection)
@@ -264,6 +296,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnec
     m_aHeader.db_anz    = 0;
     m_aHeader.db_kopf   = 0;
     m_aHeader.db_slng   = 0;
+    m_eEncoding = getConnection()->getTextEncoding();
 }
 // -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
@@ -280,6 +313,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnec
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
 {
+    m_eEncoding = getConnection()->getTextEncoding();
 }
 
 // -----------------------------------------------------------------------------
@@ -318,7 +352,7 @@ void ODbaseTable::construct()
             // Memo-Dateinamen bilden (.DBT):
             // nyi: Unschoen fuer Unix und Mac!
 
-            if (m_aHeader.db_typ == FoxProMemo) // foxpro uses another extension
+            if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ ) // foxpro uses another extension
                 aURL.SetExtension(String::CreateFromAscii("fpt"));
             else
                 aURL.SetExtension(String::CreateFromAscii("dbt"));
@@ -402,11 +436,13 @@ BOOL ODbaseTable::ReadMemoHeader()
                 m_aMemoHeader.db_size = 512;
             }
             break;
+        case VisualFoxPro:
         case FoxProMemo:
             m_aMemoHeader.db_typ    = MemoFoxPro;
             m_pMemoStream->Seek(6L);
             m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
             (*m_pMemoStream) >> m_aMemoHeader.db_size;
+            break;
         default:
             OSL_ENSURE( false, "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
@@ -496,7 +532,7 @@ void ODbaseTable::refreshIndexes()
             if (aKeyName.Copy(0,3) == ByteString("NDX") )
             {
                 aIndexName = aInfFile.ReadKey(aKeyName);
-                aURL.setName(String(aIndexName,getConnection()->getTextEncoding()));
+                aURL.setName(String(aIndexName,m_eEncoding));
                 try
                 {
                     Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>());
@@ -649,7 +685,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
         {
             char cLast = pData[nLen];
             pData[nLen] = 0;
-            String aStr(pData,(xub_StrLen)nLen,getConnection()->getTextEncoding());
+            String aStr(pData,(xub_StrLen)nLen,m_eEncoding);
             aStr.EraseTrailingChars();
 
             if (!aStr.Len())                // keine StringLaenge, dann NULL
@@ -667,7 +703,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                     pData[k] = ' ';
             }
 
-            String aStr(pData, (xub_StrLen)nLen,getConnection()->getTextEncoding());        // Spaces am Anfang und am Ende entfernen:
+            String aStr(pData, (xub_StrLen)nLen,m_eEncoding);       // Spaces am Anfang und am Ende entfernen:
             aStr.EraseLeadingChars();
             aStr.EraseTrailingChars();
 
@@ -936,7 +972,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
 
             ::rtl::OString aCol;
-            if ( DBTypeConversion::convertUnicodeString( aName, aCol, getConnection()->getTextEncoding() ) > nMaxFieldLength)
+            if ( DBTypeConversion::convertUnicodeString( aName, aCol, m_eEncoding ) > nMaxFieldLength)
             {
                 ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
                 sMsg += aName;
@@ -1402,7 +1438,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 if (pIndex->Find(0,*rRow[nPos]))
                 {
                     // es existiert kein eindeutiger Wert
-                    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Duplicate value found in column \"");
+                    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Duplicate value found in column \""));
                     if ( !aColName.getLength() )
                     {
                         m_pColumns->getByIndex(i) >>= xCol;
@@ -1613,7 +1649,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
 
                     // convert the string, using the connection's encoding
                     ::rtl::OString sEncoded;
-                    DBTypeConversion::convertUnicodeStringToLength( sStringToWrite, sEncoded, nLen, getConnection()->getTextEncoding() );
+
+                    DBTypeConversion::convertUnicodeStringToLength( sStringToWrite, sEncoded, nLen, m_eEncoding );
                     memcpy( pData, sEncoded.getStr(), sEncoded.getLength() );
 
                 }
@@ -1658,7 +1695,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 
     ::rtl::OUString sStringToWrite( aVariable.getString() );
     ::rtl::OString aStr;
-    ULONG nSize = DBTypeConversion::convertUnicodeString( sStringToWrite, aStr, getConnection()->getTextEncoding() );
+    ULONG nSize = DBTypeConversion::convertUnicodeString( sStringToWrite, aStr, m_eEncoding );
 
     // Anhaengen oder ueberschreiben
     BOOL bAppend = rBlockNr == 0;
@@ -2170,7 +2207,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         if ( bOk )
         {
             bOk = fetchRow( aRow, m_aColumns.getBody(), sal_True, sal_True);
-            if ( bOk )
+            if ( bOk && !aRow->isDeleted() ) // copy only not deleted rows
             {
                 // special handling when pos == 0 then we don't have to distinguish between the two rows
                 if(_nPos)
@@ -2188,13 +2225,6 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                 }
                 bOk = _pNewTable->InsertRow(*aInsertRow,sal_True,_pNewTable->m_pColumns);
                 OSL_ENSURE(bOk,"Row could not be inserted!");
-                // now adjust the delete state
-                if ( aRow->isDeleted() )
-                {
-                    sal_Int32 nNewTablePos = 0;
-                    _pNewTable->seekRow( IResultSetHelper::LAST , 0, nNewTablePos );
-                    _pNewTable->DeleteRow(*_pNewTable->m_aColumns);
-                }
             }
             else
                 OSL_ENSURE(bOk,"Row could not be fetched!");
@@ -2336,7 +2366,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
 
             } while (!bReady && !m_pMemoStream->IsEof() && aBStr.Len() < STRING_MAXLEN);
 
-            ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
+            ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),m_eEncoding);
             aVariable = aStr;
 
         } break;
@@ -2387,7 +2417,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 ByteString aBStr;
                 aBStr.Expand(STRING_MAXLEN);
                 m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
-                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
                 nLength -= STRING_MAXLEN;
             }
             if ( nLength > 0 )
@@ -2397,7 +2427,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
                 //  aBStr.ReleaseBufferAccess();
 
-                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
 
             }
             if ( aStr.getLength() )
