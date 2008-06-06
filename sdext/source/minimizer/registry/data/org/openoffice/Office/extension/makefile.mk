@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,13 +33,13 @@ PRJ=..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME=sdext
 TARGET=data_ooOfficeext
 PACKAGE=org.openoffice.Office.extension
-EXTNAME=minimi
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/source$/minimizer$/minimizer.pmk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 XCSROOT=$(PRJ)$/source$/minimizer
-ABSXCSROOT=$(PRJ)$/source$/minimizer
+ABSXCSROOT=$(PWD)$/$(PRJ)$/source$/minimizer
 
 # --- Targets ------------------------------------------------------
 
