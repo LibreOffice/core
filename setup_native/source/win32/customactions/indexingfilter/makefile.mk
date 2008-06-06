@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 DYNAMIC_CRT=
 NO_DEFAULT_STL=TRUE
 USE_DEFFILE=TRUE
+MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
