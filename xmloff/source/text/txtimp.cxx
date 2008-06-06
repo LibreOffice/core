@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.140 $
+ * $Revision: 1.141 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,6 +105,7 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::ucb::XAnyCompare;
 
 using namespace ::std;
 using namespace ::com::sun::star::uno;
@@ -951,24 +952,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 }
                 else
                 {
-                    if( !xNumRuleCompare.is() )
-                    {
-                        Reference<XAnyCompareFactory> xCompareFac( xServiceFactory, UNO_QUERY );
-                        OSL_ENSURE( xCompareFac.is(), "got no XAnyCompareFactory" );
-                        if( xCompareFac.is() )
-                        {
-                            xNumRuleCompare.set(
-                                xCompareFac->createAnyCompareByName(
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                            "NumberingRules" ) ) ));
-                            OSL_ENSURE( xNumRuleCompare .is(),
-                                    "got no Numbering Rules comparison" );
-                        }
-                    }
+                    Reference< XAnyCompare > xNumRuleCompare( xNumRules, UNO_QUERY );
                     if( xNumRuleCompare.is() )
                     {
-                        bSameNumRules = (xNumRuleCompare->compare( makeAny(xNumRules),
-                            makeAny(xNewNumRules) ) == 0);
+                        bSameNumRules = (xNumRuleCompare->compare( Any(xNumRules), Any(xNewNumRules) ) == 0);
                     }
                 }
             }
@@ -998,24 +985,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if( !pListItem &&
                 xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
             {
-                sal_Bool bTmp = sal_False;
-                xPropSet->setPropertyValue( sNumberingIsNumber, makeAny(bTmp) );
+                xPropSet->setPropertyValue( sNumberingIsNumber, Any(sal_False) );
             }
 
-            xPropSet->setPropertyValue( sNumberingLevel, makeAny(nLevel) );
+            xPropSet->setPropertyValue( sNumberingLevel, Any(nLevel) );
 
-            // #i36217# for impress/draw hard set the IsNumbering property
-            // since we may not export it in future versions
-/* remove this fix as we also export paragraphs with numbering level > 0 withoud IsNumbering
-            {
-                static const OUString sIsNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) );
-                if( xPropSetInfo->hasPropertyByName( sIsNumbering ) )
-                {
-                    sal_Bool bTmp = pListItem ? sal_True : sal_False;
-                    xPropSet->setPropertyValue( sIsNumbering, Any( bTmp ) );
-                }
-            }
-*/
             if( pListBlock->IsRestartNumbering() )
             {
                 // TODO: property missing
