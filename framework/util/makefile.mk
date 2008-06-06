@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.122 $
+# $Revision: 1.123 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,7 +68,7 @@ LIB1OBJFILES=   \
 
 LIB2TARGET=     $(SLB)$/fweobj.lib
 
-LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
+LIB2OBJFILES=   \
                 $(SLO)$/bmkmenu.obj                             \
                 $(SLO)$/eventsconfiguration.obj                 \
                 $(SLO)$/eventsdocumenthandler.obj               \
