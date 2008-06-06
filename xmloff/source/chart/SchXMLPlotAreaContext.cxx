@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLPlotAreaContext.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,6 @@
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLImport.hxx"
 #include "SchXMLSeries2Context.hxx"
-#include "SchXMLErrorBuildIds.hxx"
 #include "SchXMLTools.hxx"
 #include <tools/debug.hxx>
 #ifdef DBG_UTIL
@@ -408,9 +407,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
 
                     //correct default starting angle for old 3D pies
-                    sal_Int32 nBuildId = 0;
-                    sal_Int32 nUPD;
-                    if( !GetImport().getBuildIds( nUPD, nBuildId ) || nBuildId < xmloff::chart::BUILD_ID_3_0 )
+                    if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
                         if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
@@ -460,9 +457,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
         if( ! (bStacked || mbPercentStacked ))
         {
-            sal_Int32 nBuildId = 0;
-            sal_Int32 nUPD;
-            if( !GetImport().getBuildIds( nUPD, nBuildId ) )
+            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
                 bool bIs3d = false;
                 if( ( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dim3D"))) >>= bIs3d ) &&
@@ -518,9 +513,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
         {
             bool bAddMissingXAxisForNetCharts = false;
             bool bAdaptWrongPercentScaleValues = false;
-            sal_Int32 nBuildId = 0;
-            sal_Int32 nUPD = 0;
-            if( !GetImport().getBuildIds( nUPD, nBuildId ) )
+            if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
                 //correct errors from older versions
 
