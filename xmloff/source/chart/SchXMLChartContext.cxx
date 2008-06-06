@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLChartContext.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,6 @@
 #include "SchXMLSeriesHelper.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
-#include "SchXMLErrorBuildIds.hxx"
 #include <comphelper/mediadescriptor.hxx>
 #include <tools/debug.hxx>
 // header for class ByteString
@@ -611,10 +610,7 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
     if( rServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" )))
     {
-        sal_Int32 nBuildId = 0;
-        sal_Int32 nUPD;
-        if( (!rImport.getBuildIds( nUPD, nBuildId )))
-            bResult= true;
+        bResult = SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( rImport.GetModel() );
     }
     return bResult;
 }
@@ -803,7 +799,13 @@ void SchXMLChartContext::EndElement()
     }
     else if( msChartAddress.getLength() )
     {
-        if( mbAllRangeAddressesAvailable && !bSpecialHandlingForDonutChart && !mbIsStockChart )
+        // in this case there are range addresses that are simply wrong.
+        bool bOldFileWithOwnDataFromRows =
+            (mbHasOwnTable && (meDataRowSource==chart::ChartDataRowSource_ROWS) &&
+             SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3(
+                 Reference< frame::XModel >( xNewDoc, uno::UNO_QUERY )));
+        if( mbAllRangeAddressesAvailable && !bSpecialHandlingForDonutChart && !mbIsStockChart &&
+            !bOldFileWithOwnDataFromRows )
         {
             // note: mbRowHasLabels means the first row contains labels, that
             // means we have "column-descriptions", (analogously mbColHasLabels
@@ -1070,10 +1072,12 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                     {
                         OSL_ASSERT( msRowTrans.getLength() == 0 );
                         pTableContext->setColumnPermutation( GetNumberSequenceFromString( msColTrans, true ));
+                        msColTrans = OUString();
                     }
                     else if( msRowTrans.getLength() > 0 )
                     {
                         pTableContext->setRowPermutation( GetNumberSequenceFromString( msRowTrans, true ));
+                        msRowTrans = OUString();
                     }
                 }
                 pContext = pTableContext;
