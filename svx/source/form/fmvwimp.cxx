@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmvwimp.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -168,18 +168,20 @@ FmXPageViewWinRec::FmXPageViewWinRec(const Reference< XMultiServiceFactory >& _r
     DBG_CTOR(FmXPageViewWinRec,NULL);
 
     // create an XFormController for every form
-    FmFormPage* pFormPage = PTR_CAST( FmFormPage, _rWindow.GetPageView().GetPage() );
+    FmFormPage* pFormPage = dynamic_cast< FmFormPage* >( _rWindow.GetPageView().GetPage() );
     DBG_ASSERT( pFormPage, "FmXPageViewWinRec::FmXPageViewWinRec: no FmFormPage found!" );
     if ( pFormPage )
     {
         Reference< XIndexAccess > xForms( pFormPage->GetForms(), UNO_QUERY );
-        sal_uInt32 nLength = xForms->getCount();
-        Any aElement;
-        Reference< XForm >  xForm;
-        for (sal_uInt32 i = 0; i < nLength; i++)
+        if( xForms.is() )
         {
-            if ( xForms->getByIndex(i) >>= xForm )
-                setController( xForm );
+            const sal_Int32 nLength = xForms->getCount();
+            for (sal_Int32 i = 0; i < nLength; i++)
+            {
+                Reference< XForm > xForm( xForms->getByIndex(i), UNO_QUERY );
+                if( xForm.is() )
+                    setController( xForm );
+            }
         }
     }
 }
