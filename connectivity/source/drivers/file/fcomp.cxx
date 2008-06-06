@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fcomp.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -325,24 +325,15 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
-    if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
-    {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
-    }
-
     sal_Int32 ePredicateType;
-    OSQLParseNode *pAtom;
-    OSQLParseNode *pOptEscape;
     sal_Unicode cEscape = L'\0';
-
     if (pPredicateNode->count() == 5)
         ePredicateType = SQLFilterOperator::NOT_LIKE;
     else
         ePredicateType = SQLFilterOperator::LIKE;
 
-    pAtom       = pPredicateNode->getChild(pPredicateNode->count()-2);
-    pOptEscape  = pPredicateNode->getChild(pPredicateNode->count()-1);
+    OSQLParseNode* pAtom        = pPredicateNode->getChild(pPredicateNode->count()-2);
+    OSQLParseNode* pOptEscape   = pPredicateNode->getChild(pPredicateNode->count()-1);
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
@@ -380,12 +371,6 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 6,"OFILECursor: Fehler im Parse Tree");
-
-    if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
-    {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
-    }
 
     OSQLParseNode* pColumn = pPredicateNode->getChild(0);
     OSQLParseNode* p1stValue = pPredicateNode->getChild(3);
@@ -465,12 +450,6 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 //------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
-    if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
-    {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
-    }
-
     DBG_ASSERT(pPredicateNode->count() >= 3,"OFILECursor: Fehler im Parse Tree");
     DBG_ASSERT(SQL_ISTOKEN(pPredicateNode->getChild(1),IS),"OFILECursor: Fehler im Parse Tree")
 
@@ -665,12 +644,6 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
 // -----------------------------------------------------------------------------
 OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQLException, RuntimeException)
 {
-    /*if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
-    {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
-        return NULL;
-    }*/
-
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
     sal_Bool bUpper = SQL_ISTOKEN(pPredicateNode->getChild(0),UPPER);
