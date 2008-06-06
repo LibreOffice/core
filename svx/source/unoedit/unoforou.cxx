@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoforou.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,7 +187,7 @@ void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet 
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( NULL );
 
-    rOutliner.SetParaAttribs( nPara, rSet, true );
+    rOutliner.SetParaAttribs( nPara, rSet );
 
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( pOldParent );
@@ -449,44 +449,32 @@ sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection&
     return sal_True;
 }
 
-USHORT SvxOutlinerForwarder::GetDepth( USHORT nPara ) const
+sal_Int16 SvxOutlinerForwarder::GetDepth( USHORT nPara ) const
 {
     DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::GetDepth: Invalid paragraph index");
 
     Paragraph* pPara = rOutliner.GetParagraph( nPara );
 
-    USHORT nLevel(0);
+    sal_Int16 nLevel = -1;
 
     if( pPara )
-    {
         nLevel = rOutliner.GetDepth( nPara );
-
-        if(pSdrObject != NULL)
-        {
-            if((pSdrObject->GetObjInventor() == SdrInventor) &&
-               (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT))
-                --nLevel;
-        }
-    }
 
     return nLevel;
 }
 
-sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
+sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT( nPara < GetParagraphCount(), "SvxOutlinerForwarder::SetDepth: Invalid paragraph index");
 
-    const sal_Bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
-
-    if(bOutlinerText)
-        ++nNewDepth;
-
-    if( nNewDepth <= 9 )
+    if( (nNewDepth >= -1) && (nNewDepth <= 9) && (nPara < GetParagraphCount()) )
     {
         Paragraph* pPara = rOutliner.GetParagraph( nPara );
         if( pPara )
         {
             rOutliner.SetDepth( pPara, nNewDepth );
+
+            const bool bOutlinerText = (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
             if( bOutlinerText )
                 rOutliner.SetLevelDependendStyleSheet( nPara );
 
@@ -495,6 +483,56 @@ sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
     }
 
     return sal_False;
+}
+
+sal_Int16 SvxOutlinerForwarder::GetNumberingStartValue( sal_uInt16 nPara )
+{
+    if( nPara < GetParagraphCount() )
+    {
+        return rOutliner.GetNumberingStartValue( nPara );
+    }
+    else
+    {
+        DBG_ERROR( "SvxOutlinerForwarder::GetNumberingStartValue)(), Invalid paragraph index");
+        return -1;
+    }
+}
+
+void SvxOutlinerForwarder::SetNumberingStartValue(  sal_uInt16 nPara, sal_Int16 nNumberingStartValue )
+{
+    if( nPara < GetParagraphCount() )
+    {
+        rOutliner.SetNumberingStartValue( nPara, nNumberingStartValue );
+    }
+    else
+    {
+        DBG_ERROR( "SvxOutlinerForwarder::SetNumberingStartValue)(), Invalid paragraph index");
+    }
+}
+
+sal_Bool SvxOutlinerForwarder::IsParaIsNumberingRestart( sal_uInt16 nPara )
+{
+    if( nPara < GetParagraphCount() )
+    {
+        return rOutliner.IsParaIsNumberingRestart( nPara );
+    }
+    else
+    {
+        DBG_ERROR( "SvxOutlinerForwarder::IsParaIsNumberingRestart)(), Invalid paragraph index");
+        return sal_False;
+    }
+}
+
+void SvxOutlinerForwarder::SetParaIsNumberingRestart(  sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart )
+{
+    if( nPara < GetParagraphCount() )
+    {
+        rOutliner.SetParaIsNumberingRestart( nPara, bParaIsNumberingRestart );
+    }
+    else
+    {
+        DBG_ERROR( "SvxOutlinerForwarder::SetParaIsNumberingRestart)(), Invalid paragraph index");
+    }
 }
 
 const SfxItemSet * SvxOutlinerForwarder::GetEmptyItemSetPtr()
@@ -525,5 +563,25 @@ xub_StrLen SvxOutlinerForwarder::AppendTextPortion( USHORT nPara, const String &
     return nLen;
 }
 
+//------------------------------------------------------------------------
+
+
+sal_Int16 SvxTextForwarder::GetNumberingStartValue( sal_uInt16 )
+{
+    return -1;
+}
+
+void SvxTextForwarder::SetNumberingStartValue( sal_uInt16, sal_Int16 )
+{
+}
+
+sal_Bool SvxTextForwarder::IsParaIsNumberingRestart( sal_uInt16  )
+{
+    return sal_False;
+}
+
+void SvxTextForwarder::SetParaIsNumberingRestart( sal_uInt16, sal_Bool )
+{
+}
 
 //------------------------------------------------------------------------
