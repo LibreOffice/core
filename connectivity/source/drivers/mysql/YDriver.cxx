@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YDriver.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +33,12 @@
 #include "mysql/YDriver.hxx"
 #include "mysql/YCatalog.hxx"
 #include <osl/diagnose.h>
+#include <comphelper/namedvaluecollection.hxx>
 #include "connectivity/dbexception.hxx"
+#include <connectivity/dbcharset.hxx>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include "TConnection.hxx"
+
 
 //........................................................................
 namespace connectivity
@@ -106,23 +109,6 @@ namespace connectivity
         sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
         {
             return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
-        }
-        //--------------------------------------------------------------------
-        ::rtl::OUString getDriverClass(const Sequence< PropertyValue >& info)
-        {
-            ::rtl::OUString sRet;
-            const PropertyValue* pSupported = info.getConstArray();
-            const PropertyValue* pEnd = pSupported + info.getLength();
-            for (;pSupported != pEnd; ++pSupported)
-                if ( !pSupported->Name.compareToAscii("JavaDriverClass") )
-                {
-                    OSL_VERIFY( pSupported->Value >>= sRet );
-                    break;
-                }
-
-            if ( !sRet.getLength() )
-                sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
-            return sRet;
         }
         //--------------------------------------------------------------------
         ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl)
@@ -218,9 +204,11 @@ namespace connectivity
         }
         else
         {
-            ::rtl::OUString sDriverClass = getDriverClass(info);
-            if ( !sDriverClass.getLength() )
-                throw SQLException();
+            ::comphelper::NamedValueCollection aSettings( info );
+            ::rtl::OUString sDriverClass(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
+            sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
+            ::rtl::OUString sCharSet = aSettings.getOrDefault( "CharSet", ::rtl::OUString() );
+
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
                 aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xFactory,sCuttedUrl))).first;
@@ -241,8 +229,37 @@ namespace connectivity
             if ( xDriver.is() )
             {
                 ::rtl::OUString sCuttedUrl = transformUrl(url);
-                sal_Bool bIsODBC = isOdbcUrl( url );
+                const sal_Bool bIsODBC = isOdbcUrl( url );
                 Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
+                if ( !bIsODBC )
+                {
+                    ::comphelper::NamedValueCollection aSettings( info );
+                    ::rtl::OUString sIanaName = aSettings.getOrDefault( "CharSet", ::rtl::OUString() );
+                    if ( sIanaName.getLength() )
+                    {
+                        ::dbtools::OCharsetMap aLookupIanaName;
+                        ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+                        if (aLookup != aLookupIanaName.end() )
+                        {
+                            ::rtl::OUString sAdd;
+                            if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
+                            {
+                                static const ::rtl::OUString s_sCharSetOp(RTL_CONSTASCII_USTRINGPARAM("useUnicode=true&"));
+                                if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
+                                {
+                                    sAdd = s_sCharSetOp;
+                                } // if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
+                            } // if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
+                            if ( sCuttedUrl.indexOf('?') == -1 )
+                                sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
+                            else
+                                sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("&"));
+                            sCuttedUrl += sAdd;
+                            sCuttedUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("characterEncoding="));
+                            sCuttedUrl += sIanaName;
+                        }
+                    }
+                } // if ( !bIsODBC )
 
                 xConnection = xDriver->connect( sCuttedUrl, aConvertedProperties );
                 if ( xConnection.is() )
