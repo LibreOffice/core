@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoforou.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,8 +104,13 @@ public:
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
-    virtual USHORT          GetDepth( USHORT nPara ) const;
-    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
+    virtual sal_Int16       GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
+    virtual sal_Int16       GetNumberingStartValue( sal_uInt16 nPara );
+    virtual void            SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
+
+    virtual sal_Bool        IsParaIsNumberingRestart( sal_uInt16 nPara );
+    virtual void            SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart );
 
     /* this method flushes internal caches for this forwarder */
     void                flushCache();
