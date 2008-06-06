@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkutil.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,9 +80,6 @@ rtl::OUString getPlatform();
 
 
 rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
-
-rtl::OUString getFileFromURL(const rtl::OUString& sFileURL);
-
 
 /** Returns the file URL of the folder where the executable resides.
  */
