@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoedsrc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,7 +391,7 @@ public:
         @return the outline level of the given paragraph. The range is
         [0,n), where n is the maximal outline level.
      */
-    virtual USHORT          GetDepth( USHORT nPara ) const = 0;
+    virtual sal_Int16       GetDepth( USHORT nPara ) const = 0;
 
     /** Set the outline depth of given paragraph
 
@@ -406,8 +406,13 @@ public:
         failure are e.g. the text does not support outline level
         (EditEngine), or the depth range is exceeded.
      */
-    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth ) = 0;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth ) = 0;
 
+    virtual sal_Int16 GetNumberingStartValue( sal_uInt16 nPara );
+    virtual void SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
+
+    virtual sal_Bool IsParaIsNumberingRestart( sal_uInt16 nPara );
+    virtual void SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumberingRestart );
 };
 
 /** Encapsulates the document view for the purpose of unified
