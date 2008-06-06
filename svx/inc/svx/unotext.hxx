@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,9 +84,11 @@
 #include <svx/unoprov.hxx>
 #include <svx/unomid.hxx>
 
-#define WID_FONTDESC        3900
-#define WID_NUMLEVEL        3901
-#define WID_PORTIONTYPE     3903
+#define WID_FONTDESC                3900
+#define WID_NUMLEVEL                3901
+#define WID_PORTIONTYPE             3903
+#define WID_NUMBERINGSTARTVALUE     3904
+#define WID_PARAISNUMBERINGRESTART  3905
 
 #define SVX_UNOEDIT_NUMBERING_PROPERTIE \
     {MAP_CHAR_LEN(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace>*)0), 0, 0 }, \
@@ -94,7 +96,9 @@
 
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
     SVX_UNOEDIT_NUMBERING_PROPERTIE, \
-    {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),        WID_NUMLEVEL,       &::getCppuType((const sal_Int16*)0), 0, 0 }
+    {MAP_CHAR_LEN(UNO_NAME_NUMBERING_LEVEL),        WID_NUMLEVEL,       &::getCppuType((const sal_Int16*)0), 0, 0 }, \
+    {MAP_CHAR_LEN("NumberingStartValue"),           WID_NUMBERINGSTARTVALUE, &::getCppuType((const sal_Int16*)0), 0, 0 }, \
+    {MAP_CHAR_LEN("ParaIsNumberingRestart"),        WID_PARAISNUMBERINGRESTART, &::getBooleanCppuType(), 0, 0 }
 
 #define SVX_UNOEDIT_CHAR_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_HEIGHT),      EE_CHAR_FONTHEIGHT, &::getCppuType((const float*)0),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
@@ -224,8 +228,8 @@ public:
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
-    virtual USHORT          GetDepth( USHORT nPara ) const;
-    virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
+    virtual sal_Int16       GetDepth( USHORT nPara ) const;
+    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
 
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
 
