@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YTable.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,6 +222,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        bool bColumnNameChanged = false;
 
         if (    nOldType != nNewType
             ||  nOldPrec != nNewPrec
@@ -256,6 +257,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
                 }
             }
             alterColumnType(nNewType,colName,descriptor);
+            bColumnNameChanged = true;
         }
 
         // third: check the default values
@@ -275,14 +277,14 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         // now we should look if the name of the column changed
         ::rtl::OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
-        if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) )
+        if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) && !bColumnNameChanged )
         {
             ::rtl::OUString sSql = getAlterTableColumnPart();
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            sSql += ::dbtools::createStandardColumnPart(descriptor,getConnection());
+            sSql += ::dbtools::createStandardColumnPart(descriptor,getConnection(),getTypeCreatePattern());
             executeStatement(sSql);
         }
         m_pColumns->refresh();
@@ -311,8 +313,14 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
 
-    sSql += ::dbtools::createStandardColumnPart(xProp,getConnection());
+    sSql += ::dbtools::createStandardColumnPart(xProp,getConnection(),getTypeCreatePattern());
     executeStatement(sSql);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OMySQLTable::getTypeCreatePattern() const
+{
+    static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
+    return s_sCreatePattern;
 }
 // -----------------------------------------------------------------------------
 void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: YTables.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,8 +189,9 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 // -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
-    Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,xConnection);
+    const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
+    static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
+    const ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,xConnection,s_sCreatePattern);
 
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
