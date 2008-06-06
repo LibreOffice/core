@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FResultSet.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,6 +181,7 @@ namespace connectivity
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // clear insert row
             void clearInsertRow();
+            void sortRows();
         protected:
 
             using OResultSet_BASE::rBHelper;
