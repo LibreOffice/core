@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: contextid.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,5 +48,10 @@
 #define CTF_SD_SHAPE_PARA_ADJUST            ( XML_SD_CTF_START +  3 )
 
 #define CTF_FORMS_DATA_STYLE                ( XML_FORM_CTF_START +  0 )
+
+/** use together with MID_FLAG_NO_PROPERTY to import the specified
+    attribute into the alien attribute container */
+
+#define CTF_ALIEN_ATTRIBUTE_IMPORT  0x00007fff
 
 #endif  // _XMLOFF_CONTEXTID_HXX_
