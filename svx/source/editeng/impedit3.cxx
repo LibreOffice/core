@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit3.cxx,v $
- * $Revision: 1.122 $
+ * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include <svx/langitem.hxx>
 #include <svx/scriptspaceitem.hxx>
 #include <svx/charscaleitem.hxx>
+#include <svx/numitem.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctloptions.hxx>
@@ -613,6 +614,9 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
     SvxAdjust eJustification = GetJustification( nPara );
     sal_Bool bHyphenatePara = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HYPHENATE )).GetValue();
+    sal_Int32 nSpaceBefore      = 0;
+    sal_Int32 nMinLabelWidth    = 0;
+    sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pNode, &nSpaceBefore, &nMinLabelWidth );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pNode );
     const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&) pNode->GetContentAttribs().GetItem( EE_PARA_SBL );
     const BOOL bScriptSpace = ((const SvxScriptSpaceItem&) pNode->GetContentAttribs().GetItem( EE_PARA_ASIANCJKSPACING )).GetValue();
@@ -743,7 +747,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         sal_uInt16 nPortionStart = 0;
         sal_uInt16 nPortionEnd = 0;
 
-        long nStartX = GetXValue( rLRItem.GetTxtLeft() );
+        long nStartX = GetXValue( rLRItem.GetTxtLeft() + nSpaceBeforeAndMinLabelWidth );
         if ( nIndex == 0 )
         {
             long nFI = GetXValue( rLRItem.GetTxtFirstLineOfst() );
@@ -751,8 +755,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
 
             if ( !nLine && ( pParaPortion->GetBulletX() > nStartX ) )
             {
-                nStartX -= nFI; // Vielleicht reicht der LI?
-                if ( pParaPortion->GetBulletX() > nStartX )
+// TL_NFLR              nStartX += nFI; // Vielleicht reicht der LI?
+// TL_NFLR              if ( pParaPortion->GetBulletX() > nStartX )
                     nStartX = pParaPortion->GetBulletX();
             }
         }
@@ -914,8 +918,9 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         if ( aStatus.DoStretch() && ( nStretchX != 100 ) )
                             nCurPos = nCurPos*100/nStretchX;
 
-                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - rLRItem.GetTxtLeft(), aEditDoc.GetDefTab() );
-                        aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + rLRItem.GetTxtLeft() ) );
+                        short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTxtLeft()/* + rLRItem.GetTxtLeft()*/ + nSpaceBeforeAndMinLabelWidth);
+                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/, aEditDoc.GetDefTab() );
+                        aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText /*rLRItem.GetTxtLeft()*/ ) );
                         aCurrentTab.bValid = FALSE;
 
                         // Switch direction in R2L para...
@@ -1553,14 +1558,16 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     pParaPortion->GetLines().Insert( pTmpLine, pParaPortion->GetLines().Count() );
 
     sal_Bool bLineBreak = pParaPortion->GetNode()->Len() ? sal_True : sal_False;
+    sal_Int32 nSpaceBefore = 0;
+    sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pParaPortion->GetNode(), &nSpaceBefore );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pParaPortion->GetNode() );
     const SvxLineSpacingItem& rLSItem = (const SvxLineSpacingItem&)pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    short nStartX = GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+    short nStartX = GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBefore));
 
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( bLineBreak == sal_True )
     {
-        nStartX = (short)GetXValue( rLRItem.GetTxtLeft() );
+        nStartX = (short)GetXValue( rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
     }
     else
     {
@@ -1571,7 +1578,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             pParaPortion->SetBulletX( 0 ); // Falls Bullet falsch eingestellt.
         if ( pParaPortion->GetBulletX() > nStartX )
         {
-            nStartX = (short)GetXValue( rLRItem.GetTxtLeft() );
+            nStartX = (short)GetXValue( rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
             if ( pParaPortion->GetBulletX() > nStartX )
                 nStartX = pParaPortion->GetBulletX();
         }
@@ -4122,6 +4129,56 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
         }
     }
     UndoActionEnd( EDITUNDO_STRETCH );
+}
+
+const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode ) const
+{
+    const SvxNumberFormat *pRes = 0;
+
+    if (pNode)
+    {
+        // get index of paragraph
+        USHORT nPara = GetEditDoc().GetPos( const_cast< ContentNode * >(pNode) );
+        DBG_ASSERT( nPara < USHRT_MAX, "node not found in array" );
+        if (nPara < USHRT_MAX)
+        {
+            // the called function may be overloaded by an OutlinerEditEng object to provide
+            // access to the SvxNumberFormat of the Outliner.
+            // The EditEngine implementation will just return 0.
+            pRes = pEditEngine->GetNumberFormat( nPara );
+        }
+    }
+
+    return pRes;
+}
+
+sal_Int32 ImpEditEngine::GetSpaceBeforeAndMinLabelWidth(
+    const ContentNode *pNode,
+    sal_Int32 *pnSpaceBefore, sal_Int32 *pnMinLabelWidth ) const
+{
+    // nSpaceBefore     matches the ODF attribut text:space-before
+    // nMinLabelWidth   matches the ODF attribut text:min-label-width
+
+    const SvxNumberFormat *pNumFmt = GetNumberFormat( pNode );
+
+    // if no number format was found we have no Outliner or the numbering level
+    // within the Outliner is -1 which means no number format should be applied.
+    // Thus the default values to be returned are 0.
+    sal_Int32 nSpaceBefore   = 0;
+    sal_Int32 nMinLabelWidth = 0;
+
+    if (pNumFmt)
+    {
+        nMinLabelWidth = -pNumFmt->GetFirstLineOffset();
+        nSpaceBefore   = pNumFmt->GetAbsLSpace() - nMinLabelWidth;
+        DBG_ASSERT( nMinLabelWidth >= 0, "ImpEditEngine::GetSpaceBeforeAndMinLabelWidth: min-label-width < 0 encountered" );
+    }
+    if (pnSpaceBefore)
+        *pnSpaceBefore      = nSpaceBefore;
+    if (pnMinLabelWidth)
+        *pnMinLabelWidth    = nMinLabelWidth;
+
+    return nSpaceBefore + nMinLabelWidth;
 }
 
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
