@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: roadmapwizard.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -483,8 +483,31 @@ namespace svt
     bool RoadmapWizard::canAdvance() const
     {
         if ( !m_pImpl->bActivePathIsDefinite )
-            // there's always a next state if we did not yet decide for a path
-            return true;
+        {
+            // check how many paths are still allowed
+            const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
+            sal_Int32 nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), rActivePath );
+
+            size_t nPossiblePaths(0);
+            for (   Paths::const_iterator aPathPos = m_pImpl->aPaths.begin();
+                    aPathPos != m_pImpl->aPaths.end();
+                    ++aPathPos
+                )
+            {
+                // the index from which on both paths differ
+                sal_Int32 nDivergenceIndex = m_pImpl->getFirstDifferentIndex( rActivePath, aPathPos->second );
+
+                if ( nDivergenceIndex > nCurrentStatePathIndex )
+                    // this path is still a possible path
+                    nPossiblePaths += 1;
+            }
+
+            // if we have more than one path which is still possible, then we assume
+            // to always have a next state. Though there might be scenarios where this
+            // is not true, but this is too sophisticated (means not really needed) right now.
+            if ( nPossiblePaths > 1 )
+                return true;
+        }
 
         const WizardPath& rPath = m_pImpl->aPaths[ m_pImpl->nActivePath ];
         if ( *rPath.rbegin() == getCurrentState() )
@@ -497,6 +520,22 @@ namespace svt
     void RoadmapWizard::updateTravelUI()
     {
         OWizardMachine::updateTravelUI();
+
+        // disable the "Previous" button if all states in our history are disabled
+        ::std::vector< WizardState > aHistory;
+        getStateHistory( aHistory );
+        bool bHaveEnabledState = false;
+        for (   ::std::vector< WizardState >::const_iterator state = aHistory.begin();
+                state != aHistory.end() && !bHaveEnabledState;
+                ++state
+            )
+        {
+            if ( isStateEnabled( *state ) )
+                bHaveEnabledState = true;
+        }
+
+        enableButtons( WZB_PREVIOUS, bHaveEnabledState );
+
         implUpdateRoadmap();
     }
 
@@ -606,10 +645,9 @@ namespace svt
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
     //--------------------------------------------------------------------
-    bool    RoadmapWizard::isStateEnabled( WizardState _nState ) const
+    bool RoadmapWizard::isStateEnabled( WizardState _nState ) const
     {
-        sal_Bool bEnabled = m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
-        return bEnabled;
+        return m_pImpl->aDisabledStates.find( _nState ) == m_pImpl->aDisabledStates.end();
     }
     //--------------------------------------------------------------------
     void RoadmapWizard::Resize()
