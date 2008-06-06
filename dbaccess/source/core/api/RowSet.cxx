@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RowSet.cxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2692,6 +2692,9 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
         // TODO: resource
     if ( m_aCurrentRow.isNull() )
         throwSQLException( "Invalid cursor state", SQL_INVALID_CURSOR_STATE, *this );
+
+    if ( sal_Int32((*m_aCurrentRow)->size()) <= columnIndex )
+        throwSQLException( "Invalid column index", SQL_INVALID_DESCRIPTOR_INDEX, *this );
         // TODO: resource
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwSQLException( "Result set is not writeable", SQL_GENERAL_ERROR, *this );
