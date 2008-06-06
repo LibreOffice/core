@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TKey.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,17 +53,10 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
     construct();
 }
 // -------------------------------------------------------------------------
-OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable,
-            const ::rtl::OUString& _Name,
-            const ::rtl::OUString& _ReferencedTable,
-            sal_Int32       _Type,
-            sal_Int32       _UpdateRule,
-            sal_Int32       _DeleteRule
-            ) : connectivity::sdbcx::OKey(_Name,
-                          _ReferencedTable,
-                          _Type,
-                          _UpdateRule,
-                          _DeleteRule,sal_True)
+OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
+            ,const ::rtl::OUString& _Name
+            ,const sdbcx::TKeyProperties& _rProps
+            ) : connectivity::sdbcx::OKey(_Name,_rProps,sal_True)
                 ,m_pTable(_pTable)
 {
     construct();
