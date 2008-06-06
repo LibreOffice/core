@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.40 $
+# $Revision: 1.41 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1502,8 +1502,9 @@ sub create_download_sets
 
     my $infoline = "";
 
+    my $force = 1; # print this message even in 'quiet' mode
     installer::logger::print_message( "\n******************************************\n" );
-    installer::logger::print_message( "... creating download installation set ...\n" );
+    installer::logger::print_message( "... creating download installation set ...\n", $force );
     installer::logger::print_message( "******************************************\n" );
 
     installer::logger::include_header_into_logfile("Creating download installation sets:");
