@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AppControllerGen.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,132 +31,57 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_APPCONTROLLER_HXX
 #include "AppController.hxx"
-#endif
-
-#include <com/sun/star/ucb/Command.hpp>
-#include <com/sun/star/ucb/XCommandProcessor.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
-#include <com/sun/star/sdb/ErrorCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECT_HPP_
-#include <com/sun/star/sdb/application/DatabaseObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
-#include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
-#include <com/sun/star/container/XContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
-#include <com/sun/star/sdbcx/XRename.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
-#include <com/sun/star/uno/XNamingService.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
-#include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef CONNECTIVITY_SQLERROR_HXX
-#include <connectivity/sqlerror.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#ifndef DBAUI_DLGSAVE_HXX
-#include "dlgsave.hxx"
-#endif
-#ifndef INCLUDED_SFX_MAILMODELAPI_HXX
-#include <sfx2/mailmodelapi.hxx>
-#endif
-#ifndef DBAUI_APPVIEW_HXX
-#include "AppView.hxx"
-#endif
-#ifndef _SVX_DBAEXCHANGE_HXX_
-#include <svx/dbaexchange.hxx>
-#endif
-#ifndef _UTL_BOOTSTRAP_HXX
-#include <unotools/bootstrap.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_MNEMONIC_HXX
-#include <vcl/mnemonic.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-#ifndef DBAUI_APPDETAILVIEW_HXX
 #include "AppDetailView.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _DBACCESS_SLOTID_HRC_
+#include "AppView.hxx"
 #include "dbaccess_slotid.hrc"
-#endif
-#ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMECONTAINER_HPP_
-#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
+#include "dbustrings.hrc"
 #include "defaultobjectnamecheck.hxx"
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include "dlgsave.hxx"
+#include "UITools.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbcx/XRename.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+/** === end UNO includes === **/
+
 #include <cppuhelper/exc_hlp.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/sqlerror.hxx>
+#include <connectivity/dbexception.hxx>
+#include <sfx2/mailmodelapi.hxx>
+#include <svx/dbaexchange.hxx>
+#include <toolkit/unohlp.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <unotools/bootstrap.hxx>
+#include <vcl/mnemonic.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/waitobj.hxx>
+#include <vos/mutex.hxx>
 
 //........................................................................
 namespace dbaui
