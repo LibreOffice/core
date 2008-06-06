@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: BKeys.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "adabas/BKeys.hxx"
-#ifndef _CONNECTIVITY_ADABAS_INDEX_HXX_
-#include "adabas/BKey.hxx"
-#endif
 #include "adabas/BTable.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -43,6 +40,7 @@
 #include "adabas/BCatalog.hxx"
 #include <comphelper/property.hxx>
 #include <connectivity/TKeys.hxx>
+#include <connectivity/dbtools.hxx>
 
 
 using namespace ::comphelper;
@@ -54,66 +52,13 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-typedef connectivity::sdbcx::OCollection OCollection_TYPE;
+typedef OKeysHelper OCollection_TYPE;
 
-// -------------------------------------------------------------------------
-sdbcx::ObjectType OKeys::createObject(const ::rtl::OUString& _rName)
-{
-    sdbcx::ObjectType xRet = NULL;
-
-    if(_rName.getLength())
-    {
-        Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),
-            m_pTable->getSchema(),m_pTable->getTableName());
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString sName;
-            const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-            while(xResult->next())
-            {
-                sName = xRow->getString(2);
-                if(sName.getLength())
-                    sName += sDot;
-                sName += xRow->getString(3);
-                sal_Int32 nUpdateRule = xRow->getInt(10);
-                if(xRow->wasNull())
-                    nUpdateRule = KeyRule::NO_ACTION;
-
-                sal_Int32 nDeleteRule = xRow->getInt(11);
-                if(xRow->wasNull())
-                    nDeleteRule = KeyRule::NO_ACTION;
-                if(xRow->getString(12) == _rName)
-                {
-                    OAdabasKey* pRet = new OAdabasKey(m_pTable,_rName,sName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
-                    xRet = pRet;
-                    break;
-                }
-            }
-            ::comphelper::disposeComponent(xResult);
-        }
-    }
-    else
-        xRet = new OAdabasKey(m_pTable,_rName,::rtl::OUString(),KeyType::PRIMARY,KeyRule::NO_ACTION,KeyRule::NO_ACTION);
-
-    return xRet;
-}
-// -------------------------------------------------------------------------
-void OKeys::impl_refresh() throw(RuntimeException)
-{
-    m_pTable->refreshKeys();
-}
-// -------------------------------------------------------------------------
-Reference< XPropertySet > OKeys::createDescriptor()
-{
-    return new OAdabasKey(m_pTable);
-}
 // -------------------------------------------------------------------------
 // XAppend
 sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    if ( m_pTable->isNew() )
+    if ( getTable()->isNew() )
     {
         Reference< XPropertySet > xNewDescriptor( cloneDescriptor( descriptor ) );
         OKeysHelper::cloneDescriptorColumns( descriptor, xNewDescriptor );
@@ -123,10 +68,11 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
     sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-    ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+    const ::rtl::OUString aQuote    = getTable()->getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
-    aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
+    aSql += composeTableName( getTable()->getConnection()->getMetaData(), getTable(), ::dbtools::eInTableDefinitions, false, false, true );
+
     if(nKeyType == KeyType::PRIMARY)
     {
         aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
@@ -150,14 +96,18 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
     }
     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
+    sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
+    ::rtl::OUString sReferencedName;
+
     if(nKeyType == KeyType::FOREIGN)
     {
-        sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
+        nDeleteRule = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE)));
 
-        ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
-        sal_Int32 nLen = aRefTable.indexOf('.');
-        aSchema = aRefTable.copy(0,nLen);
-        aName   = aRefTable.copy(nLen+1);
+        ::rtl::OUString aName,aSchema;
+        sReferencedName = getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
+        sal_Int32 nLen = sReferencedName.indexOf('.');
+        aSchema = sReferencedName.copy(0,nLen);
+        aName   = sReferencedName.copy(nLen+1);
         aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
                     + aQuote + aSchema + aQuote + sDot + aQuote + aName + aQuote;
         aSql += ::rtl::OUString::createFromAscii(" (");
@@ -190,14 +140,20 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
         }
     }
 
-    Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
+    Reference< XStatement > xStmt = getTable()->getConnection()->createStatement(  );
     xStmt->execute(aSql);
     ::comphelper::disposeComponent(xStmt);
     // find the name which the database gave the new key
     ::rtl::OUString sNewName( _rForName );
     if(nKeyType == KeyType::FOREIGN)
     {
-        Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
+        const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+        ::rtl::OUString aSchema,aTable;
+        getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
+        getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))     >>= aTable;
+        Reference< XResultSet > xResult = getTable()->getMetaData()->getImportedKeys( getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                                                                                    ,aSchema
+                                                                                    ,aTable);
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -215,40 +171,14 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
         }
     }
 
+    getTable()->addKey(sNewName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(sReferencedName,nKeyType,nUpdateRule,nDeleteRule)));
     return createObject( sNewName );
 }
 // -------------------------------------------------------------------------
-// XDrop
-void OKeys::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+::rtl::OUString OKeys::getDropForeignKey() const
 {
-    if(!m_pTable->isNew())
-    {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-
-        Reference<XPropertySet> xKey(getObject(_nPos),UNO_QUERY);
-        if ( xKey.is() )
-        {
-            sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
-
-            aSql += aQuote + m_pTable->getSchema() + aQuote + sDot + aQuote + m_pTable->getTableName() + aQuote;
-            if ( nKeyType == KeyType::PRIMARY )
-                aSql += ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
-            else
-            {
-                aSql += ::rtl::OUString::createFromAscii(" DROP FOREIGN KEY ");
-                aSql += aQuote + _sElementName + aQuote;
-            }
-
-            Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
-            if ( xStmt.is() )
-            {
-                xStmt->execute(aSql);
-                ::comphelper::disposeComponent(xStmt);
-            }
-        }
-    }
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP FOREIGN KEY "));
 }
+
 // -----------------------------------------------------------------------------
 
