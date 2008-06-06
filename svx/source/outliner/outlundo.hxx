@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlundo.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,16 +49,56 @@ public:
     Outliner*   GetOutliner() const { return mpOutliner; }
 };
 
+class OutlinerUndoChangeParaFlags : public OutlinerUndoBase
+{
+private:
+    sal_uInt16      mnPara;
+    sal_uInt16      mnOldFlags;
+    sal_uInt16      mnNewFlags;
+
+    void ImplChangeFlags( sal_uInt16 nFlags );
+
+public:
+    OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_uInt16 nPara, sal_uInt16 nOldDepth, sal_uInt16 nNewDepth );
+
+    virtual void    Undo();
+    virtual void    Redo();
+};
+
+class OutlinerUndoChangeParaNumberingRestart : public OutlinerUndoBase
+{
+private:
+    sal_uInt16      mnPara;
+
+    struct ParaRestartData
+    {
+        sal_Int16       mnNumberingStartValue;
+        sal_Bool        mbParaIsNumberingRestart;
+    };
+
+    ParaRestartData maUndoData;
+    ParaRestartData maRedoData;
+
+    void ImplApplyData( const ParaRestartData& rData );
+public:
+    OutlinerUndoChangeParaNumberingRestart( Outliner* pOutliner, sal_uInt16 nPara,
+        sal_Int16 nOldNumberingStartValue, sal_Int16 mnNewNumberingStartValue,
+        sal_Bool  nOldbParaIsNumberingRestart, sal_Bool nbNewParaIsNumberingRestart );
+
+    virtual void    Undo();
+    virtual void    Redo();
+};
+
 class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
     using SfxUndoAction::Repeat;
 private:
     USHORT          mnPara;
-    USHORT          mnOldDepth;
-    USHORT          mnNewDepth;
+    sal_Int16       mnOldDepth;
+    sal_Int16       mnNewDepth;
 
 public:
-                    OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, USHORT nOldDepth, USHORT nNewDepth );
+                    OutlinerUndoChangeDepth( Outliner* pOutliner, USHORT nPara, sal_Int16 nOldDepth, sal_Int16 nNewDepth );
 
     virtual void    Undo();
     virtual void    Redo();
