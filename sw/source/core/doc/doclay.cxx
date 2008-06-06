@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doclay.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1862,12 +1862,18 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
             GetRootFrm()->StartAllAction();
 
+            // no jump on update of fields #i85168#
+            const sal_Bool bOldLockView = pStartSh->IsViewLocked();
+            pStartSh->LockView( sal_True );
+
             GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );    // KapitelFld
             UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
             UpdateTblFlds(NULL);                // Tabellen
             UpdateRefFlds(NULL);                // Referenzen
 
             GetRootFrm()->EndAllAction();
+
+            pStartSh->LockView( bOldLockView );
 
             GetUpdtFlds().SetInUpdateFlds( sal_False );
             GetUpdtFlds().SetFieldsDirty( sal_False );
