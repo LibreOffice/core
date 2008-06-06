@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -585,9 +585,14 @@ bool BackendImpl::PackageImpl::checkDependencies(
 
         if (!nodeSimpleLic.is())
             return true;
-        //throws an exception if nothing adequate was found
-        OUString sHref = desc.getExtensionRootUrl() + OUSTR("/")
-            + getDescriptionInfoset().getLocalizedLicenseURL();
+        OUString sLic = getDescriptionInfoset().getLocalizedLicenseURL();
+        //If we do not get a localized licence then there is an error in the description.xml
+        //This should be handled by using a validating parser. Therefore we assume that no
+        //license is available.
+        if (sLic.getLength() == 0)
+            throw css::deployment::DeploymentException(
+                OUSTR("Could not obtain path to license. Possible error in description.xml"), 0, Any());
+        OUString sHref = desc.getExtensionRootUrl() + OUSTR("/") + sLic;
            OUString sLicense = getLicenseText(xCmdEnv, sHref);
         //determine who has to agree to the license
         css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
