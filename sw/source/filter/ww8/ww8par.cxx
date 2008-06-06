@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.191 $
+ * $Revision: 1.192 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2335,6 +2335,37 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
         return cChar;
 }
 
+bool SwWW8ImplReader::LangUsesHindiNumbers(USHORT nLang)
+{
+    bool bResult = false;
+
+    switch (nLang)
+    {
+        case 0x1401: // Arabic(Algeria)
+        case 0x3c01: // Arabic(Bahrain)
+        case 0xc01: // Arabic(Egypt)
+        case 0x801: // Arabic(Iraq)
+        case 0x2c01: // Arabic (Jordan)
+        case 0x3401: // Arabic(Kuwait)
+        case 0x3001: // Arabic(Lebanon)
+        case 0x1001: // Arabic(Libya)
+        case 0x1801: // Arabic(Morocco)
+        case 0x2001: // Arabic(Oman)
+        case 0x4001: // Arabic(Qatar)
+        case 0x401: // Arabic(Saudi Arabia)
+        case 0x2801: // Arabic(Syria)
+        case 0x1c01: // Arabic(Tunisia)
+        case 0x3801: // Arabic(U.A.E)
+        case 0x2401: // Arabic(Yemen)
+            bResult = true;
+            break;
+        default:
+            break;
+    }
+
+    return bResult;
+}
+
 sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
 {
     if (nChar >= 0x0030 && nChar <= 0x0039)
@@ -2377,6 +2408,11 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     BYTE   nBCode = 0;
     UINT16 nUCode;
     xub_StrLen nL2;
+
+    USHORT nCTLLang = 0;
+    const SfxPoolItem * pItem = GetFmtAttr(RES_CHRATR_CTL_LANGUAGE);
+    if (pItem != NULL)
+        nCTLLang = dynamic_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
 
     for( nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
     {
@@ -2426,7 +2462,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         else
             *pWork = Custom8BitToUnicode(hConverter, nBCode);
 
-        if (nIdctHint == 2)
+        if (m_bRegardHindiDigits && bBidi && LangUsesHindiNumbers(nCTLLang))
         {
             *pWork = TranslateToHindiNumbers(*pWork);
         }
@@ -3112,9 +3148,11 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     mpAtnNames(0),
     pAuthorInfos(0),
     sBaseURL(rBaseURL),
+    m_bRegardHindiDigits( false ),
     mbNewDoc(bNewDoc),
     nDropCap(0),
-    nIdctHint(0)
+    nIdctHint(0),
+    bBidi(false)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -4564,15 +4602,17 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     ULONG nErrRet = 0;
 
     {
-        static const sal_Char* aNames[ 12 ] = {
+        static const sal_Char* aNames[ 13 ] = {
             "WinWord/WW", "WinWord/WW8", "WinWord/WWFT",
             "WinWord/WWFLX", "WinWord/WWFLY",
             "WinWord/WWF",
             "WinWord/WWFA0", "WinWord/WWFA1", "WinWord/WWFA2",
-            "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2"
+            "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2",
+            "WinWord/RegardHindiDigits"
         };
-        sal_uInt32 aVal[ 12 ];
-        SwFilterOptions aOpt( 12, aNames, aVal );
+        sal_uInt32 aVal[ 13 ];
+
+        SwFilterOptions aOpt( 13, aNames, aVal );
 
         nIniFlags = aVal[ 0 ];
         nIniFlags1= aVal[ 1 ];
@@ -4587,6 +4627,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
         nFieldTagBad[0] = aVal[ 9 ];
         nFieldTagBad[1] = aVal[ 10 ];
         nFieldTagBad[2] = aVal[ 11 ];
+        m_bRegardHindiDigits = aVal[ 12 ] > 0;
     }
 
     UINT16 nMagic;
