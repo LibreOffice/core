@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.96 $
+ * $Revision: 1.97 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Xmerge,
 	gid_File_Jar_Xmergebridge,
     gid_File_Rdb_Offapi,
-	gid_Starregistry_Legacy_Binfilters_Rdb,
 	gid_Starregistry_Services_Rdb);
 End
 
@@ -196,7 +195,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Lng,
 	gid_File_Lib_Offacc,
 	gid_File_Lib_Oox,
-	gid_File_Lib_Bindet,
 	gid_File_Lib_Pcr,
 	gid_File_Lib_Pdffilter,
 	gid_File_Lib_Pk,
@@ -320,22 +318,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Officebean,
 	gid_File_Lib_Openssl,
 	gid_File_Lib_Package2,
-	gid_File_Lib_Bf_Sch,
-	gid_File_Lib_Bf_Lng,
-	gid_File_Lib_Bf_Go,
-	gid_File_Lib_Bf_Xo,
-	gid_File_Lib_Bf_Svx,
-	gid_File_Lib_Bf_Svt,
-	gid_File_Lib_Bf_Frm,
-	gid_File_Lib_Bf_Ofa,
-	gid_File_Lib_Bf_Sd,
-	gid_File_Lib_Bf_Sb,
-	gid_File_Lib_Bf_So,
-	gid_File_Lib_Bf_Sm,
-	gid_File_Lib_Bf_Sw,
-	gid_File_Lib_Bf_Wrapper,
-	gid_File_Lib_Legacy_Binfilters,
-	gid_File_Lib_Bf_Migratefilter,
 	gid_File_Lib_Deployment,
 	gid_File_Lib_DeploymentGui,
 	gid_File_Lib_Sax_Uno,
