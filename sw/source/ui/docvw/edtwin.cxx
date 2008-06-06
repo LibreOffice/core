@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.158 $
+ * $Revision: 1.159 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2110,9 +2110,24 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if((nSelectionType & nsSelectionType::SEL_DRW) &&
                             0 == (nSelectionType & nsSelectionType::SEL_DRW_TXT) &&
                             rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1)
-                                eKeyState = KS_GoIntoDrawing;
-                        else
-                            eKeyState = KS_InsChar;
+                        {
+                            SdrObject* pObj = rSh.GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+                            if(pObj)
+                            {
+                                EnterDrawTextMode(pObj->GetLogicRect().Center());
+                                if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
+                                    ((SwDrawTextShell*)rView.GetCurShell())->Init();
+                                rSh.GetDrawView()->KeyInput( rKEvt, this );
+                            }
+                        }
+                        else if(nSelectionType & nsSelectionType::SEL_FRM)
+                        {
+                            rSh.UnSelectFrm();
+                            rSh.LeaveSelFrmMode();
+                            rView.AttrChangedNotify(&rSh);
+                            rSh.MoveSection( fnSectionCurr, fnSectionEnd );
+                        }
+                        eKeyState = KS_InsChar;
                     }
                     else
                     {
@@ -2130,6 +2145,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             rSh.UnSelectFrm();
             rSh.LeaveSelFrmMode();
             rView.AttrChangedNotify(&rSh);
+            rSh.MoveSection( fnSectionCurr, fnSectionEnd );
             eKeyState = KS_Ende;
         break;
         case KS_GoIntoDrawing :
