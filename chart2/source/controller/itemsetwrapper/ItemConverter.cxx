@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ItemConverter.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <svtools/itemiter.hxx>
 // header for class SfxWhichIter
 #include <svtools/whiter.hxx>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 
@@ -259,7 +260,12 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
             (rDestSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET))
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
-                rDestSet.InvalidateItem(nWhich);
+            {
+                if( SID_CHAR_DLG_PREVIEW_STRING != nWhich )
+                {
+                    rDestSet.InvalidateItem(nWhich);
+                }
+            }
         }
         else if( rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_DONTCARE )
             rDestSet.InvalidateItem(nWhich);
