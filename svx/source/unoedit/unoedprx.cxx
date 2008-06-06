@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoedprx.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1072,14 +1072,14 @@ sal_Bool SvxAccessibleTextAdapter::QuickFormatDoc( BOOL bFull )
     return mrTextForwarder->QuickFormatDoc( bFull );
 }
 
-USHORT SvxAccessibleTextAdapter::GetDepth( USHORT nPara ) const
+sal_Int16 SvxAccessibleTextAdapter::GetDepth( USHORT nPara ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
     return mrTextForwarder->GetDepth( nPara );
 }
 
-sal_Bool SvxAccessibleTextAdapter::SetDepth( USHORT nPara, USHORT nNewDepth )
+sal_Bool SvxAccessibleTextAdapter::SetDepth( USHORT nPara, sal_Int16 nNewDepth )
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 
