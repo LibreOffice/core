@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TickmarkHelper.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include "ViewDefines.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
+#include <memory>
 
 //.............................................................................
 namespace chart
@@ -414,6 +415,13 @@ TickmarkHelper::TickmarkHelper(
     }
 }
 
+TickmarkHelper* TickmarkHelper::createShiftedTickmarkHelper() const
+{
+    ExplicitIncrementData aShiftedIncrement( m_rIncrement );
+    aShiftedIncrement.BaseValue = m_rIncrement.BaseValue-m_rIncrement.Distance/2.0;
+    return new TickmarkHelper( m_rScale, aShiftedIncrement );
+}
+
 TickmarkHelper::~TickmarkHelper()
 {
     delete[] m_pfCurrentValues;
@@ -654,6 +662,12 @@ void TickmarkHelper::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rA
     }
 }
 
+void TickmarkHelper::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
+{
+    std::auto_ptr< TickmarkHelper > apShiftedTickmarkHelper( createShiftedTickmarkHelper() );
+    apShiftedTickmarkHelper->getAllTicks( rAllTickInfos );
+}
+
 void TickmarkHelper::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence< double > >& rParentTicks ) const
 {
     TickIter aIter( rParentTicks, m_rIncrement, 0, nDepth-1 );
@@ -722,6 +736,19 @@ TickmarkHelper_2D::TickmarkHelper_2D(
         m_fStrech_LogicToScreen = -1.0/fWidthY;
         m_fOffset_LogicToScreen = -m_fScaledVisibleMax;
     }
+}
+
+TickmarkHelper* TickmarkHelper_2D::createShiftedTickmarkHelper() const
+{
+    ExplicitIncrementData aShiftedIncrement( m_rIncrement );
+    aShiftedIncrement.BaseValue = m_rIncrement.BaseValue-m_rIncrement.Distance/2.0;
+
+    ::basegfx::B2DVector aStart( m_aAxisStartScreenPosition2D );
+    ::basegfx::B2DVector aEnd( m_aAxisEndScreenPosition2D );
+    if( AxisOrientation_MATHEMATICAL==m_rScale.Orientation )
+        std::swap( aStart, aEnd );
+
+    return new TickmarkHelper_2D( m_rScale, aShiftedIncrement, aStart, aEnd );
 }
 
 TickmarkHelper_2D::~TickmarkHelper_2D()
@@ -804,7 +831,7 @@ B2DVector TickmarkHelper_2D::getDistanceTickToText( const AxisProperties& rAxisP
     B2DVector aStart(0,0), aEnd(0,0);
     for( sal_Int32 nN=rAxisProperties.m_aTickmarkPropertiesList.size();nN--;)
     {
-        const TickmarkProperties& rProps = rAxisProperties.m_aTickmarkPropertiesList[0];
+        const TickmarkProperties& rProps = rAxisProperties.m_aTickmarkPropertiesList[nN];
         B2DVector aNewStart = aOrthoDirection*rProps.RelativePos;
         B2DVector aNewEnd = aNewStart - aOrthoDirection*rProps.Length;
         if(aNewStart.getLength()>aStart.getLength())
@@ -880,6 +907,13 @@ TickmarkHelper_3D::TickmarkHelper_3D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement )
           : TickmarkHelper( rScale, rIncrement )
 {
+}
+
+TickmarkHelper* TickmarkHelper_3D::createShiftedTickmarkHelper() const
+{
+    ExplicitIncrementData aShiftedIncrement( m_rIncrement );
+    aShiftedIncrement.BaseValue = m_rIncrement.BaseValue-m_rIncrement.Distance/2.0;
+    return new TickmarkHelper_3D( m_rScale, aShiftedIncrement );
 }
 
 TickmarkHelper_3D::~TickmarkHelper_3D()
