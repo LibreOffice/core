@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Writer.xcs,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1590,7 +1590,7 @@
 						<label>Use squared paper mode</label>
 					</info>
 					<value>true</value>
-				</prop>	
+				</prop>
 			</group>
 			<group oor:name="Zoom">
 				<info>
@@ -2394,7 +2394,7 @@
 						<desc>Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
 						<label>Number recognition</label>
 					</info>
-                    <value>false</value>
+                    <value>true</value>
 				</prop>
 				<prop oor:name="NumberFormatRecognition" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
@@ -2416,7 +2416,7 @@
 						<desc>Specifies if all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
 						<label>Alignment</label>
 					</info>
-					<value>true</value>
+					<value>false</value>
 				</prop>
 			</group>
 		</group>
@@ -6830,6 +6830,12 @@
 					</constraints>
 					<value>0</value>
 				</prop>
+                                <prop oor:name="RegardHindiDigits" oor:type="xs:long">
+                                        <info>
+                                                <desc>If true yields to digits marked as CTL script to be imported as Hindi digits.</desc>
+                                        </info>
+                                        <value>0</value>
+                                </prop>
 			</group>
 			<group oor:name="Writer">
 				<info>
