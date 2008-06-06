@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ObjectIdentifier.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -468,7 +468,7 @@ OUString ObjectIdentifier::createParticleForGrid(
     aRet.append( OUString::valueOf( nDimensionIndex ) );
     aRet.appendAscii(",");
     aRet.append( OUString::valueOf( nAxisIndex ) );
-    aRet.append( C2U(":Grid=") );
+    aRet.append( C2U(":Grid=0") );
 
     return aRet.makeStringAndClear();
 }
