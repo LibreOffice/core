@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_ext.mk,v $
 #
-# $Revision: 1.87 $
+# $Revision: 1.88 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -85,10 +85,10 @@ TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
 .ENDIF          # "$(TAR_EXCLUDES)"!=""
 
 unzip_quiet_switch:=-qq
-#.IF "$(VERBOSE)"!=""
+.IF "$(VERBOSE)"=="TRUE"
 tar_verbose_switch=v
 unzip_quiet_switch:=
-#.ENDIF			# "$(VERBOSE)"!=""
+.ENDIF			# "$(VERBOSE)"=="TRUE"
 
 .IF "$(ADDITIONAL_FILES)"!=""
 P_ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
