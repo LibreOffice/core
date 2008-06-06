@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: linkeddocuments.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,9 @@
 #include "dbustrings.hrc"
 #endif
 #include <comphelper/classids.hxx>
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -246,7 +249,7 @@ namespace dbaui
                 break;
 
             default:
-                OSL_ENSURE( false, "OLinkedDocumentsAccess::impl_open: invalid open mode!" );
+                OSL_ENSURE( false, "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
                 break;
         }
         aArguments.put( "OpenMode", sOpenMode );
