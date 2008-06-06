@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: MNSProfileDiscover.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,7 +232,7 @@ namespace connectivity
                         getter_Copies(regData));
                 if (NS_FAILED(rv)) continue;
 
-#if defined(XP_MAC) || defined(XP_MACOSX)
+#if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX)
                     rv = NS_NewNativeLocalFile(nsCString(), PR_TRUE, getter_AddRefs(tempLocal));
                 if (NS_SUCCEEDED(rv))
                     rv = tempLocal->SetPersistentDescriptor(NS_LossyConvertUCS2toASCII(regData));
