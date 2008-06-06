@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpropls.cxx,v $
- * $Revision: 1.99 $
+ * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1125,7 +1125,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );
                 break;
             case XML_TYPE_WRAP_OPTION:
-                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_NO_WRAP ), GetXMLToken( XML_WRAP ) );
+                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_WRAP ), GetXMLToken( XML_NO_WRAP ) );
                 break;
 
             case XML_SD_TYPE_MOVE_PROTECT:
@@ -1163,7 +1163,7 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 // ----------------------------------------
 
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport )
-: SvXMLExportPropertyMapper2( rMapper )
+: SvXMLExportPropertyMapper( rMapper )
 , mpListAutoPool( pListAutoPool )
 , mrExport( rExport )
 , maNumRuleExp( rExport )
