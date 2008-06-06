@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: menudocumenthandler.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +39,12 @@
 #include <xml/menudocumenthandler.hxx>
 #include <xml/menuconfiguration.hxx>
 #include <classes/addonmenu.hxx>
-#ifndef __FRAMEWORK_XML_ATTRIBUTELIST_HXX_
-#include <xml/attributelist.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -60,6 +55,8 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
+
+#include <comphelper/attributelist.hxx>
 
 //_________________________________________________________________________________________________________________
 //  defines
@@ -762,7 +759,8 @@ OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
     m_xMenuBarContainer( rMenuBarContainer ),
     m_xWriteDocumentHandler( rDocumentHandler )
 {
-    m_xEmptyList = Reference< XAttributeList >( (XAttributeList *)new AttributeListImpl, UNO_QUERY );
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
+    m_xEmptyList = Reference< XAttributeList >( (XAttributeList *) pList, UNO_QUERY );
     m_aAttributeType =  OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TYPE_CDATA ));
 }
 
@@ -775,7 +773,7 @@ OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()
 void OWriteMenuDocumentHandler::WriteMenuDocument()
 throw ( SAXException, RuntimeException )
 {
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > rList( (XAttributeList *) pList , UNO_QUERY );
 
     m_xWriteDocumentHandler->startDocument();
@@ -788,11 +786,11 @@ throw ( SAXException, RuntimeException )
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_MENU )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_MENU )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_MENU )) );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( "menubar" )) );
 
@@ -838,15 +836,15 @@ throw ( SAXException, RuntimeException )
                 }
                 else if (( aCommandURL.getLength() > 0 ) && !AddonPopupMenu::IsCommandURLPrefix ( aCommandURL ))
                 {
-                    AttributeListImpl* pListMenu = new AttributeListImpl;
+                    ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
                     Reference< XAttributeList > xListMenu( (XAttributeList *)pListMenu , UNO_QUERY );
 
-                    pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+                    pListMenu->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                                             m_aAttributeType,
                                             aCommandURL );
 
                     if ( !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
-                        pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
+                        pListMenu->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                                  m_aAttributeType,
                                                  aLabel );
 
@@ -890,23 +888,23 @@ throw ( SAXException, RuntimeException )
 
 void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL)
 {
-    AttributeListImpl* pList = new AttributeListImpl;
+    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
+    pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                                 m_aAttributeType,
                                 aCommandURL );
 
     if ( aHelpURL.getLength() > 0 )
     {
-        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),
+        pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),
                              m_aAttributeType,
                              aHelpURL );
     }
 
     if (( aLabel.getLength() > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
     {
-        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
+        pList->AddAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                 m_aAttributeType,
                                 aLabel );
     }
