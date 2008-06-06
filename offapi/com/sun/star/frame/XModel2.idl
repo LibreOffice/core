@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XModel2.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,21 +30,11 @@
 #ifndef __com_sun_star_frame_XModel2_idl__
 #define __com_sun_star_frame_XModel2_idl__
 
-#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XController2.idl>
 #include <com/sun/star/frame/XModel.idl>
-#endif
-
-#ifndef __com_sun_star_container_XEnumeration_idl__
 #include <com/sun/star/container/XEnumeration.idl>
-#endif
-
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 //=============================================================================
 
@@ -82,21 +72,36 @@ interface XModel2 : com::sun::star::frame::XModel
     //-------------------------------------------------------------------------
     /** provides the available names of the factory to be used to create views.
 
-        @see createView()
+        <p>The names are usually logical view names. The following names have
+        a defined meaning, i.e. every concrete implementation which returns such
+        a name must ensure it has the same meaning, and if a concrete implementation
+        has a view with the given meaning, it must give it the name as defined here:
+        <ul>
+            <li><b>Default</b> specifies the default view of the document.</li>
+            <li><b>Preview</b> specifies a preview of the document. A minimal implementation of such a view
+                is a <em>Default</em> view which is read-only.</li>
+            <li><b>PrintPreview</b> specifies a print preview of the document.</li>
+        </ul>
+        </p>
+
+        <p>Implementations of this interface might decide to support additional
+        view names, which then are documented in the respective service descriptions.</p>
+
+        @see createView
 
         @returns
-            sequence of all view names
+            a sequence of names of all supported views for this document.
      */
     sequence< string > getAvailableViewControllerNames();
 
     //-------------------------------------------------------------------------
     /** creates the default view instance for this model.
 
+        <p>Effectively, this method is equivalent to calling <member>createView</member> with
+        the <code>ViewName</code> being <code>&quot;Default&quot;</code>.</p>
+
         @param Frame
                used to place the new created view there
-
-        @param ComponentWindow
-               returns a suitable component window for the new created view controller
 
         @return the new view controller instance
 
@@ -106,13 +111,18 @@ interface XModel2 : com::sun::star::frame::XModel
         @throws ::com::sun::star::uno::Exception
                 if creation of a new view failed by other reasons
      */
-    com::sun::star::frame::XController createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame          ,
-                                                                    [out] com::sun::star::awt::XWindow  ComponentWindow)
+    com::sun::star::frame::XController2 createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::Exception                );
 
     //-------------------------------------------------------------------------
     /** creates a new view instance classified by the specified name and arguments.
+
+        <p>The newly created controller must not be connected with the document and the
+        frame. That is, you should neither call <member>XFrame::setComponent</member>, nor
+        <member>XController::attachFrame</member>, nor <member>XController::attachModel</member>,
+        nor <member>XModel::connectController</member>, not <member>XModel::setCurrentController</member>.
+        All of this is the responsibility of the caller, which will do it in the proper order.</p>
 
         @param ViewName
                classified name of instance
@@ -123,9 +133,6 @@ interface XModel2 : com::sun::star::frame::XModel
         @param Frame
                used to place the new created view there
 
-        @param ComponentWindow
-               returns a suitable component window for the new created view controller
-
         @return the new view controller instance
 
         @throws ::com::sun::star::lang::IllegalArgumentException
@@ -134,10 +141,9 @@ interface XModel2 : com::sun::star::frame::XModel
         @throws ::com::sun::star::uno::Exception
                 if creation of a new view failed by other reasons
      */
-    com::sun::star::frame::XController createViewController( [in]  string                                           ViewName       ,
-                                                             [in]  sequence< com::sun::star::beans::PropertyValue > Arguments      ,
-                                                             [in]  com::sun::star::frame::XFrame                    Frame          ,
-                                                             [out] com::sun::star::awt::XWindow                     ComponentWindow)
+    com::sun::star::frame::XController2 createViewController( [in]  string                                           ViewName       ,
+                                                              [in]  sequence< com::sun::star::beans::PropertyValue > Arguments      ,
+                                                              [in]  com::sun::star::frame::XFrame                    Frame          )
         raises (com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::uno::Exception                );
 };
