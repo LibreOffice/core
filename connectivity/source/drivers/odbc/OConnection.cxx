@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OConnection.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,9 +114,10 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,getTextEncoding()));
     memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
-
+#ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,(SQLPOINTER)nTimeOut,SQL_IS_UINTEGER);
     // Verbindung aufbauen
+#endif
 
 #ifdef LINUX
     OSL_UNUSED( bSilent );
