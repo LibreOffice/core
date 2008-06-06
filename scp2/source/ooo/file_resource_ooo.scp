@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_resource_ooo.scp,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,24 +84,6 @@ STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
 STD_RES_FILE( gid_File_Res_San, san )
 
 #endif
-
-//
-// start binfilter #110743#
-//
-
-#ifndef WITHOUT_BINFILTER
-STD_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
-STD_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
-STD_RES_FILE( gid_File_Res_Bf_Svt, bf_svt )
-STD_RES_FILE( gid_File_Res_Bf_Frm, bf_frm )
-STD_RES_FILE( gid_File_Res_Bf_Ofa, bf_ofa )
-STD_RES_FILE( gid_File_Res_Bf_Sd, bf_sd )
-STD_RES_FILE( gid_File_Res_Bf_Sw, bf_sw )
-#endif
-
-//
-// end binfilter #110743#
-//
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
