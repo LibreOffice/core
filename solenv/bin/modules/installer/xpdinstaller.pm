@@ -8,7 +8,7 @@
 #
 # $RCSfile: xpdinstaller.pm,v $
 #
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -213,6 +213,7 @@ sub get_end_tag
 sub get_tag_line
 {
     my ( $indent, $name, $value ) = @_;
+    $value = '' unless defined $value;
 
     my $line = $indent . "<" . $name . ">" . $value . "</" . $name . ">" . "\n";
 
@@ -682,7 +683,7 @@ sub get_languagespecific_value
 
     my $value = "false";
 
-    if ( $islanguagemodule == 1 ) { $value = "true"; }
+    if ( defined $islanguagemodule && $islanguagemodule == 1 ) { $value = "true"; }
 
     return $value;
 }
