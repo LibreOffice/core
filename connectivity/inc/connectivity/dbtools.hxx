@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbtools.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -600,9 +600,12 @@ namespace dbtools
             The descriptor of the new table.
         @param  _xConnection
             The connection.
+        @param  _bAddScale
+            The scale will also be added when the value is 0.
     */
     ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                                    const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates the standard sql statement for the key part of a create table statement.
         @param  descriptor
@@ -618,20 +621,26 @@ namespace dbtools
             The descriptor of the column.
         @param  _xConnection
             The connection.
+        @param  _bAddScale
+            The scale will also be added when the value is 0.
     */
     ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                                const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SQL CREATE TABLE statement
         @param  descriptor
             The descriptor of the new table.
         @param  _xConnection
             The connection.
+        @param  _bAddScale
+            The scale will also be added when the value is 0.
         @return
             The CREATE TABLE statement.
     */
     ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                                    const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable
