@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TickmarkHelper.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,10 @@ public:
         , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     virtual ~TickmarkHelper();
 
+    virtual TickmarkHelper* createShiftedTickmarkHelper() const;
+
     void          getAllTicks( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
+    void          getAllTicksShifted( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     bool          isPostEquidistant( sal_Int32 nDepth ) const;
 
     //
@@ -177,8 +180,8 @@ protected: //methods
     virtual void hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& /*rAllTickInfos*/ ) const {}
 
 protected: //member
-    const ::com::sun::star::chart2::ExplicitScaleData&     m_rScale;
-    const ::com::sun::star::chart2::ExplicitIncrementData& m_rIncrement;
+    ::com::sun::star::chart2::ExplicitScaleData     m_rScale;
+    ::com::sun::star::chart2::ExplicitIncrementData m_rIncrement;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >
                                                 m_xInverseScaling;
@@ -203,6 +206,8 @@ public:
         , const ::basegfx::B2DVector& rStartScreenPos, const ::basegfx::B2DVector& rEndScreenPos );
         //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
     virtual ~TickmarkHelper_2D();
+
+    virtual TickmarkHelper* createShiftedTickmarkHelper() const;
 
     static sal_Int32    getTickScreenDistance( TickIter& rIter );
 
@@ -238,6 +243,7 @@ public:
         , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     virtual ~TickmarkHelper_3D();
 
+    virtual TickmarkHelper* createShiftedTickmarkHelper() const;
 };
 
 //.............................................................................
