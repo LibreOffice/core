@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: css1atr.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2822,7 +2822,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
     case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
     case WEIGHT_LIGHT:      pStr = sCSS1_PV_light;          break;
     case WEIGHT_SEMILIGHT:  pStr = sCSS1_PV_demi_light;     break;
-    case WEIGHT_NORMAL:     pStr = sCSS1_PV_medium;         break;
+    case WEIGHT_NORMAL:     pStr = sCSS1_PV_normal;         break;
     case WEIGHT_SEMIBOLD:   pStr = sCSS1_PV_demi_bold;      break;
     case WEIGHT_BOLD:
         if( !rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
@@ -2836,7 +2836,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         break;
     case WEIGHT_ULTRABOLD:  pStr = sCSS1_PV_extra_bold;     break;
     default:
-        ;
+        pStr = sCSS1_PV_normal;;
     }
 
     if( pStr )
