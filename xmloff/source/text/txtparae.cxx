@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.145 $
+ * $Revision: 1.146 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -378,6 +378,47 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         }
     }
 
+    if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
+    {
+        Reference < XIndexReplace > xNumRule(rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
+            rPropSet, sal_True ), uno::UNO_QUERY);
+        if( xNumRule.is() && xNumRule->getCount() )
+        {
+            Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
+            OUString sName;
+            if( xNamed.is() )
+                sName = xNamed->getName();
+            sal_Bool bAdd = !sName.getLength();
+            if( !bAdd )
+            {
+                Reference < XPropertySet > xNumPropSet( xNumRule,
+                                                        UNO_QUERY );
+                const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
+                if( xNumPropSet.is() &&
+                    xNumPropSet->getPropertySetInfo()
+                               ->hasPropertyByName( sIsAutomatic ) )
+                {
+                    bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
+                    // --> OD 2007-01-12 #i73361# - check on outline style
+                    const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
+                    if ( bAdd &&
+                         xNumPropSet->getPropertySetInfo()
+                                   ->hasPropertyByName( sNumberingIsOutline ) )
+                    {
+                        bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
+                    }
+                    // <--
+                }
+                else
+                {
+                    bAdd = sal_True;
+                }
+            }
+            if( bAdd )
+                pListAutoPool->Add( xNumRule );
+        }
+    }
+
     if( xPropStates.size() > 0L )
     {
         OUString sParent, sCondParent;
@@ -394,46 +435,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                 rPropSetHelper.getValue( PARA_CONDITIONAL_STYLE_NAME_AUTO,
                                                  rPropSet, sal_True ) >>= sCondParent;
             }
-            if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
-            {
-                Reference < XIndexReplace > xNumRule(rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
-                    rPropSet, sal_True ), uno::UNO_QUERY);
-                if( xNumRule.is() && xNumRule->getCount() )
-                {
-                    Reference < XNamed > xNamed( xNumRule, UNO_QUERY );
-                    OUString sName;
-                    if( xNamed.is() )
-                        sName = xNamed->getName();
-                    sal_Bool bAdd = !sName.getLength();
-                    if( !bAdd )
-                    {
-                        Reference < XPropertySet > xNumPropSet( xNumRule,
-                                                                UNO_QUERY );
-                        const OUString sIsAutomatic( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) );
-                        if( xNumPropSet.is() &&
-                            xNumPropSet->getPropertySetInfo()
-                                       ->hasPropertyByName( sIsAutomatic ) )
-                        {
-                            bAdd = *(sal_Bool *)xNumPropSet->getPropertyValue( sIsAutomatic ).getValue();
-                            // --> OD 2007-01-12 #i73361# - check on outline style
-                            const OUString sNumberingIsOutline( RTL_CONSTASCII_USTRINGPARAM( "NumberingIsOutline" ) );
-                            if ( bAdd &&
-                                 xNumPropSet->getPropertySetInfo()
-                                           ->hasPropertyByName( sNumberingIsOutline ) )
-                            {
-                                bAdd = !(*(sal_Bool *)xNumPropSet->getPropertyValue( sNumberingIsOutline ).getValue());
-                            }
-                            // <--
-                        }
-                        else
-                        {
-                            bAdd = sal_True;
-                        }
-                    }
-                    if( bAdd )
-                        pListAutoPool->Add( xNumRule );
-                }
-            }
+
             break;
         }
 
@@ -659,8 +661,10 @@ void XMLTextParagraphExport::exportListChange(
                     if( sTmp.getLength() )
                         sName = sTmp;
                 }
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                        GetExport().EncodeStyleName( sName ) );
+
+                if( sName.getLength() )
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                            GetExport().EncodeStyleName( sName ) );
             }
             if( bContinue && rNextInfo.IsOrdered() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -846,7 +850,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sWidth(RTL_CONSTASCII_USTRINGPARAM("Width")),
     sWidthType( RTL_CONSTASCII_USTRINGPARAM( "WidthType" ) ),
-
     aCharStyleNamesPropInfoCache( sCharStyleNames )
 {
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
@@ -1529,6 +1532,7 @@ void XMLTextParagraphExport::exportText(
                 xPropertySet->getPropertyValue(sTextSection) >>= xBaseSection ;
             }
 
+/* #i35937#
             // for applications that use the outliner we need to check if
             // the current text object needs the level information exported
             if( !bAutoStyles )
@@ -1541,6 +1545,7 @@ void XMLTextParagraphExport::exportText(
                     xPropertySet->getPropertyValue(sHasLevels) >>= bExportLevels;
                 }
             }
+*/
         }
     }
 
@@ -3477,4 +3482,3 @@ sal_Int32 XMLTextParagraphExport::GetHeadingLevel( const OUString& rStyleName )
 
     return -1;
 }
-
