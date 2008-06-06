@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdxmlwrp.cxx,v $
- * $Revision: 1.68 $
+ * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +34,10 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HDL_
 #include <com/sun/star/xml/sax/SAXParseException.hdl>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <tools/urlobj.hxx>
 #include "drawdoc.hxx"
 #include <unotools/streamwrap.hxx>
@@ -52,16 +51,10 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XExporter_HPP_
 #include <com/sun/star/document/XExporter.hpp>
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HXX_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
@@ -95,6 +88,8 @@ using namespace com::sun::star::document;
 using namespace comphelper;
 
 #define SD_XML_READERROR 1234
+
+extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -758,11 +753,56 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            const OUString sBuildId( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
-            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildId) )
+            const OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+
+            OUString sBuildId;
+            xInfoSet->getPropertyValue(sPropName) >>= sBuildId;
+
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
             {
-                xModelSet->setPropertyValue( sBuildId, xInfoSet->getPropertyValue(sBuildId) );
+                xModelSet->setPropertyValue( sPropName, Any( sBuildId ) );
             }
+
+            bool bTransform = false;
+
+            if( (nRet == 0) )
+            {
+                if( sBuildId.getLength() )
+                {
+                    sal_Int32 nIndex = sBuildId.indexOf('$');
+                    if( nIndex != -1 )
+                    {
+                        sal_Int32 nUPD = sBuildId.copy( 0, nIndex ).toInt32();
+
+                        if( nUPD == 300 )
+                        {
+                            sal_Int32 nBuildId = sBuildId.copy( nIndex+1 ).toInt32();
+                            if( (nBuildId > 0) && (nBuildId < 9305) )
+                                bTransform = true; // treat OOo 3.0 beta1 as OOo 2.x
+                        }
+                        else if( (nUPD == 680) || ( nUPD >= 640 && nUPD <= 645 ) )
+                            bTransform = true;
+                    }
+                }
+                else
+                {
+                    // check for binary formats
+                     const SfxFilter * pFilter = mrMedium.GetFilter();
+                    if( pFilter )
+                    {
+                        const String& rTypeName = pFilter->GetRealTypeName();
+
+                        if( (rTypeName.CompareToAscii( RTL_CONSTASCII_STRINGPARAM("impress_StarImpress" ) ) == 0) ||
+                            (rTypeName.CompareToAscii( RTL_CONSTASCII_STRINGPARAM("draw_StarDraw" ) ) == 0) )
+                        {
+                            bTransform = true;
+                        }
+                    }
+                }
+            }
+
+            if( bTransform )
+                TransformOOo2xDocument( pDoc );
         }
     }
 
