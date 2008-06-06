@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,9 +39,9 @@ TARGET=mingwheaders
 
 # Cygwin and MinGW use different directories for the W32API headers
 .IF "$(USE_MINGW)" == "cygwin"
-MINGW_INCLUDE_DIR=$(COMPATH)$/include/mingw/include/
-MINGW_W32API_INCLUDE_DIR=$(COMPATH)$/include/w32api/
-MINGW_W32API_LIB_DIR=$(COMPATH)$/include/w32api/
+MINGW_INCLUDE_DIR=$/usr$/include/mingw/include/
+MINGW_W32API_INCLUDE_DIR=$/usr$/include/w32api/
+MINGW_W32API_LIB_DIR=$/usr$/include/w32api/
 .ELSE
 MINGW_INCLUDE_DIR=$(COMPATH)$/include/
 MINGW_W32API_INCLUDE_DIR=$(COMPATH)$/include/
@@ -60,7 +60,6 @@ FILES_TO_COPY_FROM_MINGW=excpt.h \
              tchar.h
 
 FILES_TO_COPY_FROM_W32API=amvideo.h \
-              basetyps.h \
               bdatypes.h \
               oaidl.h \
               objfwd.h \
@@ -79,6 +78,7 @@ FILES_TO_COPY_FROM_PSDK=adoctint.h \
             adodef.h \
             adoguids.h \
             adoint.h \
+            bcrypt.h \
             commctrl.h \
             control.h \
             filter.h \
@@ -93,27 +93,41 @@ FILES_TO_COPY_FROM_PSDK=adoctint.h \
             gdipluspath.h \
             gdipluspen.h \
             gdiplusregion.h \
+            gdiplusstringformat.h \
             imagehlp.h \
+            inaddr.h \
+            intsafe.h \
             mapinls.h \
             mapiwin.h \
                 msdasc.h \
+                msi.h \
+                msiquery.h \
             multimon.h \
+            ncrypt.h \
+                ntquery.h \
             ocidl.h \
             oledb.h \
             oleidl.h \
             propidl.h \
+            propkeydef.h \
+            propsys.h \
             qedit.h \
             shlobj.h \
             shobjidl.h \
             shtypes.h \
             specstrings.h \
+            specstrings_adt.h \
+            specstrings_strict.h \
             sspi.h \
             strmif.h \
             strsafe.h \
+            structuredquery.h \
             urlmon.h \
             wincrypt.h \
             wingdi.h \
             winsock2.h \
+            ws2def.h \
+            ws2ipdef.h \
             ws2tcpip.h \
             wspiapi.h \
             adoid.h \
@@ -133,34 +147,53 @@ FILES_TO_COPY_FROM_PSDK=adoctint.h \
             transact.h \
             winerror.h
 
+.IF "$(DISABLE_ATL)"==""
+MINGWHEADER_ATL_PATCH_TARGET=$(MISC)$/mingwheader_atl_patch
+MINGWHEADER_ATL_COPY_TARGET=$(MISC)$/mingwheader_atl_copy
 FILES_TO_COPY_FROM_ATL=atlbase.h \
                atlcom.h \
                atlconv.h \
                atlctl.h \
                atlwin.h \
                statreg.h
+.ENDIF
 
 FILES_TO_COPY_FROM_DIRECTXSDK=dxtrans.h \
-                  d3dx9.h
+                  d3dx9.h \
+                  d3d.h \
+                  d3dtypes.h \
+                  d3dx9math.h \
+                  d3dx9math.inl \
+                  d3dx9core.h
 
-$(MISC)$/mingwheader_patch_all : $(MISC)$/mingwheader_patch $(LB)$/libmsvcrt.a
+$(MISC)$/mingwheader_patch_all : $(MISC)$/mingwheader_patch $(MINGWHEADER_ATL_PATCH_TARGET) $(LB)$/libmsvcrt.a
 
 $(MISC)$/mingwheader_patch : $(MISC)$/mingwheader_copy
     patch -bd $(MISC)$/mingw -p0 -N -f -Z <mingw_headers.patch
-    $(TOUCH) $(MISC)$/mingwheader_add
     $(TOUCH) $(MISC)$/mingwheader_patch
+
+.IF "$(DISABLE_ATL)"==""
+$(MINGWHEADER_ATL_PATCH_TARGET) : $(MINGWHEADER_ATL_COPY_TARGET)
+    patch -bd $(MISC)$/mingw -p0 -N -f -Z <mingw_atl_headers.patch
+    $(TOUCH) $(MINGWHEADER_ATL_PATCH_TARGET)
+.ENDIF
 
 $(MISC)$/mingwheader_copy:
     $(MKDIRHIER) $(MISC)$/mingw$/include
-    $(MKDIRHIER) $(MISC)$/mingw$/include/atl
     $(MKDIRHIER) $(MISC)$/mingw$/include/sys
     $(COPY) $(FILES_TO_COPY_FROM_MINGW:^$(MINGW_INCLUDE_DIR)) $(MISC)$/mingw$/include
     $(COPY) $(FILES_TO_COPY_FROM_W32API:^$(MINGW_W32API_INCLUDE_DIR)) $(MISC)$/mingw$/include
     $(COPY) $(FILES_TO_COPY_FROM_SYS:^$(SYS_INCLUDE_DIR)) $(MISC)$/mingw$/include$/sys
     $(COPY) $(FILES_TO_COPY_FROM_PSDK:^$(PSDK_INCLUDE_DIR)) $(MISC)$/mingw$/include
-    $(COPY) $(FILES_TO_COPY_FROM_ATL:^$(ATL_INCLUDE_DIR)) $(MISC)$/mingw$/include$/atl
     $(COPY) $(FILES_TO_COPY_FROM_DIRECTXSDK:^$(DIRECTXSDK_INCLUDE_DIR)) $(MISC)$/mingw$/include
     $(TOUCH) $(MISC)$/mingwheader_copy
+
+.IF "$(DISABLE_ATL)"==""
+$(MINGWHEADER_ATL_COPY_TARGET):
+    $(MKDIRHIER) $(MISC)$/mingw$/include/atl
+    $(COPY) $(FILES_TO_COPY_FROM_ATL:^$(ATL_INCLUDE_DIR)) $(MISC)$/mingw$/include$/atl
+     $(TOUCH) $(MINGWHEADER_ATL_COPY_TARGET)
+.ENDIF
 
 $(LB)$/libmsvcrt.a:
 .IF "$(USE_MINGW)" == "cygwin"
