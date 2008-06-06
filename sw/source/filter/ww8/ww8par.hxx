@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.156 $
+ * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -970,6 +970,7 @@ private:
     ULONG nFieldFlags;          // dito fuer Feldern
     ULONG nFieldTagAlways[3];   // dito fuers Taggen von Feldern
     ULONG nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
+    bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
     WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
 
@@ -1064,6 +1065,7 @@ private:
     int nDropCap;
 
     int nIdctHint;
+    bool bBidi;
 
 //---------------------------------------------
 
@@ -1101,6 +1103,7 @@ private:
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
+    bool LangUsesHindiNumbers(USHORT nLang);
     sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
@@ -1400,6 +1403,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Obj(USHORT, const BYTE*, short nLen);
     void Read_PicLoc(USHORT, const BYTE* pData, short nLen );
     void Read_BoldUsw(USHORT nId, const BYTE*, short nLen);
+    void Read_Bidi(USHORT nId, const BYTE*, short nLen);
     void Read_BoldBiDiUsw(USHORT nId, const BYTE*, short nLen);
     void Read_SubSuper(         USHORT, const BYTE*, short nLen );
     bool ConvertSubToGraphicPlacement();
