@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.97 $
+ * $Revision: 1.98 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,6 +391,7 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_sn_tools,
     gid_File_Lib_relnotes,
     GID_FILE_LIB_WPD,
+        gid_File_Lib_Mingwm10,
 	gid_File_Lib_Msvcp70,
 	gid_File_Lib_Msvcr70,
 	gid_File_Lib_Msvcr80,
