@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLTools.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,9 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -88,6 +91,23 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
 
     return xContext;
 }
+
+rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& xChartModel )
+{
+    ::rtl::OUString aGenerator;
+    uno::Reference< document::XDocumentPropertiesSupplier> xChartDocumentPropertiesSupplier( xChartModel, uno::UNO_QUERY );
+    if( xChartDocumentPropertiesSupplier.is() )
+    {
+        uno::Reference< document::XDocumentProperties > xChartDocumentProperties(
+            xChartDocumentPropertiesSupplier->getDocumentProperties());
+        if( xChartDocumentProperties.is() )
+        {
+            aGenerator =  xChartDocumentProperties->getGenerator();
+        }
+    }
+    return aGenerator;
+}
+
 } // anonymous namespace
 
 // ----------------------------------------
@@ -543,6 +563,39 @@ bool getXMLRangePropertyFromDataSequence(
             OSL_ENSURE( false, ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught, Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        }
+    }
+    return bResult;
+}
+
+bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel );
+    if( !bResult )
+    {
+        ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/680m") ) ) != -1 )
+            bResult= true;
+    }
+    return bResult;
+}
+
+bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bResult = false;
+    ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+    if( !aGenerator.getLength() )
+    {
+        //if there is no meta stream at the chart object it was not written with a newer OpenOffice version >= 2.3
+
+        //so it is sufficient to check now whether it was written by an OpenOffice version at all
+        //->check the meta information at the parent document
+        uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
+        if( xChild.is() )
+        {
+            ::rtl::OUString aParentGenerator( lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) ) );
+            if( aParentGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
+                bResult= true;
         }
     }
     return bResult;
