@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ContainerMediator.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
-
+#include <com/sun/star/sdbcx/XRename.hpp>
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
@@ -177,10 +177,36 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    OSL_ENSURE( false, "OContainerMediator::elementReplaced: not yet implemented!" );
-    // we would need to update our PropertyForwarder with the new elements, and initially synchronize them
+    Reference< XContainer > xContainer = m_xContainer;
+    if ( _rEvent.Source == xContainer && xContainer.is() )
+    {
+        ::rtl::OUString sElementName;
+        _rEvent.ReplacedElement >>= sElementName;
+
+        PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
+        if ( aFind != m_aForwardList.end() )
+        {
+            ::rtl::OUString sNewName;
+            _rEvent.Accessor >>= sNewName;
+            try
+            {
+                Reference<XNameContainer> xNameContainer( m_xSettings, UNO_QUERY_THROW );
+                if ( xNameContainer.is() && m_xSettings->hasByName( sElementName ) )
+                {
+                    Reference<XRename> xSource(m_xSettings->getByName(sElementName),UNO_QUERY_THROW);
+                    xSource->rename(sNewName);
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            aFind->second->setName(sNewName);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
