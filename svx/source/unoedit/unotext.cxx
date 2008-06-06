@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotext.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,8 @@
 #include <svx/tstpitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svtools/intitem.hxx>
+
+#include <svtools/eitem.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -540,12 +542,40 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet&, const S
             }
         }
         break;
+    case WID_NUMBERINGSTARTVALUE:
+        {
+            SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
+            if(pForwarder && pSelection)
+            {
+                sal_Int16 nStartValue = -1;
+                if( aValue >>= nStartValue )
+                {
+                    pForwarder->SetNumberingStartValue( pSelection->nStartPara, nStartValue );
+                    return sal_True;
+                }
+            }
+        }
+        break;
+    case WID_PARAISNUMBERINGRESTART:
+        {
+            SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
+            if(pForwarder && pSelection)
+            {
+                sal_Bool bParaIsNumberingRestart = sal_False;
+                if( aValue >>= bParaIsNumberingRestart )
+                {
+                    pForwarder->SetParaIsNumberingRestart( pSelection->nStartPara, bParaIsNumberingRestart );
+                    return sal_True;
+                }
+            }
+        }
+        break;
     case EE_PARA_BULLETSTATE:
         {
-            sal_Bool bBullet = sal_Bool();
+            sal_Bool bBullet = sal_True;
             if( aValue >>= bBullet )
             {
-                SfxUInt16Item aItem( EE_PARA_BULLETSTATE, bBullet );
+                SfxBoolItem aItem( EE_PARA_BULLETSTATE, bBullet );
                 rNewSet.Put(aItem);
                 return sal_True;
             }
@@ -674,22 +704,37 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
             if(pForwarder && pSelection)
             {
-                // #101004# Call interface method instead of unsafe cast
-                sal_Int16 nLevel( pForwarder->GetDepth( pSelection->nStartPara ) );
-                aAny <<= nLevel;
+                sal_Int16 nLevel = pForwarder->GetDepth( pSelection->nStartPara );
+                if( nLevel >= 0 )
+                    aAny <<= nLevel;
             }
         }
         break;
+    case WID_NUMBERINGSTARTVALUE:
+        {
+            SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
+            if(pForwarder && pSelection)
+                aAny <<= pForwarder->GetNumberingStartValue( pSelection->nStartPara );
+        }
+        break;
+    case WID_PARAISNUMBERINGRESTART:
+        {
+            SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
+            if(pForwarder && pSelection)
+                aAny <<= pForwarder->IsParaIsNumberingRestart( pSelection->nStartPara );
+        }
+        break;
+
     case EE_PARA_BULLETSTATE:
         {
             sal_Bool bState = sal_False;
             if( rSet.GetItemState( EE_PARA_BULLETSTATE, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT))
             {
-                SfxUInt16Item* pItem = (SfxUInt16Item*)rSet.GetItem( EE_PARA_BULLETSTATE, sal_True );
-                bState = pItem->GetValue() == TRUE;
+                SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, sal_True );
+                bState = pItem->GetValue() ? sal_True : sal_False;
             }
 
-            aAny.setValue( &bState, ::getCppuBooleanType() );
+            aAny <<= bState;
         }
         break;
     default:
@@ -1005,6 +1050,8 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
                 break;
 
             case WID_NUMLEVEL:
+            case WID_NUMBERINGSTARTVALUE:
+            case WID_PARAISNUMBERINGRESTART:
                 eItemState = SFX_ITEM_SET;
                 break;
 
@@ -1155,6 +1202,8 @@ sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, cons
                 break;
 
             case WID_NUMLEVEL:
+            case WID_NUMBERINGSTARTVALUE:
+            case WID_PARAISNUMBERINGRESTART:
                 eItemState = SFX_ITEM_SET;
                 break;
 
@@ -1220,8 +1269,16 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         else if( pMap->nWID == WID_NUMLEVEL )
         {
             // #101004# Call interface method instead of unsafe cast
-            pForwarder->SetDepth( maSelection.nStartPara, 0 );
+            pForwarder->SetDepth( maSelection.nStartPara, -1 );
             return;
+        }
+        else if( pMap->nWID == WID_NUMBERINGSTARTVALUE )
+        {
+            pForwarder->SetNumberingStartValue( maSelection.nStartPara, -1 );
+        }
+        else if( pMap->nWID == WID_PARAISNUMBERINGRESTART )
+        {
+            pForwarder->SetParaIsNumberingRestart( maSelection.nStartPara, sal_False );
         }
         else
         {
@@ -1262,10 +1319,16 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 
             case WID_NUMLEVEL:
                 {
-                    uno::Any aValue;
-                    aValue <<= (sal_Int16)0;
-                    return aValue;
+                    uno::Any aAny;
+                    return aAny;
                 }
+
+            case WID_NUMBERINGSTARTVALUE:
+                return uno::Any( (sal_Int16)-1 );
+
+            case WID_PARAISNUMBERINGRESTART:
+                return uno::Any( (sal_Bool)sal_False );
+
             default:
                 {
                     // Default aus ItemPool holen
@@ -2052,13 +2115,34 @@ void SvxPropertyValuesToItemSet(
             {
                 if (pForwarder)
                 {
-                    sal_Int16 nLevel = 0;
-                    if (pProps[i].Value >>= nLevel)
-                    {
-                        // #101004# Call interface method instead of unsafe cast
-                        if (!pForwarder->SetDepth( nPara, nLevel ))
-                            throw lang::IllegalArgumentException();
-                    }
+                    sal_Int16 nLevel = -1;
+                    pProps[i].Value >>= nLevel;
+
+                    // #101004# Call interface method instead of unsafe cast
+                    if (!pForwarder->SetDepth( nPara, nLevel ))
+                        throw lang::IllegalArgumentException();
+                }
+            }
+            else if (pEntry->nWID == WID_NUMBERINGSTARTVALUE )
+            {
+                if( pForwarder )
+                {
+                    sal_Int16 nStartValue = -1;
+                    if( !(pProps[i].Value >>= nStartValue) )
+                        throw lang::IllegalArgumentException();
+
+                    pForwarder->SetNumberingStartValue( nPara, nStartValue );
+                }
+            }
+            else if (pEntry->nWID == WID_PARAISNUMBERINGRESTART )
+            {
+                if( pForwarder )
+                {
+                    sal_Bool bParaIsNumberingRestart = sal_False;
+                    if( !(pProps[i].Value >>= bParaIsNumberingRestart) )
+                        throw lang::IllegalArgumentException();
+
+                    pForwarder->SetParaIsNumberingRestart( nPara, bParaIsNumberingRestart );
                 }
             }
             else
@@ -2500,12 +2584,12 @@ sal_Bool SvxDummyTextSource::QuickFormatDoc( BOOL )
     return sal_False;
 }
 
-USHORT SvxDummyTextSource::GetDepth( USHORT ) const
+sal_Int16 SvxDummyTextSource::GetDepth( USHORT ) const
 {
-    return 0;
+    return -1;
 }
 
-sal_Bool SvxDummyTextSource::SetDepth( USHORT, USHORT nNewDepth )
+sal_Bool SvxDummyTextSource::SetDepth( USHORT, sal_Int16 nNewDepth )
 {
     return nNewDepth == 0 ? sal_True : sal_False;
 }
