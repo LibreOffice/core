@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typedetectionexport.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,7 @@
 #include "typedetectionexport.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
-#include <attributelist.hxx>
+#include <comphelper/attributelist.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::beans;
@@ -115,7 +115,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
         Reference< XActiveDataSource > xDocSrc( xHandler, UNO_QUERY );
         xDocSrc->setOutputStream( xOS );
 
-        AttributeList * pAttrList = new AttributeList;
+        ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "xmlns:oor" ), sCdataAttribute, OUString::createFromAscii( "http://openoffice.org/2001/registry" ) );
         pAttrList->AddAttribute ( OUString::createFromAscii( "xmlns:xs" ), sCdataAttribute, OUString::createFromAscii( "http://www.w3.org/2001/XMLSchema" ) );
         pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "TypeDetection" ) );
@@ -128,7 +128,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 
         // export types
         {
-            xAttrList = pAttrList = new AttributeList;
+            xAttrList = pAttrList = new ::comphelper::AttributeList;
             pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "Types" ) );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
@@ -138,7 +138,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
             {
                 const filter_info_impl* pFilter = (*aIter);
 
-                xAttrList = pAttrList = new AttributeList;
+                xAttrList = pAttrList = new ::comphelper::AttributeList;
                 pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maType );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
@@ -171,7 +171,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 
         // export filters
         {
-            xAttrList = pAttrList = new AttributeList;
+            xAttrList = pAttrList = new ::comphelper::AttributeList;
             pAttrList->AddAttribute ( sName, sCdataAttribute, OUString::createFromAscii( "Filters" ) );
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->startElement( sNode, xAttrList );
@@ -181,7 +181,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
             {
                 const filter_info_impl* pFilter = (*aIter);
 
-                xAttrList = pAttrList = new AttributeList;
+                xAttrList = pAttrList = new ::comphelper::AttributeList;
                 pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maFilterName );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
@@ -247,7 +247,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
         const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
         const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
-        AttributeList * pAttrList = new AttributeList;
+        ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:type" ), sCdataAttribute, OUString::createFromAscii( "xs:string" ) );
         Reference < XAttributeList > xAttrList (pAttrList);
@@ -277,14 +277,14 @@ void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHa
         const OUString sValue( RTL_CONSTASCII_USTRINGPARAM( "value" ) );
         const OUString sWhiteSpace          ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
 
-        AttributeList * pAttrList = new AttributeList;
+        ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:name" ), sCdataAttribute, rName );
         pAttrList->AddAttribute ( OUString::createFromAscii( "oor:type" ), sCdataAttribute, OUString::createFromAscii( "xs:string" ) );
         Reference < XAttributeList > xAttrList (pAttrList);
 
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sProp, xAttrList );
-        xAttrList = pAttrList = new AttributeList;
+        xAttrList = pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString::createFromAscii( "xml:lang" ), sCdataAttribute, OUString::createFromAscii( "en-US" ) );
         xHandler->ignorableWhitespace ( sWhiteSpace );
         xHandler->startElement( sValue, xAttrList );
