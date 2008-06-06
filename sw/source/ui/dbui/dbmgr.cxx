@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmgr.cxx,v $
- * $Revision: 1.130 $
+ * $Revision: 1.131 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2631,7 +2631,9 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     String sFilterXLS(SW_RES(STR_FILTER_XLS));
     String sFilterTXT(SW_RES(STR_FILTER_TXT));
     String sFilterCSV(SW_RES(STR_FILTER_CSV));
-
+#ifdef WNT
+    String sFilterMDB(SW_RES(STR_FILTER_MDB));
+#endif
     xFltMgr->appendFilter( sFilterAll, C2U("*") );
     xFltMgr->appendFilter( sFilterAllData, C2U("*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv"));
 
@@ -2641,6 +2643,9 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     xFltMgr->appendFilter( sFilterXLS, C2U("*.xls") );
     xFltMgr->appendFilter( sFilterTXT, C2U("*.txt") );
     xFltMgr->appendFilter( sFilterCSV, C2U("*.csv") );
+#ifdef WNT
+    xFltMgr->appendFilter( sFilterMDB, C2U("*.mdb") );
+#endif
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
     String sFind;
@@ -2653,6 +2658,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         String sExt( aURL.GetExtension() );
         Any aURLAny;
         Any aTableFilterAny;
+        Any aSuppressVersionsAny;
         Any aInfoAny;
         INetURLObject aTempURL(aURL);
         bool bStore = true;
@@ -2697,6 +2703,15 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
         }
+#ifdef WNT
+        else if(sExt.EqualsIgnoreCaseAscii("mdb"))
+        {
+            rtl::OUString sDBURL(C2U("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE="));
+            sDBURL += aTempURL.PathToFileName();
+            aURLAny <<= sDBURL;
+            aSuppressVersionsAny <<= makeAny(true);
+        }
+#endif
         try
         {
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -2736,6 +2751,8 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                     xDataProperties->setPropertyValue(C2U("URL"), aURLAny);
                 if(aTableFilterAny.hasValue())
                     xDataProperties->setPropertyValue(C2U("TableFilter"), aTableFilterAny);
+                if(aSuppressVersionsAny.hasValue())
+                    xDataProperties->setPropertyValue(C2U("SuppressVersionColumns"), aSuppressVersionsAny);
                 if(aInfoAny.hasValue())
                     xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
 
