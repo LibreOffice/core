@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -68,6 +68,7 @@ SHL1LIBS= \
     $(SLB)$/fastsax.lib
 
 SHL1STDLIBS= \
+    $(UCBHELPERLIB) \
     $(LIBXML2LIB) \
     $(TOOLSLIB)	\
     $(COMPHELPERLIB)	\
