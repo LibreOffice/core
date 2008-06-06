@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ScaleAutomatism.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,6 +153,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     //---------------------------------------------------------------
     //fill explicit increment
 
+    rExplicitIncrement.ShiftedPosition = (m_aSourceScale.AxisType==AxisType::SERIES) ? true : false;
     bool bIsLogarithm = false;
 
     //minimum and maximum of the ExplicitScaleData may be changed if allowed
