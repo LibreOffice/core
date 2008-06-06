@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkbase.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -704,20 +704,6 @@ rtl::OString getVendorSettingsPath()
     return getVendorSettingsPath(BootParams::getVendorSettings());
 }
 
-rtl::OUString getApplicationBase()
-{
-    rtl::OString sExcMsg("[Java framework] Error in function getApplicationBase (fwkutil.cxx)");
-
-    rtl_uString* sExe = NULL;
-    if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
-
-    rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
-    rtl::OUString sBase = getDirFromFile(ouExe);
-
-    OSL_ASSERT(sBase.getLength());
-    return sBase;
-}
 void setJavaSelected()
 {
     g_bJavaSet = true;
