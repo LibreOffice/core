@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XXPathAPI.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +46,9 @@
 #ifndef __com_sun_star_xml_xpath_XXPathExtension_idl__
 #include <com/sun/star/xml/xpath/XXPathExtension.idl>
 #endif
-
+#ifndef __com_sun_star_xml_XPath_XPathException_idl__
+#include <com/sun/star/xml/xpath/XPathException.idl>
+#endif
 
 
 module com { module sun { module star { module xml { module xpath {
@@ -64,53 +66,142 @@ interface XXPathAPI : com::sun::star::uno::XInterface
             [in] string url);
 
     void registerExtension( [in] string serviceName );
-    void registerExtensionInstance( [in] com::sun::star::xml::xpath::XXPathExtension aExtension);
+    void registerExtensionInstance(
+            [in] com::sun::star::xml::xpath::XXPathExtension aExtension);
 
-    /**
-    Eval XPath Expression
-    */
+    /** Eval XPath Expression.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            an object representing the result of the XPath evaluation
+
+        @see XXPathObject
+     */
     XXPathObject eval(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
 
-    /**
-    Eval XPath Expression
-    */
+    /** Eval XPath Expression.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            an object representing the result of the XPath evaluation
+
+        @see XXPathObject
+     */
     XXPathObject evalNS(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str,
-        [in] com::sun::star::xml::dom::XNode namespaceNode);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
 
+    /** Evaluate an XPath expression to select a list of nodes.
 
-    /**
-    Use an XPath string to select a nodelist.
-    */
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a list of nodes
+
+        @see XNodeList
+     */
     com::sun::star::xml::dom::XNodeList selectNodeList(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
 
-    /**
-    Use an XPath string to select a nodelist.
-    */
+    /** Evaluate an XPath expression to select a list of nodes.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a list of nodes
+
+        @see XNodeList
+     */
     com::sun::star::xml::dom::XNodeList selectNodeListNS(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str,
-        [in] com::sun::star::xml::dom::XNode namespaceNode);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string str,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
 
-    /**
-    Use an XPath string to select a single node.
+    /** Evaluate an XPath expression to select a single node.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a single node
     */
     com::sun::star::xml::dom::XNode selectSingleNode(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
 
-    /**
-    Use an XPath string to select a single node.
+    /** Evaluate an XPath expression to select a single node.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a single node
     */
     com::sun::star::xml::dom::XNode selectSingleNodeNS(
-        [in] com::sun::star::xml::dom::XNode contextNode,
-        [in] string str,
-        [in] com::sun::star::xml::dom::XNode namespaceNode);
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string str,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
 
 };
 
