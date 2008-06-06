@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -232,10 +232,10 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     while (pPara)
                     {
                         ULONG nParaPos = pOutliner->GetAbsPos( pPara );
-                        USHORT nDepth = pOutliner->GetDepth( (USHORT) nParaPos );
+                        sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nParaPos );
                         String aName(rPage.GetLayoutName());
                         aName += (sal_Unicode)(' ');
-                        aName += String::CreateFromInt32( (sal_Int32)nDepth );
+                        aName += String::CreateFromInt32( (nDepth <= 0) ? 1 : nDepth + 1 );
                         SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
                         DBG_ASSERT(pSheet, "StyleSheet nicht gefunden");
 
@@ -243,9 +243,9 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         aTempSet.Put( rSet );
                         aTempSet.ClearInvalidItems();
 
-                        if( nDepth > 1 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                        if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
                         {
-                            // Kein SvxNumBulletItem in Gliederungsebenen 2 bis 9!
+                            // no SvxNumBulletItem in outline level 1 to 8!
                             aTempSet.ClearItem( EE_PARA_NUMBULLET );
                         }
 
@@ -257,12 +257,12 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
                         // now also broadcast any child sheets
-                        USHORT nChild;
-                        for( nChild = nDepth + 1; nChild < 10; nChild++ )
+                        sal_Int16 nChild;
+                        for( nChild = nDepth + 1; nChild < 9; nChild++ )
                         {
                             String aSheetName(rPage.GetLayoutName());
                             aSheetName += (sal_Unicode)(' ');
-                            aSheetName += String::CreateFromInt32( (sal_Int32)nChild );
+                            aSheetName += String::CreateFromInt32( nChild <= 0 ? 1 : nChild + 1 );
                             SfxStyleSheet* pOutlSheet = static_cast< SfxStyleSheet* >(pStShPool->Find(aSheetName, SD_STYLE_FAMILY_MASTERPAGE));
 
                             if( pOutlSheet )
@@ -271,8 +271,8 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
 
                         pPara = (Paragraph*)pList->Prev();
 
-                        if( !pPara && nDepth > 1 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
-                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 1 )
+                        if( !pPara && nDepth > 0 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
+                            pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( (Paragraph*) pList->First() ) ) > 0 )
                             pPara = pOutliner->GetParagraph( 0 );  // Put NumBulletItem in outline level 1
                     }
 
