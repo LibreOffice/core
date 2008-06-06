@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbui.src,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +225,10 @@ String STR_FILTER_TXT
 String STR_FILTER_CSV
 {
     Text [ en-US ] = "Text Comma Separated (*.csv)" ;
+};
+String STR_FILTER_MDB
+{
+    Text = "Microsoft Access (*.mdb)" ;
 };
 
  // DLG_MM_CREATIONMONITOR ------------------------------------------------------
