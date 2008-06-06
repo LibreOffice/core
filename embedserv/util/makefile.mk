@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -71,6 +71,7 @@ SHL1STDLIBS=\
         $(UUIDLIB)				\
         $(OLEAUT32LIB)
 
+.IF "$(COM)"=="MSC"
 .IF "$(CCNUMVER)" >= "001300000000" && "$(CCNUMVER)" <= "001399999999"
 SHL1STDLIBS+=\
         $(ADVAPI32LIB)	\
@@ -82,6 +83,7 @@ SHL1STDLIBS+=\
         $(ADVAPI32LIB)	\
         $(ATL_LIB)$/atls.lib
 .ENDIF # "$(WINDOWS_VISTA_PSDK)"!=""
+.ENDIF # "$(COM)"=="MSC"
 
 
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
