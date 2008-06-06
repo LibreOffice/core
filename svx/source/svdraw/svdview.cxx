@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdview.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1292,6 +1292,11 @@ XubString SdrView::GetStatusText()
         aStr.SearchAndReplaceAscii("%1", UniString::CreateFromInt32(nPar + 1));
         aStr.SearchAndReplaceAscii("%2", UniString::CreateFromInt32(nLin + 1));
         aStr.SearchAndReplaceAscii("%3", UniString::CreateFromInt32(nCol + 1));
+
+#ifndef PRODUCT
+        aStr += UniString( RTL_CONSTASCII_USTRINGPARAM( ", Level " ) );
+        aStr += UniString::CreateFromInt32( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+#endif
     }
 
     if(aStr.EqualsAscii("nix"))
