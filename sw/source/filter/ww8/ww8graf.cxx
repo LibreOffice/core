@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.151 $
+ * $Revision: 1.152 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2375,10 +2375,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // a table cell, is horizontal aligned at frame|character and
         // has wrap through, but its attribute 'layout in table cell' isn't set,
         // convert its horizontal alignment to page text area.
+        // --> OD 2008-04-10 #i84783# - use new method <IsObjectLayoutInTableCell()>
         if ( nInTable &&
              ( eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR ) &&
              pFSPA->nwr == 3 &&
-             pRecord->nLayoutInTableCell == 0x80000000 )
+//             pRecord->nLayoutInTableCell == 0x80000000 )
+             !IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell ) )
         {
             eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
         }
@@ -2432,6 +2434,51 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     return eAnchor;
 }
+
+// --> OD 2008-04-10 #i84783#
+bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const
+{
+    bool bIsObjectLayoutInTableCell = false;
+
+    if ( bVer8 )
+    {
+        const UINT16 nWWVersion = pWwFib->nProduct & 0xE000;
+        switch ( nWWVersion )
+        {
+            case 0x0000: // version 8 aka Microsoft Word 97
+            {
+                bIsObjectLayoutInTableCell = false;
+                ASSERT( nLayoutInTableCell == 0xFFFFFFFF,
+                        "no explicit object attribute layout in table cell excepted." );
+            }
+            break;
+            case 0x2000: // version 9 aka Microsoft Word 2000
+            case 0x4000: // version 10 aka Microsoft Word 2002
+            case 0x6000: // version 11 aka Microsoft Word 2003
+            case 0x8000: // version 12 aka Microsoft Word 2007
+            {
+                if ( nLayoutInTableCell == 0xFFFFFFFF || // no explicit attribute value given
+                     nLayoutInTableCell & 0x00008000 )
+                {
+                    bIsObjectLayoutInTableCell = true;
+                }
+                else
+                {
+                    bIsObjectLayoutInTableCell = false;
+                }
+            }
+            break;
+            default:
+            {
+                ASSERT( false,
+                        "unknown version." );
+            }
+        }
+    }
+
+    return bIsObjectLayoutInTableCell;
+}
+// <--
 
 SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 {
@@ -2624,11 +2671,15 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     if (!pRecord)
         return 0;
 
-    //cmc: We're in a table, and the element has the magic Word XP bit set
-    //to enable layout inside a cell
-    // --> OD 2005-08-10 #124714# - undo change made for issue #i33442#
-    bool bLayoutInTableCell = ( nInTable &&
-                                pRecord->nLayoutInTableCell & 0x00008000 );
+    // --> OD 2008-04-10 #i84783#
+//    //cmc: We're in a table, and the element has the magic Word XP bit set
+//    //to enable layout inside a cell
+//    // --> OD 2005-08-10 #124714# - undo change made for issue #i33442#
+//    bool bLayoutInTableCell = ( nInTable &&
+//                                pRecord->nLayoutInTableCell & 0x00008000 );
+//    // <--
+    const bool bLayoutInTableCell =
+        nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
     // <--
 
     // OD 14.10.2003 #i18732#
