@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docmacromode.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -297,12 +297,16 @@ namespace sfx2
             document will be allowed (again: unless disabled globally), since in this case
             macros which later are newly created by the user should be allowed, of course.
 
+            @return
+                <TRUE/> if and only if macro execution is allowed in the document
+
             @see isMacroExecutionDisallowed
             @see IMacroDocumentAccess::documentStorageHasMacros
             @see hasMacroLibrary
             @see IMacroDocumentAccess::checkForBrokenScriptingSignatures
         */
-        void    checkMacrosOnLoading(
+        sal_Bool
+                checkMacrosOnLoading(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
                 );
 
