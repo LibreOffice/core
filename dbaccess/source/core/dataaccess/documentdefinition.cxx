@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -275,8 +275,8 @@ using namespace ::cppu;
 namespace css = ::com::sun::star;
 
 
-#define DEFAULT_WIDTH  15000
-#define DEFAULT_HEIGHT 10000
+#define DEFAULT_WIDTH  10000
+#define DEFAULT_HEIGHT  7500
 //........................................................................
 namespace dbaccess
 {
@@ -898,9 +898,14 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         }
     }
 
-    bool bExecuteDBDocMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
-        // Note that we don't pass an interaction handler here. If the user has not been asked/notified
-        // by now (i.e. during loading the whole DB document), then this won't happen anymore.
+    bool bExecuteDBDocMacros = m_pImpl->m_pDataSource->checkMacrosOnLoading();
+        // Note that this call implies the user might be asked for the macro execution mode.
+        // Normally, this would happen when the database document is loaded, and subsequent calls
+        // will simply use the user's decision from this point in time.
+        // However, it is possible to programmatically load forms/reports, without actually
+        // loading the database document into a frame. In this case, the user will be asked
+        // here and now.
+        // #i87741# / 2008-05-05 / frank.schoenheit@sun.com
 
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
@@ -1112,7 +1117,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
             dispose();
         }
-        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "storeOwn" ) ) )
+        else if (   ( aCommand.Name.compareToAscii( "storeOwn" ) == 0 ) // compatibility
+                ||  ( aCommand.Name.compareToAscii( "store" ) == 0 )
+                )
         {
             Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
             if ( xPersist.is() )
@@ -1645,9 +1652,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                     if ( bSetSize )
                     {
-                        ::com::sun::star::awt::Size aSize;
-                        aSize.Width = DEFAULT_WIDTH;
-                        aSize.Height = DEFAULT_HEIGHT;
+                        ::com::sun::star::awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 
                         m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
                     }
@@ -1694,6 +1699,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                 lcl_putLoadArgs( aMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
+                    // #i88977# / 2008-05-05 / frank.schoenheit@sun.com
                     // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
 
                 aMediaDesc >>= aArgs;
