@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binding.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +49,6 @@
 #include <functional>
 
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/xml/xpath/XXPathObject.hpp>
-#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
-#include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -111,7 +108,6 @@ using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XNodeList;
 using com::sun::star::xml::dom::events::XEventListener;
 using com::sun::star::xml::dom::events::XEventTarget;
-using com::sun::star::xml::xpath::XXPathObject;
 using com::sun::star::xsd::XDataType;
 
 
