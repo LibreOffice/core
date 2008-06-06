@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mediadescriptor.hxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +121,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_MODEL();
         static const ::rtl::OUString& PROP_VIEWONLY();
         static const ::rtl::OUString& PROP_DOCUMENTBASEURL();
+        static const ::rtl::OUString& PROP_VIEWCONTROLLERNAME();
 
     //-------------------------------------------
     // interface
