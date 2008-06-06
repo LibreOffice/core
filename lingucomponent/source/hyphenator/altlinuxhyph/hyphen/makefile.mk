@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +36,7 @@ TARGET	= hyphen_lib
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 HNJLIB=-lhyphen
 .ELIF  "$(GUI)"=="OS2"
 HNJLIB=$(SLB)\hyphen.lib
