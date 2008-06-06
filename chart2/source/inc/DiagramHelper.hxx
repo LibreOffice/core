@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DiagramHelper.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         StackMode eStackMode,
-        bool bOnlyAtFirstChartType = false
+        bool bOnlyAtFirstChartType = true
         );
 
     /** Retrieves the stackmode of the first DataSeries or none. If the series have differing stack
