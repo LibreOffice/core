@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpage2.cxx,v $
- * $Revision: 1.37 $
+ * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,14 +169,14 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                 SfxStyleSheetBase* pSheet = NULL;
                 SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
 
-                for (USHORT i = 1; i < 10; i++)
+                for (sal_Int16 i = -1; i < 9; i++)
                 {
                     aFullName = maLayoutName;
                     aOldFullName = aOldLayoutName;
                     aFullName += sal_Unicode( ' ' );
-                    aFullName += String::CreateFromInt32( (sal_Int32)i );
+                    aFullName += String::CreateFromInt32( (sal_Int32) (i <= 0 ) ? 1 : i + 1);
                     aOldFullName += sal_Unicode( ' ' );
-                    aOldFullName += String::CreateFromInt32( (sal_Int32)i );
+                    aOldFullName += String::CreateFromInt32( (sal_Int32) (i <= 0 ) ? 1 : i + 1 );
 
                     pSheet = pStShPool->Find(aOldFullName, SD_STYLE_FAMILY_MASTERPAGE);
                     DBG_ASSERT(pSheet, "alte Gliederungsvorlage nicht gefunden");
