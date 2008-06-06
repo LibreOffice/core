@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.48 $
+# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -92,6 +92,12 @@ SCP1FILES  = installation_ooo.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
+
+.IF "$(WITH_BINFILTER)" != "NO"
+SCP1FILES +=                               \
+             module_binfilter.par         \
+             file_binfilter.par
+.ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
 SCP1FILES +=                               \
@@ -239,6 +245,12 @@ SCP2FILES  = installation_ooo.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
+
+.IF "$(WITH_BINFILTER)" != "NO"
+SCP2FILES +=                               \
+             module_binfilter.par          \
+             file_binfilter.par
+.ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
 SCP2FILES +=                               \
