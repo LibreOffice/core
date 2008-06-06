@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,30 +33,23 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=SunPresentationMinimizer
 GEN_HID=FALSE
-EXTNAME=minimi
-
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
-
 .INCLUDE : settings.mk
+.INCLUDE :  $(PRJ)$/source$/minimizer$/minimizer.pmk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+# set in minimizer.pmk
+#EXTENSIONNAME:=SunPresentationMinimizer
+EXTENSION_ZIPNAME:=sun-presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"
 @all:
     @echo "Presentation Minimizer build disabled."
-.ELSE
-
-DESCRIPTION:=$(MISC)$/SunPresentationMinimizer$/description.xml
-
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/license_$i)
-.ELSE
-PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/LICENSE_$i)
 .ENDIF
 
 DLLPRE=
-common_build_zip=
 
 # --- Files -------------------------------------
 
@@ -92,47 +85,43 @@ SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
 COMPONENT_MERGED_XCU= \
-    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
-    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
-    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu \
 
 COMPONENT_FILES= \
-    $(MISC)$/SunPresentationMinimizer$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs \
-    $(MISC)$/SunPresentationMinimizer$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
+    $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
 
+# native libraries
+COMPONENT_LIBRARIES= \
+    $(EXTENSIONDIR)$/SunPresentationMinimizer.uno$(DLLPOST)
+
+# rather freestyle or common to all?
 COMPONENT_BITMAPS= \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/aboutlogo.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_16.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_26.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_16_h.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/opt_26_h.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/minimizepresi_80.png \
-    $(MISC)$/SunPresentationMinimizer$/bitmaps$/minimizepresi_80_h.png
+    $(EXTENSIONDIR)$/bitmaps$/aboutlogo.png \
+    $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
+    $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
+    $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
+    $(EXTENSIONDIR)$/bitmaps$/opt_26_h.png \
+    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
+    $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
 
+# rather freestyle or common to all?
 COMPONENT_HELP= \
-    $(MISC)$/SunPresentationMinimizer$/help$/help_de.odt \
-    $(MISC)$/SunPresentationMinimizer$/help$/help_en-US.odt
-    
-COMPONENT_MANIFEST= \
-    $(MISC)$/SunPresentationMinimizer$/META-INF$/manifest.xml
+    $(EXTENSIONDIR)$/help$/help_de.odt \
+    $(EXTENSIONDIR)$/help$/help_en-US.odt
 
-COMPONENT_LIBRARY= \
-    $(MISC)$/SunPresentationMinimizer$/SunPresentationMinimizer.uno$(DLLPOST)
-
-ZIP1DEPS=		$(PACKLICS) $(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
-ZIP1TARGET=		sun-presentation-minimizer
-ZIP1DIR=		$(MISC)$/SunPresentationMinimizer
-ZIP1EXT=		.oxt
-ZIP1FLAGS=-r
-ZIP1LIST=		*
+# make sure to add your custom files here
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
 
 # --- Targets ----------------------------------
 
+.INCLUDE : extension_pre.mk
+
 .INCLUDE : target.mk
 
-$(COMPONENT_MANIFEST) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
+.INCLUDE : extension_post.mk
 
 $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
@@ -142,39 +131,3 @@ $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ELSE
-$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-.ENDIF
-
-$(MISC)$/SunPresentationMinimizer$/registry$/data$/%.xcu : $(MISC)$/$(EXTNAME)$/merge$/%.xcu
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-$(MISC)$/SunPresentationMinimizer$/%.xcu : %.xcu
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-$(MISC)$/SunPresentationMinimizer$/%.xcs : %.xcs
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
-.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
-.IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
-PHONYDESC=.PHONY
-.ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
-$(DESCRIPTION) $(PHONYDESC) : $$(@:f)
-    @@-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $@
-    @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
-
-.ENDIF #  "$(ENABLE_MINIMIZER)" != "YES"
