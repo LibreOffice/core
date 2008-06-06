@@ -1,0 +1,145 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: extension_post.mk,v $
+#
+# $Revision: 1.2 $
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data .
+
+fixme=$(MISC)$/$(EXTNAME)$/merge$/$(MISC)
+fixme2=$(fixme:n)
+
+$(EXTENSIONDIR)$/registry$/data$/%.xcu : %.xcu
+# ugly hacking to workaround prepended first source path
+    @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
+    $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
+
+.IF "$(COMPONENT_CONFIGDIR)"!=""
+$(EXTENSIONDIR)$/%.xcu : $(COMPONENT_CONFIGDIR)$/%.xcu
+# ugly hacking to workaround prepended first source path
+    @@-$(MKDIRHIER) $(subst,$(fixme2),$(MISC) $(@:d))
+    $(GNUCOPY) $< $(subst,$(fixme2),$(MISC) $@)
+.ENDIF			# "$(COMPONENT__CONFIGDIR)"!=""
+
+$(EXTENSIONDIR)$/%.xcs : %.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+$(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+.IF "$(COMPONENT_JARFILES)"!=""
+$(COMPONENT_JARFILES) : $(CLASSDIR)$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF			# "$(COMPONENT_JARFILES)"!=""
+
+.IF "$(COMPONENT_LIBRARIES)"!=""
+# TODO(Q3): strip the binary?
+$(COMPONENT_LIBRARIES) : $(DLLDEST)$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(PACKMS)"!=""
+.IF "$(CCNUMVER)" <= "001399999999"
+    $(GNUCOPY) $(PACKMS)$/msvcr71.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/msvcp71.dll $(EXTENSIONDIR)
+.ELSE			# "$(CCNUMVER)" <= "001399999999"
+.IF "$(CCNUMVER)" <= "001499999999"
+    $(GNUCOPY) $(PACKMS)$/msvcr80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/msvcp80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/msvcm80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/Microsoft.VC80.CRT.manifest $(EXTENSIONDIR)
+.ELSE			# "$(CCNUMVER)" <= "001499999999"
+    $(GNUCOPY) $(PACKMS)$/msvcr90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/msvcp90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/msvcm90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(PACKMS)$/Microsoft.VC90.CRT.manifest $(EXTENSIONDIR)
+.ENDIF 			# "$(CCNUMVER)" <= "001499999999"
+.ENDIF			# "$(CCNUMVER)" <= "001399999999"
+.ELSE        # "$(PACKMS)"!=""
+.IF "$(CCNUMVER)" <= "001399999999"
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcr71.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcp71.dll $(EXTENSIONDIR)
+.ELSE			# "$(CCNUMVER)" <= "001399999999"
+.IF "$(CCNUMVER)" <= "001499999999"
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcr80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcp80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcm80.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC80.CRT.manifest $(EXTENSIONDIR)
+.ELSE    		# "$(CCNUMVER)" <= "001499999999"
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcr90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcp90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/msvcm90.dll $(EXTENSIONDIR)
+    $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC90.CRT.manifest $(EXTENSIONDIR)
+.ENDIF			# "$(CCNUMVER)" <= "001499999999"
+.ENDIF			# "$(CCNUMVER)" <= "001399999999"
+.ENDIF          # "$(PACKMS)"!=""
+.ENDIF 			# "$(OS)$(CPU)"=="WNTI"
+.ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
+
+IMPLEMENTATION_IDENTIFIER*="com.sun.star.$(EXTENSIONNAME)-$(PLATFORMID)"
+
+.INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
+.IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
+PHONYDESC=.PHONY
+.ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
+$(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
+    @@-$(MKDIRHIER) $(@:d)
+    $(PERL) $(SOLARENV)$/bin$/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.$(EXTNAME)
+    @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)$/$(TARGET)_lang_track.mk
+    $(TYPE) $@.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $(MISC)$/desc.tmp.$(EXTNAME)
+    @@-$(RM) $@.$(EXTNAME)
+    $(TYPE) $(MISC)$/desc.tmp.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
+    @@-$(RM) $(MISC)$/desc.tmp.$(EXTNAME)
+
+# default OOo license text!!!
+# may not fit...
+.IF "$(CUSTOM_LICENSE)"==""
+.IF "$(GUI)" == "WNT"
+PACKLICDEPS=$(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+.ELSE			# "$(GUI)" == "WNT"
+PACKLICDEPS=$(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE			# "$(CUSTOM_LICENSE)" == ""
+PACKLICDEPS=$(CUSTOM_LICENSE)
+.ENDIF			# "$(CUSTOM_LICENSE)" == ""
+$(PACKLICS) : $(PACKLICDEPS)
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+
+#$(COMPONENT_MANIFEST) : $$(@:f)
+$(COMPONENT_MANIFEST) : $(MANIFEST_SRC) $(MANIFEST_DEPS)
+    @@-$(MKDIRHIER) $(@:d)
+.IF "$(COMPONENT_MANIFEST_GENERIC)" == ""
+    $(TYPE) $(MANIFEST_SRC) | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" | $(SED) "s/EXEC_EXTENSION/$(EXECPOST)/" > $@
+.ELSE			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
+    $(PERL) $(SOLARENV)$/bin$/makemani.pl $(PRJ)$/util$/manifest.xml $(EXTENSIONDIR) $(COMPONENT_MANIFEST_SEARCHDIR) $(@:d:d)
+.ENDIF			# "$(COMPONENT_MANIFEST_GENERIC)" != ""
+
