@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dlgassim.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                     for (ULONG nPara = 0; nPara < nCount; nPara++)
                     {
                         pPara = pOutliner->GetParagraph(nPara);
-                        if(pPara && pOutliner->GetDepth( (USHORT) nPara ) == 1 )
+                        if(pPara && pOutliner->GetDepth( (USHORT) nPara ) == 0 )
                         {
                             String aParaText = pOutliner->GetText(pPara);
                             if(aParaText.Len() != 0)
