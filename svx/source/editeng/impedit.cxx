@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1586,10 +1586,10 @@ void ImpEditView::dragGestureRecognized( const ::com::sun::star::datatransfer::d
             pDragAndDropInfo->bOutlinerMode = TRUE;
             EditPaM aStartPaM( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
-            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+            const SfxInt16Item& rLevel = (const SfxInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
             for ( USHORT n = nPara +1; n < pEditEngine->pImpEditEngine->GetEditDoc().Count(); n++ )
             {
-                const SfxUInt16Item& rL = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
+                const SfxInt16Item& rL = (const SfxInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
                 if ( rL.GetValue() > rLevel.GetValue() )
                 {
                     aEndPaM.SetNode( pEditEngine->pImpEditEngine->GetEditDoc().GetObject( n ) );
