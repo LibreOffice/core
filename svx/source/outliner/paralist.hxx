@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paralist.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,7 @@ public:
     Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph, USHORT& rRelPos ) const;
+    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
     BOOL            HasChilds( Paragraph* pParagraph ) const;
     BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
     BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
