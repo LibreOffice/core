@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoshape.cxx,v $
- * $Revision: 1.172 $
+ * $Revision: 1.173 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2651,12 +2651,13 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
 {
     switch( pProperty->nWID )
     {
+/*
     case OWN_ATTR_HASLEVELS:
     {
         rValue <<= SvxTextEditSource::hasLevels( mpObj.get() );
         break;
     }
-
+*/
     case OWN_ATTR_CAPTION_POINT:
     {
         Point aVclPoint = ((SdrCaptionObj*)mpObj.get())->GetTailPos();
