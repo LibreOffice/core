@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.69 $
+# $Revision: 1.70 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -125,8 +125,7 @@ SHL1STDLIBS+= \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
     $(I18NUTILLIB)	\
-        $(AVMEDIALIB) \
-        $(LIBXML2LIB)
+    $(AVMEDIALIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
