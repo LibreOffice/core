@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: FILEConnectionProperties.idl,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,9 +53,13 @@ module com {  module sun {  module star {  module sdbc {
 service FILEConnectionProperties
 {
     service com::sun::star::sdbc::ConnectionProperties;
-    /** which charset should be used to fetch data.
+
+    /** specifies the encoding to use to translate the backend data
+
+        <p>See the <a href="http://www.iana.org/assignments/character-sets">IANA character set list</a>
+        for a list of valid values.</p>
     */
-    [optional, property] long Charset;
+    [optional, property] string CharSet;
 };
 
 //=============================================================================
