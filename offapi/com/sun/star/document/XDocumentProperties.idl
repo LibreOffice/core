@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XDocumentProperties.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -236,10 +236,15 @@ interface XDocumentProperties
         describes a case where no autoload is specified.
         </p>
 
+        @throws com::sun::star::lang::IllegalArgumentException
+            if argument is negative
+
         @see AutoloadURL
      */
 
-    [attribute] long AutoloadSecs;
+    [attribute] long AutoloadSecs {
+            set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
 
     //-------------------------------------------------------------------------
     /** contains the name of the default frame into which
@@ -265,17 +270,27 @@ interface XDocumentProperties
     /** describes how often the document was edited and saved.
         <p>
         </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if argument is negative
      */
 
-    [attribute] short EditingCycles;
+    [attribute] short EditingCycles {
+            set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
 
     //-------------------------------------------------------------------------
     /** contains the net time of editing the document (in seconds).
         <p>
         </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if argument is negative
      */
 
-    [attribute] long EditingDuration;
+    [attribute] long EditingDuration {
+            set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
 
     //-------------------------------------------------------------------------
     /** resets all attributes that could identify the user.
