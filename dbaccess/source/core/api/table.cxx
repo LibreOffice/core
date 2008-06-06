@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,9 +77,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
-#ifndef DBACCESS_CORE_API_KEYS_HXX
-#include "CKeys.hxx"
-#endif
+#include <connectivity/TKeys.hxx>
 #ifndef DBACCESS_INDEXES_HXX_
 #include "CIndexes.hxx"
 #endif
@@ -470,7 +468,7 @@ sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createKeys(const TStringVector& _rNames)
 {
-    return new OKeys(this,m_aMutex,_rNames,NULL);
+    return new connectivity::OKeysHelper(this,m_aMutex,_rNames);
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createIndexes(const TStringVector& _rNames)
