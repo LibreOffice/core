@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updateprotocol.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,8 +156,13 @@ checkForUpdates(
             if( aUpdateInfoEnumeration->nextElement() >>= aEntry )
             {
                 uno::Reference< xml::dom::XNode > xNode( aEntry.UpdateDocument.get() );
-                uno::Reference< xml::dom::XNodeList > xNodeList =
-                    xXPath->selectNodeList(xNode, aXPathExpression + UNISTRING("/inst:update/attribute::src"));
+                uno::Reference< xml::dom::XNodeList > xNodeList;
+                try {
+                    xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
+                        + UNISTRING("/inst:update/attribute::src"));
+                } catch (css::xml::xpath::XPathException &) {
+                    // ignore
+                }
 
 /*
                 o_rUpdateInfo.Sources.push_back( DownloadSource(true,
@@ -179,13 +184,23 @@ checkForUpdates(
                     }
                 }
 
-                uno::Reference< xml::dom::XNode > xNode2 =
-                    xXPath->selectSingleNode(xNode, aXPathExpression + UNISTRING("/inst:version/text()"));
+                uno::Reference< xml::dom::XNode > xNode2;
+                try {
+                    xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
+                        + UNISTRING("/inst:version/text()"));
+                } catch (css::xml::xpath::XPathException &) {
+                    // ignore
+                }
 
                 if( xNode2.is() )
                     o_rUpdateInfo.Version = xNode2->getNodeValue();
 
-                xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression + UNISTRING("/inst:buildid/text()"));
+                try {
+                    xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression
+                        + UNISTRING("/inst:buildid/text()"));
+                } catch (css::xml::xpath::XPathException &) {
+                    // ignore
+                }
 
                 if( xNode2.is() )
                     o_rUpdateInfo.BuildId = xNode2->getNodeValue();
@@ -193,7 +208,12 @@ checkForUpdates(
                 o_rUpdateInfo.Description = aEntry.Description;
 
                 // Release Notes
-                xNodeList = xXPath->selectNodeList(xNode, aXPathExpression + UNISTRING("/inst:relnote"));
+                try {
+                    xNodeList = xXPath->selectNodeList(xNode, aXPathExpression
+                        + UNISTRING("/inst:relnote"));
+                } catch (css::xml::xpath::XPathException &) {
+                    // ignore
+                }
                 imax = xNodeList->getLength();
                 for( i = 0; i < imax; ++i )
                 {
