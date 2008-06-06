@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TTableHelper.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,26 +230,24 @@ void OTableHelper::refreshColumns()
         m_pColumns  = createColumns(aVector);
 }
 // -------------------------------------------------------------------------
-void OTableHelper::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
+void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 {
     Any aCatalog;
     if ( m_CatalogName.getLength() )
         aCatalog <<= m_CatalogName;
     Reference< XResultSet > xResult = getMetaData()->getPrimaryKeys(aCatalog,m_SchemaName,m_Name);
 
-    if(xResult.is())
+    if ( xResult.is() && xResult->next() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one primary key
-        {
-            ::rtl::OUString aPkName = xRow->getString(6);
-            _rKeys.push_back(aPkName);
-        }
+        const ::rtl::OUString aPkName = xRow->getString(6);
+        m_aKeys.insert(TKeyMap::value_type(aPkName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(::rtl::OUString(),KeyType::PRIMARY,0,0))));
+        _rNames.push_back(aPkName);
         ::comphelper::disposeComponent(xResult);
     }
 }
 // -------------------------------------------------------------------------
-void OTableHelper::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
+void OTableHelper::refreshForgeinKeys(TStringVector& _rNames)
 {
     Any aCatalog;
     if ( m_CatalogName.getLength() )
@@ -259,14 +257,30 @@ void OTableHelper::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 
     if ( xRow.is() )
     {
+        ::rtl::OUString aName,sCatalog,aSchema;
         while( xResult->next() )
         {
-            sal_Int32 nKeySeq = xRow->getInt(9);
+            // this must be outsid the "if" because we have to call in a right order
+            sCatalog    = xRow->getString(1);
+            if ( xRow->wasNull() )
+                sCatalog = ::rtl::OUString();
+            aSchema     = xRow->getString(2);
+            aName       = xRow->getString(3);
+
+            const sal_Int32 nKeySeq = xRow->getInt(9);
+            const sal_Int32 nUpdateRule = xRow->getInt(10);
+            const sal_Int32 nDeleteRule = xRow->getInt(11);
+
             if ( nKeySeq == 1 )
             { // only append when the sequnce number is 1 to forbid serveral inserting the same key name
-                ::rtl::OUString sFkName = xRow->getString(12);
-                if ( !xRow->wasNull() && sFkName.getLength() )
-                    _rKeys.push_back(sFkName);
+                const ::rtl::OUString sFkName = xRow->getString(12);
+                if ( sFkName.getLength() && !xRow->wasNull() )
+                {
+                    ::rtl::OUString sReferencedName;
+                    sReferencedName = ::dbtools::composeTableName(getMetaData(),sCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
+                    m_aKeys.insert(TKeyMap::value_type(sFkName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(sReferencedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule))));
+                    _rNames.push_back(sFkName);
+                }
             }
         }
         ::comphelper::disposeComponent(xResult);
@@ -275,17 +289,22 @@ void OTableHelper::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 // -------------------------------------------------------------------------
 void OTableHelper::refreshKeys()
 {
-    TStringVector aVector;
+    m_aKeys.clear();
+
+    TStringVector aNames;
 
     if(!isNew())
     {
-        refreshPrimaryKeys(aVector);
-        refreshForgeinKeys(aVector);
-    }
-    if(m_pKeys)
+        refreshPrimaryKeys(aNames);
+        refreshForgeinKeys(aNames);
+        m_pKeys = createKeys(aNames);
+    } // if(!isNew())
+    else if (!m_pKeys )
+        m_pKeys = createKeys(aNames);
+    /*if(m_pKeys)
         m_pKeys->reFill(aVector);
-    else
-        m_pKeys = createKeys(aVector);
+    else*/
+
 }
 // -------------------------------------------------------------------------
 void OTableHelper::refreshIndexes()
@@ -417,6 +436,33 @@ void SAL_CALL OTableHelper::acquire() throw()
 void SAL_CALL OTableHelper::release() throw()
 {
     OTable_TYPEDEF::release();
+}
+// -----------------------------------------------------------------------------
+sdbcx::TKeyProperties OTableHelper::getKeyProperties(const ::rtl::OUString& _sName) const
+{
+    sdbcx::TKeyProperties pKeyProps;
+    TKeyMap::const_iterator aFind = m_aKeys.find(_sName);
+    if ( aFind != m_aKeys.end() )
+    {
+        pKeyProps = aFind->second;
+    }
+    else // only a fall back
+    {
+        OSL_ENSURE(0,"No key with the given name found");
+        pKeyProps.reset(new sdbcx::KeyProperties());
+    }
+
+    return pKeyProps;
+}
+// -----------------------------------------------------------------------------
+void OTableHelper::addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties)
+{
+    m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTableHelper::getTypeCreatePattern() const
+{
+    return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
 
