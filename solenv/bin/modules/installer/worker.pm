@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.60 $
+# $Revision: 1.61 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2311,7 +2311,7 @@ sub collect_all_files_from_includepathes
     my ($patharrayref) = @_;
 
     installer::logger::globallog("Reading all directories: Start");
-    print "... reading include pathes ...\n";
+    installer::logger::print_message( "... reading include pathes ...\n" );
     # empty the global
 
     @installer::globals::allincludepathes =();
