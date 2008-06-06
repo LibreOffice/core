@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.126 $
+# $Revision: 1.127 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,11 +47,10 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.126 $ ';
+$id_str = ' $Revision: 1.127 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
-print "$script_name -- version: $script_rev\n";
 
 #### globals ####
 
@@ -105,6 +104,7 @@ $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
 $opt_silent         = 0;            # be silent, only report errors
+$opt_verbose        = 0;            # be verbose (former default behaviour)
 $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
@@ -137,6 +137,8 @@ use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 
 parse_options();
 
+print "$script_name -- version: $script_rev\n" if !$opt_silent;
+
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
         if ($ENV{COM} eq 'GCC') {
@@ -157,7 +159,7 @@ write_log() if $opt_log;
 zip_files() if $opt_zip;
 cleanup() if $opt_delete;
 delete_output() if $opt_deloutput;
-print_stats() if !$opt_silent;
+print_stats();
 
 exit($error);
 
@@ -237,7 +239,6 @@ sub do_linklib
     @globbed_files = glob("$from_dir/$lib");
 
     if ( $#globbed_files == -1 ) {
-       $files_unchanged++;
        return;
     }
 
@@ -279,8 +280,8 @@ sub do_linklib
         }
         else {
             if ( $opt_delete ) {
-                print "REMOVE: $to_dir/$lib_major\n" if ($long && !$opt_silent);
-                print "REMOVE: $to_dir/$lib_base\n" if !$opt_silent;
+                print "REMOVE: $to_dir/$lib_major\n" if ($long && $opt_verbose);
+                print "REMOVE: $to_dir/$lib_base\n" if $opt_verbose;
                 unlink "$to_dir/$lib_major" if $long;
                 unlink "$to_dir/$lib_base";
                 if ( $opt_zip ) {
@@ -302,7 +303,7 @@ sub do_linklib
             # remove old symlinks
             unlink(@symlibs);
             foreach $symlib (@symlibs) {
-                print "LINKLIB: $lib -> $symlib\n" if !$opt_silent;
+                print "LINKLIB: $lib -> $symlib\n" if $opt_verbose;
                 if ( !symlink("$lib", "$symlib") ) {
                     print_error("can't symlink $lib -> $symlib: $!",0);
                 }
@@ -362,14 +363,14 @@ sub do_symlink
         }
     }
     else {
-        print "REMOVE: $to\n" if !$opt_silent;
+        print "REMOVE: $to\n" if $opt_verbose;
         unlink $to;
         if ( $opt_delete ) {
             push_on_ziplist($to) if $opt_zip;
             return;
         }
 
-        print "SYMLIB: $from -> $to\n" if !$opt_silent;
+        print "SYMLIB: $from -> $to\n" if $opt_verbose;
         if ( !symlink("$from", "$to") ) {
             print_error("can't symlink $from -> $to: $!",0);
         }
@@ -398,18 +399,21 @@ sub parse_options
 {
     my $arg;
     my $dontdeletecommon = 0;
+    $opt_silent = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE');
+    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE');
     while ( $arg = shift @ARGV ) {
-        $arg =~ /^-force$/  and $opt_force  = 1 and next;
-        $arg =~ /^-minor$/  and $opt_minor  = 1 and next;
-        $arg =~ /^-check$/  and $opt_check  = 1 and next;
-        $arg =~ /^-quiet$/  and $opt_silent = 1 and next;
-        $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
-        $arg =~ /^-delete$/ and $opt_delete = 1 and next;
+        $arg =~ /^-force$/      and $opt_force  = 1  and next;
+        $arg =~ /^-minor$/      and $opt_minor  = 1  and next;
+        $arg =~ /^-check$/      and $opt_check  = 1  and $opt_verbose = 1 and next;
+        $arg =~ /^-quiet$/      and $opt_silent = 1  and next;
+        $arg =~ /^-verbose$/    and $opt_verbose = 1 and next;
+        $arg =~ /^-zip$/        and $opt_zip    = 1  and next;
+        $arg =~ /^-delete$/     and $opt_delete = 1  and next;
         $arg =~ /^-dontdeletecommon$/ and $dontdeletecommon = 1 and next;
-        $arg =~ /^-help$/   and $opt_help   = 1 and $arg = '';
-        $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
-        $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
-        $arg =~ /^-debug$/  and $is_debug   = 1 and next;
+        $arg =~ /^-help$/       and $opt_help   = 1  and $arg = '';
+        $arg =~ /^-link$/       and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
+        $arg =~ /^-deloutput$/  and $opt_deloutput = 1 and next;
+        $arg =~ /^-debug$/      and $is_debug   = 1  and next;
         $arg =~ /^-checkdlst$/  and $opt_checkdlst = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /^-/ );
         if ( $arg =~ /^-/ || $opt_help || $#ARGV > -1 ) {
@@ -421,8 +425,8 @@ sub parse_options
     if ( $dest and ($opt_zip || $opt_delete) ) {
         usage(1);
     }
-    # $opt_check and $opt_silent are mutually exclusive
-    if ( $opt_check and $opt_silent ) {
+    # $opt_silent and $opt_check or $opt_verbose are mutually exclusive
+    if ( ($opt_check or $opt_verbose) and $opt_silent ) {
         print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
@@ -772,11 +776,11 @@ sub copy_if_newer
     return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
     if ( $opt_delete ) {
-        print "REMOVE: $to\n" if !$opt_silent;
+        print "REMOVE: $to\n" if $opt_verbose;
         $rc = unlink($to) unless $opt_check;
         # handle special packaging of *.dylib files for Mac OS X
         if ( $to =~ s/\.dylib$/.jnilib/ ) {
-            print "REMOVE: $to\n" if !$opt_silent;
+            print "REMOVE: $to\n" if $opt_verbose;
             $rc += unlink "$to" unless $opt_check;
         }
         return 1 if $opt_check;
@@ -786,16 +790,16 @@ sub copy_if_newer
     if( !$opt_check && $opt_link ) {
         # hard link if possible
         if( link($from, $to) ){
-            print "LINK: $from -> $to\n" if !$opt_silent;
+            print "LINK: $from -> $to\n" if $opt_verbose;
             return 1;
         }
     }
 
     if( $touch ) {
-       print "TOUCH: $from -> $to\n" if !$opt_silent;
+       print "TOUCH: $from -> $to\n" if $opt_verbose;
     }
     else {
-       print "COPY: $from -> $to\n" if !$opt_silent;
+       print "COPY: $from -> $to\n" if $opt_verbose;
     }
 
     return 1 if( $opt_check );
@@ -830,7 +834,7 @@ sub copy_if_newer
                     $bundlelib =~ s/\.dylib$//;
                     $bundlelib .= ".jnilib";
                     if ( $opt_delete ) {
-                        print "REMOVE: $bundlelib\n" if !$opt_silent;
+                        print "REMOVE: $bundlelib\n" if $opt_verbose;
                         unlink "$bundlelib" unless $opt_check;
                     } else {
                         push_on_ziplist($bundlelib) if $opt_zip;
@@ -1060,14 +1064,14 @@ sub add_incpath_if_newer
     push_on_loglist("ADDINCPATH", "$from", "$to") if $opt_log;
 
     if ( $opt_delete ) {
-        print "REMOVE: $to\n" if !$opt_silent;
+        print "REMOVE: $to\n" if $opt_verbose;
         my $rc = unlink($to);
         return 1 if $rc;
         return 0;
     }
 
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        print "ADDINCPATH: $from -> $to\n" if !$opt_silent;
+        print "ADDINCPATH: $from -> $to\n" if $opt_verbose;
 
         return 1 if $opt_check;
 
@@ -1183,7 +1187,7 @@ sub zip_files
         push @zipfiles, ($common_zip_file);
     }
     foreach my $zip_file ( @zipfiles ) {
-        print "ZIP: updating $zip_file\n" if !$opt_silent;
+        print "ZIP: updating $zip_file\n" if $opt_verbose;
         next if ( $opt_check );
 
         local $work_file = "";
@@ -1304,11 +1308,11 @@ sub write_log
     foreach my $log ( @logs ) {
         $log_file{$log} = expand_macros( $log_file{$log} );
         if ( $opt_delete ) {
-            print "LOG: removing $log_file{$log}\n" if !$opt_silent;
+            print "LOG: removing $log_file{$log}\n" if $opt_verbose;
             next if ( $opt_check );
             unlink $log_file{$log};
         } else {
-            print "LOG: writing $log_file{$log}\n" if !$opt_silent;
+            print "LOG: writing $log_file{$log}\n" if $opt_verbose;
             next if ( $opt_check );
             open( LOGFILE, "> $log_file{$log}" ) or warn "Error: could not open log file.";
             foreach my $item ( @$log ) {
@@ -1378,7 +1382,7 @@ sub cleanup
     foreach my $path ( @dirlist ) {
         $path = expand_macros($path);
         if ( $opt_check ) {
-            print "RMDIR: $path\n" if !$opt_silent;
+            print "RMDIR: $path\n" if $opt_verbose;
         } else {
             rmdir $path;
         }
@@ -1390,7 +1394,7 @@ sub delete_output
     my $output_path = expand_macros("../%__SRC%");
     if ( "$output_path" ne "../" ) {
         if ( rmtree([$output_path], 0, 1) ) {
-            print "Deleted output tree.\n";
+            print "Deleted output tree.\n" if $opt_verbose;
         }
         else {
             print_error("Error deleting output tree $output_path: $!",0);
@@ -1434,14 +1438,19 @@ sub print_error
 
 sub print_stats
 {
-    print "Statistics:\n";
-    if ( $opt_delete ) {
-        print "Files removed $files_copied\n";
+    print "Module '$module' delivered ";
+    if ( $error ) {
+        print "with errors\n";
+    } else {
+        print "successfully.";
+        if ( $opt_delete ) {
+            print " $files_copied files removed,";
+        }
+        else {
+            print " $files_copied files copied,";
+        }
+        print " $files_unchanged files unchanged\n";
     }
-    else {
-        print "Files copied: $files_copied\n";
-    }
-    print "Files unchanged/not matching: $files_unchanged\n";
 }
 
 sub cleanup_and_die
