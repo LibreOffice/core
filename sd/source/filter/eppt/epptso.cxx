@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: epptso.cxx,v $
- * $Revision: 1.104 $
+ * $Revision: 1.105 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2291,7 +2291,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     mXPropSet = rXPropSet;
 
-    bDepth = bExtendedParameters = FALSE;
+    bExtendedParameters = FALSE;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -2307,7 +2307,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
     mbLastParagraph     ( aParaFlags.bLastParagraph )
 {
-    bDepth = bExtendedParameters = FALSE;
+    bExtendedParameters = FALSE;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -2436,11 +2436,24 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
      delete pConvert;
 }
 
-void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bGetPropStateValue )
+void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
 {
+    ::com::sun::star::uno::Any aAny;
+    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
+    {
+        sal_Int32 nVal;
+        if ( aAny >>= nVal )
+            nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
+    }
+    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaFirstLineIndent" ) ) ) )
+    {
+        if ( aAny >>= nBulletOfs )
+            nBulletOfs = static_cast< sal_Int32 >( nBulletOfs / ( 2540.0 / 576 ) + 0.5 );
+    }
+
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > aXIndexReplace;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ), bGetPropStateValue ) )
+    if ( bIsBullet && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ), bGetPropStateValue ) )
     {
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
@@ -2502,9 +2515,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartWith" ) ) )
                             nStartWith = *( (sal_Int16*)pValue );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LeftMargin" ) ) )
-                            nTextOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
+                            nTextOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstLineOffset" ) ) )
-                            nBulletOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
+                            nBulletOfs += (sal_Int16)( *( (sal_Int32*)pValue ) / ( 2540.0 / 576 ) );
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletColor" ) ) )
                         {
                             sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
@@ -2726,39 +2739,43 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     }
                 }
             }
-            nBulletOfs = nTextOfs + nBulletOfs;
-            if ( nBulletOfs < 0 )
-                nBulletOfs = 0;
         }
     }
+    nBulletOfs = nTextOfs + nBulletOfs;
+    if ( nBulletOfs < 0 )
+        nBulletOfs = 0;
 }
 
 void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
 {
-    static String sIsNumbering      ( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) );
     static String sNumberingLevel   ( RTL_CONSTASCII_USTRINGPARAM( "NumberingLevel" ) );
 
     ::com::sun::star::uno::Any aAny;
-    meBullet = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    if ( GetPropertyValue( aAny, mXPropSet, sIsNumbering, sal_True ) )
+    if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
     {
-        if  ( bGetPropStateValue )
-            meBullet = GetPropertyState( mXPropSet, sIsNumbering );
-        aAny >>= mbIsBullet;
+        if ( bGetPropStateValue )
+            meBullet = GetPropertyState( mXPropSet, sNumberingLevel );
+        nDepth = *( (sal_Int16*)aAny.getValue() );
 
-        if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
+        if ( nDepth < 0 )
         {
-            if ( bGetPropStateValue )
-                meBullet = GetPropertyState( mXPropSet, sNumberingLevel );
-            nDepth = *( (sal_Int16*)aAny.getValue() );
-            if ( nDepth > 4 )
-                nDepth = 4;
-            bDepth = TRUE;
+            mbIsBullet = sal_False;
+            nDepth = 0;
         }
         else
-            nDepth = 0;
-        ImplGetNumberingLevel( rBuProv, nDepth, bGetPropStateValue );
+        {
+            if ( nDepth > 4 )
+                nDepth = 4;
+            mbIsBullet = sal_True;
+        }
     }
+    else
+    {
+        nDepth = 0;
+        mbIsBullet = sal_False;
+    }
+    ImplGetNumberingLevel( rBuProv, nDepth, mbIsBullet, bGetPropStateValue );
+
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabStops" ) ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
     sal_Int16 eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
@@ -2857,7 +2874,6 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
         Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
 
     maTabStop = rParagraphObj.maTabStop;
-    bDepth = rParagraphObj.bDepth;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
     nParaFlags = rParagraphObj.nParaFlags;
     nBulletFlags = rParagraphObj.nBulletFlags;
