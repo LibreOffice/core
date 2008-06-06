@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outlview.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,21 +36,16 @@
 #include <svx/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "eetext.hxx"
 #include <svx/eeitem.hxx>
 #include <svx/editstat.hxx>
-#ifndef _LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
-#endif
 #include <svx/svdotext.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/imagemgr.hxx>
 #include <sfx2/app.hxx>
-#ifndef _BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
-#endif
 #include <svtools/itempool.hxx>
 #include <svtools/style.hxx>
 #include <svx/svdorect.hxx>
@@ -69,6 +64,9 @@
 #include <svx/editobj.hxx>
 #include <svx/editund2.hxx>
 
+#include <svx/editview.hxx>
+#include <svx/svxfont.hxx>
+#include <svx/fhgtitem.hxx>
 
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
@@ -85,6 +83,11 @@
 #include "ViewShellBase.hxx"
 #include "undo/undoobjects.hxx"
 #include "undo/undomanager.hxx"
+#include "stlsheet.hxx"
+
+using ::rtl::OUString;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 namespace sd {
 
@@ -121,6 +124,8 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 , mpProgress(NULL)
 , mbHighContrastMode( false )
 , maDocColor( COL_WHITE )
+, mnPageNumberWidthPixel( 0 )
+, maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
 {
     BOOL bInitOutliner = FALSE;
 
@@ -129,7 +134,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
         // Outliner initialisieren: Referenz-Device setzen
         bInitOutliner = TRUE;
         mpOutliner->Init( OUTLINERMODE_OUTLINEVIEW );
-
+/*
         SfxStyleSheet* pTitleSheet = mpDoc->GetSdPage( 0, PK_STANDARD )->GetStyleSheetForPresObj( PRESOBJ_TITLE );
 
         if ( pTitleSheet )
@@ -159,7 +164,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
             aFormat.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
             mpOutliner->OverwriteLevel0Bullet( aFormat );
         }
-
+*/
         mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
         ULONG nWidth = OUTLINE_PAPERWIDTH;
         mpOutliner->SetPaperSize(Size(nWidth, 400000000));
@@ -190,6 +195,27 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_PAGE_ORDER);
+
+    LanguageType eLang = mpOutliner->GetDefaultLanguage();
+    maPageNumberFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 );
+    maPageNumberFont.SetHeight( 500 );
+
+    maBulletFont.SetColor( COL_AUTO );
+    maBulletFont.SetHeight( 1000 );
+    maBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
+    maBulletFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )) );
+    maBulletFont.SetWeight(WEIGHT_NORMAL);
+    maBulletFont.SetUnderline(UNDERLINE_NONE);
+    maBulletFont.SetStrikeout(STRIKEOUT_NONE);
+    maBulletFont.SetItalic(ITALIC_NONE);
+    maBulletFont.SetOutline(FALSE);
+    maBulletFont.SetShadow(FALSE);
+
+
+    Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY);
+
+    const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
+    maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );
 }
 
 /*************************************************************************
@@ -270,9 +296,71 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     {
         pOlView->HideCursor();
         pOlView->Paint(rRect);
+
         pOlView->ShowCursor(mbFirstPaint);
+
+/*
+        if( mnPageNumberWidthPixel == 0 )
+            GetPageNumberWidthPixel();
+
+        const ULONG nParaCount = pOlView->GetOutliner()->GetParagraphCount();
+        EditView& rEditView = pOlView->GetEditView();
+
+        Font aOldFont( pWin->GetFont() );
+
+        const String aBulletStr( sal_Unicode( 0xE011 ) );
+        pWin->SetFont( maBulletFont);
+        sal_Int32 nBulletWidth = pWin->GetTextWidth(aBulletStr);
+
+        sal_Int32 nPage = 1;
+        for( ULONG nPara = 0; nPara < nParaCount; nPara++ )
+        {
+            Paragraph* pPara = pOlView->GetOutliner()->GetParagraph( nPara );
+            if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
+            {
+                pWin->SetFont( maPageNumberFont );
+                const String aStr( String::CreateFromInt32( nPage++ ) );
+                Point aPos( rEditView.GetWindowPosTopLeft( (USHORT)nPara ) );
+
+                sal_Int32 nNumberOffset = pWin->PixelToLogic( Point(mnPageNumberWidthPixel, 0) ).X() - nBulletWidth;
+                sal_Int32 nLineHeight = pOlView->GetOutliner()->GetLineHeight( nPara, 0 );
+
+                aPos.X() = nNumberOffset;
+
+                Point aPoint( aPos.X() - pWin->GetTextWidth( aStr ), aPos.Y() + ( nLineHeight - maPageNumberFont.GetHeight()) / 2 );
+                pWin->DrawText( aPoint, aStr );
+
+                aPoint.X() = aPos.X();
+                aPoint.Y() = aPos.Y() +( nLineHeight - maBulletFont.GetHeight()) / 2;
+                pWin->SetFont( maBulletFont );
+                pWin->DrawText( aPoint, aBulletStr );
+            }
+        }
+
+        pWin->SetFont( aOldFont );
+*/
         mbFirstPaint = FALSE;
     }
+}
+
+void OutlineView::InvalidateSlideNumberArea()
+{
+/*
+    for( sal_Int16 nView = 0; nView < MAX_OUTLINERVIEWS; ++nView )
+    {
+        if (mpOutlinerView[nView] != NULL)
+        {
+            ::Window* pWindow = mpOutlinerView[nView]->GetWindow();
+            if( pWindow )
+            {
+                Rectangle aRect( Point(0,0), pWindow->GetOutputSize() );
+                aRect.nRight = aRect.nLeft + pWindow->PixelToLogic( Point( mnPageNumberWidthPixel, 0 ) ).X() * 2;
+
+                pWindow->Invalidate(aRect);
+            }
+        }
+    }
+*/
 }
 
 /*************************************************************************
@@ -392,22 +480,21 @@ OutlinerView* OutlineView::GetViewByWindow (::Window* pWin) const
 
 Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
 {
-    Paragraph* pResult = NULL;
-    ULONG      nPos    = mpOutliner->GetAbsPos((Paragraph*)pPara);
+    sal_Int32 nPos = mpOutliner->GetAbsPos(const_cast<Paragraph*>(pPara));
 
     if (nPos > 0)
     {
-        while (nPos && !pResult)
+        while(nPos)
         {
             pPara = mpOutliner->GetParagraph(--nPos);
-            if ( mpOutliner->GetDepth( (USHORT) nPos ) == 0 )
+            if( pPara->HasFlag(PARAFLAG_ISPAGE) )
             {
-                pResult = (Paragraph*)pPara;
+                return const_cast< Paragraph* >( pPara );
             }
         }
 
     }
-    return pResult;
+    return NULL;
 }
 
 /*************************************************************************
@@ -418,20 +505,19 @@ Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
 
 Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 {
-    ULONG nPos = mpOutliner->GetAbsPos((Paragraph*)pPara);
+    Paragraph* pResult = const_cast< Paragraph* >( pPara );
 
-    Paragraph* pResult = (Paragraph*)pPara;
+    sal_Int32 nPos = mpOutliner->GetAbsPos(pResult);
+
     do
     {
         pResult = mpOutliner->GetParagraph(++nPos);
+        if( pResult && pResult->HasFlag(PARAFLAG_ISPAGE) )
+            return pResult;
     }
-    while (pResult && mpOutliner->GetDepth( (USHORT) nPos ) != 0);
+    while( pResult );
 
-    if (pResult && mpOutliner->GetDepth( (USHORT) nPos ) != 0)
-    {
-        pResult = NULL;
-    }
-    return pResult;
+    return NULL;
 }
 
 /*************************************************************************
@@ -442,128 +528,144 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 
 IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
-    InsertSlideForParagraph( pOutliner->GetHdlParagraph() );
+//  DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphInsertedHdl(), model change without undo?!" );
+
+    // we get calls to this handler during binary insert of drag and drop contents but
+    // we ignore it here and handle it later in OnEndPasteOrDrop()
+    if( maDragAndDropModelGuard.get() == 0 )
+    {
+        OutlineViewPageChangesGuard aGuard(this);
+
+        Paragraph* pPara = pOutliner->GetHdlParagraph();
+
+        USHORT nAbsPos = (USHORT)mpOutliner->GetAbsPos( pPara );
+
+        UpdateParagraph( nAbsPos );
+
+        if( (nAbsPos == 0) || pPara->HasFlag(PARAFLAG_ISPAGE) || mpOutliner->GetParagraph( nAbsPos-1 )->HasFlag(PARAFLAG_ISPAGE) )
+        {
+            InsertSlideForParagraph( pPara );
+            InvalidateSlideNumberArea();
+        }
+    }
+
     return 0;
 }
 
 /** creates and inserts an empty slide for the given paragraph */
 SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 {
-    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphInsertedHdl(), model change without undo?!" );
+    DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::InsertSlideForParagraph(), model change without undo?!" );
 
     OutlineViewPageChangesGuard aGuard(this);
 
-    SdPage* pPage = 0;
-
-    if ( mpOutliner->GetDepth( (USHORT) mpOutliner->GetAbsPos( pPara ) ) == 0 )
+    pPara->SetFlag( PARAFLAG_ISPAGE );
+    // wieviele Titel sind vor dem neuen Titelabsatz?
+    ULONG nExample = 0L;            // Position der "Vorbild"seite
+    ULONG nTarget  = 0L;            // Einfuegeposition
+    while(pPara)
     {
-        // wieviele Titel sind vor dem neuen Titelabsatz?
-        ULONG nExample = 0L;            // Position der "Vorbild"seite
-        ULONG nTarget  = 0L;            // Einfuegeposition
-        while(pPara)
-        {
-            pPara = GetPrevTitle(pPara);
-            if (pPara)
-                nTarget++;
-        }
-
-
-        // was der Outliner nicht kann, muss hier wieder wettgemacht werden:
-        // wenn VOR dem ersten Absatz ein neuer Absatz mit RETURN erzeugt wird,
-        // meldet der Outliner den bereits bestehenden (jetzt nach unten
-        // gerutschten) Absatz als neuen Absatz; nicht darauf reinfallen!
-        if (nTarget == 1)
-        {
-            String aTest(mpOutliner->GetText( mpOutliner->GetParagraph( 0 ) ));
-            if (aTest.Len() == 0)
-            {
-                nTarget = 0;
-            }
-        }
-
-
-        // "Vorbild"seite ist - wenn vorhanden - die Vorgaengerseite
-        if (nTarget > 0)
-        {
-            nExample = nTarget - 1;
-
-            USHORT nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-            if( nExample >= nPageCount )
-                nExample = nPageCount - 1;
-        }
-
-        /**********************************************************************
-        * Es wird stets zuerst eine Standardseite und dann eine
-        * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
-        * Standardseite stets die zugehoerige Notizseite folgt.
-        * Vorangestellt ist genau eine Handzettelseite
-        **********************************************************************/
-
-        // diese Seite hat Vorbildfunktion
-        SdPage* pExample = (SdPage*)mpDoc->GetSdPage((USHORT)nExample, PK_STANDARD);
-        pPage = (SdPage*)mpDoc->AllocPage(FALSE);
-
-        pPage->SetLayoutName(pExample->GetLayoutName());
-
-        // einfuegen (Seite)
-        mpDoc->InsertPage(pPage, (USHORT)(nTarget) * 2 + 1);
-        if( isRecordingUndo() )
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
-
-        // der Standardseite eine Masterpage zuweisen
-        pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
-
-        // Seitengroesse setzen
-        pPage->SetSize(pExample->GetSize());
-        pPage->SetBorder( pExample->GetLftBorder(),
-                          pExample->GetUppBorder(),
-                          pExample->GetRgtBorder(),
-                          pExample->GetLwrBorder() );
-
-        // neue Praesentationsobjekte anlegen (auf <Titel> oder
-        // <Titel mit Untertitel> folgt <Titel mit Gliederung>, ansonsten
-        // wird das Layout von der Vorgaengerseite uebernommen)
-        AutoLayout eAutoLayout = pExample->GetAutoLayout();
-        if (eAutoLayout == AUTOLAYOUT_TITLE ||
-            eAutoLayout == AUTOLAYOUT_ONLY_TITLE)
-        {
-            pPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
-        }
-        else
-        {
-            pPage->SetAutoLayout(pExample->GetAutoLayout(), TRUE);
-        }
-
-        /**********************************************************************
-        |* jetzt die Notizseite
-        \*********************************************************************/
-        pExample = (SdPage*)mpDoc->GetSdPage((USHORT)nExample, PK_NOTES);
-        SdPage* pNotesPage = (SdPage*)mpDoc->AllocPage(FALSE);
-
-        pNotesPage->SetLayoutName(pExample->GetLayoutName());
-
-        pNotesPage->SetPageKind(PK_NOTES);
-
-        // einfuegen (Notizseite)
-        mpDoc->InsertPage(pNotesPage, (USHORT)(nTarget) * 2 + 2);
-        if( isRecordingUndo() )
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
-
-        // der Notizseite eine Masterpage zuweisen
-        pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
-
-        // Seitengroesse setzen, es muss bereits eine Seite vorhanden sein
-        pNotesPage->SetSize(pExample->GetSize());
-        pNotesPage->SetBorder( pExample->GetLftBorder(),
-                               pExample->GetUppBorder(),
-                               pExample->GetRgtBorder(),
-                               pExample->GetLwrBorder() );
-
-        // neue Praesentationsobjekte anlegen
-        pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), TRUE);
-
-        mpOutliner->UpdateFields();
+        pPara = GetPrevTitle(pPara);
+        if (pPara)
+            nTarget++;
     }
+
+
+    // was der Outliner nicht kann, muss hier wieder wettgemacht werden:
+    // wenn VOR dem ersten Absatz ein neuer Absatz mit RETURN erzeugt wird,
+    // meldet der Outliner den bereits bestehenden (jetzt nach unten
+    // gerutschten) Absatz als neuen Absatz; nicht darauf reinfallen!
+    if (nTarget == 1)
+    {
+        String aTest(mpOutliner->GetText( mpOutliner->GetParagraph( 0 ) ));
+        if (aTest.Len() == 0)
+        {
+            nTarget = 0;
+        }
+    }
+
+
+    // "Vorbild"seite ist - wenn vorhanden - die Vorgaengerseite
+    if (nTarget > 0)
+    {
+        nExample = nTarget - 1;
+
+        USHORT nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+        if( nExample >= nPageCount )
+            nExample = nPageCount - 1;
+    }
+
+    /**********************************************************************
+    * Es wird stets zuerst eine Standardseite und dann eine
+    * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
+    * Standardseite stets die zugehoerige Notizseite folgt.
+    * Vorangestellt ist genau eine Handzettelseite
+    **********************************************************************/
+
+    // diese Seite hat Vorbildfunktion
+    SdPage* pExample = (SdPage*)mpDoc->GetSdPage((USHORT)nExample, PK_STANDARD);
+    SdPage* pPage = (SdPage*)mpDoc->AllocPage(FALSE);
+
+    pPage->SetLayoutName(pExample->GetLayoutName());
+
+    // einfuegen (Seite)
+    mpDoc->InsertPage(pPage, (USHORT)(nTarget) * 2 + 1);
+    if( isRecordingUndo() )
+        AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
+
+    // der Standardseite eine Masterpage zuweisen
+    pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
+
+    // Seitengroesse setzen
+    pPage->SetSize(pExample->GetSize());
+    pPage->SetBorder( pExample->GetLftBorder(),
+                      pExample->GetUppBorder(),
+                      pExample->GetRgtBorder(),
+                      pExample->GetLwrBorder() );
+
+    // neue Praesentationsobjekte anlegen (auf <Titel> oder
+    // <Titel mit Untertitel> folgt <Titel mit Gliederung>, ansonsten
+    // wird das Layout von der Vorgaengerseite uebernommen)
+    AutoLayout eAutoLayout = pExample->GetAutoLayout();
+    if (eAutoLayout == AUTOLAYOUT_TITLE ||
+        eAutoLayout == AUTOLAYOUT_ONLY_TITLE)
+    {
+        pPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
+    }
+    else
+    {
+        pPage->SetAutoLayout(pExample->GetAutoLayout(), TRUE);
+    }
+
+    /**********************************************************************
+    |* jetzt die Notizseite
+    \*********************************************************************/
+    pExample = (SdPage*)mpDoc->GetSdPage((USHORT)nExample, PK_NOTES);
+    SdPage* pNotesPage = (SdPage*)mpDoc->AllocPage(FALSE);
+
+    pNotesPage->SetLayoutName(pExample->GetLayoutName());
+
+    pNotesPage->SetPageKind(PK_NOTES);
+
+    // einfuegen (Notizseite)
+    mpDoc->InsertPage(pNotesPage, (USHORT)(nTarget) * 2 + 2);
+    if( isRecordingUndo() )
+        AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+
+    // der Notizseite eine Masterpage zuweisen
+    pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
+
+    // Seitengroesse setzen, es muss bereits eine Seite vorhanden sein
+    pNotesPage->SetSize(pExample->GetSize());
+    pNotesPage->SetBorder( pExample->GetLftBorder(),
+                           pExample->GetUppBorder(),
+                           pExample->GetRgtBorder(),
+                           pExample->GetLwrBorder() );
+
+    // neue Praesentationsobjekte anlegen
+    pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), TRUE);
+
+    mpOutliner->UpdateFields();
 
     return pPage;
 }
@@ -581,7 +683,7 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
+    if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
     {
         // wieviele Titel sind vor dem fraglichen Titelabsatz?
         ULONG nPos = 0L;
@@ -626,6 +728,8 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
         pOutliner->UpdateFields();
     }
 
+    InvalidateSlideNumberArea();
+
     return 0;
 }
 
@@ -643,8 +747,12 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
     OutlineViewPageChangesGuard aGuard(this);
 
     Paragraph* pPara = pOutliner->GetHdlParagraph();
-    if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
+    if( pPara->HasFlag( PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) == 0) )
     {
+        // the current paragraph is transformed into a slide
+
+        mpOutliner->SetDepth( pPara, -1 );
+
         // werden da etwa mehrere Level-1-Absaetze auf Level 0 gebracht und
         // wir sollten eine Fortschrittsanzeige oder Eieruhr aufsetzen und
         // haben es noch nicht getan?
@@ -657,7 +765,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             Paragraph*    pParagraph   = (Paragraph*)pList->First();
             while (pParagraph)
             {
-                if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) == 1 )
+                if( !pParagraph->HasFlag( PARAFLAG_ISPAGE ) && (pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pParagraph ) ) <= 0) )
                     mnPagesToProcess++;
                 pParagraph = (Paragraph*)pList->Next();
             }
@@ -708,9 +816,11 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-    else if (pOutliner->GetPrevDepth() == 0)
+    else if( !pPara->HasFlag( PARAFLAG_ISPAGE ) && ((pOutliner->GetPrevFlags() & PARAFLAG_ISPAGE) != 0) )
     {
-        // wieviele Titel sind vor dem fraglichen Titelabsatz?
+        // the paragraph was a page but now becomes a normal paragraph
+
+        // how many titles are before the title paragraph in question?
         ULONG nPos = 0L;
         Paragraph* pParagraph = pPara;
         while(pParagraph)
@@ -732,6 +842,10 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         if( isRecordingUndo() )
             AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
         mpDoc->RemovePage(nAbsPos);
+
+        pPage = GetPageForParagraph( pPara );
+
+        mpOutliner->SetDepth( pPara, (pPage && (static_cast<SdPage*>(pPage)->GetAutoLayout() == AUTOLAYOUT_TITLE)) ?  -1 : 0 );
 
         // ggfs. Fortschrittsanzeige
         if (mnPagesToProcess)
@@ -771,7 +885,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             SdPage*pPage = (SdPage*)mpDoc->GetSdPage( (USHORT) nPos, PK_STANDARD);
 
             if(pPage && pPage->GetPresObj(PRESOBJ_TEXT))
-                pOutliner->SetDepth( pPara, 1 );
+                pOutliner->SetDepth( pPara, 0 );
         }
 
     }
@@ -794,10 +908,10 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
         {
             SfxStyleSheet* pStyleSheet = NULL;
             ULONG nPara = pOutliner->GetAbsPos( pPara );
-            ULONG nDepth = pOutliner->GetDepth( (USHORT) nPara );
-            BOOL bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
+            sal_Int16 nDepth = pOutliner->GetDepth( (USHORT) nPara );
+            bool bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
 
-            if( nDepth == 0 )
+            if( pPara->HasFlag(PARAFLAG_ISPAGE) )
             {
                 pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             }
@@ -809,11 +923,11 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             {
                 pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
 
-                if( nDepth > 1 )
+                if( nDepth > 0 )
                 {
                     String aNewStyleSheetName( pStyleSheet->GetName() );
                     aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
-                    aNewStyleSheetName += String::CreateFromInt32( nDepth );
+                    aNewStyleSheetName += String::CreateFromInt32( nDepth+1 );
                     SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
                     pStyleSheet = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, pStyleSheet->GetFamily() );
                 }
@@ -821,21 +935,22 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
             // before we set the style sheet we need to preserve the bullet item
             // since all items will be deleted while setting a new style sheet
-             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( nPara ) );
+             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( (USHORT)nPara ) );
 
             pOutliner->SetStyleSheet( nPara, pStyleSheet );
 
             // restore the old bullet item but not if the style changed
-            if ( pOutliner->GetPrevDepth() != 0 &&
-                 nDepth != 0 &&
+            if ( pOutliner->GetPrevDepth() != -1 && nDepth != -1 &&
                  aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
             {
-                SfxItemSet aAttrs( pOutliner->GetParaAttribs( nPara ) );
+                SfxItemSet aAttrs( pOutliner->GetParaAttribs( (USHORT)nPara ) );
                 aAttrs.Put( *aOldAttrs.GetItem( EE_PARA_NUMBULLET ) );
-                pOutliner->SetParaAttribs( nPara, aAttrs );
+                pOutliner->SetParaAttribs( (USHORT)nPara, aAttrs );
             }
         }
     }
+
+    InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -868,6 +983,8 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
                                        Point(aVis.TopLeft()));
         mpOutlineViewShell->UpdateScrollBars();
     }
+
+    InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -882,6 +999,7 @@ IMPL_LINK( OutlineView, BeginDropHdl, void *, EMPTYARG )
 IMPL_LINK( OutlineView, EndDropHdl, void *, EMPTYARG )
 {
     maDragAndDropModelGuard.reset(0);
+    InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -902,17 +1020,17 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
 
     // Liste der selektierten Titelabsaetze
     mpSelectedParas = mpOutlinerView[0]->CreateSelectionList();
-    Paragraph* pPara = (Paragraph*)mpSelectedParas->First();
+    Paragraph* pPara = static_cast<Paragraph*>(mpSelectedParas->First());
     while (pPara)
     {
-        if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) > 0 )
+        if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             mpSelectedParas->Remove();
-            pPara = (Paragraph*)mpSelectedParas->GetCurObject();
+            pPara = static_cast<Paragraph*>(mpSelectedParas->GetCurObject());
         }
         else
         {
-            pPara = (Paragraph*)mpSelectedParas->Next();
+            pPara = static_cast<Paragraph*>(mpSelectedParas->Next());
         }
     }
 
@@ -922,9 +1040,9 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
     ULONG nParaPos = 0;
     pPara = pOutliner->GetParagraph( 0 );
 
-    while (pPara)
+    while(pPara)
     {
-        if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )                     // eine Seite?
+        if( pPara->HasFlag(PARAFLAG_ISPAGE) )                     // eine Seite?
         {
             mpOldParaOrder->Insert(pPara, LIST_APPEND);
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
@@ -965,7 +1083,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     Paragraph*  pPrev = NULL;
     while (pPara && pPara != pSearchIt)
     {
-        if (pOutliner->GetDepth( (USHORT) nParaPos ) == 0)
+        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             nPosNewOrder++;
             pPrev = pPara;
@@ -1003,6 +1121,8 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
     mpSelectedParas = NULL;
     delete mpOldParaOrder;
     mpOldParaOrder = NULL;
+
+    InvalidateSlideNumberArea();
 
     return 0;
 }
@@ -1080,7 +1200,6 @@ SdrTextObj* OutlineView::CreateTitleTextObject(SdPage* pPage)
 SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
 {
     DBG_ASSERT( GetOutlineTextObject(pPage) == 0, "sd::OutlineView::CreateOutlineTextObject(), there is already a layout text object!" );
-
 
     AutoLayout eNewLayout = pPage->GetAutoLayout();
     switch( eNewLayout )
@@ -1173,127 +1292,102 @@ void OutlineView::FillOutliner()
     mpOutliner->GetUndoManager().Clear();
     mpOutliner->EnableUndo(FALSE);
     ResetLinks();
-    mpOutliner->SetMinDepth(0);
+    mpOutliner->SetUpdateMode(false);
 
     Paragraph* pTitleToSelect = NULL;
     ULONG nPageCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
-    // Outliner mit Text versorgen
+    // fill outliner with paragraphs from slides title & (outlines|subtitles)
     for (USHORT nPage = 0; nPage < nPageCount; nPage++)
     {
         SdPage*     pPage = (SdPage*)mpDoc->GetSdPage(nPage, PK_STANDARD);
         Paragraph * pPara = NULL;
 
-        // Titeltext uebernehmen
-        SdrTextObj*     pTO   = GetTitleTextObject(pPage);
-        if (pTO)
+        // take text from title shape
+        SdrTextObj* pTO = GetTitleTextObject(pPage);
+        if(pTO && !(pTO->IsEmptyPresObj()))
         {
-            if (!(pTO->IsEmptyPresObj()))   // gesetzten Titeltext gefunden
+            OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+            if (pOPO)
             {
-                OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
-                if (pOPO)
-                {
-                    BOOL bVertical = pOPO->IsVertical();
-                    pOPO->SetVertical( FALSE );
-                    mpOutliner->AddText(*pOPO);
-                    pOPO->SetVertical( bVertical );
-                    pPara = mpOutliner->GetParagraph( mpOutliner->GetParagraphCount() - 1 );
-                    // Man sollte meinen, dass folgendes Statement unnoetig sei,
-                    // aber ueber das #39788#-Bugdoc ist eine Inkonsistenz im
-                    // Doc aufgefallen, wo Titel die Ebene 1 (nicht 0) hat.
-                    // Die Ursache ist bisher ungeklaert.
-                    mpOutliner->SetDepth( pPara, 0 );
-                }
-                else
-                {
-                    pPara = mpOutliner->Insert(String());
-
-                    // Keine harten Attribute vom vorherigen Absatz uebernehmen
-                    mpOutliner->SetParaAttribs( mpOutliner->GetAbsPos(pPara),
-                                               mpOutliner->GetEmptyItemSet() );
-                    pPara = mpOutliner->GetParagraph( mpOutliner->GetParagraphCount() - 1 );
-                }
-            }
-            else                            // leerer Praesentationstitel
-            {
-                pPara = mpOutliner->Insert(String());
-
-                // Keine harten Attribute vom vorherigen Absatz uebernehmen
-                mpOutliner->SetParaAttribs( mpOutliner->GetAbsPos(pPara),
-                                           mpOutliner->GetEmptyItemSet() );
-
-                mpOutliner->SetStyleSheet( mpOutliner->GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ) );
+                BOOL bVertical = pOPO->IsVertical();
+                pOPO->SetVertical( FALSE );
+                mpOutliner->AddText(*pOPO);
+                pOPO->SetVertical( bVertical );
+                pPara = mpOutliner->GetParagraph( mpOutliner->GetParagraphCount()-1 );
             }
         }
-        else                // kein Titeltext, also leerer Titel
+
+        if( pPara == 0 ) // no title, insert an empty paragraph
         {
             pPara = mpOutliner->Insert(String());
+            mpOutliner->SetDepth(pPara, -1);
 
             // Keine harten Attribute vom vorherigen Absatz uebernehmen
-            mpOutliner->SetParaAttribs( mpOutliner->GetAbsPos(pPara),
+            mpOutliner->SetParaAttribs( (USHORT)mpOutliner->GetAbsPos(pPara),
                                        mpOutliner->GetEmptyItemSet() );
 
             mpOutliner->SetStyleSheet( mpOutliner->GetAbsPos( pPara ), pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE ) );
         }
 
-        // selektierte Seite merken
+        pPara->SetFlag( PARAFLAG_ISPAGE );
+
+        ULONG nPara = mpOutliner->GetAbsPos( pPara );
+
+        UpdateParagraph( (USHORT)nPara );
+
+        // remember paragraph of currently selected page
         if (pPage->IsSelected())
-        {
             pTitleToSelect = pPara;
-        }
 
+        // take text from subtitle or outline
+        pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));
+        const bool bSubTitle = pTO != 0;
 
-        // Gliederungstext uebernehmen
-        pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
-        BOOL   bSubTitle = pTO != NULL;
-        if (!pTO)
-        {
+        if (!pTO) // if no subtile found, try outline
             pTO = GetOutlineTextObject(pPage);
-        }
-        if (pTO)
+
+        if(pTO && !(pTO->IsEmptyPresObj())) // found some text
         {
-            if(!(pTO->IsEmptyPresObj())) // gesetzten Gl.text gefunden
+            OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+            if (pOPO)
             {
-                OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
-                if (pOPO)
+                USHORT nParaCount1 = (USHORT)mpOutliner->GetParagraphCount();
+                BOOL bVertical = pOPO->IsVertical();
+                pOPO->SetVertical( FALSE );
+                mpOutliner->AddText(*pOPO);
+                pOPO->SetVertical( bVertical );
+
+                USHORT nParaCount2 = (USHORT)mpOutliner->GetParagraphCount();
+                for (USHORT n = nParaCount1; n < nParaCount2; n++)
                 {
-                    ULONG nParaCount1 = mpOutliner->GetParagraphCount();
-                    BOOL bVertical = pOPO->IsVertical();
-                    pOPO->SetVertical( FALSE );
-                    mpOutliner->AddText(*pOPO);
-                    pOPO->SetVertical( bVertical );
-                    if (bSubTitle)
+                    if( bSubTitle )
                     {
-                        ULONG nParaCount2 = mpOutliner->GetParagraphCount();
-                        for (ULONG nPara = nParaCount1; nPara < nParaCount2; nPara++)
-                        {
-                            Paragraph* p = mpOutliner->GetParagraph(nPara);
-                            if(p && mpOutliner->GetDepth( (USHORT) nPara ) != 1 )
-                                mpOutliner->SetDepth(p, 1);
-                        }
+                        Paragraph* p = mpOutliner->GetParagraph(n);
+                        if(p && mpOutliner->GetDepth( n ) > 0 )
+                            mpOutliner->SetDepth(p, 0);
                     }
+
+                    UpdateParagraph( n );
                 }
             }
         }
-        else                // kein Gliederungstext, also nichts einfuegen
-        {
-        }
     }
 
-    // Cursor an den Anfang stellen
+    // place cursor at the start
     Paragraph* pFirstPara = mpOutliner->GetParagraph( 0 );
     mpOutlinerView[0]->Select( pFirstPara, TRUE, FALSE );
     mpOutlinerView[0]->Select( pFirstPara, FALSE, FALSE );
 
-    // Titel der selektierten Seite des Models im Outliner selektieren
+    // select title of slide that was selected
     if (pTitleToSelect)
-    {
         mpOutlinerView[0]->Select(pTitleToSelect, TRUE, FALSE);
-    }
 
     SetLinks();
 
     mpOutliner->EnableUndo(TRUE);
+
+    mpOutliner->SetUpdateMode(true);
 }
 
 /*************************************************************************
@@ -1322,6 +1416,8 @@ IMPL_LINK( OutlineView, RemovingPagesHdl, OutlinerView *, EMPTYARG )
     }
     mpOutliner->UpdateFields();
 
+    InvalidateSlideNumberArea();
+
     return 1;
 }
 
@@ -1344,10 +1440,9 @@ SdPage* OutlineView::GetActualPage()
 {
     ::sd::Window* pWin = mpOutlineViewShell->GetActiveWindow();
     OutlinerView* pActiveView = GetViewByWindow(pWin);
-    ::Outliner* pOutl = pActiveView->GetOutliner();
     std::auto_ptr<List> pSelList( static_cast< List* >(pActiveView->CreateSelectionList()) );
 
-    SdPage* pCurrent = GetPageForParagraph(pOutl, static_cast<Paragraph*>(pSelList->First()) );
+    SdPage* pCurrent = GetPageForParagraph(static_cast<Paragraph*>(pSelList->First()) );
     DBG_ASSERT( pCurrent ||
                 (mpDocSh->GetUndoManager() && static_cast< sd::UndoManager *>(mpDocSh->GetUndoManager())->isInUndo()) ||
                 maDragAndDropModelGuard.get(),
@@ -1358,12 +1453,11 @@ SdPage* OutlineView::GetActualPage()
         return mpDoc->GetSdPage( 0, PK_STANDARD );
 }
 
-SdPage* OutlineView::GetPageForParagraph( ::Outliner* pOutl, Paragraph* pPara )
+SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
 {
-    if( pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) ) > 0 )
-    {
+    if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
         pPara = GetPrevTitle(pPara);
-    }
+
     sal_uInt32 nPageToSelect = 0;
     while(pPara)
     {
@@ -1389,7 +1483,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
     while( pPara )
     {
         // if this paragraph is a page ...
-        if ( pOutl->GetDepth( (USHORT) nParaPos ) == 0 )
+        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             // see if we already skiped enough pages
             if( 0 == nPagesToSkip )
@@ -1446,9 +1540,9 @@ void OutlineView::SetSelectedPages()
     List* pSelParas = mpOutlinerView[0]->CreateSelectionList();
     Paragraph* pPara = (Paragraph*) pSelParas->First();
 
-    while (pPara)
+    while(pPara)
     {
-        if ( mpOutliner->GetDepth( (USHORT) mpOutliner->GetAbsPos( pPara ) ) > 0 )
+        if( !pPara->HasFlag(PARAFLAG_ISPAGE) )
         {
             pSelParas->Remove();
             pPara = (Paragraph*) pSelParas->GetCurObject();
@@ -1465,9 +1559,9 @@ void OutlineView::SetSelectedPages()
     ULONG nParaPos = 0;
     pPara = mpOutliner->GetParagraph( 0 );
 
-    while (pPara)
+    while(pPara)
     {
-        if ( mpOutliner->GetDepth( (USHORT) nParaPos ) == 0 )                     // eine Seite?
+        if( pPara->HasFlag(PARAFLAG_ISPAGE) )                     // eine Seite?
         {
             SdPage* pPage = mpDoc->GetSdPage(nPos, PK_STANDARD);
             DBG_ASSERT(pPage!=NULL,
@@ -1504,10 +1598,12 @@ void OutlineView::SetLinks()
     mpOutliner->SetEndMovingHdl(LINK(this, OutlineView, EndMovingHdl));
     mpOutliner->SetRemovingPagesHdl(LINK(this, OutlineView, RemovingPagesHdl));
     mpOutliner->SetIndentingPagesHdl(LINK(this, OutlineView, IndentingPagesHdl));
-    mpOutliner->SetMinDepth(0);
     mpOutliner->SetStatusEventHdl(LINK(this, OutlineView, StatusEventHdl));
     mpOutliner->SetBeginDropHdl(LINK(this,OutlineView, BeginDropHdl));
     mpOutliner->SetEndDropHdl(LINK(this,OutlineView, EndDropHdl));
+    mpOutliner->SetPaintFirstLineHdl(LINK(this,OutlineView,PaintingFirstLineHdl));
+    mpOutliner->SetBeginPasteOrDropHdl(LINK(this,OutlineView, BeginPasteOrDropHdl));
+    mpOutliner->SetEndPasteOrDropHdl(LINK(this,OutlineView, EndPasteOrDropHdl));
 }
 
 
@@ -1530,7 +1626,9 @@ void OutlineView::ResetLinks() const
     mpOutliner->SetStatusEventHdl(aEmptyLink);
     mpOutliner->SetRemovingPagesHdl(aEmptyLink);
     mpOutliner->SetIndentingPagesHdl(aEmptyLink);
-    mpOutliner->SetMinDepth(0);
+    mpOutliner->SetDrawPortionHdl(aEmptyLink);
+    mpOutliner->SetBeginPasteOrDropHdl(aEmptyLink);
+    mpOutliner->SetEndPasteOrDropHdl(aEmptyLink);
 }
 
 /*************************************************************************
@@ -1630,6 +1728,7 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
         {
             case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
                 SetActualPage(mpOutlineViewShell->GetActualPage());
+                InvalidateSlideNumberArea();
                 break;
 
             case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
@@ -1642,7 +1741,7 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
                         ::sd::Window* pWindow = mpOutlineViewShell->GetActiveWindow();
                         if (pWindow != NULL)
                             pWindow->Invalidate();
-               }
+                    }
                 }
                 break;
         }
@@ -1841,6 +1940,206 @@ void OutlineView::TryToMergeUndoActions()
     }
 }
 
+IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
+{
+    if( pInfo && mpOutliner )
+    {
+        Paragraph* pPara = mpOutliner->GetParagraph( pInfo->mnPara );
+        EditEngine& rEditEngine = const_cast< EditEngine& >( mpOutliner->GetEditEngine() );
+
+        Size aImageSize( pInfo->mpOutDev->PixelToLogic( maSlideImage.GetSizePixel()  ) );
+        Size aOffset( 100, 100 );
+
+        // paint slide number
+        if( pPara && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        {
+            long nPage = 0; // todo, printing??
+            for ( USHORT n = 0; n <= pInfo->mnPara; n++ )
+            {
+                Paragraph* p = mpOutliner->GetParagraph( n );
+                if ( p->HasFlag(PARAFLAG_ISPAGE) )
+                    nPage++;
+            }
+
+            long nBulletHeight = (long)mpOutliner->GetLineHeight( pInfo->mnPara );
+            long nFontHeight = 0;
+            if ( !rEditEngine.IsFlatMode() )
+            {
+//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetParaAttrib( pInfo->mnPara, EE_CHAR_FONTHEIGHT );
+//              nBulletHeight = rFH.GetHeight();
+                nFontHeight = nBulletHeight / 5;
+            }
+            else
+            {
+//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
+ //               nBulletHeight = rFH.GetHeight();
+                nFontHeight = (nBulletHeight * 10) / 25;
+            }
+
+            Size aFontSz( 0, nFontHeight );
+
+            Size aOutSize( 2000, nBulletHeight );
+
+            const float fImageHeight = ((float)aOutSize.Height() * (float)4) / (float)7;
+            const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
+            aImageSize.Width() = (long)( fImageRatio * fImageHeight );
+            aImageSize.Height() = (long)( fImageHeight );
+
+            Point aImagePos( pInfo->mrStartPos );
+            aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;
+            aImagePos.Y() += (aOutSize.Height() - aImageSize.Height()) / 2;
+
+            pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
+
+            const bool bVertical = mpOutliner->IsVertical();
+            const bool bRightToLeftPara = rEditEngine.IsRightToLeft( pInfo->mnPara );
+
+            LanguageType eLang = rEditEngine.GetDefaultLanguage();
+
+            Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
+            Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
+            aNewFont.SetSize( aFontSz );
+//          aNewFont.SetAlign( aBulletFont.GetAlign() );
+            aNewFont.SetVertical( bVertical );
+            aNewFont.SetOrientation( bVertical ? 2700 : 0 );
+            aNewFont.SetColor( COL_AUTO );
+            pInfo->mpOutDev->SetFont( aNewFont );
+            String aPageText = String::CreateFromInt32( nPage );
+            Size aTextSz;
+            aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
+            aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
+//            long nBulletHeight = !bVertical ? aBulletArea.GetHeight() : aBulletArea.GetWidth();
+            if ( !bVertical )
+            {
+                aTextPos.Y() += (aOutSize.Height() - aTextSz.Height()) / 2;
+                if ( !bRightToLeftPara )
+                {
+                    aTextPos.X() -= aTextSz.Width();
+                }
+                else
+                {
+                    aTextPos.X() += aTextSz.Width();
+                }
+            }
+            else
+            {
+                aTextPos.Y() -= aTextSz.Width();
+                aTextPos.X() += nBulletHeight / 2;
+            }
+            pInfo->mpOutDev->DrawText( aTextPos, aPageText );
+        }
+    }
+
+    return 0;
+}
+
+sal_Int32 OutlineView::GetPageNumberWidthPixel()
+{
+    Window* pActWin = mpOutlineViewShell->GetActiveWindow();
+    if( pActWin )
+    {
+        Font aOldFont( pActWin->GetFont() );
+        pActWin->SetFont( maPageNumberFont );
+        Size aSize( pActWin->GetTextWidth( String( RTL_CONSTASCII_USTRINGPARAM("X" ) ) ), 0 );
+        sal_Int32 nWidth = pActWin->LogicToPixel( aSize ).Width() * 5;
+
+        const String aBulletStr( sal_Unicode( 0xE011 ) );
+        pActWin->SetFont( maBulletFont);
+
+        aSize.Width() = pActWin->GetTextWidth(aBulletStr);
+        nWidth += pActWin->LogicToPixel( aSize ).Width();
+
+        pActWin->SetFont( aOldFont );
+
+        mnPageNumberWidthPixel = nWidth;
+    }
+    return mnPageNumberWidthPixel;
+}
+
+// --------------------------------------------------------------------
+
+void OutlineView::UpdateParagraph( USHORT nPara )
+{
+    if( mpOutliner )
+    {
+        SfxItemSet aNewAttrs2( mpOutliner->GetParaAttribs( nPara ) );
+        aNewAttrs2.Put( maLRSpaceItem );
+        mpOutliner->SetParaAttribs( nPara, aNewAttrs2 );
+    }
+}
+
+// --------------------------------------------------------------------
+
+void OutlineView::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
+{
+}
+
+/** this is called after a paste or drop operation, make sure that the newly inserted paragraphs
+    get the correct style sheet and new slides are inserted. */
+void OutlineView::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
+{
+    SdPage* pPage = 0;
+    SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
+
+    for( sal_uInt16 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
+    {
+        Paragraph* pPara = mpOutliner->GetParagraph( nPara );
+
+        bool bPage = pPara->HasFlag( PARAFLAG_ISPAGE  );
+
+        if( !bPage )
+        {
+            SdStyleSheet* pStyleSheet = dynamic_cast< SdStyleSheet* >( mpOutliner->GetStyleSheet( nPara ) );
+            if( pStyleSheet )
+            {
+                const OUString aName( pStyleSheet->GetApiName() );
+                if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title" ) ) )
+                    bPage = true;
+            }
+        }
+
+        if( !pPara )
+            continue; // fatality!?
+
+        if( bPage && (nPara != pInfos->nStartPara) )
+        {
+            // insert new slide for this paragraph
+            pPage = InsertSlideForParagraph( pPara );
+        }
+        else
+        {
+            // newly inserted non page paragraphs get the outline style
+            if( !pPage )
+                pPage = GetPageForParagraph( pPara );
+
+            if( pPage )
+            {
+                SfxStyleSheet* pStyle = pPage->GetStyleSheetForPresObj( bPage ? PRESOBJ_TITLE : PRESOBJ_OUTLINE );
+
+                if( !bPage )
+                {
+                    const sal_Int16 nDepth = mpOutliner->GetDepth( nPara );
+                    if( nDepth > 0 )
+                    {
+                        String aStyleSheetName( pStyle->GetName() );
+                        aStyleSheetName.Erase( aStyleSheetName.Len() - 1, 1 );
+                        aStyleSheetName += String::CreateFromInt32( nDepth );
+                        pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyle->GetFamily() ) );
+                        DBG_ASSERT( pStyle, "sd::OutlineView::OnEndPasteOrDrop(), Style not found!" );
+                    }
+                }
+
+                mpOutliner->SetStyleSheet( nPara, pStyle );
+            }
+
+            UpdateParagraph( nPara );
+        }
+    }
+}
+
+// ====================================================================
+
+
 OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
 : mrView( rView )
 {
@@ -1864,5 +2163,6 @@ OutlineViewPageChangesGuard::~OutlineViewPageChangesGuard()
     if( mpView )
         mpView->IgnoreCurrentPageChanges( false );
 }
+
 
 } // end of namespace sd
