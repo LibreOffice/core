@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh.hxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -295,5 +295,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 };
+
+class Graphic;
+//implemented in source/ui/docvw/romenu.cxx
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName );
 
 #endif
