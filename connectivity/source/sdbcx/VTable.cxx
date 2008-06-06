@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VTable.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -211,10 +211,14 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
+    Reference< XIndexAccess > xKeys;
+
     try
     {
-        if(!m_pKeys)
-            refreshKeys();
+        refreshKeys();
+        xKeys = m_pKeys;
+        if(!isNew())
+            m_pKeys = NULL;
     }
     catch( const RuntimeException& )
     {
@@ -226,7 +230,7 @@ Reference< XIndexAccess > SAL_CALL OTable::getKeys(  ) throw(RuntimeException)
         // allowed
     }
 
-    return m_pKeys;
+    return xKeys;
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
