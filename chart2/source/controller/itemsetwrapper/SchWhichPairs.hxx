@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchWhichPairs.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,10 @@
 namespace
 {
 
+#define CHARACTER_WHICHPAIRS \
+    EE_ITEMS_START, EE_ITEMS_END,  \
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING
+
 const USHORT nTitleWhichPairs[] =
 {
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
@@ -49,14 +53,14 @@ const USHORT nTitleWhichPairs[] =
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     0
 };
 
 const USHORT nAxisWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,                          //  1000 -  1016  svx/xdef.hxx
-    EE_ITEMS_START, EE_ITEMS_END,                               //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, // 11432          svx/svxids.hrc
     SCHATTR_AXISTYPE, SCHATTR_AXISTYPE,                         //    39          sch/schattr.hxx
@@ -71,7 +75,7 @@ const USHORT nAxisWhichPairs[] =
 const USHORT nAllAxisWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SCHATTR_TEXT_START, SCHATTR_TEXT_END,           //     4 -     6  sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,     //    54          sch/schattr.hxx
@@ -112,7 +116,7 @@ const USHORT nLegendWhichPairs[] =
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SCHATTR_LEGEND_START, SCHATTR_LEGEND_END,       //     3 -     3  sch/schattr.hxx
     0
 };
@@ -133,6 +137,7 @@ const USHORT nDataLabelWhichPairs[] =
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              /*  1000 -  1016  svx/xdef.hxx   */ \
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */ \
     EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  svx/eeitem.hxx */ \
+    SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, \
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
@@ -181,7 +186,7 @@ const USHORT nAreaWhichPairs[] =
 
 const USHORT nTextWhichPairs[] =
 {
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     0
@@ -189,7 +194,7 @@ const USHORT nTextWhichPairs[] =
 
 const USHORT nTextOrientWhichPairs[] =
 {
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     0
@@ -213,7 +218,7 @@ const USHORT nErrorBarWhichPairs[]=
 
 const USHORT nCharacterPropertyWhichPairs[] =
 {
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     0
 };
 
@@ -260,7 +265,7 @@ const USHORT nRegEquationWhichPairs[] =
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
-    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    CHARACTER_WHICHPAIRS,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     0
 };
