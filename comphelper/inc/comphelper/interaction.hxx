@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interaction.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
+#include <com/sun/star/task/XInteractionPassword.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "comphelper/comphelperdllapi.h"
 
@@ -112,6 +113,29 @@ namespace comphelper
     //= OInteractionRetry
     //=========================================================================
     typedef OInteraction< ::com::sun::star::task::XInteractionRetry >   OInteractionRetry;
+
+    //=========================================================================
+    //= OInteractionPassword
+    //=========================================================================
+    class COMPHELPER_DLLPUBLIC OInteractionPassword : public OInteraction< ::com::sun::star::task::XInteractionPassword >
+    {
+    public:
+        OInteractionPassword()
+        {
+        }
+
+        OInteractionPassword( const ::rtl::OUString& _rInitialPassword )
+            :m_sPassword( _rInitialPassword )
+        {
+        }
+
+        // XInteractionPassword
+        virtual void SAL_CALL setPassword( const ::rtl::OUString& _Password ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        ::rtl::OUString m_sPassword;
+    };
 
     //=========================================================================
     //= OInteractionRequest
