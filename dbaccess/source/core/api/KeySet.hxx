@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: KeySet.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,7 @@ namespace dbaccess
         SelectColumnsMetaData*                                  m_pColumnNames;         // contains all column names
         SelectColumnsMetaData*                                  m_pForeignColumnNames;  // contains all column names of the rest
         connectivity::OSQLTable                                 m_xTable; // reference to our table
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xTableKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement>   m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
@@ -133,6 +134,7 @@ namespace dbaccess
         virtual ~OKeySet();
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xTableKeys,
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer);
 
