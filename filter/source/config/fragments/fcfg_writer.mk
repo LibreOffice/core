@@ -1,32 +1,5 @@
 all_fragments+=writer
 
-
-.IF "$(WITH_BINFILTER)" != "NO"
-T4_WRITER_BINFILTER = \
-    writer_StarWriter_10 \
-    writer_StarWriter_20 \
-    writer_StarWriter_30 \
-    writer_StarWriter_30_VorlageTemplate \
-    writer_StarWriter_40 \
-    writer_StarWriter_40_VorlageTemplate \
-    writer_StarWriter_50 \
-    writer_StarWriter_50_VorlageTemplate \
-    writer_StarWriter_DOS
-F4_WRITER_BINFILTER = \
-    StarWriter_1_0 \
-    StarWriter_2_0 \
-    StarWriter_3_0 \
-    StarWriter_3_0_Vorlage_Template \
-    StarWriter_4_0 \
-    StarWriter_4_0_Vorlage_Template \
-    StarWriter_5_0 \
-    StarWriter_5_0_Vorlage_Template \
-    StarWriter_DOS
-.ELSE
-T4_WRITER_BINFILTER =
-F4_WRITER_BINFILTER =
-.ENDIF
-
 # -----------------------------------------------
 # count = 39
 T4_WRITER = \
@@ -44,7 +17,6 @@ T4_WRITER = \
     writer_MS_Word_97_Vorlage \
     writer_Rich_Text_Format \
     writer_StarOffice_XML_Writer \
-    $(T4_WRITER_BINFILTER) \
     writer_WordPerfect_Document \
     writer_T602_Document \
     writer_Text \
@@ -80,7 +52,6 @@ F4_WRITER = \
     MS_Word_97_Vorlage \
     Rich_Text_Format \
     StarOffice_XML__Writer_ \
-    $(F4_WRITER_BINFILTER) \
     WordPerfect \
     T602Document \
     Text \
@@ -107,9 +78,6 @@ F4_UI_WRITER = \
     MS_Word_95_Vorlage_ui \
     MS_Word_97_Vorlage_ui \
     StarOffice_XML__Writer__ui \
-    StarWriter_3_0_Vorlage_Template_ui \
-    StarWriter_4_0_Vorlage_Template_ui \
-    StarWriter_5_0_Vorlage_Template_ui \
     Text_ui \
     Text__encoded__ui \
     writer_JustSystem_Ichitaro_10_template_ui \
