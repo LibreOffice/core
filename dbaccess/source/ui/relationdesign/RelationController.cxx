@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RelationController.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -415,95 +415,101 @@ void ORelationController::loadData()
 // -----------------------------------------------------------------------------
 void ORelationController::loadTableData(const Any& _aTable)
 {
-    Reference<XIndexAccess> xKeys;
-    Reference<XKeysSupplier> xKeySup(_aTable,UNO_QUERY);
+    Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
+    const ::rtl::OUString sSourceName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
+    TTableWindowData::value_type pReferencingTable = existsTable(sSourceName);
+    bool bNotFound = true, bAdded = false;
+    if ( !pReferencingTable )
+    {
+        pReferencingTable.reset(new OTableWindowData(xTableProp,sSourceName, sSourceName));
+        pReferencingTable->ShowAll(FALSE);
+        bAdded = true;
+        m_vTableData.push_back(pReferencingTable);
+    }
 
-    if ( xKeySup.is() )
+    Reference<XIndexAccess> xKeys = pReferencingTable->getKeys();
+    Reference<XKeysSupplier> xKeySup(xTableProp,UNO_QUERY);
+
+    if ( !xKeys.is() && xKeySup.is() )
     {
         xKeys = xKeySup->getKeys();
-        if ( xKeys.is() )
+    }
+
+    if ( xKeys.is() )
+    {
+        Reference<XPropertySet> xKey;
+        const sal_Int32 nCount = xKeys->getCount();
+        for(sal_Int32 i = 0 ; i < nCount ; ++i)
         {
-            Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
-            Reference<XPropertySet> xKey;
-            for(sal_Int32 i=0;i< xKeys->getCount();++i)
+            xKeys->getByIndex(i) >>= xKey;
+            sal_Int32 nKeyType = 0;
+            xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if ( KeyType::FOREIGN == nKeyType )
             {
-                xKeys->getByIndex(i) >>= xKey;
-                sal_Int32 nKeyType = 0;
-                xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if ( KeyType::FOREIGN == nKeyType )
+                bNotFound = false;
+                ::rtl::OUString sReferencedTable;
+                xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
+                //////////////////////////////////////////////////////////////////////
+                // insert windows
+                TTableWindowData::value_type pReferencedTable = existsTable(sReferencedTable);
+                if ( !pReferencedTable )
                 {
-                    ::rtl::OUString sSourceName,sReferencedTable;
-
-                    sSourceName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
-                    xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-                    //////////////////////////////////////////////////////////////////////
-                    // insert windows
-                    TTableWindowData::value_type pReferencingTable = existsTable(sSourceName);
-                    if ( !pReferencingTable )
+                    if ( m_xTables->hasByName(sReferencedTable) )
                     {
-                        pReferencingTable.reset(new OTableWindowData(xTableProp,sSourceName, sSourceName));
-                        pReferencingTable->ShowAll(FALSE);
-                        m_vTableData.push_back(pReferencingTable);
+                        Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
+                        pReferencedTable.reset(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable));
+                        pReferencedTable->ShowAll(FALSE);
+                        m_vTableData.push_back(pReferencedTable);
                     }
-
-                    TTableWindowData::value_type pReferencedTable = existsTable(sReferencedTable);
-                    if ( !pReferencedTable )
-                    {
-                        if ( m_xTables->hasByName(sReferencedTable) )
-                        {
-                            Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
-                            pReferencedTable.reset(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable));
-                            pReferencedTable->ShowAll(FALSE);
-                            m_vTableData.push_back(pReferencedTable);
-                        }
-                        else
-                            continue; // table name could not be found so we do not show this table releation
-                    }
-
-                    ::rtl::OUString sKeyName;
-                    xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
-                    //////////////////////////////////////////////////////////////////////
-                    // insert connection
-                    ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
-                    m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
-                    //////////////////////////////////////////////////////////////////////
-                    // insert columns
-                    Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
-                    OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
-                    Reference<XNameAccess> xColumns     = xColsSup->getColumns();
-                    Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
-                    const ::rtl::OUString* pIter    = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
-                    ::rtl::OUString sColumnName,sRelatedName;
-                    for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
-                    {
-                        Reference<XPropertySet> xPropSet;
-                        xColumns->getByName(*pIter) >>= xPropSet;
-                        OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
-                        if ( xPropSet.is() )
-                        {
-                            xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
-                            xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
-                        }
-                        pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
-                    }
-                    //////////////////////////////////////////////////////////////////////
-                    // Update/Del-Flags setzen
-                    sal_Int32   nUpdateRule = 0;
-                    sal_Int32   nDeleteRule = 0;
-                    xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
-                    xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
-
-                    pTabConnData->SetUpdateRules( nUpdateRule );
-                    pTabConnData->SetDeleteRules( nDeleteRule );
-
-                    //////////////////////////////////////////////////////////////////////
-                    // Kardinalitaet setzen
-                    pTabConnData->SetCardinality();
+                    else
+                        continue; // table name could not be found so we do not show this table releation
                 }
+
+                ::rtl::OUString sKeyName;
+                xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
+                //////////////////////////////////////////////////////////////////////
+                // insert connection
+                ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
+                m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
+                //////////////////////////////////////////////////////////////////////
+                // insert columns
+                Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
+                OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
+                Reference<XNameAccess> xColumns     = xColsSup->getColumns();
+                Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
+                const ::rtl::OUString* pIter    = aNames.getConstArray();
+                const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+                ::rtl::OUString sColumnName,sRelatedName;
+                for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
+                {
+                    Reference<XPropertySet> xPropSet;
+                    xColumns->getByName(*pIter) >>= xPropSet;
+                    OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
+                    if ( xPropSet.is() )
+                    {
+                        xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
+                        xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
+                    }
+                    pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
+                }
+                //////////////////////////////////////////////////////////////////////
+                // Update/Del-Flags setzen
+                sal_Int32   nUpdateRule = 0;
+                sal_Int32   nDeleteRule = 0;
+                xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
+                xKey->getPropertyValue(PROPERTY_DELETERULE) >>= nDeleteRule;
+
+                pTabConnData->SetUpdateRules( nUpdateRule );
+                pTabConnData->SetDeleteRules( nDeleteRule );
+
+                //////////////////////////////////////////////////////////////////////
+                // Kardinalitaet setzen
+                pTabConnData->SetCardinality();
             }
         }
-    }
+    } // if ( xKeys.is() )
+    if ( bNotFound && bAdded )
+        m_vTableData.pop_back();
 }
 // -----------------------------------------------------------------------------
 TTableWindowData::value_type ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
