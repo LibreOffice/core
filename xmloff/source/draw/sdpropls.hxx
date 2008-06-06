@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpropls.hxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -259,7 +259,7 @@ public:
     ~XMLShapePropertySetMapper();
 };
 
-class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper2
+class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
     XMLTextListAutoStylePool *mpListAutoPool;
