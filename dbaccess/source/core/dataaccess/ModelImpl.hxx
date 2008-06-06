@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -386,7 +386,7 @@ public:
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments
     */
-    void            checkMacrosOnLoading();
+    bool            checkMacrosOnLoading();
 
     /** adjusts our document's macro execution mode, without using any UI, assuming the user
         would reject execution of macros, if she would have been asked.
