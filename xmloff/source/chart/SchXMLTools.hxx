@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SchXMLTools.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,8 @@
 #include <xmloff/xmltoken.hxx>
 #include "transporttypes.hxx"
 
+#include <com/sun/star/frame/XModel.hpp>
+
 namespace com { namespace sun { namespace star {
     namespace chart2 {
         class XChartDocument;
@@ -51,6 +53,9 @@ class SvXMLExport;
 
 namespace SchXMLTools
 {
+    bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+    bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel);
+
     enum SchXMLChartTypeEnum
     {
         XML_CHART_CLASS_LINE,
