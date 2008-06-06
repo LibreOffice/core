@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updateinstalldialog.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +53,6 @@
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/ucb/XProgressHandler.hpp"
