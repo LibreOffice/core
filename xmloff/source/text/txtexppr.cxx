@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtexppr.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -565,14 +565,6 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
         case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
-        case CTF_ISNUMBERING:
-            {
-                if( GetExport().isExperimentalOdfExportEnabled() )
-                {
-                    propertie->mnIndex = -1;
-                }
-                break;
-            }
         }
     }
 
