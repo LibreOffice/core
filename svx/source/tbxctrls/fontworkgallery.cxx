@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fontworkgallery.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,10 +187,7 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
     {
         SdrOutliner& rOutl = mpModel->GetDrawOutliner(pObj);
 
-        rOutl.SetMinDepth(0);
-
         USHORT nOutlMode = rOutl.GetMode();
-        USHORT nMinDepth = rOutl.GetMinDepth();
         Size aPaperSize = rOutl.GetPaperSize();
         BOOL bUpdateMode = rOutl.GetUpdateMode();
         rOutl.SetUpdateMode(FALSE);
@@ -211,7 +208,6 @@ void FontWorkGalleryDialog::changeText( SdrTextObj* pObj )
         rOutl.Init( nOutlMode );
         rOutl.SetParaAttribs( 0, rOutl.GetEmptyItemSet() );
         rOutl.SetUpdateMode( bUpdateMode );
-        rOutl.SetMinDepth( nMinDepth );
         rOutl.SetPaperSize( aPaperSize );
 
         rOutl.Clear();
