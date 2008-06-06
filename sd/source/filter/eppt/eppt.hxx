@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.hxx,v $
- * $Revision: 1.48 $
+ * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,7 +157,6 @@ struct PHLayout
 
 struct SOParagraph
 {
-    sal_Bool                bDepth;
     sal_Bool                bExtendedParameters;
     sal_uInt32              nParaFlags;
     sal_Int16               nBulletFlags;
@@ -183,10 +182,11 @@ struct SOParagraph
     SOParagraph()
     {
         nDepth = 0;
-        bDepth = TRUE;
         bExtendedParameters = FALSE;
         nParaFlags = 0;
         nBulletFlags = 0;
+        nBulletOfs = 0;
+        nTextOfs = 0;
         bExtendedBulletsUsed = FALSE;
         nBulletId = 0xffff;
     };
@@ -599,7 +599,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& rSize );
         void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = FALSE );
-        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bGetPropStateValue = FALSE );
+        void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = FALSE );
 
     public :
 
