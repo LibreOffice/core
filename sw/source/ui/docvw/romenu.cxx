@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: romenu.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -394,16 +394,12 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             pClipCntnr->CopyToClipboard( pWin );
     }
 }
-                                             //nicht const, weil GetLink() noch
-                                             //nicht const. kann bei naechster
-                                             //Aenderung dieses Files mit
-                                             //erledigt werden.
-static void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
+static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
 {
     // dann ggfs. ueber die native-Info der Grafik den "besten"
     // Filter vorschlagen
     const sal_Char* pExt = "png";
-    switch( rGrf.GetLink().GetType() )
+    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
     {
         case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
         case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
@@ -419,7 +415,7 @@ static void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
 
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
-    SvtPathOptions aPathOpt;
+/*  SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
 
     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -427,7 +423,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
-    aPath.SetSmartURL( sGrfPath);
+    aPath.SetSmartURL( sGrfPath);*/
 
     //Namen der Grafik herausfischen.
     String aName;
@@ -448,6 +444,24 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     }
     else
         aName = sGrfName;
+    return ExportGraphic( aGraphic, sGrfName, aName );
+}
+
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName )
+{
+    SvtPathOptions aPathOpt;
+    String sGrfPath( aPathOpt.GetGraphicPath() );
+
+    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
+    INetURLObject aPath;
+    aPath.SetSmartURL( rName );
+
+    //Namen der Grafik herausfischen.
+    String aName = rGrfName;
+
     INetURLObject aURL;
     aURL.SetSmartURL( aName );
     aPath.Append( aURL.GetName() );
@@ -459,7 +473,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 
     String aExt( aURL.GetExtension() );
     if( !aExt.Len() )
-        lcl_GetPreferedExtension( aExt, aGraphic );
+        lcl_GetPreferedExtension( aExt, rGraphic );
 
     aExt.ToLowerAscii();
     USHORT nDfltFilter = USHRT_MAX;
@@ -475,7 +489,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     if ( USHRT_MAX == nDfltFilter )
     {
         //"falsche" Extension?
-        lcl_GetPreferedExtension( aExt, aGraphic );
+        lcl_GetPreferedExtension( aExt, rGraphic );
         for ( USHORT i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
             {
@@ -495,11 +509,11 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();
 
-            if( sGrfName.Len() &&
+            if( rGrfName.Len() &&
                  nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
                 //Versuchen die Originalgrafik zu speichern.
-                SfxMedium aIn( sGrfName, STREAM_READ | STREAM_NOCREATE,
+                SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE,
                                 TRUE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
@@ -525,7 +539,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
             else
                 nFilter = GRFILTER_FORMAT_DONTKNOW;
             String aFilter( rGF.GetExportFormatShortName( nFilter ) );
-            XOutBitmap::WriteGraphic( aGraphic, sPath, aFilter,
+            XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
                                         XOUTBMP_DONT_EXPAND_FILENAME );
             return sPath;
         }
