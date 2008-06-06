@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TKeys.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,44 +70,13 @@ sdbcx::ObjectType OKeysHelper::createObject(const ::rtl::OUString& _rName)
 
     if(_rName.getLength())
     {
-        ::rtl::OUString aSchema,aTable;
-        ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
-        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
-
-        Reference< XResultSet > xResult = m_pTable->getMetaData()->getImportedKeys(m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)),
-            aSchema,aTable);
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName,aCatalog;
-            while( xResult->next() )
-            {
-                // this must be outsid the "if" because we have to call in a right order
-                aCatalog    = xRow->getString(1);
-                if ( xRow->wasNull() )
-                    aCatalog = ::rtl::OUString();
-                aSchema     = xRow->getString(2);
-                aName       = xRow->getString(3);
-
-                sal_Int32 nUpdateRule = xRow->getInt(10);
-                sal_Int32 nDeleteRule = xRow->getInt(11);
-                if ( xRow->getString(12) == _rName )
-                {
-                    ::rtl::OUString aComposedName;
-                    aComposedName = ::dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aName,sal_False,::dbtools::eInDataManipulation);
-                    OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,aComposedName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
-                    xRet = pRet;
-                    break;
-                }
-            }
-        }
+        OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
+        xRet = pRet;
     }
 
     if(!xRet.is()) // we have a primary key with a system name
     {
-        OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,::rtl::OUString(),KeyType::PRIMARY,KeyRule::NO_ACTION,KeyRule::NO_ACTION);
+        OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
         xRet = pRet;
     }
 
@@ -213,26 +182,30 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     }
     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
+    sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
+    ::rtl::OUString sReferencedName;
+
     if ( nKeyType == KeyType::FOREIGN )
     {
-        ::rtl::OUString aRefTable;
-
-        descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)) >>= aRefTable;
+        descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)) >>= sReferencedName;
 
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" REFERENCES "))
-                +  ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),aRefTable,::dbtools::eInTableDefinitions);
+                +  ::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::eInTableDefinitions);
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
 
         for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
-            ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+            xColumns->getByIndex(i) >>= xColProp;
             aSql += ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))))
                             +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
         }
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
-        aSql += getKeyRuleString(sal_True   ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_UPDATERULE))));
-        aSql += getKeyRuleString(sal_False  ,getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE))));
+        descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_UPDATERULE)) >>= nUpdateRule;
+        descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DELETERULE)) >>= nDeleteRule;
+
+        aSql += getKeyRuleString(sal_True   ,nUpdateRule);
+        aSql += getKeyRuleString(sal_False  ,nDeleteRule);
     }
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -277,6 +250,8 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     {
     }
 
+    m_pTable->addKey(sNewName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(sReferencedName,nKeyType,nUpdateRule,nDeleteRule)));
+
     return createObject( sNewName );
 }
 // -----------------------------------------------------------------------------
@@ -309,7 +284,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
         else
         {
             aSql += getDropForeignKey();
-            ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+            const ::rtl::OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
             aSql += ::dbtools::quoteName( aQuote,_sElementName);
         }
 
