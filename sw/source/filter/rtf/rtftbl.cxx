@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtftbl.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,7 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <swtblfmt.hxx>
+#include <wrtswtbl.hxx>
 #include <tblenum.hxx>
 #include <frmatr.hxx>
 #include <fmtrowsplt.hxx>
@@ -330,7 +331,7 @@ void SwRTFParser::ReadTable( int nToken )
                 }
 
                 if( !nSize )
-                    ++nSize;
+                    nSize = COL_DFLT_WIDTH;
                 pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
                 aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
