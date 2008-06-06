@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +84,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Html_Thirdpartylicensereadme,
              gid_Brand_File_Images_Brand_Zip,
              gid_Brand_File_Lib_Dbghelp,
+             gid_Brand_File_Lib_Mingwm10,
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
              gid_Brand_File_Lib_Msvcm80,
@@ -560,6 +561,15 @@ File gid_Brand_File_Share_Xdg_Writer
     Dir = gid_Brand_Dir_Share_Xdg;
     Name = "writer.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined WNT && defined(_gcc3)
+File gid_Brand_File_Lib_Mingwm10
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "mingwm10.dll";
 End
 #endif
 
