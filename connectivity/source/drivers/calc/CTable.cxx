@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CTable.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
+#include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -212,6 +213,33 @@ Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int
     return xCell;
 }
 
+bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
+{
+    // look for any text cell or text result in the column
+
+    Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
+    if (xAddr.is())
+    {
+        CellRangeAddress aTotalRange = xAddr->getRangeAddress();
+        sal_Int32 nLastRow = aTotalRange.EndRow;
+        Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
+        if (xQuery.is())
+        {
+            // are there text cells in the column?
+            Reference<XSheetCellRanges> xTextContent = xQuery->queryContentCells( CellFlags::STRING );
+            if ( xTextContent.is() && xTextContent->hasElements() )
+                return true;
+
+            // are there formulas with text results in the column?
+            Reference<XSheetCellRanges> xTextFormula = xQuery->queryFormulaCells( FormulaResult::STRING );
+            if ( xTextFormula.is() && xTextFormula->hasElements() )
+                return true;
+        }
+    }
+
+    return false;
+}
+
 void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
                         sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                         ::rtl::OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
@@ -240,7 +268,8 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
         rCurrency = sal_False;          // set to true for currency below
 
         CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
-        if ( eCellType == CellContentType_TEXT )
+        // #i35178# use "text" type if there is any text cell in the column
+        if ( eCellType == CellContentType_TEXT || lcl_HasTextInColumn( xSheet, nDocColumn, nDataRow ) )
             rDataType = DataType::VARCHAR;
         else if ( eCellType == CellContentType_VALUE )
         {
