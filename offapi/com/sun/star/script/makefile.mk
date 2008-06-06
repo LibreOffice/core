@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.7 $
+# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,6 +44,7 @@ PACKAGE=com$/sun$/star$/script
 IDLFILES=\
     DocumentDialogLibraryContainer.idl\
     DocumentScriptLibraryContainer.idl\
+    LibraryNotLoadedException.idl\
     XLibraryContainer.idl\
     XLibraryContainer2.idl\
     XLibraryContainerPassword.idl\
