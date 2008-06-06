@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlimpit.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -532,17 +532,8 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                         DEF_LINE_WIDTH_4 ) )
                         return sal_False;
 
-                    sal_uInt16 nSize = sizeof( aDBorderWidths );
-                    sal_uInt16 i;
-                    for( i = 0; i < nSize; i += 4 )
-                    {
-                        if( aDBorderWidths[i+1] == nOutWidth &&
-                            aDBorderWidths[i+2] == nInWidth &&
-                            aDBorderWidths[i+3] == nDistance )
-                            break;
-                    }
-
-                    sal_uInt16 nWidth = i < nSize ? 0 : static_cast<sal_uInt16>( nOutWidth + nInWidth + nDistance );
+                    // #i61946: accept line style even it's not part of our "normal" set of line styles
+                    sal_uInt16 nWidth = 0;
 
                     if( TOP_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
