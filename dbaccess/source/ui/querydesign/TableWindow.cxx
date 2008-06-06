@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TableWindow.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,32 +242,28 @@ BOOL OTableWindow::FillListBox()
     try
     {
         // first we need the keys from the table
-        Reference< XKeysSupplier > xKeys( m_pData->getTable(), UNO_QUERY );
-        if ( xKeys.is() )
+        Reference< XIndexAccess> xKeyIndex = m_pData->getKeys();
+        // search the one and only primary key
+        if ( xKeyIndex.is() )
         {
-            Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
             Reference<XColumnsSupplier> xColumnsSupplier;
-            // search the one and only primary key
-            if ( xKeyIndex.is() )
+            for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
             {
-                for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                Reference<XPropertySet> xProp;
+                xKeyIndex->getByIndex(i) >>= xProp;
+                if ( xProp.is() )
                 {
-                    Reference<XPropertySet> xProp;
-                    xKeyIndex->getByIndex(i) >>= xProp;
-                    if ( xProp.is() )
+                    sal_Int32 nKeyType = 0;
+                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                    if(KeyType::PRIMARY == nKeyType)
                     {
-                        sal_Int32 nKeyType = 0;
-                        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                        if(KeyType::PRIMARY == nKeyType)
-                        {
-                            xColumnsSupplier.set(xProp,UNO_QUERY);
-                            break;
-                        }
+                        xColumnsSupplier.set(xProp,UNO_QUERY);
+                        break;
                     }
                 }
-                if ( xColumnsSupplier.is() )
-                    xPKeyColumns = xColumnsSupplier->getColumns();
             }
+            if ( xColumnsSupplier.is() )
+                xPKeyColumns = xColumnsSupplier->getColumns();
         }
     }
     catch(Exception&)
