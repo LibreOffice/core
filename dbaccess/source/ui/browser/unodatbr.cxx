@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodatbr.cxx,v $
- * $Revision: 1.200 $
+ * $Revision: 1.201 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2860,7 +2860,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return xDataSource;
+        return xDataSource.get();
     }
 }
 
