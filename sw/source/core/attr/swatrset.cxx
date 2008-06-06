@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swatrset.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -281,10 +281,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             {
                 SfxItemSet aTmpSet( *this );
 
-                // JP 09.02.99: und jetzt doch wieder nur entfernen
-                aTmpSet.ClearItem( RES_PAGEDESC );
-
-/*************************************************************************
                 SwPageDesc* pDstPgDesc = pDstDoc->FindPageDescByName(
                                                     pPgDesc->GetName() );
                 if( !pDstPgDesc )
@@ -297,7 +293,6 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 SwFmtPageDesc aDesc( pDstPgDesc );
                 aDesc.SetNumOffset( ((SwFmtPageDesc*)pItem)->GetNumOffset() );
                 aTmpSet.Put( aDesc );
-************************************************************************/
 
                 if( pCNd )
                     pCNd->SetAttr( aTmpSet );
