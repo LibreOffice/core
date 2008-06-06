@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SfxDocumentMetaData.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,7 +222,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getAutoloadSecs()
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAutoloadSecs(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual ::rtl::OUString SAL_CALL getDefaultTarget()
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDefaultTarget(const ::rtl::OUString & the_value)
@@ -235,11 +235,11 @@ public:
     virtual ::sal_Int16 SAL_CALL getEditingCycles()
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEditingCycles(::sal_Int16 the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual ::sal_Int32 SAL_CALL getEditingDuration()
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEditingDuration(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual void SAL_CALL resetUserData(const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::beans::XPropertyContainer > SAL_CALL
@@ -1105,17 +1105,16 @@ void SAL_CALL SfxDocumentMetaData::init(
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
-    try
-    {
-        ::rtl::OUString prefix = ::rtl::OUString::createFromAscii(
-            "/child::office:document-meta/child::office:meta");
-        css::uno::Reference<css::xml::dom::XNode> xDocNode(
-            m_xDoc, css::uno::UNO_QUERY_THROW);
+    ::rtl::OUString prefix = ::rtl::OUString::createFromAscii(
+        "/child::office:document-meta/child::office:meta");
+    css::uno::Reference<css::xml::dom::XNode> xDocNode(
+        m_xDoc, css::uno::UNO_QUERY_THROW);
+    m_xParent.clear();
+    try {
         m_xParent = xPath->selectSingleNode(xDocNode, prefix);
-    }
-    catch(com::sun::star::uno::RuntimeException&)
-    {
-        DBG_ERROR("caught RuntimeException from libxml!");
+    } catch (com::sun::star::uno::Exception &) {
+//        DBG_WARNING("SfxDocumentMetaData::init: "
+//            "caught RuntimeException from libxml!");
     }
 
     if (!m_xParent.is()) {
@@ -1650,12 +1649,12 @@ SfxDocumentMetaData::getAutoloadSecs() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    if (the_value < 0) throw css::uno::RuntimeException(
+    if (the_value < 0) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii(
             "SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
-            *this);
+            *this, 0);
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
     if (m_AutoloadSecs != the_value) {
@@ -1761,13 +1760,13 @@ SfxDocumentMetaData::getEditingCycles() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    ::osl::MutexGuard g(m_aMutex);
-    if (the_value < 0) throw css::uno::RuntimeException(
+    if (the_value < 0) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii(
                 "SfxDocumentMetaData::setEditingCycles: argument is negative"),
-                *this);
+                *this, 0);
+    ::osl::MutexGuard g(m_aMutex);
     ::rtl::OUStringBuffer buf;
     ::sax::Converter::convertNumber(buf, the_value);
     setMetaText("meta:editing-cycles", buf.makeStringAndClear());
@@ -1782,12 +1781,12 @@ SfxDocumentMetaData::getEditingDuration() throw (css::uno::RuntimeException)
 
 void SAL_CALL
 SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
-    if (the_value < 0) throw css::uno::RuntimeException(
+    if (the_value < 0) throw css::lang::IllegalArgumentException(
         ::rtl::OUString::createFromAscii(
             "SfxDocumentMetaData::setEditingDuration: argument is negative"),
-            *this);
+            *this, 0);
     ::osl::MutexGuard g(m_aMutex);
     setMetaText("meta:editing-duration", durationToText(the_value));
 }
