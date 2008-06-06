@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: conn_shared_res.src,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,12 +73,12 @@ String STR_MOZILLA_IS_RUNNING
 
 String STR_COULD_NOT_RETRIEVE_AB_ENTRY
 {
-    Text [ en-US ] = "An address book entry could not be retrieved, an unknown error occured.";
+    Text [ en-US ] = "An address book entry could not be retrieved, an unknown error occurred.";
 };
 
 String STR_COULD_NOT_GET_DIRECTORY_NAME
 {
-    Text [ en-US ] = "An address book directory name could not be retrieved, an unknown error occured.";
+    Text [ en-US ] = "An address book directory name could not be retrieved, an unknown error occurred.";
 };
 
 String STR_TIMEOUT_WAITING
@@ -88,7 +88,7 @@ String STR_TIMEOUT_WAITING
 
 String STR_ERR_EXECUTING_QUERY
 {
-    Text [ en-US ] = "An error occured while executing the query.";
+    Text [ en-US ] = "An error occurred while executing the query.";
 };
 
 String STR_MOZILLA_IS_RUNNIG_NO_CHANGES
