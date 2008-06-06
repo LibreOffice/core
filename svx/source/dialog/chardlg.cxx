@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.101 $
+ * $Revision: 1.102 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,6 +114,7 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/twolinesitem.hxx>
 #include <charhiddenitem.hxx>
+#include <svtools/stritem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/charrotateitem.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
@@ -246,6 +247,17 @@ void SvxCharBasePage::ActivatePage( const SfxItemSet& rSet )
     SvxFont&        rCJKFont = GetPreviewCJKFont();
     SvxFont&        rCTLFont = GetPreviewCTLFont();
     USHORT          nWhich;
+
+    nWhich = GetWhich( SID_CHAR_DLG_PREVIEW_STRING );
+    if( ISITEMSET )
+    {
+        const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
+        ::rtl::OUString aString = rItem.GetValue();
+        if( aString.getLength() != 0 )
+            m_aPreviewWin.SetPreviewText( aString );
+        else
+            m_aPreviewWin.SetFontNameAsPreviewText();
+    }
 
     // Underline
     FontUnderline eUnderline;
