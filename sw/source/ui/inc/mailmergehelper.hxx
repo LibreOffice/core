@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mailmergehelper.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +38,10 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/mail/XMailMessage.hpp"
 #include "com/sun/star/datatransfer/XTransferable.hpp"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <vcl/scrbar.hxx>
 #include "swdllapi.h"
 
@@ -245,7 +247,11 @@ public:
   -----------------------------------------------------------------------*/
 class SwMailTransferable :
         public SwMutexBase,
-        public cppu::WeakComponentImplHelper1< ::com::sun::star::datatransfer::XTransferable >
+        public cppu::WeakComponentImplHelper2
+        <
+            ::com::sun::star::datatransfer::XTransferable,
+            ::com::sun::star::beans::XPropertySet
+        >
 {
     rtl::OUString  m_aMimeType;
     rtl::OUString  m_sBody;
@@ -266,6 +272,16 @@ class SwMailTransferable :
     virtual ::sal_Bool SAL_CALL
                         isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
                             throw (::com::sun::star::uno::RuntimeException);
+
+    //XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
 };
 
 /*-- 22.06.2004 16:38:34---------------------------------------------------
