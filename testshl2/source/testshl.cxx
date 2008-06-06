@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: testshl.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,12 +75,12 @@ void initTPrint(GetOpt & _aOptions)
     st_nBits = FileHelper::createFlags(_aOptions);
 }
 
-void my_sleep(int sec)
+void my_sleep(int nCount)
 {
 #ifdef WNT
-    WinSleep(sec * 1000);
+    WinSleep(nCount * 2);
 #else
-    usleep(sec * 1000000); // 10 ms
+    usleep(nCount * 2000);
 #endif
 }
 
@@ -198,13 +198,24 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
 
 int starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper);
 
-void endless()
+void makeslow()
 {
-    while(1)
+    sal_Int32 n = 0;
+    for (sal_Int32 i=0;i<1024 * 1024;i++)
     {
-        my_sleep(1);
+        ++n;
     }
 }
+//  void endless()
+//  {
+//      sal_Int64 n = 0;
+//      while(1)
+//      {
+//          n++;
+//          makeslow();
+//          my_sleep(1);
+//      }
+//  }
 
 // ----------------------------------- Main -----------------------------------
 
@@ -235,6 +246,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
         "-endless,      testshl runs endless, for test only!!!",
         "-whereami,     shows at runtime, which function is tested next.",
         "-noerroronexit, if this is given the program exits with return code 0 even if runtime errors occurs.",
+        "-hardexit,     Exit the tests without call any dtor.",
+        "-absolutepath, Use the given absolute path to local the test library.",
+        "-localpath,    Make a chdir() to the test library path, then try to load the library without given path.",
         "-h:s,          display help or help on option",
         "-help:s,       see -h",
         NULL
@@ -252,12 +266,29 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.23 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.24 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
     {
-        endless();
+//        endless();
+
+// With parameter -endless a test is attachable by debuggers
+// Attach to testshl2.exe set a breakpoint in this while (1) loop
+
+// Then you have to set the process pointer (Set next Statement) to
+// the next line outside the while loop.
+// Now it is possible to debug the whole code.
+// Never source this code to a function, because you will
+// lost the variables like opt.
+
+        sal_Int64 n = 0;
+        while(1)
+        {
+            n++;
+            makeslow();
+            my_sleep(1);
+        }
     }
 
     int  nExitCode = 0;
@@ -322,29 +353,45 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 // -----------------------------------------------------------------------------
 // this function is only inserted to give a better startpoint for breakpoints
 
-int starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
+int starttest(GetOpt & _opt, AutomaticRegisterHelper const& aHelper)
 {
     // create a TestResult
-    std::auto_ptr<CppUnit::TestResult> pResult = initResult(opt);
+    std::auto_ptr<CppUnit::TestResult> pResult = initResult(_opt);
 
     // call all test functions
     aHelper.CallAll(pResult.get());
 
     // create and open log
-    std::auto_ptr<Outputter> pOutput = initOutputter(opt);
+    std::auto_ptr<Outputter> pOutput = initOutputter(_opt);
 
     // give the output
     pResult->print(*pOutput.get());
 
     // this is a debug extension, so you can read the output and after a key is pressed the program will end.
-    if (opt.hasOpt("-waitforkey"))
+    if (_opt.hasOpt("-waitforkey"))
     {
         fprintf(stderr, "Press return key.");
         fflush(stderr);
         getchar();
     }
 
-    removeSignalFile(opt);
+    if (_opt.hasOpt("-verbose"))
+    {
+        fprintf(stderr, "Remove signal handlers");
+    }
+
+    removeSignalFile(_opt);
+
+    if (_opt.hasOpt("-verbose"))
+    {
+        fprintf(stderr, " [done]\n");
+    }
+
+    if (_opt.hasOpt("-hardexit"))
+    {
+        fprintf(stderr, "Hardexit forced.\n");
+        abort();
+    }
 
     int nExit = pResult->getExitValue();
     return nExit;
