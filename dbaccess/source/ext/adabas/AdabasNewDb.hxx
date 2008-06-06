@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasNewDb.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +143,6 @@ namespace adabasui
         DECL_LINK( TerminateHdl,        void        * );
 
         void CheckBitmaps();
-        void ShowErrorText(INT32 _nError);
 
         DECL_LINK(OnError, void*);
         DECL_LINK(OnNoDefaultPath, void*);
@@ -155,7 +154,7 @@ namespace adabasui
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XCreateCatalog>& _rxCreateCatalog,
                         const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                         BOOL _bRestore=FALSE);
-        ~OAdabasNewDbDlg();
+        virtual ~OAdabasNewDbDlg();
 
         ::rtl::OUString GetDatabaseName()       const { return m_ET_DATABASENAME.GetText(); }
         ::rtl::OUString GetControlUser()        const { return m_ET_CONUSR.GetText();       }

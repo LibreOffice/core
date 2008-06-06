@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasNewDb.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -570,43 +570,6 @@ IMPL_LINK( OAdabasNewDbDlg, TerminateHdl, void*, /*NOTUSABLE*/ )
 {
     EndDialog(RET_OK);
     return 0;
-}
-// -----------------------------------------------------------------------------
-void OAdabasNewDbDlg::ShowErrorText(INT32 _nError)
-{
-    String aErrorMsg;
-    BOOL bError = TRUE;
-    switch(_nError)
-    {
-        case -5:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_NO_NEW_CONFIG_FILE));
-            break;
-        case -7:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_WRONG_KERNEL_PARAMETER));
-            break;
-        case -8:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_NO_SERVER_START));
-            break;
-        case -9:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_NOT_ENOUGH_SPACE));
-            aErrorMsg .SearchAndReplace(String::CreateFromAscii("\'#\'"),m_SYSDEV_File);
-            break;
-        case -10:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_NOT_ENOUGH_SPACE));
-            aErrorMsg.SearchAndReplace(String::CreateFromAscii("\'#\'"),m_TRANSDEV_File);
-            break;
-        case -11:
-            aErrorMsg = String(ModuleRes(STR_ADABAS_NOT_ENOUGH_SPACE));
-            aErrorMsg.SearchAndReplace(String::CreateFromAscii("\'#\'"),m_DATADEV_File);
-            break;
-        case 0:
-        default:
-            bError = FALSE;
-    }
-    if(bError)
-    {
-        //  OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),aErrorMsg).Execute();
-    }
 }
 //------------------------------------------------------------------------
 IMPL_LINK( OAdabasNewDbDlg, LoseFocusHdl, Edit *, pEdit )

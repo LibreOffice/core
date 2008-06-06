@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: adabasui_resource.hrc,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,16 +68,16 @@
 // strings
 
 #define STR_ADABAS_NO_BACKUP_FILE           RID_STRING_START + 0
-#define STR_ADABAS_NOT_ENOUGH_SPACE         RID_STRING_START + 1
+//
 #define STR_NO_SAME_USER                    RID_STRING_START + 2
 #define STR_DEVSPACE_NO_FILE                RID_STRING_START + 3
 #define STR_NO_PERMISSION                   RID_STRING_START + 4
 #define STR_FILE_OR_DIR_UNKNOWN             RID_STRING_START + 5
 #define STR_STAT_WARNING                    RID_STRING_START + 6
-#define STR_ADABAS_NO_NEW_CONFIG_FILE       RID_STRING_START + 7
+//
 #define STR_ADABAS_NO_PARAM_SET             RID_STRING_START + 8
-#define STR_ADABAS_NO_SERVER_START          RID_STRING_START + 9
-#define STR_ADABAS_WRONG_KERNEL_PARAMETER   RID_STRING_START + 10
+//
+//
 #define STR_ADABAS_NO_DB_CREATED            RID_STRING_START + 11
 #define STR_ADABAS_NO_SYSTEM_TABLES         RID_STRING_START + 12
 #define STR_ERROR_IN_ADABAS_INSTALLATION    RID_STRING_START + 13

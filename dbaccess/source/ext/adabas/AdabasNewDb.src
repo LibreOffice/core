@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: AdabasNewDb.src,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -364,24 +364,10 @@ Image DEFAULT_BLUE
     MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 /* Fehlermeldungen beim Erstellen einer Adabas DB */
-String STR_ADABAS_NO_NEW_CONFIG_FILE
-{
-    Text[ en-US ]   = "An \"empty\" DB configuration file cannot be created.";
-};
 
 String STR_ADABAS_NO_PARAM_SET
 {
     Text[ en-US ]   = "No entry could be written in the configuration file.";
-};
-
-String STR_ADABAS_WRONG_KERNEL_PARAMETER
-{
-    Text[ en-US ]   = "The parameters set for the kernel are not large enough. Please see the Help.";
-};
-
-String STR_ADABAS_NO_SERVER_START
-{
-    Text[ en-US ]   = "The DB server could not be started.";
 };
 
 String STR_ADABAS_NO_DB_CREATED
@@ -401,11 +387,6 @@ String STR_ADABAS_NO_BACKUP_FILE
 InfoBox INFO_STR_MAX_FILE_LENGTH
 {
     Message[ en-US ]    = "The fully qualified file cannot be longer than \'#\' characters.";
-};
-
-String STR_ADABAS_NOT_ENOUGH_SPACE
-{
-    Text[ en-US ]   = "An error occurred as the file \'#\' was being created. Please check if there is enough memory available.";
 };
 
 String STR_NO_SAME_USER
