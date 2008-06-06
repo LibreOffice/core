@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: elements.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,24 +53,6 @@
 using namespace osl;
 namespace jfw
 {
-
-xmlNode* findChildNode(const xmlNode * pParent, const xmlChar* pName)
-{
-    xmlNode* ret = NULL;
-
-    if (pParent)
-    {
-        xmlNode* cur = pParent->children;
-        while (cur != NULL)
-        {
-            if (xmlStrcmp(cur->name, pName) == 0)
-                break;
-            cur = cur->next;
-        }
-        ret = cur;
-    }
-    return ret;
-}
 
 rtl::OString getElementUpdated()
 {
@@ -874,20 +856,6 @@ CNodeJavaInfo::~CNodeJavaInfo()
 {
 }
 
-CNodeJavaInfo::CNodeJavaInfo(const JavaInfo * pInfo)
-{
-    if (pInfo != NULL)
-    {
-        m_bEmptyNode = false;
-//        sAttrVendorUpdate = sUpdated;
-        sVendor = pInfo->sVendor;
-        sLocation = pInfo->sLocation;
-        sVersion = pInfo->sVersion;
-        nFeatures = pInfo->nFeatures;
-        nRequirements = pInfo->nRequirements;
-        arVendorData = pInfo->arVendorData;
-    }
-}
 void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
     rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
@@ -1206,11 +1174,6 @@ const rtl::OUString&  MergedSettings::getUserClassPath() const
     return m_sClassPath;
 }
 
-const std::vector<rtl::OUString>& MergedSettings::getVmParameters() const
-{
-    return m_vmParams;
-}
-
 ::std::vector< ::rtl::OString> MergedSettings::getVmParametersUtf8() const
 {
     ::std::vector< ::rtl::OString> ret;
@@ -1232,12 +1195,12 @@ JavaInfo * MergedSettings::createJavaInfo() const
 {
     return m_javaInfo.makeJavaInfo();
 }
-
+#ifdef WNT
 bool MergedSettings::getJavaInfoAttrAutoSelect() const
 {
     return m_javaInfo.bAutoSelect;
 }
-
+#endif
 void MergedSettings::getVmParametersArray(
     rtl_uString *** parParams, sal_Int32 * size) const
 {
