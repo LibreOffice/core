@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editdoc.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1542,8 +1542,15 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, BOOL bKeepEndingAttribs )
     XubString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
+    // the paragraph attributes...
+    ContentAttribs aContentAttribs( aPaM.GetNode()->GetContentAttribs() );
+
+    // for a new paragraph we like to have the bullet/numbering visible by default
+    aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, TRUE), EE_PARA_BULLETSTATE );
+
     // ContenNode-CTOR kopiert auch die Absatzattribute
-    ContentNode* pNode = new ContentNode( aStr, aPaM.GetNode()->GetContentAttribs());
+    ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
+
     // Den Default-Font kopieren
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();
     SfxStyleSheet* pStyle = aPaM.GetNode()->GetStyleSheet();
