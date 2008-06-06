@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CharacterPropertyItemConverter.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,10 @@
 #include <svx/postitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/fhgtitem.hxx>
+#include <svtools/stritem.hxx>
+
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
 
 using namespace ::com::sun::star;
 
@@ -270,6 +273,19 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             {
                 ASSERT_EXCEPTION( ex );
             }
+        }
+        break;
+
+        case SID_CHAR_DLG_PREVIEW_STRING:
+        {
+            uno::Reference< chart2::XFormattedString > xFormattedString( GetPropertySet(), uno::UNO_QUERY );
+            if( xFormattedString.is() )
+            {
+                ::rtl::OUString aString = xFormattedString->getString();
+                rOutItemSet.Put( SfxStringItem( nWhichId, aString ) );
+            }
+            else
+                rOutItemSet.Put( SfxStringItem( nWhichId, C2U( "" ) ) );
         }
         break;
     }
