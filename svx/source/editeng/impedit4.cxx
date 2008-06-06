@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit4.cxx,v $
- * $Revision: 1.75 $
+ * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -764,20 +764,25 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_PARA_OUTLLEVEL:
         {
-            rOutput << "\\level";
-            sal_uInt16 nLevel = ((const SfxUInt16Item&)rItem).GetValue();
-            rOutput.WriteNumber( nLevel );
+            sal_Int16 nLevel = ((const SfxInt16Item&)rItem).GetValue();
+            if( nLevel >= 0 )
+            {
+                rOutput << "\\level";
+                rOutput.WriteNumber( nLevel );
+            }
         }
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:
         {
+//            const ContentNode *pNode = aEditDoc.GetObject( nPara );
+
             rOutput << sRTF_FI;
             short nTxtFirst = ((const SvxLRSpaceItem&)rItem).GetTxtFirstLineOfst();
             nTxtFirst = (short)LogicToTwips( nTxtFirst );
             rOutput.WriteNumber( nTxtFirst );
             rOutput << sRTF_LI;
-            sal_uInt16 nTxtLeft = (USHORT)((const SvxLRSpaceItem&)rItem).GetTxtLeft();
+            sal_uInt16 nTxtLeft = static_cast< sal_uInt16 >(((const SvxLRSpaceItem&)rItem).GetTxtLeft());
             nTxtLeft = (sal_uInt16)LogicToTwips( nTxtLeft );
             rOutput.WriteNumber( nTxtLeft );
             rOutput << sRTF_RI;
@@ -1091,26 +1096,6 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
 
         // Die Absatzattribute...
         pC->GetParaAttribs().Set( pNode->GetContentAttribs().GetItems() );
-
-        // Seit der 5.1 werden im Outliner die LRSpaceItems anders interpretiert.
-        // Damit sie in einer 5.0 und aelter richtig sind, muss das Flag
-        // richtig gesetzt sein...
-        sal_Bool bOutliner = aStatus.IsAnyOutliner();
-        for ( sal_uInt16 n = 0; n <=1; n++ )
-        {
-            sal_uInt16 nItemId = n ? EE_PARA_LRSPACE : EE_PARA_OUTLLRSPACE;
-            if ( pC->GetParaAttribs().GetItemState( nItemId ) == SFX_ITEM_ON )
-            {
-                const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&) pC->GetParaAttribs().Get( nItemId );
-                if ( rItem.IsBulletFI() != bOutliner )
-                {
-                    SvxLRSpaceItem aNewItem( rItem );
-                    aNewItem.SetBulletFI( bOutliner );
-                    pC->GetParaAttribs().Put( aNewItem );
-                }
-            }
-        }
-
 
         // Das StyleSheet...
         if ( pNode->GetStyleSheet() )
