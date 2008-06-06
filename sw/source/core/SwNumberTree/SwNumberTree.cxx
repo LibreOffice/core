@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwNumberTree.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -349,7 +349,11 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
     }
     while (aIt != mChildren.end() && *aIt != pNode);
 
-    SetLastValid(aIt);
+    // --> OD 2008-05-21 #i74748# - applied patch from garnier_romain
+    // number tree node has to be validated.
+//    SetLastValid(aIt);
+    SetLastValid( aIt, true );
+    // <--
 }
 
 void SwNumberTreeNode::Validate(const SwNumberTreeNode * pNode) const
