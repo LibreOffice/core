@@ -8,7 +8,7 @@
  *
  * $RCSfile: unotbl.cxx,v $
  *
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,7 +566,7 @@ void lcl_InspectLines(SwTableLines& rLines, SvStrings& rAllNames)
         for(sal_uInt16 j = 0; j < rBoxes.Count(); j++)
         {
             SwTableBox* pBox = rBoxes[j];
-            if(pBox->GetName().Len())
+            if(pBox->GetName().Len() && pBox->getRowSpan() > 0 )
                 rAllNames.Insert(new String(pBox->GetName()), rAllNames.Count());
             SwTableLines& rBoxLines = pBox->GetTabLines();
             if(rBoxLines.Count())
@@ -2512,7 +2512,7 @@ uno::Reference< text::XTextTableCursor >  SwXTextTable::createCursorByCellName(c
         SwTable* pTable = SwTable::FindTable( pFmt );
         String sCellName(CellName);
         SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
-        if(pBox)
+        if(pBox && pBox->getRowSpan() > 0 )
         {
             xRet = new SwXTextTableCursor(pFmt, pBox);
         }
