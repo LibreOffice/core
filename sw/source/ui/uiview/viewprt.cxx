@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewprt.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,41 +62,29 @@
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/flagitem.hxx>
+#include <svx/linkmgr.hxx>
+
 #include <modcfg.hxx>
 #include <edtwin.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
 #include <fontcfg.hxx>
 #include <cfgitems.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <docstat.hxx>
 #include <viewfunc.hxx>
 #include <swmodule.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <doc.hxx>
 #include <fldbas.hxx>
 
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <svtools/eitem.hxx>
 #include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
@@ -558,7 +546,11 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     return;
                 }
             }
-
+            //#i61455# if master documentes are printed silently without loaded links then update the links now
+            if( bSilent && pSh->IsGlobalDoc() && !pSh->IsGlblDocSaveLinks() )
+            {
+                pSh->GetLinkManager().UpdateAllLinks( sal_False, sal_False, sal_False, 0 );
+            }
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
             return;
         }
