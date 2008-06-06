@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -278,6 +278,9 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
 .IF "$(OS)$(CPU)"=="WNTI"
+ .IF "$(COM)"=="GCC"
+    $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(ZIP1DIR)
+ .ELSE
     .IF "$(PACKMS)"!=""
         .IF "$(CCNUMVER)" <= "001499999999"
             $(GNUCOPY) $(PACKMS)$/msvcr80.dll $(ZIP1DIR)
@@ -303,6 +306,7 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
             $(GNUCOPY) $(SOLARBINDIR)$/Microsoft.VC90.CRT.manifest $(ZIP1DIR)
         .ENDIF
     .ENDIF         # "$(PACKMS)"!=""
+ .ENDIF	#"$(COM)"=="GCC" 
 .ENDIF
 
 
