@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: WCopyTable.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,7 +225,12 @@ Sequence< ::rtl::OUString > ObjectCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
 {
-    ::std::vector< Reference< XNameAccess > > aPrimaryKeyColumns( ::dbaui::getKeyColumns( m_xObject, KeyType::PRIMARY ) );
+    Reference<XKeysSupplier> xSup(m_xObject,UNO_QUERY);
+    Reference< XIndexAccess> xKeys;
+    if(xSup.is() )
+        xKeys = xSup->getKeys();
+
+    ::std::vector< Reference< XNameAccess > > aPrimaryKeyColumns( ::dbaui::getKeyColumns( xKeys, KeyType::PRIMARY ) );
     OSL_ENSURE( ( aPrimaryKeyColumns.size() == 1 ) || aPrimaryKeyColumns.empty(),
         "ObjectCopySource::getPrimaryKeyColumnNames: more than one primary key?!" );
 
@@ -920,6 +925,9 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                                     OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
                                     m_bCreatePrimaryKeyColumn = sal_True;
                                     m_aKeyName = pPage->GetKeyName();
+                                    if ( !m_aKeyName.getLength() )
+                                        m_aKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
+                                    m_aKeyName = createUniqueName( m_aKeyName );
                                     sal_Int32 nBreakPos2 = 0;
                                     CheckColumns(nBreakPos2);
                                     break;
@@ -958,7 +966,8 @@ sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName )
 {
     m_bCreatePrimaryKeyColumn = _bDoCreate;
-    m_aKeyName = _rSuggestedName;
+    if ( _rSuggestedName.getLength() )
+        m_aKeyName = _rSuggestedName;
 
     OCopyTable* pSettingsPage = dynamic_cast< OCopyTable* >( GetPage( 0 ) );
     OSL_ENSURE( pSettingsPage, "OCopyTableWizard::setCreatePrimaryKey: page should have been added in the ctor!" );
