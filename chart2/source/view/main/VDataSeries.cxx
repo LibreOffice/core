@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: VDataSeries.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "CommonConverters.hxx"
 #include "LabelPositionHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ContainerHelper.hxx"
 #include <com/sun/star/chart2/Symbol.hpp>
 
 //#include "CommonConverters.hxx"
@@ -57,10 +58,87 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
+namespace
+{
+    struct lcl_LessIndex
+    {
+        inline bool operator() ( const sal_Int32& first,
+                             const sal_Int32& second )
+        {
+            return ( first < second );
+        }
+    };
+
+    void lcl_removeIndices( uno::Sequence< double >& rValues, const uno::Sequence< sal_Int32 >& rIndicesToRemove )
+    {
+        if( !rIndicesToRemove.getLength() )
+            return;
+
+        ::std::vector< sal_Int32 > aIndicesToRemove( ContainerHelper::SequenceToVector( rIndicesToRemove) );
+        ::std::sort( aIndicesToRemove.begin(), aIndicesToRemove.end(), lcl_LessIndex() );
+
+        sal_Int32 nTarget=0;
+        sal_Int32 nR = 0;
+        sal_Int32 nRemove = aIndicesToRemove[nR];
+        for( sal_Int32 nSource=0; nSource<rValues.getLength(); nSource++ )
+        {
+            if( nSource<nRemove || nRemove==-1 )
+            {
+                if( nTarget < nSource )
+                    rValues[nTarget]=rValues[nSource];
+                nTarget++;
+                continue;
+            }
+            if( nSource==nRemove )
+            {
+                ++nR;
+                if( nR<static_cast<sal_Int32>(aIndicesToRemove.size()) )
+                    nRemove = aIndicesToRemove[nR];
+                else
+                    nRemove = -1;
+            }
+        }
+
+        if( nTarget>0 )
+            rValues.realloc( nTarget );
+        else
+            rValues.realloc(0);
+    }
+}
+
 void VDataSequence::init( const uno::Reference< data::XDataSequence >& xModel )
 {
+    bool bDisplayHiddenCells = true; //todo: make this configurable in future
+    bool bIsHidden = false;
+    uno::Sequence< sal_Int32 > aHiddenValues;
+    if( !bDisplayHiddenCells )
+    {
+        uno::Reference<beans::XPropertySet> xProp(xModel, uno::UNO_QUERY );
+        if( xProp.is())
+        {
+            try
+            {
+                xProp->getPropertyValue( C2U( "IsHidden" ) ) >>= bIsHidden;
+                xProp->getPropertyValue( C2U( "HiddenValues" ) ) >>= aHiddenValues;
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+    }
+
     Model = xModel;
-    Doubles = DataSequenceToDoubleSequence( xModel );
+    if( bDisplayHiddenCells || !bIsHidden )
+        Doubles = DataSequenceToDoubleSequence( xModel );
+
+    if( !bDisplayHiddenCells )
+    {
+        if( bIsHidden )
+            Doubles.realloc(0);
+        else if( aHiddenValues.getLength() )
+            lcl_removeIndices( Doubles, aHiddenValues );
+    }
 }
 
 bool VDataSequence::is() const
