@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,11 @@ APP1LIBSALCPPRT=
 APP1OBJS= \
     $(OBJ)$/wrapper_gpl.obj $(OBJ)/pdfioutdev_gpl.obj
 .IF "$(GUI)" == "WNT"
+.IF "$(COM)"=="GCC"
+APP1STDLIBS+=-lxpdf -lfofi -lGoo -lgdi32 -ladvapi32
+.ELSE
 APP1STDLIBS+=xpdf.lib fofi.lib Goo.lib gdi32.lib advapi32.lib
+.ENDIF
 .ELSE
 APP1STDLIBS+=-lxpdf -lfofi -lGoo
 .ENDIF
