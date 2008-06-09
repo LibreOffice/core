@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtww8.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2410,12 +2410,18 @@ void SwWW8Writer::PrepareStorage()
             xDPS->getDocumentProperties());
         DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
 
-        if (xDocProps.is()) {
-            ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                pDocShell->GetPreviewMetaFile (sal_False);
-            uno::Sequence<sal_uInt8> metaFile(
-                sfx2::convertMetaFile(pMetaFile.get()));
-            sfx2::SaveOlePropertySet(xDocProps, pStg, &metaFile);
+        if (xDocProps.is())
+        {
+            if ( SvtFilterOptions::Get()->IsEnableWordPreview() )
+            {
+                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                    pDocShell->GetPreviewMetaFile (sal_False);
+                uno::Sequence<sal_uInt8> metaFile(
+                    sfx2::convertMetaFile(pMetaFile.get()));
+                sfx2::SaveOlePropertySet(xDocProps, pStg, &metaFile);
+            }
+            else
+                sfx2::SaveOlePropertySet( xDocProps, pStg );
         }
     }
 }
