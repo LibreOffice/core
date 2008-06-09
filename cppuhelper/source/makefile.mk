@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.53 $
+# $Revision: 1.54 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -146,7 +146,10 @@ SLOFILES= \
         $(SLO)$/access_control.obj	\
         $(SLO)$/macro_expander.obj \
             $(SLO)$/unourl.obj \
-        $(SLO)$/propertysetmixin.obj
+        $(SLO)$/propertysetmixin.obj \
+        $(SLO)$/findsofficepath.obj
+
+OBJFILES = $(OBJ)$/findsofficepath.obj
 
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
@@ -161,6 +164,9 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(SALHELPERLIB)	\
         $(CPPULIB)
+.IF "$(OS)" == "WNT"
+SHL1STDLIBS += $(ADVAPI32LIB)
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
