@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.24 $
+# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,8 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(SALHELPERLIB)				\
-    $(SALLIB)
+    $(SALLIB)                   \
+    $(TOOLSLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
