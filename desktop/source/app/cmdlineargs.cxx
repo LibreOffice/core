@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +39,7 @@
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include "tools/getprocessworkingdir.hxx"
 
 #include <svtools/documentlockfile.hxx>
 
@@ -56,9 +57,17 @@ class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
 public:
     explicit ExtCommandLineSupplier():
         m_count(rtl_getAppCommandArgCount()),
-        m_index(0) {}
+        m_index(0)
+    {
+        rtl::OUString url;
+        if (tools::getProcessWorkingDir(&url)) {
+            m_cwdUrl.reset(url);
+        }
+    }
 
     virtual ~ExtCommandLineSupplier() {}
+
+    virtual boost::optional< rtl::OUString > getCwdUrl() { return m_cwdUrl; }
 
     virtual bool next(rtl::OUString * argument) {
         OSL_ASSERT(argument != NULL);
@@ -73,6 +82,7 @@ public:
     }
 
 private:
+    boost::optional< rtl::OUString > m_cwdUrl;
     sal_uInt32 m_count;
     sal_uInt32 m_index;
 };
@@ -109,23 +119,24 @@ CommandLineArgs::Supplier::Exception::operator =(Exception const &)
 CommandLineArgs::Supplier::~Supplier() {}
 
 // intialize class with command line parameters from process environment
-CommandLineArgs::CommandLineArgs( bool bConvert )
+CommandLineArgs::CommandLineArgs()
 {
     ResetParamValues();
     ExtCommandLineSupplier s;
-    ParseCommandLine_Impl( s, bConvert );
+    ParseCommandLine_Impl( s );
 }
 
 CommandLineArgs::CommandLineArgs( Supplier& supplier )
 {
     ResetParamValues();
-    ParseCommandLine_Impl( supplier, false );
+    ParseCommandLine_Impl( supplier );
 }
 
 // ----------------------------------------------------------------------------
 
-void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier, bool convert )
+void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
+    m_cwdUrl = supplier.getCwdUrl();
     Reference<XMultiServiceFactory> xMS(comphelper::getProcessServiceFactory(), UNO_QUERY);
     OSL_ENSURE(xMS.is(), "CommandLineArgs: no ProcessServiceFactory.");
 
@@ -155,17 +166,13 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier, bool convert )
         {
             break;
         }
-
-        if ( convert )
+        // convert file URLs to internal form #112849#
+        if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
+            xTranslator.is())
         {
-            // convert file URLs to internal form #112849#
-            if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
-                xTranslator.is())
-            {
-                OUString tmp(xTranslator->translateToInternal(aArg));
-                if (tmp.getLength() > 0)
-                    aArg = tmp;
-            }
+            OUString tmp(xTranslator->translateToInternal(aArg));
+            if (tmp.getLength() > 0)
+                aArg = tmp;
         }
         String          aArgStr = aArg;
 
