@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_main.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include "boost/scoped_array.hpp"
 
 #include "ns_debug.hxx"
 #include "so_msg.hxx"
@@ -66,10 +67,14 @@
 
 #include "nsp_func.hxx"
 
-
+#include "sal/main.h"
 
 #define MAX_NODE_NUM 1024
+
 SoPluginInstance* lpInstance[MAX_NODE_NUM];
+
+static  NSP_PIPE_FD la_read_fd = 0;
+static char const * progdir = NULL;
 
 
 long int NSP_ReadFromPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
@@ -273,14 +278,22 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
         char para[128] = {0};
         sprintf(para, "-accept=socket,host=0,port=%d;urp", SO_SERVER_PORT);
 #ifdef UNIX
+
+        boost::scoped_array< char > exepath(
+            new char[( progdir ? strlen( progdir ) : 0 ) + RTL_CONSTASCII_LENGTH( "/soffice" ) + 1] );
+        if ( progdir )
+            sprintf( exepath.get(), "%s/soffice", progdir );
+        else
+            sprintf( exepath.get(), "soffice" );
+
         int nChildPID = fork();
         if( ! nChildPID )  // child process
        {
             NSP_CloseSocket(my_sock);
             NSP_Close_Pipe(read_fd);
-            sprintf(sCommand, "/bin/sh soffice -nologo -nodefault %s", para);
+            sprintf(sCommand, "/bin/sh %s -nologo -nodefault %s", exepath.get(), para);
             debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s\n",sCommand);
-            execl("/bin/sh", "/bin/sh", "soffice", "-nologo", "-nodefault", para, NULL);
+            execl("/bin/sh", "/bin/sh", exepath.get(), "-nologo", "-nodefault", para, NULL);
             _exit(255);
         }
 #endif //end of UNIX
@@ -328,9 +341,7 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
 }
 
 
-static  NSP_PIPE_FD la_read_fd = 0;
-
-int main(int argc, char** argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
    // Sleep(20*1000);
     debug_fprintf(NSP_LOG_APPEND, "start of main\n");
@@ -338,21 +349,13 @@ int main(int argc, char** argv)
 
     NSP_PIPE_FD fd_pipe[2];
     int iPipe[2];
-#ifdef UNIX
      if(argc < 3)
     {
         debug_fprintf(NSP_LOG_APPEND, "print by nsplugin, command error; too little argument to start plugin exec\n");
-        return sal_False;
+        return EXIT_FAILURE;
     }
     iPipe[0] = atoi(argv[1]);
     iPipe[1] = atoi(argv[2]);
-#endif  //end of UNIX
-#ifdef WNT
-    (void)argc;
-    //sscanf( GetCommandLine(), "%d %d", &iPipe[0],  &iPipe[1] );
-    iPipe[0] = atoi(argv[0]);
-    iPipe[1] = atoi(argv[1]);
-#endif  //end of WNT
 
     // fd_pipe[0]: read, fd_pipe[0]: write
     fd_pipe[0] = (NSP_PIPE_FD) iPipe[0] ;
@@ -366,6 +369,9 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    // the program path is provided only on unix, on windows the registry entry is used
+    if ( argc > 4 )
+        progdir = argv[4];
     if(!start_office(la_read_fd))
     {
         NSP_Close_Pipe(la_read_fd);
@@ -389,6 +395,7 @@ int main(int argc, char** argv)
     }
     NSP_Close_Pipe(la_read_fd);
     _exit(0);
+    return EXIT_SUCCESS; // avoid warnings
 }
 
 extern "C"{
