@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_instance.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,13 +123,7 @@ sal_Bool SoPluginInstance::Connect()
     //create local service manager
     if(!mxLocalMSF.is())
     {
-#ifdef WNT
-        xComponentContext = defaultBootstrap_InitialComponentContext(
-             OUString(RTL_CONSTASCII_USTRINGPARAM("uno.ini")) );
-#else
-        xComponentContext = defaultBootstrap_InitialComponentContext(
-             OUString(RTL_CONSTASCII_USTRINGPARAM("unorc")) );
-#endif
+        xComponentContext = defaultBootstrap_InitialComponentContext();
         if (xComponentContext.is())
         {
             debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create mxLocalMSF.\n");
