@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extendloaderenvironment.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +33,51 @@
 
 #include "sal/config.h"
 
+#include <cstddef>
+
 #include <tchar.h>
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 #define MY_STRING(s) (s), MY_LENGTH(s)
 
 namespace desktop_win32 {
+
+inline WCHAR * commandLineAppend(
+    WCHAR * buffer, WCHAR const * text, std::size_t length)
+{
+    wcsncpy(buffer, text, length + 1); // trailing null
+    return buffer + length;
+}
+
+inline WCHAR * commandLineAppend(WCHAR * buffer, WCHAR const * text) {
+    return commandLineAppend(buffer, text, wcslen(text));
+}
+
+inline WCHAR * commandLineAppendEncoded(WCHAR * buffer, WCHAR const * text) {
+    std::size_t n = 0;
+    for (;;) {
+        WCHAR c = *text++;
+        if (c == L'\0') {
+            break;
+        } else if (c == L'$') {
+            buffer = commandLineAppend(buffer, MY_STRING(L"\\$"));
+            n = 0;
+        } else if (c == L'\\') {
+            buffer = commandLineAppend(buffer, MY_STRING(L"\\\\"));
+            n += 2;
+        } else {
+            *buffer++ = c;
+            n = 0;
+        }
+    }
+    // The command line will continue with a double quote, so double any
+    // preceding backslashes as required by Windows:
+    for (std::size_t i = 0; i < n; ++i) {
+        *buffer++ = L'\\';
+    }
+    *buffer = L'\0';
+    return buffer;
+}
 
 // Set the PATH environment variable in the current (loader) process, so that a
 // following CreateProcess has the necessary environment:
