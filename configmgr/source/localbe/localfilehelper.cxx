@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localfilehelper.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 #include "localfilehelper.hxx"
 #include "filehelper.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <osl/process.h>
+#include "tools/getprocessworkingdir.hxx"
 #include <vector>
 
 namespace configmgr
@@ -97,8 +97,8 @@ namespace configmgr
     {
         using osl::File;
 
-        rtl::OUString sBasePath = _rsURL;
-        OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
+        rtl::OUString sBasePath;
+        OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
         rtl::OUString sAbsolute;
         if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
