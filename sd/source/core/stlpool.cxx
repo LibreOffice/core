@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,6 +203,8 @@ List* SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName)
 
 void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck /*= sal_False*/ )
 {
+    const sal_uInt16 nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
+
     (void)bCheck;
     sal_Bool bCreated = sal_False;
 
@@ -250,7 +252,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         if (!Find(aLevelName, SD_STYLE_FAMILY_MASTERPAGE))
         {
             bCreated = sal_True;
-            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_MASTERPAGE);
+            pSheet = &Make(aLevelName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
             pSheet->SetParent( String() );
@@ -389,7 +391,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
         pSheet->SetParent(String());
         SfxItemSet& rTitleSet = pSheet->GetItemSet();
@@ -434,7 +436,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
         pSheet->SetParent(String());
         SfxItemSet& rSubtitleSet = pSheet->GetItemSet();
@@ -482,7 +484,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
         pSheet->SetParent(String());
         SfxItemSet& rNotesSet = pSheet->GetItemSet();
@@ -533,7 +535,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
@@ -555,7 +557,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     {
         bCreated = sal_True;
 
-        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE);
+        pSheet = &Make(aName, SD_STYLE_FAMILY_MASTERPAGE,nUsedMask);
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
         pSheet->SetParent(String());
         SfxItemSet& rBackgroundSet = pSheet->GetItemSet();
