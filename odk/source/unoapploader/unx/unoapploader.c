@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoapploader.c,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +32,18 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #ifdef LINUX
 #define __USE_GNU
 #endif
 #include <dlfcn.h>
 
-char* getPath();
-char* getPathFromPathEnvVar();
+#include "cppuhelper/findsofficepath.h"
+#include "rtl/string.h"
+#include "sal/types.h"
+
+char const* getPath();
 char* createCommandName( char* argv0 );
 
 const int SEPARATOR = '/';
@@ -69,37 +73,126 @@ const char* PATHSEPARATOR = ":";
  */
 int main( int argc, char *argv[] )
 {
-    const char* ENVVARNAME = "LD_LIBRARY_PATH";
-
-    char* path;
-    char* value;
-    char* envstr;
+    char const* path;
     char* cmdname;
-    int size;
 
     (void) argc; /* avoid warning about unused parameter */
-    (void) argv; /* avoid warning about unused parameter */
 
     /* get the path of the UNO installation */
     path = getPath();
 
     if ( path != NULL )
     {
-        /* get the value of the LD_LIBRARY_PATH environment variable */
+        static const char* ENVVARNAME = "LD_LIBRARY_PATH";
+
+        char * libpath;
+        int freeLibpath;
+
+        char* value;
+        char* envstr;
+        int size;
+
+        size_t pathlen = strlen(path);
+        struct stat stat;
+        int ret;
+        char * unoinfo = malloc(
+            pathlen + RTL_CONSTASCII_LENGTH("/unoinfo") + 1);
+            /*TODO: overflow */
+        if (unoinfo == NULL) {
+            fprintf(stderr, "Error: out of memory!\n");
+            exit(EXIT_FAILURE);
+        }
+        strcpy(unoinfo, path);
+        strcpy(
+            unoinfo + pathlen,
+            "/unoinfo" + (pathlen == 0 || path[pathlen - 1] != '/' ? 0 : 1));
+        ret = lstat(unoinfo, &stat);
+        free(unoinfo);
+
+        if (ret == 0) {
+            char * cmd = malloc(
+                2 * pathlen + RTL_CONSTASCII_LENGTH("/unoinfo c++") + 1);
+                /*TODO: overflow */
+            char const * p;
+            char * q;
+            FILE * f;
+            size_t n = 1000;
+            size_t old = 0;
+            if (cmd == NULL) {
+                fprintf(stderr, "Error: out of memory!\n");
+                exit(EXIT_FAILURE);
+            }
+            p = path;
+            q = cmd;
+            while (*p != '\0') {
+                *q++ = '\\';
+                *q++ = *p++;
+            }
+            if (p == path || p[-1] != '/') {
+                *q++ = '/';
+            }
+            strcpy(q, "unoinfo c++");
+            f = popen(cmd, "r");
+            free(cmd);
+            if (f == NULL)
+            {
+                fprintf(stderr, "Error: calling unoinfo failed!\n");
+                exit(EXIT_FAILURE);
+            }
+            libpath = NULL;
+            for (;;) {
+                size_t m;
+                libpath = realloc(libpath, n);
+                if (libpath == NULL) {
+                    fprintf(
+                        stderr,
+                        "Error: out of memory reading unoinfo output!\n");
+                    exit(EXIT_FAILURE);
+                }
+                m = fread(libpath + old, 1, n - old - 1, f);
+                if (m != n - old - 1) {
+                    if (ferror(f)) {
+                        fprintf(stderr, "Error: cannot read unoinfo output!\n");
+                        exit(EXIT_FAILURE);
+                    }
+                    libpath[old + m] = '\0';
+                    break;
+                }
+                if (n >= SAL_MAX_SIZE / 2) {
+                    fprintf(
+                        stderr,
+                        "Error: out of memory reading unoinfo output!\n");
+                    exit(EXIT_FAILURE);
+                }
+                old = n - 1;
+                n *= 2;
+            }
+            if (pclose(f) != 0) {
+                fprintf(stderr, "Error: executing unoinfo failed!\n");
+                exit(EXIT_FAILURE);
+            }
+            freeLibpath = 1;
+        }
+        else
+        {
+            /* Assume an old OOo 2.x installation without unoinfo: */
+            libpath = (char *) path;
+            freeLibpath = 0;
+        }
+
         value = getenv( ENVVARNAME );
 
-        /*
-         * add the UNO installation path to the LD_LIBRARY_PATH environment
-         * variable; note that this only affects the environment variable of the
-         * current process, the command processor's environment is not changed
-         */
-        size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( path ) + 1;
+        size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( libpath ) + 1;
         if ( value != NULL )
             size += strlen( PATHSEPARATOR ) + strlen( value );
         envstr = (char*) malloc( size );
         strcpy( envstr, ENVVARNAME );
         strcat( envstr, "=" );
-        strcat( envstr, path );
+        strcat( envstr, libpath );
+        if ( freeLibpath != 0 )
+        {
+            free( libpath );
+        }
         if ( value != NULL )
         {
             strcat( envstr, PATHSEPARATOR );
@@ -134,99 +227,16 @@ int main( int argc, char *argv[] )
  * @return the installation path or NULL, if no installation was specified or
  *         found, or if an error occured
  */
-char* getPath()
+char const* getPath()
 {
-    const char* UNOPATHVARNAME = "UNO_PATH";
+    char const* path = cppuhelper_detail_findSofficePath();
 
-    char* path = NULL;
-
-    /* get the installation path from the UNO_PATH environment variable */
-    path = getenv( UNOPATHVARNAME );
-
-    if ( path == NULL || strlen( path ) == 0 )
+    if ( path == NULL )
     {
-        /* get the installation path from the PATH environment variable */
-        path = getPathFromPathEnvVar();
-
-        if ( path == NULL )
-        {
-            fprintf( stderr, "Warning: getting path from PATH environment "
-                "variable failed!\n" );
-            fflush( stderr );
-        }
+        fprintf( stderr, "Warning: getting path from PATH environment "
+                 "variable failed!\n" );
+        fflush( stderr );
     }
-
-    return path;
-}
-
-/*
- * Gets the installation path from the PATH environment variable.
- *
- * <p>An installation is found, if the executable 'soffice' or a symbolic link
- * is in one of the directories listed in the PATH environment variable.</p>
- *
- * @return the installation path or NULL, if no installation was found or
- *         if an error occured
- */
-char* getPathFromPathEnvVar()
-{
-    const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/soffice";
-
-    char* path = NULL;
-    char* env = NULL;
-    char* str = NULL;
-    char* dir = NULL;
-    char* file = NULL;
-    char* resolved = NULL;
-    char* sep = NULL;
-
-    char buffer[1024];
-    int pos;
-
-    /* get the value of the PATH environment variable */
-    env = getenv( PATHVARNAME );
-    str = (char*) malloc( strlen( env ) + 1 );
-    strcpy( str, env );
-
-    /* get the tokens separated by ':' */
-    dir = strtok( str, PATHSEPARATOR );
-
-    while ( dir )
-    {
-        /* construct soffice file path */
-        file = (char*) malloc( strlen( dir ) + strlen( APPENDIX ) + 1 );
-        strcpy( file, dir );
-        strcat( file, APPENDIX );
-
-        /* check existence of soffice file */
-        if ( !access( file, F_OK ) )
-        {
-            /* resolve symbolic link */
-            resolved = realpath( file, buffer );
-
-            if ( resolved != NULL )
-            {
-                /* get path to program directory */
-                sep = strrchr( resolved, SEPARATOR );
-
-                if ( sep != NULL )
-                {
-                    pos = sep - resolved;
-                    path = (char*) malloc( pos + 1 );
-                    strncpy( path, resolved, pos );
-                    path[ pos ] = '\0';
-                    free( file );
-                    break;
-                }
-            }
-        }
-
-        dir = strtok( NULL, PATHSEPARATOR );
-        free( file );
-    }
-
-    free( str );
 
     return path;
 }
