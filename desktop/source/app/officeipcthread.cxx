@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,8 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
-
+#include "osl/file.hxx"
+#include "tools/getprocessworkingdir.hxx"
 
 using namespace vos;
 using namespace rtl;
@@ -60,7 +60,6 @@ using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uri;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -87,23 +86,59 @@ namespace {
 class Parser: public CommandLineArgs::Supplier {
 public:
     explicit Parser(rtl::OString const & input): m_input(input) {
-        if (m_input.match(ARGUMENT_PREFIX) &&
-            (m_input.getLength() == RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX) ||
-             m_input[RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX)] == ','))
+        if (!m_input.match(ARGUMENT_PREFIX) ||
+            m_input.getLength() == RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX))
         {
-            m_index = RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX);
-        } else {
+            throw CommandLineArgs::Supplier::Exception();
+        }
+        m_index = RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX);
+        switch (m_input[m_index++]) {
+        case '0':
+            break;
+        case '1':
+            {
+                rtl::OUString url;
+                if (!next(&url, false)) {
+                    throw CommandLineArgs::Supplier::Exception();
+                }
+                m_cwdUrl.reset(url);
+                break;
+            }
+        case '2':
+            {
+                rtl::OUString path;
+                if (!next(&path, false)) {
+                    throw CommandLineArgs::Supplier::Exception();
+                }
+                rtl::OUString url;
+                if (osl::FileBase::getFileURLFromSystemPath(path, url) ==
+                    osl::FileBase::E_None)
+                {
+                    m_cwdUrl.reset(url);
+                }
+                break;
+            }
+        default:
             throw CommandLineArgs::Supplier::Exception();
         }
     }
 
     virtual ~Parser() {}
 
-    virtual bool next(rtl::OUString * argument) {
+    virtual boost::optional< rtl::OUString > getCwdUrl() { return m_cwdUrl; }
+
+    virtual bool next(rtl::OUString * argument) { return next(argument, true); }
+
+private:
+    virtual bool next(rtl::OUString * argument, bool prefix) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_input.getLength()) {
-            OSL_ASSERT(m_input[m_index] == ',');
-            ++m_index;
+            if (prefix) {
+                if (m_input[m_index] != ',') {
+                    throw CommandLineArgs::Supplier::Exception();
+                }
+                ++m_index;
+            }
             rtl::OStringBuffer b;
             while (m_index < m_input.getLength()) {
                 char c = m_input[m_index];
@@ -130,23 +165,60 @@ public:
                 }
                 b.append(c);
             }
-            *argument = rtl::OStringToOUString(
-                b.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-                //TODO: Signal error on malformed UTF-8.
+            rtl::OString b2(b.makeStringAndClear());
+            if (!rtl_convertStringToUString(
+                    &argument->pData, b2.getStr(), b2.getLength(),
+                    RTL_TEXTENCODING_UTF8,
+                    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+                     RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+                     RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+            {
+                throw CommandLineArgs::Supplier::Exception();
+            }
             return true;
         } else {
             return false;
         }
     }
 
-private:
+    boost::optional< rtl::OUString > m_cwdUrl;
     rtl::OString m_input;
     sal_Int32 m_index;
 };
 
+bool addArgument(
+    ByteString * arguments, char prefix, rtl::OUString const & argument)
+{
+    rtl::OString utf8;
+    if (!argument.convertToString(
+            &utf8, RTL_TEXTENCODING_UTF8,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        return false;
+    }
+    *arguments += prefix;
+    for (sal_Int32 i = 0; i < utf8.getLength(); ++i) {
+        char c = utf8[i];
+        switch (c) {
+        case '\0':
+            *arguments += "\\0";
+            break;
+        case ',':
+            *arguments += "\\,";
+            break;
+        case '\\':
+            *arguments += "\\\\";
+            break;
+        default:
+            *arguments += c;
+            break;
+        }
+    }
+    return true;
 }
 
-String GetURL_Impl( const String& rName );
+}
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 namespace { struct Security : public rtl::Static<OSecurity, Security> {}; }
@@ -447,75 +519,22 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
         sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
+        rtl::OUString cwdUrl;
+        if (!(tools::getProcessWorkingDir(&cwdUrl) &&
+              addArgument(&aArguments, '1', cwdUrl)))
+        {
+            aArguments += '0';
+        }
         ULONG nCount = aInfo.getCommandArgCount();
-
-        sal_Bool    bPrintTo = sal_False;
-        OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
-
-        Reference< XExternalUriReferenceTranslator > xTranslator(
-            comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii(
-            "com.sun.star.uri.ExternalUriReferenceTranslator")),
-            UNO_QUERY);
-
         for( ULONG i=0; i < nCount; i++ )
         {
             aInfo.getCommandArg( i, aDummy );
-            // Make absolute pathes from relative ones!
-            // It's neccessary to use current working directory of THESE office instance and not of
-            // currently running once, which get these information by using pipe.
-            // Otherwhise relativ pathes are not right for his environment ...
             if( aDummy.indexOf('-',0) != 0 )
             {
                 bWaitBeforeClose = sal_True;
-                // convert to an absolut url, but don't touch extrnal file URLs here
-                if ( !bPrintTo)
-                {
-                    // convert file URLs to internal form #112849#
-                    if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
-                        xTranslator.is())
-                    {
-                        OUString tmp(xTranslator->translateToInternal(aDummy));
-                        if (tmp.getLength() > 0)
-                            aDummy = tmp;
-                    }
-                    aDummy = GetURL_Impl( aDummy );
-                }
-                bPrintTo = sal_False;
             }
-            else
-            {
-                if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
-                    bPrintTo = sal_True;
-                else
-                    bPrintTo = sal_False;
-            }
-
-            aArguments += ',';
-            rtl::OString utf8;
-            if (!aDummy.convertToString(
-                    &utf8, RTL_TEXTENCODING_UTF8,
-                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                    | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
-            {
+            if (!addArgument(&aArguments, ',', aDummy)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
-            }
-            for (sal_Int32 j = 0; j < utf8.getLength(); ++j) {
-                char c = utf8[j];
-                switch (c) {
-                case '\0':
-                    aArguments += "\\0";
-                    break;
-                case ',':
-                    aArguments += "\\,";
-                    break;
-                case '\\':
-                    aArguments += "\\\\";
-                    break;
-                default:
-                    aArguments += c;
-                    break;
-                }
             }
         }
         // finaly, write the string onto the pipe
@@ -716,7 +735,8 @@ void SAL_CALL OfficeIPCThread::run()
 #endif
 
             sal_Bool bDocRequestSent = sal_False;
-            ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
+            ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest(
+                aCmdLineArgs->getCwdUrl());
             cProcessed.reset();
             pRequest->pcProcessed = &cProcessed;
 
@@ -884,6 +904,7 @@ void SAL_CALL OfficeIPCThread::run()
 
 static void AddToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
+    boost::optional< rtl::OUString > const & cwdUrl,
     const OUString& aRequestList,
     DispatchWatcher::RequestType nType,
     const OUString& aParam,
@@ -897,7 +918,7 @@ static void AddToDispatchList(
             OUString aToken = aRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
             if ( aToken.getLength() > 0 )
                 rDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( nType, aToken, aParam, aFactory ));
+                    DispatchWatcher::DispatchRequest( nType, aToken, cwdUrl, aParam, aFactory ));
         }
         while ( nIndex >= 0 );
     }
@@ -909,13 +930,13 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
     DispatchWatcher::DispatchList   aDispatchList;
 
     // Create dispatch list for dispatch watcher
-    AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aStartList, DispatchWatcher::REQUEST_START, aEmpty, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
-    AddToDispatchList( aDispatchList, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aStartList, DispatchWatcher::REQUEST_START, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty, aRequest.aModule );
+    AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty, aRequest.aModule );
 
     osl::ClearableMutexGuard aGuard( GetMutex() );
     sal_Bool bShutdown( sal_False );
