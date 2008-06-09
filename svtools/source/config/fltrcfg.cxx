@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +60,9 @@ using namespace com::sun::star::uno;
 #define FILTERCFG_IMPRESS_LOAD          0x4000
 #define FILTERCFG_IMPRESS_SAVE          0x8000
 #define FILTERCFG_EXCEL_EXECTBL         0x10000
+#define FILTERCFG_ENABLE_PPT_PREVIEW    0x20000
+#define FILTERCFG_ENABLE_EXCEL_PREVIEW  0x40000
+#define FILTERCFG_ENABLE_WORD_PREVIEW   0x80000
 
 static SvtFilterOptions* pOptions=0;
 
@@ -285,7 +288,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        int nCount = 8;
+        int nCount = 11;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
@@ -296,7 +299,10 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
             "Export/MathToMathType",            //  4
             "Export/WriterToWinWord",           //  5
             "Export/ImpressToPowerPoint",       //  6
-            "Export/CalcToExcel"                //  7
+            "Export/CalcToExcel",               //  7
+            "Export/EnablePowerPointPreview",   //  8
+            "Export/EnableExcelPreview",        //  9
+            "Export/EnableWordPreview"          // 10
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -318,6 +324,10 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
         case  5: nFlag = FILTERCFG_WRITER_SAVE; break;
         case  6: nFlag = FILTERCFG_IMPRESS_SAVE; break;
         case  7: nFlag = FILTERCFG_CALC_SAVE; break;
+        case  8: nFlag = FILTERCFG_ENABLE_PPT_PREVIEW; break;
+        case  9: nFlag = FILTERCFG_ENABLE_EXCEL_PREVIEW; break;
+        case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
+
         default: DBG_ERROR("illegal value");
     }
     return nFlag;
@@ -555,6 +565,25 @@ SvtFilterOptions* SvtFilterOptions::Get()
     if ( !pOptions )
         pOptions = new SvtFilterOptions;
     return pOptions;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SvtFilterOptions::IsEnablePPTPreview() const
+{
+    return pImp->IsFlag( FILTERCFG_ENABLE_PPT_PREVIEW );
+}
+
+
+BOOL SvtFilterOptions::IsEnableCalcPreview() const
+{
+    return pImp->IsFlag( FILTERCFG_ENABLE_EXCEL_PREVIEW );
+}
+
+
+BOOL SvtFilterOptions::IsEnableWordPreview() const
+{
+    return pImp->IsFlag( FILTERCFG_ENABLE_WORD_PREVIEW );
 }
 
 
