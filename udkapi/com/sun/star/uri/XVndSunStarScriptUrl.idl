@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XVndSunStarScriptUrl.idl,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #ifndef __com_sun_star_uri_XVndSunStarScriptUrl_idl__
 #define __com_sun_star_uri_XVndSunStarScriptUrl_idl__
 
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module uri {
@@ -75,6 +76,20 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
     string getName();
 
     /**
+        sets the name part of this URL.
+
+        @param name
+        specifies the non-escaped new name part of the URL.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+        if <arg>name</arg> is empty
+
+        @since OOo 3.0
+    */
+    void   setName([in] string name)
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /**
        returns whether this URL has a parameter with a given key.
 
        @param key
@@ -99,6 +114,25 @@ published interface XVndSunStarScriptUrl: com::sun::star::uno::XInterface {
        empty <atom>string</atom>, an empty <atom>string</atom> is returned.
      */
     string getParameter([in] string key);
+
+    /**
+        sets the value of a parameter with a given key.
+
+        @param key
+        a non-escaped key
+
+        @param value
+        the non-escaped value to be set for the parameter. If there already is a
+        parameter with this key, the value of its first appearance will be replaced.
+        Otherwise, a parameter with the given key/value will be appended.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+        if <arg>key</arg> is empty
+
+        @since OOo 3.0
+    */
+    void setParameter( [in] string key, [in] string value )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
 };
 
 }; }; }; };
