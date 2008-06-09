@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +145,20 @@ namespace rtl
         */
         inline rtlBootstrapHandle getHandle() const SAL_THROW( () )
             { return _handle; }
+
+        /** Escapes special characters ("$" and "\").
+
+            @param value
+            an arbitrary value
+
+            @return
+            the given value, with all occurences of special characters ("$" and
+            "\") escaped
+
+            @since UDK 3.2.9
+        */
+        static inline ::rtl::OUString encode( ::rtl::OUString const & value )
+            SAL_THROW( () );
     };
 
     //----------------------------------------------------------------------------
@@ -212,5 +226,12 @@ namespace rtl
         rtl_bootstrap_get_iniName_from_handle(_handle, &iniName.pData);
     }
 
+    inline ::rtl::OUString Bootstrap::encode( ::rtl::OUString const & value )
+        SAL_THROW( () )
+    {
+        ::rtl::OUString encoded;
+        rtl_bootstrap_encode(value.pData, &encoded.pData);
+        return encoded;
+    }
 }
 #endif
