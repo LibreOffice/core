@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpmread.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,10 +135,8 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                         nBits = 24;
                     else if ( mnColors > 16 )
                         nBits = 8;
-                    else if ( mnColors > 4 )
-                        nBits = 4;
                     else if ( mnColors > 2 )
-                        nBits = 2;
+                        nBits = 4;
                     else
                         nBits = 1;
 
