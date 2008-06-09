@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: genericloader.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,14 +71,32 @@ static int GenericMain()
 
     PROCESS_INFORMATION aProcessInfo;
 
+    WCHAR cwd[MAX_PATH];
+    DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
+    if (cwdLen >= MAX_PATH) {
+        cwdLen = 0;
+    }
     LPTSTR cl1 = GetCommandLine();
-    LPTSTR cl2 = new TCHAR[
-        _tcslen(cl1) + MY_LENGTH(_T(" \"-env:INIFILEPATH=")) +
-        _tcslen(szIniDirectory) + MY_LENGTH(_T("redirect.ini\"")) + 1];
-    _tcscpy(cl2, cl1);
-    _tcscat(cl2, _T(" \"-env:INIFILEPATH="));
-    _tcscat(cl2, szIniDirectory);
-    _tcscat(cl2, _T("redirect.ini\""));
+    WCHAR * cl2 = new WCHAR[
+        wcslen(cl1) + MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
+        wcslen(szIniDirectory) +
+        MY_LENGTH(L"redirect.ini\" \"-env:OOO_CWD=2") + 4 * cwdLen +
+        MY_LENGTH(L"\"") + 1];
+        // 4 * cwdLen: each char preceded by backslash, each trailing backslash
+        // doubled
+    WCHAR * p = desktop_win32::commandLineAppend(cl2, cl1);
+    p = desktop_win32::commandLineAppend(
+        p, MY_STRING(L" \"-env:INIFILENAME=vnd.sun.star.pathname:"));
+    p = desktop_win32::commandLineAppend(p, szIniDirectory);
+    p = desktop_win32::commandLineAppend(
+        p, MY_STRING(L"redirect.ini\" \"-env:OOO_CWD="));
+    if (cwdLen == 0) {
+        p = desktop_win32::commandLineAppend(p, MY_STRING(L"0"));
+    } else {
+        p = desktop_win32::commandLineAppend(p, MY_STRING(L"2"));
+        p = desktop_win32::commandLineAppendEncoded(p, cwd);
+    }
+    desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
 
     BOOL fSuccess = CreateProcess(
         szTargetFileName,
@@ -88,7 +106,7 @@ static int GenericMain()
         TRUE,
         0,
         NULL,
-        NULL,
+        szIniDirectory,
         &aStartupInfo,
         &aProcessInfo );
 
