@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr2.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -329,7 +329,9 @@ void ScInterpreter::ScGetDiffDate360()
             PushError( nGlobalError);
         else
         {
-            if (nDate2 < nDate1)
+            // #i84934# only for non-US European algorithm swap dates. Else
+            // follow Excel's meaningless extrapolation for "interoperability".
+            if (bFlag && (nDate2 < nDate1))
             {
                 fSign = nDate1;
                 nDate1 = nDate2;
@@ -1174,68 +1176,131 @@ void ScInterpreter::ScZZR()
         PushDouble(log(-(nZins*nZw-nRmz)/(nZins*nBw+nRmz))/log(1.0+nZins));
 }
 
-double ScInterpreter::GetZinsIterationEps(double fZzr, double fRmz, double fBw,
-                                          double fZw, double fF, double& fSchaetzwert)
+bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
+                                   double fFv, double fPayType, double & fGuess )
 {
-    double fEps = 1.0;
-    double x, xNeu, fTerm1, fTerm2;
-    if (fSchaetzwert == 0.0)
-        x = 0.1;                                // default gegen Nulldivisionen
-    else
-        x = fSchaetzwert;                       // Startwert
+    // See also #i15090#
+    // Newton-Raphson method: x(i+1) = x(i) - f(x(i)) / f'(x(i))
+    // This solution handles integer and non-integer values of Nper different.
+    // If ODFF will constraint Nper to integer, the distinction of cases can be
+    // removed; only the integer-part is needed then.
+    bool bValid = true, bFound = false;
+    double fX, fXnew, fTerm, fTermDerivation;
+    double fGeoSeries, fGeoSeriesDerivation;
     const USHORT nIterationsMax = 150;
     USHORT nCount = 0;
-    while (fEps > SCdEpsilon && nCount < nIterationsMax)
-    {                                           // Newton-Verfahren:
-        if (x == 0.0)
-            xNeu = x -
-                    (fBw + fRmz*fZzr + fZw) /
-                    (fBw*fZzr + fRmz*(fZzr*(fZzr-1.0) + 2*fF*fZzr)/2.0);
-        else
+    const double fEpsilonSmall = 1.0E-14;
+    // convert any fPayType situation to fPayType == zero situation
+    fFv = fFv - fPayment * fPayType;
+    fPv = fPv + fPayment * fPayType;
+    if (fNper == ::rtl::math::round( fNper, 0, rtl_math_RoundingMode_Corrected ))
+    { // Nper is an integer value
+        fX = fGuess;
+        double fPowN, fPowNminus1;  // for (1.0+fX)^Nper and (1.0+fX)^(Nper-1)
+        while (!bFound && nCount < nIterationsMax)
         {
-            fTerm1 = pow(1.0+x, fZzr-1);
-            fTerm2 = fTerm1*(1.0+x);
-            xNeu = x*(1.0 -                     // x(i+1) = x(i) - f(x(i)) / f'(x(i))
-                 (x*fBw*fTerm2 + fRmz*(1.0+x*fF)*(fTerm2-1.0) + x*fZw) /
-                 (x*x*fZzr*fBw*fTerm1 - fRmz*(fTerm2-1.0)
-                                      + x*fRmz*(1.0+x*fF)*fZzr*fTerm1) );
+            fPowNminus1 = pow( 1.0+fX, fNper-1.0);
+            fPowN = fPowNminus1 * (1.0+fX);
+            if (rtl::math::approxEqual( fabs(fX), 0.0))
+            {
+                fGeoSeries = fNper;
+                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+            }
+            else
+            {
+                fGeoSeries = (fPowN-1.0)/fX;
+                fGeoSeriesDerivation = fNper * fPowNminus1 / fX - fGeoSeries / fX;
+            }
+            fTerm = fFv + fPv *fPowN+ fPayment * fGeoSeries;
+            fTermDerivation = fPv * fNper * fPowNminus1 + fPayment * fGeoSeriesDerivation;
+            if (fabs(fTerm) < fEpsilonSmall)
+                bFound = true;  // will catch root which is at an extreme
+            else
+            {
+                if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
+                    fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
+                else
+                    fXnew = fX - fTerm / fTermDerivation;
+            nCount++;
+            // more accuracy not possible in oscillating cases
+            bFound = (fabs(fXnew - fX) < SCdEpsilon);
+            fX = fXnew;
+            }
         }
-        nCount++;
-        fEps = fabs(xNeu - x);
-        x = xNeu;
+        // Gnumeric returns roots < -1, Excel gives an error in that cases,
+        // ODFF says nothing about it. Enable the statement, if you want Excel's
+        // behavior
+        //bValid =(fX >=-1.0);
     }
-    if (fSchaetzwert == 0.0 && fabs(x) < SCdEpsilon)
-        x = 0.0;                                // auf Null normieren
-    fSchaetzwert = x;                           //n Rueckgabe
-    return fEps;
+    else
+    { // Nper is not an integer value.
+        fX = (fGuess < -1.0) ? -1.0 : fGuess;   // start with a valid fX
+        while (bValid && !bFound && nCount < nIterationsMax)
+        {
+            if (rtl::math::approxEqual( fabs(fX), 0.0))
+            {
+                fGeoSeries = fNper;
+                fGeoSeriesDerivation = fNper * (fNper-1.0)/2.0;
+            }
+            else
+            {
+                fGeoSeries = (pow( 1.0+fX, fNper) - 1.0) / fX;
+                fGeoSeriesDerivation = fNper * pow( 1.0+fX, fNper-1.0) / fX - fGeoSeries / fX;
+            }
+            fTerm = fFv + fPv *pow(1.0 + fX,fNper)+ fPayment * fGeoSeries;
+            fTermDerivation = fPv * fNper * pow( 1.0+fX, fNper-1.0) + fPayment * fGeoSeriesDerivation;
+            if (fabs(fTerm) < fEpsilonSmall)
+                bFound = true;  // will catch root which is at an extreme
+            else
+            {
+                if (rtl::math::approxEqual( fabs(fTermDerivation), 0.0))
+                    fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
+                else
+                    fXnew = fX - fTerm / fTermDerivation;
+            nCount++;
+             // more accuracy not possible in oscillating cases
+            bFound = (fabs(fXnew - fX) < SCdEpsilon);
+            fX = fXnew;
+            bValid = (fX >= -1.0);  // otherwise pow(1.0+fX,fNper) will fail
+            }
+        }
+    }
+    fGuess = fX;    // return approximate root
+    return bValid && bFound;
 }
 
+// In Calc UI it is the function RATE(Nper;Pmt;Pv;Fv;Type;Guess)
 void ScInterpreter::ScZins()
 {
-    double nZw = 0, nRmz, nZzr, nBw, nFlag = 0, nSchaetzwert = 0.1, fEps;
+    double fPv, fPayment, fNper;
+    // defaults for missing arguments, see ODFF spec
+    double fFv = 0, fPayType = 0, fGuess = 0.1;
+    bool bValid = true;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
         return;
     if (nParamCount == 6)
-        nSchaetzwert = GetDouble();
+        fGuess = GetDouble();
     if (nParamCount >= 5)
-        nFlag = GetDouble();
+        fPayType = GetDouble();
     if (nParamCount >= 4)
-        nZw  = GetDouble();
-    nBw  = GetDouble();
-    nRmz = GetDouble();
-    nZzr = GetDouble();
-    if (nFlag == 0.0)
-        fEps = GetZinsIterationEps(nZzr, nRmz, nBw, nZw, 0.0, nSchaetzwert);
-    else
-        fEps = GetZinsIterationEps(nZzr, nRmz, nBw, nZw, 1.0, nSchaetzwert);
-    if (fEps >= SCdEpsilon)
+        fFv = GetDouble();
+    fPv = GetDouble();
+    fPayment = GetDouble();
+    fNper = GetDouble();
+    if (fNper <= 0.0) // constraint from ODFF spec
     {
-        SetError(errNoConvergence);
-        nSchaetzwert = 0;
+        PushIllegalArgument();
+        return;
     }
-    PushDouble(nSchaetzwert);
+    // other values for fPayType might be meaningful,
+    // ODFF spec is not clear yet, enable statement if you want only 0 and 1
+    //if (fPayType != 0.0) fPayType = 1.0;
+    bValid = RateIteration(fNper, fPayment, fPv, fFv, fPayType, fGuess);
+    if (!bValid)
+        SetError(errNoConvergence);
+    PushDouble(fGuess);
 }
 
 double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
