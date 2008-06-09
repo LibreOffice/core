@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,13 +32,19 @@
 PRJ = ..$/..
 PRJNAME = tools
 TARGET = misc
+LIBTARGET = NO
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-SLOFILES = \
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+LIB1OBJFILES = \
     $(SLO)$/appendunixshellword.obj \
-    $(SLO)$/extendapplicationenvironment.obj
+    $(SLO)$/extendapplicationenvironment.obj \
+    $(SLO)$/getprocessworkingdir.obj
+
+OBJFILES = $(OBJ)$/pathutils.obj
+SLOFILES = $(SLO)$/pathutils.obj $(LIB1OBJFILES)
 
 .INCLUDE: target.mk
