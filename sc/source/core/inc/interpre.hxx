@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpre.hxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -587,8 +587,8 @@ double ScGetZw(double fZins, double fZzr, double fRmz,
                       double fBw, double fF);
 void ScZW();
 void ScZZR();
-double GetZinsIterationEps(double fZzr, double fRmz, double fBw, double fZw,
-                                  double fF,   double& fSchaetzwert);
+bool RateIteration(double fNper, double fPayment, double fPv,
+                                double fFv, double fPayType, double& fGuess);
 void ScZins();
 double ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
                          double fZw, double fF, double& fRmz);
@@ -692,7 +692,6 @@ void ScGeoMean();
 void ScStandard();
 void ScSkew();
 void ScMedian();
-void GetSortArray(short nParamCount, double** ppSortArray, SCSIZE& nSize);
 void GetSortArray(BYTE nParamCount, ::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void QuickSort(::std::vector<double>& rSortArray, ::std::vector<long>* pIndexOrder = NULL);
 void ScModalValue();
