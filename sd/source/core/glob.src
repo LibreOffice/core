@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: glob.src,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,29 +406,24 @@ String STR_FONTWORKOBJECTBARSHELL
 String STR_POOLSHEET_BANDED_CELL
 {
     Text [ en-US ] = "Banding cell" ;
-    Text [ DE ] = "Alternierende Zelle" ;
 };
 
 String STR_POOLSHEET_HEADER
 {
     Text [ en-US ] = "Header" ;
-    Text [ DE ] = "Kopfzeile" ;
 };
 
 String STR_POOLSHEET_TOTAL
 {
     Text [ en-US ] = "Total line" ;
-    Text [ DE ] = "Summenzeile" ;
 };
 
 String STR_POOLSHEET_FIRST_COLUMN
 {
     Text [ en-US ] = "First column" ;
-    Text [ DE ] = "Erste Spalte" ;
 };
 
 String STR_POOLSHEET_LAST_COLUMN
 {
     Text [ en-US ] = "Last column" ;
-    Text [ DE ] = "Letzte Spalte" ;
 };
