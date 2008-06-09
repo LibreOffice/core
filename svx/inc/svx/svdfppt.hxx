@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,8 @@
 #include <svx/flditem.hxx>
 #undef ITEMID_FIELD
 #include "svx/svxdllapi.h"
-
 #include <vcl/font.hxx>
+#include <vector>
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrModel;
@@ -274,7 +274,8 @@ struct PptColorSchemeAtom
     BYTE                aData[32];
 
 public:
-
+                        PptColorSchemeAtom () { Clear(); }
+    void                Clear();
     Color               GetColor( USHORT nNum ) const;
 
     friend SvStream& operator>>(SvStream& rIn, PptColorSchemeAtom& rAtom);
@@ -672,11 +673,14 @@ struct  PPTTextSpecInfoAtomInterpreter
 
 struct PPTExtParaLevel
 {
-        UINT32  nBuFlags;
-        UINT32  nNumberingType;
-        UINT16  nBuStart;
-        UINT16  nBuInstance;
-        BOOL    bSet;
+        sal_uInt32  mnExtParagraphMask;
+        sal_uInt16  mnBuBlip;
+        sal_uInt16  mnHasAnm;
+        sal_uInt32  mnAnmScheme;
+        sal_uInt32  mpfPP10Ext;
+        sal_uInt32  mnExtCharacterMask;
+        sal_uInt32  mcfPP10Ext;
+        sal_Bool    mbSet;
 
         PPTExtParaLevel();
         friend SvStream& operator>>( SvStream& rIn, PPTExtParaLevel& rL );
@@ -830,20 +834,16 @@ struct ImplPPTParaPropSet
     sal_uInt32  mnBulletColor;
     sal_uInt16  mpArry[ 22 ];
 
-    sal_uInt32  nBuFlags;
-    sal_uInt32  nNumberingType;
-    sal_uInt16  nBuStart;
-    sal_uInt16  nBuInstance;
+    sal_uInt32  mnExtParagraphMask;
+    sal_uInt32  mnAnmScheme;
+    sal_uInt16  mnHasAnm;
+    sal_uInt16  mnBuBlip;
 
     sal_uInt32  nDontKnow1;
     sal_uInt32  nDontKnow2;
     sal_uInt16  nDontKnow2bit06;
 
-#ifdef DBG_EXTRACT_BUDATA
-    sal_uInt16  mnEntryCount;
-#endif
-
-            ImplPPTParaPropSet(){ mnRefCount = 1; mnAttrSet = 0; nBuFlags = 0; mnDepth = 0; };
+            ImplPPTParaPropSet(){ mnRefCount = 1; mnAttrSet = 0; mnExtParagraphMask = 0; mnDepth = 0; };
 };
 
 struct PPTParaPropSet
@@ -851,9 +851,6 @@ struct PPTParaPropSet
     sal_uInt32          mnOriginalTextPos;
     ImplPPTParaPropSet* pParaSet;
 
-#ifdef DBG_EXTRACT_BUDATA
-    sal_uInt16          mnCharacters;
-#endif
                         PPTParaPropSet();
                         PPTParaPropSet( PPTParaPropSet& rParaPropSet );
                         ~PPTParaPropSet();
@@ -870,14 +867,10 @@ struct ImplPPTCharPropSet
     sal_uInt32  mnColor;
     sal_uInt16  mnFont;
     sal_uInt16  mnAsianOrComplexFont;
-    sal_uInt16  mnUnknown2;
+    sal_uInt16  mnANSITypeface;
     sal_uInt16  mnFontHeight;
     sal_uInt16  mnEscapement;
     sal_uInt16  mnSymbolFont;
-
-#ifdef DBG_EXTRACT_BUDATA
-    sal_uInt16  mnEntryCount;
-#endif
 
     ImplPPTCharPropSet(){ mnRefCount = 1; mnAttrSet = 0; };
 };
@@ -892,10 +885,6 @@ struct PPTCharPropSet
     sal_uInt16          mnLanguage[ 3 ];
 
     ImplPPTCharPropSet* pCharSet;
-
-#ifdef DBG_EXTRACT_BUDATA
-    sal_uInt16          mnCharacters;
-#endif
 
     void                SetFont( UINT16 nFont );
     void                SetColor( sal_uInt32 nColor );
@@ -960,16 +949,45 @@ struct PPTTextRulerInterpreter
 #define PPT_SPEC_SYMBOL             0x20000
 #define PPT_SPEC_USE_STARBATS       0x40000
 
+struct StyleTextProp9
+{
+    sal_uInt32  mnExtParagraphMask;
+    sal_uInt16  mnBuBlip;
+    sal_uInt16  mnHasAnm;
+    sal_uInt32  mnAnmScheme;
+    sal_uInt32  mpfPP10Ext;
+    sal_uInt32  mnExtCharacterMask;
+    sal_uInt32  mncfPP10Ext;
+    sal_uInt32  mnSpecialInfoMask;
+    sal_uInt32  mnPP10Ext;
+    sal_uInt16  mfBidi;
+
+    StyleTextProp9()
+    : mnExtParagraphMask( 0 )
+    , mnBuBlip( 0 )
+    , mnHasAnm( 0 )
+    , mnAnmScheme( 0 )
+    , mpfPP10Ext( 0 )
+    , mnExtCharacterMask( 0 )
+    , mncfPP10Ext( 0 )
+    , mnSpecialInfoMask( 0 )
+    , mnPP10Ext( 0 )
+    , mfBidi( 0 )
+    {
+    }
+    void Read( SvStream& rSt );
+};
+
 struct PPTStyleTextPropReader
 {
-    List        aSpecMarkerList;            // hiword -> Flags, loword -> Position
-    List        aParaPropList;
-    List        aCharPropList;
+    List    aSpecMarkerList;            // hiword -> Flags, loword -> Position
+    List    aParaPropList;
+    List    aCharPropList;
 
-                PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport&, const DffRecordHeader& rClientTextBoxHd,
-                    PPTTextRulerInterpreter& rInterpreter, const DffRecordHeader& rExtParaHd, sal_uInt32 nTextInstance );
+    PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport&, const DffRecordHeader& rClientTextBoxHd,
+        PPTTextRulerInterpreter& rInterpreter, const DffRecordHeader& rExtParaHd, sal_uInt32 nTextInstance );
 
-                ~PPTStyleTextPropReader();
+    ~PPTStyleTextPropReader();
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1349,7 +1367,7 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
 #define PPT_CharAttr_EnableNumbering2   12  //00001000
 #define PPT_CharAttr_Font               16  //00010000
 #define PPT_CharAttr_AsianOrComplexFont 21  //00200000
-#define PPT_CharAttr_Unknown2           22  //00400000
+#define PPT_CharAttr_ANSITypeface       22  //00400000
 #define PPT_CharAttr_Symbol             23  //00800000
 #define PPT_CharAttr_FontHeight         17  //00020000
 #define PPT_CharAttr_FontColor          18  //00040000
