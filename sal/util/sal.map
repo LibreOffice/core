@@ -570,6 +570,7 @@ UDK_3.7 { # OOo 2.4
 
 UDK_3.8 { # OOo 3.0
     global:
+        rtl_bootstrap_encode;
         rtl_convertStringToUString;
 } UDK_3.7;
 
