@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,7 +48,8 @@ APP1NOSAL=TRUE
 APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP1OBJS=\
     $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj
+    $(OBJ)$/genericloader.obj \
+    $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB1=$(SHLWAPILIB)
 
 APP2TARGET=so$/guiloader
@@ -56,7 +57,8 @@ APP2NOSAL=TRUE
 APP2ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP2OBJS=\
     $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/genericloader.obj
+    $(OBJ)$/genericloader.obj \
+    $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB2=$(SHLWAPILIB)
 
 # --- Targets ------------------------------------------------------
