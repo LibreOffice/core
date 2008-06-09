@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacx.mk,v $
 #
-# $Revision: 1.32 $
+# $Revision: 1.33 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -198,6 +198,7 @@ LINKFLAGSRUNPATH_UREBIN=
 LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO$/$(@:f)'
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
