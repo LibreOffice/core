@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tablertfimporter.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -282,7 +282,7 @@ void SdrTableRTFParser::FillTable()
                 RTFCellInfoPtr xCellInfo( (*xColumn)[nCol] );
 
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                if( xCell.is() )
+                if( xCell.is() && xCellInfo.get() )
                 {
                     const SfxPoolItem *pPoolItem = 0;
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,FALSE,&pPoolItem)==SFX_ITEM_SET)
