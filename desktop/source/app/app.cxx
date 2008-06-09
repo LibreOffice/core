@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: app.cxx,v $
- * $Revision: 1.221 $
+ * $Revision: 1.222 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +119,6 @@
 #include <svtools/moduleoptions.hxx>
 #include <osl/module.h>
 #include <osl/file.hxx>
-#include <osl/process.h>
 #include <osl/signal.h>
 #include <rtl/uuid.h>
 #include <svtools/pathoptions.hxx>
@@ -328,7 +327,7 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pArgs )
     {
-            pArgs = new CommandLineArgs( true );
+            pArgs = new CommandLineArgs;
     }
     }
 
@@ -2601,7 +2600,7 @@ void Desktop::OpenClients()
     sal_Bool bShutdown( sal_False );
     if ( !pArgs->IsServer() )
     {
-        ProcessDocumentsRequest aRequest;
+        ProcessDocumentsRequest aRequest(pArgs->getCwdUrl());
         aRequest.pcProcessed = NULL;
 
         pArgs->GetOpenList( aRequest.aOpenList );
@@ -2725,14 +2724,15 @@ void Desktop::OpenDefault()
             return;
     }
 
-    ProcessDocumentsRequest aRequest;
+    ProcessDocumentsRequest aRequest(pArgs->getCwdUrl());
     aRequest.pcProcessed = NULL;
     aRequest.aOpenList   = aName;
     OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
 }
 
 
-String GetURL_Impl( const String& rName )
+String GetURL_Impl(
+    const String& rName, boost::optional< rtl::OUString > const & cwdUrl )
 {
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
     // as INetURLObj does not handle handle there URLs
@@ -2753,23 +2753,16 @@ String GetURL_Impl( const String& rName )
         return rName;
     }
 
-    // if the filename is a physical name, it is the client file system, not the file system
-    // of the machine where the office is running ( if this are different machines )
-    // so in the remote case we can't handle relative filenames as arguments, because they
-    // are parsed relative to the program path
-    // the file system of the client is addressed through the "file:" protocol
-
-    // Get current working directory to support relativ pathes
-    ::rtl::OUString aWorkingDir;
-    osl_getProcessWorkingDir( &aWorkingDir.pData );
-
     // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
     // Attention: "setFianlSlash()" is neccessary for calling "smartRel2Abs()"!!!
     // Otherwhise last part will be ignored and wrong result will be returned!!!
     // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
     // But if we add a seperator - he doesn't do it anymore.
-    INetURLObject aObj( aWorkingDir );
-    aObj.setFinalSlash();
+    INetURLObject aObj;
+    if (cwdUrl) {
+        aObj.SetURL(*cwdUrl);
+        aObj.setFinalSlash();
+    }
 
     // Use the provided parameters for smartRel2Abs to support the usage of '%' in system paths.
     // Otherwise this char won't get encoded and we are not able to load such files later,
@@ -2895,7 +2888,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         CommandLineArgs* pCmdLine = GetCommandLineArgs();
         if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
         {
-            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest;
+            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
+                pCmdLine->getCwdUrl());
             pDocsRequest->aOpenList = aOpenURL;
             pDocsRequest->pcProcessed = NULL;
 
@@ -2910,7 +2904,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         CommandLineArgs* pCmdLine = GetCommandLineArgs();
         if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
         {
-            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest;
+            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest(
+                pCmdLine->getCwdUrl());
             pDocsRequest->aPrintList = aPrintURL;
             pDocsRequest->pcProcessed = NULL;
 
