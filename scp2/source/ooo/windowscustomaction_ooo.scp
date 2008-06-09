@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,24 +59,6 @@ WindowsCustomAction gid_Customaction_Regmsdocmsidll3
 	Target = "DeinstallExecSequenceEntry";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "REMOVE\<\>\"\" And Not PATCH", "end");
-End
-
-WindowsCustomAction gid_Customaction_Pythonmsidll1
-	Name = "Pythonmsidll1";
-	Typ = "65";
-	Source = "pythonmsi.dll";
-	Target = "InstallExecSequenceEntry";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3 And Not PATCH", "end");
-End
-
-WindowsCustomAction gid_Customaction_Pythonmsidll2
-	Name = "Pythonmsidll2";
-	Typ = "65";
-	Source = "pythonmsi.dll";
-	Target = "DeinstallExecSequenceEntry";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end");
 End
 
 WindowsCustomAction gid_Customaction_Regactivexdll1
