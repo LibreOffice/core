@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: sdpptwrp.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,6 +158,8 @@ sal_Bool SdPPTFilter::Export()
                         nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
                     if ( pFilterOptions->IsImpress2PowerPoint() )
                         nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
+                    if ( pFilterOptions->IsEnablePPTPreview() )
+                        nCnvrtFlags |= 0x8000;
                 }
 
                 mrDocument.SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
