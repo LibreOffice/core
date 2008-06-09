@@ -84,6 +84,9 @@ mkdir: %_DEST%\bin%_EXT%\c08
 ..\%__SRC%\bin\pagein %_DEST%\bin%_EXT%\pagein
 ..\%__SRC%\misc\pagein-* %_DEST%\bin%_EXT%\pagein-*
 
+..\%__SRC%\bin\unoinfo.exe %_DEST%\bin%_EXT%\unoinfo.exe
+..\%__SRC%\misc\unoinfo.sh %_DEST%\bin%_EXT%\unoinfo
+
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 ..\%__SRC%\misc\soffice.sh %_DEST%\bin%_EXT%\soffice
