@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxsoli4.mk,v $
 #
-# $Revision: 1.44 $
+# $Revision: 1.45 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -132,6 +132,7 @@ LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
 LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
 LINKCFLAGS=-w -mt -z combreloc -norunpath
 
