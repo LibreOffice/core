@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.98 $
+ * $Revision: 1.99 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +40,6 @@ Module gid_Module_Root_Files_2
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Bin_Cde_Open_Url,
-	gid_File_Bin_Configimport,
 	gid_File_Bin_Gnome_Open_Url,
 	gid_File_Bin_Gnome_Open_Url_Bin,
 	gid_File_Bin_Kde_Open_Url,
@@ -59,7 +58,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Npsoplugin,
     gid_File_Lib_Soffice,
     gid_File_Lib_Unopkg,
-	gid_File_Script_Configimport,
 	gid_File_Script_Setofficelang,
 	gid_File_Script_Setofficelang_C01,
 	gid_File_Server_Bonobo_Presentationstarter,
@@ -826,8 +824,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Sp_Jlsf_Mcd,
 	gid_File_Sp_Klsf_Mcd,
 	gid_File_Sp_Subm_Mcd,
-	gid_File_Spuser1_Txt,
-	gid_File_Registry_Spool_Oo_Office_Jobs_Stclient_Xcu);
+	gid_File_Spuser1_Txt);
 End
 
 Module gid_Module_Root_Files_7
