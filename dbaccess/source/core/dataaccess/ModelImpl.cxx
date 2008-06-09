@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ModelImpl.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1182,8 +1182,8 @@ namespace
         {
             if ( _rxNewRootStorage.is() )
                 _rxContainer->setRootStorage( _rxNewRootStorage );
-            else
-                ;   // TODO: what to do here? dispose the container?
+//            else
+                   // TODO: what to do here? dispose the container?
         }
     }
 }
