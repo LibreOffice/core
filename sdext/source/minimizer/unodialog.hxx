@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodialog.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,9 +119,9 @@ public :
 
     void setControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
     com::sun::star::uno::Any getControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName );
-
+#if 0
     void showMessageBox( const rtl::OUString& rTitle, const rtl::OUString& rMessage, sal_Bool bErrorBox ) const;
-
+#endif
     void enableControl( const rtl::OUString& rControlName );
     void disableControl( const rtl::OUString& rControlName );
 
