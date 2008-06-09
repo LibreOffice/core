@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: math.h,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -398,6 +398,13 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     fVal * pow(10.0, nExp)
  */
 double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C();
+
+/** Rounds value to 15 significant decimal digits.
+
+    @param fValue
+    The value to be rounded.
+  */
+double SAL_CALL rtl_math_approxValue(double fValue) SAL_THROW_EXTERN_C();
 
 #if defined __cplusplus
 }
