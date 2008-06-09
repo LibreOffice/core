@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxlngs3904.mk,v $
 #
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -141,6 +141,7 @@ LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
 LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
