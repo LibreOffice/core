@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.232 $
+# $Revision: 1.233 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -1207,6 +1207,7 @@ LINKFLAGSRUNPATH_UREBIN*=
 LINKFLAGSRUNPATH_OOO*=
 LINKFLAGSRUNPATH_BRAND*=
 LINKFLAGSRUNPATH_OXT*=
+LINKFLAGSRUNPATH_NONE*=
 
 # make sure both linker variables are set
 LINKC*=$(LINK)
