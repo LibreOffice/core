@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -145,7 +145,7 @@ $(SPRMCODETOSTRTMP): $(DOCTOKSPRMCODETOSTRXSL) $(DOCTOKMODEL)
     $(XSLTPROC) $(DOCTOKSPRMCODETOSTRXSL) $(DOCTOKMODEL) > $@
 
 $(SPRMCODETOSTRCXX): sprmcodetostrheader $(SPRMCODETOSTRTMP) sprmcodetostrfooter
-    $(TYPE) $^ > $@
+    $(TYPE) $< > $@
 
 $(SLO)$/sprmcodetostr.obj: $(SPRMCODETOSTRCXX)
 $(SLO)$/qnametostr.obj: $(QNAMETOSTRCXX)
