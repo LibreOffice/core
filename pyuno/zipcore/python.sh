@@ -9,7 +9,7 @@
 #
 # $RCSfile: python.sh,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,76 +35,31 @@ sd_cwd="`pwd`"
 if [ -h "$0" ] ; then
     sd_basename=`basename "$0"`
      sd_script=`ls -l "$0" | sed "s/.*${sd_basename} -> //g"`
-     sd_sub=`echo $sd_script | cut -f1 -d/`
-    if [ "$sd_sub" = ".." -a "$SO_MODE" = "" ]; then
-        SO_MODE="remote"
-    fi
     cd "`dirname "$0"`"
     cd "`dirname "$sd_script"`"
 else
     cd "`dirname "$0"`"
 fi
-
-sd_prog="`pwd`"
-sd_progsub=$sd_prog/$SO_MODE
-
-cd ..
-sd_binary=`basename "$0"`".bin"
-sd_inst="`pwd`"
-
-# change back directory
+sd_prog=`pwd`
 cd "$sd_cwd"
 
-# check if all required patches are installed
-if [ -x "$sd_prog/sopatchlevel.sh" ]; then
-    "$sd_prog/sopatchlevel.sh"
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-fi
+# Set PATH so that crash_report is found:
+PATH=$sd_prog${PATH+:$PATH}
+export PATH
 
-# set search path for shared libraries
-sd_platform=`uname -s`
-case $sd_platform in
-  SunOS)
-    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:/usr/dt/lib:$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH
-    ;;
+# Set LD_LIBRARY_PATH so that "import pyuno" finds libpyuno.so:
+LD_LIBRARY_PATH=$sd_prog/../basis-link/program${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
 
-  AIX)
-    LIBPATH="$sd_progsub":"$sd_prog":$LIBPATH
-    export LIBPATH
-    ;;
+# Set URE_BOOTSTRAP so that "uno.getComponentContext()" bootstraps a complete
+# OOo UNO environment:
+: ${URE_BOOTSTRAP=vnd.sun.star.pathname:$sd_prog/fundamentalrc}
+export URE_BOOTSTRAP
 
-  HP-UX)
-    SHLIB_PATH="$sd_progsub":"$sd_prog":/usr/openwin/lib:$SHLIB_PATH
-    export SHLIB_PATH
-    ;;
-
-  IRIX*)
-    LD_LIBRARYN32_PATH=:"$sd_progsub":"$sd_prog":$LD_LIBRARYN32_PATH
-    export LD_LIBRARYN32_PATH
-    ;;
-
-  Darwin*)
-    DYLD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$DYLD_LIBRARY_PATH
-    export DYLD_LIBRARY_PATH
-    ;;
-
-  *)
-    LD_LIBRARY_PATH="$sd_progsub":"$sd_prog":$LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH
-    ;;
-esac
-
-PYTHONPATH="$sd_prog":"$sd_prog/python-core-%%PYVERSION%%/lib":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk":"$sd_prog/python-core-%%PYVERSION%%/lib/site-packages":"$PYTHONPATH"
+PYTHONPATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-dynload:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-tk:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/site-packages${PYTHONPATH+:$PYTHONPATH}
 export PYTHONPATH
-
-PYTHONHOME="$sd_prog"/python-core-%%PYVERSION%%
+PYTHONHOME=$sd_prog/../basis-link/program/python-core-%%PYVERSION%%
 export PYTHONHOME
 
-# set path so that other apps can be started from soffice just by name
-PATH="$sd_prog":$PATH
-export PATH
-exec "$sd_prog/python.bin" "$@"
-
+# execute binary
+exec "$sd_prog/../basis-link/program/python.bin" "$@"
