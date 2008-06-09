@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optinet2.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,15 +105,14 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <string.h>
-#include <osl/process.h>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #endif
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <osl/module.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1864,18 +1863,19 @@ extern "C" {
 #endif
 
 #define NPP_PATH_MAX 2048
-inline ::rtl::OString getDllURL( void )
+inline bool getDllURL(rtl::OString * path)
 {
-//    ::rtl::OUString libPath(rtl::OUString::createFromAscii("libcui680li.so"));
+    OSL_ASSERT(path != NULL);
     ::rtl::OUString dirPath/*dllPath, */;
-    osl::Module::getUrlFromAddress(reinterpret_cast< oslGenericFunction >(getDllURL), dirPath);
+    if (osl_getExecutableFile(&dirPath.pData) != osl_Process_E_None) {
+        return false;
+    }
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
 //    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
     ::rtl::OUString sysDirPath;
     osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
-    ::rtl::OString oSysDirPath;
-    oSysDirPath = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
-    return oSysDirPath;
+    *path = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
+    return true;
 }
 
 BOOL MozPluginTabPage::isInstalled()
@@ -1902,7 +1902,9 @@ BOOL MozPluginTabPage::isInstalled()
     // get the real file path
     char realFilePath[NPP_PATH_MAX] = {0};
     ::rtl::OString tempString;
-    tempString = getDllURL();
+    if (!getDllURL(&tempString)) {
+        return false;
+    }
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
@@ -1915,7 +1917,9 @@ BOOL MozPluginTabPage::isInstalled()
         BOOL ret = true;
     ::rtl::OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
-    tempString = getDllURL();
+    if (!getDllURL(&tempString)){
+        return false;
+    }
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
     if(! lc_isInstalled(realFilePath))
         ret =true;
@@ -1949,7 +1953,9 @@ BOOL MozPluginTabPage::installPlugin()
     // get the real file path
     char realFilePath[NPP_PATH_MAX] = {0};
     ::rtl::OString tempString;
-    tempString = getDllURL();
+    if (!getDllURL(&tempString)) {
+        return false;
+    }
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
     strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
@@ -1961,7 +1967,9 @@ BOOL MozPluginTabPage::installPlugin()
 #ifdef WNT
     ::rtl::OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
-    tempString = getDllURL();
+    if (!getDllURL(&tempString)) {
+        return false;
+    }
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
     if( !lc_installPlugin(realFilePath))
         return true;
@@ -1986,7 +1994,9 @@ BOOL MozPluginTabPage::uninstallPlugin()
 #ifdef WNT
     ::rtl::OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
-    tempString = getDllURL();
+    if (!getDllURL(&tempString)) {
+        return false;
+    }
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
     if(!lc_uninstallPlugin(realFilePath))
         return true;
