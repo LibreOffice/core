@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,10 +47,11 @@ NO_DEFAULT_STL=true
 # --- Files --------------------------------------------------------
 
 APP1NOSAL=TRUE
+APP1RPATH=NONE
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS=   $(OBJ)$/unoapploader.obj
+APP1OBJS=   $(OBJ)$/unoapploader.obj $(SOLARLIBDIR)$/findsofficepath.obj
 
 APP1STDLIBS=\
             $(ADVAPI32LIB)
