@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.68 $
+# $Revision: 1.69 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -209,6 +209,10 @@ SCPDEFS+=-DENABLE_VBA
 
 .IF "$(DISABLE_ATL)"!=""
 SCPDEFS+=-DDISABLE_ATL
+.ENDIF
+
+.IF "$(SYSTEM_PYTHON)" == "YES"
+SCPDEFS+=-DSYSTEM_PYTHON
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
