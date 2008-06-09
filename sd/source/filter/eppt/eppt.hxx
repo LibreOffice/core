@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.hxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -774,7 +774,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
 
     protected:
 
-        sal_Bool            ImplCreateDocumentSummaryInformation();
+        sal_Bool            ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags );
         sal_Bool            ImplCreateCurrentUserStream();
         void                ImplCreateHeaderFooterStrings( SvStream& rOut,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPagePropSet );
