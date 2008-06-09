@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localhierarchybrowsersvc.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -317,7 +317,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 
 #include "filehelper.hxx"
 #include <osl/file.hxx>
-#include <osl/process.h>
+#include "tools/getprocessworkingdir.hxx"
 #include <vector>
 // -----------------------------------------------------------------------------
 
@@ -363,7 +363,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     bool makeAbsoluteURL(OUString & rURL )
     {
         using osl::File;
-        OUString aBaseDir; osl_getProcessWorkingDir(&aBaseDir.pData);
+        OUString aBaseDir; tools::getProcessWorkingDir(&aBaseDir);
 
         File::RC errcode = osl::File::getAbsoluteFileURL(aBaseDir,rURL,rURL);
 
