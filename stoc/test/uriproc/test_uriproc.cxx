@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: test_uriproc.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -789,17 +789,18 @@ void Test::testVndSunStarScript() {
     struct Data {
         char const * uriReference;
         char const * name;
+        const bool   normalized;
         Parameter parameters[parameterCount];
     };
     Data data[] = {
-        { "vnd.sun.star.script:", 0, {} },
-        { "vnd.sun.star.script:/", 0, {} },
-        { "vnd.sun.star.script:/abc/def?ghi=jkl&mno=pqr", 0, {} },
-        { "vnd.sun.star.script:abc%3fdef/ghi", "abc?def/ghi", {} },
-        { "vnd.sun.star.script:name?a", 0, {} },
-        { "vnd.sun.star.script:name?a=", "name", { { "a", "" }, { "A", 0 } } },
-        { "vnd.sun.star.script:name?a=&", 0, {} },
-        { "vnd.sun.star.script:name?key1=&%26=%3D&key1=hello", "name",
+        { "vnd.sun.star.script:", 0, false, {} },
+        { "vnd.sun.star.script:/", 0, false, {} },
+        { "vnd.sun.star.script:/abc/def?ghi=jkl&mno=pqr", 0, false, {} },
+        { "vnd.sun.star.script:abc%3fdef/ghi", "abc?def/ghi", false, {} },
+        { "vnd.sun.star.script:name?a", 0, false, {} },
+        { "vnd.sun.star.script:name?a=", "name", true, { { "a", "" }, { "A", 0 } } },
+        { "vnd.sun.star.script:name?a=&", 0, true, {} },
+        { "vnd.sun.star.script:name?key1=&%26=%3D&key1=hello", "name", true,
           { { "key1", "" }, { "key2", 0 }, { "&", "=" } } } };
     for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
@@ -819,6 +820,7 @@ void Test::testVndSunStarScript() {
                 "testVndSunStarScript", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].name),
                 scriptUrl->getName());
+            rtl::OUString originalReference(uriRef->getUriReference());
             for (std::size_t j = 0; j < parameterCount; ++j) {
                 if (data[i].parameters[j].key != 0) {
                     TEST_ASSERT_EQUAL(
@@ -840,10 +842,96 @@ void Test::testVndSunStarScript() {
                         scriptUrl->getParameter(
                             rtl::OUString::createFromAscii(
                                 data[i].parameters[j].key)));
+
+                    // setting the parameter to its original value should not change
+                    // the overall uri reference (provided it was normalized before)
+                    if ( data[i].normalized ) {
+                        if ( scriptUrl->hasParameter(rtl::OUString::createFromAscii(
+                            data[i].parameters[j].key)) ) {
+                            scriptUrl->setParameter(
+                                rtl::OUString::createFromAscii(
+                                    data[i].parameters[j].key),
+                                scriptUrl->getParameter(
+                                    rtl::OUString::createFromAscii(
+                                        data[i].parameters[j].key)));
+                            TEST_ASSERT_EQUAL(
+                                "testVndSunStarScript",
+                                static_cast< double >(i)
+                                + static_cast< double >(j) / 10.0,
+                                ::rtl::OUString::createFromAscii("setParameter"),
+                                originalReference,
+                                uriRef->getUriReference());
+                        }
+                    }
                 }
+            }
+            if ( data[i].normalized ) {
+                scriptUrl->setName(scriptUrl->getName());
+                TEST_ASSERT_EQUAL(
+                    "testVndSunStarScript",
+                    i,
+                    ::rtl::OUString::createFromAscii("setName"),
+                    originalReference,
+                    uriRef->getUriReference());
             }
         }
     }
+
+    css::uno::Reference< css::uri::XUriReference > uriRef(
+        m_uriFactory->parse(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "vnd.sun.star.script:Hello?location=Library.Module"))),
+        css::uno::UNO_SET_THROW);
+    css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
+        scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
+
+    scriptUrl->setParameter(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "location")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "foo")));
+    TEST_ASSERT_EQUAL(
+        "testVndSunStarScript", (sal_Int32)10, (sal_Int32)1,
+        uriRef->getUriReference(),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Hello?location=foo")));
+
+    scriptUrl->setParameter(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "language")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarBasic")));
+    TEST_ASSERT_EQUAL(
+        "testVndSunStarScript", (sal_Int32)10, (sal_Int32)2,
+        uriRef->getUriReference(),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Hello?location=foo&language=StarBasic")));
+
+
+    bool caughtExpected = false;
+    try {
+        scriptUrl->setName(::rtl::OUString());
+    }
+    catch( const css::lang::IllegalArgumentException& ) {
+        caughtExpected = true;
+    }
+    TEST_ASSERT_EQUAL(
+        "testVndSunStarScript",
+        ::rtl::OUString::createFromAscii("illegal arguments"),
+        ::rtl::OUString::createFromAscii("name"),
+        caughtExpected,
+        true);
+
+    caughtExpected = false;
+    try {
+        scriptUrl->setParameter(
+            ::rtl::OUString(),
+            ::rtl::OUString::createFromAscii("non-empty"));
+    }
+    catch( const css::lang::IllegalArgumentException& ) {
+        caughtExpected = true;
+    }
+    TEST_ASSERT_EQUAL(
+        "testVndSunStarScript",
+        ::rtl::OUString::createFromAscii("illegal arguments"),
+        ::rtl::OUString::createFromAscii("parameter"),
+        caughtExpected,
+        true);
 }
 
 void Test::testTranslator() {
