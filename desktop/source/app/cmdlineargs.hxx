@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cmdlineargs.hxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +33,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-
+#include "boost/optional.hpp"
 
 namespace desktop
 {
@@ -113,11 +113,14 @@ class CommandLineArgs
             };
 
             virtual ~Supplier();
+            virtual boost::optional< rtl::OUString > getCwdUrl() = 0;
             virtual bool next(rtl::OUString * argument) = 0;
         };
 
-        CommandLineArgs( bool bConvert );
+        CommandLineArgs();
         CommandLineArgs( Supplier& supplier );
+
+        boost::optional< rtl::OUString > getCwdUrl() const { return m_cwdUrl; }
 
         // generic methods to access parameter
         void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
@@ -185,13 +188,14 @@ class CommandLineArgs
         CommandLineArgs operator=( const CommandLineArgs& );
 
         sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
-        void                    ParseCommandLine_Impl( Supplier& supplier, bool convert );
+        void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    ResetParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
         void                    AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
         void                    SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
 
+        boost::optional< rtl::OUString > m_cwdUrl;
         sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
         rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
         sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
