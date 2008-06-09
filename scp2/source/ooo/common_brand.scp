@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: common_brand.scp,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,17 +59,20 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Registry_Modules_Oo,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Inet,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office,
+            gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs,
             gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Writer,
             gid_Brand_Dir_Share_Xdg);
     Files = (gid_Brand_File_BasisLink,
              gid_Brand_File_Bin_Crashreport,
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
+             gid_Brand_File_Bin_Python,
              gid_Brand_File_Bin_Setofficelang_C01,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
              gid_Brand_File_Bin_Spadmin,
+             gid_Brand_File_Bin_Unoinfo,
              gid_Brand_File_Bin_Unopkgcom,
              gid_Brand_File_Bin_Unopkgexe,
              gid_Brand_File_Bin_Unopkg,
@@ -93,6 +96,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Msvcp90,
              gid_Brand_File_Lib_Msvcm90,
              gid_Brand_File_Msvcm90crt_Manifest,
+             gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
              gid_Brand_File_Oo_Office_Common_Xcu,
              gid_Brand_File_Oo_Office_Compatibility_Xcu,
@@ -103,6 +107,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Registry_Spool_Oo_Office_Writer_defaultfontarial_Xcu_C01,
              gid_Brand_File_Script_Setofficelang_C01,
              gid_Brand_File_Script_Unopkg,
+             gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Stclient,
              gid_Brand_File_Share_Xdg_Base,
              gid_Brand_File_Share_Xdg_Calc,
              gid_Brand_File_Share_Xdg_Draw,
@@ -413,6 +418,13 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
+File gid_Brand_File_Bin_Unoinfo
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(unoinfo);
+    Styles = (PACKED);
+End
+
 #ifdef WNT
 File gid_Brand_File_Bin_Unopkgcom
     BIN_FILE_BODY;
@@ -456,6 +468,15 @@ File gid_Brand_File_Bin_Unopkg
     Styles = (PACKED);
     Name = "unopkg.bin";
 End
+
+#if !defined WITHOUT_MOZILLA && (!defined UNX || defined ENABLE_GTK)
+File gid_Brand_File_Lib_Npsoplugin
+    BIN_FILE_BODY;
+    Name = SPECIAL_NAME(npsoplugin);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+End
+#endif
 
 File gid_Brand_File_Bmp_IntroAbout
     TXT_FILE_BODY;
@@ -1277,5 +1298,31 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
     Inifiletablekey = "InstallLocation";
     Inifiletableaction = "1";
     Styles = (INIFILETABLE);
+End
+#endif
+
+#if defined BUILD_SPECIAL && !defined MACOSX
+
+Directory gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs
+    ParentID = gid_Brand_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Jobs";
+End
+
+File gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Stclient
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs;
+    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-stclient.xcu";
+End
+
+#endif
+
+//TODO: This actually belongs into a module of its own:
+#if !defined SYSTEM_PYTHON
+File gid_Brand_File_Bin_Python
+    BIN_FILE_BODY;
+    Name = EXENAME(pyuno/python);
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
 End
 #endif
