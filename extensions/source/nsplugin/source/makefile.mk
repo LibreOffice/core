@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -81,6 +81,7 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 #.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
+SHL1OBJS+=$(SOLARLIBDIR)$/pathutils-slo.obj
 STDLIBS+=$(SOLARLIBDIR)$/npwin.obj
 SHL1STDLIBS+= $(SHELL32LIB) $(SOLARLIBDIR)$/npwin.obj
 
@@ -93,33 +94,21 @@ OBJFILES=\
         $(OBJ)$/so_main.obj
 
 # --- Plugin executable -------------------------
-.IF "$(OS)"=="SOLARIS"
-LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
-.ENDIF          # "$(OS)"=="SOLARIS"
 APP1TARGET=nsplugin$(EXEPOSTFIX)
 APP1OBJS=$(OBJFILES)
 
 APP1STDLIBS=\
             $(CPPULIB)			\
             $(CPPUHELPERLIB)	\
-            $(UNOTOOLSLIB)		\
-            $(COMPHELPERLIB)	\
-            $(VOSLIB)			\
-            $(SALLIB)			\
-            $(VCLLIB)			\
-            $(SVLLIB)			\
-            $(TOOLSLIB)
+            $(SALLIB)
 
-.IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="MACOSX"
-.ELSE
-APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
-.ENDIF
+.IF "$(OS)"=="SOLARIS"
+APP1STDLIBS+= -lsocket -lnsl
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
 DEPOBJFILES=$(OBJ)$/nsp_windows.obj
-APP1OBJS+=$(OBJ)$/nsp_windows.obj
+APP1OBJS+=$(OBJ)$/nsp_windows.obj $(SOLARLIBDIR)$/pathutils-obj.obj
 APP1STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB) $(OLEAAUT32LIB) $(UUIDLIB)
 .ENDIF
 
@@ -133,6 +122,7 @@ SHL1STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB)
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1RPATH=BRAND
 
 # ----- get some additional keys in versioninfo ------------
 SHL1ADD_VERINFO=nsplugin.rc
@@ -156,6 +146,7 @@ SHL2STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB)
 SHL2DEPN=
 SHL2IMPLIB=	i$(SHL2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+SHL2RPATH=BRAND
 
 # ----- get some additional keys in versioninfo ------------
 SHL2ADD_VERINFO=nsplugin_oo.rc
