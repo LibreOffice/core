@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.h,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -212,6 +212,21 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
 */
 void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_uString ** macro )
+    SAL_THROW_EXTERN_C();
+
+/** Escapes special characters ("$" and "\").
+
+    @param value
+    an arbitrary, non-NULL value
+
+    @param encoded
+    non-NULL out parameter, receiving the given value with all occurences of
+    special characters ("$" and "\") escaped
+
+    @since UDK 3.2.9
+*/
+void SAL_CALL rtl_bootstrap_encode(
+    rtl_uString const * value, rtl_uString ** encoded )
     SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
