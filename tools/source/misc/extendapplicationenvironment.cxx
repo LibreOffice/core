@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: extendapplicationenvironment.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,7 @@
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
 #include "rtl/textcvt.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -64,12 +65,13 @@ void extendApplicationEnvironment() {
 #endif
 
     // Make sure URE_BOOTSTRAP environment variable is set (failure is fatal):
-    rtl::OUString env(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP="));
+    rtl::OUStringBuffer env;
+    env.appendAscii(RTL_CONSTASCII_STRINGPARAM("URE_BOOTSTRAP="));
     rtl::OUString uri;
     if (rtl::Bootstrap::get(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_BOOTSTRAP")), uri))
     {
-        env += uri;
+        env.append(rtl::Bootstrap::encode(uri));
     } else {
         if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
             abort();
@@ -78,12 +80,12 @@ void extendApplicationEnvironment() {
         if (i >= 0) {
             uri = uri.copy(0, i + 1);
         }
-        env += uri;
-        env += rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("fundamental")));
+        env.append(rtl::Bootstrap::encode(uri));
+        env.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM(SAL_CONFIGFILE("fundamental")));
     }
     rtl::OString s;
-    if (!env.convertToString(
+    if (!env.makeStringAndClear().convertToString(
             &s, osl_getThreadTextEncoding(),
             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
