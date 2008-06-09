@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,70 +29,35 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=$(PRJ)$/source
+PRJ = ..$/..
+PRJNAME = configmgr
+PRJINC = $(PRJ)$/source
+TARGET = cmdtools
+LIBTARGET = NO
+ENABLE_EXCEPTIONS = TRUE
 
-PRJNAME=configmgr
-
-TARGET=configtools
-TARGET1=configimport
-TARGET2=setofficelang
-
-# Targettype should be CUI, but we need to be able to run the tools on Windows without a shell
+# Targettype should be CUI, but we need to be able to run the tools on Windows
+# without a shell:
 .IF "$(GUI)" == "WNT"
-TARGETTYPE=GUI
-APP1NOSAL="TRUE"
-APP2NOSAL="TRUE"
-.ELSE  # "$(GUI)" == "WNT
-TARGETTYPE=CUI
-.ENDIF # "$(GUI)" == "WNT
-
-LIBTARGET=NO
-
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-APPSTDLIBS=\
-            $(SALLIB) \
-            $(CPPULIB)	\
-            $(CPPUHELPERLIB)
-
-OBJFILES=\
-    $(OBJ)$/configimport.obj \
-    $(OBJ)$/setofficelang.obj \
-    $(OBJ)$/unomain.obj 
-
-
-# --- Apps --------------------------------------------------------
-APP1STDLIBS = $(APPSTDLIBS)
-APP2STDLIBS = $(APPSTDLIBS)
-
-.IF "$(GUI)"=="UNX"
-APP1TARGET= $(TARGET1).bin
-APP2TARGET= $(TARGET2).bin
+TARGETTYPE = GUI
+APP1NOSAL = TRUE
 .ELSE
-APP1TARGET= $(TARGET1)
-APP2TARGET= $(TARGET2)
+TARGETTYPE = CUI
 .ENDIF
 
-APP1OBJS=	\
-    $(OBJ)$/filehelper.obj \
-    $(OBJ)$/oslstream.obj \
-    $(OBJ)$/bufferedfile.obj \
-    $(OBJ)$/configimport.obj \
-    $(OBJ)$/unomain.obj 
+.INCLUDE: settings.mk
 
-APP2OBJS=	\
+APP1TARGET = setofficelang
+APP1OBJS = \
     $(OBJ)$/setofficelang.obj \
     $(OBJ)$/unomain.obj 
+APP1STDLIBS = \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB)	\
+    $(SALLIB)
 
-# --- Scripts ------------------------------------------------------
+OBJFILES = $(APP1OBJS)
 
-UNIXTEXT = $(MISC)/configimport.sh
+UNIXTEXT = $(MISC)/setofficelang.sh
 
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
