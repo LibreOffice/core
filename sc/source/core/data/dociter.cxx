@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dociter.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -386,6 +386,13 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
                                 nRow--;
                                 bNumValid = FALSE;
                                 return TRUE;                            // gefunden
+                            }
+                            else if ( bTextAsZero )
+                            {
+                                rValue = 0.0;
+                                nRow--;
+                                bNumValid = FALSE;
+                                return TRUE;
                             }
                         }
                     }
