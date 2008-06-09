@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeloader.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,6 +141,41 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
 
 //---------------------------------------------------------------------------
 
+namespace {
+
+bool writeArgument(HANDLE pipe, char prefix, WCHAR const * argument) {
+    CHAR szBuffer[4096];
+    int n = WideCharToMultiByte(
+        CP_UTF8, 0, argument, -1, szBuffer, sizeof (szBuffer), NULL, NULL);
+    char b[1 + 2 * ((sizeof szBuffer) - 1)]; // hopefully does not overflow
+    b[0] = prefix;
+    char * p = b + 1;
+    for (int i = 0; i < n - 1; ++i) { // cannot underflow (n >= 0)
+        char c = szBuffer[i];
+        switch (c) {
+        case '\0':
+            *p++ = '\\';
+            *p++ = '0';
+            break;
+        case ',':
+            *p++ = '\\';
+            *p++ = ',';
+            break;
+        case '\\':
+            *p++ = '\\';
+            *p++ = '\\';
+            break;
+        default:
+            *p++ = c;
+            break;
+        }
+    }
+    DWORD w;
+    return WriteFile(pipe, b, p - b, &w, NULL);
+}
+
+}
+
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR, int )
 #else
@@ -181,6 +216,11 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     int argc = 0;
     LPTSTR * argv = NULL;
     bool first = true;
+    WCHAR cwd[MAX_PATH];
+    DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
+    if (cwdLen >= MAX_PATH) {
+        cwdLen = 0;
+    }
 
     do
     {
@@ -242,35 +282,18 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                     LPWSTR  *argv = CommandLineToArgvW( GetCommandLine(), &argc );
 
                     fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
+                    if (fSuccess) {
+                        if (cwdLen > 0) {
+                            fSuccess = writeArgument(hPipe, '2', cwd);
+                        } else {
+                            fSuccess = WriteFile(
+                                hPipe, RTL_CONSTASCII_STRINGPARAM("0"),
+                                &dwBytesWritten, NULL);
+                        }
+                    }
                     for ( int argn = 1; fSuccess && argn < argc; argn++ )
                     {
-                        CHAR    szBuffer[4096];
-
-                        int n = WideCharToMultiByte( CP_UTF8, 0, argv[argn], -1, szBuffer, sizeof(szBuffer), NULL, NULL );
-                        char b[RTL_CONSTASCII_LENGTH(",") + 2 * ((sizeof szBuffer) - 1)] = ","; // hopefully does not overflow
-                        char * p = b + RTL_CONSTASCII_LENGTH(",");
-                        for (int i = 0; i < n - 1; ++i) // cannot underflow (n >= 0)
-                        {
-                            char c = szBuffer[i];
-                            switch (c) {
-                            case '\0':
-                                *p++ = '\\';
-                                *p++ = '0';
-                                break;
-                            case ',':
-                                *p++ = '\\';
-                                *p++ = ',';
-                                break;
-                            case '\\':
-                                *p++ = '\\';
-                                *p++ = '\\';
-                                break;
-                            default:
-                                *p++ = c;
-                                break;
-                            }
-                        }
-                        fSuccess = WriteFile(  hPipe, b, p - b, &dwBytesWritten, NULL );
+                        fSuccess = writeArgument(hPipe, ',', argv[argn]);
                     }
 
                     if ( fSuccess )
@@ -300,21 +323,34 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
         if (first) {
             argv = GetCommandArgs(&argc);
-            std::size_t n = _tcslen(argv[0]) + 2;
+            std::size_t n = wcslen(argv[0]) + 2;
             for (int i = 1; i < argc; ++i) {
-                n += _tcslen(argv[i]) + 3;
+                n += wcslen(argv[i]) + 3;
             }
-            lpCommandLine = new TCHAR[n + 1];
+            n += MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen +
+                MY_LENGTH(L"\"") + 1;
+                // 4 * cwdLen: each char preceded by backslash, each trailing
+                // backslash doubled
+            lpCommandLine = new WCHAR[n];
         }
-        _tcscpy(lpCommandLine, _T("\""));
-        _tcscat(lpCommandLine, argv[0]);
+        WCHAR * p = desktop_win32::commandLineAppend(
+            lpCommandLine, MY_STRING(L"\""));
+        p = desktop_win32::commandLineAppend(p, argv[0]);
         for (int i = 1; i < argc; ++i) {
-            if (first || _tcsncmp(argv[i], MY_STRING(_T("-env:"))) == 0) {
-                _tcscat(lpCommandLine, _T("\" \""));
-                _tcscat(lpCommandLine, argv[i]);
+            if (first || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
+                p = desktop_win32::commandLineAppend(p, MY_STRING(L"\" \""));
+                p = desktop_win32::commandLineAppend(p, argv[i]);
             }
         }
-        _tcscat(lpCommandLine, _T("\""));
+        p = desktop_win32::commandLineAppend(
+            p, MY_STRING(L"\" \"-env:OOO_CWD="));
+        if (cwdLen == 0) {
+            p = desktop_win32::commandLineAppend(p, MY_STRING(L"0"));
+        } else {
+            p = desktop_win32::commandLineAppend(p, MY_STRING(L"2"));
+            p = desktop_win32::commandLineAppendEncoded(p, cwd);
+        }
+        desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
         first = false;
 
         TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
@@ -354,7 +390,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             TRUE,
             0,
             NULL,
-            NULL,
+            szIniDirectory,
             &aStartupInfo,
             &aProcessInfo );
 
