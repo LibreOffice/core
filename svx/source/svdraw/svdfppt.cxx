@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svdfppt.cxx,v $
- * $Revision: 1.160 $
+ * $Revision: 1.161 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -416,6 +416,11 @@ void PptNotesAtom::Clear()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void PptColorSchemeAtom::Clear()
+{
+    memset(&aData[0], 0, 32);
+}
 
 Color PptColorSchemeAtom::GetColor( USHORT nNum ) const
 {
@@ -3338,32 +3343,32 @@ PPTBuGraEntry::PPTBuGraEntry( Graphic& rGraphic, UINT32 nInst ) :
     nInstance       ( nInst ),
     aBuGra          ( rGraphic )  {}
 
-PPTExtParaLevel::PPTExtParaLevel() :
-    nBuFlags        ( 0 ),
-    nNumberingType  ( 0x30001 ),
-    nBuStart        ( 0 ),
-    nBuInstance     ( 0xffff ),
-    bSet            ( FALSE )
+PPTExtParaLevel::PPTExtParaLevel()
+: mnExtParagraphMask( 0 )
+, mnBuBlip( 0xffff )
+, mnHasAnm( 0 )
+, mnAnmScheme( 0 )
+, mpfPP10Ext( 0 )
+, mnExtCharacterMask( 0 )
+, mcfPP10Ext( 0 )
+, mbSet( sal_False )
 {}
 
 SvStream& operator>>( SvStream& rIn, PPTExtParaLevel& rLevel )
 {
-    rLevel.bSet = TRUE;
-    rIn >> rLevel.nBuFlags;
-    if ( rLevel.nBuFlags & 0x00800000 )
-        rIn >> rLevel.nBuInstance;
-    if ( rLevel.nBuFlags & 0x01000000 )
-        rIn >> rLevel.nNumberingType;
-    if ( rLevel.nBuFlags & 0x02000000 )
-        rIn >> rLevel.nBuStart;
-#ifdef DBG_UTIL
-    UINT32 nTemp;
-    rIn >> nTemp;
-    if ( nTemp )
-        DBG_ERROR( ">>PPTExtParaLevel - undefined value (SJ)" );
-#else
-    rIn.SeekRel( 4 );
-#endif
+    rLevel.mbSet = TRUE;
+    rIn >> rLevel.mnExtParagraphMask;
+    if ( rLevel.mnExtParagraphMask & 0x00800000 )
+        rIn >> rLevel.mnBuBlip;
+    if ( rLevel.mnExtParagraphMask & 0x02000000 )
+        rIn >> rLevel.mnHasAnm;
+    if ( rLevel.mnExtParagraphMask & 0x01000000 )
+        rIn >> rLevel.mnAnmScheme;
+    if ( rLevel.mnExtParagraphMask & 0x04000000 )
+        rIn >> rLevel.mpfPP10Ext;
+    rIn >> rLevel.mnExtCharacterMask;
+    if ( rLevel.mnExtCharacterMask & 0x100000 )
+        rIn >> rLevel.mcfPP10Ext;
     return rIn;
 }
 
@@ -3564,9 +3569,9 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     BOOL bHardAttribute = ( nDestinationInstance == 0xffffffff );
 
     UINT32  nBuFlags = 0;
-    UINT16  nBuStart = 0;
-    UINT32  nNumberingType = 0x30001;
-    UINT16  nBuInstance = 0xffff;
+    UINT16  nHasAnm = 0;
+    UINT32  nAnmScheme = 0x10003;
+    UINT16  nBuBlip = 0xffff;
 
     const PPTExtParaProv* pParaProv = pExtParaProv;
     if ( !pExtParaProv )
@@ -3574,18 +3579,19 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
                               : rManager.pPPTStyleSheet->pExtParaProv;
     if ( pPara )
     {
-        nBuFlags = pPara->pParaSet->nBuFlags;
+        nBuFlags = pPara->pParaSet->mnExtParagraphMask;
         if ( nBuFlags )
         {
             if ( nBuFlags & 0x00800000 )
-                nBuInstance = pPara->pParaSet->nBuInstance;
+                nBuBlip = pPara->pParaSet->mnBuBlip;
             if ( nBuFlags & 0x01000000 )
-                nNumberingType = pPara->pParaSet->nNumberingType;
+                nAnmScheme = pPara->pParaSet->mnAnmScheme;
             if ( nBuFlags & 0x02000000 )
-                nBuStart = pPara->pParaSet->nBuStart;
+                nHasAnm = pPara->pParaSet->mnHasAnm;
             bHardAttribute = TRUE;
         }
     }
+
     if ( ( nBuFlags & 0x03800000 ) != 0x03800000 )  // merge style sheet
     {   // we have to read the master attributes
         if ( pParaProv && ( nLevel < 5 ) )
@@ -3593,28 +3599,28 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
             if ( pParaProv->bStyles )
             {
                 const PPTExtParaLevel& rLev = pParaProv->aExtParaSheet[ nInstance ].aExtParaLevel[ nLevel ];
-                if ( rLev.bSet )
+                if ( rLev.mbSet )
                 {
-                    UINT32 nMaBuFlags = rLev.nBuFlags;
+                    UINT32 nMaBuFlags = rLev.mnExtParagraphMask;
 
                     if ( (!( nBuFlags & 0x00800000)) && ( nMaBuFlags & 0x00800000 ) )
                     {
                         if (!( nBuFlags & 0x02000000))          // if there is a BuStart without BuInstance,
-                            nBuInstance = rLev.nBuInstance;     // then there is no graphical Bullet possible
+                            nBuBlip = rLev.mnBuBlip;        // then there is no graphical Bullet possible
                     }
                     if ( (!( nBuFlags & 0x01000000)) && ( nMaBuFlags & 0x01000000 ) )
-                        nNumberingType = rLev.nNumberingType;
+                        nAnmScheme = rLev.mnAnmScheme;
                     if ( (!( nBuFlags & 0x02000000)) && ( nMaBuFlags & 0x02000000 ) )
-                        nBuStart = rLev.nBuStart;
+                        nHasAnm = rLev.mnHasAnm;
                     nBuFlags |= nMaBuFlags;
                 }
             }
         }
     }
-    if ( nBuInstance != 0xffff )        // set graphical bullet
+    if ( nBuBlip != 0xffff )        // set graphical bullet
     {
         Graphic aGraphic;
-        if ( pParaProv->GetGraphic( nBuInstance, aGraphic ) )
+        if ( pParaProv->GetGraphic( nBuBlip, aGraphic ) )
         {
             SvxBrushItem aBrush( aGraphic, GPOS_MM, SID_ATTR_BRUSH );
             rNumberFormat.SetGraphicBrush( &aBrush );
@@ -3625,114 +3631,111 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
             rNumberFormat.SetNumberingType ( SVX_NUM_BITMAP );
         }
     }
-    else if ( nBuStart && ( nBuFlags & 0x03000000 ) )
+    else if ( nHasAnm )
     {
-        if ( nNumberingType & 1 )
+        switch( static_cast< sal_uInt16 >( nAnmScheme ) )
         {
-            switch( nNumberingType >> 16 )
+            default :
+            case 0 :
             {
-                default :
-                case 0 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
-                }
-                break;
-                case 1 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
-                }
-                break;
-                case 2 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                }
-                break;
-                case 3 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
-                }
-                break;
-                case 4 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                    rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
-                }
-                break;
-                case 5 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                }
-                break;
-                case 6 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
-                }
-                break;
-                case 7 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
-                }
-                break;
-                case 8 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                    rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
-                }
-                break;
-                case 9 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                }
-                break;
-                case 10 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                    rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
-                }
-                break;
-                case 11 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                }
-                break;
-                case 12 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                    rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
-                }
-                break;
-                case 13 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
-                }
-                break;
-                case 14 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                    rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
-                }
-                break;
-                case 15 :
-                {
-                    rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
-                    rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
-                }
-                break;
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
             }
+            break;
+            case 1 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 2 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+            }
+            break;
+            case 3 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 4 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+            }
+            break;
+            case 5 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+            }
+            break;
+            case 6 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_LOWER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 7 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( "." ) ) );
+            }
+            break;
+            case 8 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+            }
+            break;
+            case 9 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_LOWER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+            }
+            break;
+            case 10 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+            }
+            break;
+            case 11 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_CHARS_UPPER_LETTER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+            }
+            break;
+            case 12 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+            }
+            break;
+            case 13 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ARABIC );
+            }
+            break;
+            case 14 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+                rNumberFormat.SetPrefix( String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) );
+            }
+            break;
+            case 15 :
+            {
+                rNumberFormat.SetNumberingType( SVX_NUM_ROMAN_UPPER );
+                rNumberFormat.SetSuffix( String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) );
+            }
+            break;
         }
 //      if ( nBuFlags & 0x02000000 )
 //          rNumberFormat.SetStart( nBuStart );
@@ -3938,7 +3941,7 @@ void PPTCharSheet::Read( SvStream& rIn, sal_Bool /*bMasterStyle*/, sal_uInt32 nL
         rIn >> maCharLevel[ nLevel ].mnFont;
     if ( nCMask & ( 1 << PPT_CharAttr_AsianOrComplexFont ) )    // 0x00200000
         rIn >> maCharLevel[ nLevel ].mnAsianOrComplexFont;
-    if ( nCMask & ( 1 << PPT_CharAttr_Unknown2 ) )              // 0x00400000
+    if ( nCMask & ( 1 << PPT_CharAttr_ANSITypeface ) )          // 0x00400000
         rIn >> nVal16;
     if ( nCMask & ( 1 << PPT_CharAttr_Symbol ) )                // 0x00800000
         rIn >> nVal16;
@@ -4487,7 +4490,7 @@ PPTStyleSheet::~PPTStyleSheet()
 PPTParaPropSet::PPTParaPropSet() :
     pParaSet( new ImplPPTParaPropSet )
 {
-    pParaSet->nBuStart = 1;
+    pParaSet->mnHasAnm = 1;
 }
 
 PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
@@ -4496,11 +4499,6 @@ PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
     pParaSet->mnRefCount++;
 
     mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
-
-#ifdef DBG_EXTRACT_BUDATA
-    mnCharacters = rParaPropSet.mnCharacters;
-#endif
-
 }
 
 PPTParaPropSet::~PPTParaPropSet()
@@ -4519,9 +4517,6 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
         pParaSet->mnRefCount++;
 
         mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
-#ifdef DBG_EXTRACT_BUDATA
-        mnCharacters = rParaPropSet.mnCharacters;
-#endif
     }
     return *this;
 }
@@ -4546,9 +4541,6 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     mnLanguage[ 0 ] = rCharPropSet.mnLanguage[ 0 ];
     mnLanguage[ 1 ] = rCharPropSet.mnLanguage[ 1 ];
     mnLanguage[ 2 ] = rCharPropSet.mnLanguage[ 2 ];
-#ifdef DBG_EXTRACT_BUDATA
-    mnCharacters = rCharPropSet.mnCharacters;
-#endif
 }
 
 PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
@@ -4561,9 +4553,6 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagr
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
     mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
-#ifdef DBG_EXTRACT_BUDATA
-    mnCharacters = rCharPropSet.mnCharacters;
-#endif
 }
 
 PPTCharPropSet::~PPTCharPropSet()
@@ -4586,9 +4575,6 @@ PPTCharPropSet& PPTCharPropSet::operator=( PPTCharPropSet& rCharPropSet )
         mnParagraph = rCharPropSet.mnParagraph;
         maString = rCharPropSet.maString;
         mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
-#ifdef DBG_EXTRACT_BUDATA
-        mnCharacters = rCharPropSet.mnCharacters;
-#endif
     }
     return *this;
 }
@@ -4939,11 +4925,44 @@ PPTTextSpecInfoAtomInterpreter::~PPTTextSpecInfoAtomInterpreter()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void StyleTextProp9::Read( SvStream& rIn )
+{
+    rIn >> mnExtParagraphMask;
+    if ( mnExtParagraphMask & 0x800000 )
+        rIn >> mnBuBlip;
+    if ( mnExtParagraphMask & 0x2000000 )
+        rIn >> mnHasAnm;
+    if ( mnExtParagraphMask & 0x1000000 )
+        rIn >> mnAnmScheme;
+    if ( mnExtParagraphMask & 0x4000000 )
+        rIn >> mpfPP10Ext;
+    rIn >> mnExtCharacterMask;
+    if ( mnExtCharacterMask & 0x100000 )
+        rIn >> mncfPP10Ext;
+    rIn >> mnSpecialInfoMask;
+    if ( mnSpecialInfoMask & 0x20 )
+        rIn >> mnPP10Ext;
+    if ( mnSpecialInfoMask & 0x40 )
+        rIn >> mfBidi;
+}
+
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImport& rMan, const DffRecordHeader& rTextHeader,
                                                         PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
 {
     sal_uInt32 nMerk = rIn.Tell();
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
+
+    std::vector< StyleTextProp9 > aStyleTextProp9;
+    if ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom  )
+    {
+        rIn.Seek( rExtParaHd.nFilePos + 8 );
+        while( ( rIn.GetError() == 0 ) && ( rIn.Tell() < rExtParaHd.GetRecEndFilePos() ) )
+        {
+            aStyleTextProp9.resize( aStyleTextProp9.size() + 1 );
+            aStyleTextProp9.back().Read( rIn );
+        }
+        rIn.Seek( nMerk );
+    }
 
     String aString;
     DffRecordHeader aTextHd;
@@ -5019,18 +5038,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
         sal_uInt32  nCharCount, nCharAnzRead = 0;
         sal_Int32   nCharsToRead;
-        sal_uInt16  i, j, nDummy16;
+        sal_uInt16  nDummy16;
         sal_Bool    bTextPropAtom = sal_False;
 
         sal_uInt16 nStringLen = aString.Len();
 
         DffRecordHeader aTextHd2;
-
-#ifdef DBG_EXTRACT_BUDATA
-        sal_uInt16 nParaEntryCount = 0;
-        sal_uInt16 nCharEntryCount = 0;
-#endif
-
         rTextHeader.SeekToContent( rIn );
         if ( rMan.SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd2 ) )
             bTextPropAtom = sal_True;
@@ -5043,10 +5056,6 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 rIn >> nCharCount
                     >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
-#ifdef DBG_EXTRACT_BUDATA
-                aSet.mnEntryCount = ++nParaEntryCount;
-                aParaPropSet.mnCharacters = (sal_uInt16)nCharCount;
-#endif
                 nCharCount--;
 
                 rIn >> nMask;
@@ -5058,18 +5067,18 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 aSet.mpArry[ PPT_ParaAttr_BuHardFont  ] = ( nBulFlg & 2 ) ? 1 : 0;
                 aSet.mpArry[ PPT_ParaAttr_BuHardColor ] = ( nBulFlg & 4 ) ? 1 : 0;
 
-                if ( nMask & 0x0080 )
+                if ( nMask & 0x0080 )   // buChar
                     rIn >> aSet.mpArry[ PPT_ParaAttr_BulletChar ];
-                if ( nMask & 0x0010 )
+                if ( nMask & 0x0010 )   // buTypeface
                     rIn >> aSet.mpArry[ PPT_ParaAttr_BulletFont ];
-                if ( nMask & 0x0040 )
+                if ( nMask & 0x0040 )   // buSize
                 {
                     rIn >> aSet.mpArry[ PPT_ParaAttr_BulletHeight ];
                     if ( ! ( ( nMask & ( 1 << PPT_ParaAttr_BuHardHeight ) )
                         && ( nBulFlg && ( 1 << PPT_ParaAttr_BuHardHeight ) ) ) )
                         aSet.mnAttrSet ^= 0x40;
                 }
-                if ( nMask & 0x0020 )
+                if ( nMask & 0x0020 )   // buColor
                 {
                     sal_uInt32 nVal32, nHiByte;
                     rIn >> nVal32;
@@ -5078,31 +5087,36 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         nVal32 = nHiByte | PPT_COLSCHEME;
                     aSet.mnBulletColor = nVal32;
                 }
-                if ( nMask & 0x0F00 )
+                if ( nMask & 0x0800 )   // pfAlignment
                 {
-                    if ( nMask & 0x800 )
-                    {   // AbsJust!
-                        rIn >> nDummy16;
-                        aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
-                    }
-                    if ( nMask & 0x400 )
-                        rIn >> nDummy16;
-                    if ( nMask & 0x200 )
-                        rIn >> nDummy16;
-                    if ( nMask & 0x100 )
-                        rIn >> nDummy16;
+                    rIn >> nDummy16;
+                    aSet.mpArry[ PPT_ParaAttr_Adjust ] = nDummy16 & 3;
                 }
-                if ( nMask & 0x1000 )
+                if ( nMask & 0x1000 )   // pfLineSpacing
                     rIn >> aSet.mpArry[ PPT_ParaAttr_LineFeed ];
-                if ( nMask & 0x2000 )
+                if ( nMask & 0x2000 )   // pfSpaceBefore
                     rIn >> aSet.mpArry[ PPT_ParaAttr_UpperDist ];
-                if ( nMask & 0x4000 )
+                if ( nMask & 0x4000 )   // pfSpaceAfter
                     rIn >> aSet.mpArry[ PPT_ParaAttr_LowerDist ];
-                if ( nMask & 0x8000 )
+                if ( nMask & 0x100 )    // pfLeftMargin
                     rIn >> nDummy16;
-                if ( nMask & 0x10000 )
+                if ( nMask & 0x400 )    // pfIndent
                     rIn >> nDummy16;
-                if ( nMask & 0xe0000 )
+                if ( nMask & 0x8000 )   // pfDefaultTabSize
+                    rIn >> nDummy16;
+                if ( nMask & 0x100000 ) // pfTabStops
+                {
+                    sal_uInt16 i, nDistance, nAlignment, nNumberOfTabStops = 0;
+                    rIn >> nNumberOfTabStops;
+                    for ( i = 0; i < nNumberOfTabStops; i++ )
+                    {
+                        rIn >> nDistance
+                            >> nAlignment;
+                    }
+                }
+                if ( nMask & 0x10000 )  // pfBaseLine
+                    rIn >> nDummy16;
+                if ( nMask & 0xe0000 )  // pfCharWrap, pfWordWrap, pfOverflow
                 {
                     rIn >> nDummy16;
                     if ( nMask & 0x20000 )
@@ -5113,7 +5127,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         aSet.mpArry[ PPT_ParaAttr_AsianLB_3 ] = ( nDummy16 >> 2 ) & 1;
                     aSet.mnAttrSet |= ( ( nMask >> 17 ) & 7 ) << PPT_ParaAttr_AsianLB_1;
                 }
-                if ( nMask & 0x200000 )                     // #88602#
+                if ( nMask & 0x200000 ) // pfTextDirection
                     rIn >> aSet.mpArry[ PPT_ParaAttr_BiDi ];
             }
             else
@@ -5160,16 +5174,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         sal_Bool bEmptyParaPossible = sal_True;
         sal_uInt32 nCurrentPara = nCharAnzRead = 0;
         sal_uInt32 nCurrentSpecMarker = (sal_uInt32)(sal_uIntPtr)aSpecMarkerList.First();
-        sal_uInt32 nExtBuInd = 0x3c00;
+        sal_uInt32 nExtParaNibble = 0;
 
         while ( nCharAnzRead < nStringLen )
         {
-            sal_uInt32 nBuFlags = 0, nNumberingType = 0, nLatestParaUpdate = 0xffffffff; //TODO: nBuFlags, nNumberingType initialized here to suppress warning for now, see corresponding TODO below
-            sal_uInt16 nBuInstance = 0, nBuStart = 0; //TODO: nBuFlags, nBuStart initialized here to suppress warning for now, see corresponding TODO below
-
-            sal_uInt32  nDontKnow1 = 0; //TODO: nDontKnow1 initialized here to suppress warning for now, see corresponding TODO below
-            sal_uInt32  nDontKnow2 = 0; //TODO: nDontKnow2 initialized here to suppress warning for now, see corresponding TODO below
-            sal_uInt16  nDontKnow2bit06 = 0; //TODO: nDontKnow2bit06 initialized here to suppress warning for now, see corresponding TODO below
+            sal_uInt32 nExtParaFlags = 0, nLatestParaUpdate = 0xffffffff, nAnmScheme = 0;
+            sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
 
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
@@ -5189,115 +5199,73 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 }
                 ImplPPTCharPropSet& aSet = *aCharPropSet.pCharSet;
 
-#ifdef DBG_EXTRACT_BUDATA
-                aSet.mnEntryCount = ++nCharEntryCount;
-                aCharPropSet.mnCharacters = (sal_uInt16)nCharCount;
-#endif
                 // character attributes
                 rIn >> nMask;
-
                 if ( (sal_uInt16)nMask )
                 {
                     aSet.mnAttrSet |= (sal_uInt16)nMask;
                     rIn >> aSet.mnFlags;
                 }
-                // Die Sortierung der Char-Attribs ist etwas durcheinander...
-                static sal_uInt16 __READONLY_DATA aCharAttrTable[16] =
+                if ( nMask & 0x10000 )  // cfTypeface
                 {
-                    16, 21, 22, 23, 17, 18, 19, 20,
-                    24, 25, 26, 27, 28, 29, 30, 31
-                };
-                for ( i = 0; i < 16; i++ )
+                    rIn >> aSet.mnFont;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_Font;
+                }
+                if ( nMask & 0x200000 ) // cfFEOldTypeface
                 {
-                    // Reihenfolge ist bei einfachen Textobjekten normal...
-                    j = aCharAttrTable[ i ];
-                    if ( nMask & ( 1 << j ) )
+                    rIn >> aSet.mnAsianOrComplexFont;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_AsianOrComplexFont;
+                }
+                if ( nMask & 0x400000 ) // cfANSITypeface
+                {
+                    rIn >> aSet.mnANSITypeface;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_ANSITypeface;
+                }
+                if ( nMask & 0x800000 ) // cfSymbolTypeface
+                {
+                    rIn >> aSet.mnSymbolFont;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_Symbol;
+                }
+                if ( nMask & 0x20000 )  // cfSize
+                {
+                    rIn >> aSet.mnFontHeight;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_FontHeight;
+                }
+                if ( nMask & 0x80000 )  // cfPosition
+                {
+                    rIn >> aSet.mnEscapement;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
+                }
+                if ( nMask & 0x40000 )  // cfColor
+                {
+                    sal_uInt32 nVal;
+                    rIn >> nVal;
+                    if ( !( nVal & 0xff000000 ) )
+                        nVal = PPT_COLSCHEME_HINTERGRUND;
+                    aSet.mnColor = nVal;
+                    aSet.mnAttrSet |= 1 << PPT_CharAttr_FontColor;
+                }
+                if ( nExtParaPos )
+                {
+                    sal_uInt32 nExtBuInd = nMask & 0x3c00;
+                    if ( nExtBuInd )
+                        nExtBuInd = ( aSet.mnFlags & 0x3c00 ) >> 10;
+                    if ( nExtBuInd < aStyleTextProp9.size() )
                     {
-                        switch ( j )
-                        {
-                            case PPT_CharAttr_Symbol :
-                            {
-                                rIn >> aSet.mnSymbolFont;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_Symbol;
-                            }
-                            break;
-                            case PPT_CharAttr_Font :
-                            {
-                                rIn >> aSet.mnFont;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_Font;
-                            }
-                            break;
-                            case PPT_CharAttr_AsianOrComplexFont :
-                            {
-                                rIn >> aSet.mnAsianOrComplexFont;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_AsianOrComplexFont;
-                            }
-                            break;
-                            case PPT_CharAttr_Unknown2 :
-                            {
-                                rIn >> aSet.mnUnknown2;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_Unknown2;
-                            }
-                            break;
-                            case PPT_CharAttr_FontHeight :
-                            {
-                                rIn >> aSet.mnFontHeight;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_FontHeight;
-                            }
-                            break;
-                            case PPT_CharAttr_FontColor :
-                            {
-                                sal_uInt32 nVal;
-                                rIn >> nVal;
-                                if ( !( nVal & 0xff000000 ) )
-                                    nVal = PPT_COLSCHEME_HINTERGRUND;
-                                aSet.mnColor = nVal;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_FontColor;
-                            }
-                            break;
-                            case PPT_CharAttr_Escapement :
-                            {
-                                rIn >> aSet.mnEscapement;
-                                aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
-                            }
-                            break;
-                            default :
-                                rIn >> nDummy16;
-                        }
+                        if ( nExtParaNibble && ( ( nExtBuInd + nExtParaNibble ) < aStyleTextProp9.size() ) )
+                            nExtBuInd += nExtParaNibble;
+
+                        nExtParaFlags = aStyleTextProp9[ nExtBuInd ].mnExtParagraphMask;
+                        nBuBlip = aStyleTextProp9[ nExtBuInd ].mnBuBlip;
+                        nHasAnm = aStyleTextProp9[ nExtBuInd ].mnHasAnm;
+                        nAnmScheme = aStyleTextProp9[ nExtBuInd ].mnAnmScheme;
                     }
+                    if ( ( nExtBuInd & 0xf ) == 0xf )
+                        nExtParaNibble += 16;
                 }
             }
             else
                 nCharCount = nStringLen;
-
-            /* SJ: get the new ppt2000 numrules (f???!!!, why are the bullet information
-               stored in the portion and not paragraph section ?
-               that makes no sense and cost me days of my life.)
-            */
-            if ( nExtParaPos && ( ( nMask & 0x3c00 ) != nExtBuInd ) ) //TODO: nMask may be used without having been properly initialized
-            {
-                nExtBuInd = nMask & 0x3c00;
-                if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
-                {
-                    sal_uInt32 nOldPos = rIn.Tell();
-                    rIn.Seek( nExtParaPos );
-                    rIn >> nBuFlags;
-                    if ( nBuFlags & 0x800000 )
-                        rIn >> nBuInstance;
-                    if ( nBuFlags & 0x01000000 )
-                        rIn >> nNumberingType;
-                    if ( nBuFlags & 0x02000000 )
-                        rIn >> nBuStart;
-
-                    rIn >> nDontKnow1
-                        >> nDontKnow2;
-
-                    if ( nDontKnow2 & 0x00000040 )
-                        rIn >> nDontKnow2bit06;
-                    nExtParaPos = rIn.Tell();
-                    rIn.Seek( nOldPos );
-                }
-            }
 
             sal_uInt32 nLen;
             while( nCharCount )
@@ -5305,19 +5273,15 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 if ( nExtParaPos && ( nLatestParaUpdate != nCurrentPara ) && ( nCurrentPara < aParaPropList.Count() ) )
                 {
                     PPTParaPropSet* pPropSet = (PPTParaPropSet*)aParaPropList.GetObject( nCurrentPara );
-                    pPropSet->pParaSet->nBuFlags = nBuFlags; //TODO: nBuFlags may be used without having been properly initialized
-                    if ( nBuFlags & 0x800000 )
-                        pPropSet->pParaSet->nBuInstance = nBuInstance; //TODO: nBuInstance may be used without having been properly initialized
-                    if ( nBuFlags & 0x01000000 )
-                        pPropSet->pParaSet->nNumberingType = nNumberingType; //TODO: nNumberingType may be used without having been properly initialized
-                    if ( nBuFlags & 0x02000000 )
-                        pPropSet->pParaSet->nBuStart = nBuStart; //TODO: nBuStart may be used without having been properly initialized
-                    pPropSet->pParaSet->nDontKnow1 = nDontKnow1; //TODO: nDontKnow1 may be used without having been properly initialized
-                    pPropSet->pParaSet->nDontKnow2 = nDontKnow2; //TODO: nDontKnow2 may be used without having been properly initialized
-                    pPropSet->pParaSet->nDontKnow2bit06 = nDontKnow2bit06; //TODO: nDontKnow2bit06 may be used without having been properly initialized
+                    pPropSet->pParaSet->mnExtParagraphMask = nExtParaFlags;
+                    if ( nExtParaFlags & 0x800000 )
+                        pPropSet->pParaSet->mnBuBlip = nBuBlip;
+                    if ( nExtParaFlags & 0x01000000 )
+                        pPropSet->pParaSet->mnAnmScheme = nAnmScheme;
+                    if ( nExtParaFlags & 0x02000000 )
+                        pPropSet->pParaSet->mnHasAnm = nHasAnm;
                     nLatestParaUpdate = nCurrentPara;
                 }
-
                 aCharPropSet.mnOriginalTextPos = nCharAnzRead;
                 if ( nCurrentSpecMarker &&  ( ( nCurrentSpecMarker & 0xffff ) < ( nCharAnzRead + nCharCount ) ) )
                 {
@@ -6437,26 +6401,6 @@ void PPTFieldEntry::SetDateTime( UINT32 nVal )
     }
 }
 
-#ifdef DBG_EXTRACT_BUDATA
-ByteString Implgethex( sal_uInt32 nHex, sal_Int32 nBytes )
-{
-    ByteString aHexString;
-    sal_Int32 nBitsLeft = nBytes << 3;
-    while( nBitsLeft )
-    {
-        sal_uInt32 nNumb = ( nHex << ( 32 - nBitsLeft ) ) >> 28;
-        if ( nNumb > 9 )
-            nNumb += 'A' - 10;
-        else
-            nNumb += '0';
-        aHexString+=(sal_Char)nNumb;
-        nBitsLeft -= 4;
-    }
-    aHexString += ' ';
-    return aHexString;
-}
-#endif
-
 //  -----------------------------------------------------------------------
 
 PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport, PptSlidePersistEntry& rPersistEntry, DffObjData* pObjData ) :
@@ -6664,97 +6608,6 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         PPTStyleTextPropReader aStyleTextPropReader( rIn, rSdrPowerPointImport, aClientTextBoxHd,
                                                                         aTextRulerInterpreter, aExtParaHd, nInstance );
                         sal_uInt32 nParagraphs = mpImplTextObj->mnParagraphCount = aStyleTextPropReader.aParaPropList.Count();
-
-#ifdef DBG_EXTRACT_BUDATA
-
-                        // testcode
-                        sal_uInt32 nExtParaPos = ( aExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? aExtParaHd.nFilePos + 8 : 0;
-                        if ( nExtParaPos )
-                        {
-                            sal_uInt32 i, nOldPos = rIn.Tell();
-                            rIn.Seek( nExtParaPos );
-                            sal_Char nLineBreak = 0xa;
-                            SvFileStream aFileStream( String( ByteString( "d:\\numberings.txt" ), RTL_TEXTENCODING_UTF8 ), STREAM_WRITE );
-                            aFileStream.Seek( STREAM_SEEK_TO_END );
-
-                            if ( nParagraphs )
-                            {
-                                ByteString aParaEntries( "ParagraphEntryCount:" );
-                                PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( nParagraphs - 1 );
-                                aParaEntries.Append( Implgethex( pSet->pParaSet->mnEntryCount, 2 ) );
-                                aFileStream.Write( aParaEntries.GetBuffer(), aParaEntries.Len() );
-                                aFileStream << nLineBreak;
-                            }
-                            sal_uInt32 nPortionEntries = aStyleTextPropReader.aCharPropList.Count();
-                            if ( nPortionEntries )
-                            {
-                                ByteString aCharEntries( "CharacterEntryCount:" );
-                                PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( nPortionEntries - 1 );
-                                aCharEntries.Append( Implgethex( pSet->pCharSet->mnEntryCount, 2 ) );
-                                aFileStream.Write( aCharEntries.GetBuffer(), aCharEntries.Len() );
-                                aFileStream << nLineBreak;
-                            }
-                            sal_uInt32 nCharCount = aStyleTextPropReader.aCharPropList.Count();
-                            while ( rIn.Tell() < aExtParaHd.GetRecEndFilePos() )
-                            {
-                                ByteString aHex;
-
-                                sal_uInt32 nBuFlags, nNumberingType, nDontKnow1, nDontKnow2;
-                                sal_uInt16 nBuInstance, nBuStart;
-
-                                rIn >> nBuFlags;
-                                aHex.Append( Implgethex( nBuFlags, 4 ) );
-                                if ( nBuFlags & 0x00800000 )
-                                {
-                                    rIn >> nBuInstance;
-                                    aHex.Append( Implgethex( nBuInstance, 2 ) );
-                                }
-                                if ( nBuFlags & 0x01000000 )
-                                {
-                                    rIn >> nNumberingType;
-                                    aHex.Append( Implgethex( nNumberingType, 4 ) );
-                                }
-                                if ( nBuFlags & 0x02000000 )
-                                {
-                                    rIn >> nBuStart;
-                                    aHex.Append( Implgethex( nBuStart, 2 ) );
-                                }
-                                rIn >> nDontKnow1
-                                    >> nDontKnow2;
-
-                                aHex.Append( Implgethex( nDontKnow1, 4 ) );
-                                aHex.Append( Implgethex( nDontKnow2, 4 ) );
-                                aFileStream.Write( aHex.GetBuffer(), aHex.Len() );
-                                aFileStream << nLineBreak;
-                            }
-                            for ( i = 0; i < nParagraphs; i++ )
-                            {
-                                ByteString aBuFlag;
-                                PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( i );
-                                aBuFlag.Append( Implgethex( pSet->mnCharacters, 2 ) );
-                                aBuFlag.Append( ByteString( "ParaFlags:" ) );
-                                aBuFlag.Append( Implgethex( pSet->pParaSet->mnAttrSet, 4 ) );
-                                aBuFlag.Append( Implgethex( pSet->pParaSet->mpArry[ PPT_ParaAttr_BulletOn ], 1 ) );
-                                aFileStream.Write( aBuFlag.GetBuffer(), aBuFlag.Len() );
-                                aFileStream << nLineBreak;
-                            }
-                            for ( i = 0; i < nPortionEntries; i++ )
-                            {
-                                ByteString aBuFlag;
-                                PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( i );
-                                aBuFlag.Append( Implgethex( pSet->mnCharacters, 2 ) );
-                                aBuFlag.Append( ByteString( "CharFlags:" ) );
-                                aBuFlag.Append( Implgethex( pSet->pCharSet->mnAttrSet, 4 ) );
-                                aFileStream.Write( aBuFlag.GetBuffer(), aBuFlag.Len() );
-                                aFileStream << nLineBreak;
-                            }
-                            aFileStream << nLineBreak;
-                            aFileStream << nLineBreak;
-                            rIn.Seek( nOldPos );
-                        }
-
-#endif
-
                         if ( nParagraphs )
                         {
                             // the language settings will be merged into the list of PPTCharPropSet
