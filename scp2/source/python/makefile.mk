@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,8 +57,7 @@ PARFILES=\
         module_python.par              \
         module_python_mailmerge.par    \
         profileitem_python.par         \
-        file_python.par                \
-        shortcut_python.par
+        file_python.par
 
 ULFFILES= \
         module_python.ulf              \
