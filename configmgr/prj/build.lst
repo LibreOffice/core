@@ -1,7 +1,7 @@
-cg	configmgr	:	offapi comphelper cppuhelper vos NULL
+cg	configmgr	:	offapi comphelper cppuhelper tools vos NULL
 cg	configmgr								usr1	-	all	cg_mkout NULL
 cg	configmgr\inc							nmake	-	all	cg_inc NULL
-cg	configmgr\source\cmdtools				nmake	-	all	cg_cmdtools cg_misc cg_inc NULL
+cg	configmgr\source\cmdtools				nmake	-	all	cg_cmdtools cg_inc NULL
 cg	configmgr\source\misc					nmake	-	all	cg_misc cg_inc NULL
 cg	configmgr\source\data					nmake	-	all	cg_data cg_inc NULL
 cg	configmgr\source\tree					nmake	-	all	cg_tree cg_inc NULL
