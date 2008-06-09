@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: surface.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +82,9 @@ namespace canvas
     basegfx::B2DRectangle Surface::getUVCoords() const
     {
         ::basegfx::B2ISize aPageSize(mpPageManager->getPageSize());
-        ::basegfx::B2IPoint aDestOffset(mpFragment->getPos());
+        ::basegfx::B2IPoint aDestOffset;
+        if( mpFragment )
+            aDestOffset = mpFragment->getPos();
 
         const double pw( aPageSize.getX() );
         const double ph( aPageSize.getY() );
@@ -258,7 +260,9 @@ namespace canvas
         if(aSize.getX() <= 0 || aSize.getY() <= 0)
             return true;
 
-        ::basegfx::B2IPoint aDestOffset(mpFragment->getPos());
+        ::basegfx::B2IPoint aDestOffset;
+        if( mpFragment )
+            mpFragment->getPos();
 
         // convert size to normalized device coordinates
         const ::basegfx::B2DRectangle& rUV(
@@ -468,18 +472,24 @@ namespace canvas
         if(!(mpFragment))
         {
             mpFragment = mpPageManager->allocateSpace(maSize);
-            mpFragment->setColorBuffer(mpColorBuffer);
-            mpFragment->setSourceOffset(maSourceOffset);
+            if( mpFragment )
+            {
+                mpFragment->setColorBuffer(mpColorBuffer);
+                mpFragment->setSourceOffset(maSourceOffset);
+            }
         }
 
-        // now we need to 'select' the fragment, which will in turn
-        // pull informations from the image on demand.
-        // in case this fragment is still not located on any of the
-        // available pages ['naked'], we force the page manager to
-        // do it now, no way to defer this any longer...
-        if(!(mpFragment->select(mbIsDirty)))
-            mpPageManager->nakedFragment(mpFragment);
+        if( mpFragment )
+        {
+            // now we need to 'select' the fragment, which will in turn
+            // pull informations from the image on demand.
+            // in case this fragment is still not located on any of the
+            // available pages ['naked'], we force the page manager to
+            // do it now, no way to defer this any longer...
+            if(!(mpFragment->select(mbIsDirty)))
+                mpPageManager->nakedFragment(mpFragment);
 
+        }
         mbIsDirty=false;
     }
 
