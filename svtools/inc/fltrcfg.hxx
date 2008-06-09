@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltrcfg.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +85,10 @@ public:
     void SetPowerPoint2Impress( sal_Bool bFlag );
     sal_Bool IsImpress2PowerPoint() const;
     void SetImpress2PowerPoint( sal_Bool bFlag );
+
+    sal_Bool IsEnablePPTPreview() const;
+    sal_Bool IsEnableCalcPreview() const;
+    sal_Bool IsEnableWordPreview() const;
 
     static SvtFilterOptions* Get();
 };
