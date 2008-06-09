@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: officeipcthread.hxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 #include <osl/conditn.hxx>
+#include "boost/optional.hpp"
 
 namespace desktop
 {
@@ -55,6 +56,10 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 // that was given by command line or by IPC pipe communication.
 struct ProcessDocumentsRequest
 {
+    ProcessDocumentsRequest(boost::optional< rtl::OUString > const & cwdUrl):
+        aCwdUrl(cwdUrl) {}
+
+    boost::optional< ::rtl::OUString > aCwdUrl;
     ::rtl::OUString aModule;
     ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
     ::rtl::OUString aViewList;      // Documents that should be opened in viewmode
