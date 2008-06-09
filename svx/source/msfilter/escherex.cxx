@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: escherex.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1206,10 +1206,12 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
     sal_Bool        bMirrored = sal_False;
     sal_Bool        bRotate   = sal_True;
+    sal_uInt16      nAngle    = 0;
     GraphicAttr*    pGraphicAttr = NULL;
     GraphicObject   aGraphicObject;
     String          aGraphicUrl;
     ByteString      aUniqueId;
+    bool            bIsGraphicMtf(false);
 
     ::com::sun::star::drawing::BitmapMode   eBitmapMode( ::com::sun::star::drawing::BitmapMode_NO_REPEAT );
     ::com::sun::star::uno::Any aAny;
@@ -1234,6 +1236,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     aGraphicObject = aGraphic;
                     aUniqueId = aGraphicObject.GetUniqueID();
+                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
                 }
             }
         }
@@ -1249,6 +1252,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     Graphic     aGraphic( aBitmapEx );
                     aGraphicObject = aGraphic;
                     aUniqueId = aGraphicObject.GetUniqueID();
+                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
                 }
             }
         }
@@ -1316,9 +1320,27 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     }
                     eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
                     aUniqueId = aGraphicObject.GetUniqueID();
+                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
                 }
             }
         }
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
+            aAny >>= bMirrored;
+
+        if ( bCreateFillBitmap && bFillBitmapModeAllowed )
+        {
+            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
+                aAny >>= eBitmapMode;
+        }
+        else
+        {
+            nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                                                                             String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True )
+                ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
+                : 0;
+        }
+
         if ( aGraphicUrl.Len() )
         {
             String aVndUrl( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
@@ -1331,100 +1353,124 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             }
             else
             {
+                // externally, linked graphic? convert to embedded
+                // one, if transformations are needed. this is because
+                // everything < msoxp cannot even handle rotated
+                // bitmaps.
+                // And check whether the graphic link target is
+                // actually supported by mso.
                 INetURLObject   aTmp( aGraphicUrl );
-                SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
-                    aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-                if ( pIn )
+                GraphicDescriptor aDescriptor(aTmp);
+                aDescriptor.Detect();
+                const USHORT nFormat = aDescriptor.GetFileFormat();
+
+                // can MSO handle it?
+                if ( bMirrored || nAngle ||
+                     (nFormat != GFF_BMP &&
+                      nFormat != GFF_GIF &&
+                      nFormat != GFF_JPG &&
+                      nFormat != GFF_PNG &&
+                      nFormat != GFF_TIF &&
+                      nFormat != GFF_PCT &&
+                      nFormat != GFF_WMF &&
+                      nFormat != GFF_EMF) )
                 {
-                    Graphic aGraphic;
-                    sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
-                    if ( nErrCode == ERRCODE_NONE )
+                    SvStream* pIn = ::utl::UcbStreamHelper::CreateStream(
+                        aTmp.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+                    if ( pIn )
                     {
-                        aGraphicObject = aGraphic;
-                        aUniqueId = aGraphicObject.GetUniqueID();
+                        Graphic aGraphic;
+                        sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
+
+                        if ( nErrCode == ERRCODE_NONE )
+                        {
+                            // no.
+                            aGraphicObject = aGraphic;
+                            aUniqueId = aGraphicObject.GetUniqueID();
+                        }
+                        // else: simply keep the graphic link
+                        delete pIn;
                     }
-                    delete pIn;
                 }
             }
         }
-        if ( aUniqueId.Len() )
+
+        if ( aGraphicUrl.Len() || aUniqueId.Len() )
         {
-            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
-                aAny >>= bMirrored;
-
-            if ( bCreateFillBitmap && bFillBitmapModeAllowed )
+            if ( bMirrored || nAngle )
             {
-                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapMode" ) ), sal_True ) )
-                    aAny >>= eBitmapMode;
-            }
-            else
-            {
-                sal_uInt16 nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                                        String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True )
-                                    ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
-                                    : 0;
-
-                if ( bMirrored || nAngle )
+                pGraphicAttr = new GraphicAttr;
+                if ( bMirrored )
+                    pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
+                if ( bIsGraphicMtf )
+                    AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
+                else
                 {
-                    pGraphicAttr = new GraphicAttr;
-                    if ( bMirrored )
-                        pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                    GraphicObject aTmpGraphicObject( aUniqueId );
-                    if ( aTmpGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
-                        AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
-                    else
+                    pGraphicAttr->SetRotation( nAngle );
+                    if ( nAngle && pShapeBoundRect )   // up to xp ppoint does not rotate bitmaps !
                     {
-                        pGraphicAttr->SetRotation( nAngle );
-                        if ( nAngle && pShapeBoundRect )   // up to xp ppoint does not rotate bitmaps !
-                        {
-                            Polygon aPoly( *pShapeBoundRect );
-                            aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
-                            *pShapeBoundRect = aPoly.GetBoundRect();
-                            bSuppressRotation = sal_True;
-                        }
+                        Polygon aPoly( *pShapeBoundRect );
+                        aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
+                        *pShapeBoundRect = aPoly.GetBoundRect();
+                        bSuppressRotation = sal_True;
                     }
                 }
             }
+
             if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
             else
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
 
-            if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+            if ( aUniqueId.Len() )
             {
-                Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-
-                sal_uInt32 nBlibId = 0;
-                if ( aUniqueId.Len() )
-                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr );
-                if ( nBlibId )
+                // write out embedded graphic
+                if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
-                    if ( bCreateFillBitmap )
-                        AddOpt( ESCHER_Prop_fillBlip, nBlibId, sal_True );
-                    else
+                    Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
+
+                    sal_uInt32 nBlibId = 0;
+                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, NULL, pGraphicAttr );
+                    if ( nBlibId )
                     {
-                        AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
-                        ImplCreateGraphicAttributes( rXPropSet, nBlibId, bCreateCroppingAttributes );
+                        if ( bCreateFillBitmap )
+                            AddOpt( ESCHER_Prop_fillBlip, nBlibId, sal_True );
+                        else
+                        {
+                            AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+                            ImplCreateGraphicAttributes( rXPropSet, nBlibId, bCreateCroppingAttributes );
+                        }
+                        bRetValue = sal_True;
                     }
-                    bRetValue = sal_True;
+                }
+                else
+                {
+                    EscherGraphicProvider aProvider;
+                    SvMemoryStream aMemStrm;
+                    Rectangle aRect;
+
+                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr ) )
+                    {
+                        // grab BLIP from stream and insert directly as complex property
+                        // ownership of stream memory goes to complex property
+                        aMemStrm.ObjectOwnsMemory( FALSE );
+                        sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
+                        sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
+                        AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
+                        bRetValue = sal_True;
+                    }
                 }
             }
+            // write out link to graphic
             else
             {
-                EscherGraphicProvider aProvider;
-                SvMemoryStream aMemStrm;
-                Rectangle aRect;
+                OSL_ASSERT(aGraphicUrl.Len());
 
-                if ( aUniqueId.Len() && aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, NULL, pGraphicAttr ) )
-                {
-                    // grab BLIP from stream and insert directly as complex property
-                    // ownership of stream memory goes to complex property
-                    aMemStrm.ObjectOwnsMemory( FALSE );
-                    sal_uInt8* pBuf = (sal_uInt8*) aMemStrm.GetData();
-                    sal_uInt32 nSize = aMemStrm.Seek( STREAM_SEEK_TO_END );
-                    AddOpt( ESCHER_Prop_fillBlip, sal_True, nSize, pBuf, nSize );
-                    bRetValue = sal_True;
-                }
+                AddOpt( ESCHER_Prop_pibName, aGraphicUrl );
+                sal_uInt32  nPibFlags=0;
+                GetOpt( ESCHER_Prop_pibFlags, nPibFlags );
+                AddOpt( ESCHER_Prop_pibFlags,
+                        ESCHER_BlipFlagLinkToFile|ESCHER_BlipFlagFile|ESCHER_BlipFlagDoNotSave | nPibFlags );
             }
         }
     }
