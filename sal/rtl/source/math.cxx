@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: math.cxx,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +48,37 @@
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
+
+
+static int const n10Count = 16;
+static double const n10s[2][n10Count] = {
+    { 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
+      1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16 },
+    { 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8,
+      1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 1e-16 }
+};
+
+// return pow(10.0,nExp) optimized for exponents in the interval [-16,16]
+static double getN10Exp( int nExp )
+{
+    if ( nExp < 0 )
+    {
+        if ( -nExp <= n10Count )
+            return n10s[1][-nExp-1];
+        else
+            return pow( 10.0, static_cast<double>( nExp ) );
+    }
+    else if ( nExp > 0 )
+    {
+        if ( nExp <= n10Count )
+            return n10s[0][nExp-1];
+        else
+            return pow( 10.0, static_cast<double>( nExp ) );
+    }
+    else // ( nExp == 0 )
+        return 1.0;
+}
+
 
 namespace {
 
@@ -212,7 +243,7 @@ inline void doubleToString(StringT ** pResult,
     if ( fValue > 0.0 )
     {
         nExp = static_cast< int >( floor( log10( fValue ) ) );
-        fValue /= pow( 10.0, static_cast< double >( nExp ) );
+        fValue /= getN10Exp( nExp );
     }
 
     switch ( eFormat )
@@ -799,7 +830,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
         if ( nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20) )
             return bSign ? -fValue : fValue;
 
-        fFac = pow( 10.0, nDecPlaces );
+        fFac = getN10Exp( nDecPlaces );
         fValue *= fFac;
     }
     //else  //! uninitialized fFac, not needed
@@ -891,30 +922,40 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     return bSign ? -fValue : fValue;
 }
 
+
 double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 {
-    static int const n10Count = 16;
-    static double const n10s[2][n10Count] = {
-        { 1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8,
-          1e9, 1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16 },
-        { 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7, 1e-8,
-          1e-9, 1e-10, 1e-11, 1e-12, 1e-13, 1e-14, 1e-15, 1e-16 }
-    };
+    return fValue * getN10Exp( nExp );
+}
 
-    if ( nExp < 0 )
-    {
-        if ( -nExp <= n10Count )
-            return fValue * n10s[1][-nExp-1];
-        else
-            return fValue * pow( 10.0, static_cast<double>( nExp ) );
-    }
-    else if ( nExp > 0 )
-    {
-        if ( nExp <= n10Count )
-            return fValue * n10s[0][nExp-1];
-        else
-            return fValue * pow( 10.0, static_cast<double>( nExp ) );
-    }
-    else
+
+double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
+{
+    if (fValue == 0.0 || fValue == HUGE_VAL || !::rtl::math::isFinite( fValue))
+        // We don't handle these conditions.  Bail out.
         return fValue;
+
+    double fOrigValue = fValue;
+
+    bool bSign = ::rtl::math::isSignBitSet( fValue);
+    if (bSign)
+        fValue = -fValue;
+
+    int nExp = static_cast<int>( floor( log10( fValue)));
+    nExp = 14 - nExp;
+    double fExpValue = getN10Exp( nExp);
+
+    fValue *= fExpValue;
+    // If the original value was near DBL_MIN we got an overflow. Restore and
+    // bail out.
+    if (!rtl::math::isFinite( fValue))
+        return fOrigValue;
+    fValue = rtl_math_round( fValue, 0, rtl_math_RoundingMode_Corrected);
+    fValue /= fExpValue;
+    // If the original value was near DBL_MAX we got an overflow. Restore and
+    // bail out.
+    if (!rtl::math::isFinite( fValue))
+        return fOrigValue;
+
+    return bSign ? -fValue : fValue;
 }
