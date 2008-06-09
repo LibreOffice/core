@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_python.scp,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,19 +99,6 @@ End
 #endif
 #endif
 
-// substitute for the python Windows basic scripts
-
-#ifdef WNT
-
-File gid_File_Pythonmsi_Dll
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "pythonmsi.dll";
-    Styles = (PACKED, BINARYTABLE, BINARYTABLE_ONLY);
-End
-
-#endif
- 
 // Scripting Framework Python script proxy
 
 File gid_File_Py_Pythonscript
@@ -158,15 +145,6 @@ File gid_File_Pyuno
     Dir = gid_Dir_Program;
     Styles = (PACKED);
 End
-
-#ifndef SYSTEM_PYTHON
-File gid_File_Python_Sh
-    BIN_FILE_BODY;
-    Name = "python.sh";
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
 
 #endif
 
