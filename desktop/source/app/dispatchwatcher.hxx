@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatchwatcher.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,11 +83,12 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
 
         struct DispatchRequest
         {
-            DispatchRequest( RequestType aType, const ::rtl::OUString& aFile, const ::rtl::OUString& aPrinter, const ::rtl::OUString& aFact ) :
-                aRequestType( aType ), aURL( aFile ), aPrinterName( aPrinter ), aPreselectedFactory( aFact ) {}
+            DispatchRequest( RequestType aType, const ::rtl::OUString& aFile, boost::optional< rtl::OUString > const & cwdUrl, const ::rtl::OUString& aPrinter, const ::rtl::OUString& aFact ) :
+                aRequestType( aType ), aURL( aFile ), aCwdUrl( cwdUrl ), aPrinterName( aPrinter ), aPreselectedFactory( aFact ) {}
 
             RequestType     aRequestType;
             rtl::OUString   aURL;
+            boost::optional< rtl::OUString > aCwdUrl;
             rtl::OUString   aPrinterName;
             rtl::OUString   aPreselectedFactory;
         };
