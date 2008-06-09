@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 // ---------------------------------------------------------------------------------------
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h> // for osl_getExecutableFile
+#include "tools/getprocessworkingdir.hxx"
 
 // ---------------------------------------------------------------------------------------
 // #define this to a non-zero value, if remembering defaults is not supported properly
@@ -263,8 +264,8 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
 {
     using osl::File;
 
-    OUString sBasePath = _rsURL;
-    OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
+    OUString sBasePath;
+    OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
