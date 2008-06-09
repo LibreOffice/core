@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: aboutdialog.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,7 @@ rtl::OUString InsertFixedText( AboutDialog& rAboutDialog, const rtl::OUString& r
     return rControlName;
 }
 
+#if 0
 rtl::OUString InsertSeparator( AboutDialog& rAboutDialog, const OUString& rControlName, sal_Int32 nOrientation,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
@@ -114,6 +115,8 @@ rtl::OUString InsertSeparator( AboutDialog& rAboutDialog, const OUString& rContr
         rControlName, aNames, aValues );
     return rControlName;
 }
+
+#endif
 
 rtl::OUString InsertImage( AboutDialog& rAboutDialog, const OUString& rControlName, const OUString& rURL,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
