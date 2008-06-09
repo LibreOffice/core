@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_env.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,6 +159,12 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
        "SOFTWARE\\MozillaPlugins\\@sun.com/npsopluginmi;version=1.0",
        0, KEY_QUERY_VALUE, &hKey );
+    if (lRet == ERROR_FILE_NOT_FOUND) {
+        lRet = RegOpenKeyEx(
+            HKEY_CURRENT_USER,
+            "SOFTWARE\\MozillaPlugins\\@sun.com/npsopluginmi;version=1.0", 0,
+            KEY_QUERY_VALUE, &hKey);
+    }
     debug_fprintf(NSP_LOG_APPEND, "2 before before strstr realFileName is %s\n", realFileName);
     if( lRet != ERROR_SUCCESS )
        return FALSE;
@@ -209,21 +215,6 @@ const char* findProgramDir()
 #endif
     }
     return sProgram;
-}
-
-// Return the nsplugin executable file path, return value like "/home/build/staroffice/program/nsplugin"
-const char* findNsExeFile()
-{
-    static char sNsExe[NPP_BUFFER_SIZE] = {0};
-
-    if (!sNsExe[0])
-    {
-        sprintf(sNsExe, "%s/%s", findProgramDir(), PLUGIN_EXE_FILE_NAME);
-#ifdef WNT
-        UnixToDosPath(sNsExe);
-#endif
-     }
-    return sNsExe;
 }
 
 // Return: "/home/build/staroffice/program" + original system library path
