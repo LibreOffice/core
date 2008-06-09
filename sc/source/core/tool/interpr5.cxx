@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr5.cxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,11 +64,12 @@ const double fInvEpsilon = 1.0E-7;
 
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
-    if (fy == 0.0 || fx == 0.0)
-    {
-        SetError(errIllegalArgument);
-        return 1.0;
-    }
+    // By ODFF definition GCD(0,a) => a. This is also vital for the code in
+    // ScGCD() to work correctly with a preset fy=0.0
+    if (fy == 0.0)
+        return fx;
+    else if (fx == 0.0)
+        return fy;
     else
     {
         double fz = fmod(fx, fy);
@@ -87,12 +88,10 @@ void ScInterpreter::ScGCD()
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
-        double fSign = 1.0;
         double fx, fy = 0.0;
-        bool bFirst = true;
         ScRange aRange;
         size_t nRefInList = 0;
-        while (nParamCount-- > 0)
+        while (!nGlobalError && nParamCount-- > 0)
         {
             switch (GetStackType())
             {
@@ -100,26 +99,13 @@ void ScInterpreter::ScGCD()
                 case svString:
                 case svSingleRef:
                 {
-                    if (bFirst)
+                    fx = ::rtl::math::approxFloor( GetDouble());
+                    if (fx < 0.0)
                     {
-                        bFirst = false;
-                        fy = GetDouble();
-                        if (fy < 0.0)
-                        {
-                            fy *= -1.0;
-                            fSign *= -1.0;
-                        }
+                        PushIllegalArgument();
+                        return;
                     }
-                    else
-                    {
-                        fx = GetDouble();
-                        if (fx < 0.0)
-                        {
-                            fx *= -1.0;
-                            fSign *= -1.0;
-                        }
-                        fy = ScGetGCD(fx, fy);
-                    }
+                    fy = ScGetGCD(fx, fy);
                 }
                 break;
                 case svDoubleRef :
@@ -131,38 +117,18 @@ void ScInterpreter::ScGCD()
                     ScValueIterator aValIter(pDok, aRange, glSubTotal);
                     if (aValIter.GetFirst(nCellVal, nErr))
                     {
-                        if (bFirst)
+                        do
                         {
-                            bFirst = false;
-                            fy = nCellVal;
-                            if (fy < 0.0)
-                            {
-                                fy *= -1.0;
-                                fSign *= -1.0;
-                            }
-                        }
-                        else
-                        {
-                            fx = nCellVal;
+                            fx = ::rtl::math::approxFloor( nCellVal);
                             if (fx < 0.0)
                             {
-                                fx *= -1.0;
-                                fSign *= -1.0;
+                                PushIllegalArgument();
+                                return;
                             }
                             fy = ScGetGCD(fx, fy);
-                        }
-                        while (nErr == 0 && aValIter.GetNext(nCellVal, nErr))
-                        {
-                            fx = nCellVal;
-                            if (fx < 0.0)
-                            {
-                                fx *= -1.0;
-                                fSign *= -1.0;
-                            }
-                            fy = ScGetGCD(fx, fy);
-                        }
-                        SetError(nErr);
+                        } while (nErr == 0 && aValIter.GetNext(nCellVal, nErr));
                     }
+                    SetError(nErr);
                 }
                 break;
                 case svMatrix :
@@ -176,44 +142,19 @@ void ScInterpreter::ScGCD()
                             SetError(errIllegalArgument);
                         else
                         {
-                            if (!pMat->IsValue(0))
-                            {
-                                PushIllegalArgument();
-                                return;
-                            }
-                            if (bFirst)
-                            {
-                                bFirst = false;
-                                fy = pMat->GetDouble(0);
-                                if (fy < 0.0)
-                                {
-                                    fy *= -1.0;
-                                    fSign *= -1.0;
-                                }
-                            }
-                            else
-                            {
-                                fx = pMat->GetDouble(0);
-                                if (fx < 0.0)
-                                {
-                                    fx *= -1.0;
-                                    fSign *= -1.0;
-                                }
-                                fy = ScGetGCD(fx, fy);
-                            }
                             SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 1; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nCount; j++ )
                             {
                                 if (!pMat->IsValue(j))
                                 {
                                     PushIllegalArgument();
                                     return;
                                 }
-                                fx = pMat->GetDouble(j);
+                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
                                 if (fx < 0.0)
                                 {
-                                    fx *= -1.0;
-                                    fSign *= -1.0;
+                                    PushIllegalArgument();
+                                    return;
                                 }
                                 fy = ScGetGCD(fx, fy);
                             }
@@ -224,12 +165,7 @@ void ScInterpreter::ScGCD()
                 default : SetError(errIllegalParameter); break;
             }
         }
-        if (bFirst)
-            SetError( errIllegalParameter);
-        if (fSign == -1.0)
-            PushDouble(-fy);
-        else
-            PushDouble(fy);
+        PushDouble(fy);
     }
 }
 
@@ -238,12 +174,10 @@ void ScInterpreter:: ScLCM()
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
-        double fSign = 1.0;
-        double fx, fy = 0.0;
-        bool bFirst = true;
+        double fx, fy = 1.0;
         ScRange aRange;
         size_t nRefInList = 0;
-        while (nParamCount-- > 0)
+        while (!nGlobalError && nParamCount-- > 0)
         {
             switch (GetStackType())
             {
@@ -251,26 +185,16 @@ void ScInterpreter:: ScLCM()
                 case svString:
                 case svSingleRef:
                 {
-                    if (bFirst)
+                    fx = ::rtl::math::approxFloor( GetDouble());
+                    if (fx < 0.0)
                     {
-                        bFirst = false;
-                        fy = GetDouble();
-                        if (fy < 0.0)
-                        {
-                            fy *= -1.0;
-                            fSign *= -1.0;
-                        }
+                        PushIllegalArgument();
+                        return;
                     }
+                    if (fx == 0.0 || fy == 0.0)
+                        fy = 0.0;
                     else
-                    {
-                        fx = GetDouble();
-                        if (fx < 0.0)
-                        {
-                            fx *= -1.0;
-                            fSign *= -1.0;
-                        }
                         fy = fx * fy / ScGetGCD(fx, fy);
-                    }
                 }
                 break;
                 case svDoubleRef :
@@ -282,38 +206,21 @@ void ScInterpreter:: ScLCM()
                     ScValueIterator aValIter(pDok, aRange, glSubTotal);
                     if (aValIter.GetFirst(nCellVal, nErr))
                     {
-                        if (bFirst)
+                        do
                         {
-                            bFirst = false;
-                            fy = nCellVal;
-                            if (fy < 0.0)
-                            {
-                                fy *= -1.0;
-                                fSign *= -1.0;
-                            }
-                        }
-                        else
-                        {
-                            fx = nCellVal;
+                            fx = ::rtl::math::approxFloor( nCellVal);
                             if (fx < 0.0)
                             {
-                                fx *= -1.0;
-                                fSign *= -1.0;
+                                PushIllegalArgument();
+                                return;
                             }
-                            fy = fx * fy / ScGetGCD(fx, fy);
-                        }
-                        while (nErr == 0 && aValIter.GetNext(nCellVal, nErr))
-                        {
-                            fx = nCellVal;
-                            if (fx < 0.0)
-                            {
-                                fx *= -1.0;
-                                fSign *= -1.0;
-                            }
-                            fy = fx * fy / ScGetGCD(fx, fy);
-                        }
-                        SetError(nErr);
+                            if (fx == 0.0 || fy == 0.0)
+                                fy = 0.0;
+                            else
+                                fy = fx * fy / ScGetGCD(fx, fy);
+                        } while (nErr == 0 && aValIter.GetNext(nCellVal, nErr));
                     }
+                    SetError(nErr);
                 }
                 break;
                 case svMatrix :
@@ -327,46 +234,24 @@ void ScInterpreter:: ScLCM()
                             SetError(errIllegalArgument);
                         else
                         {
-                            if (!pMat->IsValue(0))
-                            {
-                                PushIllegalArgument();
-                                return;
-                            }
-                            if (bFirst)
-                            {
-                                bFirst = false;
-                                fy = pMat->GetDouble(0);
-                                if (fy < 0.0)
-                                {
-                                    fy *= -1.0;
-                                    fSign *= -1.0;
-                                }
-                            }
-                            else
-                            {
-                                fx = pMat->GetDouble(0);
-                                if (fx < 0.0)
-                                {
-                                    fx *= -1.0;
-                                    fSign *= -1.0;
-                                }
-                                fy = fx * fy / ScGetGCD(fx, fy);
-                            }
                             SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 1; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nCount; j++ )
                             {
                                 if (!pMat->IsValue(j))
                                 {
                                     PushIllegalArgument();
                                     return;
                                 }
-                                fx = pMat->GetDouble(j);
+                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
                                 if (fx < 0.0)
                                 {
-                                    fx *= -1.0;
-                                    fSign *= -1.0;
+                                    PushIllegalArgument();
+                                    return;
                                 }
-                                fy = fx * fy / ScGetGCD(fx, fy);
+                                if (fx == 0.0 || fy == 0.0)
+                                    fy = 0.0;
+                                else
+                                    fy = fx * fy / ScGetGCD(fx, fy);
                             }
                         }
                     }
@@ -375,10 +260,7 @@ void ScInterpreter:: ScLCM()
                 default : SetError(errIllegalParameter); break;
             }
         }
-        if (fSign == -1.0)
-            PushDouble(-fy);
-        else
-            PushDouble(fy);
+        PushDouble(fy);
     }
 }
 
