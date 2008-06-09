@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -86,7 +86,6 @@ SCP1FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
-             shortcut_python.par           \
              ure_into_ooo.par              \
              ure.par                       \
              common_brand.par              \
@@ -239,7 +238,6 @@ SCP2FILES  = installation_ooo.par          \
              module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
-             shortcut_python.par           \
              ure_into_ooo.par              \
              ure.par                       \
              common_brand.par              \
