@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: math.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,6 +193,13 @@ inline double pow10Exp(double fValue, int nExp)
     return rtl_math_pow10Exp(fValue, nExp);
 }
 
+/** A wrapper around rtl_math_approxValue.
+ */
+inline double approxValue(double fValue)
+{
+    return rtl_math_approxValue(fValue);
+}
+
 /** Test equality of two values with an accuracy of the magnitude of the
     given values scaled by 2^-48 (4 bits roundoff stripped).
 
@@ -238,38 +245,22 @@ inline double approxSub(double a, double b)
     return a - b;
 }
 
-/** floor() method taking approxEqual() into account.
+/** floor() method taking approxValue() into account.
 
     Use for expected integer values being calculated by double functions.
-
-    @ATTENTION
-    The threshhold value is 3.55271e-015
  */
 inline double approxFloor(double a)
 {
-    double b = floor( a );
-    // The second approxEqual() is necessary for values that are near the limit
-    // of numbers representable with 4 bits stripped off. (#i12446#)
-    if ( approxEqual( a - 1.0, b ) && !approxEqual( a, b ) )
-        return b + 1.0;
-    return b;
+    return floor( approxValue( a ));
 }
 
-/** ceil() method taking approxEqual() into account.
+/** ceil() method taking approxValue() into account.
 
     Use for expected integer values being calculated by double functions.
-
-    @ATTENTION
-    The threshhold value is 3.55271e-015
  */
 inline double approxCeil(double a)
 {
-    double b = ceil( a );
-    // The second approxEqual() is necessary for values that are near the limit
-    // of numbers representable with 4 bits stripped off. (#i12446#)
-    if ( approxEqual( a + 1.0, b ) && !approxEqual( a, b ) )
-        return b - 1.0;
-    return b;
+    return ceil( approxValue( a ));
 }
 
 /** Tests whether a value is neither INF nor NAN.
