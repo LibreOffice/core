@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fileopendialog.hxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,7 @@ public :
         sal_Int16 execute();
 
         void setDefaultName( const rtl::OUString& );
-        void setDefaultDirectory( const rtl::OUString& );
+//      void setDefaultDirectory( const rtl::OUString& );
 
         ::rtl::OUString getURL() const;
         ::rtl::OUString getFilterName() const;
