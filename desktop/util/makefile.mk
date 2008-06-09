@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.80 $
+# $Revision: 1.81 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -146,7 +146,8 @@ APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
     $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/officeloader.obj
+    $(OBJ)$/officeloader.obj \
+    $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB6=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
 
 APP7TARGET=officeloader
@@ -158,7 +159,8 @@ APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
     $(OBJ)$/extendloaderenvironment.obj \
-    $(OBJ)$/officeloader.obj
+    $(OBJ)$/officeloader.obj \
+    $(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIB7=$(ADVAPI32LIB) $(SHELL32LIB) $(SHLWAPILIB)
 .ENDIF # WNT
 
