@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uicmdstohtml.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +34,7 @@
 #include <sal/main.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <osl/process.h>
+#include "tools/getprocessworkingdir.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
@@ -962,7 +962,7 @@ bool Convert( sal_Bool        bUseProduct,
 {
     OUString aWorkDir;
 
-    osl_getProcessWorkingDir( &aWorkDir.pData );
+    tools::getProcessWorkingDir( &aWorkDir );
 
     // Try to find xx*.csv file and put all commands into hash table
     for ( int i = 0; i < (int)rInDirVector.size(); i++ )
