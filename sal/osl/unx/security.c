@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: security.c,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,56 +64,55 @@ static sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* psz
 static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
-enum Result { KNOWN, UNKNOWN, ERROR };
-
-static enum Result sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
+static sal_Bool sysconf_SC_GETPW_R_SIZE_MAX(size_t * value) {
 #if defined _SC_GETPW_R_SIZE_MAX
     long m;
     errno = 0;
     m = sysconf(_SC_GETPW_R_SIZE_MAX);
     if (m == -1) {
-        if (errno == 0 || errno == EINVAL) {
-            /* _SC_GETPW_R_SIZE_MAX has no limit; some platforms like certain
-               FreeBSD versions support sysconf(_SC_GETPW_R_SIZE_MAX) in a
-               broken way and always set EINVAL, so be resilient here: */
-            return UNKNOWN;
-        } else {
-            /* sysconf failed: */
-            return ERROR;
-        }
+        /* _SC_GETPW_R_SIZE_MAX has no limit; some platforms like certain
+           FreeBSD versions support sysconf(_SC_GETPW_R_SIZE_MAX) in a broken
+           way and always set EINVAL, so be resilient here: */
+        return sal_False;
     } else {
         OSL_ASSERT(m >= 0 && (unsigned long) m < SIZE_MAX);
         *value = (size_t) m;
-        return KNOWN;
+        return sal_True;
     }
 #else
     /* some platforms like Mac OS X 1.3 do not define _SC_GETPW_R_SIZE_MAX: */
-    return UNKNOWN;
+    return sal_False;
 #endif
 }
 
-static oslSecurityImpl * newSecurityImpl(size_t * bufSize) {
+static oslSecurityImpl * growSecurityImpl(
+    oslSecurityImpl * impl, size_t * bufSize)
+{
     size_t n = 0;
-    switch (sysconf_SC_GETPW_R_SIZE_MAX(&n)) {
-    case KNOWN:
-        break;
-    case UNKNOWN:
-        /* choose something sensible (the callers of newSecurityImpl should
-           detect it if the allocated buffer is too small, so this could lead to
-           an error upstream, but not a crash): */
-        n = 1024;
-        break;
-    default: /* ERROR */
-        return NULL;
+    oslSecurityImpl * p = NULL;
+    if (impl == NULL) {
+        if (!sysconf_SC_GETPW_R_SIZE_MAX(&n)) {
+            /* choose something sensible (the callers of growSecurityImpl will
+               detect it if the allocated buffer is too small: */
+            n = 1024;
+        }
+    } else if (*bufSize <= SIZE_MAX / 2) {
+        n = 2 * *bufSize;
     }
-    if (n <= SIZE_MAX - offsetof(oslSecurityImpl, m_buffer)) {
-        *bufSize = n;
-        n += offsetof(oslSecurityImpl, m_buffer);
-    } else {
-        *bufSize = SIZE_MAX - offsetof(oslSecurityImpl, m_buffer);
-        n = SIZE_MAX;
+    if (n != 0) {
+        if (n <= SIZE_MAX - offsetof(oslSecurityImpl, m_buffer)) {
+            *bufSize = n;
+            n += offsetof(oslSecurityImpl, m_buffer);
+        } else {
+            *bufSize = SIZE_MAX - offsetof(oslSecurityImpl, m_buffer);
+            n = SIZE_MAX;
+        }
+        p = realloc(impl, n);
     }
-    return malloc(n);
+    if (p == NULL) {
+        free(impl);
+    }
+    return p;
 }
 
 static void deleteSecurityImpl(oslSecurityImpl * impl) {
@@ -123,17 +122,26 @@ static void deleteSecurityImpl(oslSecurityImpl * impl) {
 oslSecurity SAL_CALL osl_getCurrentSecurity()
 {
     size_t n;
-    oslSecurityImpl * p = newSecurityImpl(&n);
-    if (p != NULL) {
+    oslSecurityImpl * p = NULL;
+    for (;;) {
         struct passwd * found;
-        if (getpwuid_r(getuid(), &p->m_pPasswd, p->m_buffer, n, &found) != 0 ||
-            found == NULL)
-        {
+        p = growSecurityImpl(p, &n);
+        if (p == NULL) {
+            return NULL;
+        }
+        switch (getpwuid_r(getuid(), &p->m_pPasswd, p->m_buffer, n, &found)) {
+        case ERANGE:
+            break;
+        case 0:
+            if (found != NULL) {
+                return p;
+            }
+            /* fall through */
+        default:
             deleteSecurityImpl(p);
-            p = 0;
+            return NULL;
         }
     }
-    return p;
 }
 
 
@@ -507,108 +515,114 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
     oslSecurityError nError = osl_Security_E_Unknown;
     oslSecurityImpl * p = NULL;
     if (pszUserName != NULL && pszPasswd != NULL && pSecurity != NULL) {
+        /* get nis or normal password, should succeed for any known user, but
+           perhaps the password is wrong (i.e. 'x') if shadow passwords are in
+           use or authentication must be done by PAM */
         size_t n;
-        p = newSecurityImpl(&n);
-        if (p != NULL) {
-            /* get nis or normal password, should succeed for any known user,
-               but perhaps the password is wrong (i.e. 'x') if shadow passwords
-               are in use or authentication must be done by PAM */
-            struct passwd * found;
-            if (getpwnam_r(pszUserName, &p->m_pPasswd, p->m_buffer, n, &found)
-                == 0)
-            {
-                if (found == NULL) {
-                    nError = osl_Security_E_UserUnknown;
-                } else {
+        int err = 0;
+        struct passwd * found = NULL;
+        for (;;) {
+            p = growSecurityImpl(p, &n);
+            if (p == NULL) {
+                break;
+            }
+            err = getpwnam_r(
+                pszUserName, &p->m_pPasswd, p->m_buffer, n, &found);
+            if (err != ERANGE) {
+                break;
+            }
+        }
+        if (p != NULL && err == 0) {
+            if (found == NULL) {
+                nError = osl_Security_E_UserUnknown;
+            } else {
 #if defined LINUX && !defined NOPAM
-                    /* only root is able to read the /etc/shadow passwd, a
-                       normal user even can't read his own encrypted passwd */
-                    if (osl_equalPasswords(p->m_pPasswd.pw_passwd, pszPasswd) ||
-                        osl_PamAuthentification(pszUserName, pszPasswd))
+                /* only root is able to read the /etc/shadow passwd, a normal
+                   user even can't read his own encrypted passwd */
+                if (osl_equalPasswords(p->m_pPasswd.pw_passwd, pszPasswd) ||
+                    osl_PamAuthentification(pszUserName, pszPasswd))
+                {
+                    nError = osl_Security_E_None;
+                } else {
+                    char buffer[1024];
+                    struct spwd result_buf;
+                    struct spwd * pShadowPasswd;
+                    buffer[0] = '\0';
+                    if (getspnam_r(
+                            pszUserName, &result_buf, buffer, sizeof buffer,
+                            &pShadowPasswd) == 0 &&
+                        pShadowPasswd != NULL)
                     {
-                        nError = osl_Security_E_None;
-                    } else {
-                        char buffer[1024];
-                        struct spwd result_buf;
-                        struct spwd * pShadowPasswd;
-                        buffer[0] = '\0';
+                        nError =
+                            osl_equalPasswords(
+                                pShadowPasswd->sp_pwdp, pszPasswd)
+                            ? osl_Security_E_None
+                            : osl_Security_E_WrongPassword;
+                    } else if (getuid() == 0) {
+                        /* mfe: Try to verify the root-password via nis */
                         if (getspnam_r(
-                                pszUserName, &result_buf, buffer, sizeof buffer,
+                                "root", &result_buf, buffer, sizeof buffer,
                                 &pShadowPasswd) == 0 &&
-                            pShadowPasswd != NULL)
+                            pShadowPasswd != NULL &&
+                            osl_equalPasswords(
+                                pShadowPasswd->sp_pwdp, pszPasswd))
                         {
+                            nError = osl_Security_E_None;
+                        } else {
+                            /* mfe: we can't get via nis (glibc2.0.x has bug in
+                               getspnam_r) we try it with the normal getspnam */
+                            static pthread_mutex_t pwmutex =
+                                PTHREAD_MUTEX_INITIALIZER;
+                            pthread_mutex_lock(&pwmutex);
+                            pShadowPasswd = getspnam("root");
+                            pthread_mutex_unlock(&pwmutex);
                             nError =
-                                osl_equalPasswords(
-                                    pShadowPasswd->sp_pwdp, pszPasswd)
+                                ((pShadowPasswd != NULL &&
+                                  osl_equalPasswords(
+                                      pShadowPasswd->sp_pwdp, pszPasswd)) ||
+                                 osl_PamAuthentification("root", pszPasswd))
                                 ? osl_Security_E_None
                                 : osl_Security_E_WrongPassword;
-                        } else if (getuid() == 0) {
-                            /* mfe: Try to verify the root-password via nis */
-                            if (getspnam_r(
-                                    "root", &result_buf, buffer, sizeof buffer,
-                                    &pShadowPasswd) == 0 &&
-                                pShadowPasswd != NULL &&
-                                osl_equalPasswords(
-                                    pShadowPasswd->sp_pwdp, pszPasswd))
-                            {
-                                nError = osl_Security_E_None;
-                            } else {
-                                /* mfe: we can't get via nis (glibc2.0.x has bug
-                                   in getspnam_r) we try it with the normal
-                                   getspnam */
-                                static pthread_mutex_t pwmutex =
-                                    PTHREAD_MUTEX_INITIALIZER;
-                                pthread_mutex_lock(&pwmutex);
-                                pShadowPasswd = getspnam("root");
-                                pthread_mutex_unlock(&pwmutex);
-                                nError =
-                                    ((pShadowPasswd != NULL &&
-                                      osl_equalPasswords(
-                                          pShadowPasswd->sp_pwdp, pszPasswd)) ||
-                                     osl_PamAuthentification("root", pszPasswd))
-                                    ? osl_Security_E_None
-                                    : osl_Security_E_WrongPassword;
-                            }
                         }
                     }
+                }
 #else
-                    char buffer[1024];
-                    struct spwd spwdStruct;
-                    buffer[0] = '\0';
+                char buffer[1024];
+                struct spwd spwdStruct;
+                buffer[0] = '\0';
 #ifndef NEW_SHADOW_API
-                    if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer) != NULL)
+                if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer) != NULL)
 #else
-                    if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer, NULL) == 0)
+                if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer, NULL) == 0)
+#endif
+                {
+                    char salt[3];
+                    char * cryptPasswd;
+                    strncpy(salt, spwdStruct.sp_pwdp, 2);
+                    salt[2] = '\0';
+                    cryptPasswd = (char *) crypt(pszPasswd, salt);
+                    if (strcmp(spwdStruct.sp_pwdp, cryptPasswd) == 0) {
+                        nError = osl_Security_E_None;
+                    } else if (getuid() == 0 &&
+#ifndef NEW_SHADOW_API
+                               (getspnam_r("root", &spwdStruct, buffer, sizeof buffer) != NULL))
+#else
+                               (getspnam_r("root", &spwdStruct, buffer, sizeof buffer, NULL) == 0))
 #endif
                     {
-                        char salt[3];
-                        char * cryptPasswd;
+                        /* if current process is running as root, allow to logon
+                           as any other user */
                         strncpy(salt, spwdStruct.sp_pwdp, 2);
                         salt[2] = '\0';
                         cryptPasswd = (char *) crypt(pszPasswd, salt);
                         if (strcmp(spwdStruct.sp_pwdp, cryptPasswd) == 0) {
                             nError = osl_Security_E_None;
-                        } else if (getuid() == 0 &&
-#ifndef NEW_SHADOW_API
-                                   (getspnam_r("root", &spwdStruct, buffer, sizeof buffer) != NULL))
-#else
-                                   (getspnam_r("root", &spwdStruct, buffer, sizeof buffer, NULL) == 0))
-#endif
-                        {
-                            /* if current process is running as root, allow to
-                               logon as any other user */
-                            strncpy(salt, spwdStruct.sp_pwdp, 2);
-                            salt[2] = '\0';
-                            cryptPasswd = (char *) crypt(pszPasswd, salt);
-                            if (strcmp(spwdStruct.sp_pwdp, cryptPasswd) == 0) {
-                                nError = osl_Security_E_None;
-                            }
-                        } else {
-                            nError = osl_Security_E_WrongPassword;
                         }
+                    } else {
+                        nError = osl_Security_E_WrongPassword;
                     }
-#endif
                 }
+#endif
             }
         }
     }
