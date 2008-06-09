@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fileopendialog.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,10 +165,6 @@ sal_Int16 FileOpenDialog::execute()
 void FileOpenDialog::setDefaultName( const rtl::OUString& rDefaultName )
 {
     mxFilePicker->setDefaultName( rDefaultName );
-}
-void FileOpenDialog::setDefaultDirectory( const rtl::OUString& rDefaultDirectory )
-{
-    mxFilePicker->setDisplayDirectory( rDefaultDirectory );
 }
 ::rtl::OUString FileOpenDialog::getURL() const
 {
