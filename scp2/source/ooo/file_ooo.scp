@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.246 $
+ * $Revision: 1.247 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,15 +124,6 @@ End
 #ifndef WITHOUT_MOZILLA
 
 #if !defined(UNX) || defined(ENABLE_GTK)
-File gid_File_Lib_Npsoplugin
-        BIN_FILE_BODY;
-        Styles          = (PACKED);
-        Dir             = gid_Dir_Program;
-        Name            = SPECIAL_NAME(npsoplugin);
-End
-#endif
-
-#if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
         Styles          = (PACKED);
@@ -164,28 +155,6 @@ File gid_File_Script_Setofficelang
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "setofficelang";
-End
-
-#endif
-
-File gid_File_Bin_Configimport
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = "configimport.bin";
-  #else
-    Name = "configimport.exe";
-  #endif
-End
-
-#ifdef UNX
-
-File gid_File_Script_Configimport
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "configimport";
 End
 
 #endif
@@ -2866,13 +2835,6 @@ File gid_File_Stclient_Wrapper
     Name = "stclient_wrapper";
 #endif
     Styles = ();
-End
-
-File gid_File_Registry_Spool_Oo_Office_Jobs_Stclient_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
-    Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-stclient.xcu";
 End
 #endif
 #endif
