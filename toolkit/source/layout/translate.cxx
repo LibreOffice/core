@@ -3,9 +3,9 @@
 #include <list>
 #if TEST_LAYOUT
 #include <stdio.h>
+#include "tools/getprocessworkingdir.hxx"
 #endif
 
-#include <osl/process.h>
 #include <unotools/bootstrap.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -81,7 +81,7 @@ readRightTranslation( OUString const& aXMLName )
         = getLocaleSubdirList( Application::GetSettings().GetUILocale() );
 #if TEST_LAYOUT // read from cwd first
     OUString aCurrentWorkingUrl;
-    osl_getProcessWorkingDir( &aCurrentWorkingUrl.pData );
+    tools::getProcessWorkingDir( &aCurrentWorkingUrl );
     String aCurrentWorkingDir;
     LocalFileHelper::ConvertURLToPhysicalName( aCurrentWorkingUrl, aCurrentWorkingDir );
     aXMLFile = getFirstExisting( aCurrentWorkingDir, aSubdirs, aXMLName );
