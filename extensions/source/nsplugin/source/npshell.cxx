@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: npshell.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +74,8 @@
 
 #include <string.h>
 #include <errno.h>
-
+#include "boost/scoped_array.hpp"
+#include "tools/pathutils.hxx"
 
 #include "npapi.h"
 #include "npshell.hxx"
@@ -116,11 +117,85 @@ long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 static pid_t nChildPID = 0;
 #endif
 
-// chdir to staroffice's program dir, start nspluin executable in child process, and use pipe to talk with it
+#define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
+#define MY_STRING(s) (s), MY_LENGTH(s)
+
+#if defined WNT
+namespace {
+
+bool extendEnvironment(
+    boost::scoped_array< WCHAR > * environment, WCHAR const * pathBegin,
+    WCHAR const * pathEnd)
+{
+    WCHAR ure[MAX_PATH];
+    if (tools::buildPath(ure, pathBegin, pathEnd, MY_STRING(L"\\ure-link")) ==
+        NULL)
+    {
+        return false;
+    }
+    WCHAR * ureEnd = tools::resolveLink(ure);
+    if (ureEnd == NULL) {
+        return false;
+    }
+    ureEnd = tools::buildPath(ure, ure, ureEnd, MY_STRING(L"\\bin"));
+    if (ureEnd == NULL) {
+        return false;
+    }
+    WCHAR const * env = GetEnvironmentStringsW();
+    if (env == NULL) {
+        return false;
+    }
+    WCHAR const * p = env;
+    WCHAR const * p1 = NULL;
+    while (*p != L'\0') {
+        size_t n = wcslen(p);
+        if (p1 == NULL && n >= MY_LENGTH(L"PATH=") &&
+            (p[0] == L'P' ||  p[0] == L'p') &&
+            (p[1] == L'A' ||  p[1] == L'a') &&
+            (p[2] == L'T' ||  p[2] == L't') &&
+            (p[3] == L'H' ||  p[3] == L'h') && p[4] == L'=')
+        {
+            p1 = p + MY_LENGTH(L"PATH=");
+            //TODO: check whether the ure path is already present in PATH (at
+            // the beginning of PATH?)
+        }
+        p += n + 1;
+    }
+    ++p;
+    if (p1 == NULL) {
+        environment->reset(
+            new WCHAR[MY_LENGTH(L"PATH=") + (ureEnd - ure) + 1 + (p - env)]);
+            //TODO: overflow
+        memcpy(environment->get(), MY_STRING(L"PATH=") * sizeof (WCHAR));
+        memcpy(
+            environment->get() + MY_LENGTH(L"PATH="), ure,
+            ((ureEnd - ure) + 1) * sizeof (WCHAR));
+        memcpy(
+            environment->get() + MY_LENGTH(L"PATH=") + (ureEnd - ure) + 1, env,
+            (p - env) * sizeof (WCHAR));
+    } else {
+        environment->reset(
+            new WCHAR[(p - env) + (ureEnd - ure) + MY_LENGTH(L";")]);
+            //TODO: overflow
+        memcpy(environment->get(), env, (p1 - env) * sizeof (WCHAR));
+        memcpy(
+            environment->get() + (p1 - env), ure,
+            (ureEnd - ure) * sizeof (WCHAR));
+        environment->get()[(p1 - env) + (ureEnd - ure)] = L';';
+        memcpy(
+            environment->get() + (p1 - env) + (ureEnd - ure) + 1, p1,
+            (p - p1) * sizeof (WCHAR));
+    }
+    return true;
+}
+
+}
+#endif
+
+// start nspluin executable in child process, and use pipe to talk with it
 int do_init_pipe()
 {
     debug_fprintf(NSP_LOG_APPEND, "enter do_init_pipe 1\n");
-    NSP_CHDIR(findProgramDir());
     NSP_PIPE_FD fd[2];
 
     if( 0 != NSP_Inherited_Pipe(fd) )
@@ -134,27 +209,95 @@ int do_init_pipe()
     if( ! nChildPID )  // child process
 #endif //end of UNIX
     {
+#ifdef UNIX
         char s_read_fd[16] = {0};
         char s_write_fd[16] = {0};
         sprintf(s_read_fd,  "%d", fd[0]);
         sprintf(s_write_fd, "%d", fd[1]);
-        // transfer pipe fds to nsplugin process
-        debug_fprintf(NSP_LOG_APPEND, "try to start plugin exe: %s %s %s.\n", findNsExeFile(), s_read_fd, s_write_fd);
-
-#ifdef UNIX
-        execl(findNsExeFile(), findNsExeFile(), s_read_fd, s_write_fd, NULL);
+        char const * instdir = findInstallDir();
+        boost::scoped_array< char > exepath(
+            new char[strlen(instdir) +
+                     RTL_CONSTASCII_LENGTH("/basis-link/program/nsplugin") +
+                     1]);
+        sprintf(exepath.get(), "%s/basis-link/program/nsplugin", instdir);
+        char const * progdir = findProgramDir();
+        boost::scoped_array< char > inifilepath(
+            new char[
+                RTL_CONSTASCII_LENGTH(
+                    "-env:INIFILENAME=vnd.sun.star.pathname:") +
+                strlen(progdir) + RTL_CONSTASCII_LENGTH("/redirectrc") + 1]);
+            //TODO: overflow
+        sprintf(
+            inifilepath.get(),
+            "-env:INIFILENAME=vnd.sun.star.pathname:%s/redirectrc", progdir);
+        execl(
+            exepath.get(), exepath.get(), s_read_fd, s_write_fd,
+            inifilepath.get(), progdir, NULL);
         _exit(255);
 #endif //end of UNIX
 #ifdef WNT
-        char sArgc[NPP_BUFFER_SIZE];
-        sprintf(sArgc, "%s %s", s_read_fd, s_write_fd);
-        STARTUPINFO NSP_StarInfo;
-        memset((void*) &NSP_StarInfo, 0, sizeof(STARTUPINFO));
-        NSP_StarInfo.cb = sizeof(STARTUPINFO);
+        WCHAR s_read_fd[16] = {0};
+        WCHAR s_write_fd[16] = {0};
+        wsprintfW(s_read_fd, L"%d", fd[0]);
+        wsprintfW(s_write_fd, L"%d", fd[1]);
+        WCHAR brand[MAX_PATH];
+        int brandLen = MultiByteToWideChar(
+            CP_ACP, MB_PRECOMPOSED, findInstallDir(), -1, brand, MAX_PATH);
+            //TODO: conversion errors
+        if (brandLen == 0) {
+            return NPERR_GENERIC_ERROR;
+        }
+        WCHAR path[MAX_PATH];
+        if (tools::buildPath(
+                path, brand, brand + brandLen - 1, MY_STRING(L"\\basis-link"))
+            == NULL)
+        {
+            return NPERR_GENERIC_ERROR;
+        }
+        WCHAR * pathEnd = tools::resolveLink(path);
+        if (pathEnd == NULL) {
+            return NPERR_GENERIC_ERROR;
+        }
+        boost::scoped_array< WCHAR > env;
+        if (!extendEnvironment(&env, path, pathEnd)) {
+            return NPERR_GENERIC_ERROR;
+        }
+        pathEnd = tools::buildPath(
+            path, path, pathEnd, MY_STRING(L"\\program"));
+        if (pathEnd == NULL) {
+            return NPERR_GENERIC_ERROR;
+        }
+        WCHAR exe[MAX_PATH];
+        WCHAR * exeEnd = tools::buildPath(
+            exe, path, pathEnd, MY_STRING(L"\\nsplugin.exe"));
+        if (exeEnd == NULL) {
+            return NPERR_GENERIC_ERROR;
+        }
+        WCHAR * brandEnd = tools::buildPath(
+            brand, brand, brand + brandLen - 1,
+            MY_STRING(L"\\program\\redirect.ini"));
+        if (brandEnd == NULL) {
+            return NPERR_GENERIC_ERROR;
+        }
+        boost::scoped_array< WCHAR > args(
+            new WCHAR[
+                MY_LENGTH(L"\"") + (exeEnd - exe) + MY_LENGTH(L"\" ") +
+                wcslen(s_read_fd) + MY_LENGTH(L" ") + wcslen(s_write_fd) +
+                MY_LENGTH(L" \"-env:INIFILENAME=vnd.sun.star.pathname:") +
+                (brandEnd - brand) + MY_LENGTH(L"\"") + 1]); //TODO: overflow
+        wsprintfW(
+            args.get(),
+            L"\"%s\" %s %s \"-env:INIFILENAME=vnd.sun.star.pathname:%s\"", exe,
+            s_read_fd, s_write_fd, brand);
+        STARTUPINFOW NSP_StarInfo;
+        memset((void*) &NSP_StarInfo, 0, sizeof(STARTUPINFOW));
+        NSP_StarInfo.cb = sizeof(STARTUPINFOW);
         PROCESS_INFORMATION NSP_ProcessInfo;
         memset((void*)&NSP_ProcessInfo, 0, sizeof(PROCESS_INFORMATION));
-        if(!CreateProcess(findNsExeFile(), sArgc, NULL, NULL, TRUE,
-                      CREATE_NO_WINDOW, NULL, NULL, &NSP_StarInfo, &NSP_ProcessInfo))
+        if(!CreateProcessW(
+               exe, args.get(), NULL, NULL, TRUE,
+               CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT, env.get(), path,
+               &NSP_StarInfo, &NSP_ProcessInfo))
         {
             DWORD Err = GetLastError();
             (void)Err;
