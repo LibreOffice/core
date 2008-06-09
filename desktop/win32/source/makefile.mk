@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +40,8 @@ AUTOSEG=true
 
 .INCLUDE :  settings.mk
 
+UWINAPILIB =
+
 # --- Files --------------------------------------------------------
 
 OBJFILES = \
@@ -50,7 +52,13 @@ OBJFILES = \
         $(OBJ)$/rwrapa.obj \
         $(OBJ)$/rwrapw.obj \
         $(OBJ)$/sowrapper.obj \
-        $(OBJ)$/extendloaderenvironment.obj
+        $(OBJ)$/extendloaderenvironment.obj \
+        $(OBJ)$/unoinfo.obj
+
+APP1TARGET = unoinfo
+APP1OBJS = $(OBJ)$/unoinfo.obj $(SOLARLIBDIR)$/pathutils-obj.obj
+APP1STDLIBS =
+APP1RPATH = BRAND
 
 # --- Targets ------------------------------------------------------
 
