@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +53,7 @@
 #include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/component_context.hxx"
 #include "cppuhelper/access_control.hxx"
+#include "cppuhelper/findsofficepath.h"
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
@@ -508,14 +509,44 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
     try
     {
+        char const * p1 = cppuhelper_detail_findSofficePath();
+        if (p1 == NULL) {
+            throw BootstrapException(
+                OUSTR("no soffice installation found!"));
+        }
+        rtl::OUString p2;
+        if (!rtl_convertStringToUString(
+                &p2.pData, p1, strlen(p1), osl_getThreadTextEncoding(),
+                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+        {
+            throw BootstrapException(
+                OUSTR("bad characters in soffice installation path!"));
+        }
+        OUString path;
+        if (osl::FileBase::getFileURLFromSystemPath(p2, path) !=
+            osl::FileBase::E_None)
+        {
+            throw BootstrapException(
+                OUSTR("cannot convert soffice installation path to URL!"));
+        }
+        if (path.getLength() > 0 && path[path.getLength() - 1] != '/') {
+            path += OUSTR("/");
+        }
+
+        OUString uri;
+        if (!Bootstrap::get(OUSTR("URE_BOOTSTRAP"), uri)) {
+            Bootstrap::set(
+                OUSTR("URE_BOOTSTRAP"),
+                Bootstrap::encode(path + OUSTR(SAL_CONFIGFILE("fundamental"))));
+        }
+
         // create default local component context
         Reference< XComponentContext > xLocalContext(
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
             throw BootstrapException( OUSTR( "no local component context!" ) );
-
-        // URL to office executable
-        OUString sOfficeURL( get_this_libpath() + OUSTR( "/soffice" ) );
 
         // create a random pipe name
         rtlRandomPool hPool = rtl_random_createPool();
@@ -560,7 +591,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         // start office process
         oslProcess hProcess = 0;
         oslProcessError rc = osl_executeProcess(
-            sOfficeURL.pData, ar_args, ARLEN( ar_args ),
+            (path + OUSTR("soffice")).pData, ar_args, ARLEN( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             0, // => current working dir
