@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTscript.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +36,7 @@
 #include "UriReference.hxx"
 #include "supportsService.hxx"
 
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -48,6 +49,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
+#include "rtl/uri.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -149,6 +151,30 @@ rtl::OUString parsePart(
         }
     }
     return buf.makeStringAndClear();
+}
+
+namespace
+{
+    static rtl::OUString encodeNameOrParamFragment( rtl::OUString const & fragment )
+    {
+        static sal_Bool const aCharClass[] =
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* NameOrParamFragment */
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, /* !"#$%&'()*+,-./*/
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, /*0123456789:;<=>?*/
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*@ABCDEFGHIJKLMNO*/
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, /*PQRSTUVWXYZ[\]^_*/
+          0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, /*`abcdefghijklmno*/
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0  /*pqrstuvwxyz{|}~ */
+        };
+
+        return rtl::Uri::encode(
+            fragment,
+            aCharClass,
+            rtl_UriEncodeIgnoreEscapes,
+            RTL_TEXTENCODING_UTF8
+        );
+    }
 }
 
 bool parseSchemeSpecificPart(rtl::OUString const & part) {
@@ -257,11 +283,17 @@ public:
 
     virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
 
+    virtual void SAL_CALL setName(rtl::OUString const & name)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+
     virtual sal_Bool SAL_CALL hasParameter(rtl::OUString const & key)
         throw (css::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getParameter(rtl::OUString const & key)
         throw (css::uno::RuntimeException);
+
+    virtual void SAL_CALL setParameter(rtl::OUString const & key, rtl::OUString const & value)
+        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
 private:
     UrlReference(UrlReference &); // not implemented
@@ -280,6 +312,22 @@ rtl::OUString UrlReference::getName() throw (css::uno::RuntimeException) {
     return parsePart(m_base.m_path, true, &i);
 }
 
+void SAL_CALL UrlReference::setName(rtl::OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+{
+    if (name.getLength() == 0)
+        throw css::lang::IllegalArgumentException(
+            ::rtl::OUString(), *this, 1);
+
+    osl::MutexGuard g(m_base.m_mutex);
+    sal_Int32 i = 0;
+    parsePart(m_base.m_path, true, &i);
+
+    rtl::OUStringBuffer newPath;
+    newPath.append(encodeNameOrParamFragment(name));
+    newPath.append(m_base.m_path.copy(i));
+    m_base.m_path = newPath.makeStringAndClear();
+}
+
 sal_Bool UrlReference::hasParameter(rtl::OUString const & key)
     throw (css::uno::RuntimeException)
 {
@@ -293,6 +341,37 @@ rtl::OUString UrlReference::getParameter(rtl::OUString const & key)
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
     return i >= 0 ? parsePart(m_base.m_path, false, &i) : rtl::OUString();
+}
+
+void UrlReference::setParameter(rtl::OUString const & key, rtl::OUString const & value)
+    throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+{
+    if (key.getLength() == 0)
+        throw css::lang::IllegalArgumentException(
+            ::rtl::OUString(), *this, 1);
+
+    osl::MutexGuard g(m_base.m_mutex);
+    sal_Int32 i = findParameter(key);
+    bool bExistent = ( i>=0 );
+    if (!bExistent) {
+        i = m_base.m_path.getLength();
+    }
+
+    rtl::OUStringBuffer newPath;
+    newPath.append(m_base.m_path.copy(0, i));
+    if (!bExistent) {
+        newPath.append(sal_Unicode(m_base.m_path.indexOf('?') < 0 ? '?' : '&'));
+        newPath.append(encodeNameOrParamFragment(key));
+        newPath.append(sal_Unicode('='));
+    }
+    newPath.append(encodeNameOrParamFragment(value));
+    if (bExistent) {
+        /*oldValue = */
+        parsePart(m_base.m_path, false, &i); // skip key
+        newPath.append(m_base.m_path.copy(i));
+    }
+
+    m_base.m_path = newPath.makeStringAndClear();
 }
 
 sal_Int32 UrlReference::findParameter(rtl::OUString const & key) {
