@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: celltempl.src,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +38,6 @@ TabDialog TAB_CELL_TEMPLATE
     SVLook = TRUE ;
     Moveable = TRUE ;
     Text [ en-US ] = "Cell Style" ;
-    Text [ DE ] = "Zellvorlagen" ;
 
     Size = MAP_APPFONT ( 289 , 176 ) ;
 
