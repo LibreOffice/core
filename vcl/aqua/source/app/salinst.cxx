@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <stdio.h>
 
 #include "tools/fsys.hxx"
+#include "tools/getprocessworkingdir.hxx"
 #include "osl/process.h"
 #include "rtl/ustrbuf.hxx"
 #include "vcl/svapp.hxx"
@@ -264,14 +265,11 @@ extern "C" {
 
 void InitSalMain()
 {
-    rtl_uString *urlWorkDir = NULL;
+    rtl::OUString urlWorkDir;
     rtl_uString *sysWorkDir = NULL;
-
-    oslProcessError err1 = osl_getProcessWorkingDir(&urlWorkDir);
-
-    if (err1 == osl_Process_E_None)
+    if (tools::getProcessWorkingDir(&urlWorkDir))
     {
-        oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir, &sysWorkDir);
+        oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
         if (err2 == osl_File_E_None)
         {
             ByteString aPath( getenv( "PATH" ) );
