@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: binarycache.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +44,7 @@
 #include "bootstrap.hxx"
 #endif
 #include <osl/file.hxx>
-#include <osl/process.h>
+#include "tools/getprocessworkingdir.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
@@ -84,8 +84,8 @@ namespace configmgr
                 return false;
             }
 
-            rtl::OUString sBasePath = _rsURL;
-            OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
+            rtl::OUString sBasePath;
+            OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
 
             rtl::OUString sAbsolute;
             if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
