@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_misc.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,7 @@
 #include "osl/process.h"
 #include "osl/file.h"
 #include "osl/thread.hxx"
+#include "tools/getprocessworkingdir.hxx"
 #include "ucbhelper/contentbroker.hxx"
 #include "ucbhelper/configurationkeys.hxx"
 #include "unotools/processfactory.hxx"
@@ -200,7 +201,7 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
     const OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        osl_getProcessWorkingDir( &workingDir.pData );
+        tools::getProcessWorkingDir(&workingDir);
         return workingDir;
     }
 };
