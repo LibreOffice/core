@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Loader.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,8 @@ package com.sun.star.lib.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
@@ -166,18 +168,7 @@ public final class Loader {
                     "java.class.path: " + e );
             }
             if ( classpath != null ) {
-                StringTokenizer tokens = new StringTokenizer( classpath,
-                    File.pathSeparator );
-                while ( tokens.hasMoreTokens() ) {
-                    try {
-                        vec.add( new File( tokens.nextToken() ).toURL() );
-                    } catch ( MalformedURLException e ) {
-                        // don't add this class path entry to the list of class
-                        // loader URLs
-                        System.err.println( "com.sun.star.lib.loader.Loader::" +
-                            "getCustomLoader: bad java.class.path: " + e );
-                    }
-                }
+                addUrls(vec, classpath, File.pathSeparator);
             }
 
             // get the urls from which to load classes and resources
@@ -186,42 +177,47 @@ public final class Loader {
             if ( path != null ) {
                 File fClassesDir = new File( path, CLASSESDIR );
                 File fJuh = new File( fClassesDir, JUHJAR );
-                URL[] clurls = new URL[1];
-                try {
-                    clurls[0] = fJuh.toURL();
-                    ClassLoader cl = new CustomURLClassLoader( clurls );
-                    Class c = cl.loadClass(
-                        "com.sun.star.comp.helper.UnoInfo" );
-                    Method m = c.getMethod( "getJars", (Class[]) null );
-                    URL[] jarurls = (URL[]) m.invoke( null, (Object[]) null );
-                    for ( int i = 0; i < jarurls.length; i++ ) {
-                        vec.add( jarurls[i] );
+                if ( fJuh.exists() ) {
+                    URL[] clurls = new URL[1];
+                    try {
+                        clurls[0] = fJuh.toURL();
+                        ClassLoader cl = new CustomURLClassLoader( clurls );
+                        Class c = cl.loadClass(
+                            "com.sun.star.comp.helper.UnoInfo" );
+                        Method m = c.getMethod( "getJars", (Class[]) null );
+                        URL[] jarurls = (URL[]) m.invoke(
+                            null, (Object[]) null );
+                        for ( int i = 0; i < jarurls.length; i++ ) {
+                            vec.add( jarurls[i] );
+                        }
+                    } catch ( MalformedURLException e ) {
+                        // don't add the UNO jar files to the list of class
+                        // loader URLs
+                        System.err.println( "com.sun.star.lib.loader.Loader::" +
+                            "getCustomLoader: cannot add UNO jar files: " + e );
+                    } catch ( ClassNotFoundException e ) {
+                        // don't add the UNO jar files to the list of class
+                        // loader URLs
+                        System.err.println( "com.sun.star.lib.loader.Loader::" +
+                            "getCustomLoader: cannot add UNO jar files: " + e );
+                    } catch ( NoSuchMethodException e ) {
+                        // don't add the UNO jar files to the list of class
+                        // loader URLs
+                        System.err.println( "com.sun.star.lib.loader.Loader::" +
+                            "getCustomLoader: cannot add UNO jar files: " + e );
+                    } catch ( IllegalAccessException e ) {
+                        // don't add the UNO jar files to the list of class
+                        // loader URLs
+                        System.err.println( "com.sun.star.lib.loader.Loader::" +
+                            "getCustomLoader: cannot add UNO jar files: " + e );
+                    } catch ( InvocationTargetException e ) {
+                        // don't add the UNO jar files to the list of class
+                        // loader URLs
+                        System.err.println( "com.sun.star.lib.loader.Loader::" +
+                            "getCustomLoader: cannot add UNO jar files: " + e );
                     }
-                } catch ( MalformedURLException e ) {
-                    // don't add the UNO jar files to the list of class loader
-                    // URLs
-                    System.err.println( "com.sun.star.lib.loader.Loader::" +
-                        "getCustomLoader: cannot add UNO jar files: " + e );
-                } catch ( ClassNotFoundException e ) {
-                    // don't add the UNO jar files to the list of class loader
-                    // URLs
-                    System.err.println( "com.sun.star.lib.loader.Loader::" +
-                        "getCustomLoader: cannot add UNO jar files: " + e );
-                } catch ( NoSuchMethodException e ) {
-                    // don't add the UNO jar files to the list of class loader
-                    // URLs
-                    System.err.println( "com.sun.star.lib.loader.Loader::" +
-                        "getCustomLoader: cannot add UNO jar files: " + e );
-                } catch ( IllegalAccessException e ) {
-                    // don't add the UNO jar files to the list of class loader
-                    // URLs
-                    System.err.println( "com.sun.star.lib.loader.Loader::" +
-                        "getCustomLoader: cannot add UNO jar files: " + e );
-                } catch ( InvocationTargetException e ) {
-                    // don't add the UNO jar files to the list of class loader
-                    // URLs
-                    System.err.println( "com.sun.star.lib.loader.Loader::" +
-                        "getCustomLoader: cannot add UNO jar files: " + e );
+                } else {
+                    callUnoinfo(path, vec);
                 }
             } else {
                 System.err.println( "com.sun.star.lib.loader.Loader::" +
@@ -237,6 +233,116 @@ public final class Loader {
         }
 
         return m_Loader;
+    }
+
+    private static void addUrls(Vector urls, String data, String delimiter) {
+        StringTokenizer tokens = new StringTokenizer( data, delimiter );
+        while ( tokens.hasMoreTokens() ) {
+            try {
+                urls.add( new File( tokens.nextToken() ).toURL() );
+            } catch ( MalformedURLException e ) {
+                // don't add this class path entry to the list of class loader
+                // URLs
+                System.err.println( "com.sun.star.lib.loader.Loader::" +
+                    "getCustomLoader: bad pathname: " + e );
+            }
+        }
+    }
+
+    private static void callUnoinfo(String path, Vector urls) {
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec(
+                new String[] { new File(path, "unoinfo").getPath(), "java" });
+        } catch (IOException e) {
+            System.err.println(
+                "com.sun.star.lib.loader.Loader::getCustomLoader: exec" +
+                " unoinfo: " + e);
+            return;
+        }
+        new Drain(p.getErrorStream()).start();
+        int code;
+        byte[] buf = new byte[1000];
+        int n = 0;
+        try {
+            InputStream s = p.getInputStream();
+            code = s.read();
+            for (;;) {
+                if (n == buf.length) {
+                    if (n > Integer.MAX_VALUE / 2) {
+                        System.err.println(
+                            "com.sun.star.lib.loader.Loader::getCustomLoader:" +
+                            " too much unoinfo output");
+                        return;
+                    }
+                    byte[] buf2 = new byte[2 * n];
+                    for (int i = 0; i < n; ++i) {
+                        buf2[i] = buf[i];
+                    }
+                    buf = buf2;
+                }
+                int k = s.read(buf, n, buf.length - n);
+                if (k == -1) {
+                    break;
+                }
+                n += k;
+            }
+        } catch (IOException e) {
+            System.err.println(
+                "com.sun.star.lib.loader.Loader::getCustomLoader: reading" +
+                " unoinfo output: " + e);
+            return;
+        }
+        int ev;
+        try {
+            ev = p.waitFor();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println(
+                "com.sun.star.lib.loader.Loader::getCustomLoader: waiting for" +
+                " unoinfo: " + e);
+            return;
+        }
+        if (ev != 0) {
+            System.err.println(
+                "com.sun.star.lib.loader.Loader::getCustomLoader: unoinfo"
+                + " exit value " + n);
+            return;
+        }
+        String s;
+        if (code == '0') {
+            s = new String(buf);
+        } else if (code == '1') {
+            try {
+                s = new String(buf, "UTF-16LE");
+            } catch (UnsupportedEncodingException e) {
+                System.err.println(
+                    "com.sun.star.lib.loader.Loader::getCustomLoader:" +
+                    " transforming unoinfo output: " + e);
+                return;
+            }
+        } else {
+            System.err.println(
+                "com.sun.star.lib.loader.Loader::getCustomLoader: bad unoinfo"
+                + " output");
+            return;
+        }
+        addUrls(urls, s, "\0");
+    }
+
+    private static final class Drain extends Thread {
+        public Drain(InputStream stream) {
+            super("unoinfo stderr drain");
+            this.stream = stream;
+        }
+
+        public void run() {
+            try {
+                while (stream.read() != -1) {}
+            } catch (IOException e) { /* ignored */ }
+        }
+
+        private final InputStream stream;
     }
 
     /**
