@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxlngi6.mk,v $
 #
-# $Revision: 1.45 $
+# $Revision: 1.46 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -153,6 +153,7 @@ LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
 LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
 
