@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodialog.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -343,7 +343,7 @@ void UnoDialog::setControlProperty( const OUString& rControlName, const OUString
 }
 
 // -----------------------------------------------------------------------------
-
+#if 0
 void UnoDialog::showMessageBox( const OUString& rTitle, const OUString& rMessage, sal_Bool bErrorBox ) const
 {
     try
@@ -388,6 +388,8 @@ finally{
 }}
 */
 }
+
+#endif
 
 // -----------------------------------------------------------------------------
 
