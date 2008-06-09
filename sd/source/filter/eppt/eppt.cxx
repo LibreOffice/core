@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: eppt.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,7 +250,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage,
     if ( !ImplWriteAtomEnding() )
         return;
 
-    if ( !ImplCreateDocumentSummaryInformation() )
+    if ( !ImplCreateDocumentSummaryInformation( nCnvrtFlags ) )
         return;
 
     mbStatus = TRUE;
@@ -323,7 +323,7 @@ sal_Bool PPTWriter::ImplCreateCurrentUserStream()
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
+sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation( sal_uInt32 nCnvrtFlags )
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         mXModel, uno::UNO_QUERY_THROW);
@@ -353,17 +353,24 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
             aHyperSeq[j] = pBlob[j];
         }
 
-        uno::Sequence<sal_uInt8> aThumbSeq;
-        if ( ImplGetPageByIndex( 0, NORMAL ) &&
-             ImplGetPropertyValue( mXPagePropSet,
-                String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
+        if ( nCnvrtFlags & 0x8000 )
         {
-            aThumbSeq =
-                *static_cast<const uno::Sequence<sal_uInt8>*>(mAny.getValue());
+            uno::Sequence<sal_uInt8> aThumbSeq;
+            if ( ImplGetPageByIndex( 0, NORMAL ) &&
+                 ImplGetPropertyValue( mXPagePropSet,
+                    String( RTL_CONSTASCII_USTRINGPARAM( "PreviewBitmap" ) ) ) )
+            {
+                aThumbSeq =
+                    *static_cast<const uno::Sequence<sal_uInt8>*>(mAny.getValue());
+            }
+            sfx2::SaveOlePropertySet( xDocProps, mrStg,
+                    &aThumbSeq, &aGuidSeq, &aHyperSeq);
         }
-
-        sfx2::SaveOlePropertySet( xDocProps, mrStg,
-                &aThumbSeq, &aGuidSeq, &aHyperSeq);
+        else
+        {
+            sfx2::SaveOlePropertySet( xDocProps, mrStg,
+                    NULL, &aGuidSeq, &aHyperSeq );
+        }
     }
 
     return sal_True;
