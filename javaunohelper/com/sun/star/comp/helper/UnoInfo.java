@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: UnoInfo.java,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +101,6 @@ public final class UnoInfo {
 
         String[] jarFileNames = new String[] {
             "jurt.jar",
-            "unoil.jar",
             "ridl.jar",
             "juh.jar" };
 
@@ -114,10 +113,6 @@ public final class UnoInfo {
      * @return the extra UNO types
      */
     public static URL[] getExtraTypes() {
-
-        String[] jarFileNames = new String[] {
-            "unoil.jar" };
-
-        return getURLs( jarFileNames );
+        return new URL[0];
     }
 }
