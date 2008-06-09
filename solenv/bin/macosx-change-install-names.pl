@@ -8,7 +8,7 @@
 #
 # $RCSfile: macosx-change-install-names.pl,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,7 @@ sub action($$$)
 }
 
 @ARGV == 3 || @ARGV >= 2 && $ARGV[0] eq "extshl" or
-    die "Usage: app|shl|extshl UREBIN|URELIB|OOO|BRAND|OXT <filepath>*";
+    die "Usage: app|shl|extshl UREBIN|URELIB|OOO|BRAND|OXT|NONE <filepath>*";
 $type = shift @ARGV;
 $loc = shift @ARGV;
 if ($type eq "extshl")
