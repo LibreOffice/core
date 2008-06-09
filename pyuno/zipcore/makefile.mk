@@ -1,7 +1,43 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.14 $
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
 PRJNAME=pyuno
 PRJ=..
 
+TARGET=zipcore
+LIBTARGET=NO
+
 .INCLUDE : settings.mk
+
+UWINAPILIB =
 
 .IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
 systempython:
@@ -11,7 +47,7 @@ systempython:
 .INCLUDE : pyversion.mk
 
 PYDIRNAME=python-core-$(PYVERSION)
-DESTROOT=$(BIN)$/python-core-$(PYVERSION)
+DESTROOT=$(BIN)$/$(PYDIRNAME)
 .IF "$(GUI)" == "UNX"
 PYTHONBINARY=$(BIN)$/python$(EXECPOST).bin
 .ELSE
@@ -26,23 +62,38 @@ FILES=\
     $(PYTHONBINARY)	\
     $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
 
-target: \
-    $(BIN)$/python-core-$(PYVERSION).zip \
-    $(BIN)$/python.sh
+.IF "$(OS)" == "WNT"
+APP1TARGET = python
+APP1OBJS = $(OBJFILES) $(SOLARLIBDIR)$/pathutils-obj.obj
+APP1STDLIBS =
+APP1RPATH = BRAND
+OBJFILES = $(OBJ)$/python.obj
+.ENDIF
 
+.INCLUDE: target.mk
+
+ALLTAR: \
+    $(BIN)$/$(PYDIRNAME).zip
+
+.IF "$(GUI)" == "UNX"
+ALLTAR : $(BIN)$/python.sh
 $(BIN)$/python.sh : python.sh
     -rm -f $@
     cat $? > $@
     sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $@ > $@.new
     mv $@.new $@
-.IF "$(GUI)" == "UNX"
     chmod +x $@
 .ENDIF
 
-$(BIN)$/python-core-$(PYVERSION).zip : $(FILES) $(BIN)$/python.sh
+$(OBJ)$/python.obj: $(OUT)$/inc$/pyversion.hxx
+
+$(OUT)$/inc$/pyversion.hxx: pyversion.inc
+    $(SED) $(USQ)s/@/$(PYVERSION)/g$(USQ) < $< > $@
+
+$(BIN)$/$(PYDIRNAME).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
-    cd $(BIN) && find . -name '*$(DLLPOST)' | xargs strip
+    cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
     -rm -f $@
