@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: expop2.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,11 +115,16 @@ FltError ExportBiff5::Write()
                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-        ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-            pDocShell->GetPreviewMetaFile (sal_False);
-        uno::Sequence<sal_uInt8> metaFile(
-            sfx2::convertMetaFile(pMetaFile.get()));
-        sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
+        if ( SvtFilterOptions::Get()->IsEnableCalcPreview() )
+        {
+            ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                pDocShell->GetPreviewMetaFile (sal_False);
+            uno::Sequence<sal_uInt8> metaFile(
+                sfx2::convertMetaFile(pMetaFile.get()));
+            sfx2::SaveOlePropertySet(xDocProps, xRootStrg, &metaFile);
+        }
+        else
+            sfx2::SaveOlePropertySet(xDocProps, xRootStrg );
     }
 
     //! TODO: separate warnings for columns and sheets
