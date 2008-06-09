@@ -9,7 +9,7 @@
 #
 # $RCSfile: unopkg.sh,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,7 +59,7 @@ done
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS \
-        "-env:INIFILEPATH=$sd_prog/redirectrc"`
+        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
         LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH+:$LD_LIBRARY_PATH}
         export LD_LIBRARY_PATH
@@ -76,5 +76,6 @@ PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # execute binary
-exec "$sd_prog/unopkg.bin" "$@" "-env:INIFILEPATH=$sd_prog/redirectrc"
+exec "$sd_prog/unopkg.bin" "$@" \
+    "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"
 
