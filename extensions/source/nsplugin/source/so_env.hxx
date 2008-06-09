@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: so_env.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,12 +54,10 @@
 
 #ifdef UNIX
 #define STAROFFICE_VERSION_FILE "/.sversionrc"
-#define PLUGIN_EXE_FILE_NAME "nsplugin"
 #define STAROFFICE_EXE_FILE_NAME "soffice"
 #endif
 #ifdef WNT
 #define STAROFFICE_VERSION_FILE "\\sversion.ini"
-#define PLUGIN_EXE_FILE_NAME "nsplugin.exe"
 #define STAROFFICE_EXE_FILE_NAME "soffice.exe"
 #endif
 
@@ -79,9 +77,6 @@ const char* getNewLibraryPath();
 
 // return SO program dir absolute path, like "/home/build/staroffice/program"
 const char* findProgramDir();
-
-// return nsplugin executable absolute path, like "/home/build/staroffice/program/nsplugin"
-const char* findNsExeFile();
 
 #ifdef WNT
 // return SO executable absolute path, like "/home/build/staroffice/program/soffice"
