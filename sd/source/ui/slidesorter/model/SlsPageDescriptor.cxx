@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SlsPageDescriptor.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +105,7 @@ sal_Int32 PageDescriptor::GetPageIndex (void) const
 
 view::PageObject* PageDescriptor::GetPageObject (void)
 {
-    if (mpPageObject==NULL && mpPageObjectFactory!=NULL)
+    if (mpPageObject==NULL && mpPageObjectFactory!=NULL && mpPage != NULL)
     {
         mpPageObject = mpPageObjectFactory->CreatePageObject(mpPage, shared_from_this());
     }
