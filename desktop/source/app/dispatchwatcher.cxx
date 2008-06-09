@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dispatchwatcher.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,7 +70,8 @@ using namespace ::com::sun::star::view;
 namespace desktop
 {
 
-String GetURL_Impl( const String& rName );
+String GetURL_Impl(
+    const String& rName, boost::optional< rtl::OUString > const & cwdUrl );
 
 struct DispatchHolder
 {
@@ -78,6 +79,7 @@ struct DispatchHolder
         aURL( rURL ), xDispatch( rDispatch ) {}
 
     URL aURL;
+    rtl::OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
 
@@ -193,7 +195,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
         }
 
-        String aName( GetURL_Impl( aDispatchRequest.aURL ) );
+        String aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
