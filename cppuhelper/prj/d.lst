@@ -69,4 +69,8 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\source\unorc %_DEST%\bin%_EXT%\uno.ini
 ..\source\unorc %_DEST%\lib%_EXT%\unorc
 
+..\inc\cppuhelper\findsofficepath.h %_DEST%\inc%_EXT%\cppuhelper\findsofficepath.h
+..\%__SRC%\obj\findsofficepath.o %_DEST%\lib%_EXT%\findsofficepath.o
+..\%__SRC%\obj\findsofficepath.obj %_DEST%\lib%_EXT%\findsofficepath.obj
+
 linklib: libuno_cppuhelper*.*.*
