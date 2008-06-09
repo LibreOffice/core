@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr4.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3705,6 +3705,8 @@ StackVar ScInterpreter::Interpret()
 // Functions that evaluate an error code and directly set nGlobalError to 0,
 // usage: switch( OpCode ) { CASE_OCERRFUNC statements; }
 #define CASE_OCERRFUNC \
+    case ocCount : \
+    case ocCount2 : \
     case ocErrorType : \
     case ocIsEmpty : \
     case ocIsErr : \
