@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,21 @@ struct Bootstrap_Impl;
 
 namespace {
 
+bool resolvePathnameUrl(rtl::OUString * url) {
+    OSL_ASSERT(url !=  NULL);
+    static char const schema[] = "vnd.sun.star.pathname:";
+    if (!url->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(schema)) ||
+        (osl::FileBase::getFileURLFromSystemPath(
+            url->copy(RTL_CONSTASCII_LENGTH(schema)), *url) ==
+         osl::FileBase::E_None))
+    {
+        return true;
+    } else {
+        *url = rtl::OUString();
+        return false;
+    }
+}
+
 static char const URE_BOOTSTRAP[] = "URE_BOOTSTRAP";
 
 struct FundamentalIniData {
@@ -75,8 +90,9 @@ struct FundamentalIniData {
     FundamentalIniData() {
         OUString uri;
         ini =
-            rtl::Bootstrap::get(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(URE_BOOTSTRAP)), uri)
+            (rtl::Bootstrap::get(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(URE_BOOTSTRAP)), uri) &&
+             resolvePathnameUrl(&uri))
             ? rtl_bootstrap_args_open(uri.pData) : NULL;
     }
 
@@ -227,22 +243,7 @@ static OUString & getIniFileName_Impl()
                &fileName.pData,
                OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")).pData))
         {
-            // do nothing
-        }
-        else if(getFromCommandLineArgs(
-                    &fileName.pData,
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILEPATH")).pData))
-        {
-            OUString url;
-            if (osl::FileBase::getFileURLFromSystemPath(fileName, url) ==
-                osl::FileBase::E_None)
-            {
-                fileName = url;
-            }
-            else
-            {
-                fileName = OUString();
-            }
+            resolvePathnameUrl(&fileName);
         }
         else
         {
@@ -493,16 +494,20 @@ sal_Bool Bootstrap_Impl::getValue(
                     if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
                     {
                         oslSecurity security = osl_getCurrentSecurity();
-                        osl_getConfigDir(security, ppValue);
-                        EnsureNoFinalSlash(ppValue);
+                        result = osl_getConfigDir(security, ppValue);
+                        if (result) {
+                            EnsureNoFinalSlash(ppValue);
+                        }
                         osl_freeSecurityHandle(security);
                         further_macro_expansion = false;
                     }
                     else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME") ))
                     {
                         oslSecurity security = osl_getCurrentSecurity();
-                        osl_getHomeDir(security, ppValue);
-                        EnsureNoFinalSlash(ppValue);
+                        result = osl_getHomeDir(security, ppValue);
+                        if (result) {
+                            EnsureNoFinalSlash(ppValue);
+                        }
                         osl_freeSecurityHandle(security);
                         further_macro_expansion = false;
                     }
@@ -865,7 +870,20 @@ void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_bootstrap_expandMacros_from_handle(NULL, macro);
 }
 
-//----------------------------------------------------------------------------
+void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
+    SAL_THROW_EXTERN_C()
+{
+    OSL_ASSERT(value != NULL);
+    rtl::OUStringBuffer b;
+    for (sal_Int32 i = 0; i < value->length; ++i) {
+        sal_Unicode c = value->buffer[i];
+        if (c == '$' || c == '\\') {
+            b.append(sal_Unicode('\\'));
+        }
+        b.append(c);
+    }
+    rtl_uString_assign(encoded, b.makeStringAndClear().pData);
+}
 
 namespace {
 
