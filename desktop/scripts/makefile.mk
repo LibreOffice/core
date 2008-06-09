@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.13 $
+# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,6 +51,7 @@ UNIXTEXT= \
     $(MISC)$/sweb.sh \
     $(MISC)$/swriter.sh \
     $(MISC)$/mozwrapper.sh \
+    $(MISC)$/unoinfo.sh \
     $(MISC)$/unopkg.sh
 
 .INCLUDE :  target.mk
