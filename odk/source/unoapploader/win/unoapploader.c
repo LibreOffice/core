@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoapploader.c,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +41,11 @@
 #pragma warning(pop)
 #endif
 
-char* getPath();
-char* getPathFromWindowsRegistry();
-char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName );
+#include "cppuhelper/findsofficepath.h"
+
+#define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
+
+char const* getPath();
 char* createCommandLine( char* lpCmdLine );
 FILE* getErrorFile( int create );
 void writeError( const char* errstr );
@@ -75,7 +77,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     const char* ENVVARNAME = "PATH";
     const char* PATHSEPARATOR = ";";
 
-    char* path = NULL;
+    char const* path = NULL;
+    char path2[MAX_PATH];
     char* value = NULL;
     char* envstr = NULL;
     char* cmdline = NULL;
@@ -93,6 +96,131 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     if ( path != NULL )
     {
+        wchar_t cmd[
+            MY_LENGTH(L"\"") + MAX_PATH +
+            MY_LENGTH(L"\\unoinfo.exe\" c++")];
+            /* hopefully does not overflow */
+        int pathsize;
+        SECURITY_ATTRIBUTES sec;
+        HANDLE temp;
+        HANDLE stdoutRead;
+        HANDLE stdoutWrite;
+        STARTUPINFOW startinfo;
+        PROCESS_INFORMATION procinfo;
+        int ret;
+        cmd[0] = L'"';
+        pathsize = MultiByteToWideChar(CP_ACP, 0, path, -1, cmd + 1, MAX_PATH);
+        if (pathsize == 0) {
+            writeError("Error: MultiByteToWideChar failed!\n");
+            closeErrorFile();
+            return 1;
+        }
+        if (wcschr(cmd + 1, L'"') != NULL) {
+            writeError("Error: bad characters in UNO installation path!\n");
+            closeErrorFile();
+            return 1;
+        }
+        wcscpy(
+            cmd + pathsize,
+            (L"\\unoinfo.exe\" c++" +
+             (pathsize == 1 || cmd[pathsize - 1] != L'\\' ? 0 : 1)));
+        sec.nLength = sizeof (SECURITY_ATTRIBUTES);
+        sec.lpSecurityDescriptor = NULL;
+        sec.bInheritHandle = TRUE;
+        if (CreatePipe(&temp, &stdoutWrite, &sec, 0) == 0 ||
+            DuplicateHandle(
+                GetCurrentProcess(), temp, GetCurrentProcess(), &stdoutRead, 0,
+                FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) == 0)
+        {
+            writeError("Error: CreatePipe/DuplicateHandle failed!\n");
+            closeErrorFile();
+            return 1;
+        }
+        memset(&startinfo, 0, sizeof (STARTUPINFOW));
+        startinfo.cb = sizeof (STARTUPINFOW);
+        startinfo.lpDesktop = L"";
+        startinfo.dwFlags = STARTF_USESTDHANDLES;
+        startinfo.hStdOutput = stdoutWrite;
+        ret = CreateProcessW(
+            NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &startinfo, &procinfo);
+        if (ret != 0) {
+            char * buf = NULL;
+            size_t n = 1000;
+            size_t k = 0;
+            DWORD exitcode;
+            int path2size;
+            CloseHandle(stdoutWrite);
+            CloseHandle(procinfo.hThread);
+            for (;;) {
+                DWORD m;
+                buf = realloc(buf, n);
+                if (buf == NULL) {
+                    writeError(
+                        "Error: out of memory reading unoinfo output!\n");
+                    closeErrorFile();
+                    return 1;
+                }
+                if (!ReadFile(stdoutRead, buf + k, n - k, &m, NULL))
+                {
+                    DWORD err = GetLastError();
+                    if (err == ERROR_HANDLE_EOF || err == ERROR_BROKEN_PIPE) {
+                        break;
+                    }
+                    writeError("Error: cannot read unoinfo output!\n");
+                    closeErrorFile();
+                    return 1;
+                }
+                if (m == 0) {
+                    break;
+                }
+                k += m;
+                if (k >= n) {
+                    if (n >= SIZE_MAX / 2) {
+                        writeError(
+                            "Error: out of memory reading unoinfo output!\n");
+                        closeErrorFile();
+                        return 1;
+                    }
+                    n *= 2;
+                }
+            }
+            if ((k & 1) == 1) {
+                writeError("Error: bad unoinfo output!\n");
+                closeErrorFile();
+                return 1;
+            }
+            CloseHandle(stdoutRead);
+            if (!GetExitCodeProcess(procinfo.hProcess, &exitcode) ||
+                exitcode != 0)
+            {
+                writeError("Error: executing unoinfo failed!\n");
+                closeErrorFile();
+                return 1;
+            }
+            if (k == 0) {
+                path2size = 0;
+            } else {
+                path2size = WideCharToMultiByte(
+                    CP_ACP, 0, (wchar_t *) buf, k / 2, path2, MAX_PATH - 1,
+                    NULL, NULL);
+                if (path2size == 0) {
+                    writeError("Error: converting unoinfo output failed!\n");
+                    closeErrorFile();
+                    return 1;
+                }
+            }
+            path2[path2size] = '\0';
+            path = path2;
+        } else {
+            if (GetLastError() != ERROR_FILE_NOT_FOUND) {
+                writeError("Error: calling unoinfo failed!\n");
+                closeErrorFile();
+                return 1;
+            }
+            CloseHandle(stdoutRead);
+            CloseHandle(stdoutWrite);
+        }
+
         /* get the value of the PATH environment variable */
         value = getenv( ENVVARNAME );
 
@@ -155,96 +283,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
  * @return the installation path or NULL, if no installation was specified or
  *         found, or if an error occured
  */
-char* getPath()
+char const* getPath()
 {
-    const char* UNOPATHVARNAME = "UNO_PATH";
-
-    char* path = NULL;
-
-    /* get the installation path from the UNO_PATH environment variable */
-    path = getenv( UNOPATHVARNAME );
-
-    if ( path == NULL || strlen( path ) == 0 )
-    {
-        /* get the installation path from the Windows Registry */
-        path = getPathFromWindowsRegistry();
-        if ( path == NULL )
-            writeError( "Warning: getting path from Windows Registry "
-                        "failed!\n" );
-    }
-
-    return path;
-}
-
-
-/*
- * Gets the installation path from the Windows Registry.
- *
- * @return the installation path or NULL, if no installation was found or
- *         if an error occured
- */
-char* getPathFromWindowsRegistry()
-{
-    const char* SUBKEYNAME = "Software\\OpenOffice.org\\UNO\\InstallPath";
-
-    char* path = NULL;
-
-    /* read the key's default value from HKEY_CURRENT_USER */
-    path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME );
+    char const* path = cppuhelper_detail_findSofficePath();
 
     if ( path == NULL )
-    {
-        /* read the key's default value from HKEY_LOCAL_MACHINE */
-        path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME );
-    }
+        writeError( "Warning: getting path from Windows Registry failed!\n" );
 
     return path;
-}
-
-/*
- * Gets the installation path from the Windows Registry for the specified
- * registry key.
- *
- * @param hroot       open handle to predefined root registry key
- * @param subKeyName  name of the subkey to open
- *
- * @return the installation path or NULL, if no installation was found or
- *         if an error occured
- */
-char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
-{
-    HKEY hkey;
-    DWORD type;
-    char* data = NULL;
-    DWORD size;
-
-    /* open the specified registry key */
-    if ( RegOpenKeyEx( hroot, subKeyName, 0, KEY_READ, &hkey ) != ERROR_SUCCESS )
-    {
-        return NULL;
-    }
-
-    /* find the type and size of the default value */
-    if ( RegQueryValueEx( hkey, NULL, NULL, &type, NULL, &size) != ERROR_SUCCESS )
-    {
-        RegCloseKey( hkey );
-        return NULL;
-    }
-
-    /* get memory to hold the default value */
-    data = (char*) malloc( size );
-
-    /* read the default value */
-    if ( RegQueryValueEx( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
-    {
-        RegCloseKey( hkey );
-        return NULL;
-    }
-
-    /* release registry key handle */
-    RegCloseKey( hkey );
-
-    return data;
 }
 
 /*
