@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xpathapi.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -274,6 +274,9 @@ namespace XPath
             va_list args;
 
             va_start(args, format);
+#ifdef _WIN32
+#define vsnprintf _vsnprintf
+#endif
             vsnprintf(str, sizeof(str), format, args);
             va_end(args);
 
