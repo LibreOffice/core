@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewinformation2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:19 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace drawinglayer
 
             // the DrawPage which is target of visualisation. This is needed e.g. for
             // the view-dependent decomposition of PageNumber TextFields
-            uno::Reference< drawing::XDrawPage > mxVisualizedPage;
+            uno::Reference< drawing::XDrawPage >        mxVisualizedPage;
 
             // the point in time
             double                                      mfViewTime;
@@ -84,7 +84,7 @@ namespace drawinglayer
             uno::Sequence< beans::PropertyValue >       mxViewInformation;
 
             // the extra PropertyValues; not represented by ViewTransformation,
-            // Viewport or ViewTime
+            // Viewport, VisualizedPage or ViewTime
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // bitfield
@@ -317,6 +317,15 @@ namespace drawinglayer
             {
                 return mxExtendedInformation;
             }
+
+            bool operator==(const ImpViewInformation2D& rCandidate) const
+            {
+                return (maViewTransformation == rCandidate.maViewTransformation
+                    && maViewport == rCandidate.maViewport
+                    && mxVisualizedPage == rCandidate.mxVisualizedPage
+                    && mfViewTime == rCandidate.mfViewTime
+                    && mxExtendedInformation == rCandidate.mxExtendedInformation);
+            }
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -380,6 +389,16 @@ namespace drawinglayer
             mpViewInformation2D->mnRefCount++;
 
             return *this;
+        }
+
+        bool ViewInformation2D::operator==(const ViewInformation2D& rCandidate) const
+        {
+            if(rCandidate.mpViewInformation2D == mpViewInformation2D)
+            {
+                return true;
+            }
+
+            return (*rCandidate.mpViewInformation2D == *mpViewInformation2D);
         }
 
         const basegfx::B2DHomMatrix& ViewInformation2D::getViewTransformation() const

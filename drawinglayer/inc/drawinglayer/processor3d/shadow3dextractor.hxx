@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ namespace drawinglayer
             // prepared data (transformations) for 2D/3D shadow calculations
             basegfx::B3DHomMatrix                           maWorldToEye;
             basegfx::B3DHomMatrix                           maEyeToView;
-            basegfx::B3DHomMatrix                           maWorldToView;
             basegfx::B3DVector                              maLightNormal;
             basegfx::B3DVector                              maShadowPlaneNormal;
             basegfx::B3DPoint                               maPlanePoint;
@@ -92,10 +91,8 @@ namespace drawinglayer
 
         public:
             Shadow3DExtractingProcessor(
-                double fTime,
+                const geometry::ViewInformation3D& rViewInformation,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
-                const basegfx::B3DHomMatrix& rWorldToEye,
-                const basegfx::B3DHomMatrix& rEyeToView,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 const primitive3d::Primitive3DSequence& rPrimitiveVector,
                 double fShadowSlant);
@@ -108,7 +105,6 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const basegfx::B3DHomMatrix& getWorldToEye() const { return maWorldToEye; }
             const basegfx::B3DHomMatrix& getEyeToView() const { return maEyeToView; }
-            const basegfx::B3DHomMatrix& getWorldToView() const { return maWorldToView; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

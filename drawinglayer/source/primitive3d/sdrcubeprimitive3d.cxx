@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrCubePrimitive3D::createLocalDecomposition(double /*fTime*/) const
+        Primitive3DSequence SdrCubePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             const basegfx::B3DRange aUnitRange(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
             Primitive3DSequence aRetval;
@@ -175,11 +175,7 @@ namespace drawinglayer
                 appendPrimitive3DSequenceToPrimitive3DSequence(aRetval, aShadow);
             }
 
-#ifdef DBG_UTIL
-            return EventuallyAddTestRange(aRetval);
-#else
             return aRetval;
-#endif
         }
 
         SdrCubePrimitive3D::SdrCubePrimitive3D(
@@ -196,7 +192,7 @@ namespace drawinglayer
             return SdrPrimitive3D::operator==(rPrimitive);
         }
 
-        basegfx::B3DRange SdrCubePrimitive3D::getB3DRange(double /*fTime*/) const
+        basegfx::B3DRange SdrCubePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2.
             // The parent implementation which uses the ranges of the decomposition would be more

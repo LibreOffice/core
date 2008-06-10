@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ namespace drawinglayer
 
         public:
             DefaultProcessor3D(
-                double fTime,
+                const geometry::ViewInformation3D& rViewInformation,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute);
             virtual ~DefaultProcessor3D();

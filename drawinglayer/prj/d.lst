@@ -71,8 +71,8 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\animation
 ..\inc\drawinglayer\animation\animationtiming.hxx %_DEST%\inc%_EXT%\drawinglayer\animation\animationtiming.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\geometry
-..\inc\drawinglayer\geometry\transformation3d.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\transformation3d.hxx
 ..\inc\drawinglayer\geometry\viewinformation2d.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\viewinformation2d.hxx
+..\inc\drawinglayer\geometry\viewinformation3d.hxx %_DEST%\inc%_EXT%\drawinglayer\geometry\viewinformation3d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
 ..\inc\drawinglayer\processor2d\baseprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\baseprocessor2d.hxx

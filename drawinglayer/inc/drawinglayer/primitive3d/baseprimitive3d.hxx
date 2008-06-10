@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,13 @@
     sal_uInt32 TheClass::getPrimitiveID() const { return TheID; }
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
+
+namespace drawinglayer { namespace geometry {
+    class ViewInformation3D;
+}}
+
+//////////////////////////////////////////////////////////////////////////////
 // basePrimitive3D class
 
 namespace drawinglayer
@@ -86,7 +93,7 @@ namespace drawinglayer
 
             // method which is to be used to implement the local decomposition of a 2D primitive. The default
             // implementation will just return an empty decomposition
-            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
+            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             // constructor
@@ -102,7 +109,7 @@ namespace drawinglayer
             // This method is for places where using the C++ implementation directly is possible. The subprocessing
             // and range merging is more efficient when working directly on basegfx::B3DRange. The default implementation
             // will use getDecomposition results to create the range
-            virtual basegfx::B3DRange getB3DRange(double fTime) const;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID for fast identifying of known primitive implementations in renderers. These use
             // the the defines from primitivetypes3d.hxx to define unique IDs.
@@ -110,17 +117,17 @@ namespace drawinglayer
 
             // The getDecomposition default implementation will on demand use createLocalDecomposition() if maLocalDecomposition is empty.
             // It will set maLocalDecomposition to this obtained decomposition to buffer it.
-            // If the decomposition is also time-dependent, this method needs to be overloaded and the
-            // time for the last decomposition need to be remembered, too, and be used in the next call to decide if
+            // If the decomposition is also ViewInformation-dependent, this method needs to be overloaded and the
+            // ViewInformation for the last decomposition needs to be remembered, too, and be used in the next call to decide if
             // the buffered decomposition may be reused or not.
-            virtual Primitive3DSequence get3DDecomposition(double fTime) const;
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
             //
             // Methods from XPrimitive3D
             //
 
             // The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
-            // will get the time from the ViewParameters for that purpose
+            // will get the ViewInformation from the ViewParameters for that purpose
             virtual Primitive3DSequence SAL_CALL getDecomposition( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters ) throw ( ::com::sun::star::uno::RuntimeException );
 
             // the getRange default implemenation will use getDecomposition to create the range information from merging
@@ -138,10 +145,10 @@ namespace drawinglayer
     namespace primitive3d
     {
         // get B3DRange from a given Primitive3DReference
-        basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, double fTime);
+        basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
         // get range3D from a given Primitive3DSequence
-        basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, double fTime);
+        basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation);
 
         // compare two Primitive2DReferences for equality, including trying to get implementations (BasePrimitive2D)
         // and using compare operator
@@ -156,9 +163,6 @@ namespace drawinglayer
         // concatenate single Primitive3D
         void appendPrimitive3DReferenceToPrimitive3DSequence(Primitive3DSequence& rDest, const Primitive3DReference& rSource);
 
-        // conversion helpers for 3D ViewParameters (only time used ATM)
-        double ViewParametersToTime(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > TimeToViewParameters(double fTime);
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

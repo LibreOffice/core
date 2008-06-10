@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedded3dprimitive2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
-#include <drawinglayer/geometry/transformation3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ namespace drawinglayer
         private:
             primitive3d::Primitive3DSequence                mxChildren3D;
             basegfx::B2DHomMatrix                           maObjectTransformation;
-            geometry::Transformation3D                      maTransformation3D;
+            geometry::ViewInformation3D                     maViewInformation3D;
 
         protected:
             // local decomposition.
@@ -63,12 +63,12 @@ namespace drawinglayer
             Embedded3DPrimitive2D(
                 const primitive3d::Primitive3DSequence& rxChildren3D,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
-                const geometry::Transformation3D& rTransformation3D);
+                const geometry::ViewInformation3D& rViewInformation3D);
 
             // get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
-            const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
+            const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

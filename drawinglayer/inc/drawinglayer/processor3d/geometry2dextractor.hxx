@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometry2dextractor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,18 +57,13 @@ namespace drawinglayer
             // object transformation for scene for 2d definition
             basegfx::B2DHomMatrix                           maObjectTransformation;
 
-            // prepared data (transformations) for 2D/3D transformation calculations
-            // will be used as transformation stack during processing (changed)
-            basegfx::B3DHomMatrix                           maWorldToView;
-
             // the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                    maBColorModifierStack;
 
         public:
             Geometry2DExtractingProcessor(
-                double fTime,
-                const basegfx::B2DHomMatrix& rObjectTransformation,
-                const basegfx::B3DHomMatrix& rWorldToView);
+                const geometry::ViewInformation3D& rViewInformation,
+                const basegfx::B2DHomMatrix& rObjectTransformation);
 
             // the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource);
@@ -76,7 +71,6 @@ namespace drawinglayer
             // data access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
-            const basegfx::B3DHomMatrix& getWorldToView() const { return maWorldToView; }
             const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
         };
     } // end of namespace processor3d

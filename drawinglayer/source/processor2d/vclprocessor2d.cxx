@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -762,19 +762,20 @@ namespace drawinglayer
             // create new transformations for CurrentTransformation
             // and for local ViewInformation2D
             maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
-            maViewInformation2D = geometry::ViewInformation2D(
+            const geometry::ViewInformation2D aViewInformation2D(
                 getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
                 getViewInformation2D().getViewport(),
                 getViewInformation2D().getVisualizedPage(),
                 getViewInformation2D().getViewTime(),
                 getViewInformation2D().getExtendedInformationSequence());
+            updateViewInformation(aViewInformation2D);
 
             // proccess content
             process(rTransformCandidate.getChildren());
 
             // restore transformations
             maCurrentTransformation = aLastCurrentTransformation;
-            maViewInformation2D = aLastViewInformation2D;
+            updateViewInformation(aLastViewInformation2D);
         }
 
         // new XDrawPage for ViewInformation2D
@@ -784,18 +785,19 @@ namespace drawinglayer
             const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
             // create new local ViewInformation2D
-            maViewInformation2D = geometry::ViewInformation2D(
+            const geometry::ViewInformation2D aViewInformation2D(
                 getViewInformation2D().getViewTransformation(),
                 getViewInformation2D().getViewport(),
                 rPagePreviewCandidate.getXDrawPage(),
                 getViewInformation2D().getViewTime(),
                 getViewInformation2D().getExtendedInformationSequence());
+            updateViewInformation(aViewInformation2D);
 
             // proccess decomposed content
             process(rPagePreviewCandidate.get2DDecomposition(getViewInformation2D()));
 
             // restore transformations
-            maViewInformation2D = aLastViewInformation2D;
+            updateViewInformation(aLastViewInformation2D);
         }
 
         // marker

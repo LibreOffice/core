@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrextrudeprimitive3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence SdrExtrudePrimitive3D::createLocalDecomposition(double /*fTime*/) const
+        Primitive3DSequence SdrExtrudePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DSequence aRetval;
 
@@ -205,11 +205,7 @@ namespace drawinglayer
                 }
             }
 
-#ifdef DBG_UTIL
-            return EventuallyAddTestRange(aRetval);
-#else
             return aRetval;
-#endif
         }
 
         void SdrExtrudePrimitive3D::impCreateSlices()
@@ -315,7 +311,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B3DRange SdrExtrudePrimitive3D::getB3DRange(double /*fTime*/) const
+        basegfx::B3DRange SdrExtrudePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             // use defaut from sdrPrimitive3D which uses transformation expanded by line width/2
             // The parent implementation which uses the ranges of the decomposition would be more

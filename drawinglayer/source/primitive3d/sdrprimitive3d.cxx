@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,32 +126,6 @@ namespace drawinglayer
             return false;
         }
 
-#ifdef DBG_UTIL
-        Primitive3DSequence SdrPrimitive3D::EventuallyAddTestRange(Primitive3DSequence& rTarget) const
-        {
-            static bool bAddBoundCretsForTest(false);
-
-            if(bAddBoundCretsForTest)
-            {
-                const basegfx::B3DRange a3DRange(getB3DRange(0.0));
-                const basegfx::B3DPolyPolygon aLine(basegfx::tools::createCubePolyPolygonFromB3DRange(a3DRange));
-                const basegfx::BColor aBColor(0.0, 0.0, 1.0);
-                const ::std::vector< double > aEmptyVector;
-                const drawinglayer::attribute::SdrLineAttribute aLineAttribute(
-                    basegfx::B2DLINEJOIN_NONE,
-                    0.0,
-                    0.0,
-                    aBColor,
-                    aEmptyVector,
-                    0.0);
-                const basegfx::B3DHomMatrix aEmptyTransform;
-                const Primitive3DSequence aLines(create3DPolyPolygonLinePrimitives(aLine, aEmptyTransform, aLineAttribute));
-                appendPrimitive3DSequenceToPrimitive3DSequence(rTarget, aLines);
-            }
-
-            return rTarget;
-        }
-#endif
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

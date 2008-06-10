@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_drawinglayer.hxx"
 
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -45,24 +46,12 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace
-{
-    const ::rtl::OUString& getNamePropertyTime()
-    {
-        static ::rtl::OUString s_sNamePropertyTime(RTL_CONSTASCII_USTRINGPARAM("Time"));
-        return s_sNamePropertyTime;
-    }
-} // end of anonymous namespace
-
-//////////////////////////////////////////////////////////////////////////////
-
 namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence BasePrimitive3D::createLocalDecomposition(double /*fTime*/) const
+        Primitive3DSequence BasePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            // default returns an empty sequence
             return Primitive3DSequence();
         }
 
@@ -77,19 +66,18 @@ namespace drawinglayer
             return (getPrimitiveID() == rPrimitive.getPrimitiveID());
         }
 
-        basegfx::B3DRange BasePrimitive3D::getB3DRange(double fTime) const
+        basegfx::B3DRange BasePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
-            return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(fTime), fTime);
+            return getB3DRangeFromPrimitive3DSequence(get3DDecomposition(rViewInformation), rViewInformation);
         }
 
-
-        Primitive3DSequence BasePrimitive3D::get3DDecomposition(double fTime) const
+        Primitive3DSequence BasePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
             if(!getLocalDecomposition().hasElements())
             {
-                const Primitive3DSequence aNewSequence(createLocalDecomposition(fTime));
+                const Primitive3DSequence aNewSequence(createLocalDecomposition(rViewInformation));
                 const_cast< BasePrimitive3D* >(this)->setLocalDecomposition(aNewSequence);
             }
 
@@ -98,12 +86,14 @@ namespace drawinglayer
 
         Primitive3DSequence SAL_CALL BasePrimitive3D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            return get3DDecomposition(ViewParametersToTime(rViewParameters));
+            const geometry::ViewInformation3D aViewInformation(rViewParameters);
+            return get3DDecomposition(rViewParameters);
         }
 
-        geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
+        com::sun::star::geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException )
         {
-            return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(ViewParametersToTime(rViewParameters)));
+            const geometry::ViewInformation3D aViewInformation(rViewParameters);
+            return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));
         }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -116,7 +106,7 @@ namespace drawinglayer
     namespace primitive3d
     {
         // get range3D from a given Primitive3DReference
-        basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, double fTime)
+        basegfx::B3DRange getB3DRangeFromPrimitive3DReference(const Primitive3DReference& rCandidate, const geometry::ViewInformation3D& aViewInformation)
         {
             basegfx::B3DRange aRetval;
 
@@ -128,13 +118,13 @@ namespace drawinglayer
                 if(pCandidate)
                 {
                     // use it if possible
-                    aRetval.expand(pCandidate->getB3DRange(fTime));
+                    aRetval.expand(pCandidate->getB3DRange(aViewInformation));
                 }
                 else
                 {
                     // use UNO API call instead
-                    const uno::Sequence< beans::PropertyValue > xViewParameters(TimeToViewParameters(fTime));
-                    aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(xViewParameters)));
+                    const uno::Sequence< beans::PropertyValue >& rViewParameters(aViewInformation.getViewInformationSequence());
+                    aRetval.expand(basegfx::unotools::b3DRectangleFromRealRectangle3D(rCandidate->getRange(rViewParameters)));
                 }
             }
 
@@ -142,7 +132,7 @@ namespace drawinglayer
         }
 
         // get range3D from a given Primitive3DSequence
-        basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, double fTime)
+        basegfx::B3DRange getB3DRangeFromPrimitive3DSequence(const Primitive3DSequence& rCandidate, const geometry::ViewInformation3D& aViewInformation)
         {
             basegfx::B3DRange aRetval;
 
@@ -152,7 +142,7 @@ namespace drawinglayer
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
-                    aRetval.expand(getB3DRangeFromPrimitive3DReference(rCandidate[a], fTime));
+                    aRetval.expand(getB3DRangeFromPrimitive3DReference(rCandidate[a], aViewInformation));
                 }
             }
 
@@ -267,42 +257,6 @@ namespace drawinglayer
             }
         }
 
-        // conversion helpers for 3D ViewParameters (only time used ATM)
-        double ViewParametersToTime(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-        {
-            double fRetval(0.0);
-
-            if(rViewParameters.hasElements())
-            {
-                const sal_Int32 nCount(rViewParameters.getLength());
-
-                for(sal_Int32 a(0); a < nCount; a++)
-                {
-                    const beans::PropertyValue& rProp = rViewParameters[a];
-
-                    if(rProp.Name == getNamePropertyTime())
-                    {
-                        rProp.Value >>= fRetval;
-                    }
-                }
-            }
-
-            return fRetval;
-        }
-
-        const uno::Sequence< beans::PropertyValue > TimeToViewParameters(double fTime)
-        {
-            uno::Sequence< beans::PropertyValue > xViewParameters;
-
-            if(0.0 < fTime)
-            {
-                xViewParameters.realloc(1);
-                xViewParameters[0].Name = getNamePropertyTime();
-                xViewParameters[0].Value <<= fTime;
-            }
-
-            return xViewParameters;
-        }
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
 

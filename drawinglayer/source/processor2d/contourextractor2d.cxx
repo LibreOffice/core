@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contourextractor2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,19 +143,21 @@ namespace drawinglayer
 
                     // create new transformations for CurrentTransformation and for local ViewInformation2D
                     maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
-                    maViewInformation2D = geometry::ViewInformation2D(
+                    const geometry::ViewInformation2D aViewInformation2D(
                         getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
                         getViewInformation2D().getExtendedInformationSequence());
+                    updateViewInformation(aViewInformation2D);
 
                     // proccess content
                     process(rTransformCandidate.getChildren());
 
                     // restore transformations
                     maCurrentTransformation = aLastCurrentTransformation;
-                    maViewInformation2D = aLastViewInformation2D;
+                    updateViewInformation(aLastViewInformation2D);
+
                     break;
                 }
                 case PRIMITIVE2D_ID_SCENEPRIMITIVE2D :

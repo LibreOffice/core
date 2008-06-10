@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrprimitive3d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,6 @@ namespace drawinglayer
             // implementation for primitive3D which
             // will use given Slice3Ds and expand by evtl. line width / 2
             basegfx::B3DRange get3DRangeFromSlices(const Slice3DVector& rSlices) const;
-
-#ifdef DBG_UTIL
-            // tooling for testing. Eventually adds geometry to visualize the BoundRect of the primitive
-            Primitive3DSequence EventuallyAddTestRange(Primitive3DSequence& rTarget) const;
-#endif
 
         public:
             SdrPrimitive3D(

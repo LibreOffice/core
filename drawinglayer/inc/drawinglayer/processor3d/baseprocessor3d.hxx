@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -47,17 +48,23 @@ namespace drawinglayer
         class BaseProcessor3D
         {
         private:
-            double                                              mfTime;
+            geometry::ViewInformation3D                     maViewInformation3D;
+
+        protected:
+            void updateViewInformation(const geometry::ViewInformation3D& rViewInformation3D)
+            {
+                maViewInformation3D = rViewInformation3D;
+            }
 
         public:
-            BaseProcessor3D(double fTime);
+            BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation);
             virtual ~BaseProcessor3D();
 
             // the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource) = 0;
 
             // data access
-            double getTime() const { return mfTime; }
+            const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
@@ -74,7 +81,7 @@ namespace drawinglayer
             primitive3d::Primitive3DSequence                        maPrimitive3DSequence;
 
         public:
-            CollectingProcessor3D(double fTime);
+            CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation);
 
             // the central processing method
             virtual void process(const primitive3d::Primitive3DSequence& rSource);

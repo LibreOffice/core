@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:17 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition. Implementation will just return children
-            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
+            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             // constructor

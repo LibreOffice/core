@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,7 +488,7 @@ namespace drawinglayer
                     if(bDoHatchDecomposition)
                     {
                         // let break down
-                        process(rBasePrimitive.get3DDecomposition(getTime()));
+                        process(rBasePrimitive.get3DDecomposition(getViewInformation3D()));
                     }
                     else
                     {
@@ -549,7 +549,7 @@ namespace drawinglayer
                 default:
                 {
                     // process recursively
-                    process(rBasePrimitive.get3DDecomposition(getTime()));
+                    process(rBasePrimitive.get3DDecomposition(getViewInformation3D()));
                     break;
                 }
             }
@@ -578,8 +578,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue > xViewParameters(primitive3d::TimeToViewParameters(getTime()));
-                            process(xReference->getDecomposition(xViewParameters));
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
                         }
                     }
                 }
@@ -587,10 +587,10 @@ namespace drawinglayer
         }
 
         DefaultProcessor3D::DefaultProcessor3D(
-            double fTime,
+            const geometry::ViewInformation3D& rViewInformation,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute)
-        :   BaseProcessor3D(fTime),
+        :   BaseProcessor3D(rViewInformation),
             mrSdrSceneAttribute(rSdrSceneAttribute),
             mrSdrLightingAttribute(rSdrLightingAttribute),
             maWorldToEye(),

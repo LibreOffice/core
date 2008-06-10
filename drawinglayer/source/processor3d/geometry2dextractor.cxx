@@ -4,9 +4,9 @@
  *
  *  $RCSfile: geometry2dextractor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,11 @@ namespace drawinglayer
     namespace processor3d
     {
         Geometry2DExtractingProcessor::Geometry2DExtractingProcessor(
-            double fTime,
-            const basegfx::B2DHomMatrix& rObjectTransformation,
-            const basegfx::B3DHomMatrix& rWorldToView)
-        :   BaseProcessor3D(fTime),
+            const geometry::ViewInformation3D& rViewInformation,
+            const basegfx::B2DHomMatrix& rObjectTransformation)
+        :   BaseProcessor3D(rViewInformation),
             maPrimitive2DSequence(),
             maObjectTransformation(rObjectTransformation),
-            maWorldToView(rWorldToView),
             maBColorModifierStack()
         {
         }
@@ -95,16 +93,23 @@ namespace drawinglayer
                                 {
                                     // transform group. Remember current transformations
                                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*(xReference.get()));
-                                    basegfx::B3DHomMatrix aLastWorldToView(getWorldToView());
+                                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
 
-                                    // create new transformations
-                                    maWorldToView = getWorldToView() * rPrimitive.getTransformation();
+                                    // create new transformation; add new object transform from right side
+                                    const geometry::ViewInformation3D aNewViewInformation3D(
+                                        aLastViewInformation3D.getTransformation() * rPrimitive.getTransformation(),
+                                        aLastViewInformation3D.getOrientation(),
+                                        aLastViewInformation3D.getProjection(),
+                                        aLastViewInformation3D.getDeviceToView(),
+                                        aLastViewInformation3D.getViewTime(),
+                                        aLastViewInformation3D.getExtendedInformationSequence());
+                                    updateViewInformation(aNewViewInformation3D);
 
                                     // let break down recursively
                                     process(rPrimitive.getChildren());
 
                                     // restore transformations
-                                    maWorldToView = aLastWorldToView;
+                                    updateViewInformation(aLastViewInformation3D);
                                     break;
                                 }
                                 case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
@@ -125,7 +130,7 @@ namespace drawinglayer
                                 {
                                     // PolygonHairlinePrimitive3D
                                     const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B2DPolygon a2DHairline(basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getWorldToView()));
+                                    basegfx::B2DPolygon a2DHairline(basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView()));
 
                                     if(a2DHairline.count())
                                     {
@@ -140,7 +145,7 @@ namespace drawinglayer
                                 {
                                     // PolyPolygonMaterialPrimitive3D
                                     const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B2DPolyPolygon a2DFill(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getWorldToView()));
+                                    basegfx::B2DPolyPolygon a2DFill(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView()));
 
                                     if(a2DFill.count())
                                     {
@@ -176,7 +181,7 @@ namespace drawinglayer
                                 default :
                                 {
                                     // process recursively
-                                    process(pBasePrimitive->get3DDecomposition(getTime()));
+                                    process(pBasePrimitive->get3DDecomposition(getViewInformation3D()));
                                     break;
                                 }
                             }
@@ -184,8 +189,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue > xViewParameters(primitive3d::TimeToViewParameters(getTime()));
-                            process(xReference->getDecomposition(xViewParameters));
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
                         }
                     }
                 }

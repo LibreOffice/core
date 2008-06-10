@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B3DRange PolygonHairlinePrimitive3D::getB3DRange(double /*fTime*/) const
+        basegfx::B3DRange PolygonHairlinePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return basegfx::tools::getRange(getB3DPolygon());
         }
@@ -92,7 +92,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        Primitive3DSequence PolygonStrokePrimitive3D::createLocalDecomposition(double /*fTime*/) const
+        Primitive3DSequence PolygonStrokePrimitive3D::createLocalDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             Primitive3DSequence aRetval;
 

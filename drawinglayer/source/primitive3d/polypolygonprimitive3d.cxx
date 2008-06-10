@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:21 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B3DRange PolyPolygonMaterialPrimitive3D::getB3DRange(double /*fTime*/) const
+        basegfx::B3DRange PolyPolygonMaterialPrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             return basegfx::tools::getRange(getB3DPolyPolygon());
         }

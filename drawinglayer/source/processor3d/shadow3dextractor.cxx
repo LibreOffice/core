@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,20 +61,17 @@ namespace drawinglayer
     namespace processor3d
     {
         Shadow3DExtractingProcessor::Shadow3DExtractingProcessor(
-            double fTime,
+            const geometry::ViewInformation3D& rViewInformation,
             const basegfx::B2DHomMatrix& rObjectTransformation,
-            const basegfx::B3DHomMatrix& rWorldToEye,
-            const basegfx::B3DHomMatrix& rEyeToView,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const primitive3d::Primitive3DSequence& rPrimitiveSequence,
             double fShadowSlant)
-        :   BaseProcessor3D(fTime),
+        :   BaseProcessor3D(rViewInformation),
             maPrimitive2DSequence(),
             mpPrimitive2DSequence(&maPrimitive2DSequence),
             maObjectTransformation(rObjectTransformation),
-            maWorldToEye(rWorldToEye),
-            maEyeToView(rEyeToView),
-            maWorldToView(maEyeToView * maWorldToEye),
+            maWorldToEye(),
+            maEyeToView(),
             maLightNormal(),
             maShadowPlaneNormal(),
             maPlanePoint(),
@@ -84,19 +81,11 @@ namespace drawinglayer
             mbConvert(false),
             mbUseProjection(false)
         {
-            // create deviceToView projection for shadow geometry
-            // outcome is [-1.0 .. 1.0] in X,Y and Z. bring to [0.0 .. 1.0]. Also
-            // necessary to flip Y due to screen orientation
-            // Z is not needed, but will also be brought to [0.0 .. 1.0]
-            basegfx::B3DHomMatrix aDeviceToView;
-            aDeviceToView.scale(0.5, -0.5, 0.5);
-            aDeviceToView.translate(0.5, 0.5, 0.5);
-
             // calculate shadow projection stuff
             if(rSdrLightingAttribute.getLightVector().size())
             {
                 // get light normal, plane normal and sclalar from it
-                maLightNormal = rSdrLightingAttribute.getLightVector()[0L].getDirection();
+                maLightNormal = rSdrLightingAttribute.getLightVector()[0].getDirection();
                 maLightNormal.normalize();
                 maShadowPlaneNormal = basegfx::B3DVector(0.0, sin(fShadowSlant), cos(fShadowSlant));
                 maShadowPlaneNormal.normalize();
@@ -105,7 +94,12 @@ namespace drawinglayer
                 // use only when scalar is > 0.0, so the light is in front of the object
                 if(basegfx::fTools::more(mfLightPlaneScalar, 0.0))
                 {
-                    basegfx::B3DRange aContained3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(rPrimitiveSequence, getTime()));
+                    // prepare buffered WorldToEye and EyeToView
+                    maWorldToEye = getViewInformation3D().getOrientation() * getViewInformation3D().getTransformation();
+                    maEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
+
+                    // calculate range to get front edge around which to rotate the shadow's projection
+                    basegfx::B3DRange aContained3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(rPrimitiveSequence, getViewInformation3D()));
                     aContained3DRange.transform(getWorldToEye());
                     maPlanePoint.setX(maShadowPlaneNormal.getX() < 0.0 ? aContained3DRange.getMinX() : aContained3DRange.getMaxX());
                     maPlanePoint.setY(maShadowPlaneNormal.getY() > 0.0 ? aContained3DRange.getMinY() : aContained3DRange.getMaxY());
@@ -185,19 +179,37 @@ namespace drawinglayer
                                 {
                                     // transform group. Remember current transformations
                                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive);
-                                    basegfx::B3DHomMatrix aLastWorldToView(getWorldToView());
-                                    basegfx::B3DHomMatrix aLastWorldToEye(getWorldToEye());
+                                    const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
 
-                                    // create new transformations
-                                    maWorldToView = getWorldToView() * rPrimitive.getTransformation();
-                                    maWorldToEye = getWorldToEye() * rPrimitive.getTransformation();
+                                    // create new transformation; add new object transform from right side
+                                    const geometry::ViewInformation3D aNewViewInformation3D(
+                                        aLastViewInformation3D.getTransformation() * rPrimitive.getTransformation(),
+                                        aLastViewInformation3D.getOrientation(),
+                                        aLastViewInformation3D.getProjection(),
+                                        aLastViewInformation3D.getDeviceToView(),
+                                        aLastViewInformation3D.getViewTime(),
+                                        aLastViewInformation3D.getExtendedInformationSequence());
+                                    updateViewInformation(aNewViewInformation3D);
+
+                                    if(mbShadowProjectionIsValid)
+                                    {
+                                        // update buffered WorldToEye and EyeToView
+                                        maWorldToEye = getViewInformation3D().getOrientation() * getViewInformation3D().getTransformation();
+                                        maEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
+                                    }
 
                                     // let break down
                                     process(rPrimitive.getChildren());
 
                                     // restore transformations
-                                    maWorldToView = aLastWorldToView;
-                                    maWorldToEye = aLastWorldToEye;
+                                    updateViewInformation(aLastViewInformation3D);
+
+                                    if(mbShadowProjectionIsValid)
+                                    {
+                                        // update buffered WorldToEye and EyeToView
+                                        maWorldToEye = getViewInformation3D().getOrientation() * getViewInformation3D().getTransformation();
+                                        maEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
+                                    }
                                     break;
                                 }
                                 case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
@@ -217,7 +229,7 @@ namespace drawinglayer
                                         }
                                         else
                                         {
-                                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getWorldToView());
+                                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView());
                                         }
 
                                         if(a2DHairline.count())
@@ -246,7 +258,7 @@ namespace drawinglayer
                                         }
                                         else
                                         {
-                                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getWorldToView());
+                                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView());
                                         }
 
                                         if(a2DFill.count())
@@ -267,7 +279,7 @@ namespace drawinglayer
                                 default :
                                 {
                                     // process recursively
-                                    process(pBasePrimitive->get3DDecomposition(getTime()));
+                                    process(pBasePrimitive->get3DDecomposition(getViewInformation3D()));
                                     break;
                                 }
                             }
@@ -275,8 +287,8 @@ namespace drawinglayer
                         else
                         {
                             // unknown implementation, use UNO API call instead and process recursively
-                            const uno::Sequence< beans::PropertyValue > xViewParameters(primitive3d::TimeToViewParameters(getTime()));
-                            process(xReference->getDecomposition(xViewParameters));
+                            const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation3D().getViewInformationSequence());
+                            process(xReference->getDecomposition(rViewParameters));
                         }
                     }
                 }

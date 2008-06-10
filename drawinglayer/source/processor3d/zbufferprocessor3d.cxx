@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/geometry/transformation3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -571,15 +570,15 @@ namespace drawinglayer
         }
 
         ZBufferProcessor3D::ZBufferProcessor3D(
-            const geometry::ViewInformation2D& rViewInformation,
-            const geometry::Transformation3D& rTransformation3D,
+            const geometry::ViewInformation3D& rViewInformation3D,
+            const geometry::ViewInformation2D& rViewInformation2D,
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             double fSizeX,
             double fSizeY,
             const basegfx::B2DRange& rVisiblePart,
             sal_uInt16 nAntiAlialize)
-        :   DefaultProcessor3D(rViewInformation.getViewTime(), rSdrSceneAttribute, rSdrLightingAttribute),
+        :   DefaultProcessor3D(rViewInformation3D, rSdrSceneAttribute, rSdrLightingAttribute),
             mpBZPixelRaster(0),
             maInvEyeToView(),
             mpZBufferRasterConverter3D(0),
@@ -588,8 +587,8 @@ namespace drawinglayer
             mbContainsTransparent(false)
         {
             // generate ViewSizes
-            const double fFullViewSizeX((rViewInformation.getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
-            const double fFullViewSizeY((rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
+            const double fFullViewSizeX((rViewInformation2D.getViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
+            const double fFullViewSizeY((rViewInformation2D.getViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
             const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
             const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
 
@@ -636,13 +635,13 @@ namespace drawinglayer
                 }
 
                 // create world to eye transformation
-                maWorldToEye = rTransformation3D.getOrientation() * rTransformation3D.getTransformation();
+                maWorldToEye = getViewInformation3D().getOrientation() * getViewInformation3D().getTransformation();
 
                 // create EyeToView transformation
-                maWorldToView = aDeviceToView * rTransformation3D.getProjection() * maWorldToEye;
+                maWorldToView = aDeviceToView * getViewInformation3D().getProjection() * maWorldToEye;
 
                 // create inverse EyeToView transformation
-                maInvEyeToView = aDeviceToView * rTransformation3D.getProjection();
+                maInvEyeToView = aDeviceToView * getViewInformation3D().getProjection();
                 maInvEyeToView.invert();
 
                 // prepare maRasterRange

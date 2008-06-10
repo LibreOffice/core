@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcubeprimitive3d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace drawinglayer
         {
         protected:
             // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(double fTime) const;
+            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
             SdrCubePrimitive3D(
@@ -61,7 +61,7 @@ namespace drawinglayer
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
             // get range
-            virtual basegfx::B3DRange getB3DRange(double fTime) const;
+            virtual basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive3DIDBlock()

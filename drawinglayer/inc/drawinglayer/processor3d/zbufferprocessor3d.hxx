@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zbufferprocessor3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:18 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ namespace drawinglayer {
     }
     namespace geometry {
         class ViewInformation2D;
-        class Transformation3D;
     }
 }
 
@@ -99,8 +98,8 @@ namespace drawinglayer
 
         public:
             ZBufferProcessor3D(
-                const geometry::ViewInformation2D& rViewInformation,
-                const geometry::Transformation3D& rTransformation3D,
+                const geometry::ViewInformation3D& rViewInformation3D,
+                const geometry::ViewInformation2D& rViewInformation2D,
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 double fSizeX,

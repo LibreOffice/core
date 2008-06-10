@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,8 @@ namespace drawinglayer
 
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
                 processor3d::ZBufferProcessor3D aZBufferProcessor3D(
+                    getViewInformation3D(),
                     rViewInformation,
-                    getTransformation3D(),
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
                     aLogicRenderSize.getX(),
@@ -254,9 +254,8 @@ namespace drawinglayer
             {
                 // create 2D geometry extraction processor
                 processor3d::Geometry2DExtractingProcessor aGeometryProcessor(
-                    rViewInformation.getViewTime(),
-                    getObjectTransformation(),
-                    getTransformation3D().getWorldToView());
+                    getViewInformation3D(),
+                    getObjectTransformation());
 
                 // process local primitives
                 aGeometryProcessor.process(getChildren3D());
@@ -281,13 +280,13 @@ namespace drawinglayer
             const attribute::SdrSceneAttribute& rSdrSceneAttribute,
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
-            const geometry::Transformation3D& rTransformation3D)
+            const geometry::ViewInformation3D& rViewInformation3D)
         :   BasePrimitive2D(),
             mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
             maObjectTransformation(rObjectTransformation),
-            maTransformation3D(rTransformation3D),
+            maViewInformation3D(rViewInformation3D),
             mbShadow3DChecked(false),
             mbLabel3DChecked(false),
             mfOldDiscreteSizeX(0.0),
@@ -306,7 +305,7 @@ namespace drawinglayer
                     && getSdrSceneAttribute() == rCompare.getSdrSceneAttribute()
                     && getSdrLightingAttribute() == rCompare.getSdrLightingAttribute()
                     && getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getTransformation3D() == rCompare.getTransformation3D());
+                    && getViewInformation3D() == rCompare.getViewInformation3D());
             }
 
             return false;
@@ -401,7 +400,7 @@ namespace drawinglayer
             return BasePrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        bool ScenePrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const
+        bool ScenePrimitive2D::impGetShadow3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             osl::MutexGuard aGuard( m_aMutex );
 
@@ -409,14 +408,9 @@ namespace drawinglayer
             if(!mbShadow3DChecked && getChildren3D().hasElements())
             {
                 // create shadow extraction processor
-                const basegfx::B3DHomMatrix aWorldToEye(getTransformation3D().getOrientation() * getTransformation3D().getTransformation());
-                const basegfx::B3DHomMatrix aEyeToView(getTransformation3D().getDeviceToView() * getTransformation3D().getProjection());
-
                 processor3d::Shadow3DExtractingProcessor aShadowProcessor(
-                    rViewInformation.getViewTime(),
+                    getViewInformation3D(),
                     getObjectTransformation(),
-                    aWorldToEye,
-                    aEyeToView,
                     getSdrLightingAttribute(),
                     getChildren3D(),
                     getSdrSceneAttribute().getShadowSlant());
@@ -433,7 +427,7 @@ namespace drawinglayer
             return maShadowPrimitives.hasElements();
         }
 
-        bool ScenePrimitive2D::impGetLabel3D(const geometry::ViewInformation2D& rViewInformation) const
+        bool ScenePrimitive2D::impGetLabel3D(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             osl::MutexGuard aGuard( m_aMutex );
 
@@ -442,9 +436,8 @@ namespace drawinglayer
             {
                 // create label extraction processor
                 processor3d::Label3DExtractingProcessor aLabelProcessor(
-                    rViewInformation.getViewTime(),
-                    getObjectTransformation(),
-                    getTransformation3D().getWorldToView());
+                    getViewInformation3D(),
+                    getObjectTransformation());
 
                 // process local primitives
                 aLabelProcessor.process(getChildren3D());

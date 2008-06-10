@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2008-05-27 20:09:13 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/attribute/sdrattribute3d.hxx>
-#include <drawinglayer/geometry/transformation3d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ namespace drawinglayer
             attribute::SdrSceneAttribute                        maSdrSceneAttribute;        // 3d scene attribute set
             attribute::SdrLightingAttribute                     maSdrLightingAttribute;     // lighting attribute set
             basegfx::B2DHomMatrix                               maObjectTransformation;     // object transformation for scene for 2d definition
-            geometry::Transformation3D                          maTransformation3D;         // scene transformation set and object transformation
+            geometry::ViewInformation3D                         maViewInformation3D;        // scene transformation set and object transformation
 
             // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
             Primitive2DSequence                                 maShadowPrimitives;
@@ -104,14 +104,14 @@ namespace drawinglayer
                 const attribute::SdrSceneAttribute& rSdrSceneAttribute,
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
-                const geometry::Transformation3D& rTransformation3D);
+                const geometry::ViewInformation3D& rViewInformation3D);
 
             // get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return maSdrSceneAttribute; }
             const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return maSdrLightingAttribute; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
-            const geometry::Transformation3D& getTransformation3D() const { return maTransformation3D; }
+            const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

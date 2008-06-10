@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedded3dprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/geometry/viewinformation3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -55,11 +56,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence Embedded3DPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence Embedded3DPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
-            basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), rViewInformation.getViewTime()));
-            a3DRange.transform(getTransformation3D().getWorldToView());
+            basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
+            a3DRange.transform(getViewInformation3D().getObjectToView());
 
             // create 2d range from projected 3d and transform with scene's object transformation
             basegfx::B2DRange a2DRange;
@@ -76,11 +77,11 @@ namespace drawinglayer
         Embedded3DPrimitive2D::Embedded3DPrimitive2D(
             const primitive3d::Primitive3DSequence& rxChildren3D,
             const basegfx::B2DHomMatrix& rObjectTransformation,
-            const geometry::Transformation3D& rTransformation3D)
+            const geometry::ViewInformation3D& rViewInformation3D)
         :   BasePrimitive2D(),
             mxChildren3D(rxChildren3D),
             maObjectTransformation(rObjectTransformation),
-            maTransformation3D(rTransformation3D)
+            maViewInformation3D(rViewInformation3D)
         {
         }
 
@@ -92,17 +93,17 @@ namespace drawinglayer
 
                 return (primitive3d::arePrimitive3DSequencesEqual(getChildren3D(), rCompare.getChildren3D())
                     && getObjectTransformation() == rCompare.getObjectTransformation()
-                    && getTransformation3D() == rCompare.getTransformation3D());
+                    && getViewInformation3D() == rCompare.getViewInformation3D());
             }
 
             return false;
         }
 
-        basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        basegfx::B2DRange Embedded3DPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // use the 3d transformation stack to create a projection of the 3D range
-            basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), rViewInformation.getViewTime()));
-            a3DRange.transform(getTransformation3D().getWorldToView());
+            basegfx::B3DRange a3DRange(primitive3d::getB3DRangeFromPrimitive3DSequence(getChildren3D(), getViewInformation3D()));
+            a3DRange.transform(getViewInformation3D().getObjectToView());
 
             // create 2d range from projected 3d and transform with scene's object transformation
             basegfx::B2DRange aRetval;

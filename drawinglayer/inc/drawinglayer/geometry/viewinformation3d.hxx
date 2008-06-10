@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: viewinformation2d.hxx,v $
+ *  $RCSfile: viewinformation3d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: aw $ $Date: 2008-06-10 09:29:20 $
  *
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
-#define INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
+#define INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 
 // the solaris compiler defines 'sun' as '1'. To avoid that (and to allow
 // pre-declarations of com/sun/star namespace), include sal/config.h here
@@ -42,18 +42,16 @@
 #include <sal/config.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
 namespace drawinglayer { namespace {
-    class ImpViewInformation2D;
+    class ImpViewInformation3D;
 }}
 
 namespace basegfx {
-    class B2DHomMatrix;
-    class B2DRange;
+    class B3DHomMatrix;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -62,54 +60,55 @@ namespace drawinglayer
 {
     namespace geometry
     {
-        class ViewInformation2D
+        class ViewInformation3D
         {
         private:
             // impl pointer
-            ImpViewInformation2D*                   mpViewInformation2D;
+            ImpViewInformation3D*                   mpViewInformation3D;
 
         public:
-            // constructor to easily build a ViewInformation2D when all view
+            // constructor to easily build a ViewInformation3D when all view
             // information is available as basegfx implementation classes. The
-            // ExtendedParameters allows adding extra parameters besides ViewTransformation,
-            // Viewport, ViewTime and DrawPage and should not itself include one of these.
-            ViewInformation2D(
-                const basegfx::B2DHomMatrix& rViewTransformation,
-                const basegfx::B2DRange& rViewport,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
+            // ExtendedParameters allows adding extra parameters besides the simple ones
+            // and should not itself include one of these.
+            ViewInformation3D(
+                const basegfx::B3DHomMatrix& rTransformation,
+                const basegfx::B3DHomMatrix& rOrientation,
+                const basegfx::B3DHomMatrix& rProjection,
+                const basegfx::B3DHomMatrix& rDeviceToView,
                 double fViewTime,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rExtendedParameters);
 
-            // constructor to create a ViewInformation2D based on API information only. The
+            // constructor to create a ViewInformation3D based on API information only. The
             // ViewParameters can contain ViewTransformation, Viewport and ViewTime but also
             // other parameters which will be preserved in the ExtendedInformation. The three
             // named information will be extracted locally for faster access.
-            ViewInformation2D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
+            ViewInformation3D(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rViewParameters);
 
             // copy constructor
-            ViewInformation2D(const ViewInformation2D& rCandidate);
+            ViewInformation3D(const ViewInformation3D& rCandidate);
 
             // destructor
-            ~ViewInformation2D();
+            ~ViewInformation3D();
 
             // assignment operator
-            ViewInformation2D& operator=(const ViewInformation2D& rCandidate);
+            ViewInformation3D& operator=(const ViewInformation3D& rCandidate);
 
             // compare operator
-            bool operator==(const ViewInformation2D& rCandidate) const;
+            bool operator==(const ViewInformation3D& rCandidate) const;
 
             // data access
-            const basegfx::B2DHomMatrix& getViewTransformation() const;
-            const basegfx::B2DRange& getViewport() const;
+            // the four transformations defining the 3D view pipeline complately
+            const basegfx::B3DHomMatrix& getTransformation() const;
+            const basegfx::B3DHomMatrix& getOrientation() const;
+            const basegfx::B3DHomMatrix& getProjection() const;
+            const basegfx::B3DHomMatrix& getDeviceToView() const;
+
+            // for convenience, the linear combination of the above four transformations
+            const basegfx::B3DHomMatrix& getObjectToView() const;
+
+            // time at which the transformation is to be used. This may be used from animated objects
             double getViewTime() const;
-
-            // get the DrawPage which is visualized. Tjhis is needed e.g. for the
-            // view-dependent decomposition of PageNumber Fields in Texts
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getVisualizedPage() const;
-
-            // data access with on-demand preparations
-            const basegfx::B2DHomMatrix& getInverseViewTransformation() const;
-            const basegfx::B2DRange& getDiscreteViewport() const;
 
             // get the uno::Sequence< beans::PropertyValue > which contains all information. When
             // constructed using the API constructor, You will get back Your input. If not, the
@@ -117,7 +116,7 @@ namespace drawinglayer
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getViewInformationSequence() const;
 
             // get the uno::Sequence< beans::PropertyValue > which contains only extra information. This means
-            // information different from ViewTransformation, Viewport, ViewTime and DrawPage.
+            // information different from the four transformations.
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
     } // end of namespace geometry
@@ -125,6 +124,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
+#endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 
 // eof

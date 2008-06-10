@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:22 $
+ *  last change: $Author: aw $ $Date: 2008-06-10 09:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        BaseProcessor3D::BaseProcessor3D(double fTime)
-        :   mfTime(fTime)
+        BaseProcessor3D::BaseProcessor3D(const geometry::ViewInformation3D& rViewInformation)
+        :   maViewInformation3D(rViewInformation)
         {
         }
 
@@ -65,8 +65,8 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        CollectingProcessor3D::CollectingProcessor3D(double fTime)
-        :   BaseProcessor3D(fTime),
+        CollectingProcessor3D::CollectingProcessor3D(const geometry::ViewInformation3D& rViewInformation)
+        :   BaseProcessor3D(rViewInformation),
             maPrimitive3DSequence()
         {
         }
