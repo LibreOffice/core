@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: security.c,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +121,7 @@ static void deleteSecurityImpl(oslSecurityImpl * impl) {
 
 oslSecurity SAL_CALL osl_getCurrentSecurity()
 {
-    size_t n;
+    size_t n = 0;
     oslSecurityImpl * p = NULL;
     for (;;) {
         struct passwd * found;
@@ -518,7 +518,7 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
         /* get nis or normal password, should succeed for any known user, but
            perhaps the password is wrong (i.e. 'x') if shadow passwords are in
            use or authentication must be done by PAM */
-        size_t n;
+        size_t n = 0;
         int err = 0;
         struct passwd * found = NULL;
         for (;;) {
