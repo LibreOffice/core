@@ -153,13 +153,16 @@
  {"ISO8859-2",iso2_tbl},
  {"ISO8859-3",iso3_tbl},
 --- misc/hunspell-1.1.12/src/hunspell/csutil.hxx	2007-09-02 02:04:00.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/csutil.hxx	2008-04-24 12:17:07.000000000 +0200
-@@ -21,7 +21,7 @@
++++ misc/build/hunspell-1.1.12/src/hunspell/csutil.hxx	2008-06-11 19:00:13.817528000 +0200
+@@ -21,7 +21,11 @@
  // default flags
  #define ONLYUPCASEFLAG 65535
  
--typedef struct {
++#ifdef WIN32
+ typedef struct {
++#else
 +typedef struct __attribute__ ((packed)) {
++#endif
      unsigned char l;
      unsigned char h;
  } w_char;
