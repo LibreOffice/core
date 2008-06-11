@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: deliver.pl,v $
 #
-# $Revision: 1.127 $
+# $Revision: 1.128 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.127 $ ';
+$id_str = ' $Revision: 1.128 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1016,9 +1016,10 @@ sub push_default_actions
             push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         }
     }
-    push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
     if ( $common_build ) {
         push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
+    } else {
+        push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
     }
 
     # deliver build.lst to $dest/inc/$module
