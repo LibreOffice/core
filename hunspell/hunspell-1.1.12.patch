@@ -227,7 +227,7 @@
  
 -#include "config.h"
 --- misc/hunspell-1.1.12/src/hunspell/makefile.mk	2007-04-06 10:05:32.000000000 +0200
-+++ misc/build/hunspell-1.1.12/src/hunspell/makefile.mk	2008-04-23 23:00:30.000000000 +0200
++++ misc/build/hunspell-1.1.12/src/hunspell/makefile.mk	2008-06-11 19:31:42.983723000 +0200
 @@ -60,11 +60,12 @@
  #
  #*************************************************************************
@@ -261,7 +261,12 @@
  		$(SLO)$/affentry.obj \
  		$(SLO)$/affixmgr.obj \
  		$(SLO)$/dictmgr.obj \
-@@ -93,7 +94,7 @@
+@@ -89,11 +90,12 @@
+ 		$(SLO)$/utf_info.obj \
+ 		$(SLO)$/hashmgr.obj \
+ 		$(SLO)$/suggestmgr.obj \
++		$(SLO)$/phonet.obj \
+ 		$(SLO)$/hunspell.obj
  
  LIB1TARGET= $(SLB)$/lib$(TARGET).lib
  LIB1ARCHIV= $(LB)/lib$(TARGET).a
