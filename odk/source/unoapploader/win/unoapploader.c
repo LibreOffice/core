@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoapploader.c,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@
 #endif
 
 #include "cppuhelper/findsofficepath.h"
+#include "sal/types.h"
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 
@@ -175,7 +176,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 }
                 k += m;
                 if (k >= n) {
-                    if (n >= SIZE_MAX / 2) {
+                    if (n >= SAL_MAX_SIZE / 2) {
                         writeError(
                             "Error: out of memory reading unoinfo output!\n");
                         closeErrorFile();
