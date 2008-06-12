@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoinfo.cxx,v $
- * $Revision: 1.2 $
+ * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,12 +29,18 @@
  ************************************************************************/
 
 #include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <cwchar>
+#include <stdio.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 #define WIN32_LEAN_AND_MEAN
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
 #include <windows.h>
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #include "tools/pathutils.hxx"
 
@@ -46,14 +52,14 @@ namespace {
 wchar_t * getBrandPath(wchar_t * path) {
     DWORD n = GetModuleFileNameW(NULL, path, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
-        std::exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     return tools::filename(path);
 }
 
 void writeNull() {
-    if (std::fwrite("\0\0", 1, 2, stdout) != 2) {
-        std::exit(EXIT_FAILURE);
+    if (fwrite("\0\0", 1, 2, stdout) != 2) {
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -65,40 +71,40 @@ void writePath(
     wchar_t * end = tools::buildPath(
         path, frontBegin, frontEnd, backBegin, backLength);
     if (end == NULL) {
-        std::exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     std::size_t n = (end - path) * sizeof (wchar_t);
-    if (std::fwrite(path, 1, n, stdout) != n) {
-        std::exit(EXIT_FAILURE);
+    if (fwrite(path, 1, n, stdout) != n) {
+        exit(EXIT_FAILURE);
     }
 }
 
 }
 
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
-    if (argc == 2 && std::wcscmp(argv[1], L"c++") == 0) {
+    if (argc == 2 && wcscmp(argv[1], L"c++") == 0) {
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
         if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
             == NULL)
         {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         pathEnd = tools::resolveLink(path);
         if (pathEnd == NULL ||
             (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
              NULL))
         {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         pathEnd = tools::resolveLink(path);
         if (pathEnd == NULL) {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         writePath(path, pathEnd, MY_STRING(L"\\bin"));
-    } else if (argc == 2 && std::wcscmp(argv[1], L"java") == 0) {
-        if (std::fwrite("1", 1, 1, stdout) != 1) {
-            std::exit(EXIT_FAILURE);
+    } else if (argc == 2 && wcscmp(argv[1], L"java") == 0) {
+        if (fwrite("1", 1, 1, stdout) != 1) {
+            exit(EXIT_FAILURE);
         }
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
@@ -106,22 +112,22 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link"))
             == NULL)
         {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         pathEnd = tools::resolveLink(path);
         if (pathEnd == NULL) {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"\\program\\classes\\unoil.jar"));
         if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) ==
             NULL)
         {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         pathEnd = tools::resolveLink(path);
         if (pathEnd == NULL) {
-            std::exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE);
         }
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"\\java\\ridl.jar"));
@@ -130,7 +136,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"\\java\\juh.jar"));
     } else {
-        std::exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
-    std::exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
