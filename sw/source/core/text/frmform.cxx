@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmform.cxx,v $
- * $Revision: 1.69 $
+ * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1922,18 +1922,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         // Die Formatinformationen duerfen u.U. nicht veraendert werden.
         if( IsLocked() )
             return;
-
-#if OSL_DEBUG_LEVEL > 1
-//MA 25. Jan. 94 Das Flag stimmt sehr haufig beim Eintritt nicht. Das muss
-//             bei naechster Gelegenheit geprueft und gefixt werden.
-        const sal_Bool bOldFtnFlag = HasFtn();
-        CalcFtnFlag();
-        if ( bOldFtnFlag != HasFtn() )
-            {
-                int bla = 5;
-                (void)bla;
-            }
-#endif
 
         // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
         // angestossen werden.
