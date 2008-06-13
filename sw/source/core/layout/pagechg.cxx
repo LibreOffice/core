@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.55 $
+ * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,7 +341,7 @@ void SwPageFrm::CheckGrid( BOOL bInvalidate )
 void SwPageFrm::CheckDirection( BOOL bVert )
 {
     UINT16 nDir =
-            ((SvxFrameDirectionItem&)GetFmt()->GetAttr( RES_FRAMEDIR )).GetValue();
+            ((SvxFrameDirectionItem&)GetFmt()->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir ||
@@ -411,7 +411,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                 {
                     SwFmtAnchor aAnch( rAnch );
                     aAnch.SetAnchor( 0 );
-                    pFmt->SetAttr( aAnch );
+                    pFmt->SetFmtAttr( aAnch );
                 }
                 else
                     continue;
