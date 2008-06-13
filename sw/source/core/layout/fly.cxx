@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fly.cxx,v $
- * $Revision: 1.90 $
+ * $Revision: 1.91 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +141,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
     BOOL bVert = FALSE;
     UINT16 nDir =
-        ((SvxFrameDirectionItem&)pFmt->GetAttr( RES_FRAMEDIR )).GetValue();
+        ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
         bDerivedVert = 1;
@@ -907,7 +907,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     aURL.GetMap()->Scale( aScaleX, aScaleY );
                     SwFrmFmt *pFmt = GetFmt();
                     pFmt->LockModify();
-                    pFmt->SetAttr( aURL );
+                    pFmt->SetFmtAttr( aURL );
                     pFmt->UnlockModify();
                 }
             }
@@ -1020,7 +1020,7 @@ void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                     aURL.GetMap()->Scale( aScaleX, aScaleY );
                     SwFrmFmt *pFmt = GetFmt();
                     pFmt->LockModify();
-                    pFmt->SetAttr( aURL );
+                    pFmt->SetFmtAttr( aURL );
                     pFmt->UnlockModify();
                 }
             }
@@ -1639,7 +1639,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                                     else
                                         aAttr.SetSurround( SURROUND_PARALLEL );
                                     rFmt.LockModify();
-                                    rFmt.SetAttr( aAttr );
+                                    rFmt.SetFmtAttr( aAttr );
                                     rFmt.UnlockModify();
                                 }
                             }
