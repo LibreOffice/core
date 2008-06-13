@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlgrin.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,7 +153,7 @@ void SwHTMLParser::ConnectImageMaps()
                 ImageMap *pNewIMap =
                     FindImageMap( pIMap->GetName() );
                 aURL.SetMap( pNewIMap );
-                pFmt->SetAttr( aURL );
+                pFmt->SetFmtAttr( aURL );
                 if( !pGrfNd->IsScaleImageMap() )
                 {
                     // die Grafikgroesse ist mitlerweile da oder dir
@@ -455,12 +455,12 @@ IMAGE_SETEVENT:
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
 
-        if( pTxtNode && ! pTxtNode->IsCounted())
+        if( pTxtNode && ! pTxtNode->IsCountedInList())
         {
-            ASSERT( pTxtNode->GetLevel() == GetNumInfo().GetLevel(),
+            ASSERT( pTxtNode->GetActualListLevel() == GetNumInfo().GetLevel(),
                     "Numerierungs-Ebene stimmt nicht" );
 
-            pTxtNode->SetCounted(TRUE);
+            pTxtNode->SetCountedInList( true );
 
             // Rule invalisieren ist noetig, weil zwischem dem einlesen
             // des LI und der Grafik ein EndAction gerufen worden sein kann.
@@ -762,7 +762,7 @@ IMAGE_SETEVENT:
         aURL.SetURL( rINetFmt.GetValue(), bIsMap );
         aURL.SetTargetFrameName( rINetFmt.GetTargetFrame() );
         aURL.SetName( rINetFmt.GetName() );
-        pFlyFmt->SetAttr( aURL );
+        pFlyFmt->SetFmtAttr( aURL );
 
         {
             const SvxMacro *pMacro;
@@ -801,7 +801,7 @@ IMAGE_SETEVENT:
     }
 
     if( aMacroItem.GetMacroTable().Count() )
-        pFlyFmt->SetAttr( aMacroItem );
+        pFlyFmt->SetFmtAttr( aMacroItem );
 
     // Wenn die Grafik gleich angeforder wird, muss dies geschehen,
     // nachdem das Format vollstaendig aufgebaut ist, weil es evtl.
@@ -927,7 +927,7 @@ void SwHTMLParser::InsertBodyOptions()
     {
         // Die Textfarbe wird an der Standard-Vorlage gesetzt
         pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
-            ->SetAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
+            ->SetFmtAttr( SvxColorItem(aTextColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyTextSet();
     }
 
@@ -998,7 +998,7 @@ void SwHTMLParser::InsertBodyOptions()
         // alle noch uebrigen Optionen koennen an der Standard-Vorlage
         // gesetzt werden und gelten dann automatisch als defaults
         pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD )
-            ->SetAttr( aItemSet );
+            ->SetFmtAttr( aItemSet );
     }
     else if( bSetBrush )
     {
@@ -1009,14 +1009,14 @@ void SwHTMLParser::InsertBodyOptions()
     {
         SwCharFmt *pCharFmt =
             pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_INET_NORMAL);
-        pCharFmt->SetAttr( SvxColorItem(aLinkColor, RES_CHRATR_COLOR) );
+        pCharFmt->SetFmtAttr( SvxColorItem(aLinkColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyLinkSet();
     }
     if( bVLinkColor && !pCSS1Parser->IsBodyVLinkSet() )
     {
         SwCharFmt *pCharFmt =
             pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_INET_VISIT);
-        pCharFmt->SetAttr( SvxColorItem(aVLinkColor, RES_CHRATR_COLOR) );
+        pCharFmt->SetFmtAttr( SvxColorItem(aVLinkColor, RES_CHRATR_COLOR) );
         pCSS1Parser->SetBodyVLinkSet();
     }
     if( aLang.Len() )
