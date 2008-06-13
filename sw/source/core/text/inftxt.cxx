@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.119 $
+ * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,9 +109,6 @@ namespace numfunc
     extern const String& GetDefBulletFontname();
 }
 // <--
-
-// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
-//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 
 #ifndef PRODUCT
 // Test2: WYSIWYG++
