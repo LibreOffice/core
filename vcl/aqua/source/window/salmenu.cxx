@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salmenu.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -271,7 +271,13 @@ AquaSalMenu::~AquaSalMenu()
         // in ! mbMenuBar case our mpMenu is actually a SalNSMenu*
         // so we can safely cast here
         [static_cast<SalNSMenu*>(mpMenu) setSalMenu: NULL];
-        [mpMenu release];
+        /* #i89860# FIXME:
+           using [autorelease] here (and in AquaSalMenuItem::~AquaSalMenuItem)
+           instead of [release] fixes an occasional crash. That should
+           indicate that we release menus / menu items in the wrong order
+           somewhere, but I could not find that case.
+        */
+        [mpMenu autorelease];
     }
 }
 
@@ -742,8 +748,14 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
 
 AquaSalMenuItem::~AquaSalMenuItem()
 {
+    /* #i89860# FIXME:
+       using [autorelease] here (and in AquaSalMenu:::~AquaSalMenu) instead of
+       [release] fixes an occasional crash. That should indicate that we release
+       menus / menu items in the wrong order somewhere, but I
+       could not find that case.
+    */
     if( mpMenuItem )
-        [mpMenuItem release];
+        [mpMenuItem autorelease];
 }
 
 // -------------------------------------------------------------------
