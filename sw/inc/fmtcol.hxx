@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtcol.hxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,6 +120,14 @@ public:
     {
         SetOutlineLevel( NO_NUMBERING );
     }
+    // <--
+
+    // --> OD 2008-03-04 #refactorlists#
+    // override to recognize changes on the <SwNumRuleItem> and register/unregister
+    // the paragragh style at the corresponding <SwNumRule> instance
+    virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
+    virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
+    virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     // <--
 
     // --> OD 2007-01-24 #i73790#
