@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndsect.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -195,7 +195,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
 
     SwSectionFmt* pFmt = MakeSectionFmt( 0 );
     if( pAttr )
-        pFmt->SetAttr( *pAttr );
+        pFmt->SetFmtAttr( *pAttr );
 
     SwSectionNode* pNewSectNode = 0;
 
@@ -602,7 +602,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
             USHORT nWhich = aIter.GetCurItem()->Which();
             while( TRUE )
             {
-                if( pFmt->GetAttr( nWhich ) != *aIter.GetCurItem() )
+                if( pFmt->GetFmtAttr( nWhich ) != *aIter.GetCurItem() )
                 {
                     bOnlyAttrChg = TRUE;
                     break;
@@ -627,7 +627,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
                 DoUndo( FALSE );
                 // <--
             }
-            pFmt->SetAttr( *pAttr );
+            pFmt->SetFmtAttr( *pAttr );
             SetModified();
 
             // --> FME 2004-10-13 #i32968#
@@ -687,7 +687,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     *pSection = rSect;
 
     if( pAttr )
-        pSection->GetFmt()->SetAttr( *pAttr );
+        pSection->GetFmt()->SetFmtAttr( *pAttr );
 
     if( sSectName.Len() )
         pSection->SetName( sSectName );
@@ -868,10 +868,10 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
                         aSet.ClearItem( RES_PAGEDESC );
                         aSet.ClearItem( RES_BREAK );
                     }
-                    pTNd->SwCntntNode::SetAttr( aSet );
+                    pTNd->SetAttr( aSet );
                 }
                 else
-                    pTNd->SwCntntNode::SetAttr( rSet );
+                    pTNd->SetAttr( rSet );
             }
             // den Frame anlegen nicht vergessen !!
             pCpyTNd->MakeFrms( *pTNd );
@@ -985,7 +985,7 @@ SwSectionNode::SwSectionNode( const SwNodeIndex& rIdx, SwSectionFmt& rFmt )
     // jetzt noch die Verbindung von Format zum Node setzen
     // Modify unterdruecken, interresiert keinen
     rFmt.LockModify();
-    rFmt.SetAttr( SwFmtCntnt( this ) );
+    rFmt.SetFmtAttr( SwFmtCntnt( this ) );
     rFmt.UnlockModify();
 }
 
@@ -1044,7 +1044,7 @@ SwSectionNode::~SwSectionNode()
         // das Attribut entfernen, weil die Section ihr Format loescht
         // und falls das Cntnt-Attribut vorhanden ist, die Section aufhebt.
         pFmt->LockModify();
-        pFmt->ResetAttr( RES_CNTNT );
+        pFmt->ResetFmtAttr( RES_CNTNT );
         pFmt->UnlockModify();
     }
 
@@ -1368,7 +1368,7 @@ void SwSectionNode::NodesArrChgd()
         }
 
         pFmt->LockModify();
-        pFmt->SetAttr( SwFmtCntnt( this ));
+        pFmt->SetFmtAttr( SwFmtCntnt( this ));
         pFmt->UnlockModify();
 
         SwSectionNode* pSectNd = StartOfSectionNode()->FindSectionNode();
