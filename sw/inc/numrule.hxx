@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numrule.hxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,11 +40,17 @@
 #include <calbck.hxx>
 #include <errhdl.hxx>       // Fuer die inline-ASSERTs
 #include <error.h>          // Fuer die inline-ASSERTs
-#include <SwBitArray.hxx> // #i27615#
 #include <hints.hxx>
 #include <hash_map>
 #include <stringhash.hxx>
-#include <SwNodeNum.hxx>
+// --> OD 2008-02-21 #refactorlists#
+class SwNodeNum;
+#include <SwNumberTreeTypes.hxx>
+// <--
+// --> OD 2008-02-19 #refactorlists#
+#include <vector>
+class SwTxtFmtColl;
+// <--
 
 class Font;
 class SvxBrushItem;
@@ -53,18 +59,6 @@ class SwCharFmt;
 class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
-
-extern char __FAR_DATA sOutlineStr[];   // SWG-Filter
-
-BYTE SW_DLLPUBLIC GetRealLevel( const BYTE nLvl );
-
-BOOL SW_DLLPUBLIC IsNum( BYTE nLvl );
-
-BOOL SW_DLLPUBLIC IsShowNum( BYTE nLvl );
-
-void SW_DLLPUBLIC SetNoNum( BYTE * nLvl, BOOL nVal = TRUE );
-
-void SW_DLLPUBLIC SetLevel( BYTE * nLvl, BYTE nNewLvl);
 
 const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
@@ -111,8 +105,12 @@ class SwPaM;
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {
-    typedef std::pair<SwPaM *, SwNodeNum *> tPamAndNum;
-    typedef std::vector<tPamAndNum> tPamAndNums;
+// --> OD 2008-02-19 #refactorlists#
+public:
+    typedef std::vector< SwTxtNode* > tTxtNodeList;
+    typedef std::vector< SwTxtFmtColl* > tParagraphStyleList;
+// <--
+private:
     friend void _FinitCore();
 
 #ifndef PRODUCT
@@ -127,27 +125,23 @@ class SW_DLLPUBLIC SwNumRule
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
     // <--
     static USHORT nRefCount;
-    // --> OD 2006-06-27 #6440955#
-    // move to function numfunc::GetDefBulletFont()
-//    static Font* pDefBulletFont;
-    // <--
     static char* pDefOutlineName;
 
-    tPamAndNums aNumberRanges;
     SwNumFmt* aFmts[ MAXLEVEL ];
 
-    /** list for associated text nodes
-
-        OD 2006-09-12 #i69145#
-        It's not a cache.
+    /** container for associated text nodes
 
     */
-    SwTxtNodeTable * pList;
+    // --> OD 2008-02-19 #refactorlists#
+//    SwTxtNodeTable* pTxtNodeList;
+    tTxtNodeList maTxtNodeList;
+    // <--
 
-    /**
-       marked levels
-     */
-    SwBitArray aMarkedLevels;
+    /** container for associated paragraph styles
+
+        OD 2008-03-03 #refactorlists#
+    */
+    tParagraphStyleList maParagraphStyleList;
 
     // #i36749#
     /**
@@ -168,6 +162,10 @@ class SW_DLLPUBLIC SwNumRule
 
     // --> OD 2008-02-11 #newlistlevelattrs#
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
+    // <--
+
+    // --> OD 2008-04-03 #refactorlists#
+    String msDefaultListId;
     // <--
 
     // forbidden and not implemented.
@@ -198,7 +196,7 @@ public:
     // --> OD 2005-10-17 #126238#
     // - add optional parameter <_nRestrictToThisLevel> in order to
     //   restrict returned string to this level.
-    String MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
+    String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const BOOL bInclStrings = TRUE,
                           const BOOL bOnlyArabic = FALSE,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
@@ -209,36 +207,45 @@ public:
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
     // <--
 
-    /**
-       Returns list of associated text nodes.
+    /** Returns list of associated text nodes.
 
-       @return list of associated text nodes, or NULL if none present
+       OD 2008-02-19 #refactorlists#
+
+       @return list of associated text nodes
     */
-    const SwTxtNodeTable * GetList() const { return pList; }
+//    const SwTxtNodeTable * GetTxtNodeList() const { return pTxtNodeList; }
+    void GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const;
+    SwNumRule::tTxtNodeList::size_type GetTxtNodeListSize() const;
 
-    /** Creates list of associated text nodes.
+    // --> OD 2008-02-19 #refactorlists#
+    void AddTxtNode( SwTxtNode& rTxtNode );
+    void RemoveTxtNode( SwTxtNode& rTxtNode );
+    // <--
 
-        OD 2006-09-12 #i69145#
-        Creates the list the associated text nodes by copying contents of
-        list provided by parameter <rList>
+    // --> OD 2008-03-03 #refactorlists#
+    SwNumRule::tParagraphStyleList::size_type GetParagraphStyleListSize() const;
+    void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
+    void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
+    // <--
 
-        @param _rList  the list of associated text nodes
-    */
-    void SetList(const SwTxtNodeTable& rList);
-
+    // --> OD 2008-04-03 #refactorlists#
+    inline void SetDefaultListId( const String sDefaultListId )
+    {
+        msDefaultListId = sDefaultListId;
+    }
+    inline String GetDefaultListId() const
+    {
+        return msDefaultListId;
+    }
+    // <--
     // #i36749#
     /**
        Register this rule in a "name->numrule" map.
 
        @param pNumRuleMap      map to register in
      */
-    void SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
-                       pNumRuleMap);
-
-    // --> OD 2006-06-27 #b6440955#
-    // move function to own namespace
-//    static const Font& GetDefBulletFont();
-    // <--
+    void SetNumRuleMap(
+                std::hash_map<String, SwNumRule *, StringHash>* pNumRuleMap );
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
@@ -292,38 +299,12 @@ public:
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
-    // -> #i27615#
-    /**
-       Returns if a level is marked.
-
-       @param nLvl     level to check
-
-       @retval TRUE    level is marked
-       @retval FALSE   level is not marked
-    */
-    BOOL IsLevelMarked(BYTE nLvl) const { return aMarkedLevels.Get(nLvl); }
-
-    /**
-       Mark/unmark a level.
-
-       @param nLvl     level to mark/unmark
-       @param bVal     - TRUE    mark
-                       - FALSE   unmark
-
-       @return bit array in which the altered levels are marked.
-    */
-    SwBitArray SetLevelMarked(BYTE nLvl, BOOL bVal);
-
-    // <- #i27615#
-
     // #i23726#, #i23725#
     void        Indent(short aAmount, int nLevel = -1,
                        int nReferenceLevel = -1, BOOL bRelative = TRUE,
                        BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
 
     void Validate();
-    void NewNumberRange(const SwPaM & rPam);
-    void AddNumber(SwNodeNum * pNdNum, unsigned int nLevel);
 };
 
 // --> OD 2006-06-27 #b6440955#
