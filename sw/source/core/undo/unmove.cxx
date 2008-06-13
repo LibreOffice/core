@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unmove.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
         if( pTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode, *(pTxtNd->GetDoc()) );
+            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
     }
     if( pEndTxtNd && pEndTxtNd != pTxtNd )
     {
@@ -75,7 +75,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
                                 0, pEndTxtNd->GetTxt().Len(), FALSE );
         if( pEndTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode, *(pEndTxtNd->GetDoc()) );
+            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
     }
 
     if( 0 != (pTxtNd = rRange.GetDoc()->GetNodes()[ rMvPos.nNode ]->GetTxtNode() ))
@@ -85,7 +85,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
         if( pTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode, *(pTxtNd->GetDoc()) );
+            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
     }
 
 
