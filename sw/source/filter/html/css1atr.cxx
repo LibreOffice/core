@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: css1atr.cxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3737,14 +3737,16 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_PARATR_NUMRULE */            0, // Dummy:
 /* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
 /* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_DUMMY1 */             0, // Dummy:
-/* RES_PARATR_DUMMY2 */             0, // Dummy:
-/* RES_PARATR_DUMMY3 */             0, // Dummy:
-/* RES_PARATR_DUMMY4 */             0, // Dummy:
-/* RES_PARATR_DUMMY5 */             0, // Dummy:
-/* RES_PARATR_DUMMY6 */             0, // Dummy:
-/* RES_PARATR_DUMMY7 */             0, // Dummy:
-/* RES_PARATR_DUMMY8 */             0, // Dummy:
+/* RES_PARATR_FORBIDDEN_RULES */    0, // new
+/* RES_PARATR_VERTALIGN */          0, // new
+/* RES_PARATR_SNAPTOGRID*/          0, // new
+/* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+
+/* RES_PARATR_LIST_ID */            0, // new
+/* RES_PARATR_LIST_LEVEL */         0, // new
+/* RES_PARATR_LIST_ISRESTART */     0, // new
+/* RES_PARATR_LIST_RESTARTVALUE */  0, // new
+/* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
 /* RES_FILL_ORDER   */              0,
 /* RES_FRM_SIZE */                  0,
