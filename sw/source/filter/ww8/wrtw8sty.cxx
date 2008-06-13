@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8sty.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -405,7 +405,7 @@ void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
             if ( bPap || rWrt.CollapseScriptsforWordOk(
                 i18n::ScriptType::LATIN, n) )
             {
-                Out(aWW8AttrFnTab, rFmt.GetAttr(n, true), rWrt);
+                Out(aWW8AttrFnTab, rFmt.GetFmtAttr(n, true), rWrt);
             }
         }
     }
@@ -834,7 +834,7 @@ sal_uInt16 WW8_WrPlcSepx::CurrentNoColumns(const SwDoc &rDoc) const
 
     //0xffffffff, what the hell is going on with that!, fixme most terribly
     if (rInfo.pSectionFmt && (SwSectionFmt*)0xFFFFFFFF != rInfo.pSectionFmt)
-        aSet.Put(rInfo.pSectionFmt->GetAttr(RES_COL));
+        aSet.Put(rInfo.pSectionFmt->GetFmtAttr(RES_COL));
 
     const SwFmtCol& rCol = (const SwFmtCol&)aSet.Get(RES_COL);
     const SwColumns& rColumns = rCol.GetColumns();
@@ -1237,7 +1237,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
                 // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
                 // umsetzen
-                aSet.Put(rSepInfo.pSectionFmt->GetAttr(RES_COL));
+                aSet.Put(rSepInfo.pSectionFmt->GetFmtAttr(RES_COL));
 
                 const SvxLRSpaceItem &rSectionLR =
                     ItemGet<SvxLRSpaceItem>(*(rSepInfo.pSectionFmt),
@@ -1334,7 +1334,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                             // nur die 1. Seite umrandet -> BoxItem aus dem
                             // richtigen Format besorgen
                             rWrt.pISet = &pPdFirstPgFmt->GetAttrSet();
-                            Out( aWW8AttrFnTab, pPdFirstPgFmt->GetAttr(
+                            Out( aWW8AttrFnTab, pPdFirstPgFmt->GetFmtAttr(
                                         RES_BOX ), rWrt );
                         }
                     }
