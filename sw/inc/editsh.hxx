@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.hxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -442,13 +442,21 @@ public:
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
     // and "first line indent" are additionally reset at the current selection,
     // if the list style makes use of the new list level attributes.
+    // --> OD 2008-03-17 #refactorlists#
+    // introduce parameters <bCreateNewList> and <sContinuedListId>
+    // <bCreateNewList> indicates, if a new list is created by applying the
+    // given list style.
+    // If <bCreateNewList> equals FALSE, <sContinuedListId> may contain the
+    // list Id of a list, which has to be continued by applying the given list style
     void SetCurNumRule( const SwNumRule&,
+                        const bool bCreateNewList /*= false*/,
+                        const String sContinuedListId = String(),
                         const bool bResetIndentAttrs = false );
     // <--
     // Absaetze ohne Numerierung, aber mit Einzuegen
     BOOL NoNum();
     // Loeschen, Splitten der Aufzaehlungsliste
-    BOOL DelNumRules();
+    void DelNumRules();
     // Hoch-/Runterstufen
     BOOL NumUpDown( BOOL bDown = TRUE );
     // Hoch-/Runtermoven sowohl innerhalb als auch ausserhalb von Numerierungen
@@ -467,7 +475,10 @@ public:
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
     // - NO_NUMBERING, 0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1
-    BYTE GetNumLevel( BOOL* pHasChilds = 0 ) const;
+    // --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
+//    BYTE GetNumLevel( BOOL* pHasChilds = 0 ) const;
+    BYTE GetNumLevel() const;
+    // <--
     // detect highest and lowest level to check moving of outline levels
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
 
@@ -482,14 +493,21 @@ public:
     // dem StartFlag startet
     void SetNumRuleStart( BOOL bFlag = TRUE );
     BOOL IsNumRuleStart() const;
-    void SetNodeNumStart( USHORT nStt = USHRT_MAX );
-    USHORT IsNodeNumStart() const;
+    void SetNodeNumStart( USHORT nStt );
+    // --> OD 2008-02-29 #refactorlists#
+    USHORT GetNodeNumStart() const;
+    // <--
     BOOL ReplaceNumRule( const String& rOldRule, const String& rNewRule );
     // Searches for a text node with a numbering rule.
+    // --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
+    // in case a list style is found, <sListId> holds the list id, to which the
+    // text node belongs, which applies the found list style.
     const SwNumRule * SearchNumRule(BOOL bForward,
                                     BOOL bNum,
                                     BOOL bOutline,
-                                    int nNonEmptyAllowed);
+                                    int nNonEmptyAllowed,
+                                    String& sListId );
+    // <--
 
     // Undo
     // UndoHistory am Dokument pflegen
