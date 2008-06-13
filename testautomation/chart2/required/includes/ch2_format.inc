@@ -1,0 +1,1267 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: ch2_format.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-13 14:27:01 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : joerg.sievers@sun.com
+'*
+'* short description : Chart resource test - Menu FORMAT
+'*
+'************************************************************************
+'*
+' #1 tFormatObjectProperties
+' #1 tFormatObjectPropertiesPieChart
+' #1 tFormatPositonAndSize
+' #1 tFormatArrangement
+' #1 tFormatTitleMaintitle
+' #1 tFormatTitleSubtitle
+' #1 tFormatTitleXAxistitle
+' #1 tFormatTitleYAxistitle
+' #1 tFormatTitleZAxistitle
+' #1 tFormatTitleAllTitles
+' #1 tFormatAxisXAxis
+' #1 tFormatAxisYAxis
+' #1 tFormatAxisZAxis
+' #1 tFormatAxisSecondaryXAxis
+' #1 tFormatAxisSecondaryYAxis
+' #1 tFormatAxisAllAxes
+'*
+'\************************************************************************
+
+testcase tFormatObjectProperties
+    Dim iCountTabPg as integer
+    
+    iCountTabPg = 0
+    
+'///<u><b>Dialog test after invoking Format::Object Properties...</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    if fSelectFirstOLE = 0 then
+        '/// Edit / Object / Edit
+        EditObjectEdit
+        '/// Move to third object in Chart using TAB key (data series)
+        Kontext "DocumentChart"
+        DocumentChart.TypeKeys "<TAB>" , 3
+        '/// Invoke Format::ObjectProperties
+        FormatObjectProperties
+        '/// Select tab page Aligment
+        Kontext
+        iCountTabPg = Active.GetPageCount
+        if iCountTabPg <> 7 then
+            warnlog "Edit::Properties on a data series should have 7 tab pages but has " & iCountTabPg & "."            
+        else             
+            printlog "Edit::Properties on a data series has 7 tab pages."
+        endif
+        Active.SetPage TabDataSeriesLabels
+        '/// Check if tab page series labels exists
+        Kontext "TabDataSeriesLabels"
+        call DialogTest ( TabDataSeriesLabels )        
+        '/// Close dialog with Cancel-button
+        TabDataSeriesLabels.Cancel
+        '/// Close document
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+    else
+        warnlog "It was not possible to select the chart object!"
+    endif
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------
+'
+testcase tFormatObjectPropertiesPieChart
+    Dim iCountTabPg as integer
+    
+    iCountTabPg = 0
+    
+'///<u><b>Dialog test after invoking Format::Object Properties... on a pie chart</b></u>
+    '/// Load simple chart document    
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    if fSelectFirstOLE = 0 then
+        '/// Edit / Object / Edit
+        EditObjectEdit
+        '/// Move to third object in Chart using TAB key (data series)        
+        Kontext "DocumentChart"
+        '/// Format / Chart Type
+        if fInvokeChartTypeDialog() > 0 then
+            warnlog "Something went wrong trying to invoke the Chart Types dialog"
+            Call hCloseDocument
+            goto endsub
+        endif
+        if fSetChartType("pie") > 0 then
+            warnlog "Something went wrong trying to set the Chart Type to 'Pie'"
+            Call hCloseDocument
+            goto endsub
+        endif        
+        if fCloseChartTypeDialogOK() > 0 then
+            warnlog "Something went wrong trying to leave the dialog with OK"
+            Call hCloseDocument
+            goto endsub
+        endif        
+        '/// Move to third object in Chart using TAB key (data series)
+        Kontext "DocumentChart"
+        DocumentChart.TypeKeys "<TAB>" , 3
+        '/// Invoke Format::ObjectProperties
+        FormatObjectProperties
+        '/// Select tab page Aligment
+        Kontext
+        iCountTabPg = Active.GetPageCount
+        if iCountTabPg <> 7 then
+            warnlog "Edit::Properties on a data series of a pie chart should have 7 tab pages but has " & iCountTabPg & "."
+        else
+            printlog "Edit::Properties on a data series on a pie chart has 7 tab pages."
+        endif
+        Active.SetPage TabChartPieOpetions
+        '/// Check if tab page Options exists
+        Kontext "TabChartPieOpetions"
+        call DialogTest ( TabChartPieOpetions )        
+        '/// Close dialog with Cancel-button
+        TabChartPieOpetions.Cancel
+        '/// Close document
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<ESCAPE>"
+    else
+        warnlog "It was not possible to select the chart object!"
+    endif
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatPositonAndSize
+'///<u><b>Dialog test after invoking Format::PositionAndSize</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    '/// Move to first object in Chart using TAB key
+    Kontext "DocumentChart"
+    DocumentChart.TypeKeys "<TAB>"
+    '/// Invoke Format::PositionAndSize
+    FormatPositionAndSizeChart
+    '/// Check if Position and Size dialog exists (single tab page)
+    Kontext "TabPositionAndSize"
+    call DialogTest ( TabPositionAndSize )
+    '/// Close dialog
+    TabPositionAndSize.Cancel
+    '/// Close document
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatArrangement
+    QAErrorLog "#i63017# - Should be only enabled to sort data curves; testcase has to be designed."    
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleMaintitle
+'///<u><b>Dialog test after invoking Format::Title::MainTitle</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Format / Title / Main title
+    FormatTitleMainTitle
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )  
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea )   
+    '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )   
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )
+    '/// Close dialog
+    TabFormatChartTitleAlignment.Cancel
+    '/// Close document
+     Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleSubtitle
+'///<u><b>Dialog test after invoking Format::Title::Subtitle</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Insert / Title
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertTitleDialog"
+    '/// Set Subtitle
+    if fSetTitle( SubTitle , "Custom Subtitle" ) > 0 then
+        warnlog "Something went wrong setting the subtitle -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Title dialog
+    if fCloseTitlesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Format / Title / Subtitle
+    FormatTitleSubTitle
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea )   
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )
+    '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Close dialog with Cancel
+    TabFontEffects.Cancel
+    '/// Close document
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleXAxistitle
+'///<u><b>Dialog test after invoking Format::Title::X Axis Title</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Insert / Title
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertTitleDialog"
+    '/// Set X Axis Title
+    if fSetTitle( TitleXaxis , "Custom X Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the X Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Title dialog
+    if fCloseTitlesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Format / Chart Type
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Change Chart type to Column + Line
+    if fSetChartType( "column_line" ) > 0 then
+        warnlog "Something went wrong setting chart type to Column + Line -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Chart Type dialog
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    '/// Format / Title / X Axis Title
+    FormatTitleX_Axis
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea )   
+    '/// Close dialog
+    TabArea.Cancel
+    '/// Close document    
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleYAxistitle
+'///<u><b>Dialog test after invoking Format::Title::Y Axis Title</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Insert / Title
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertTitleDialog"
+    '/// Set Y Axis Title
+    if fSetTitle( TitleYaxis , "Custom Y Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the Y Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Title dialog
+    if fCloseTitlesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Format / Chart Type
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Change Chart type to STOCK
+    if fSetChartType( "stock" ) > 0 then
+        warnlog "Something went wrong setting chart type to STOCK -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Chart Type dialog
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    '/// Format / Title / Y Axis Title
+    FormatTitleY_Axis
+   '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea )  
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Close dialog
+    TabFont.Cancel
+    '/// Close document
+   Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleZAxistitle
+'///<u><b>Dialog test after invoking Format::Title::Z Axis Title</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Convert chart to 3D (this will enable all controls in Title dialog)
+    if NOT fConvertChartTo3D() then
+        warnlog "Conversion of chart to 3D failed -> Quit testcase"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Insert / Title
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertTitleDialog"
+    '/// Set Z Axis Title
+    if fSetTitle( TitleZaxis , "Custom Z Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the Z Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Title dialog
+    if fCloseTitlesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Format / Chart Type
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Change Chart type to BAR
+    if fSetChartType( "bar" ) > 0 then
+        warnlog "Something went wrong setting chart type to BAR -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Chart Type dialog
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    '/// Invoke Format::Title::Z Axis Title
+    FormatTitleZ_Axis
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )   
+    '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea )
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
+    '/// Close dialog
+    TabFormatChartBorders.Cancel
+    '/// Close document
+   Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatTitleAllTitles
+'///<u><b>Dialog test after invoking Format::Title::All Titles</b></u>
+    '/// Load simple chart document
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    '/// Select chart using navigator
+    call fSelectFirstOLE
+    '/// Edit / Object / Edit
+    EditObjectEdit
+    sleep(1)
+    '/// Convert chart to 3D (this will enable all controls in Title dialog)
+    if NOT fConvertChartTo3D() then
+        warnlog "Conversion of chart to 3D failed -> Quit testcase"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Insert / Title
+    if fInvokeTitlesDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    Kontext "InsertTitleDialog"
+    '/// Set All Axis Title
+    if fSetTitle( SubTitle , "Custom Subtitle" ) > 0 then
+        warnlog "Something went wrong setting the subtitle -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    if fSetTitle( TitleXaxis , "Custom X Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the X Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    if fSetTitle( TitleYaxis , "Custom Y Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the Y Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    if fSetTitle( TitleZaxis , "Custom Z Axis Title" ) > 0 then
+        warnlog "Something went wrong setting the Y Axis Title -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Title dialog
+    if fCloseTitlesDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Title dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Format / Chart Type
+    if fInvokeChartTypeDialog() > 0 then
+        warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Change Chart type to AREA
+    if fSetChartType( "area" ) > 0 then
+        warnlog "Something went wrong setting chart type to AREA -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif
+    '/// Close Chart Type dialog
+    if fCloseChartTypeDialogOK() > 0 then
+        warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+        Call hCloseDocument
+        goto endsub
+    endif   
+    '/// Format / Title / All Titles
+    FormatTitleAllTitles
+    '/// Goto tab page Characters
+    Kontext
+    Active.SetPage TabFont
+    '/// Check if tab page Characters exists
+    Kontext "TabFont"
+    call DialogTest ( TabFont )   
+    '/// Goto tab page Alignment
+    Kontext
+    Active.SetPage TabFormatChartTitleAlignment
+    '/// Check if tab page Alignment exists
+    Kontext "TabFormatChartTitleAlignment"
+    call DialogTest ( TabFormatChartTitleAlignment )   
+    '/// Goto tab page Font Effects
+    Kontext
+    Active.SetPage TabFontEffects
+    '/// Check if tab page Font Effects exists
+    Kontext "TabFontEffects"
+    call DialogTest ( TabFontEffects )   
+    '/// Goto tab page Area
+    Kontext
+    Active.SetPage TabArea
+    '/// Check if tab page Area exists
+    Kontext "TabArea"
+    call DialogTest ( TabArea ) 
+    '/// Goto tab page Borders
+    Kontext
+    Active.SetPage TabFormatChartBorders
+    '/// Check if tab page Borders exists
+    Kontext "TabFormatChartBorders"
+    call DialogTest ( TabFormatChartBorders )
+    '/// Goto tab page Transparency
+    Kontext
+    Active.SetPage TabTransparency
+    '/// Check if tab page Transparency exists
+    Kontext "TabTransparency"
+    call DialogTest ( TabTransparency )
+    '/// Close dialog
+    TabTransparency.Cancel
+    '/// Close document
+    Kontext "DocumentCalc"    
+    DocumentCalc.TypeKeys "<Escape>"   
+    Call hCloseDocument
+endcase
+'
+'-------------------------------------------------------------------------------
+'
+testcase tFormatAxisXAxis
+'///<u><b>Dialog test after invoking Format::Axis::X Axis</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Format / Chart Type
+   if fInvokeChartTypeDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Change Chart type to XY (to obtain more tabpages)
+   if fSetChartType( "xy" ) > 0 then
+       warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Chart Type dialog
+   if fCloseChartTypeDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   
+   '/// Invoke Format::Axis::X Axis
+   FormatAxisXAxis
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Goto tab page Scale
+   Kontext
+   Active.SetPage TabChartAxisScale
+   '/// Check if tab page Scale exists
+   Kontext "TabChartAxisScale"
+   call DialogTest ( TabChartAxisScale )
+   
+   '/// Goto tab page Numbers
+   Kontext
+   Active.SetPage TabChartAxisNumbers
+   '/// Check if tab page Numbers exists
+   Kontext "TabChartAxisNumbers"
+   call DialogTest ( TabChartAxisNumbers )
+   
+   '/// Close dialog
+   TabChartAxisNumbers.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+'-------------------------------------------------------------
+testcase tFormatAxisYAxis
+'///<u><b>Dialog test after invoking Format::Axis::Y Axis</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Format / Chart Type
+   if fInvokeChartTypeDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Change Chart type to BAR (to obtain more tabpages)
+   if fSetChartType( "bar" ) > 0 then
+       warnlog "Something went wrong setting chart type to BAR -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Chart Type dialog
+   if fCloseChartTypeDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   
+   '/// Invoke Format::Axis::Y Axis
+   FormatAxisYAxis
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Goto tab page Numbers
+   Kontext
+   Active.SetPage TabChartAxisNumbers
+   '/// Check if tab page Numbers exists
+   Kontext "TabChartAxisNumbers"
+   call DialogTest ( TabChartAxisNumbers )
+   
+   '/// Goto tab page Scale
+   Kontext
+   Active.SetPage TabChartAxisScale
+   '/// Check if tab page Scale exists
+   Kontext "TabChartAxisScale"
+   call DialogTest ( TabChartAxisScale )
+   
+   '/// Close dialog
+   TabChartAxisScale.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+  '-------------------------------------------------------------
+testcase tFormatAxisZAxis
+'///<u><b>Dialog test after invoking Format::Axis::Z Axis</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Format / Chart Type
+   if fInvokeChartTypeDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Change Chart type to AREA (to obtain more tabpages)
+   if fSetChartType( "area" ) > 0 then
+       warnlog "Something went wrong setting chart type to AREA -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Chart Type dialog
+   if fCloseChartTypeDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Convert chart to 3D (this will enable the Z Axis)
+   if NOT fConvertChartTo3D() then
+       warnlog "Conversion of chart to 3D failed -> Quit testcase"
+       Call hCloseDocument
+       goto endsub
+   endif
+   
+   '/// Invoke Format::Axis::Z Axis
+   FormatAxisZAxis
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Close dialog
+   TabFormatChartLine.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+'-------------------------------------------------------------
+testcase tFormatAxisSecondaryXAxis
+'///<u><b>Dialog test after invoking Format::Axis::Secondary X Axis</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Format / Chart Type
+   if fInvokeChartTypeDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Change Chart type to XY (to obtain more tabpages)
+   if fSetChartType( "xy" ) > 0 then
+       warnlog "Something went wrong setting chart type to XY -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Chart Type dialog
+   if fCloseChartTypeDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Invoke Insert::Axes
+   if fInvokeAxesDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   Kontext "InsertAxesDialog"
+   '/// Check Secondary X Axis Title
+   if fSetAxis( SecondaryXAxis , TRUE ) > 0 then
+       warnlog "Something went wrong enabling the Secondary X Axis  -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Axes dialog
+   if fCloseAxesDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   
+   '/// Invoke Format::Axis::Secondary X Axis
+   FormatAxisSecondaryXAxis
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Goto tab page Numbers
+   Kontext
+   Active.SetPage TabChartAxisNumbers
+   '/// Check if tab page Numbers exists
+   Kontext "TabChartAxisNumbers"
+   call DialogTest ( TabChartAxisNumbers )
+   
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Goto tab page Scale
+   Kontext
+   Active.SetPage TabChartAxisScale
+   '/// Check if tab page Scale exists
+   Kontext "TabChartAxisScale"
+   call DialogTest ( TabChartAxisScale )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Close dialog
+   TabChartAxisLabel.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+'-------------------------------------------------------------
+testcase tFormatAxisSecondaryYAxis
+'///<u><b>Dialog test after invoking Format::Axis::Secondary Y Axis</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Invoke Insert::Axes
+   if fInvokeAxesDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Axes dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   Kontext "InsertAxesDialog"
+   '/// Check Secondary Y Axis Title
+   if fSetAxis( SecondaryYAxis , TRUE ) > 0 then
+       warnlog "Something went wrong enabling the Secondary Y Axis  -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Axes dialog
+   if fCloseAxesDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Axes dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   
+   '/// Invoke Format::Axis::Secondary Y Axis
+   FormatAxisSecondaryYAxis
+   '/// Goto tab page Scale
+   Kontext
+   Active.SetPage TabChartAxisScale
+   '/// Check if tab page Scale exists
+   Kontext "TabChartAxisScale"
+   call DialogTest ( TabChartAxisScale )
+   
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Numbers
+   Kontext
+   Active.SetPage TabChartAxisNumbers
+   '/// Check if tab page Numbers exists
+   Kontext "TabChartAxisNumbers"
+   call DialogTest ( TabChartAxisNumbers )
+   
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Close dialog
+   TabFontEffects.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+
+'-------------------------------------------------------------
+testcase tFormatAxisAllAxes
+'///<u><b>Dialog test after invoking Format::Axis::All Axes</b></u>
+
+
+   '/// Load simple chart document
+   if fLoadVerySimpleChartAndSaveLocal() > 0 then
+       warnlog "Loading test document seems to have failed -> Check this out!"
+       goto endsub
+   endif
+   '/// Select chart using navigator
+   call fSelectFirstOLE
+   '/// Edit / Object / Edit
+   EditObjectEdit
+   sleep(1)
+   '/// Format / Chart Type
+   if fInvokeChartTypeDialog() > 0 then
+       warnlog "Something went wrong trying to invoke the Chart Types dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Change Chart type to NET
+   if fSetChartType( "net" ) > 0 then
+       warnlog "Something went wrong setting chart type to NET -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Close Chart Type dialog
+   if fCloseChartTypeDialogOK() > 0 then
+       warnlog "Something went wrong trying to close the Chart Type dialog -> Check this out! (Previous log may help you)"
+       Call hCloseDocument
+       goto endsub
+   endif
+   '/// Invoke Format::Axis::All Axes
+   FormatAxisAllAxes
+   '/// Goto tab page Characters
+   Kontext
+   Active.SetPage TabFont
+   '/// Check if tab page Characters exists
+   Kontext "TabFont"
+   call DialogTest ( TabFont )
+   
+   '/// Goto tab page Font Effects
+   Kontext
+   Active.SetPage TabFontEffects
+   '/// Check if tab page Font Effects exists
+   Kontext "TabFontEffects"
+   call DialogTest ( TabFontEffects )
+   
+   '/// Goto tab page Line
+   Kontext
+   Active.SetPage TabFormatChartLine
+   '/// Check if tab page Line exists
+   Kontext "TabFormatChartLine"
+   call DialogTest ( TabFormatChartLine )
+   
+   '/// Goto tab page Label
+   Kontext
+   Active.SetPage TabChartAxisLabel
+   '/// Check if tab page Label exists
+   Kontext "TabChartAxisLabel"
+   call DialogTest ( TabChartAxisLabel )
+   
+   '/// Close dialog
+   TabChartAxisLabel.Cancel
+   '/// Close document
+   Kontext "DocumentCalc"
+   DocumentCalc.TypeKeys "<Escape>"
+   Call hCloseDocument
+
+
+endcase
+
