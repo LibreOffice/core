@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,45 +49,24 @@ MYTHESLIB=libmythes.lib
 .ENDIF # wnt
 .ENDIF
 
-.IF "$(ULINGULIB)"==""
-.IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu
-.ENDIF # unx
-.IF "$(GUI)"=="OS2"
-ULINGULIB=$(SLB)\libulingu.lib
-.ENDIF # os2
-.IF "$(GUI)"=="WNT"
-ULINGULIB=libulingu.lib
-.ENDIF # wnt
-.ENDIF
-
-
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_HUNSPELL)" == "YES" && "$(SYSTEM_MYTHES)" == "YES"
-CXXFLAGS += $(HUNSPELL_CFLAGS)
-CFLAGSCXX += $(HUNSPELL_CFLAGS)
-CFLAGSCC += $(HUNSPELL_CFLAGS)
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
 .ENDIF
-.IF "$(SYSTEM_HUNSPELL)" == "YES" && "$(SYSTEM_MYTHES)" != "YES"
-CXXFLAGS += -I..$/mythes $(HUNSPELL_CFLAGS)
-CFLAGSCXX += -I..$/mythes $(HUNSPELL_CFLAGS)
-CFLAGSCC += -I..$/mythes $(HUNSPELL_CFLAGS)
+
+.IF "$(SYSTEM_MYTHES)" != "YES"
+CXXFLAGS += -I..$/mythes
+CFLAGSCXX += -I..$/mythes
+CFLAGSCC += -I..$/mythes
 .ENDIF
-.IF "$(SYSTEM_HUNSPELL)" != "YES" && "$(SYSTEM_MYTHES)" == "YES"
-CXXFLAGS += -I..$/..$/lingutil
-CFLAGSCXX += -I..$/..$/lingutil
-CFLAGSCC += -I..$/..$/lingutil
-.ENDIF
-.IF "$(SYSTEM_HUNSPELL)" != "YES" && "$(SYSTEM_MYTHES)" != "YES"
-CXXFLAGS += -I..$/mythes -I..$/..$/lingutil
-CFLAGSCXX += -I..$/mythes -I..$/..$/lingutil
-CFLAGSCC += -I..$/mythes -I..$/..$/lingutil
-.ENDIF
+CXXFLAGS += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
+CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
+CFLAGSCC += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 
 EXCEPTIONSFILES=	\
         $(SLO)$/ntprophelp.obj\
@@ -115,13 +94,10 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                $(MYTHESLIB)
+                $(ULINGULIB) \
+        $(MYTHESLIB) \
+        $(HUNSPELLLIB)
 
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-SHL1STDLIBS+=   $(ULINGULIB)
-.ELSE
-SHL1STDLIBS+=   $(HUNSPELL_LIBS)
-.ENDIF
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
