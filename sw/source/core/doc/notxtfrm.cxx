@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notxtfrm.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,13 +86,6 @@
 using namespace com::sun::star;
 
 #define DEFTEXTSIZE  12
-
-// OD 25.09.2002 #99739# - insert declaration of global methods <SwAlignRect>
-//     and <SwAlignGrtRect>.
-//     Methods are implemented in /core/layout/paintfrm.cxx
-// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
-//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
-//extern void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
