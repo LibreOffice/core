@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -983,15 +983,22 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
         return;
     }
 
-    // short circuit if there is nothing to do
+    // accelerate trivial operations
     /*const*/ AquaSalGraphics* pSrc = static_cast<AquaSalGraphics*>(pSrcGraphics);
     const bool bSameGraphics = (this == pSrc) || (mpFrame && (mpFrame == pSrc->mpFrame));
     if( bSameGraphics
-    &&  (pPosAry->mnSrcX == pPosAry->mnDestX)
-    &&  (pPosAry->mnSrcY == pPosAry->mnDestY)
     &&  (pPosAry->mnSrcWidth == pPosAry->mnDestWidth)
     &&  (pPosAry->mnSrcHeight == pPosAry->mnDestHeight))
+    {
+        // short circuit if there is nothing to do
+        if( (pPosAry->mnSrcX == pPosAry->mnDestX)
+        &&  (pPosAry->mnSrcY == pPosAry->mnDestY))
+            return;
+        // use copyArea() if source and destination context are identical
+        copyArea( pPosAry->mnDestX, pPosAry->mnDestY, pPosAry->mnSrcX, pPosAry->mnSrcY,
+            pPosAry->mnSrcWidth, pPosAry->mnSrcHeight, 0 );
         return;
+    }
 
     pSrc->ApplyXorContext();
 
@@ -1050,12 +1057,19 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
 #else
     DBG_ASSERT( mxLayer!=NULL, "AquaSalGraphics::copyArea() for non-layered graphics" )
 
-    // drawing layer onto its own context means trouble => copy it first
-    const CGSize aSrcSize = { nSrcWidth, nSrcHeight };
-    const CGLayerRef xSrcLayer = CGLayerCreateWithContext( mrContext, aSrcSize, NULL );
-    const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
-    const CGPoint aSrcPoint = { -nSrcX, (nSrcY+nSrcHeight)-mnHeight };
-    ::CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
+    // drawing a layer onto its own context means trouble => copy it first
+    // TODO: is it possible to get rid of this unneeded copy more often?
+    //       e.g. on OSX>=10.5 only this situation causes problems:
+    //          mnBitmapDepth && (aDstPoint.x + pSrc->mnWidth) > mnWidth
+    CGLayerRef xSrcLayer = mxLayer;
+    // TODO: if( mnBitmapDepth > 0 )
+    {
+        const CGSize aSrcSize = { nSrcWidth, nSrcHeight };
+        xSrcLayer = CGLayerCreateWithContext( mrContext, aSrcSize, NULL );
+        const CGContextRef xSrcContext = CGLayerGetContext( xSrcLayer );
+        const CGPoint aSrcPoint = { -nSrcX, (nSrcY+nSrcHeight)-mnHeight };
+        ::CGContextDrawLayerAtPoint( xSrcContext, aSrcPoint, mxLayer );
+    }
 
     // draw at new destination
     // NOTE: flipped drawing gets disabled for this, else the subimage would be drawn upside down
@@ -1066,8 +1080,8 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, l
     ::CGContextDrawLayerAtPoint( mrContext, aDstPoint, xSrcLayer );
 
     // cleanup
-//  CGContextRelease( xSrcContext );
-    CGLayerRelease( xSrcLayer );
+    if( xSrcLayer != mxLayer )
+        CGLayerRelease( xSrcLayer );
     CGContextRestoreGState( mrContext );
 
     // mark the destination rectangle as updated
