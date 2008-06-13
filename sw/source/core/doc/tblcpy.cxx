@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tblcpy.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -662,7 +662,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA ) ||
             SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE ) )
         {
-            pDstBox->ClaimFrmFmt()->ResetAttr( RES_BOXATR_FORMAT,
+            pDstBox->ClaimFrmFmt()->ResetFmtAttr( RES_BOXATR_FORMAT,
                                                  RES_BOXATR_VALUE );
         }
 
@@ -684,7 +684,7 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     if( nNewIdx != nOldIdx )
                         aBoxAttrSet.Put( SwTblBoxNumFormat( nNewIdx ));
                 }
-                pDstBox->ClaimFrmFmt()->SetAttr( aBoxAttrSet );
+                pDstBox->ClaimFrmFmt()->SetFmtAttr( aBoxAttrSet );
             }
         }
     }
