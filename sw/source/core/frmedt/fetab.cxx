@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fetab.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2357,7 +2357,7 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     {
         SwFmtFrmSize aSz( rTblFrmSz );
         aSz.SetWidth( pTab->Prt().Width() );
-        pTab->GetFmt()->SetAttr( aSz );
+        pTab->GetFmt()->SetFmtAttr( aSz );
     }
 
     if( (eType & (nsTblChgWidthHeightType::WH_FLAG_BIGGER | nsTblChgWidthHeightType::WH_FLAG_INSDEL)) ==
