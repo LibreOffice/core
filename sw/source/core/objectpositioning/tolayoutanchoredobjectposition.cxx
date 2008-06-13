@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tolayoutanchoredobjectposition.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             {
                 aVert.SetPos( nAttrRelPosY );
                 const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
+                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aVert );
                 const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
             }
         }
@@ -227,7 +227,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
             {
                 aHori.SetPos( nAttrRelPosX );
                 const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aHori );
+                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aHori );
                 const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
             }
         }
