@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: applab.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,20 +292,20 @@ static sal_uInt16 nBCTitleNo = 0;
             aULMargin.SetUpper((sal_uInt16) rItem.lUpper);
             aLRMargin.SetRight(MINLAY/2);
             aULMargin.SetLower(MINLAY/2);
-            rFmt.SetAttr(aLRMargin);
-            rFmt.SetAttr(aULMargin);
+            rFmt.SetFmtAttr(aLRMargin);
+            rFmt.SetFmtAttr(aULMargin);
 
             // Kopf- und Fusszeilen
-            rFmt.SetAttr(SwFmtHeader(sal_Bool(sal_False)));
+            rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
             aDesc.ChgHeaderShare(sal_False);
-            rFmt.SetAttr(SwFmtFooter(sal_Bool(sal_False)));
+            rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
             aDesc.ChgFooterShare(sal_False);
 
 
             aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Seitennumerierung
 
             // Einstellen der Seitengroesse
-            rFmt.SetAttr(SwFmtFrmSize(ATT_FIX_SIZE,
+            rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
                                         rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY,
                                         rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY));
 
@@ -321,7 +321,7 @@ static sal_uInt16 nBCTitleNo = 0;
             pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
-            rFmt.SetAttr(aItem);
+            rFmt.SetFmtAttr(aItem);
 
             //determine orientation by calculating the width and height of the resulting page
             const int nResultWidth = rItem.lHDist * (rItem.nCols - 1) + rItem.lWidth + rItem.lLeft;
@@ -348,7 +348,7 @@ static sal_uInt16 nBCTitleNo = 0;
                 SwFmt *pStandard = pSh->GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
                 aLR.SetLeft ( sal_uInt16(nMin) );
                 aLR.SetRight( sal_uInt16(nMin) );
-                pStandard->SetAttr( aLR );
+                pStandard->SetFmtAttr( aLR );
             }
 
             // Rahmenvorlage vorbereiten
@@ -356,23 +356,23 @@ static sal_uInt16 nBCTitleNo = 0;
             SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE,
                                     rItem.lHDist - (rItem.lHDist-rItem.lWidth),
                                     rItem.lVDist - (rItem.lVDist-rItem.lHeight));
-            pFmt->SetAttr(aFrmSize);
+            pFmt->SetFmtAttr(aFrmSize);
 
             SvxLRSpaceItem aFrmLRSpace( 0, (sal_uInt16)(rItem.lHDist - rItem.lWidth),
                                         0, 0,
                                         RES_LR_SPACE);
-            pFmt->SetAttr(aFrmLRSpace);
+            pFmt->SetFmtAttr(aFrmLRSpace);
 
             SvxULSpaceItem aFrmULSpace( 0, (sal_uInt16)(rItem.lVDist - rItem.lHeight),
                                         RES_UL_SPACE);
-            pFmt->SetAttr(aFrmULSpace);
+            pFmt->SetFmtAttr(aFrmULSpace);
 
             const SwFrmFmt *pFirstFlyFmt = 0;
             if ( rItem.bPage )
             {
                 SwFmtVertOrient aFrmVertOrient( pFmt->GetVertOrient() );
                 aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
-                pFmt->SetAttr(aFrmVertOrient);
+                pFmt->SetFmtAttr(aFrmVertOrient);
 
                 for ( sal_uInt16 i = 0; i < rItem.nRows; ++i )
                 {
