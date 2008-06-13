@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtsecte.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,13 +160,13 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         // a new section started, or an old one gets closed!
 
         // close old list
-        XMLTextNumRuleInfo aEmptyNumRule;
+        XMLTextNumRuleInfo aEmptyNumRuleInfo;
         if ( !bAutoStyles )
-            exportListChange(rPrevRule, aEmptyNumRule);
+            exportListChange(rPrevRule, aEmptyNumRuleInfo);
 
         // Build stacks of old and new sections
         // Sections on top of mute sections should not be on the stack
-        vector<Reference<XTextSection> > aOldStack;
+        vector< Reference<XTextSection> > aOldStack;
         Reference<XTextSection> aCurrent(rPrevSection);
         while(aCurrent.is())
         {
@@ -179,7 +179,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             aCurrent.set(aCurrent->getParentSection());
         }
 
-        vector<Reference<XTextSection> > aNewStack;
+        vector< Reference<XTextSection> > aNewStack;
         aCurrent.set(rNextSection);
         sal_Bool bMute = sal_False;
         while(aCurrent.is())
@@ -246,7 +246,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 
         // start new list
         if ( !bAutoStyles && !bMute )
-            exportListChange(aEmptyNumRule, rNextRule);
+            exportListChange(aEmptyNumRuleInfo, rNextRule);
     }
     else
     {
