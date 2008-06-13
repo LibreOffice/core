@@ -23,13 +23,34 @@ fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
 ### i74020 ###
 fwl.FilterFactory::com::sun::star::lang::XMultiServiceFactory
 
-### i84321 ###  -> disabled in framework.sce
+### i30570 	###
+fwl.FilterFactory::com::sun::star::container::XNameReplace
+
+### i84321 ###
 fwk.PopupMenuControllerFactory
+# -> disabled in framework.sce
 
 ### i84346 ###
-# fwl.PathSettings::com::sun::star::beans::XMultiPropertySet -> disabled in framework.sce
+fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
+#-> disabled in framework.sce
 
 ### i84423 ###
-#-o fwk.JobExecutor -> disabled in framework.sce
-#-o fwk.JobHandler -> disabled in framework.sce
+fwk.JobExecutor
+fwk.JobHandler 
+#-> disabled in framework.sce
 
+### i88635 ###
+fwk.Desktop::com::sun::star::frame::XFramesSupplier
+
+### i87526 ###
+fwk.Frame::com::sun::star::lang::XComponent
+
+### i87865 ###
+fwk.Desktop::com::sun::star::frame::XDesktop
+
+### i88644 ###
+fwk.Frame
+#-> disabled in framework.sce
+
+### i90345 ###
+fwk.URLTransformer::com::sun::star::util::XURLTransformer
