@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltoken.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3010,11 +3010,13 @@ namespace xmloff { namespace token {
         XML_CELL_RANGE,
         XML_ERROR_LOWER_RANGE,
         XML_ERROR_UPPER_RANGE,
-
         // erAck: 2008-04-09T20:02+0200  OpenFormula aka ODFF
         XML_NP_OF,
         XML_N_OF,
-
+        // --> OD 2008-04-22 #refactorlists#
+        XML_CONTINUE_LIST,
+        XML_STYLE_OVERRIDE,
+        // <--
         XML_TOKEN_END
     };
 
