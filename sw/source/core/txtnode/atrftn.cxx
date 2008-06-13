@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrftn.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +134,7 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
         if( pSectNd )
         {
             const SwFmtFtnEndAtTxtEnd& rFtnEnd = (SwFmtFtnEndAtTxtEnd&)
-                pSectNd->GetSection().GetFmt()->GetAttr(
+                pSectNd->GetSection().GetFmt()->GetFmtAttr(
                                 IsEndNote() ?
                                 static_cast<USHORT>(RES_END_AT_TXTEND) :
                                 static_cast<USHORT>(RES_FTN_AT_TXTEND) );
