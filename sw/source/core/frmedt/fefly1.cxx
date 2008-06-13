@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fefly1.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1225,12 +1225,12 @@ sal_Bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
                     if( !IsInvalidItem( pItem ) &&
                         RES_ANCHOR != ( nWhich = pItem->Which() ) &&
                         RES_CHAIN != nWhich && RES_CNTNT != nWhich )
-                        pFly->GetFmt()->ResetAttr( nWhich );
+                        pFly->GetFmt()->ResetFmtAttr( nWhich );
                     pItem = aIter.NextItem();
                 }
             }
             else
-                pFly->GetFmt()->ResetAttr( nWhich );
+                pFly->GetFmt()->ResetFmtAttr( nWhich );
 
             bRet = sal_True;
             EndAllActionAndCall();
