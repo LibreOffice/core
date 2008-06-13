@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylepool.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,27 +50,57 @@ namespace {
     class Node
     {
         std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
-        std::vector< StylePool::SfxItemSet_Pointer_t > aItemSet; // shared pointer an inserted item set or nul
-        const SfxPoolItem *pItem;   // my pool item
-        Node *pUpper;               // if I'm a child node that's my parent node
+        // container of shared pointers of inserted item sets; for non-poolable
+        // items more than one item set is needed
+        std::vector< StylePool::SfxItemSet_Pointer_t > maItemSet;
+        const SfxPoolItem *mpItem;   // my pool item
+        Node *mpUpper;               // if I'm a child node that's my parent node
+        // --> OD 2008-03-07 #i86923#
+        const bool mbIsItemIgnorable;
+        // <--
     public:
-        Node() : pItem( 0 ), pUpper( 0 ) {} // root node Ctor
-        Node( const SfxPoolItem& rItem, Node* pParent ) : // child node Ctor
-            pItem( rItem.Clone() ), pUpper( pParent ){}
+        // --> OD 2008-03-07 #i86923#
+        Node() // root node Ctor
+            : mChildren(),
+              maItemSet(),
+              mpItem( 0 ),
+              mpUpper( 0 ),
+              mbIsItemIgnorable( false )
+        {}
+        Node( const SfxPoolItem& rItem, Node* pParent, const bool bIgnorable ) // child node Ctor
+            : mChildren(),
+              maItemSet(),
+              mpItem( rItem.Clone() ),
+              mpUpper( pParent ),
+              mbIsItemIgnorable( bIgnorable )
+        {}
+        // <--
         ~Node();
-        const bool hasItemSet() const { return 0 < aItemSet.size(); }
+        // --> OD 2008-03-11 #i86923#
+        const bool hasItemSet( const bool bCheckUsage ) const;
+        // <--
         // --> OD 2008-04-29 #i87808#
 //        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return aItemSet[aItemSet.size()-1]; }
         const StylePool::SfxItemSet_Pointer_t getItemSet() const
         {
-            return aItemSet.back();
+            return maItemSet.back();
         }
         const StylePool::SfxItemSet_Pointer_t getUsedOrLastAddedItemSet() const;
         // <--
-        void setItemSet( const SfxItemSet& rSet ){ aItemSet.push_back( StylePool::SfxItemSet_Pointer_t( rSet.Clone() ) ); }
-        Node* findChildNode( const SfxPoolItem& rItem );
-        Node* nextItemSet( Node* pLast );
-        const SfxPoolItem& getPoolItem() const { return *pItem; }
+        void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( StylePool::SfxItemSet_Pointer_t( rSet.Clone() ) ); }
+        // --> OD 2008-03-11 #i86923#
+        Node* findChildNode( const SfxPoolItem& rItem,
+                             const bool bIsItemIgnorable = false );
+        Node* nextItemSet( Node* pLast,
+                           const bool bSkipUnusedItemSet,
+                           const bool bSkipIgnorable );
+        // <--
+        const SfxPoolItem& getPoolItem() const { return *mpItem; }
+        // --> OD 2008-03-11 #i86923#
+        bool hasIgnorableChildren( const bool bCheckUsage ) const;
+        const StylePool::SfxItemSet_Pointer_t getItemSetOfIgnorableChild(
+                                        const bool bSkipUnusedItemSets ) const;
+        // <--
     };
 
     // --> OD 2008-04-29 #i87808#
@@ -78,7 +108,7 @@ namespace {
     {
         std::vector< StylePool::SfxItemSet_Pointer_t >::const_reverse_iterator aIter;
 
-        for ( aIter = aItemSet.rbegin(); aIter != aItemSet.rend(); ++aIter )
+        for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
         {
             if ( (*aIter).use_count() > 1 )
             {
@@ -86,11 +116,43 @@ namespace {
             }
         }
 
-        return aItemSet.back();
+        return maItemSet.back();
     }
     // <--
 
-    Node* Node::findChildNode( const SfxPoolItem& rItem )
+    // --> OD 2008-05-06 #i86923#
+    const bool Node::hasItemSet( const bool bCheckUsage ) const
+    {
+        bool bHasItemSet = false;
+
+        if ( maItemSet.size() > 0 )
+        {
+            if ( bCheckUsage )
+            {
+                std::vector< StylePool::SfxItemSet_Pointer_t >::const_reverse_iterator aIter;
+
+                for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
+                {
+                    if ( (*aIter).use_count() > 1 )
+                    {
+                        bHasItemSet = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                bHasItemSet = true;
+            }
+        }
+        return bHasItemSet;
+    }
+    // <--
+
+    // --> OD 2008-03-07 #i86923#
+    Node* Node::findChildNode( const SfxPoolItem& rItem,
+                               const bool bIsItemIgnorable )
+    // <--
     {
         Node* pNextNode = this;
         std::vector<Node*>::iterator aIter = mChildren.begin();
@@ -101,7 +163,9 @@ namespace {
                 return *aIter;
             ++aIter;
         }
-        pNextNode = new Node( rItem, pNextNode );
+        // --> OD 2008-03-07 #i86923#
+        pNextNode = new Node( rItem, pNextNode, bIsItemIgnorable );
+        // <--
         mChildren.push_back( pNextNode );
         return pNextNode;
     }
@@ -117,9 +181,14 @@ namespace {
        partial downstairs and upstairs
        pLast != 0 && pLast != this => scan your children behind the given children,
                         the children of your parent behind you and so on.
-    */
 
-    Node* Node::nextItemSet( Node* pLast )
+       OD 2008-03-11 #i86923#
+       introduce parameters <bSkipUnusedItemSets> and <bSkipIgnorable>
+       and its handling.
+    */
+    Node* Node::nextItemSet( Node* pLast,
+                             const bool bSkipUnusedItemSets,
+                             const bool bSkipIgnorable )
     {
         // Searching downstairs
         std::vector<Node*>::iterator aIter = mChildren.begin();
@@ -134,19 +203,94 @@ namespace {
         Node *pNext = 0;
         while( aIter != mChildren.end() )
         {
+            // --> OD 2008-03-11 #i86923#
+            if ( bSkipIgnorable && (*aIter)->mbIsItemIgnorable )
+            {
+                ++aIter;
+                continue;
+            }
+            // <--
             pNext = *aIter;
-            if( pNext->hasItemSet() ) // any child with item set?
+            // --> OD 2008-03-11 #i86923#
+            if ( pNext->hasItemSet( bSkipUnusedItemSets ) )
+            {
                 return pNext;
-            pNext = pNext->nextItemSet( 0 ); // 0 => downstairs only
+            }
+            if ( bSkipIgnorable &&
+                 pNext->hasIgnorableChildren( bSkipUnusedItemSets ) )
+            {
+                return pNext;
+            }
+            pNext = pNext->nextItemSet( 0, bSkipUnusedItemSets, bSkipIgnorable ); // 0 => downstairs only
+            // <--
             if( pNext )
                 return pNext;
             ++aIter;
         }
         // Searching upstairs
-        if( pLast && pUpper )
-            pNext = pUpper->nextItemSet( this );
+        if( pLast && mpUpper )
+        {
+            // --> OD 2008-03-11 #i86923#
+            pNext = mpUpper->nextItemSet( this, bSkipUnusedItemSets, bSkipIgnorable );
+            // <--
+        }
         return pNext;
     }
+
+    // --> OD 2008-03-11 #i86923#
+    bool Node::hasIgnorableChildren( const bool bCheckUsage ) const
+    {
+        bool bHasIgnorableChildren( false );
+
+        std::vector<Node*>::const_iterator aIter = mChildren.begin();
+        while( aIter != mChildren.end() && !bHasIgnorableChildren )
+        {
+            Node* pChild = *aIter;
+            if ( pChild->mbIsItemIgnorable )
+            {
+                bHasIgnorableChildren =
+                    !bCheckUsage ||
+                    ( pChild->hasItemSet( bCheckUsage /* == true */ ) ||
+                      pChild->hasIgnorableChildren( bCheckUsage /* == true */ ) );
+            }
+            ++aIter;
+        }
+
+        return bHasIgnorableChildren;
+    }
+
+    const StylePool::SfxItemSet_Pointer_t Node::getItemSetOfIgnorableChild(
+                                        const bool bSkipUnusedItemSets ) const
+    {
+        DBG_ASSERT( hasIgnorableChildren( bSkipUnusedItemSets ),
+                    "<Node::getItemSetOfIgnorableChild> - node has no ignorable children" );
+
+        std::vector<Node*>::const_iterator aIter = mChildren.begin();
+        while( aIter != mChildren.end() )
+        {
+            Node* pChild = *aIter;
+            if ( pChild->mbIsItemIgnorable )
+            {
+                if ( pChild->hasItemSet( bSkipUnusedItemSets ) )
+                {
+                    return pChild->getUsedOrLastAddedItemSet();
+                }
+                else
+                {
+                    pChild = pChild->nextItemSet( 0, bSkipUnusedItemSets, false );
+                    if ( pChild )
+                    {
+                        return pChild->getUsedOrLastAddedItemSet();
+                    }
+                }
+            }
+            ++aIter;
+        }
+
+        StylePool::SfxItemSet_Pointer_t pReturn;
+        return pReturn;
+    }
+    // <--
 
     Node::~Node()
     {
@@ -156,17 +300,28 @@ namespace {
             delete *aIter;
             ++aIter;
         }
-        delete pItem;
+        delete mpItem;
     }
 
     class Iterator : public IStylePoolIteratorAccess
     {
-        std::map< const SfxItemSet*, Node >& rRoot;
-        std::map< const SfxItemSet*, Node >::iterator pCurrNode;
-        Node* pNode;
+        std::map< const SfxItemSet*, Node >& mrRoot;
+        std::map< const SfxItemSet*, Node >::iterator mpCurrNode;
+        Node* mpNode;
+        const bool mbSkipUnusedItemSets;
+        const bool mbSkipIgnorable;
     public:
-        Iterator( std::map< const SfxItemSet*, Node >& rR )
-            : rRoot( rR ), pCurrNode( rR.begin() ), pNode(0) {}
+        // --> OD 2008-03-07 #i86923#
+        Iterator( std::map< const SfxItemSet*, Node >& rR,
+                  const bool bSkipUnusedItemSets,
+                  const bool bSkipIgnorable )
+            : mrRoot( rR ),
+              mpCurrNode( rR.begin() ),
+              mpNode(0),
+              mbSkipUnusedItemSets( bSkipUnusedItemSets ),
+              mbSkipIgnorable( bSkipIgnorable )
+        {}
+        // <--
         virtual StylePool::SfxItemSet_Pointer_t getNext();
         virtual ::rtl::OUString getName();
     };
@@ -174,28 +329,37 @@ namespace {
     StylePool::SfxItemSet_Pointer_t Iterator::getNext()
     {
         StylePool::SfxItemSet_Pointer_t pReturn;
-        while( pNode || pCurrNode != rRoot.end() )
+        while( mpNode || mpCurrNode != mrRoot.end() )
         {
-            if( !pNode )
+            if( !mpNode )
             {
-                pNode = &pCurrNode->second;
-                ++pCurrNode;
-                if( pNode->hasItemSet() )
+                mpNode = &mpCurrNode->second;
+                ++mpCurrNode;
+                // --> OD 2008-03-11 #i86923#
+                if ( mpNode->hasItemSet( mbSkipUnusedItemSets ) )
                 {
                     // --> OD 2008-04-30 #i87808#
 //                    return pNode->getItemSet();
-                    return pNode->getUsedOrLastAddedItemSet();
+                    return mpNode->getUsedOrLastAddedItemSet();
                     // <--
                 }
+                // <--
             }
-            pNode = pNode->nextItemSet( pNode );
-            if( pNode && pNode->hasItemSet() )
+            // --> OD 2008-03-11 #i86923#
+            mpNode = mpNode->nextItemSet( mpNode, mbSkipUnusedItemSets, mbSkipIgnorable );
+            if ( mpNode && mpNode->hasItemSet( mbSkipUnusedItemSets ) )
             {
                 // --> OD 2008-04-30 #i87808#
 //                return pNode->getItemSet();
-                return pNode->getUsedOrLastAddedItemSet();
+                return mpNode->getUsedOrLastAddedItemSet();
                 // <--
             }
+            if ( mbSkipIgnorable &&
+                 mpNode && mpNode->hasIgnorableChildren( mbSkipUnusedItemSets ) )
+            {
+                return mpNode->getItemSetOfIgnorableChild( mbSkipUnusedItemSets );
+            }
+            // <--
         }
         return pReturn;
     }
@@ -203,11 +367,11 @@ namespace {
     ::rtl::OUString Iterator::getName()
     {
         ::rtl::OUString aString;
-        if( pNode && pNode->hasItemSet() )
+        if( mpNode && mpNode->hasItemSet( false ) )
         {
             // --> OD 2008-04-30 #i87808#
 //            aString = StylePool::nameOf( pNode->getItemSet() );
-            aString = StylePool::nameOf( pNode->getUsedOrLastAddedItemSet() );
+            aString = StylePool::nameOf( mpNode->getUsedOrLastAddedItemSet() );
             // <--
         }
         return aString;
@@ -231,38 +395,90 @@ namespace {
 class StylePoolImpl
 {
 private:
-    std::map< const SfxItemSet*, Node > aRoot;
-    sal_Int32 nCount;
+    std::map< const SfxItemSet*, Node > maRoot;
+    sal_Int32 mnCount;
+    // --> OD 2008-03-07 #i86923#
+    SfxItemSet* mpIgnorableItems;
+    // <--
 public:
-    StylePoolImpl() : nCount(0) {}
+    // --> OD 2008-03-07 #i86923#
+    explicit StylePoolImpl( SfxItemSet* pIgnorableItems = 0 )
+        : maRoot(),
+          mnCount(0),
+          mpIgnorableItems( pIgnorableItems != 0
+                            ? pIgnorableItems->Clone( FALSE )
+                            : 0 )
+    {
+        DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),
+                    "<StylePoolImpl::StylePoolImpl(..)> - misusage: item set for ignorable item should be empty. Please correct usage." );
+        DBG_ASSERT( !mpIgnorableItems || !mpIgnorableItems->Count(),
+                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( FALSE )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
+    }
+
+    ~StylePoolImpl()
+    {
+        delete mpIgnorableItems;
+    }
+    // <--
+
     StylePool::SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
-    IStylePoolIteratorAccess* createIterator();
-    sal_Int32 getCount() const { return nCount; }
+
+    // --> OD 2008-03-07 #i86923#
+    IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets = false,
+                                              bool bSkipIgnorableItems = false );
+    // <--
+    sal_Int32 getCount() const { return mnCount; }
 };
 
 StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
     bool bNonPoolable = false;
-    Node* pCurNode = &aRoot[ rSet.GetParent() ];
+    Node* pCurNode = &maRoot[ rSet.GetParent() ];
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
     // a complete empty SfxItemSet would stay at the root node.
+    // --> OD 2008-03-07 #i86923#
+    // insert ignorable items to the tree leaves.
+    std::auto_ptr<SfxItemSet> pFoundIgnorableItems;
+    if ( mpIgnorableItems )
+    {
+        pFoundIgnorableItems.reset( new SfxItemSet( *mpIgnorableItems ) );
+    }
     while( pItem )
     {
         if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE ) )
             bNonPoolable = true;
-        pCurNode = pCurNode->findChildNode( *pItem );
+        if ( !pFoundIgnorableItems.get() ||
+             ( pFoundIgnorableItems.get() &&
+               pFoundIgnorableItems->Put( *pItem ) == 0 ) )
+        {
+            pCurNode = pCurNode->findChildNode( *pItem );
+        }
         pItem = aIter.NextItem();
     }
+    if ( pFoundIgnorableItems.get() &&
+         pFoundIgnorableItems->Count() > 0 )
+    {
+        SfxItemIter aIgnorableItemsIter( *pFoundIgnorableItems );
+        pItem = aIgnorableItemsIter.GetCurItem();
+        while( pItem )
+        {
+            if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE ) )
+                bNonPoolable = true;
+            pCurNode = pCurNode->findChildNode( *pItem, true );
+            pItem = aIgnorableItemsIter.NextItem();
+        }
+    }
+    // <--
     // Every leaf node represents an inserted item set, but "non-leaf" nodes represents subsets
     // of inserted itemsets.
     // These nodes could have but does not need to have a shared_ptr to a item set.
-    if( !pCurNode->hasItemSet() )
+    if( !pCurNode->hasItemSet( false ) )
     {
         pCurNode->setItemSet( rSet );
         bNonPoolable = false; // to avoid a double insertion
-        ++nCount;
+        ++mnCount;
     }
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
     if( bNonPoolable )
@@ -277,31 +493,45 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
         {
             ++nCheck;
             pTemp = pIter->getNext();
-            if( pCurNode->hasItemSet() && pTemp.get() == pCurNode->getItemSet().get() )
+            if( pCurNode->hasItemSet( false ) && pTemp.get() == pCurNode->getItemSet().get() )
             {
-                ::rtl::OUString aStr = pIter->getName();
+                ::rtl::OUString aStr = StylePool::nameOf( pTemp );
                 nNo = nCheck;
             }
         } while( pTemp.get() );
-        DBG_ASSERT( nCount == nCheck, "Wrong counting");
+        DBG_ASSERT( mnCount == nCheck, "Wrong counting");
         delete pIter;
     }
 #endif
     return pCurNode->getItemSet();
 }
 
-IStylePoolIteratorAccess* StylePoolImpl::createIterator()
-{ return new Iterator( aRoot ); }
+// --> OD 2008-03-07 #i86923#
+IStylePoolIteratorAccess* StylePoolImpl::createIterator( bool bSkipUnusedItemSets,
+                                                         bool bSkipIgnorableItems )
+{
+    return new Iterator( maRoot, bSkipUnusedItemSets, bSkipIgnorableItems );
+}
+// <--
 
 // Ctor, Dtor and redirected methods of class StylePool, nearly inline ;-)
 
-StylePool::StylePool() : pImpl( new StylePoolImpl() ) {}
+// --> OD 2008-03-07 #i86923#
+StylePool::StylePool( SfxItemSet* pIgnorableItems )
+    : pImpl( new StylePoolImpl( pIgnorableItems ) )
+{}
+// <--
 
 StylePool::SfxItemSet_Pointer_t StylePool::insertItemSet( const SfxItemSet& rSet )
 { return pImpl->insertItemSet( rSet ); }
 
-IStylePoolIteratorAccess* StylePool::createIterator()
-{ return pImpl->createIterator(); }
+// --> OD 2008-03-11 #i86923#
+IStylePoolIteratorAccess* StylePool::createIterator( const bool bSkipUnusedItemSets,
+                                                     const bool bSkipIgnorableItems )
+{
+    return pImpl->createIterator( bSkipUnusedItemSets, bSkipIgnorableItems );
+}
+// <--
 
 sal_Int32 StylePool::getCount() const
 { return pImpl->getCount(); }
