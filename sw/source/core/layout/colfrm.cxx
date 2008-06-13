@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: colfrm.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -253,7 +253,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             if ( IsBodyFrm() )
                 SetFrmFmt( pDoc->GetDfltFrmFmt() );
             else
-                GetFmt()->SetAttr( SwFmtFillOrder() );
+                GetFmt()->SetFmtAttr( SwFmtFillOrder() );
             if ( pSave )
                 ::RestoreCntnt( pSave, this, 0, true );
             return;
@@ -263,7 +263,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             if ( IsBodyFrm() )
                 SetFrmFmt( pDoc->GetColumnContFmt() );
             else
-                GetFmt()->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+                GetFmt()->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
             if( !Lower() || !Lower()->IsColumnFrm() )
                 --nOldNum;
         }
@@ -430,8 +430,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
                 aUL.SetUpper( pC->GetUpper());
                 aUL.SetLower( pC->GetLower());
 
-                ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
-                ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
+                ((SwLayoutFrm*)pCol)->GetFmt()->SetFmtAttr( aLR );
+                ((SwLayoutFrm*)pCol)->GetFmt()->SetFmtAttr( aUL );
             }
 
             nGutter += aLR.GetLeft() + aLR.GetRight();
