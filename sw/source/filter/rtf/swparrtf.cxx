@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swparrtf.cxx,v $
- * $Revision: 1.79 $
+ * $Revision: 1.80 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -419,7 +419,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 SwSectionNode* pSectNd = pRegionEndIdx->GetNode().
                                     StartOfSectionNode()->GetSectionNode();
                 if( pSectNd )
-                    pSectNd->GetSection().GetFmt()->SetAttr(
+                    pSectNd->GetSection().GetFmt()->SetFmtAttr(
                                     SwFmtNoBalancedColumns( TRUE ) );
             }
 
@@ -519,10 +519,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 SwTxtNode* pPrev = aPrvIdx.GetNode().GetTxtNode();
                 pTxtNode->ChgFmtColl( pPrev->GetTxtColl() );
                 pTxtNode->FmtToTxtAttr( pPrev );
-                pTxtNode->SwCntntNode::ResetAllAttr();
+                pTxtNode->ResetAllAttr();
 
                 if( pPrev->HasSwAttrSet() )
-                    pTxtNode->SwCntntNode::SetAttr( *pPrev->GetpSwAttrSet() );
+                    pTxtNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
                 if( &pPam->GetBound(TRUE).nNode.GetNode() == pPrev )
                     pPam->GetBound(TRUE).nContent.Assign( pTxtNode, 0 );
@@ -579,7 +579,7 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
         aCol.SetWishWidth( nWishWidth );
     }
 
-    rFmt.SetAttr(aCol);
+    rFmt.SetFmtAttr(aCol);
     return true;
 }
 
@@ -593,9 +593,9 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     SwFmtFrmSize aSz(rFmt.GetFrmSize());
     aSz.SetWidth(rSection.GetPageWidth());
     aSz.SetHeight(rSection.GetPageHeight());
-    rFmt.SetAttr(aSz);
+    rFmt.SetFmtAttr(aSz);
 
-    rFmt.SetAttr(
+    rFmt.SetFmtAttr(
         SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE));
 
     if (!bIgnoreCols)
@@ -604,7 +604,7 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
             rSection.GetPageLeft() - rSection.GetPageRight()));
     }
 
-    rFmt.SetAttr(rSection.maPageInfo.maBox);
+    rFmt.SetFmtAttr(rSection.maPageInfo.maBox);
 }
 
 bool HasHeader(const SwFrmFmt &rFmt)
@@ -714,11 +714,11 @@ void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
         //Kopfzeilenhoehe minimal sezten
         if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
         {
-            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+            pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
             aHdUL.SetLower( rData.nSwHLo - cMinHdFtHeight );
-            pHdFmt->SetAttr(aHdUL);
-            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+            pHdFmt->SetFmtAttr(aHdUL);
+            pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
@@ -727,17 +727,17 @@ void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
     {
         if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
         {
-            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+            pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
             aFtUL.SetUpper( rData.nSwFUp - cMinHdFtHeight );
-            pFtFmt->SetAttr(aFtUL);
-            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+            pFtFmt->SetFmtAttr(aFtUL);
+            pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
         }
     }
 
     SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo, RES_UL_SPACE ); // Page-UL setzen
-    rFmt.SetAttr(aUL);
+    rFmt.SetFmtAttr(aUL);
 }
 
 void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
@@ -773,7 +773,7 @@ void rtfSections::CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest)
 
     mrReader.pDoc->CopyHeader(rFrom.GetMaster(), rDest.GetMaster());
     SwFrmFmt &rDestFmt = rDest.GetMaster();
-    rDestFmt.SetAttr(rFrom.GetMaster().GetHeader());
+    rDestFmt.SetFmtAttr(rFrom.GetMaster().GetHeader());
     mrReader.pDoc->CopyHeader(rFrom.GetLeft(), rDest.GetLeft());
     mrReader.pDoc->CopyFooter(rFrom.GetMaster(), rDest.GetMaster());
     mrReader.pDoc->CopyFooter(rFrom.GetLeft(), rDest.GetLeft());
@@ -786,15 +786,15 @@ void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
 
     SwFrmFmt &rDestMaster = rDest.GetMaster();
     SwFrmFmt &rFromMaster = rFrom.GetMaster();
-    rDestMaster.SetAttr(rFromMaster.GetHeader());
-    rDestMaster.SetAttr(rFromMaster.GetFooter());
+    rDestMaster.SetFmtAttr(rFromMaster.GetHeader());
+    rDestMaster.SetFmtAttr(rFromMaster.GetFooter());
     //rFromMaster.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
     //rFromMaster.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 
     SwFrmFmt &rDestLeft = rDest.GetLeft();
     SwFrmFmt &rFromLeft = rFrom.GetLeft();
-    rDestLeft.SetAttr(rFromLeft.GetHeader());
-    rDestLeft.SetAttr(rFromLeft.GetFooter());
+    rDestLeft.SetFmtAttr(rFromLeft.GetHeader());
+    rDestLeft.SetFmtAttr(rFromLeft.GetFooter());
     //rFromLeft.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
     //rFromLeft.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 }
@@ -983,7 +983,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 SwFrmFmt* pApply = rTable.GetFrmFmt();
                 ASSERT(pApply, "impossible");
                 if (pApply)
-                    pApply->SetAttr(aPgDesc);
+                    pApply->SetFmtAttr(aPgDesc);
             }
             else
             {
@@ -1035,7 +1035,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
             SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
             //The last section if continous is always unbalanced
             if (aNext == aEnd && pRet)
-                pRet->SetAttr(SwFmtNoBalancedColumns(true));
+                pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
         }
 
         if (pTxtNd)
@@ -1625,13 +1625,13 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
                 aSplitIdx-=2;
                 pDoc->GetNodes().Delete(aSplitIdx);
                 pFmt=rSplitTable.GetFrmFmt();
-                pFmt->ResetAttr(RES_PAGEDESC);
+                pFmt->ResetFmtAttr(RES_PAGEDESC);
             }
         // set keep=1(i.e. split=0) attribut
         SwFmtLayoutSplit aSplit(0);
         SwAttrSet aNewSet(pFmt->GetAttrSet());
         aNewSet.Put(aSplit);
-        pFmt->SetAttr(aNewSet);
+        pFmt->SetFmtAttr(aNewSet);
     }
     else // !isTableKeepNext
     {
@@ -1643,13 +1643,13 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
             aTmpIdx-=2;
             pDoc->GetNodes().Delete(aTmpIdx);
             pFmt=rSplitTable.GetFrmFmt();
-            pFmt->ResetAttr(RES_PAGEDESC);
+            pFmt->ResetFmtAttr(RES_PAGEDESC);
         }
         // set keep=0(i.e. split=1) attribut
         SwFmtLayoutSplit aSplit(1);
         SwAttrSet aNewSet(pFmt->GetAttrSet());
         aNewSet.Put(aSplit);
-        pFmt->SetAttr(aNewSet);
+        pFmt->SetFmtAttr(aNewSet);
     }
     // move keepnext attribtue from last paragraph to table
     if (pKeepNext!=NULL)
@@ -1657,7 +1657,7 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
         SvxFmtKeepItem aNewKeepItem(pKeepNext->GetValue(), RES_KEEP);
         SwAttrSet aNewSet(pFmt->GetAttrSet());
         aNewSet.Put(aNewKeepItem);
-        pFmt->SetAttr(aNewSet);
+        pFmt->SetFmtAttr(aNewSet);
     }
 }
 
@@ -2262,7 +2262,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
             {
-                pTxtNd->SetLevel((BYTE) ((SfxUInt16Item*)pItem)->GetValue());
+                pTxtNd->SetAttrListLevel((BYTE) ((SfxUInt16Item*)pItem)->GetValue());
                 // Update vom LR-Space abschalten?
             }
         }
@@ -2306,7 +2306,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
             {
-                pTxtNd->SwCntntNode::SetAttr(
+                pTxtNd->SetAttr(
                     *GetDfltAttr(RES_PARATR_NUMRULE));
             }
         }
@@ -2401,10 +2401,10 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
 
         SwFrmFmt &rFmt1 = rPg.GetMaster(), &rFmt2 = rPg.GetLeft();
 
-        rFmt1.SetAttr( aFrmSize );  rFmt2.SetAttr( aFrmSize );
-        rFmt1.SetAttr( aLR );       rFmt2.SetAttr( aLR );
-        rFmt1.SetAttr( aUL );       rFmt2.SetAttr( aUL );
-        rFmt1.SetAttr( aFrmDir );   rFmt2.SetAttr( aFrmDir );
+        rFmt1.SetFmtAttr( aFrmSize );   rFmt2.SetFmtAttr( aFrmSize );
+        rFmt1.SetFmtAttr( aLR );        rFmt2.SetFmtAttr( aLR );
+        rFmt1.SetFmtAttr( aUL );       rFmt2.SetFmtAttr( aUL );
+        rFmt1.SetFmtAttr( aFrmDir );   rFmt2.SetFmtAttr( aFrmDir );
 
         // StartNummer der Seiten setzen
         if (nPgStart  != 1)
@@ -2736,7 +2736,7 @@ void SwRTFParser::ReadDocControls( int nToken )
                 false)
                )
             {
-                pColl->SetAttr(SvxHyphenZoneItem(true, RES_PARATR_HYPHENZONE));
+                pColl->SetFmtAttr(SvxHyphenZoneItem(true, RES_PARATR_HYPHENZONE));
             }
 
             pDoc->SetTxtFmtColl( *pPam, pColl );
@@ -2810,7 +2810,7 @@ BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
             }
             aCol.SetWishWidth( nWishWidth );
         }
-        rFmt.SetAttr( aCol );
+        rFmt.SetFmtAttr( aCol );
         bSet = TRUE;
     }
     return bSet;
@@ -3045,8 +3045,8 @@ void SwRTFParser::ReadSectControls( int nToken )
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
                 ReadHeaderFooter(nToken, aNewSection.mpPageHdFt);
-                if (_pKeepHeader) aNewSection.mpPageHdFt->GetMaster().SetAttr(*_pKeepHeader);
-                if (_pKeepFooter) aNewSection.mpPageHdFt->GetMaster().SetAttr(*_pKeepFooter);
+                if (_pKeepHeader) aNewSection.mpPageHdFt->GetMaster().SetFmtAttr(*_pKeepHeader);
+                if (_pKeepFooter) aNewSection.mpPageHdFt->GetMaster().SetFmtAttr(*_pKeepFooter);
                 break;
             case RTF_FOOTERF:
             case RTF_HEADERF:
@@ -3278,26 +3278,26 @@ void SwRTFParser::ReadPageDescTbl()
                 if (pPgFmt && pPg)
                 {
                     // PageDesc ist fertig, setze am Doc
-                    pPgFmt->SetAttr(aFrmDir);
-                    pPgFmt->SetAttr(aLR);
-                    pPgFmt->SetAttr(aUL);
-                    pPgFmt->SetAttr(aSz);
+                    pPgFmt->SetFmtAttr(aFrmDir);
+                    pPgFmt->SetFmtAttr(aLR);
+                    pPgFmt->SetFmtAttr(aUL);
+                    pPgFmt->SetFmtAttr(aSz);
                     ::lcl_SetFmtCol(*pPgFmt, nCols, nColSpace, aColumns);
                     if (pPgFmt->GetHeader().GetHeaderFmt())
                     {
                         SwFrmFmt* pHFmt =
                             (SwFrmFmt*)pPgFmt->GetHeader().GetHeaderFmt();
-                        pHFmt->SetAttr(aHUL);
-                        pHFmt->SetAttr(aHLR);
-                        pHFmt->SetAttr(aHSz);
+                        pHFmt->SetFmtAttr(aHUL);
+                        pHFmt->SetFmtAttr(aHLR);
+                        pHFmt->SetFmtAttr(aHSz);
                     }
                     if (pPgFmt->GetFooter().GetFooterFmt())
                     {
                         SwFrmFmt* pFFmt =
                             (SwFrmFmt*)pPgFmt->GetFooter().GetFooterFmt();
-                        pFFmt->SetAttr(aHUL);
-                        pFFmt->SetAttr(aHLR);
-                        pFFmt->SetAttr(aHSz);
+                        pFFmt->SetFmtAttr(aHUL);
+                        pFFmt->SetFmtAttr(aHLR);
+                        pFFmt->SetFmtAttr(aHSz);
                     }
                     if( nPos < pDoc->GetPageDescCnt() )
                         pDoc->ChgPageDesc(nPos++, *pPg);
@@ -3347,23 +3347,23 @@ void SwRTFParser::ReadPageDescTbl()
             break;
 
         case RTF_FORMULA:   /* Zeichen "\|" !!! */
-            pPgFmt->SetAttr( aLR );
-            pPgFmt->SetAttr( aUL );
-            pPgFmt->SetAttr( aSz );
+            pPgFmt->SetFmtAttr( aLR );
+            pPgFmt->SetFmtAttr( aUL );
+            pPgFmt->SetFmtAttr( aSz );
             ::lcl_SetFmtCol( *pPgFmt, nCols, nColSpace, aColumns );
             if( pPgFmt->GetHeader().GetHeaderFmt() )
             {
                 SwFrmFmt* pHFmt = (SwFrmFmt*)pPgFmt->GetHeader().GetHeaderFmt();
-                pHFmt->SetAttr( aHUL );
-                pHFmt->SetAttr( aHLR );
-                pHFmt->SetAttr( aHSz );
+                pHFmt->SetFmtAttr( aHUL );
+                pHFmt->SetFmtAttr( aHLR );
+                pHFmt->SetFmtAttr( aHSz );
             }
             if( pPgFmt->GetFooter().GetFooterFmt() )
             {
                 SwFrmFmt* pFFmt = (SwFrmFmt*)pPgFmt->GetFooter().GetFooterFmt();
-                pFFmt->SetAttr( aHUL );
-                pFFmt->SetAttr( aHLR );
-                pFFmt->SetAttr( aHSz );
+                pFFmt->SetFmtAttr( aHUL );
+                pFFmt->SetFmtAttr( aHLR );
+                pFFmt->SetFmtAttr( aHSz );
             }
 
             pPgFmt = &pPg->GetLeft();
@@ -3457,7 +3457,7 @@ void SwRTFParser::ReadPageDescTbl()
 
         case RTF_PAGEBB:
             {
-                pPgFmt->SetAttr( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
+                pPgFmt->SetFmtAttr( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
             }
             break;
 
@@ -3571,7 +3571,7 @@ static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
     if (!pExisting)
     {
         //No existing header, create a new one
-        pHdFtFmt->SetAttr(SwFmtHeader(TRUE));
+        pHdFtFmt->SetFmtAttr(SwFmtHeader(TRUE));
         pExisting = pHdFtFmt->GetHeader().GetHeaderFmt();
     }
     return pExisting->GetCntnt().GetCntntIdx();
@@ -3585,7 +3585,7 @@ static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
     if (!pExisting)
     {
         //No exist footer, create a new one
-        pHdFtFmt->SetAttr(SwFmtFooter(TRUE));
+        pHdFtFmt->SetFmtAttr(SwFmtFooter(TRUE));
         pExisting = pHdFtFmt->GetFooter().GetFooterFmt();
     }
     return pExisting->GetCntnt().GetCntntIdx();
@@ -3789,7 +3789,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         {
             SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
             pFlySave->aFlySet.ClearItem( RES_ANCHOR );
-            pHdFtFmt->SetAttr( pFlySave->aFlySet );
+            pHdFtFmt->SetFmtAttr( pFlySave->aFlySet );
             aFlyArr.DeleteAndDestroy( aFlyArr.Count() - 1 );
         }
         else
