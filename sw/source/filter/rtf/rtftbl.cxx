@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtftbl.cxx,v $
- * $Revision: 1.39 $
+ * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -332,7 +332,7 @@ void SwRTFParser::ReadTable( int nToken )
 
                 if( !nSize )
                     nSize = COL_DFLT_WIDTH;
-                pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
+                pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
                 aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
 
@@ -418,7 +418,7 @@ void SwRTFParser::ReadTable( int nToken )
                 }
 */
 
-                pFmt->SetAttr(aBox);
+                pFmt->SetFmtAttr(aBox);
 
                 bUseLeftCellPad = false;
                 bUseRightCellPad = false;
@@ -511,7 +511,7 @@ void SwRTFParser::ReadTable( int nToken )
         if( text::VertOrientation::NONE != eVerOrient )
         {
             if( !aMergeBoxes[ nBoxCnt ] )
-                pBoxFmt->SetAttr( SwFmtVertOrient( 0, eVerOrient ));
+                pBoxFmt->SetFmtAttr( SwFmtVertOrient( 0, eVerOrient ));
             eVerOrient = text::VertOrientation::NONE;
         }
         if( bWeiter )
@@ -703,7 +703,7 @@ void SwRTFParser::ReadTable( int nToken )
                         (SwTableLineFmt*)rLns[ rLns.Count()-1 ]->GetFrmFmt(),
                         aBoxFmts.Count(), 0 );
                 pNewLine->ClaimFrmFmt();
-                pNewLine->GetFrmFmt()->ResetAttr( RES_FRM_SIZE );
+                pNewLine->GetFrmFmt()->ResetFmtAttr( RES_FRM_SIZE );
                 rLns.C40_INSERT( SwTableLine, pNewLine, rLns.Count() );
             }
             bNewTbl = FALSE;
@@ -762,10 +762,10 @@ void SwRTFParser::ReadTable( int nToken )
             eSize = ATT_FIX_SIZE, nLineHeight = -nLineHeight;
         else
             eSize = ATT_MIN_SIZE;
-        pNewLine->ClaimFrmFmt()->SetAttr(SwFmtFrmSize(eSize, 0, nLineHeight));
+        pNewLine->ClaimFrmFmt()->SetFmtAttr(SwFmtFrmSize(eSize, 0, nLineHeight));
     }
 
-    pNewLine->ClaimFrmFmt()->SetAttr(SwFmtRowSplit(!bCantSplit));
+    pNewLine->ClaimFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bCantSplit));
 
     if( aBoxFmts.Count() )
     {
