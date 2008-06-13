@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.120 $
+ * $Revision: 1.121 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1415,7 +1415,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 throw lang::IllegalArgumentException();
             }
             else
-                pFmt->SetAttr(aSet);
+                pFmt->SetFmtAttr(aSet);
         }
     }
     else if(IsDescriptor())
@@ -1851,7 +1851,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                 aSet.SetParent(&pFmt->GetAttrSet());
                 aSet.ClearItem(pCur->nWID);
                 if(!rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE)))
-                    pFmt->SetAttr(aSet);
+                    pFmt->SetFmtAttr(aSet);
             }
         }
         else if(0 != (bNextFrame = (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAIN_NEXT_NAME))))
