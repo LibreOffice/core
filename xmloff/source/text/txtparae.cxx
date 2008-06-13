@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.cxx,v $
- * $Revision: 1.146 $
+ * $Revision: 1.147 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,6 +123,9 @@
 #include <xmloff/formlayerexport.hxx>
 #include "XMLTextCharStyleNamesElementExport.hxx"
 
+// --> OD 2008-04-25 #refactorlists#
+#include <txtlists.hxx>
+// <--
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -577,26 +580,38 @@ OUString XMLTextParagraphExport::FindTextStyle(
 }
 
 
+// --> OD 2008-04-25 #refactorlists#
+// adjustments to support lists independent from list style
 void XMLTextParagraphExport::exportListChange(
         const XMLTextNumRuleInfo& rPrevInfo,
         const XMLTextNumRuleInfo& rNextInfo )
 {
     // end a list
-    if( rPrevInfo.GetLevel() > 0 &&
-        ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
-          rNextInfo.GetLevel() < rPrevInfo.GetLevel() ||
-             rNextInfo.IsRestart()  ) )
+    if ( rPrevInfo.GetLevel() > 0 )
     {
-        sal_Int16 nPrevLevel = rPrevInfo.GetLevel();
-        sal_Int16 nNextLevel =
-            ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
-              rNextInfo.IsRestart() ) ?  0 : rNextInfo.GetLevel();
-
-        if( pListElements && pListElements->Count() >= 2*(nNextLevel-nPrevLevel) )
+        bool bRootListToBeClosed = false;
+        sal_Int16 nListLevelsToBeClosed = 0;
+        if ( !rNextInfo.BelongsToSameList( rPrevInfo ) ||
+             rNextInfo.GetLevel() <= 0 )
         {
-            for( sal_Int16 i=nPrevLevel; i > nNextLevel; i-- )
-            {
-                for( sal_uInt16 j=0; j<2; j++ )
+            // close complete previous list
+            bRootListToBeClosed = true;
+            nListLevelsToBeClosed = rPrevInfo.GetLevel();
+        }
+        else if ( rPrevInfo.GetLevel() > rNextInfo.GetLevel() )
+        {
+            // close corresponding sub lists
+            DBG_ASSERT( rNextInfo.GetLevel() > 0,
+                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect -> please inform OD." );
+            nListLevelsToBeClosed = rPrevInfo.GetLevel() - rNextInfo.GetLevel();
+        }
+
+        if ( nListLevelsToBeClosed > 0 &&
+             pListElements &&
+             pListElements->Count() >= ( 2 * nListLevelsToBeClosed ) )
+        {
+            do {
+                for( sal_uInt16 j = 0; j < 2; ++j )
                 {
                     OUString *pElem = (*pListElements)[pListElements->Count()-1];
                     pListElements->Remove( pListElements->Count()-1 );
@@ -605,112 +620,204 @@ void XMLTextParagraphExport::exportListChange(
 
                     delete pElem;
                 }
-            }
+
+                // remove closed list from list stack
+                mpTextListsHelper->PopListFromStack();
+
+                --nListLevelsToBeClosed;
+            } while ( nListLevelsToBeClosed > 0 );
         }
     }
 
     // start a new list
-    if( rNextInfo.GetLevel() > 0 &&
-        ( !rPrevInfo.HasSameNumRules( rNextInfo ) ||
-          rPrevInfo.GetLevel() < rNextInfo.GetLevel() ||
-             rNextInfo.IsRestart() ) )
+    if ( rNextInfo.GetLevel() > 0 )
     {
-        sal_Int16 nPrevLevel =
-            ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
-              rNextInfo.IsRestart() ) ? 0 : rPrevInfo.GetLevel();
-        sal_Int16 nNextLevel = rNextInfo.GetLevel();
-
-        // Find out whether this is the first application of the list or not.
-        // For named lists, we use the internal name. For unnamed lists, we
-        // use the generated name. This works well, because there are either
-        // unnamed or either named lists only.
-        sal_Bool bListExported = sal_False;
-        OUString sName;
-        if( rNextInfo.IsNamed() )
-            sName = rNextInfo.GetName();
-        else
-            sName = pListAutoPool->Find( rNextInfo.GetNumRules() );
-        DBG_ASSERT( sName.getLength(), "list without a name" );
-        if( sName.getLength() )
+        bool bRootListToBeStarted = false;
+        sal_Int16 nListLevelsToBeOpened = 0;
+        if ( !rPrevInfo.BelongsToSameList( rNextInfo ) ||
+             rPrevInfo.GetLevel() <= 0 )
         {
-            bListExported = pExportedLists &&
-                             pExportedLists->Seek_Entry( (OUString *)&sName );
-            if( !bListExported )
-            {
-                if( !pExportedLists )
-                    pExportedLists = new OUStringsSort_Impl;
-                pExportedLists->Insert( new OUString(sName) );
-            }
+            // new root list
+            bRootListToBeStarted = true;
+            nListLevelsToBeOpened = rNextInfo.GetLevel();
         }
-        sal_Bool bContinue = !rNextInfo.IsRestart() && bListExported &&
-                             !rPrevInfo.HasSameNumRules( rNextInfo );
-
-        for( sal_Int16 i=nPrevLevel; i < nNextLevel; i++)
+        else if ( rNextInfo.GetLevel() > rPrevInfo.GetLevel() )
         {
-            // <text:ordered-list> or <text:unordered-list>
-            GetExport().CheckAttrList();
-            if( 0 == i )
+            // open corresponding sub lists
+            DBG_ASSERT( rPrevInfo.GetLevel() > 0,
+                        "<rPrevInfo.GetLevel() > 0> not hold. Serious defect -> please inform OD." );
+            nListLevelsToBeOpened = rNextInfo.GetLevel() - rPrevInfo.GetLevel();
+        }
+
+        if ( nListLevelsToBeOpened > 0 )
+        {
+            const bool bExportODF =
+                        ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0;
+            const SvtSaveOptions::ODFDefaultVersion eODFDefaultVersion =
+                                            GetExport().getDefaultVersion();
+            const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            ::rtl::OUString sListId( rNextInfo.GetListId() );
+            // Currently only the text documents support <ListId>.
+            if ( sListId.getLength() == 0 )
             {
-                // For named list, the name might be the name of an automatic
-                // rule, so we have to take a look into the style pool.
-                // For unnamed lists, we have done this already.
-                if( rNextInfo.IsNamed() )
+                sListId = mpTextListsHelper->GetLastProcessedListId();
+                if ( sListId.getLength() == 0 )
                 {
-                    OUString sTmp( pListAutoPool->Find(
-                                            rNextInfo.GetNumRules() ) );
-                    if( sTmp.getLength() )
-                        sName = sTmp;
+                    sListId = mpTextListsHelper->GenerateNewListId();
+                }
+            }
+            bool bExportListStyle( true );
+            bool bRestartNumberingAtContinuedRootList( false );
+            sal_Int16 nRestartValueForContinuedRootList( -1 );
+            do {
+                GetExport().CheckAttrList();
+
+                if ( bRootListToBeStarted )
+                {
+                    if ( !mpTextListsHelper->IsListProcessed( sListId ) )
+                    {
+                        if ( bExportODF &&
+                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                        {
+                            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                      XML_ID,
+                                                      sListId );
+                        }
+                        mpTextListsHelper->KeepListAsProcessed( sListId,
+                                                                sListStyleName,
+                                                                ::rtl::OUString() );
+                    }
+                    else
+                    {
+                        const ::rtl::OUString sNewListId(
+                                        mpTextListsHelper->GenerateNewListId() );
+                        if ( bExportODF &&
+                             eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                        {
+                            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                      XML_ID,
+                                                      sNewListId );
+                        }
+
+                        const ::rtl::OUString sContinueListId =
+                            mpTextListsHelper->GetLastContinuingListId( sListId );
+                        // store that list with list id <sNewListId> is last list,
+                        // which has continued list with list id <sListId>
+                        mpTextListsHelper->StoreLastContinuingList( sListId,
+                                                                    sNewListId );
+                        if ( sListStyleName ==
+                                mpTextListsHelper->GetListStyleOfLastProcessedList() &&
+                             !rNextInfo.IsRestart() )
+                        {
+                            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                      XML_CONTINUE_NUMBERING,
+                                                      XML_TRUE );
+                        }
+                        else
+                        {
+                            if ( bExportODF &&
+                                 eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 )
+                            {
+                                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                          XML_CONTINUE_LIST,
+                                                          sContinueListId );
+                            }
+                            else if ( sListStyleName ==
+                                      mpTextListsHelper->GetListStyleOfProcessedList( sListId ) )
+                            {
+                                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                                          XML_CONTINUE_NUMBERING,
+                                                          XML_TRUE );
+                            }
+
+                            if ( rNextInfo.IsRestart() &&
+                                 ( nListLevelsToBeOpened != 1 ||
+                                   !rNextInfo.HasStartValue() ) )
+                            {
+                                bRestartNumberingAtContinuedRootList = true;
+                                nRestartValueForContinuedRootList =
+                                                rNextInfo.GetListLevelStartValue();
+                            }
+                        }
+
+                        mpTextListsHelper->KeepListAsProcessed( sNewListId,
+                                                                sListStyleName,
+                                                                sContinueListId );
+                    }
+
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                            GetExport().EncodeStyleName( sListStyleName ) );
+                    bExportListStyle = false;
+
+                    bRootListToBeStarted = false;
+                }
+                else if ( bExportListStyle &&
+                          !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                            GetExport().EncodeStyleName( sListStyleName ) );
+                    bExportListStyle = false;
                 }
 
-                if( sName.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                            GetExport().EncodeStyleName( sName ) );
-            }
-            if( bContinue && rNextInfo.IsOrdered() )
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                          XML_CONTINUE_NUMBERING, XML_TRUE );
+                enum XMLTokenEnum eLName = XML_LIST;
 
-            enum XMLTokenEnum eLName = XML_LIST;
+                OUString *pElem = new OUString(
+                        GetExport().GetNamespaceMap().GetQNameByKey(
+                                            XML_NAMESPACE_TEXT,
+                                            GetXMLToken(eLName) ) );
+                GetExport().IgnorableWhitespace();
+                GetExport().StartElement( *pElem, sal_False );
 
-            OUString *pElem = new OUString(
-                    GetExport().GetNamespaceMap().GetQNameByKey(
-                                        XML_NAMESPACE_TEXT,
-                                        GetXMLToken(eLName) ) );
-            GetExport().IgnorableWhitespace();
-            GetExport().StartElement( *pElem, sal_False );
+                if( !pListElements )
+                    pListElements = new OUStrings_Impl;
+                pListElements->Insert( pElem, pListElements->Count() );
 
-            if( !pListElements )
-                pListElements = new OUStrings_Impl;
-            pListElements->Insert( pElem, pListElements->Count() );
+                mpTextListsHelper->PushListOnStack( sListId,
+                                                    sListStyleName );
 
-            // <text:list-header> or <text:list-item>
-            GetExport().CheckAttrList();
-            if( rNextInfo.HasStartValue() )
-            {
-                OUStringBuffer aBuffer;
-                aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
-                              aBuffer.makeStringAndClear() );
-            }
-            eLName = (rNextInfo.IsNumbered() || i+1 < nNextLevel)
-                        ? XML_LIST_ITEM
-                        : XML_LIST_HEADER;
-            pElem = new OUString(  GetExport().GetNamespaceMap().GetQNameByKey(
-                                        XML_NAMESPACE_TEXT,
-                                        GetXMLToken(eLName) ) );
-            GetExport().IgnorableWhitespace();
-            GetExport().StartElement( *pElem, sal_False );
+                // <text:list-header> or <text:list-item>
+                GetExport().CheckAttrList();
 
-            pListElements->Insert( pElem, pListElements->Count() );
+                if ( nListLevelsToBeOpened == 1 &&
+                     rNextInfo.HasStartValue() )
+                {
+                    OUStringBuffer aBuffer;
+                    aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
+                                  aBuffer.makeStringAndClear() );
+                }
+                else if ( bRestartNumberingAtContinuedRootList )
+                {
+                    OUStringBuffer aBuffer;
+                    aBuffer.append( (sal_Int32)nRestartValueForContinuedRootList );
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              XML_START_VALUE,
+                                              aBuffer.makeStringAndClear() );
+                    bRestartNumberingAtContinuedRootList = false;
+                }
+
+                eLName = ( rNextInfo.IsNumbered() || nListLevelsToBeOpened > 1 )
+                         ? XML_LIST_ITEM
+                         : XML_LIST_HEADER;
+                pElem = new OUString(  GetExport().GetNamespaceMap().GetQNameByKey(
+                                            XML_NAMESPACE_TEXT,
+                                            GetXMLToken(eLName) ) );
+                GetExport().IgnorableWhitespace();
+                GetExport().StartElement( *pElem, sal_False );
+
+                pListElements->Insert( pElem, pListElements->Count() );
+
+                --nListLevelsToBeOpened;
+            } while ( nListLevelsToBeOpened > 0 );
         }
     }
 
-    if( rNextInfo.GetLevel() > 0 && rNextInfo.IsNumbered() &&
-        rPrevInfo.HasSameNumRules( rNextInfo ) &&
-        rPrevInfo.GetLevel() >= rNextInfo.GetLevel() &&
-        !rNextInfo.IsRestart() )
+    if ( rNextInfo.GetLevel() > 0 &&
+         rNextInfo.IsNumbered() &&
+         rPrevInfo.BelongsToSameList( rNextInfo ) &&
+         rPrevInfo.GetLevel() >= rNextInfo.GetLevel() )
     {
-        // </text:list-item> or </text:list-header>
+        // close previous list-item
         DBG_ASSERT( pListElements && pListElements->Count() >= 2,
                 "SwXMLExport::ExportListChange: list elements missing" );
 
@@ -720,7 +827,21 @@ void XMLTextParagraphExport::exportListChange(
         pListElements->Remove( pListElements->Count()-1 );
         delete pElem;
 
-        // <text:list-item>
+        if ( rNextInfo.IsRestart() && !rNextInfo.HasStartValue() )
+        {
+            // start new sub list respectively list on same list level
+            pElem = (*pListElements)[pListElements->Count()-1];
+            GetExport().EndElement( *pElem, sal_True );
+            if ( rNextInfo.GetLevel() == 1 )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                        GetExport().EncodeStyleName( rNextInfo.GetNumRulesName() ) );
+            }
+            GetExport().IgnorableWhitespace();
+            GetExport().StartElement( *pElem, sal_False );
+        }
+
+        // open new list-item
         GetExport().CheckAttrList();
         if( rNextInfo.HasStartValue() )
         {
@@ -728,6 +849,17 @@ void XMLTextParagraphExport::exportListChange(
             aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
                               aBuffer.makeStringAndClear() );
+        }
+        if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
+             GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+        {
+            const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                          XML_STYLE_OVERRIDE,
+                                          GetExport().EncodeStyleName( sListStyleName ) );
+            }
         }
         pElem = new OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT,
@@ -738,7 +870,7 @@ void XMLTextParagraphExport::exportListChange(
         pListElements->Insert( pElem, pListElements->Count() );
     }
 }
-
+// <--
 
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
@@ -757,7 +889,9 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pFrameShapeIdxs( 0 ),
     pFieldExport( 0 ),
     pListElements( 0 ),
-    pExportedLists( 0 ),
+    // --> OD 2008-05-07 #refactorlists# - no longer needed
+//    pExportedLists( 0 ),
+    // <--
     pListAutoPool( new XMLTextListAutoStylePool( this->GetExport() ) ),
     pSectionExport( NULL ),
     pIndexMarkExport( NULL ),
@@ -769,6 +903,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     bBlock( sal_False ),
 
     bOpenRuby( sal_False ),
+    // --> OD 2008-04-25 #refactorlists#
+    mpTextListsHelper( 0 ),
+    maTextListsHelperStack(),
+    // <--
 
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
     sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText")),
@@ -912,6 +1050,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
     pFieldExport = new XMLTextFieldExport( rExp, new XMLPropertyState( nIndex, uno::makeAny(sal_True) ) );
+
+    // --> OD 2008-05-08 #refactorlists#
+    PushNewTextListsHelper();
+    // <--
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
@@ -922,7 +1064,9 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     delete pSectionExport;
     delete pFieldExport;
     delete pListElements;
-    delete pExportedLists;
+    // --> OD 2008-05-07 #refactorlists# - no longer needed
+//    delete pExportedLists;
+    // <--
     delete pListAutoPool;
     delete pPageTextFrameIdxs;
     delete pPageGraphicIdxs;
@@ -935,6 +1079,12 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
 #ifndef PRODUCT
     txtparae_bContainsIllegalCharacters = sal_False;
 #endif
+    // --> OD 2008-04-25 #refactorlists#
+    // also deletes <mpTextListsHelper>
+    PopTextListsHelper();
+    DBG_ASSERT( maTextListsHelperStack.size() == 0,
+                "misusage of text lists helper stack - it is not empty. Serious defect - please inform OD" );
+    // <--
 }
 
 SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateShapeExtPropMapper(
@@ -1607,7 +1757,7 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
 
-    sal_Bool bHasContent sal_False;
+    sal_Bool bHasContent = sal_False;
     Reference<XTextSection> xCurrentTextSection(rBaseSection);
 
     MultiPropertySetHelper aPropSetHelper(
@@ -1644,8 +1794,11 @@ sal_Bool XMLTextParagraphExport::exportTextContentEnumeration(
                 else
                 {
                     // --> OD 2006-09-27 #i69627#
+                    // --> OD 2008-04-24 #refactorlists#
+                    // pass list auto style pool to <XMLTextNumRuleInfo> instance
                     aNextNumInfo.Set( xTxtCntnt,
-                                      GetExport().writeOutlineStyleAsNormalListStyle() );
+                                      GetExport().writeOutlineStyleAsNormalListStyle(),
+                                      GetListAutoStylePool() );
                     // <--
 
                     exportListAndSectionChange( xCurrentTextSection, aPropSetHelper,
@@ -3482,3 +3635,22 @@ sal_Int32 XMLTextParagraphExport::GetHeadingLevel( const OUString& rStyleName )
 
     return -1;
 }
+
+// --> OD 2008-05-08 #refactorlists#
+void XMLTextParagraphExport::PushNewTextListsHelper()
+{
+    mpTextListsHelper = new XMLTextListsHelper();
+    maTextListsHelperStack.push_back( mpTextListsHelper );
+}
+
+void XMLTextParagraphExport::PopTextListsHelper()
+{
+    delete mpTextListsHelper;
+    mpTextListsHelper = 0;
+    maTextListsHelperStack.pop_back();
+    if ( maTextListsHelperStack.size() > 0 )
+    {
+        mpTextListsHelper = maTextListsHelperStack.back();
+    }
+}
+// <--
