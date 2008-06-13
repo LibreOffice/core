@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComplexTestCase.java,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -133,6 +133,7 @@ public abstract class ComplexTestCase implements ComplexTest {
                     testMethod = this.getClass().getMethod(entryName, new Class[]{String.class });
                 } else {
                     testMethod = this.getClass().getMethod(entryName, new Class[]{});
+                    mTestMethodName = entryName;
                 }
 
                 MethodThread th = new MethodThread(testMethod, this, parameter, (java.io.PrintWriter) log);
