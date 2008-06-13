@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrflyin.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,11 +210,11 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
             RES_DRAWFRMFMT != pFmt->Which() )
     {
         pFmt->LockModify();
-        pFmt->SetAttr( aAnchor );       // nur den Anker neu setzen
+        pFmt->SetFmtAttr( aAnchor );        // nur den Anker neu setzen
         pFmt->UnlockModify();
     }
     else
-        pFmt->SetAttr( aAnchor );       // nur den Anker neu setzen
+        pFmt->SetFmtAttr( aAnchor );        // nur den Anker neu setzen
 
     // Am Node haengen u.a. abhaengige CntFrms.
     // Fuer jeden CntFrm wird ein SwFlyInCntFrm angelegt.
