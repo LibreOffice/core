@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unostyle.cxx,v $
- * $Revision: 1.81 $
+ * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +92,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include "ccoll.hxx"
+
+#include <set>
 
 #define STYLE_FAMILY_COUNT 5            // we have 5 style families
 #define TYPE_BOOL       0
@@ -2840,7 +2842,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
             if( pMap->nWID == FN_UNO_DEFAULT_OUTLINE_LEVEL )
                 static_cast<SwTxtFmtColl*>(pTargetFmt)->SetOutlineLevel( NO_NUMBERING );
             else
-                pTargetFmt->ResetAttr ( pMap->nWID );
+                pTargetFmt->ResetFmtAttr( pMap->nWID );
         }
     }
     else if ( bIsDescriptor )
@@ -2915,8 +2917,8 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                     SvxULSpaceItem aUL( RES_UL_SPACE );
                     aUL.SetUpper ( static_cast < sal_uInt16 > ( nSize ) );
                     aUL.SetLower ( static_cast < sal_uInt16 > ( nSize ) );
-                    pTargetFmt->SetAttr ( aLR );
-                    pTargetFmt->SetAttr ( aUL );
+                    pTargetFmt->SetFmtAttr( aLR );
+                    pTargetFmt->SetFmtAttr( aUL );
 
                     SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
                     SwFmtFrmSize aFrmSz( ATT_FIX_SIZE );
@@ -2945,7 +2947,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
                         aFrmSz.SetHeight( aFrmSz.GetWidth() );
                         aFrmSz.SetWidth( nTmp );
                     }
-                    pTargetFmt->SetAttr( aFrmSz );
+                    pTargetFmt->SetFmtAttr( aFrmSz );
                 }
                 else
                 {
