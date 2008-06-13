@@ -8,7 +8,7 @@
  *
  * $RCSfile: unotbl.cxx,v $
  *
- * $Revision: 1.121 $
+ * $Revision: 1.122 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -703,10 +703,10 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
     {
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
         pBoxFmt->LockModify();
-        pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
-        pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
         if (!bKeepNumberFmt)
-            pBoxFmt->SetAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
+            pBoxFmt->SetFmtAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
         pBoxFmt->UnlockModify();
     }
     rCell.SwXText::setString(rTxt);
