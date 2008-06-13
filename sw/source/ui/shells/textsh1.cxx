@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: textsh1.cxx,v $
- * $Revision: 1.67 $
+ * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1074,6 +1074,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
+                            // --> OD 2008-02-25 #refactorlists#
+                            RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,
+                            // <--
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
                             SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
                             SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
@@ -1125,11 +1128,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Numerierungseigenschaften
             if(rWrtSh.GetCurNumRule())
             {
-                SfxBoolItem aStart(FN_NUMBER_NEWSTART,
-                                    rWrtSh.IsNumRuleStart());
+                SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart() );
                 aCoreSet.Put(aStart);
-                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT,
-                                                rWrtSh.IsNodeNumStart());
+                // --> OD 2008-02-29 #refactorlists#
+//                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT,
+//                                                rWrtSh.IsNodeNumStart());
+                SfxUInt16Item aStartAt( FN_NUMBER_NEWSTART_AT,
+                                        rWrtSh.GetNodeNumStart() );
+                // <--
                 aCoreSet.Put(aStartAt);
             }
             SfxAbstractTabDialog* pDlg = NULL;
@@ -1251,11 +1257,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_NUM_CONTINUE:
         {
-            const SwNumRule* pRule = rWrtSh.SearchNumRule(FALSE, TRUE, FALSE, -1);
-            if(pRule)
+            // --> OD 2008-03-18 #refactorlists#
+            String sContinuedListId;
+            const SwNumRule* pRule =
+                rWrtSh.SearchNumRule( FALSE, TRUE, FALSE, -1, sContinuedListId );
+            if ( pRule )
             {
-                rWrtSh.SetCurNumRule( *pRule );
+                rWrtSh.SetCurNumRule( *pRule, false, sContinuedListId );
             }
+            // <--
         }
         break;
         case FN_SELECT_PARA:
@@ -1818,12 +1828,16 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
-                if(rSh.GetCurNumRule())
+                if ( rSh.GetCurNumRule() )
                     rSet.DisableItem(nWhich);
                 else
                 {
-                    const SwNumRule* pRule = rSh.SearchNumRule(FALSE, TRUE, FALSE, -1);
-                    if(!pRule)
+                    // --> OD 2008-03-18 #refactorlists#
+                    String aDummy;
+                    const SwNumRule* pRule =
+                            rSh.SearchNumRule( FALSE, TRUE, FALSE, -1, aDummy );
+                    // <--
+                    if ( !pRule )
                         rSet.DisableItem(nWhich);
                 }
             }
@@ -1883,16 +1897,16 @@ void SwTextShell::ChangeHeaderOrFooter(
                 bChgd = TRUE;
                 SwFrmFmt &rMaster = aDesc.GetMaster();
                 if(bHeader)
-                    rMaster.SetAttr( SwFmtHeader( bOn ));
+                    rMaster.SetFmtAttr( SwFmtHeader( bOn ));
                 else
-                    rMaster.SetAttr( SwFmtFooter( bOn ));
+                    rMaster.SetFmtAttr( SwFmtFooter( bOn ));
                 if( bOn )
                 {
                     SvxULSpaceItem aUL(bHeader ? 0 : MM50, bHeader ? MM50 : 0, RES_UL_SPACE );
                     SwFrmFmt* pFmt = bHeader ?
                         (SwFrmFmt*)rMaster.GetHeader().GetHeaderFmt() :
                         (SwFrmFmt*)rMaster.GetFooter().GetFooterFmt();
-                    pFmt->SetAttr( aUL );
+                    pFmt->SetFmtAttr( aUL );
                 }
             }
             if( bChgd )
