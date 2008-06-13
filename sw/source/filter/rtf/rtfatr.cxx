@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1226,9 +1226,15 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         const SfxItemSet& rNdSet = pNd->GetSwAttrSet();
 
         const SwNumRule* pRule = pNd->GetNumRule();
-        if( pRule && pNd->IsCounted())
+        // --> OD 2008-03-19 #refactorlists#
+        if ( pRule && pNd->IsInList() )
+        // <--
         {
-            BYTE nLvl = static_cast< BYTE >(pNd->GetLevel());
+            // --> OD 2008-03-18 #refactorlists#
+            ASSERT( pNd->GetActualListLevel() >= 0 && pNd->GetActualListLevel() < MAXLEVEL,
+                    "<OutRTF_SwTxtNode(..)> - text node does not have valid list level. Serious defect -> please inform OD" );
+            // <--
+            BYTE nLvl = static_cast< BYTE >(pNd->GetActualListLevel());
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1237,7 +1243,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
 
             aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
-            if( MAXLEVEL > pNd->GetLevel() )
+            if( MAXLEVEL > pNd->GetActualListLevel() )
                 aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
@@ -4172,12 +4178,14 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_HANGINGPUNCTUATION */ OutRTF_SwHangPunctuation,
 /* RES_PARATR_FORBIDDEN_RULE*/      OutRTF_SwForbiddenRule,
 /* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign,
-/* RES_PARATR_DUMMY3 */             0, // Dummy:
-/* RES_PARATR_DUMMY4 */             0, // Dummy:
-/* RES_PARATR_DUMMY5 */             0, // Dummy:
-/* RES_PARATR_DUMMY6 */             0, // Dummy:
-/* RES_PARATR_DUMMY7 */             0, // Dummy:
-/* RES_PARATR_DUMMY8 */             0, // Dummy:
+/* RES_PARATR_SNAPTOGRID*/          0, // new
+/* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+
+/* RES_PARATR_LIST_ID */            0, // new
+/* RES_PARATR_LIST_LEVEL */         0, // new
+/* RES_PARATR_LIST_ISRESTART */     0, // new
+/* RES_PARATR_LIST_RESTARTVALUE */  0, // new
+/* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
 /* RES_FILL_ORDER   */              0, // NOT USED!! OutRTF_SwFillOrder,
 /* RES_FRM_SIZE */                  OutRTF_SwFrmSize,
