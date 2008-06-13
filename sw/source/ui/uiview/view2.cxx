@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: view2.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -912,7 +912,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 const USHORT nCurIdx = pWrtShell->GetCurPageDesc();
                 SwPageDesc aDesc( pWrtShell->GetPageDesc( nCurIdx ));
                 SwFrmFmt& rMaster = aDesc.GetMaster();
-                rMaster.SetAttr(*pItem);
+                rMaster.SetFmtAttr(*pItem);
                 pWrtShell->ChgPageDesc( nCurIdx, aDesc);
             }
         }
@@ -1410,8 +1410,11 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (pNumRule)   // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
-                    if( IsShowNum(nNumLevel) && MAXLEVEL >
-                        ( nNumLevel = GetRealLevel( nNumLevel )) )
+                    // --> OD 2008-04-02 #refactorlists#
+//                    if( IsShowNum(nNumLevel) && MAXLEVEL >
+//                        ( nNumLevel = GetRealLevel( nNumLevel )) )
+                    if ( nNumLevel < MAXLEVEL )
+                    // <--
                     {
                         if( sStr.Len() )
                             sStr.AppendAscii(sStatusDelim);
