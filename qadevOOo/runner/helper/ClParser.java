@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ClParser.java,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +32,7 @@ package helper;
 import java.util.Properties;
 
 import lib.TestParameters;
+import util.utils;
 
 
 /**
@@ -45,7 +46,6 @@ public class ClParser {
      */
     public void getCommandLineParameter(TestParameters param, String[] args) {
         Properties mapping = getMapping();
-        boolean isTestJob = false;
 
         for (int i = 0; i < args.length;) {
             String pName = getParameterFor(mapping, args[i]).trim();
@@ -65,7 +65,17 @@ public class ClParser {
                     if (pValue.startsWith("-")) {
                         i++;
                         pValue = "yes";
-                    } else {
+                    } else if (pValue.startsWith("'")){
+                        i++;
+                        while ( ! pValue.endsWith("'")){
+                            i++;
+                            pValue = pValue + " " + args[i].trim();
+
+                        }
+                        pValue = utils.replaceAll13(pValue, "'", "");
+                        i++;
+                    }
+                    else {
                         i += 2;
                     }
 
@@ -116,6 +126,7 @@ public class ClParser {
         map.setProperty("-debug", "DebugIsActive");
         map.setProperty("-log", "LoggingIsActive");
         map.setProperty("-dbout", "DataBaseOut");
+        map.setProperty("-nca", "NoCwsAttach");
 
         return map;
     }
