@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellfml.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +131,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                     aTmp.Put( SwTblBoxValue( nRet ) );
                     if( SFX_ITEM_SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTblBoxNumFormat( 0 ));
-                    pFmt->SetAttr( aTmp );
+                    pFmt->SetFmtAttr( aTmp );
                 }
                 rCalcPara.pTbl = pTmp;
             }
