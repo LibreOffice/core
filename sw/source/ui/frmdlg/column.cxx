@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: column.cxx,v $
- * $Revision: 1.36 $
+ * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -369,7 +369,7 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         const USHORT nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrmFmt &rFmt = aPageDesc.GetMaster();
-        rFmt.SetAttr(pPageSet->Get(RES_COL));
+        rFmt.SetFmtAttr(pPageSet->Get(RES_COL));
         rWrtShell.ChgPageDesc(nCurIdx, aPageDesc);
     }
     if(pFrameSet && SFX_ITEM_SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
