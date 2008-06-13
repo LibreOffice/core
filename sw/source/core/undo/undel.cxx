@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undel.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,7 +377,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         pHistory->CopyAttr( pSttTxtNd->GetpSwpHints(), nNdIdx,
                             0, pSttTxtNd->GetTxt().Len(), TRUE );
         if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
-                pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx, *(pSttTxtNd->GetDoc()) );
+                pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // die Laenge kann sich veraendert haben (!!Felder!!)
         nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
@@ -409,7 +409,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                             pEndTxtNd->GetTxt().Len(), TRUE );
 
         if( pEndTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx, *(pEndTxtNd->GetDoc()) );
+            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
 
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
@@ -633,7 +633,7 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
                 {
                     SwFmtAnchor aAnch( *pAnchor );
                     aAnch.SetAnchor( &rPos );
-                    pFmt->SetAttr( aAnch );
+                    pFmt->SetFmtAttr( aAnch );
                 }
             }
         }
@@ -829,7 +829,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             if( pNode->IsCntntNode() )
                 ((SwCntntNode*)pNode)->ResetAttr( nStt, nEnd );
             else if( pNode->IsTableNode() )
-                ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetAttr( nStt, nEnd );
+                ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nStt, nEnd );
         }
     }
     // den temp. eingefuegten Node noch loeschen !!
