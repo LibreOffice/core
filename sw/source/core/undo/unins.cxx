@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unins.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -659,7 +659,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     if( bSplitNext )
     {
         if( pNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos, *(pNd->GetDoc()) );
+            pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos );
         pHistory->Add( pNd->GetTxtColl(), nNewPos, ND_TEXTNODE );
 
         SwTxtNode* pNext = pEnd->nNode.GetNode().GetTxtNode();
@@ -667,7 +667,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetTxt().Len(), TRUE );
         if( pNext->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp, *(pNext->GetDoc()) );
+            pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp );
         pHistory->Add( pNext->GetTxtColl(),nTmp, ND_TEXTNODE );
     }
 
@@ -974,7 +974,7 @@ void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
             if ( pNd )
-                pNd->GetTable().GetFrmFmt()->ResetAttr( RES_KEEP );
+                pNd->GetTable().GetFrmFmt()->ResetFmtAttr( RES_KEEP );
         }
         SwPaM aPam( *rIter.pAktPam->GetPoint() );
         aPam.GetPoint()->nNode = NODE.nNode;
@@ -1019,7 +1019,7 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
             if ( pNd )
-                pNd->GetTable().GetFrmFmt()->SetAttr( SvxFmtKeepItem(TRUE, RES_KEEP) );
+                pNd->GetTable().GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem(TRUE, RES_KEEP) );
         }
         NODE.pUndoInsNd->Undo( rIter );
         delete NODE.pUndoInsNd, NODE.pUndoInsNd = 0;
@@ -1088,7 +1088,7 @@ void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
         _UndoFmtAttr aTmp( rOldFly, FALSE );
-        rOldFly.SetAttr( rChgSet );
+        rOldFly.SetFmtAttr( rChgSet );
         if( aTmp.pUndo )
             OBJECT.pUndoAttr = aTmp.pUndo;
         OBJECT.pUndoFly = new SwUndoInsLayFmt( &rNewFly,0,0 );
