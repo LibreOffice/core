@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wsfrm.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,7 +173,7 @@ void SwSectionFrm::CheckDirection( BOOL bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_True,
                     pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
@@ -184,7 +184,7 @@ void SwFlyFrm::CheckDirection( BOOL bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_False,
                     pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
@@ -195,7 +195,7 @@ void SwTabFrm::CheckDirection( BOOL bVert )
 {
     const SwFrmFmt* pFmt = GetFmt();
     if( pFmt )
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_True,
                     pFmt->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) );
     else
