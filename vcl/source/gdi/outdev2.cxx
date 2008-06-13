@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev2.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -486,7 +486,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     if ( rRegion.IsNull() )
         mpGraphics->ResetClipRegion();
     else
-        ImplSelectClipRegion( mpGraphics, rRegion, this );
+        ImplSelectClipRegion( rRegion );
 
     TwoRect aPosAry;
     aPosAry.mnSrcX       = rDevPt.X();
