@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shellio.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -322,7 +322,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     pDoc->SetInReading( false );
     pDoc->SetInXMLImport( false );
 
-    pDoc->SyncNumRulesAndNodes();
     pDoc->InvalidateNumRules();
     pDoc->UpdateNumRule();
     pDoc->ChkCondColls();
@@ -665,9 +664,9 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
 
         SwFrmFmt *pFrmFmt = rDoc.GetFrmFmtFromPool( nPoolId );
 
-        pFrmFmt->ResetAttr( RES_LR_SPACE );
-        pFrmFmt->ResetAttr( RES_UL_SPACE );
-        pFrmFmt->ResetAttr( RES_BOX );
+        pFrmFmt->ResetFmtAttr( RES_LR_SPACE );
+        pFrmFmt->ResetFmtAttr( RES_UL_SPACE );
+        pFrmFmt->ResetFmtAttr( RES_BOX );
     }
 }
 
@@ -876,7 +875,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
             SwFmtFrmSize aNewSz( rSz );
             aNewSz.SetHeight( lA4Height );
             aNewSz.SetWidth( lA4Width );
-            aNew.GetMaster().SetAttr( aNewSz );
+            aNew.GetMaster().SetFmtAttr( aNewSz );
             pOutDoc->ChgPageDesc( 0, aNew );
         }
     }
