@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtbl.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,7 +180,7 @@ void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
         aBox.SetLine( &aLine, BOX_LINE_LEFT );
     if ( bRight )
         aBox.SetLine( &aLine, BOX_LINE_RIGHT );
-    rFmt.SetAttr( aBox );
+    rFmt.SetFmtAttr( aBox );
 }
 
 void lcl_SetDfltBoxAttr( SwTableBox& rBox, SvPtrarr &rBoxFmtArr, BYTE nId,
@@ -207,7 +207,7 @@ void lcl_SetDfltBoxAttr( SwTableBox& rBox, SvPtrarr &rBoxFmtArr, BYTE nId,
         SwDoc* pDoc = pBoxFmt->GetDoc();
         // das Format ist also nicht vorhanden, also neu erzeugen
         pNewBoxFmt = pDoc->MakeTableBoxFmt();
-        pNewBoxFmt->SetAttr( pBoxFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
+        pNewBoxFmt->SetFmtAttr( pBoxFmt->GetAttrSet().Get( RES_FRM_SIZE ) );
 
         if( pAutoFmt )
             pAutoFmt->UpdateToSet( nId, (SfxItemSet&)pNewBoxFmt->GetAttrSet(),
@@ -231,7 +231,7 @@ SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
     {
         SwTableBoxFmt* pBoxFmt = rDoc.MakeTableBoxFmt();
         if( USHRT_MAX != nCols )
-            pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+            pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
         ::lcl_SetDfltBoxAttr( *pBoxFmt, nId );
         rBoxFmtArr.Replace( pBoxFmt, nId );
@@ -250,7 +250,7 @@ SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, SvPtrarr &rBoxFmtArr,
                                 SwTableAutoFmt::UPDATE_BOX,
                                 rDoc.GetNumberFormatter( TRUE ) );
         if( USHRT_MAX != nCols )
-            pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+            pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                             USHRT_MAX / nCols, 0 ));
         rBoxFmtArr.Replace( pBoxFmt, nId );
     }
@@ -444,14 +444,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem )
             && pItem != NULL)
         {
-            pTableFmt->SetAttr( *pItem );
+            pTableFmt->SetFmtAttr( *pItem );
         }
     }
 
     //Orientation am Fmt der Table setzen
-    pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
+    pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
     // alle Zeilen haben die Fill-Order von links nach rechts !
-    pLineFmt->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
 
     // die Tabelle bekommt USHRT_MAX als default SSize
     SwTwips nWidth = USHRT_MAX;
@@ -463,7 +463,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         {
             USHORT nFrmWidth = nLastPos;
             nLastPos = (*pColArr)[ USHORT(pColArr->Count()-2)];
-            pTableFmt->SetAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
+            pTableFmt->SetFmtAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
         }
         nWidth = nLastPos - nSttPos;
     }
@@ -472,9 +472,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         nWidth /= nCols;
         nWidth *= nCols; // to avoid rounding problems
     }
-    pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
+    pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
-        pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
+        pTableFmt->SetFmtAttr( SwFmtLayoutSplit( FALSE ));
 
     // verschiebe ggfs. die harten PageDesc/PageBreak Attribute:
     SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]
@@ -486,14 +486,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
             &pItem ) )
         {
-            pTableFmt->SetAttr( *pItem );
+            pTableFmt->SetFmtAttr( *pItem );
             pNextNd->ResetAttr( RES_PAGEDESC );
             pNdSet = pNextNd->GetpSwAttrSet();
         }
         if( pNdSet && SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, FALSE,
              &pItem ) )
         {
-            pTableFmt->SetAttr( *pItem );
+            pTableFmt->SetFmtAttr( *pItem );
             pNextNd->ResetAttr( RES_BREAK );
         }
     }
@@ -509,7 +509,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     if( !bDfltBorders && !pTAFmt )
     {
         pBoxFmt = MakeTableBoxFmt();
-        pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
+        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nCols, 0 ));
     }
     else
     {
@@ -517,7 +517,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         for( USHORT i = 0; i < nBoxArrLen; ++i )
             aBoxFmtArr.Insert( (void*)0, i );
     }
-    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+    // --> OD 2008-02-25 #refactorlists#
+//    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+    SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
+    // <--
 
     SwNodeIndex aNdIdx( *pTblNd, 1 );   // auf den ersten Box-StartNode
     SwTableLines& rLines = pNdTbl->GetTabLines();
@@ -571,7 +574,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                         *pNewFmt = *pBoxF;
                         pBoxF = pNewFmt;
                     }
-                    pBoxF->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
+                    pBoxF->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
                 }
             }
 
@@ -745,11 +748,11 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
 
     // alle Zeilen haben die Fill-Order von links nach rechts !
-    pLineFmt->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
-    pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
-        pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
+        pTableFmt->SetFmtAttr( SwFmtLayoutSplit( FALSE ));
 
     /* #106283# If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -762,7 +765,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem )
             && pItem != NULL)
         {
-            pTableFmt->SetAttr( *pItem );
+            pTableFmt->SetFmtAttr( *pItem );
         }
     }
 
@@ -785,13 +788,13 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         // die Formate an den Boxen haben schon die richtige Size, es darf
         // also nur noch die richtige Umrandung/AutoFmt gesetzt werden.
         bUseBoxFmt = TRUE;
-        pTableFmt->SetAttr( pBoxFmt->GetFrmSize() );
+        pTableFmt->SetFmtAttr( pBoxFmt->GetFrmSize() );
         delete pBoxFmt;
         eAdjust = text::HoriOrientation::NONE;
     }
 
     //Orientation am Fmt der Table setzen
-    pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
+    pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
     pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
@@ -803,7 +806,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 aBoxFmtArr.Insert( (void*)0, i );
         }
 
-        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+        // --> OD 2008-02-25 #refactorlists#
+//        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+        SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
+        // <--
         SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
 
         SwTableBoxFmt *pBoxF = 0;
@@ -876,7 +882,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 if( !bUseBoxFmt )
                 {
                     if( bChgSz )
-                        pBoxF->SetAttr( pBox->GetFrmFmt()->GetFrmSize() );
+                        pBoxF->SetFmtAttr( pBox->GetFrmFmt()->GetFrmSize() );
                     pBox->ChgFrmFmt( pBoxF );
                 }
             }
@@ -989,8 +995,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem ) )
             {
                 if( !nLines )
-                    pTblFmt->SetAttr( *pItem );
-                pTxtNd->SwCntntNode::ResetAttr( RES_BREAK );
+                    pTblFmt->SetFmtAttr( *pItem );
+                pTxtNd->ResetAttr( RES_BREAK );
                 pSet = pTxtNd->GetpSwAttrSet();
             }
 
@@ -999,8 +1005,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                 ((SwFmtPageDesc*)pItem)->GetPageDesc() )
             {
                 if( !nLines )
-                    pTblFmt->SetAttr( *pItem );
-                pTxtNd->SwCntntNode::ResetAttr( RES_PAGEDESC );
+                    pTblFmt->SetFmtAttr( *pItem );
+                pTxtNd->ResetAttr( RES_PAGEDESC );
             }
         }
 
@@ -1094,7 +1100,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         for( n = 0; n < aPosArr.Count(); ++n )
         {
             SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
-            pNewFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                                 aPosArr[ n ] - nLastPos ));
             for( USHORT nTmpLine = 0; nTmpLine < rLns.Count(); ++nTmpLine )
                 //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
@@ -1107,10 +1113,10 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
         // Groesse nach "oben" transportieren.
         ASSERT( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
-        pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
+        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
     }
     else
-        pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
+        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
 
     // das wars doch wohl ??
     return pTblNd;
@@ -1196,9 +1202,9 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
 
     // alle Zeilen haben die Fill-Order von links nach rechts !
-    pLineFmt->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
+    pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
-    pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
+    pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
 //    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
 //        pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
 
@@ -1213,7 +1219,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem )
             && pItem != NULL)
         {
-            pTableFmt->SetAttr( *pItem );
+            pTableFmt->SetFmtAttr( *pItem );
         }
     }
 
@@ -1237,7 +1243,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         // die Formate an den Boxen haben schon die richtige Size, es darf
         // also nur noch die richtige Umrandung/AutoFmt gesetzt werden.
         bUseBoxFmt = TRUE;
-        pTableFmt->SetAttr( pBoxFmt->GetFrmSize() );
+        pTableFmt->SetFmtAttr( pBoxFmt->GetFrmSize() );
         delete pBoxFmt;
 //        eAdjust = HORI_NONE;
     }
@@ -1331,8 +1337,8 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                     if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem ) )
                     {
                         if( !nLines )
-                            pTblFmt->SetAttr( *pItem );
-                        rTxtNode.SwCntntNode::ResetAttr( RES_BREAK );
+                            pTblFmt->SetFmtAttr( *pItem );
+                        rTxtNode.ResetAttr( RES_BREAK );
                         pSet = rTxtNode.GetpSwAttrSet();
                     }
 
@@ -1341,8 +1347,8 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
                         ((SwFmtPageDesc*)pItem)->GetPageDesc() )
                     {
                         if( !nLines )
-                            pTblFmt->SetAttr( *pItem );
-                        rTxtNode.SwCntntNode::ResetAttr( RES_PAGEDESC );
+                            pTblFmt->SetFmtAttr( *pItem );
+                        rTxtNode.ResetAttr( RES_PAGEDESC );
                     }
                 }
             }
@@ -1417,7 +1423,7 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
         for( n = 0; n < aPosArr.Count(); ++n )
         {
             SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
-            pNewFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE,
+            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                                 aPosArr[ n ] - nLastPos ));
             for( USHORT nLines2 = 0; nLines2 < rLns.Count(); ++nLines2 )
                 //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
@@ -1430,10 +1436,10 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
         // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
         // Groesse nach "oben" transportieren.
         ASSERT( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
-        pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
+        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
     }
     else
-        pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
+        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
 
     // das wars doch wohl ??
     return pTblNd;
@@ -2799,7 +2805,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     {
         SwFmtFrmSize aSz( rTblFrmSz );
         aSz.SetWidth( nPrtWidth );
-        rTab.GetFrmFmt()->SetAttr( aSz );
+        rTab.GetFrmFmt()->SetFmtAttr( aSz );
     }
 
     SwTabCols aOld( rNew.Count() );
@@ -3118,7 +3124,7 @@ BOOL lcl_BoxSetSplitBoxFmts( const SwTableBox*& rpBox, void* pPara )
                 SvxBoxItem aNew( rBoxItem );
                 aNew.SetLine( pFmt->GetBox().GetBottom(), BOX_LINE_TOP );
                 if( aNew != rBoxItem )
-                    pBox->ClaimFrmFmt()->SetAttr( aNew );
+                    pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
             }
         }
         else
@@ -3133,7 +3139,7 @@ USHORT __FAR_DATA aTableSplitBoxSetRange[] = {
                                 aTableSplitBoxSetRange );
             aTmpSet.Put( pFmt->GetAttrSet() );
             if( aTmpSet.Count() )
-                pBox->ClaimFrmFmt()->SetAttr( aTmpSet );
+                pBox->ClaimFrmFmt()->SetFmtAttr( aTmpSet );
 
             if( HEADLINE_BOXATRCOLLCOPY == pSplPara->GetMode() )
             {
@@ -3322,7 +3328,7 @@ BOOL lcl_ChgTblSize( SwTable& rTbl )
         if( nMaxLnWidth > aTblMaxSz.GetWidth() )
             aTblMaxSz.SetWidth( nMaxLnWidth );
     }
-    pFmt->SetAttr( aTblMaxSz );
+    pFmt->SetFmtAttr( aTblMaxSz );
     if( !bLocked )          // und gegebenenfalls Lock wieder freigeben
         pFmt->UnlockModify();
 
@@ -3615,9 +3621,9 @@ BOOL SwNodes::MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev,
         {
             // dann sollten die mal schleunigst korrigiert werden
             if( bWithPrev )
-                rDelTbl.GetFrmFmt()->SetAttr( rTblSz );
+                rDelTbl.GetFrmFmt()->SetFmtAttr( rTblSz );
             else
-                rTbl.GetFrmFmt()->SetAttr( rDelTblSz );
+                rTbl.GetFrmFmt()->SetFmtAttr( rDelTblSz );
         }
     }
 
@@ -3731,7 +3737,10 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
     {
         SwTableBox* pSetBox = (SwTableBox*)rpBox->GetBox();
         SwDoc* pDoc = pSetBox->GetFrmFmt()->GetDoc();
-        SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+        // --> OD 2008-02-25 #refactorlists#
+//        SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END-1 );
+        SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
+        // <--
         SfxItemSet aBoxSet( pDoc->GetAttrPool(), aTableBoxSetRange );
         BYTE nPos = pSetPara->nAFmtLine * 4 + pSetPara->nAFmtBox;
         pSetPara->rTblFmt.UpdateToSet( nPos, aCharSet,
@@ -3757,7 +3766,7 @@ BOOL lcl_SetAFmtBox( const _FndBox*& rpBox, void *pPara )
                 SFX_ITEM_SET == aBoxSet.GetItemState( RES_BOXATR_FORMAT ))
                 pSetPara->pUndo->SaveBoxCntnt( *pSetBox );
 
-            pSetBox->ClaimFrmFmt()->SetAttr( aBoxSet );
+            pSetBox->ClaimFrmFmt()->SetFmtAttr( aBoxSet );
         }
     }
     else
@@ -4103,15 +4112,15 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
                 //              Sorge dafuer, das der Text auch entsprechend
                 //              formatiert wird!
-                pBoxFmt->SetAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
+                pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
             }
 
             if( bLockModify ) pBoxFmt->LockModify();
-            pBoxFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
             if( bLockModify ) pBoxFmt->UnlockModify();
 
             if( bSetNumFmt )
-                pBoxFmt->SetAttr( aBoxSet );
+                pBoxFmt->SetFmtAttr( aBoxSet );
         }
     }
     else
@@ -4144,9 +4153,9 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, BOOL bCallUpdate )
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
                 //              Sorge dafuer, das der Text auch entsprechend
                 //              formatiert wird!
-                pBoxFmt->SetAttr( *GetDfltAttr( nWhich1 ));
+                pBoxFmt->SetFmtAttr( *GetDfltAttr( nWhich1 ));
             }
-            pBoxFmt->ResetAttr( nWhich1, RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( nWhich1, RES_BOXATR_VALUE );
         }
         else
             bChgd = FALSE;
@@ -4188,16 +4197,16 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
     {
         pBoxFmt->LockModify();
-        pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
         pBoxFmt->UnlockModify();
     }
     else if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_VALUE ))
     {
         pBoxFmt->LockModify();
-        pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         pBoxFmt->UnlockModify();
     }
-    pBoxFmt->SetAttr( rSet );
+    pBoxFmt->SetFmtAttr( rSet );
     SetModified();
 }
 
@@ -4234,9 +4243,9 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
                 // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
                 //              Sorge dafuer, das der Text auch entsprechend
                 //              formatiert wird!
-                pBoxFmt->SetAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
+                pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
-            pBoxFmt->ResetAttr( nWhich1, RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( nWhich1, RES_BOXATR_VALUE );
             SetModified();
         }
     }
@@ -4415,7 +4424,7 @@ BOOL SwDoc::_UnProtectTblCells( SwTable& rTbl )
         SwFrmFmt *pBoxFmt = rSrtBox[ --i ]->GetFrmFmt();
         if( pBoxFmt->GetProtect().IsCntntProtected() )
         {
-            pBoxFmt->ResetAttr( RES_PROTECT );
+            pBoxFmt->ResetFmtAttr( RES_PROTECT );
             bChgd = TRUE;
         }
     }
@@ -4471,7 +4480,7 @@ BOOL SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                 {
                     aFmts.Insert( pBoxFmt, aFmts.Count() );
                     pBoxFmt = pBox->ClaimFrmFmt();
-                    pBoxFmt->ResetAttr( RES_PROTECT );
+                    pBoxFmt->ResetFmtAttr( RES_PROTECT );
                     aNewFmts.Insert( pBoxFmt, aNewFmts.Count() );
                 }
                 bChgd = TRUE;
