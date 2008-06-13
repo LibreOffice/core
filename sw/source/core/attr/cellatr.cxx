@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellatr.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,8 +207,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
                     // und dann in der externen Darstellung
                     aCopy.PtrToBoxNm( &pTblNd->GetTable() );
                     pUpdtFld->pHistory->Add( &aCopy, &aCopy,
-                                pNd->FindTableBoxStartNode()->GetIndex(),
-                                const_cast<SwDoc&>(*(pNd->GetDoc())) );
+                                pNd->FindTableBoxStartNode()->GetIndex() );
                 }
             }
             else
