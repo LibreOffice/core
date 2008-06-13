@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: EnhancedPDFExportHelper.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -903,8 +903,8 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         //   and its level > 1 or
         // - Numbering should restart at the current node and its level > 1
         // - The current item has no label
-        const bool bNewSubListStart = pParent->GetParent() && (pParent->IsFirst( pNodeNum ) || pTxtNd->IsRestart() );
-        const bool bNoLabel = !pTxtNd->IsCounted() && !pTxtNd->IsRestart();
+        const bool bNewSubListStart = pParent->GetParent() && (pParent->IsFirst( pNodeNum ) || pTxtNd->IsListRestart() );
+        const bool bNoLabel = !pTxtNd->IsCountedInList() && !pTxtNd->IsListRestart();
         if ( bNewSubListStart || bNoLabel )
         {
             // Fine, we try to reopen the appropriate list body
@@ -944,7 +944,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
             }
         }
         // 2. We have to reopen an existing list tag:
-        else if ( !pParent->IsFirst( pNodeNum ) && !pTxtNd->IsRestart() )
+        else if ( !pParent->IsFirst( pNodeNum ) && !pTxtNd->IsListRestart() )
         {
             // any other than the first node in a list level has to reopen the current
             // list. The current list is associated in a map with the first child of the list:
@@ -986,8 +986,8 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     }
 
     // New tags:
-    const bool bNewListTag = (pNodeNum->GetParent()->IsFirst( pNodeNum ) || pTxtNd->IsRestart() || !bSameNumbering);
-    const bool bNewItemTag = bNewListTag || pTxtNd->IsCounted(); // If the text node is not counted, we do not start a new list item:
+    const bool bNewListTag = (pNodeNum->GetParent()->IsFirst( pNodeNum ) || pTxtNd->IsListRestart() || !bSameNumbering);
+    const bool bNewItemTag = bNewListTag || pTxtNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
         BeginTag( vcl::PDFWriter::List, aListString );
