@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: num.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -536,8 +536,6 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
         }
     aLevelLB.SetUpdateMode(TRUE);
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SwNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
