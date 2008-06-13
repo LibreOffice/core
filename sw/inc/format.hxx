@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: format.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,15 +99,16 @@ public:
 
     // Ist bInParents FALSE,
     // wird nur in diesem Format nach dem Attribut gesucht.
-    inline const SfxPoolItem& GetAttr( USHORT nWhich,
-                                        BOOL bInParents = TRUE ) const;
+    inline const SfxPoolItem& GetFmtAttr( USHORT nWhich,
+                                          BOOL bInParents = TRUE ) const;
     inline SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
                                     const SfxPoolItem **ppItem = 0 ) const;
-    SW_DLLPUBLIC BOOL SetAttr( const SfxPoolItem& );
-    SW_DLLPUBLIC BOOL SetAttr( const SfxItemSet& rSet );
-
-    // Nimmt den Hint mit nWhich aus dem Delta-Array
-    SW_DLLPUBLIC BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    // --> OD 2008-03-03 #refactorlists#
+    // methods renamed and made virtual
+    SW_DLLPUBLIC virtual BOOL SetFmtAttr( const SfxPoolItem& rAttr );
+    SW_DLLPUBLIC virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
+    SW_DLLPUBLIC virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    // <--
 
     // --> OD 2007-01-24 #i73790#
     // Method renamed and made virtual
@@ -335,8 +336,8 @@ public:
 
 // --------------- inline Implementierungen ------------------------
 
-inline const SfxPoolItem& SwFmt::GetAttr( USHORT nWhich,
-                                        BOOL bInParents ) const
+inline const SfxPoolItem& SwFmt::GetFmtAttr( USHORT nWhich,
+                                             BOOL bInParents ) const
 {
     return aSet.Get( nWhich, bInParents );
 }
