@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cption.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,7 +410,7 @@ void SwCaptionDialog::DrawSample()
             if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
             {
                 sal_Int8 nLvl = pFldType->GetOutlineLvl();
-                SwNodeNum::tNumberVector aNumVector;
+                SwNumberTree::tNumberVector aNumVector;
                 for( sal_Int8 i = 0; i <= nLvl; ++i )
                     aNumVector.push_back(1);
 
