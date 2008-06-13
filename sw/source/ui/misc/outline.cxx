@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outline.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -425,14 +425,14 @@ short SwOutlineTabDialog::Ok()
             rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));
 
             const SfxPoolItem & rItem =
-                rTxtColl.GetAttr(RES_PARATR_NUMRULE, FALSE);
+                rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, FALSE);
 
             if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)
             {
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
                     pOutlineRule->GetName())
                 {
-                    rTxtColl.ResetAttr(RES_PARATR_NUMRULE);
+                    rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
                 }
             }
             else
@@ -441,7 +441,7 @@ short SwOutlineTabDialog::Ok()
                     pOutlineRule->GetName())
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
-                    rTxtColl.SetAttr(aItem);
+                    rTxtColl.SetFmtAttr(aItem);
                 }
             }
         }
@@ -460,7 +460,7 @@ short SwOutlineTabDialog::Ok()
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
                                                     static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
                 pTxtColl->SetOutlineLevel( NO_NUMBERING );
-                pTxtColl->ResetAttr(RES_PARATR_NUMRULE);
+                pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
             }
             else if(aCollNames[i] != sHeadline)
             {
@@ -471,7 +471,7 @@ short SwOutlineTabDialog::Ok()
                     pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
 
                     SwNumRuleItem aItem(pOutlineRule->GetName());
-                    pTxtColl->SetAttr(aItem);
+                    pTxtColl->SetFmtAttr(aItem);
                 }
             }
         }
@@ -1082,7 +1082,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
             if(nStart) // damit moeglichs Vorgaenger und Nachfolger gezeigt werden
                 nStart--;
 
-            SwNodeNum::tNumberVector aNumVector;
+            SwNumberTree::tNumberVector aNumVector;
             BYTE nEnd = Min( (BYTE)(nStart + 3), MAXLEVEL );
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
@@ -1203,7 +1203,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
         }
         else
         {
-            SwNodeNum::tNumberVector aNumVector;
+            SwNumberTree::tNumberVector aNumVector;
             USHORT nLineHeight = nFontHeight * 3 / 2;
             for( BYTE nLevel = 0; nLevel < MAXLEVEL;
                             ++nLevel, nYStart = nYStart + nYStep )
