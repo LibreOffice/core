@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2154,11 +2154,11 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
     mnAdditionalFirstLineOffset = 0;
 
     const SwTxtNode* pTxtNode( GetTxtNode() );
-    if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->IsCounted() &&
+    if ( pTxtNode && pTxtNode->IsNumbered() && pTxtNode->IsCountedInList() &&
          pTxtNode->GetNumRule() )
     {
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
