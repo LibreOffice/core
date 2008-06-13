@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swstylemanager.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +31,11 @@
 #define _SWSTYLEMANAGER_HXX
 
 class IStyleAccess;
+// --> OD 2008-03-07 #refactorlists#
+class SfxItemSet;
+// <--
 
-IStyleAccess *createStyleManager();
-
+// --> OD 2008-03-07 #refactorlists#
+IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems = 0 );
+// <--
 #endif  //_SWSTYLEMANAGER_HXX
