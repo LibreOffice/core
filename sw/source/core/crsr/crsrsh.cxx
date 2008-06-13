@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: crsrsh.cxx,v $
- * $Revision: 1.73 $
+ * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -410,54 +410,54 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     return bRet;
 }
 
-// -> #i27615#
-void SwCrsrShell::SetMarkedNumLevel(const String & sNumRule, BYTE nLevel)
+// --> OD 2008-04-02 #refactorlists#
+void SwCrsrShell::MarkListLevel( const String& sListId,
+                                 const int nListLevel )
 {
-    if (sNumRule != sMarkedNumRule || nLevel != nMarkedNumLevel)
+    if ( sListId != sMarkedListId ||
+         nListLevel != nMarkedListLevel)
     {
-        if (sMarkedNumRule.Len() > 0)
-            pDoc->SetMarkedNumLevel(sMarkedNumRule, nMarkedNumLevel, FALSE);
+        if ( sMarkedListId.Len() > 0 )
+            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, FALSE );
 
-        if (sNumRule.Len() > 0)
+        if ( sListId.Len() > 0 )
         {
-            pDoc->SetMarkedNumLevel(sNumRule, nLevel, TRUE);
+            pDoc->MarkListLevel( sListId, nListLevel, TRUE );
         }
 
-        sMarkedNumRule = sNumRule;
-        nMarkedNumLevel = nLevel;
+        sMarkedListId = sListId;
+        nMarkedListLevel = nListLevel;
     }
 }
 
-void SwCrsrShell::UpdateMarkedNumLevel()
+void SwCrsrShell::UpdateMarkedListLevel()
 {
     SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
 
-    if ( pTxtNd ) // #i27615#
+    if ( pTxtNd )
     {
-        if (! pTxtNd->IsNumbered())
+        if ( !pTxtNd->IsNumbered() )
         {
             pCurCrsr->_SetInFrontOfLabel( FALSE );
-            SetMarkedNumLevel(String(), 0);
+            MarkListLevel( String(), 0 );
         }
-        else if (pCurCrsr->IsInFrontOfLabel())
+        else if ( pCurCrsr->IsInFrontOfLabel() )
         {
-            SwNumRule * pNumRule = pTxtNd->GetNumRule();
-
-            if (pNumRule)
+            if ( pTxtNd->IsInList() )
             {
-                ASSERT( pTxtNd->GetLevel() >= 0 &&
-                        pTxtNd->GetLevel() < MAXLEVEL, "Which level?")
-                SetMarkedNumLevel(pNumRule->GetName(),
-                                  static_cast<BYTE>(pTxtNd->GetLevel()));
+                ASSERT( pTxtNd->GetActualListLevel() >= 0 &&
+                        pTxtNd->GetActualListLevel() < MAXLEVEL, "Which level?")
+                MarkListLevel( pTxtNd->GetListId(),
+                               pTxtNd->GetActualListLevel() );
             }
         }
         else
         {
-            SetMarkedNumLevel(String(), 0);
+            MarkListLevel( String(), 0 );
         }
     }
 }
-// <- #i27615#
+// <--
 
 BOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
 {
@@ -1023,7 +1023,7 @@ bool SwCrsrShell::SetInFrontOfLabel( BOOL bNew )
     if ( bNew != IsInFrontOfLabel() )
     {
         pCurCrsr->_SetInFrontOfLabel( bNew );
-        UpdateMarkedNumLevel();
+        UpdateMarkedListLevel();
         return true;
     }
     return false;
@@ -2569,7 +2569,10 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ),
-    nMarkedNumLevel( 0 ) // #i27615#
+    // --> OD 2008-04-02 #refactorlists#
+    sMarkedListId(),
+    nMarkedListLevel( 0 )
+    // <--
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
@@ -2598,7 +2601,10 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
     pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
-    nMarkedNumLevel( 0 ) // #i27615#
+    // --> OD 2008-04-02 #refactorlists#
+    sMarkedListId(),
+    nMarkedListLevel( 0 )
+    // <--
 {
     SET_CURR_SHELL( this );
     /*
