@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewstat.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -160,7 +160,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 const SwPageDesc& rDesc = pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrmFmt& rMaster = rDesc.GetMaster();
                 const SvxBrushItem& rBrush = (const SvxBrushItem&)
-                                    rMaster.GetAttr(RES_BACKGROUND, sal_True);
+                                    rMaster.GetFmtAttr(RES_BACKGROUND, sal_True);
                 rSet.Put(rBrush);
             }
             break;
