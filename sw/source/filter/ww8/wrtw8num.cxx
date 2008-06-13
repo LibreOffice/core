@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8num.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,7 +192,7 @@ void SwWW8Writer::OutListTab()
     // second Loop - write all Levels for all SwNumRules - LVLF
 
     // prepare the NodeNum to generate the NumString
-    SwNodeNum::tNumberVector aNumVector;
+    SwNumberTree::tNumberVector aNumVector;
     for (n = 0; n < WW8ListManager::nMaxLevel; ++n)
         aNumVector.push_back(n);
 
@@ -486,7 +486,10 @@ void SwWW8Writer::Out_WwNumLvl( BYTE nWwLevel )
 
 void SwWW8Writer::Out_SwNumLvl( BYTE nSwLevel )
 {
-    ASSERT(IsNum(nSwLevel), "numbered?");
+    // --> OD 2008-04-02 #refactorlists#
+//    ASSERT(IsNum(nSwLevel), "numbered?");
+    ASSERT( nSwLevel >= 0 && nSwLevel < MAXLEVEL, "numbered?");
+    // <--
     Out_WwNumLvl( nSwLevel + 1 );
 }
 
@@ -737,7 +740,7 @@ void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
 // Return: ist es eine Gliederung ?
 bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
-    int nLevel = pNd->GetLevel();
+    int nLevel = pNd->GetActualListLevel();
 
     if (nLevel < 0 || nLevel >= MAXLEVEL)
     {
@@ -752,15 +755,6 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
     if( !pRul || nSwLevel == WW8ListManager::nMaxLevel)
         return false;
 
-    bool bNoNum = false;
-
-    if( ! IsNum(nSwLevel))
-    {
-        SetNoNum(&nSwLevel, FALSE);     // 0..WW8ListManager::nMaxLevel
-        bNoNum = true;
-    }
-
-
     bool bRet = true;
 
     SwNumFmt aFmt(pRul->Get(nSwLevel));
@@ -774,7 +768,10 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
        )
     {
         // Aufzaehlung
-        Out_WwNumLvl(bNoNum ? 12 : 11);
+        // --> OD 2008-04-02 #refactorlists#
+//        Out_WwNumLvl(bNoNum ? 12 : 11);
+        Out_WwNumLvl(11);
+        // <--
         Out_NumRuleAnld(*pRul, aFmt, 11);
         bRet = false;
     }
@@ -784,14 +781,20 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
             )
     {
         // Nummerierung
-        Out_WwNumLvl(bNoNum ? 12 : 10);
+        // --> OD 2008-04-02 #refactorlists#
+//        Out_WwNumLvl(bNoNum ? 12 : 10);
+        Out_WwNumLvl(10);
+        // <--
         Out_NumRuleAnld(*pRul, aFmt, 10);
         bRet = false;
     }
     else
     {
         // Gliederung
-        Out_SwNumLvl(bNoNum ? 12 : nSwLevel);
+        // --> OD 2008-04-02 #refactorlists#
+//        Out_SwNumLvl(bNoNum ? 12 : nSwLevel);
+        Out_SwNumLvl(nSwLevel);
+        // <--
         Out_NumRuleAnld(*pRul, aFmt, nSwLevel);
     }
     return bRet;
