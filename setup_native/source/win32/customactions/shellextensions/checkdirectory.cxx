@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: checkdirectory.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,8 @@ static void SetMsiProperty(MSIHANDLE handle, const std::_tstring& sProperty, con
 
 extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
-    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
+    std::_tstring sInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    std::_tstring sOfficeHostnamePath = GetMsiProperty(handle, TEXT("OFFICEDIRHOSTNAME"));
 
     // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
 
@@ -97,7 +98,7 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 
     // 1. Searching for file setup.ini
 
-    std::_tstring sSetupIniPath = sInstallPath + TEXT("program\\setup.ini");
+    std::_tstring sSetupIniPath = sInstallPath + sOfficeHostnamePath + TEXT("\\program\\setup.ini");
 
     WIN32_FIND_DATA data;
     HANDLE hdl = FindFirstFile(sSetupIniPath.c_str(), &data);
