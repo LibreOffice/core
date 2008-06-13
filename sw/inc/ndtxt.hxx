@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,12 @@
 #include <ndhints.hxx>
 #include <errhdl.hxx>
 #include <modeltoviewhelper.hxx>
-#include <SwNodeNum.hxx>
+#include <SwNumberTreeTypes.hxx>
+class SwNumRule;
+class SwNodeNum;
+// --> OD 2008-05-06 #refactorlists#
+class SwList;
+// <--
 
 #include <vector>
 #include <set>
@@ -106,11 +111,21 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     // The last two flags have to be recalculated if this flag is set:
     mutable BOOL bRecalcHiddenCharFlags : 1;
 
-    bool bCounted;
     bool bNotifiable;
     mutable BOOL bLastOutlineState : 1;
 
     BYTE nOutlineLevel;
+
+    // --> OD 2008-03-27 #refactorlists#
+    // boolean, indicating that a <SetAttr(..)> or <ResetAttr(..)> or
+    // <ResetAllAttr(..)> method is running.
+    // Needed to avoid duplicate handling of attribute change actions.
+    bool mbInSetOrResetAttr;
+    // <--
+    // --> OD 2008-05-06 #refactorlists#
+    // pointer to the list, to whose the text node is added to
+    SwList* mpList;
+    // <--
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
@@ -170,19 +185,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 
         @return number of this node
     */
-    inline SwNodeNum* CreateNum()
-    {
-        if ( !mpNodeNum )
-        {
-            // --> OD 2007-10-26 #i83479#
-            mpNodeNum = new SwNodeNum( const_cast<SwTxtNode*>(this) );
-            // <--
-        }
-        return mpNodeNum;
-    }
-
-    using SwCntntNode::SetAttr;
-    using SwCntntNode::GetAttr;
+    SwNodeNum* CreateNum() const;
 
 public:
     bool IsWordCountDirty() const;
@@ -208,6 +211,8 @@ public:
     //
 
 public:
+    using SwCntntNode::GetAttr;
+
     const String& GetTxt() const { return aText; }
 
     // Zugriff auf SwpHints
@@ -225,6 +230,15 @@ public:
     // steht in itratr
     void GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax, ULONG &rAbs,
                         OutputDevice* pOut = 0 ) const;
+
+    // --> OD 2008-03-13 #refactorlists#
+    // overriding to handle change of certain paragraph attributes
+    virtual BOOL SetAttr( const SfxPoolItem& );
+    virtual BOOL SetAttr( const SfxItemSet& rSet );
+    virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
+    virtual USHORT ResetAllAttr();
+    // <--
 
     /*
      * Einfuegen anderer Datentypen durch Erzeugen eines
@@ -356,14 +370,13 @@ public:
        @return numbering rule of this text node or NULL if none is set
      */
     SwNumRule *GetNumRule(BOOL bInParent = TRUE) const;
-    SwNumRule *GetNumRuleSync(BOOL bInParent = TRUE);
 
     inline const SwNodeNum* GetNum() const
     {
         return mpNodeNum;
     }
 
-    SwNodeNum::tNumberVector GetNumberVector() const;
+    SwNumberTree::tNumberVector GetNumberVector() const;
 
     /**
        Returns if this text node is an outline.
@@ -429,13 +442,6 @@ public:
        @param the first line indent of this text node taking the
                numbering into account (return parameter)
 
-       If the paragraph has a SwNodeNum and it has a numbering rule:
-         - if the number is not shown (! IsNum()) the first line offset is 0
-         - else if old numbering is active the first line offset is the first
-              line offset of the numbering (aka spacing to text).
-         - else the first line offset is the sum of the text node's first line
-              offset and that of the numbering.
-
        @retval TRUE   this node has SwNodeNum and has numbering rule
        @retval FALSE  else
      */
@@ -482,34 +488,34 @@ public:
     /** -> #i27615#
         Returns if this text node has a marked label.
 
-        This text node has a marked label if it has a label and it has
-        a numbering rule and the level of the label is marked in the
-        numbering rule.
-
-        @retval TRUE       This text node has a marked label.
-        @retval FALSE      else
+        @retval true       This text node has a marked label.
+        @retval false      else
      */
-    BOOL HasMarkedLabel() const;
+    bool HasMarkedLabel() const;
+
+    /** Sets the list level of this text node.
+
+        Side effect, when the text node is a list item:
+        The text node's representation in the list tree (<SwNodeNum> instance)
+        is updated.
+
+        @param nLevel level to set
+    */
+    void SetAttrListLevel(int nLevel);
+
+    bool HasAttrListLevel() const;
+
+    int GetAttrListLevel() const;
+
+    /** Returns the actual list level of this text node, when it is a list item
+
+        @return the actual list level of this text node, if it is a list item,
+               -1 otherwise
+    */
+    int GetActualListLevel() const;
 
     /**
-       Returns the numbering level of this text node.
-
-       The level returned is the real level, no flags included.
-
-       @return the level of this node or NO_NUMBERING if it has no
-               numbering label.
-     */
-    int GetLevel() const;
-
-    /**
-       Sets the numbering level of this text node.
-
-       @param nLevel     level to set (no flags)
-     */
-    void SetLevel(int nLevel);
-
-    /**
-       Returns outline level of this textn node.
+       Returns outline level of this text node.
 
        If a text node has an outline number (i.e. it has an SwNodeNum
        and a outline numbering rule) the outline level is the level of
@@ -564,6 +570,11 @@ public:
        @return     TRUE if the paragraph has a visible numbering/bullet/outline
      */
     bool HasVisibleNumberingOrBullet() const;
+
+    // --> OD 2008-02-19 #refactorlists#
+    void SetListId( const String sListId );
+    String GetListId() const;
+    // <--
 
     /** Determines, if the list level indent attributes can be applied to the
         paragraph.
@@ -725,9 +736,6 @@ public:
      */
     SwPosition * GetPosition(const SwTxtAttr * pAttr);
 
-    void SetStart(SwNodeNum::tSwNumTreeNumber nNum);
-    SwNodeNum::tSwNumTreeNumber GetStart() const;
-
     // Checks some global conditions like loading or destruction of document
     // to economize notifications
     bool IsNotificationEnabled() const;
@@ -735,23 +743,26 @@ public:
     // Checks a temporary notification blocker and the global conditons of IsNotificationEnabled()
     bool IsNotifiable() const;
 
-    void SetCounted(bool _bCounted);
-    bool IsCounted() const;
-
+    void SetListRestart( bool bRestart );
     // --> OD 2005-11-02 #i51089 - TUNING#
-    inline bool IsRestart() const
-    {
-        return GetNum() ? GetNum()->IsRestart() : false;
-    }
-    // <--
-    // --> OD 2007-10-26 #i83479# - made non-constant
-    void SetRestart(bool bRestart);
+    bool IsListRestart() const;
     // <--
 
-    void CopyNumber(SwTxtNode & rNode) const;
+    void SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNum );
+    bool HasAttrListRestartValue() const;
+    SwNumberTree::tSwNumTreeNumber GetAttrListRestartValue() const;
+    SwNumberTree::tSwNumTreeNumber GetActualListStartValue() const;
 
-    void SyncNumberAndNumRule();
-    void UnregisterNumber();
+    void SetCountedInList( bool bCounted );
+    bool IsCountedInList() const;
+
+    // --> OD 2008-03-13 #refactorlists#
+//    void SyncNumberAndNumRule();
+//    void UnregisterNumber();
+    void AddToList();
+    void RemoveFromList();
+    bool IsInList() const;
+    // <--
 
     bool IsFirstOfNumRule() const;
 
