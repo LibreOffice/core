@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.cxx,v $
- * $Revision: 1.56 $
+ * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,11 +172,21 @@ static void ImplDeleteObjStack( ImplObjStack* pObjStack )
 // -----------------------------------------------------------------------
 
 
-BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion, OutputDevice *pOutDev )
+bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGraphics )
 {
+    DBG_TESTSOLARMUTEX();
+
     // TODO(Q3): Change from static to plain method - everybody's
     // calling it with pOutDev=this!
-    DBG_TESTSOLARMUTEX();
+    // => done, but only with minimal changes for now => TODO
+    OutputDevice* const pOutDev = this;
+    if( !pGraphics )
+    {
+        if( !mpGraphics )
+            if( !ImplGetGraphics() )
+                return false;
+        pGraphics = mpGraphics;
+    }
 
     if( rRegion.HasPolyPolygon()
     && pGraphics->supportsOperation( OutDevSupport_B2DClip ) )
@@ -1017,7 +1027,7 @@ void OutputDevice::ImplInitClipRegion()
         else
         {
             mbOutputClipped = FALSE;
-            ImplSelectClipRegion( mpGraphics, aRegion, this );
+            ImplSelectClipRegion( aRegion );
         }
         mbClipRegionSet = TRUE;
     }
@@ -1030,9 +1040,9 @@ void OutputDevice::ImplInitClipRegion()
             else
             {
                 mbOutputClipped = FALSE;
-                ImplSelectClipRegion( mpGraphics,
+                ImplSelectClipRegion(
                                       // #102532# Respect output offset also for clip region
-                                      ImplPixelToDevicePixel( maRegion ), this );
+                                      ImplPixelToDevicePixel( maRegion ) );
             }
 
             mbClipRegionSet = TRUE;
@@ -1438,8 +1448,28 @@ void OutputDevice::ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
 
     if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
     {
+#if 0
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPolygon.getB2DPolyPolygon();
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+#else
+         // getB2DPolyPolygon() "optimizes away" some points
+         // which prevents reliable undoing of the "triangle thingy" parameter
+         // so the toolspoly -> b2dpoly conversion has to be done manually
+        ::basegfx::B2DPolyPolygon aB2DPolyPolygon;
+        for( USHORT nPolyIdx = 0; nPolyIdx < rPolyPolygon.Count(); ++nPolyIdx )
+        {
+            const Polygon& rPolygon = rPolyPolygon[ nPolyIdx ];
+            ::basegfx::B2DPolygon aB2DPoly;
+              for( USHORT nPointIdx = 0; nPointIdx < rPolygon.GetSize(); ++nPointIdx )
+              {
+                  const Point& rPoint = rPolygon[ nPointIdx ];
+                  const ::basegfx::B2DPoint aB2DPoint( rPoint.X(), rPoint.Y() );
+                  aB2DPoly.append( aB2DPoint );
+              }
+              aB2DPolyPolygon.append( aB2DPoly );
+        }
+#endif
+
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
 
         // the rPolyPolygon argument is a "triangle thingy"
@@ -2384,7 +2414,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
         ::basegfx::B2DPolygon aB2DPolyLine = rPoly.getB2DPolygon();
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyLine.transform( aTransform );
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
         if( mpGraphics->DrawPolyLine( aB2DPolyLine, aB2DLineWidth, this ) )
@@ -2531,7 +2561,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon( rPoly.getB2DPolygon() );
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
         if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
             return;
@@ -2595,7 +2625,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
     {
         ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
-        const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
         if( mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, 0.0, this ) )
             return;
