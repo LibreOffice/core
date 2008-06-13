@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swbaslnk.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -347,7 +347,7 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
             {
                 SwFmtFrmSize aAttr( rOldAttr  );
                 aAttr.SetSize( aCalcSz );
-                pFmt->SetAttr( aAttr );
+                pFmt->SetFmtAttr( aAttr );
                 bRet = TRUE;
             }
 
