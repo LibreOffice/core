@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: smoketest.pl,v $
 #
-# $Revision: 1.33 $
+# $Revision: 1.34 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,7 +51,6 @@ $is_command_infos = 0;   # print command details before exec
 $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
-$is_do_statistics = 0;
 $is_do_deinstall = 0;
 $is_admin_installation = 1;
 $is_oo = 1;
@@ -261,7 +260,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.33 $ ';
+$id_str = ' $Revision: 1.34 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -499,18 +498,11 @@ sub doTest {
     if ($ENV{OS} eq "MACOSX") {
         delete $ENV{DYLD_LIBRARY_PATH};
     }
-    if ((defined($ENV{OS})) && (defined($ENV{PROEXT})) && ($ENV{OS} eq "LINUX") && ($ENV{PROEXT} eq ".pro") && $is_do_statistics)  {
-        print "collecting statistic...\n";
-        $Command = "$PERL stats.pl -p=\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
-        execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
+    $Command = "\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
+    if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
+        $Command = "cd \"$programpath\"; " . $Command;
     }
-    else {
-        $Command = "\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
-        if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
-            $Command = "cd \"$programpath\"; " . $Command;
-        }
-        execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
-    }
+    execute_Command ($Command, $error_startOffice, $show_Message, $command_normal);
 
     # test if smoketest is ok (error 5)
 
