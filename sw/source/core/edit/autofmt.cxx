@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: autofmt.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1666,13 +1666,16 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             {
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nNode++;
-                aDelPam.GetNode(FALSE)->GetTxtNode()->SetLevel( nLvl );
+                aDelPam.GetNode(FALSE)->GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
-            pAktTxtNd->SetLevel(nLvl);
+            pAktTxtNd->SetAttrListLevel(nLvl);
             pAktTxtNd->SetNumLSpace( TRUE );
 
-            pDoc->SetNumRule( aDelPam, aRule );
+            // --> OD 2008-03-17 #refactorlists#
+            // start new list
+            pDoc->SetNumRule( aDelPam, aRule, true );
+            // <--
             aDelPam.DeleteMark();
 
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
