@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: formatclipboard.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,6 +98,7 @@ RES_TEXTGRID, RES_FRMATR_END-1,
 
 #define FORMAT_PAINTBRUSH_PARAGRAPH_IDS \
 RES_PARATR_BEGIN, RES_PARATR_END -1, \
+RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END -1, \
 FORMAT_PAINTBRUSH_FRAME_IDS \
 FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART, \
 FN_NUMBER_NEWSTART_AT, FN_NUMBER_NEWSTART_AT,
@@ -242,37 +243,37 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_BREAK
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_PAGEDESC
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_KEEP
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_FRAMEDIR
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), FALSE, &pItem);
         if(pItem)
-            pFrmFmt->SetAttr( *pItem );
+            pFrmFmt->SetFmtAttr( *pItem );
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, FALSE, &pItem) )
@@ -407,7 +408,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             {
                 SfxBoolItem aStart(FN_NUMBER_NEWSTART, rWrtShell.IsNumRuleStart());
                 pItemSet->Put(aStart);
-                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT, rWrtShell.IsNodeNumStart());
+                SfxUInt16Item aStartAt(FN_NUMBER_NEWSTART_AT, rWrtShell.GetNodeNumStart());
                 pItemSet->Put(aStartAt);
             }
         }
