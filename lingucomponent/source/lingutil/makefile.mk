@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.9 $
+# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,15 +41,21 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_HUNSPELL)" == "YES"
-@all:
-    @echo "Nothing to do here; using system hunspell..."
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
 .ENDIF
 
-SLOFILES=	\
-        $(SLO)$/dictmgr.obj \
-        $(SLO)$/lingutil.obj
+.IF "$(SYSTEM_DICTS)" == "YES"
+CXXFLAGS += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
+CFLAGSCXX += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
+CFLAGSCC += -DSYSTEM_DICTS -DDICT_SYSTEM_DIR=\"$(DICT_SYSTEM_DIR)\" -DHYPH_SYSTEM_DIR=\"$(HYPH_SYSTEM_DIR)\" -DTHES_SYSTEM_DIR=\"$(THES_SYSTEM_DIR)\"
+.ENDIF
 
+CXXFLAGS += $(HUNSPELL_CFLAGS)
+CFLAGSCXX += $(HUNSPELL_CFLAGS)
+CFLAGSCC += $(HUNSPELL_CFLAGS)
+
+SLOFILES=$(SLO)$/lingutil.obj
 
 LIB1TARGET= $(SLB)$/lib$(TARGET).lib
 LIB1ARCHIV= $(LB)/lib$(TARGET).a
