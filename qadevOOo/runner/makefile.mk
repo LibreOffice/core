@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.14 $
+# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +36,7 @@ TARGET  = $(PRJNAME)
 
 .INCLUDE: settings.mk
 
-SUBDIRS_TESTS = mod ifc
+SUBDIRS_TESTS = mod ifc complex
 SUBDIRS_RUNNER = util share stats lib complexlib helper basicrunner \
             base org$/openoffice convwatch
 
