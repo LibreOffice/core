@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -687,14 +687,14 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_PAGEDESC,
                             FALSE, &pItem ) )
                         {
-                            pTxtNd->SwCntntNode::SetAttr( *pItem );
-                            pFrmFmt->ResetAttr( RES_PAGEDESC );
+                            pTxtNd->SetAttr( *pItem );
+                            pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
                         }
                         if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_BREAK,
                             FALSE, &pItem ) )
                         {
-                            pTxtNd->SwCntntNode::SetAttr( *pItem );
-                            pFrmFmt->ResetAttr( RES_BREAK );
+                            pTxtNd->SetAttr( *pItem );
+                            pFrmFmt->ResetFmtAttr( RES_BREAK );
                         }
                     }
 
@@ -1426,7 +1426,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
         }
         const SwTxtFmtColls *pColl = pExtDoc->GetTxtFmtColls();
         for( i = 0; i < pColl->Count(); ++i )
-            (*pColl)[ i ]->ResetAttr( RES_PAGEDESC, RES_BREAK );
+            (*pColl)[ i ]->ResetFmtAttr( RES_PAGEDESC, RES_BREAK );
         SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
         ++aEndOfDoc;
         while( aIndx < aEndOfDoc )
