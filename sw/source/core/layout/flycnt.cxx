@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flycnt.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -402,7 +402,7 @@ void SwFlyAtCntFrm::MakeAll()
                     if ( aMain.GetSurround() == SURROUND_NONE )
                     {
                         aMain.SetSurround( SURROUND_THROUGHT );
-                        pFmt->SetAttr( aMain );
+                        pFmt->SetFmtAttr( aMain );
                     }
                     pFmt->UnlockModify();
                 }
@@ -532,7 +532,7 @@ void SwFlyAtCntFrm::MakeAll()
                             {
                                 pFmt->LockModify();
                                 aSurround.SetSurround( SURROUND_THROUGHT );
-                                pFmt->SetAttr( aSurround );
+                                pFmt->SetFmtAttr( aSurround );
                                 pFmt->UnlockModify();
                                 bOsz = false;
 #if OSL_DEBUG_LEVEL > 1
