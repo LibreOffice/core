@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Clipping.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +177,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         rPoly.SequenceX.realloc(nPolygonIndex+1);
         rPoly.SequenceY.realloc(nPolygonIndex+1);
         rPoly.SequenceZ.realloc(nPolygonIndex+1);
-        rResultPointCount.push_back(0);
+        rResultPointCount.resize(nPolygonIndex+1,0);
     }
 
     drawing::DoubleSequence* pOuterSequenceX = &rPoly.SequenceX.getArray()[nPolygonIndex];
