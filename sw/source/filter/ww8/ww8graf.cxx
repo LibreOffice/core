@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.152 $
+ * $Revision: 1.153 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1100,7 +1100,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                                  pRecord->eShapeType,
                                                  aInnerDist );
 
-                        pFlyFmt->SetAttr( aFlySet );
+                        pFlyFmt->SetFmtAttr( aFlySet );
 
                         MapWrapIntoFlyFmt(pRecord, pFlyFmt);
                     }
@@ -1991,14 +1991,14 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
         SvxLRSpaceItem aLR(writer_cast<USHORT>(pRecord->nDxWrapDistLeft),
             writer_cast<USHORT>(pRecord->nDxWrapDistRight), 0, 0, RES_LR_SPACE);
         AdjustLRWrapForWordMargins(*pRecord, aLR);
-        pFlyFmt->SetAttr(aLR);
+        pFlyFmt->SetFmtAttr(aLR);
     }
     if (pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom)
     {
         SvxULSpaceItem aUL(writer_cast<USHORT>(pRecord->nDyWrapDistTop),
             writer_cast<USHORT>(pRecord->nDyWrapDistBottom), RES_UL_SPACE);
         AdjustULWrapForWordMargins(*pRecord, aUL);
-        pFlyFmt->SetAttr(aUL);
+        pFlyFmt->SetFmtAttr(aUL);
     }
 
     //If we are contoured and have a custom polygon...
