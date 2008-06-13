@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfld.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -687,7 +687,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     aTmp.Put( SwTblBoxValue( nValue ));
                     if( SFX_ITEM_SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTblBoxNumFormat( 0 ));
-                    pFmt->SetAttr( aTmp );
+                    pFmt->SetFmtAttr( aTmp );
 
                     pCalc->SetCalcError( CALC_NOERR );
                 }
