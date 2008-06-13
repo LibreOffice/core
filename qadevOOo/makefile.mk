@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +44,7 @@ TST:
 .IF "$(JDK)"=="gcj"
 ANT_FLAGS+=-Dbuild.source=1.5
 .ELSE
-ANT_FLAGS+=-Dbuild.source=1.3
+ANT_FLAGS+=-Dbuild.source=1.4
 .ENDIF
 ALLTAR: ANTBUILD
 .ENDIF
