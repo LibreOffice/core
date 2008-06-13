@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.49 $
+# $Revision: 1.50 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -367,6 +367,8 @@ sub setglobalvariables
         $installer::globals::unpackpath = cwd();
         if ( $installer::globals::iswin ) { $installer::globals::unpackpath =~ s/\//\\/g; }
     }
+
+    if ( $installer::globals::localunpackdir ne "" ) { $installer::globals::unpackpath = $installer::globals::localunpackdir; }
 
     if (!($installer::globals::unpackpath eq ""))
     {
