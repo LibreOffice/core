@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vprint.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,7 +590,7 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
                 SwTwips aTmp = aSz.GetHeight();
                 aSz.SetHeight( aSz.GetWidth() );
                 aSz.SetWidth( aTmp );
-                rFmt.SetAttr( aSz );
+                rFmt.SetFmtAttr( aSz );
             }
             GetDoc()->ChgPageDesc( i, aNew );
         }
@@ -633,7 +633,7 @@ void ViewShell::ChgAllPageSize( Size &rSz )
 
         SwFmtFrmSize aFrmSz( rPgFmt.GetFrmSize() );
         aFrmSz.SetSize( aSz );
-        rPgFmt.SetAttr( aFrmSz );
+        rPgFmt.SetFmtAttr( aFrmSz );
         pMyDoc->ChgPageDesc( i, aNew );
     }
 }
@@ -810,7 +810,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
         {
             SwTableNode* pTNd = pCNd->FindTableNode();
             if( pTNd )
-                pTNd->GetTable().GetFrmFmt()->SetAttr( SwFmtPageDesc( pPageDesc ) );
+                pTNd->GetTable().GetFrmFmt()->SetFmtAttr( SwFmtPageDesc( pPageDesc ) );
         }
         else
         {
@@ -899,7 +899,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         {
             SwTableNode* pTNd = pCNd->FindTableNode();
             if( pTNd )
-                pTNd->GetTable().GetFrmFmt()->SetAttr( SwFmtPageDesc( pPageDesc ) );
+                pTNd->GetTable().GetFrmFmt()->SetFmtAttr( SwFmtPageDesc( pPageDesc ) );
         }
         else
         {
