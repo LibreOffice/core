@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -834,7 +834,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
             pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
             bNewCharFmtCreated = true;
             // Attribute reinsetzen
-            pFmt->SetAttr( *pThisLevelItemSet );
+            pFmt->SetFmtAttr( *pThisLevelItemSet );
         }
         else
         {
@@ -1418,12 +1418,12 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
     if (pNode)
     {
-        pNode->SetLevel(nLevel);
+        pNode->SetAttrListLevel(nLevel);
 
         if (bRestart || bNewstart)   //#112466# (I think)
-            pNode->SetRestart(true);
+            pNode->SetListRestart(true);
         if (bNewstart)
-            pNode->SetStart(nStart);
+            pNode->SetAttrListRestartValue(nStart);
     }
     return pRet;
 }
@@ -1452,7 +1452,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
         if( !IsInvalidOrToBeMergedTabCell() &&
             ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
-            pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
+            pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
 
         if( !rStyleInfo.pOutlineNumrule )
         {
@@ -1475,7 +1475,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             // outline rule.
 //            pTxtNode->
 //                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
-            pTxtNode->SetLevel( rStyleInfo.nOutlineLevel );
+            pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
             // <--
         }
     }
@@ -1489,7 +1489,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
     SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
     aLR.SetTxtLeft(nAbsLSpace);
     aLR.SetTxtFirstLineOfst(writer_cast<short>(nListFirstLineIndent));
-    rStyle.pFmt->SetAttr(aLR);
+    rStyle.pFmt->SetFmtAttr(aLR);
     rStyle.bListReleventIndentSet = true;
 }
 
@@ -1503,7 +1503,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
         aLR.SetTxtLeft(0);
         aLR.SetTxtFirstLineOfst(0);
     }
-    rStyle.pFmt->SetAttr(aLR);
+    rStyle.pFmt->SetFmtAttr(aLR);
 }
 
 void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
@@ -1571,7 +1571,7 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle)
                     rStyleInf.pOutlineNumrule = pNmRule;
                 else
                 {
-                    rStyleInf.pFmt->SetAttr(
+                    rStyleInf.pFmt->SetFmtAttr(
                         SwNumRuleItem( pNmRule->GetName() ) );
                     rStyleInf.bHasStyNumRule = true;
                 }
@@ -1631,7 +1631,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     const SwNumRule *pNormal = pTxtNd->GetNumRule();
                     if (pNormal != pRule)
                     {
-                        pTxtNd->SwCntntNode::SetAttr
+                        pTxtNd->SetAttr
                             (SwNumRuleItem(pRule->GetName()));
 
                     }
@@ -1646,12 +1646,12 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 //                pTxtNd->SetCounted(false);
             // <--
 
-            pTxtNd->SetLevel(nActLevel);
+            pTxtNd->SetAttrListLevel(nActLevel);
             // --> OD 2005-11-01 #126924#
             // - <IsCounted()> state of text node has to be adjusted accordingly.
             if ( /*nActLevel >= 0 &&*/ nActLevel < MAXLEVEL )
             {
-                pTxtNd->SetCounted( true );
+                pTxtNd->SetCountedInList( true );
             }
             // <--
 
@@ -1785,8 +1785,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
 
             if (pAktColl)
             {
-                pAktColl->SetAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
-                pAktColl->SetAttr(SvxLRSpaceItem(RES_LR_SPACE));    //#94672#
+                pAktColl->SetFmtAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
+                pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));    //#94672#
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
@@ -1795,9 +1795,9 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 //   setting hard no numbering.
 //                pTxtNode->SwCntntNode::SetAttr
 //                    (*GetDfltAttr(RES_PARATR_NUMRULE));
-                pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
+                pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
                 // <--
-                pTxtNode->SetCounted(false);
+                pTxtNode->SetCountedInList(false);
 
                 /*
                 #i24553#
@@ -1821,7 +1821,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                     //       to the outline rule
                     if ( pTxtNode->GetNumRule() != rDoc.GetOutlineNumRule() )
                     {
-                        pTxtNode->SwCntntNode::SetAttr(
+                        pTxtNode->SetAttr(
                             SwNumRuleItem( rDoc.GetOutlineNumRule()->GetName() ) );
                     }
                     // <--
