@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -637,7 +637,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                         SwFmtAnchor aAnch( *pAnchor );
                                         SwPosition aPos( rMark.nNode );
                                         aAnch.SetAnchor( &aPos );
-                                        pFmt->SetAttr( aAnch );
+                                        pFmt->SetFmtAttr( aAnch );
                                     }
                                 }
                                 else
@@ -681,7 +681,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                     pHistory->Add( *pFmt );
                                     SwFmtAnchor aAnch( *pAnchor );
                                     aAnch.SetAnchor( &rMark );
-                                    pFmt->SetAttr( aAnch );
+                                    pFmt->SetFmtAttr( aAnch );
                                 }
                             }
                         }
