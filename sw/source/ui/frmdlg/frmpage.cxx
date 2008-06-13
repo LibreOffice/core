@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmpage.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1977,32 +1977,6 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     else
         bAtVertPosModified = TRUE;
 
-    // OD 12.11.2003 #i22341# - following special handling no longer needed
-    /*
-    if (!bHori && pVMap == aVCharMap)
-    {
-        // Ausrichtung Vertikal
-        String sEntry;
-        USHORT nMapPos = GetMapPos(pVMap, aVerticalDLB);
-        short nAlign = GetAlignment(pVMap, nMapPos, aVerticalDLB, aVertRelationLB);
-        short nRel = GetRelation(pVMap, aVertRelationLB);
-
-        if (nRel == text::RelOrientation::CHAR)
-            sEntry = aFramePosString.GetString(SwFPos::FROMBOTTOM);
-        else
-            sEntry = aFramePosString.GetString(SwFPos::FROMTOP);
-
-        USHORT nOldPos = aVerticalDLB.GetSelectEntryPos();
-
-        String sName = aVerticalDLB.GetEntry(aVerticalDLB.GetEntryCount() - 1);
-        if (sName != sEntry)
-        {
-            aVerticalDLB.RemoveEntry(aVerticalDLB.GetEntryCount() - 1);
-            aVerticalDLB.InsertEntry(sEntry);
-            aVerticalDLB.SelectEntryPos(nOldPos);
-        }
-    }
-    */
     if(bHtmlMode  && FLY_AUTO_CNTNT == (RndStdIds)GetAnchor()) // wieder Sonderbehandlung
     {
         if(bHori)
