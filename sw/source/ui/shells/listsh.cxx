@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: listsh.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,11 +164,14 @@ void SwListShell::Execute(SfxRequest &rReq)
     switch (nSlot)
     {
         case FN_NUM_BULLET_DOWN:
+        case FN_NUM_BULLET_UP:
             {
                 SfxViewFrame * pFrame = GetView().GetViewFrame();
 
                 rReq.Done();
-                rSh.NumUpDown();
+                rSh.NumUpDown( ( nSlot == FN_NUM_BULLET_DOWN )
+                               ? TRUE
+                               : FALSE );
                 pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // StatusZeile updaten!
             }
             break;
@@ -230,12 +233,6 @@ void SwListShell::Execute(SfxRequest &rReq)
             rReq.Done();
             break;
 
-        case FN_NUM_BULLET_UP:
-            rSh.NumUpDown(FALSE);
-            GetView().GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );   // StatusZeile updaten!
-            rReq.Done();
-            break;
-
         case FN_NUM_OR_NONUM:
         {
             BOOL bApi = rReq.IsAPI();
@@ -258,10 +255,8 @@ void SwListShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
-    BOOL bHasChildren;
     SwWrtShell& rSh = GetShell();
-    BYTE nCurrentNumLevel = rSh.GetNumLevel( &bHasChildren );
-    nCurrentNumLevel = GetRealLevel(nCurrentNumLevel);
+    BYTE nCurrentNumLevel = rSh.GetNumLevel();
     while ( nWhich )
     {
         switch( nWhich )
