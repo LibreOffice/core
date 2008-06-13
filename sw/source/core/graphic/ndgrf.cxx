@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndgrf.cxx,v $
- * $Revision: 1.45 $
+ * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -492,7 +492,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
         if( 1 == nRet )
         {
             SwMsgPoolItem aMsg( RES_GRAPHIC_SWAPIN );
-            SwCntntNode::Modify( &aMsg, &aMsg );
+            Modify( &aMsg, &aMsg );
         }
     }
     else
@@ -739,7 +739,7 @@ void SwGrfNode::ScaleImageMap()
     if( bScale )
     {
         aURL.GetMap()->Scale( aScaleX, aScaleY );
-        pFmt->SetAttr( aURL );
+        pFmt->SetFmtAttr( aURL );
     }
 }
 
@@ -1119,18 +1119,6 @@ BOOL SwGrfNode::IsTransparent() const
     BOOL bRet = aGrfObj.IsTransparent();
     if( !bRet ) // ask the attribut
         bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
-
-    // --> OD 2007-12-13 #i80822#
-    // Fix is no longer needed and causes wrong results for non-transparent graphics
-//    /// OD 17.09.2002 #102099# - if return value is still FALSE and
-//    ///     graphic is swapped out, assume that graphic is transparent.
-//    ///     Thus, for safety reasons, paint errors are avoided, because the
-//    ///     background is painted not only by the graphic node.
-//    if ( !bRet && aGrfObj.IsSwappedOut() )
-//    {
-//        bRet = true;
-//    }
-    // <--
 
     return bRet;
 }
