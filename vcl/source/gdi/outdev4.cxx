@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev4.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -923,7 +923,7 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
         if( mpGraphics->supportsOperation( OutDevSupport_B2DClip ) )
         {
             ::basegfx::B2DPolyPolygon aB2DPolyPolygon = rPolyPoly.getB2DPolyPolygon();
-            const ::basegfx::B2DHomMatrix aTransform = GetViewTransformation();
+            const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
             aB2DPolyPolygon.transform( aTransform );
             mpGraphics->BeginSetClipRegion( 0 );
             mpGraphics->UnionClipRegion( aB2DPolyPolygon, this );
