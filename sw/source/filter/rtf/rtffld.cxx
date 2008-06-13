@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtffld.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -721,11 +721,11 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     {
                         SwCharFmt *pFmt = (SwCharFmt *)aRubyCharFmts[i];
                         const SvxFontHeightItem &rF = (const SvxFontHeightItem &)
-                                                    pFmt->GetAttr( nFntHWhich );
+                                                    pFmt->GetFmtAttr( nFntHWhich );
                         if( rF.GetHeight() == USHORT(aData.nFontSize * 10 ))
                         {
                             const SvxFontItem &rFI = (const SvxFontItem &)
-                                                    pFmt->GetAttr( nFntWhich );
+                                                    pFmt->GetFmtAttr( nFntWhich );
                             if( rFI.GetFamilyName().Equals( aData.sFontName ))
                             {
                                 pCharFmt = pFmt;
@@ -750,8 +750,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                         SvxFontItem aFontItem( FAMILY_DONTKNOW, aData.sFontName,
                             aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, nFntWhich );
 
-                        pCharFmt->SetAttr( aHeightItem );
-                        pCharFmt->SetAttr( aFontItem );
+                        pCharFmt->SetFmtAttr( aHeightItem );
+                        pCharFmt->SetFmtAttr( aFontItem );
                         void* p = pCharFmt;
                         aRubyCharFmts.Insert( p, aRubyCharFmts.Count() );
                     }
