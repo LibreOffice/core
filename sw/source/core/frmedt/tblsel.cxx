@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tblsel.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1084,7 +1084,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                          pCell->Frm().Width();
                                 long nTmpWidth = aNew.GetWidth() - nWidth;
                                 aNew.SetWidth( nWidth );
-                                pBox->GetFrmFmt()->SetAttr( aNew );
+                                pBox->GetFrmFmt()->SetFmtAttr( aNew );
                                 // diese Box ist selektiert
                                 pLastBox = pBox;
                                 rBoxes.Insert( pBox );
@@ -1095,7 +1095,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
                                 aNew.SetWidth( nTmpWidth );
                                 pBox->ClaimFrmFmt();
-                                pBox->GetFrmFmt()->SetAttr( aNew );
+                                pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                                 if( pUndo )
                                     pUndo->AddNewBox( pBox->GetSttIdx() );
@@ -1132,7 +1132,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             nWidth = aNew.GetWidth() - nLeft - nRight;
 
                             aNew.SetWidth( nLeft );
-                            pBox->GetFrmFmt()->SetAttr( aNew );
+                            pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                             {
                             const SfxPoolItem* pItem;
@@ -1141,14 +1141,14 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             {
                                 SvxBoxItem aBox( *(SvxBoxItem*)pItem );
                                 aBox.SetLine( 0, BOX_LINE_RIGHT );
-                                pBox->GetFrmFmt()->SetAttr( aBox );
+                                pBox->GetFrmFmt()->SetFmtAttr( aBox );
                             }
                             }
 
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
                             aNew.SetWidth( nWidth );
                             pBox->ClaimFrmFmt();
-                            pBox->GetFrmFmt()->SetAttr( aNew );
+                            pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                             if( pUndo )
                                 pUndo->AddNewBox( pBox->GetSttIdx() );
@@ -1163,7 +1163,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ];
                             aNew.SetWidth( nRight );
                             pBox->ClaimFrmFmt();
-                            pBox->GetFrmFmt()->SetAttr( aNew );
+                            pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                             if( pUndo )
                                 pUndo->AddNewBox( pBox->GetSttIdx() );
@@ -1190,13 +1190,13 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                     pCell->Frm().Width();
 
                             aNew.SetWidth( nLeft );
-                            pBox->ClaimFrmFmt()->SetAttr( aNew );
+                            pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
 
                                 // diese Box ist selektiert
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
                             aNew.SetWidth( nRight );
                             pBox->ClaimFrmFmt();
-                            pBox->GetFrmFmt()->SetAttr( aNew );
+                            pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                             pLastBox = pBox;
                             rBoxes.Insert( pBox );
@@ -1431,7 +1431,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aBox.SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
             if( aBox.GetLeft() || aBox.GetTop() ||
                 aBox.GetRight() || aBox.GetBottom() )
-                (*ppMergeBox)->GetFrmFmt()->SetAttr( aBox );
+                (*ppMergeBox)->GetFrmFmt()->SetFmtAttr( aBox );
         }
     }
 
@@ -1490,7 +1490,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
 
     // setze die Breite der Box
-    (*ppMergeBox)->GetFrmFmt()->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
+    (*ppMergeBox)->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
     if( pUndo )
         pUndo->AddNewBox( (*ppMergeBox)->GetSttIdx() );
 }
