@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.96 $
+# $Revision: 1.97 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -75,6 +75,10 @@ BEGIN
     $islinuxbuild = 0;
     $islinuxrpmbuild = 0;
     $islinuxdebbuild = 0;
+    $islinuxintelrpmbuild = 0;
+    $islinuxppcrpmbuild = 0;
+    $islinuxinteldebbuild = 0;
+    $islinuxppcdebbuild = 0;
     $issolarisbuild = 0;
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
