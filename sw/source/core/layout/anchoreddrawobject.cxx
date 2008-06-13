@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: anchoreddrawobject.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -761,8 +761,8 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
         nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
     }
 
-    GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-    GetFrmFmt().SetAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+    GetFrmFmt().SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    GetFrmFmt().SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
 }
 
 // --> OD 2004-09-29 #i34748# - change return type
@@ -855,7 +855,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         // only change position - do not lose other attributes
         SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
         aHori.SetPos( nHoriPos );
-        GetFrmFmt().SetAttr( aHori );
+        GetFrmFmt().SetFmtAttr( aHori );
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
         // --> OD 2007-01-03 #i73079# - vertical position already correct
@@ -866,7 +866,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 //        }
         // <--
         aVert.SetPos( nVertPos );
-        GetFrmFmt().SetAttr( aVert );
+        GetFrmFmt().SetFmtAttr( aVert );
         // <--
 
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
