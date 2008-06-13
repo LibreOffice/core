@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paratr.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -263,8 +263,9 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue() &&
-            GetDefinedIn() == ((SwNumRuleItem&)rAttr).GetDefinedIn();
+    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
+    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
+    // <--
 }
 /* -----------------------------27.06.00 11:05--------------------------------
 
