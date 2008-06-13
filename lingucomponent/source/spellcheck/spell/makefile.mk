@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.20 $
+# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,24 +36,9 @@ TARGET	= spell
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(HUNSPELL_LIBS)"!=""
-HUNSPELLLIB=$(HUNSPELL_LIBS)
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
 .ENDIF
-
-.IF "$(ULINGULIB)"==""
-.IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu
-.ENDIF # unx
-.IF  "$(GUI)"=="OS2"
-ULINGULIB=$(SLB)\libulingu.lib
-.ENDIF
-.IF "$(GUI)"=="WNT"
-ULINGULIB=libulingu.lib
-.ENDIF # wnt
-.ENDIF
-
-
-
 
 #----- Settings ---------------------------------------------------------
 
@@ -61,15 +46,9 @@ ULINGULIB=libulingu.lib
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-CXXFLAGS += -I..$/hunspell -I..$/..$/lingutil
-CFLAGSCXX += -I..$/hunspell -I..$/..$/lingutil
-CFLAGSCC += -I..$/hunspell  -I..$/..$/lingutil
-.ELSE
-CXXFLAGS += $(HUNSPELL_CFLAGS)
-CFLAGSCXX += $(HUNSPELL_CFLAGS)
-CFLAGSCC += $(HUNSPELL_CFLAGS)
-.ENDIF
+CXXFLAGS += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
+CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
+CFLAGSCC += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 
 EXCEPTIONSFILES=	\
         $(SLO)$/sprophelp.obj\
@@ -95,13 +74,10 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
-        $(LNGLIB)
-
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-SHL1STDLIBS+=   $(ULINGULIB) $(HUNSPELLLIB)
-.ELSE
-SHL1STDLIBS+=   $(HUNSPELLLIB)
-.ENDIF
+        $(LNGLIB) \
+        $(ULINGULIB) \
+        $(ICUUCLIB) \
+        $(HUNSPELLLIB)
 
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
