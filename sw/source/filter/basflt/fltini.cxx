@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltini.cxx,v $
- * $Revision: 1.58 $
+ * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -466,17 +466,27 @@ void SwRelNumRuleSpaces::SetNumRelSpaces( SwDoc& rDoc )
             // Rule noch gueltig und am Doc vorhanden?
             if( USHRT_MAX != rDoc.GetNumRuleTbl().GetPos( pRule ))
             {
-                SwNumRuleInfo aUpd( pRule->GetName() );
-                aUpd.MakeList( rDoc );
+                // --> OD 2008-02-19 #refactorlists#
+//                SwNumRuleInfo aUpd( pRule->GetName() );
+//                aUpd.MakeList( rDoc );
 
-                // bei allen nmumerierten Absaetzen vom linken Rand
-                // den absoluten Wert des NumFormates abziehen
-                for( ULONG nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
-                    ++nUpdPos )
+//                // bei allen nmumerierten Absaetzen vom linken Rand
+//                // den absoluten Wert des NumFormates abziehen
+//                for( ULONG nUpdPos = 0; nUpdPos < aUpd.GetList().Count();
+//                    ++nUpdPos )
+//                {
+//                    SwTxtNode* pNd = aUpd.GetList().GetObject( nUpdPos );
+//                    SetNumLSpace( *pNd, *pRule );
+//                }
+                SwNumRule::tTxtNodeList aTxtNodeList;
+                pRule->GetTxtNodeList( aTxtNodeList );
+                for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
+                      aIter != aTxtNodeList.end(); ++aIter )
                 {
-                    SwTxtNode* pNd = aUpd.GetList().GetObject( nUpdPos );
+                    SwTxtNode* pNd = *aIter;
                     SetNumLSpace( *pNd, *pRule );
                 }
+                // <--
             }
         }
     }
@@ -521,9 +531,9 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
     // - assure a correct level for retrieving numbering format.
 //    BYTE nLvl = rNd.GetLevel();
     BYTE nLvl = 0;
-    if ( rNd.GetLevel() >= 0 && rNd.GetLevel() < MAXLEVEL )
+    if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
     {
-        nLvl = static_cast< BYTE >(rNd.GetLevel());
+        nLvl = static_cast< BYTE >(rNd.GetActualListLevel());
     }
     // <--
     const SwNumFmt& rFmt = rRule.Get( nLvl );
@@ -554,7 +564,7 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
     {
         //bevor rLR geloescht wird!
         long nOffset = rLR.GetTxtLeft() - aLR.GetTxtLeft();
-        rNd.SwCntntNode::SetAttr( aLR );
+        rNd.SetAttr( aLR );
 
         // Tabs anpassen !!
         const SfxPoolItem* pItem;
@@ -576,7 +586,7 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
                         rTab.GetTabPos() += nOffset;
                 }
             }
-            rNd.SwCntntNode::SetAttr( aTStop );
+            rNd.SetAttr( aTStop );
         }
     }
 }
