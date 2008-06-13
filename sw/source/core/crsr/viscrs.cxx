@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viscrs.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,11 +65,7 @@
 #include <comcore.hrc>          // ResId fuer Abfrage wenn zu Search & Replaces
 #endif
 
-
-// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
-//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 extern void SwCalcPixStatics( OutputDevice *pOut );
-
 
 //Damit beim ShowCrsr nicht immer wieder die gleiche Size teuer ermittelt
 //werden muss, hier statische Member, die beim Wechsel des MapModes
@@ -79,10 +75,6 @@ long SwSelPaintRects::nPixPtX = 0;
 long SwSelPaintRects::nPixPtY = 0;
 MapMode* SwSelPaintRects::pMapMode = 0;
 
-
-
-//#define SHOW_BOOKMARKS
-//#define SHOW_REDLINES
 
 #ifdef SHOW_BOOKMARKS
 #include <bookmrk.hxx>
