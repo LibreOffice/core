@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,7 +566,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     const SwTwips GetCurrentBrowseWidth() /* const */;
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
-    void SetNodeNum( sal_uInt8 nLevel );
+    // --> OD 2008-04-02 #refactorlists#
+    // add parameter <bCountedInList>
+    void SetNodeNum( sal_uInt8 nLevel, bool bCountedInList );
+    // <--
 
     // Verwalten von Absatz-Vorlagen
 
