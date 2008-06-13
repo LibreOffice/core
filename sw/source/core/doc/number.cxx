@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: number.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +56,13 @@
 #include <unotools/configitem.hxx>
 // <--
 #include <numrule.hxx>
+#include <SwNodeNum.hxx>
 
 #include <hash_map>
+// --> OD 2008-02-19 #refactorlists#
+#include <list.hxx>
+#include <algorithm>
+// <--
 
 using namespace ::com::sun::star;
 
@@ -78,29 +83,6 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
         1440/4, 1440/2, 1440*3/4, 1440, 1440*5/4, 1440*3/2, 1440*7/4, 1440*2,
         1440*9/4, 1440*5/2
 };
-
-BYTE GetRealLevel( const BYTE nLvl )
-{
-    return nLvl & (NO_NUMLEVEL - 1);
-}
-
-BOOL IsNum( BYTE nLvl )
-{
-    return 0 == (nLvl & NO_NUMLEVEL);
-}
-
-BOOL IsShowNum( BYTE nLvl )
-{
-    return IsNum(nLvl) && nLvl != NO_NUMBERING;
-}
-
-void SetNoNum( BYTE * nLvl, BOOL nVal )
-{
-    if (nVal)
-        *nLvl |= NO_NUMLEVEL;
-    else
-        *nLvl &= ~NO_NUMLEVEL;
-}
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
@@ -132,14 +114,37 @@ void SwNumRule::SetName(const String & rName)
     sName = rName;
 }
 
-// --> OD 2006-09-12 #i69145#
-// Creates list of associated text nodes by copying contents of provided list <_pList>
-void SwNumRule::SetList( const SwTxtNodeTable& rList )
+// --> OD 2008-02-19 #refactorlists#
+void SwNumRule::GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const
 {
-    if ( pList )
-        delete pList;
+    rTxtNodeList = maTxtNodeList;
+}
 
-    pList = new SwTxtNodeTable( rList );
+SwNumRule::tTxtNodeList::size_type SwNumRule::GetTxtNodeListSize() const
+{
+    return maTxtNodeList.size();
+}
+
+void SwNumRule::AddTxtNode( SwTxtNode& rTxtNode )
+{
+    tTxtNodeList::iterator aIter =
+        std::find( maTxtNodeList.begin(), maTxtNodeList.end(), &rTxtNode );
+
+    if ( aIter == maTxtNodeList.end() )
+    {
+        maTxtNodeList.push_back( &rTxtNode );
+    }
+}
+
+void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
+{
+    tTxtNodeList::iterator aIter =
+        std::find( maTxtNodeList.begin(), maTxtNodeList.end(), &rTxtNode );
+
+    if ( aIter != maTxtNodeList.end() )
+    {
+        maTxtNodeList.erase( aIter );
+    }
 }
 // <--
 
@@ -148,16 +153,6 @@ void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
 {
     pNumRuleMap = _pNumRuleMap;
 }
-
-// --> OD 2006-06-27 #b6440955#
-// function move to namespace <numfunc>
-//const Font& SwNumRule::GetDefBulletFont()
-//{
-//    if( !pDefBulletFont )
-//        SwNumRule::_MakeDefBulletFont();
-//    return *pDefBulletFont;
-//}
-// <--
 
 USHORT SwNumRule::GetNumIndent( BYTE nLvl )
 {
@@ -175,7 +170,7 @@ USHORT SwNumRule::GetBullIndent( BYTE nLvl )
 
 static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
-    if( rNd.GetLevel() == nLevel )
+    if( rNd.GetActualListLevel() == nLevel )
         rNd.NumRuleChgd();
 }
 /* -----------------------------22.02.01 13:41--------------------------------
@@ -407,32 +402,41 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
         for( BYTE i = 0; i < MAXLEVEL; ++i )
             if( pRule->GetNumFmt( i ) == this )
             {
-                const String& rRuleNm = pRule->GetName();
+                // --> OD 2008-02-19 #refactorlists#
+//                const String& rRuleNm = pRule->GetName();
 
-                SwModify* pMod;
-                const SfxPoolItem* pItem;
-                USHORT k, nMaxItems = pDoc->GetAttrPool().GetItemCount(
-                                                    RES_PARATR_NUMRULE );
-                for( k = 0; k < nMaxItems; ++k )
-                    if( 0 != (pItem = pDoc->GetAttrPool().GetItem(
-                        RES_PARATR_NUMRULE, k ) ) &&
-                        0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->
-                                GetDefinedIn()) &&
-                        ((SwNumRuleItem*)pItem)->GetValue() == rRuleNm )
-                    {
-                        if( pMod->IsA( TYPE( SwFmt )) )
-                        {
-                            SwNumRuleInfo aInfo( rRuleNm );
-                            pMod->GetInfo( aInfo );
+//                SwModify* pMod;
+//                const SfxPoolItem* pItem;
+//                USHORT k, nMaxItems = pDoc->GetAttrPool().GetItemCount(
+//                                                    RES_PARATR_NUMRULE );
+//                for( k = 0; k < nMaxItems; ++k )
+//                    if( 0 != (pItem = pDoc->GetAttrPool().GetItem(
+//                        RES_PARATR_NUMRULE, k ) ) &&
+//                        0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->
+//                                GetDefinedIn()) &&
+//                        ((SwNumRuleItem*)pItem)->GetValue() == rRuleNm )
+//                    {
+//                        if( pMod->IsA( TYPE( SwFmt )) )
+//                        {
+//                            SwNumRuleInfo aInfo( rRuleNm );
+//                            pMod->GetInfo( aInfo );
 
-                            for( ULONG nFirst = 0, nLast = aInfo.GetList().Count();
-                                nFirst < nLast; ++nFirst )
-                                lcl_SetRuleChgd(
-                                    *aInfo.GetList().GetObject( nFirst ), i );
-                        }
-                        else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-                            lcl_SetRuleChgd( *(SwTxtNode*)pMod, i );
-                    }
+//                            for( ULONG nFirst = 0, nLast = aInfo.GetList().Count();
+//                                nFirst < nLast; ++nFirst )
+//                                lcl_SetRuleChgd(
+//                                    *aInfo.GetList().GetObject( nFirst ), i );
+//                        }
+//                        else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
+//                            lcl_SetRuleChgd( *(SwTxtNode*)pMod, i );
+//                    }
+                SwNumRule::tTxtNodeList aTxtNodeList;
+                pRule->GetTxtNodeList( aTxtNodeList );
+                for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
+                      aIter != aTxtNodeList.end(); ++aIter )
+                {
+                    lcl_SetRuleChgd( *(*aIter), i );
+                }
+                // <--
                 bFnd = TRUE;
                 break;
             }
@@ -466,8 +470,10 @@ SwNumRule::SwNumRule( const String& rNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType,
                       BOOL bAutoFlg )
-    : pList(0),
-    aMarkedLevels( MAXLEVEL ), // #i27615#
+    : maTxtNodeList(),
+      // --> OD 2008-03-03 #refactorlists#
+      maParagraphStyleList(),
+      // <--
     pNumRuleMap(0),
     sName( rNm ),
     eRuleType( eType ),
@@ -482,7 +488,10 @@ SwNumRule::SwNumRule( const String& rNm,
     mbCountPhantoms( true ),
     // <--
     // --> OD 2008-02-11 #newlistlevelattrs#
-    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode )
+    meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
+    // <--
+    // --> OD 2008-04-03 #refactorlists#
+    msDefaultListId()
     // <--
 {
 #ifndef PRODUCT
@@ -581,24 +590,29 @@ SwNumRule::SwNumRule( const String& rNm,
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
-    : pList(0),
-    aMarkedLevels( MAXLEVEL ), // #i27615#
-    pNumRuleMap(0),
-    sName( rNumRule.sName ),
-    eRuleType( rNumRule.eRuleType ),
-    nPoolFmtId( rNumRule.GetPoolFmtId() ),
-    nPoolHelpId( rNumRule.GetPoolHelpId() ),
-    nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
-    bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
-    bInvalidRuleFlag( TRUE ),
-    bContinusNum( rNumRule.bContinusNum ),
-    bAbsSpaces( rNumRule.bAbsSpaces ),
-    // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
-    mbCountPhantoms( true ),
-    // <--
-    // --> OD 2008-02-11 #newlistlevelattrs#
-    meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode )
-    // <--
+    : maTxtNodeList(),
+      // --> OD 2008-03-03 #refactorlists#
+      maParagraphStyleList(),
+      // <--
+      pNumRuleMap(0),
+      sName( rNumRule.sName ),
+      eRuleType( rNumRule.eRuleType ),
+      nPoolFmtId( rNumRule.GetPoolFmtId() ),
+      nPoolHelpId( rNumRule.GetPoolHelpId() ),
+      nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
+      bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
+      bInvalidRuleFlag( TRUE ),
+      bContinusNum( rNumRule.bContinusNum ),
+      bAbsSpaces( rNumRule.bAbsSpaces ),
+      // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
+      mbCountPhantoms( true ),
+      // <--
+      // --> OD 2008-02-11 #newlistlevelattrs#
+      meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
+      // <--
+      // --> OD 2008-04-03 #refactorlists#
+      msDefaultListId( rNumRule.msDefaultListId )
+      // <--
 {
 #ifndef PRODUCT
     nSerial = nInstances++;
@@ -643,20 +657,9 @@ SwNumRule::~SwNumRule()
             // <--
     }
 
-    tPamAndNums::iterator aIt;
-
-    for(aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-    {
-        delete (*aIt).first;
-        // --> OD 2006-03-07 #131436#
-        SwNodeNum::HandleNumberTreeRootNodeDelete( *((*aIt).second) );
-        // <--
-        delete (*aIt).second;
-    }
-
-    // --> OD 2006-09-12 #i69145#
-    delete pList;
-    pList = 0;
+    // --> OD 2008-02-19 #refactorlists#
+    maTxtNodeList.clear();
+    maParagraphStyleList.clear();
     // <--
 }
 
@@ -766,7 +769,7 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
     return aStr;
 }
 
-String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
+String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                                  const BOOL bInclStrings,
                                  const BOOL bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel ) const
@@ -854,7 +857,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 {
     String aRefNumStr;
 
-    if ( rNodeNum.GetLevel() >= 0 )
+    if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
         do
@@ -862,7 +865,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             bool bMakeNumStringForPhantom( false );
             if ( pWorkingNodeNum->IsPhantom() )
             {
-                SwNumFmt aFmt( Get( static_cast<USHORT>(pWorkingNodeNum->GetLevel()) ) );
+                SwNumFmt aFmt( Get( static_cast<USHORT>(pWorkingNodeNum->GetLevelInListTree()) ) );
                 bMakeNumStringForPhantom = aFmt.IsEnumeration() &&
                                            SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
 
@@ -879,9 +882,9 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 aRefNumStr.Insert( String::CreateFromAscii(" "), 0 );
             }
 
-            if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevel() > 0 )
+            if ( bInclSuperiorNumLabels && pWorkingNodeNum->GetLevelInListTree() > 0 )
             {
-                BYTE n = Get( static_cast<USHORT>(pWorkingNodeNum->GetLevel()) ).GetIncludeUpperLevels();
+                BYTE n = Get( static_cast<USHORT>(pWorkingNodeNum->GetLevelInListTree()) ).GetIncludeUpperLevels();
                 pWorkingNodeNum = dynamic_cast<SwNodeNum*>(pWorkingNodeNum->GetParent());
                 // skip parents, whose list label is already contained in the actual list label.
                 while ( pWorkingNodeNum && n > 1 )
@@ -895,8 +898,8 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 break;
             }
         } while ( pWorkingNodeNum &&
-                  pWorkingNodeNum->GetLevel() >= 0 &&
-                  static_cast<sal_uInt8>(pWorkingNodeNum->GetLevel()) >= nRestrictInclToThisLevel );
+                  pWorkingNodeNum->GetLevelInListTree() >= 0 &&
+                  static_cast<sal_uInt8>(pWorkingNodeNum->GetLevelInListTree()) >= nRestrictInclToThisLevel );
     }
 
     return aRefNumStr;
@@ -971,31 +974,23 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
 {
     if (bFlag)
     {
-        if (pList != NULL)
+        // --> OD 2008-03-13 #refactorlists#
+//        tPamAndNums::iterator aIt;
+//        for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+//            (*aIt).second->InvalidateTree();
+        std::set< SwList* > aLists;
+        tTxtNodeList::iterator aIter;
+        for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
         {
-            delete pList;
-            pList = 0;
+            const SwTxtNode* pTxtNode = *aIter;
+            aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
         }
-
-        tPamAndNums::iterator aIt;
-
-        for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-            (*aIt).second->InvalidateTree();
+        std::for_each( aLists.begin(), aLists.end(),
+                       std::mem_fun( &SwList::InvalidateListTree ) );
+        // <--
     }
 
     bInvalidRuleFlag = bFlag;
-}
-
-// #i27615#
-SwBitArray SwNumRule::SetLevelMarked(BYTE nLvl, BOOL bVal)
-{
-    SwBitArray aTmpMarkedLevels(aMarkedLevels);
-
-    aMarkedLevels.Set(nLvl, bVal);
-
-    aTmpMarkedLevels = aTmpMarkedLevels ^ aMarkedLevels;
-
-    return aTmpMarkedLevels;
 }
 
 // #i23725#, #i23726#
@@ -1063,45 +1058,22 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
         SetInvalidRule(bGotInvalid);
 }
 
-void SwNumRule::NewNumberRange(const SwPaM & rPam)
-{
-    // --> OD 2007-10-26 #i83479#
-    SwNodeNum * pNum = new SwNodeNum( this );
-    // <--
-
-    SwPaM * pPam = new SwPaM(*rPam.Start(), *rPam.End());
-    tPamAndNum aPamAndNum(pPam, pNum);
-
-    aNumberRanges.push_back(aPamAndNum);
-}
-
-void SwNumRule::AddNumber(SwNodeNum * pNum, unsigned int nLevel)
-{
-    tPamAndNums::iterator aIt;
-
-    SwPosition aPos(pNum->GetPosition());
-
-    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-    {
-        SwPosition * pStart = (*aIt).first->Start();
-        SwPosition * pEnd = (*aIt).first->End();
-        SwNodes * pRangeNodes = &(pStart->nNode.GetNode().GetNodes());
-        SwNodes * pNodes = &(aPos.nNode.GetNode().GetNodes());
-
-        if (pRangeNodes == pNodes && *pStart <= aPos && aPos <= *pEnd)
-        {
-            pNum->SetNumRule(this);
-            (*aIt).second->AddChild(pNum, nLevel);
-        }
-    }
-}
-
 void SwNumRule::Validate()
 {
-    tPamAndNums::iterator aIt;
-
-    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-        (*aIt).second->NotifyInvalidChildren();
+    // --> OD 2008-03-13 #refactorlists#
+//    tPamAndNums::iterator aIt;
+//    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+//        (*aIt).second->NotifyInvalidChildren();
+    std::set< SwList* > aLists;
+    tTxtNodeList::iterator aIter;
+    for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
+    {
+        const SwTxtNode* pTxtNode = *aIter;
+        aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
+    }
+    std::for_each( aLists.begin(), aLists.end(),
+                   std::mem_fun( &SwList::ValidateListTree ) );
+    // <--
 
     SetInvalidRule(FALSE);
 }
@@ -1115,6 +1087,35 @@ void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
 {
     mbCountPhantoms = bCountPhantoms;
 }
+
+// --> OD 2008-03-03 #refactorlists#
+SwNumRule::tParagraphStyleList::size_type SwNumRule::GetParagraphStyleListSize() const
+{
+    return maParagraphStyleList.size();
+}
+
+void SwNumRule::AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
+{
+    tParagraphStyleList::iterator aIter =
+        std::find( maParagraphStyleList.begin(), maParagraphStyleList.end(), &rTxtFmtColl );
+
+    if ( aIter == maParagraphStyleList.end() )
+    {
+        maParagraphStyleList.push_back( &rTxtFmtColl );
+    }
+}
+
+void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
+{
+    tParagraphStyleList::iterator aIter =
+        std::find( maParagraphStyleList.begin(), maParagraphStyleList.end(), &rTxtFmtColl );
+
+    if ( aIter != maParagraphStyleList.end() )
+    {
+        maParagraphStyleList.erase( aIter );
+    }
+}
+// <--
 
 // --> OD 2006-06-27 #b6440955#
 namespace numfunc
@@ -1483,3 +1484,4 @@ namespace numfunc
         return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 }
+// <--
