@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: poolfmt.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -244,10 +244,10 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                      ( rNFmt.GetAbsLSpace() || rNFmt.GetFirstLineOffset() ) )
                 // <--
                 {
-                    SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pColl->GetAttr( RES_LR_SPACE ) );
+                    SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pColl->GetFmtAttr( RES_LR_SPACE ) );
                     aLR.SetTxtFirstLineOfstValue( rNFmt.GetFirstLineOffset() );
                     aLR.SetTxtLeft( rNFmt.GetAbsLSpace() );
-                    pColl->SetAttr( aLR );
+                    pColl->SetFmtAttr( aLR );
                 }
 
                 // --> OD 2006-11-20 #i71764#
@@ -257,7 +257,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
 
-                    pColl->SetAttr(aItem);
+                    pColl->SetFmtAttr(aItem);
                 }
                 // <--
             }
@@ -1053,7 +1053,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     if( aSet.Count() )
     {
         {
-            pNewColl->SetAttr( aSet );
+            pNewColl->SetFmtAttr( aSet );
             // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
             //              (Bug: 18545)
             // SetModified();
@@ -1380,7 +1380,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     if( aSet.Count() )
     {
         {
-            pNewFmt->SetAttr( aSet );
+            pNewFmt->SetFmtAttr( aSet );
             // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
             //              (Bug: 18545)
             // SetModified();
@@ -1610,8 +1610,8 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         {
             if( bSetLeft )
-                pNewPgDsc->GetLeft().SetAttr( aSet );
-            pNewPgDsc->GetMaster().SetAttr( aSet );
+                pNewPgDsc->GetLeft().SetFmtAttr( aSet );
+            pNewPgDsc->GetMaster().SetFmtAttr( aSet );
             // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
             //              (Bug: 18545)
             // SetModified();
@@ -2358,33 +2358,41 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 // erfrage ob die NumRule benutzt wird
 sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
-    // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
-    // (auch indirekte fuer Format-Ableitung! )
-    sal_Bool bUsed = FALSE;
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
-    SwModify* pMod;
-    const SfxPoolItem* pItem;
-    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-    for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
-        {
-            if( pMod->IsA( TYPE( SwFmt )) )
-            {
-                bUsed = !pMod->GetInfo( aGetHt );
-                if( bUsed )
-                    break;
-            }
-            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-            {
-                bUsed = TRUE;
-                break;
-            }
-        }
+    // --> OD 2008-03-04 #refactorlists#
+//    // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
+//    // (auch indirekte fuer Format-Ableitung! )
+//    sal_Bool bUsed = FALSE;
+//    SwAutoFmtGetDocNode aGetHt( &aNodes );
+//    SwModify* pMod;
+//    const SfxPoolItem* pItem;
+//    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
+//    for( i = 0; i < nMaxItems; ++i )
+//    {
+//        if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
+//            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
+//            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
+//            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
+//        {
+//            if( pMod->IsA( TYPE( SwFmt )) )
+//            {
+//                bUsed = !pMod->GetInfo( aGetHt );
+//                if( bUsed )
+//                    break;
+//            }
+//            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
+//            {
+//                bUsed = TRUE;
+//                break;
+//            }
+//        }
+//    }
+
+//    return bUsed;
+    sal_Bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
+                     rRule.GetParagraphStyleListSize() > 0;
 
     return bUsed;
+    // <--
 }
 
     // Suche die Position vom Vorlagen-Namen. Ist nicht vorhanden
@@ -2546,9 +2554,9 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
 
     SwTxtFmtColl * pTxtFmtColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
-    pTxtFmtColl->ResetAttr( RES_PARATR_ADJUST );
+    pTxtFmtColl->ResetFmtAttr( RES_PARATR_ADJUST );
     /* #111214# koreans do not like SvxScriptItem(TRUE) */
-    pTxtFmtColl->ResetAttr( RES_PARATR_SCRIPTSPACE );
+    pTxtFmtColl->ResetFmtAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
@@ -2556,8 +2564,8 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
     for( sal_uInt16 i=0; i<nCount; ++i )
     {
         SwPageDesc& rDesc = _GetPageDesc( i );
-        rDesc.GetMaster().SetAttr( aFrameDir );
-        rDesc.GetLeft().SetAttr( aFrameDir );
+        rDesc.GetMaster().SetFmtAttr( aFrameDir );
+        rDesc.GetLeft().SetFmtAttr( aFrameDir );
     }
 
     // OD 09.10.2003 #i18732# - restore static pool default for item
