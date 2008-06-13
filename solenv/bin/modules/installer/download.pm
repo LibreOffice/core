@@ -8,7 +8,7 @@
 #
 # $RCSfile: download.pm,v $
 #
-# $Revision: 1.41 $
+# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -449,6 +449,8 @@ sub get_downloadname_start
 sub get_downloadname_addon
 {
     my $addon = "";
+
+    if ( $installer::globals::islinuxdebbuild ) { $addon = $addon . "_deb"; }
 
     if ( $installer::globals::product =~ /_wJRE\s*$/ ) { $addon = "_wJRE"; }
 
