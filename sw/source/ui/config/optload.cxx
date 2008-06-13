@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optload.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -936,7 +936,7 @@ void SwCaptionOptPage::DrawSample()
                 if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     BYTE nLvl = pFldType->GetOutlineLvl();
-                    SwNodeNum::tNumberVector aNumVector;
+                    SwNumberTree::tNumberVector aNumVector;
                     for( BYTE i = 0; i <= nLvl; ++i )
                         aNumVector.push_back(1);
 
