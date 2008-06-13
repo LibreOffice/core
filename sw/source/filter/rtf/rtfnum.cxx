@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtfnum.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1087,7 +1087,7 @@ NUMATTR_SETUNDERLINE:
                 pDoc->DelCharFmt( pChFmt );
             }
             else
-                pChFmt->ResetAttr( RES_CHRATR_FONT );
+                pChFmt->ResetFmtAttr( RES_CHRATR_FONT );
         }
     }
 
@@ -1127,7 +1127,7 @@ void SwRTFWriter::OutRTFListTab()
     USHORT nId = 1, nTmplId = 1, n;
 
     // prepare the NodeNum to generate the NumString
-    SwNodeNum::tNumberVector aNumVector;
+    SwNumberTree::tNumberVector aNumVector;
     for( n = 0; n < MAXLEVEL; ++n )
         aNumVector.push_back(n);
     BYTE aNumLvlPos[ MAXLEVEL ];
@@ -1367,15 +1367,22 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
     BOOL bRet = FALSE;
     const SwNumRule* pRule = rNd.GetNumRule();
 
-    if( pRule && MAXLEVEL > rNd.GetLevel() )
+    // --> OD 2008-03-18 #refactorlists#
+//    if( pRule && MAXLEVEL > rNd.GetActualListLevel() )
+    if( pRule && rNd.IsInList() )
+    // <--
     {
+        // --> OD 2008-03-18 #refactorlists#
+        ASSERT( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL,
+                "<SwRTFWriter::OutListNum(..)> - text node does not have valid list level. Serious defect -> please inform OD" );
+        // <--
+
         bOutFmtAttr = FALSE;
         bOutListNumTxt = TRUE;
         bRet = TRUE;
 
-        BOOL bValidNum = MAXLEVEL > rNd.GetLevel(),
-             bExportNumRule = USHRT_MAX != GetNumRuleId( *pRule );
-        BYTE nLvl = static_cast< BYTE >(rNd.GetLevel());
+        const bool bExportNumRule = USHRT_MAX != GetNumRuleId( *pRule );
+        const BYTE nLvl = static_cast< BYTE >(rNd.GetActualListLevel());
         const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
         if( !pFmt )
             pFmt = &pRule->Get( nLvl );
@@ -1387,12 +1394,10 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
         SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
         aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
 
-        if( bValidNum )
-        {
-            aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-            if (bExportNumRule)
-                Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
-        }
+        aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+        if ( bExportNumRule )
+            Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
+
         aSet.Put( aLR );
         Out_SfxItemSet( aRTFAttrFnTab, *this, aSet, TRUE );
 
@@ -1400,7 +1405,6 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
             Out_SfxItemSet( aRTFAttrFnTab, *this,
                         pFmt->GetCharFmt()->GetAttrSet(), TRUE );
 
-        if( bValidNum )
         {
             String sTxt;
             if( SVX_NUM_CHAR_SPECIAL == pFmt->GetNumberingType() || SVX_NUM_BITMAP == pFmt->GetNumberingType() )
