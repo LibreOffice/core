@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docshini.cxx,v $
- * $Revision: 1.66 $
+ * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -280,7 +280,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if( !bHTMLTemplSet )
             {
                 SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-                pColl->ResetAttr(nFontWhich);
+                pColl->ResetFmtAttr(nFontWhich);
             }
             delete pFontItem;
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( FONT_STANDARD, i, eLanguage );
@@ -290,7 +290,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if( !bHTMLTemplSet )
             {
                 SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-                pColl->ResetAttr(aFontHeightWhich[i]);
+                pColl->ResetFmtAttr(aFontHeightWhich[i]);
             }
 
         }
@@ -344,7 +344,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, sal_False ) )
                 {
-                    pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+                    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
                                         aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
                 }
                 if(bDelete)
@@ -357,11 +357,11 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeight = pStdFont->GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
-            SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetAttr( nFontHeightWhich, sal_True ));
+            SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, sal_True ));
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);
-                pColl->SetAttr( aFontHeight );
+                pColl->SetFmtAttr( aFontHeight );
             }
         }
     }
