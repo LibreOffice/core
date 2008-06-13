@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbgoutsw.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +51,10 @@
 #include <swrect.hxx>
 #include <ndarr.hxx>
 #include <paratr.hxx>
+#include <SwNodeNum.hxx>
 #include <dbgoutsw.hxx>
 #include <SwRewriter.hxx>
+#include <iostream>
 
 using namespace std;
 
@@ -397,7 +399,7 @@ const char * dbg_out(const SwPaM & rPam)
 
 String lcl_dbg_out(const SwNodeNum & rNum)
 {
-    return rNum.ToString();
+    return String();/*rNum.ToString();*/
 }
 
 const char * dbg_out(const SwNodeNum & rNum)
@@ -599,8 +601,8 @@ String lcl_dbg_out(const SwNode & rNode)
 
             const SwNumFmt * pNumFmt = NULL;
 
-            if (pTxtNode->GetLevel() > 0)
-                pNumFmt = pNumRule->GetNumFmt( static_cast< USHORT >(pTxtNode->GetLevel()) );
+            if (pTxtNode->GetActualListLevel() > 0)
+                pNumFmt = pNumRule->GetNumFmt( static_cast< USHORT >(pTxtNode->GetActualListLevel()) );
 
             if (pNumFmt)
             {
@@ -610,7 +612,7 @@ String lcl_dbg_out(const SwNode & rNode)
             }
         }
 
-        if (pTxtNode->IsCounted())
+        if (pTxtNode->IsCountedInList())
             aTmpStr += String(" counted", RTL_TEXTENCODING_ASCII_US);
 
         SwFmtColl * pColl = pTxtNode->GetFmtColl();
@@ -626,7 +628,7 @@ String lcl_dbg_out(const SwNode & rNode)
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
-                (pColl->GetAttr(RES_PARATR_NUMRULE));
+                (pColl->GetFmtAttr(RES_PARATR_NUMRULE));
             const String sNumruleName = rItem.GetValue();
 
             if (sNumruleName.Len() > 0)
