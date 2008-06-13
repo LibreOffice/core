@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txmsrt.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -722,14 +722,14 @@ String SwTOXPara::GetURL() const
                 if( pRule )
                 {
                     // dann noch die rel. Nummer davor setzen
-                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetLevel());
+                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
                     if(nCurrLevel <= MAXLEVEL)
                     {
                         // --> OD 2005-11-02 #i51089 - TUNING#
                         if ( pTxtNd->GetNum() )
                         {
-                            SwNodeNum::tNumberVector aNumVector =
-                                pTxtNd->GetNum()->GetNumberVector();
+                            SwNumberTree::tNumberVector aNumVector =
+                                pTxtNd->GetNumberVector();
 
                             for( USHORT n = 0; n <= nCurrLevel; ++n )
                             {
