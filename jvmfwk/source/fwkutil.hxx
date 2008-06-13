@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fwkutil.hxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +37,9 @@
 #include "rtl/ustrbuf.hxx"
 #include "rtl/byteseq.hxx"
 #include "osl/thread.hxx"
-
+#if OSL_DEBUG_LEVEL >=2
+#include <stdio.h>
+#endif
 
 
 namespace jfw
