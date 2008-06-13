@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.108 $
+ * $Revision: 1.109 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2137,8 +2137,9 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
 WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
                                                  SwPaM & rPaM)
 : mbCopy(false),
-
-mnCpStart(nCpStart), mnCpEnd(nCpEnd), mPaM(*rPaM.GetPoint(), *rPaM.GetMark()),
+  mnCpStart(nCpStart),
+  mnCpEnd(nCpEnd),
+  mPaM(*rPaM.GetPoint(), *rPaM.GetMark()),
   mItemSet(rPaM.GetDoc()->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1)
 {
 }
@@ -2559,8 +2560,8 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
                 aEmptyStr,PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT);
             aHeightItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
             aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
-            pFmt->SetAttr(aHeightItem);
-            pFmt->SetAttr(aFontItem);
+            pFmt->SetFmtAttr(aHeightItem);
+            pFmt->SetFmtAttr(aFontItem);
             aRubyCharFmts.push_back(pFmt);
             pCharFmt = pFmt;
         }
