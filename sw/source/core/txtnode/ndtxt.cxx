@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,6 +96,11 @@
 
 #include <swtable.hxx>
 #include <docsh.hxx>
+#include <SwNodeNum.hxx>
+// --> OD 2008-02-25 #refactorlists#
+#include <svtools/intitem.hxx>
+#include <list.hxx>
+// <--
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
@@ -222,36 +227,29 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       const SfxItemSet* pAutoAttr )
     : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
       pSwpHints( 0 ),
-      // --> OD 2005-11-02 #i51089 - TUNING#
-      mpNodeNum( 0L ),
-      // <--
-      bCounted( true ),
+      mpNodeNum( 0 ),
       bNotifiable( false ),
       bLastOutlineState( FALSE ),
-      nOutlineLevel( pTxtColl->GetOutlineLevel() )
+      nOutlineLevel( pTxtColl->GetOutlineLevel() ),
+      // --> OD 2008-05-06 #refactorlists#
+      mbInSetOrResetAttr( false ),
+      mpList( 0 )
+      // <--
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
-//    aNdNum.SetTxtNode(this);
-    // <--
-
     InitSwParaStatistics( true );
 
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
-        SwCntntNode::SetAttr( *pAutoAttr );
+        SetAttr( *pAutoAttr );
 
-    SyncNumberAndNumRule();
-    GetNodes().UpdateOutlineNode(*this);
-
-    if( GetNodes().IsDocNodes())
+    // --> OD 2008-03-13 #refactorlists# - no longed needed
+//    SyncNumberAndNumRule();
+    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
     {
-        SwNumRule* pRule = _GetNumRule();
-        if( pRule )
-        {
-            pRule->SetInvalidRule( TRUE );
-            bCounted = true;
-        }
+        AddToList();
     }
+    // <--
+    GetNodes().UpdateOutlineNode(*this);
 
     bNotifiable = true;
 
@@ -277,26 +275,14 @@ SwTxtNode::~SwTxtNode()
         delete pTmpHints;
     }
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
-//    aNdNum.RemoveMe();
-//    aNdNum.SetTxtNode(NULL);
-    // <--
-
-    // --> FME 2004-11-02 #114798# Force the deletion of the pList member
-    // of the num rule, otherwise this may still be contained in pList.
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    if ( pRule )
-        pRule->SetInvalidRule( TRUE );
-    // <--
-
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( mpNodeNum )
-    {
-        mpNodeNum->RemoveMe();
-        delete mpNodeNum;
-        mpNodeNum = 0L;
-    }
+    // --> OD 2008-03-13 #refactorlists#
+//    if ( mpNodeNum )
+//    {
+//        mpNodeNum->RemoveMe();
+//        delete mpNodeNum;
+//        mpNodeNum = 0L;
+//    }
+    RemoveFromList();
     // <--
 
     InitSwParaStatistics( false );
@@ -338,10 +324,6 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 {
                     SwClientIter aNew( rNode );
                     pFrm = (SwCntntFrm*)aNew.First( TYPE(SwCntntFrm) );
-//JP 11.07.00: the assert's shows incorrect an error when nodes are converted
-//              to a table. Then no layout exist!
-//                  ASSERT( pFrm, "lcl_ChangeFtnRef: No TxtFrm" );
-//                  ASSERT( pFrm && !aNew.Next(),"lcl_ChangeFtnRef: Doublefault");
                     if( !pFrm )
                         return;
                 }
@@ -400,48 +382,26 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
 SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 {
     // lege den Node "vor" mir an
-    xub_StrLen nSplitPos = rPos.nContent.GetIndex(),
-                    nTxtLen = aText.Len();
-    // --> OD 2005-10-17 #i55459#
-    // Method <_MakeNewTxtNode(..)> may modify <IsCounted> attribute of <this>.
-    // Thus, remember its state before calling this method and set this state
-    // at the newly created text node.
-    const bool bIsCounted( IsCounted() );
-    // <--
-    // --> OD 2006-04-26 #i64660#
-    // Method <_MakeNewTxtNode(..)> may modify <GetLevel()> attribute of <this>.
-    // Thus, remember its value before calling this method and set this value
-    // at the newly created text node, if needed.
-    const int nLevel( GetLevel() );
-    // <--
-    // --> OD 2007-07-09 #i77372# - complete fixes i55459 and i64660
-    // keep all numbering attributes before calling <_MakeNewTxtNode>
-    const SwNumRule* pRule( GetNumRule() );
-    const bool bIsRestart( IsRestart() );
-    const SwNodeNum::tSwNumTreeNumber nRestartVal( GetStart() );
-    // <--
-
+    xub_StrLen nSplitPos = rPos.nContent.GetIndex();
+    xub_StrLen nTxtLen = aText.Len();
     SwTxtNode* pNode = _MakeNewTxtNode( rPos.nNode, FALSE, nSplitPos==nTxtLen );
 
-    // --> OD 2007-07-09 #i77372# - restore all numbering attributes at new text node
-    if ( pRule != NULL && pRule == pNode->GetNumRule() )
+    // --> OD 2008-03-27 #refactorlists#
+//    // --> OD 2007-07-09 #i77372#
+//    // reset numbering attribute at current node, only if it is numbered.
+//    if ( GetNumRule() != NULL )
+//    {
+//        SetRestart(false);
+//        SetStart(1);
+//        SetCounted(true);
+//    }
+    ResetAttr( RES_PARATR_LIST_ISRESTART );
+    ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+    ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+    if ( GetNumRule() == 0 )
     {
-        pNode->SetLevel( nLevel );
-        pNode->SetRestart( bIsRestart );
-        pNode->SetStart( nRestartVal );
-        pNode->SetCounted( bIsCounted );
-    }
-    // <--
-
-    //pNode->SetOutlineLevel(GetOutlineLevel());
-
-    // --> OD 2007-07-09 #i77372#
-    // reset numbering attribute at current node, only if it is numbered.
-    if ( GetNumRule() != NULL )
-    {
-        SetRestart(false);
-        SetStart(1);
-        SetCounted(true);
+        ResetAttr( RES_PARATR_LIST_ID );
+        ResetAttr( RES_PARATR_LIST_LEVEL );
     }
     // <--
 
@@ -653,7 +613,7 @@ void SwTxtNode::MoveTxtAttr_To_AttrSet()
             break;
 
         if( !pHt->IsDontMoveAttr() &&
-            SwCntntNode::SetAttr( pHt->GetAttr() ) )
+            SetAttr( pHt->GetAttr() ) )
         {
             pSwpHints->DeleteAtPos(i);
             DestroyAttr( pHt );
@@ -1083,37 +1043,6 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
     aTmpIdxReg.MoveTo( *this );
 }
 
-SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
-{
-    ASSERT( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
-    ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
-                "ChgFmtColl: ist kein Text-Collectionpointer." );
-
-    SwTxtFmtColl *pOldColl = GetTxtColl();
-    if( pNewColl != pOldColl )
-    {
-        SetCalcHiddenCharFlags();
-        SwCntntNode::ChgFmtColl( pNewColl );
-        NumRuleChgd();
-    }
-
-    SwTxtFmtColl * pNewTxtColl = static_cast<SwTxtFmtColl *>(pNewColl);
-
-    // nur wenn im normalen Nodes-Array
-    if( GetNodes().IsDocNodes() )
-        _ChgTxtCollUpdateNum( pOldColl, pNewTxtColl);
-
-    BYTE nNewLevel = pNewTxtColl->GetOutlineLevel();
-
-    if ( nNewLevel != NO_NUMBERING)
-        SetLevel(nNewLevel);
-
-    //SetOutlineLevel(nNewLevel);
-    GetNodes().UpdateOutlineNode(*this);
-
-    return pOldColl;
-}
-
 void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
                                         const SwTxtFmtColl *pNewColl)
 {
@@ -1124,12 +1053,9 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;
     const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;
 
-    SyncNumberAndNumRule();
-
-    if (NO_NUMBERING != nNewLevel)
+    if ( NO_NUMBERING != nNewLevel )
     {
-        SetLevel(nNewLevel);
-        //SetOutlineLevel(nNewLevel);
+        SetAttrListLevel(nNewLevel);
     }
 
     {
@@ -2095,9 +2021,9 @@ void SwTxtNode::_Cut( SwTxtNode *pDest, const SwIndex& rDestStart,
 
     // Frames benachrichtigen;
     SwInsTxt aInsHint( nDestStart, nLen );
-    pDest->SwCntntNode::Modify( 0, &aInsHint );
+    pDest->Modify( 0, &aInsHint );
     SwDelTxt aDelHint( nTxtStartIdx, nLen );
-    SwCntntNode::Modify( 0, &aDelHint );
+    Modify( 0, &aDelHint );
 }
 
 
@@ -2257,7 +2183,6 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
 {
     SwNumRule* pRet = 0;
 
-    // --> OD 2005-11-01 #TUNING#
     const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, bInParent );
     bool bNoNumRule = false;
     if ( pItem )
@@ -2385,26 +2310,22 @@ SwNumRule* SwTxtNode::GetNumRule(BOOL bInParent) const
 {
     SwNumRule * pRet = _GetNumRule(bInParent);
 
-    if (pRet && GetLevel() == -1)
-    {
-        ASSERT(FALSE, "Node with numrule but without number?");
-    }
-
-    return pRet;
-}
-
-SwNumRule * SwTxtNode::GetNumRuleSync(BOOL)
-{
-    SwNumRule * pRet = _GetNumRule();
-
-    if (pRet && GetLevel() == -1)
-        SyncNumberAndNumRule();
-
     return pRet;
 }
 
 void SwTxtNode::NumRuleChgd()
 {
+    // --> OD 2008-04-04 #refactorlists#
+    if ( IsInList() )
+    {
+        SwNumRule* pNumRule = GetNumRule();
+        if ( pNumRule && pNumRule != GetNum()->GetNumRule() )
+        {
+            mpNodeNum->ChangeNumRule( *pNumRule );
+        }
+    }
+    // <--
+
     if( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
@@ -2422,27 +2343,27 @@ BOOL SwTxtNode::IsNumbered() const
 {
     BOOL bResult = FALSE;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
     SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
-    if ( pRule && IsCounted() )
+    if ( pRule && IsCountedInList() )
         bResult = TRUE;
 
     return bResult;
 }
 
-BOOL SwTxtNode::HasMarkedLabel() const
+// --> OD 2008-04-02 #refactorlists#
+bool SwTxtNode::HasMarkedLabel() const
 {
-    BOOL bResult = FALSE;
+    bool bResult = false;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    if ( pNumRule )
-        bResult = pNumRule->IsLevelMarked( static_cast<BYTE>(GetNum()->GetLevel()) );
-    // <--
+    if ( IsInList() )
+    {
+        bResult =
+            GetDoc()->getListByName( GetListId() )->IsListLevelMarked( GetActualListLevel() );
+    }
 
     return bResult;
 }
+// <--
 // <- #i27615#
 
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
@@ -2535,13 +2456,11 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#
     {
-        // Ein SplitNode erzeugt !!immer!! einen neuen Level, NO_NUM
-        // kann nur ueber eine entsprechende Methode erzeugt werden !!
         // --> OD 2005-10-18 #i55459#
         // - correction: parameter <bNext> has to be checked, as it was in the
         //   previous implementation.
-        if ( !bNext && !IsCounted() )
-            SetCounted(true);
+        if ( !bNext && !IsCountedInList() )
+            SetCountedInList(true);
         // <--
     }
 
@@ -2561,16 +2480,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 
     if (pNextColl != pColl)
     {
-        /* -> HB #i47372# */
-        BYTE nLevel = pNextColl->GetOutlineLevel();
-
-        if (nLevel != NO_NUMBERING)
-        {
-            SetLevel(nLevel);
-            //SetOutlineLevel(nLevel);
-        }
-        /* <- HB #i47372# */
-
         // --> OD 2007-07-10 #i75353#
         if ( bClearHardSetNumRuleWhenFmtCollChanges )
         {
@@ -2594,7 +2503,24 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
     SwNodeIndex aIdx( rPos.nNode, 1 );
     SwTxtNode* pNew = _MakeNewTxtNode( aIdx, TRUE );
 
-    SyncNumberAndNumRule();
+    // --> OD 2008-05-14 #refactorlists#
+    // reset list attributes at appended text node
+    pNew->ResetAttr( RES_PARATR_LIST_ISRESTART );
+    pNew->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+    pNew->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+    if ( pNew->GetNumRule() == 0 )
+    {
+        pNew->ResetAttr( RES_PARATR_LIST_ID );
+        pNew->ResetAttr( RES_PARATR_LIST_LEVEL );
+    }
+    // <--
+    // --> OD 2008-03-13 #refactorlists#
+//    SyncNumberAndNumRule();
+    if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
+    {
+        AddToList();
+    }
+    // <--
 
     if( GetDepends() )
         MakeFrms( *pNew );
@@ -2638,14 +2564,10 @@ BOOL SwTxtNode::HasNumber() const
 {
     BOOL bResult = FALSE;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
     if ( pRule )
     {
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetNum()->GetLevel())));
-        // <--
+        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetActualListLevel())));
 
         // #i40041#
         bResult = aFmt.IsEnumeration() &&
@@ -2659,14 +2581,10 @@ BOOL SwTxtNode::HasBullet() const
 {
     BOOL bResult = FALSE;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
     if ( pRule )
     {
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetNum()->GetLevel())));
-        // <--
+        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetActualListLevel())));
 
         bResult = aFmt.IsItemize();
     }
@@ -2679,18 +2597,16 @@ BOOL SwTxtNode::HasBullet() const
 //i53420 added max outline parameter
 XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule &&
-         GetNum()->IsCounted() &&
-         pRule->Get( static_cast<USHORT>(GetNum()->GetLevel()) ).IsTxtFmt() )
+         IsCountedInList() &&
+         pRule->Get( static_cast<USHORT>(GetActualListLevel()) ).IsTxtFmt() )
     {
         return pRule->MakeNumString( GetNum()->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings ? TRUE : FALSE,
                                      FALSE,
                                      _nRestrictToThisLevel );
     }
-    // <--
 
     return aEmptyStr;
 }
@@ -2698,14 +2614,10 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
 long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
 {
     long nRet = 0;
-    // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
     if( pRule )
     {
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetNum()->GetLevel()));
-        // <--
+        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
         // --> OD 2008-01-16 #newlistlevelattrs#
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
@@ -2746,23 +2658,19 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    // <--
     if ( pRule )
     {
-        if ( IsCounted() )
+        if ( IsCountedInList() )
         {
             // --> OD 2008-01-16 #newlistlevelattrs#
-            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetNum()->GetLevel()));
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                // --> OD 2005-11-02 #i51089 - TUNING#
-                rFLOffset = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() )).GetFirstLineOffset();
-                // <--
+                rFLOffset = pRule->Get( static_cast<USHORT>(GetActualListLevel() )).GetFirstLineOffset();
 
                 if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
-
                     rFLOffset = rFLOffset + aItem.GetTxtFirstLineOfst();
                 }
             }
@@ -2890,9 +2798,9 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
         }
     }
 
-    if ( bWithSpacesForLevel && GetLevel() > 0 )
+    if ( bWithSpacesForLevel && GetActualListLevel() > 0 )
     {
-        int nLevel( GetLevel() );
+        int nLevel( GetActualListLevel() );
         while ( nLevel > 0 )
         {
             const sal_Unicode aSpace = ' ';
@@ -3238,6 +3146,141 @@ void SwTxtNode::Replace( const SwIndex& rStart, xub_StrLen nLen,
     SwModify::Modify( 0, &aHint );
 }
 
+// --> OD 2008-03-27 #refactorlists#
+namespace {
+    // Helper method for special handling of modified attributes at text node.
+    // The following is handled:
+    // (1) on changing the paragraph style - RES_FMT_CHG:
+    // Check, if list style of the text node is changed. If yes, add respectively
+    // remove the text node to the corresponding list.
+    // (2) on changing the attributes - RES_ATTRSET_CHG:
+    // Same as (1).
+    // (3) on changing the list style - RES_PARATR_NUMRULE:
+    // Same as (1).
+    void HandleModifyAtTxtNode( SwTxtNode& rTxtNode,
+                                const SfxPoolItem* pOldValue,
+                                const SfxPoolItem* pNewValue )
+    {
+        const USHORT nWhich = pOldValue ? pOldValue->Which() :
+                              pNewValue ? pNewValue->Which() : 0 ;
+        bool bNumRuleSet = false;
+        bool bParagraphStyleChanged = false;
+        String sNumRule;
+        String sOldNumRule;
+        switch ( nWhich )
+        {
+            case RES_FMT_CHG:
+            {
+                bParagraphStyleChanged = true;
+                if( rTxtNode.GetNodes().IsDocNodes() )
+                {
+                    const SwNumRule* pNumRuleAtTxtNode = rTxtNode.GetNumRule();
+                    if ( pNumRuleAtTxtNode )
+                    {
+                        bNumRuleSet = true;
+                        sNumRule = pNumRuleAtTxtNode->GetName();
+                    }
+                    sOldNumRule =
+                        dynamic_cast<const SwFmtChg*>(pOldValue)->pChangedFmt->GetNumRule().GetValue();
+                }
+                break;
+            }
+            case RES_ATTRSET_CHG:
+            {
+                const SfxPoolItem* pItem = 0;
+                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
+                        SFX_ITEM_SET )
+                {
+                    bNumRuleSet = true;
+                    sNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                }
+                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
+                        SFX_ITEM_SET )
+                {
+                    sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
+                }
+                break;
+            }
+            case RES_PARATR_NUMRULE:
+            {
+                if ( rTxtNode.GetNodes().IsDocNodes() )
+                {
+                    if ( pNewValue )
+                    {
+                        bNumRuleSet = true;
+                        sNumRule = dynamic_cast<const SwNumRuleItem*>(pNewValue)->GetValue();
+                    }
+                    if ( pOldValue )
+                    {
+                        sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pOldValue)->GetValue();
+                    }
+                }
+                break;
+            }
+        }
+        if ( sNumRule != sOldNumRule )
+        {
+            if ( bNumRuleSet )
+            {
+                if ( sNumRule.Len() == 0 )
+                {
+                    rTxtNode.RemoveFromList();
+                    if ( bParagraphStyleChanged )
+                    {
+                        SvUShortsSort aResetAttrsArray;
+                        aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
+                        aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
+                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
+                        aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
+                        aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
+                        SwPaM aPam( rTxtNode );
+                        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                    }
+                }
+                else
+                {
+                    rTxtNode.RemoveFromList();
+                    // If new list style is the outline style, apply outline
+                    // level as the list level.
+                    if ( sNumRule ==
+                            String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) )
+                    {
+                        int nNewListLevel =
+                                    rTxtNode.GetTxtColl()->GetOutlineLevel();
+                        if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
+                        {
+                            rTxtNode.SetAttrListLevel( nNewListLevel );
+                        }
+                    }
+                    rTxtNode.AddToList();
+                }
+            }
+            else // <sNumRule.Len() == 0 && sOldNumRule.Len() != 0>
+            {
+                rTxtNode.RemoveFromList();
+                if ( bParagraphStyleChanged )
+                {
+                    SvUShortsSort aResetAttrsArray;
+                    aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
+                    aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
+                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISRESTART );
+                    aResetAttrsArray.Insert( RES_PARATR_LIST_RESTARTVALUE );
+                    aResetAttrsArray.Insert( RES_PARATR_LIST_ISCOUNTED );
+                    SwPaM aPam( rTxtNode );
+                    rTxtNode.GetDoc()->ResetAttrs( aPam, sal_True, &aResetAttrsArray );
+                }
+            }
+        }
+        else if ( sNumRule.Len() > 0 && !rTxtNode.IsInList() )
+        {
+            rTxtNode.AddToList();
+        }
+        // <--
+    }
+    // End of method <HandleModifyAtTxtNode>
+}
+// <--
+
 void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
     bool bWasNotifiable = bNotifiable;
@@ -3251,11 +3294,18 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
         pRegisteredIn == ((SwFmtChg*)pNewValue)->pChangedFmt &&
         GetNodes().IsDocNodes() )
+    {
         _ChgTxtCollUpdateNum(
                         (SwTxtFmtColl*)((SwFmtChg*)pOldValue)->pChangedFmt,
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
+    }
 
-
+    // --> OD 2008-03-27 #refactorlists#
+    if ( !mbInSetOrResetAttr )
+    {
+        HandleModifyAtTxtNode( *this, pOldValue, pNewValue );
+    }
+    // <--
 
     SwCntntNode::Modify( pOldValue, pNewValue );
 
@@ -3268,6 +3318,43 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     }
 
     bNotifiable = bWasNotifiable;
+}
+
+SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
+{
+    ASSERT( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
+    ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
+                "ChgFmtColl: ist kein Text-Collectionpointer." );
+
+    SwTxtFmtColl *pOldColl = GetTxtColl();
+    if( pNewColl != pOldColl )
+    {
+        SetCalcHiddenCharFlags();
+        SwCntntNode::ChgFmtColl( pNewColl );
+        // --> OD 2008-03-27 #refactorlists#
+//        NumRuleChgd();
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( !mbInSetOrResetAttr,
+                "DEBUG ASSERTION - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" )
+#endif
+        if ( !mbInSetOrResetAttr )
+        {
+            SwFmtChg aTmp1( pOldColl );
+            SwFmtChg aTmp2( pNewColl );
+            HandleModifyAtTxtNode( *this, &aTmp1, &aTmp2  );
+        }
+        // <--
+    }
+
+    // nur wenn im normalen Nodes-Array
+    if( GetNodes().IsDocNodes() )
+    {
+        _ChgTxtCollUpdateNum( pOldColl, static_cast<SwTxtFmtColl *>(pNewColl) );
+    }
+
+    GetNodes().UpdateOutlineNode(*this);
+
+    return pOldColl;
 }
 
 // #111840#
@@ -3288,31 +3375,34 @@ SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
     return pResult;
 }
 
-SwNumberTreeNode::tNumberVector SwTxtNode::GetNumberVector() const
+SwNodeNum* SwTxtNode::CreateNum() const
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( !mpNodeNum )
+    {
+        // --> OD 2008-02-19 #refactorlists#
+        mpNodeNum = new SwNodeNum( const_cast<SwTxtNode*>(this) );
+        // <--
+    }
+    return mpNodeNum;
+}
+
+SwNumberTree::tNumberVector SwTxtNode::GetNumberVector() const
+{
     if ( GetNum() )
     {
         return GetNum()->GetNumberVector();
     }
     else
     {
-        SwNumberTreeNode::tNumberVector aResult;
+        SwNumberTree::tNumberVector aResult;
         return aResult;
     }
-    // <--
 }
 
 BOOL SwTxtNode::IsOutline() const
 {
     BOOL bResult = FALSE;
-    // --> OD 2005-11-02 #i51089 - TUNING#
-//    const SwNumRule * pRule = _GetNumRule();
 
-//    if ( ( ( pRule && pRule->IsOutlineRule() ) ||
-//           GetOutlineLevel() != NO_NUMBERING ) &&
-//         !IsInRedlines() )
-//        bResult = TRUE;
     if ( GetOutlineLevel() != NO_NUMBERING )
     {
         bResult = !IsInRedlines();
@@ -3325,7 +3415,6 @@ BOOL SwTxtNode::IsOutline() const
             bResult = !IsInRedlines();
         }
     }
-    // <--
 
     return bResult;
 }
@@ -3356,64 +3445,74 @@ int SwTxtNode::GetOutlineLevel() const
 #endif
 }
 
-int SwTxtNode::GetLevel() const
+// --> OD 2008-02-27 #refactorlists#
+void SwTxtNode::SetAttrListLevel( int nLevel )
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    return GetNum() ? GetNum()->GetLevel() : -1;
-    // <--
+    if ( nLevel < 0 || nLevel >= MAXLEVEL )
+    {
+        ASSERT( false,
+                "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
+        return;
+    }
+
+    SfxInt16Item aNewListLevelItem( RES_PARATR_LIST_LEVEL,
+                                    static_cast<INT16>(nLevel) );
+    SetAttr( aNewListLevelItem );
+}
+// <--
+// --> OD 2008-02-27 #refactorlists#
+bool SwTxtNode::HasAttrListLevel() const
+{
+    return GetpSwAttrSet() &&
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, FALSE ) == SFX_ITEM_SET;
+}
+// <--
+// --> OD 2008-02-27 #refactorlists#
+int SwTxtNode::GetAttrListLevel() const
+{
+    int nAttrListLevel = 0;
+
+    const SfxInt16Item& aListLevelItem =
+        dynamic_cast<const SfxInt16Item&>(GetAttr( RES_PARATR_LIST_LEVEL ));
+    nAttrListLevel = static_cast<int>(aListLevelItem.GetValue());
+
+    return nAttrListLevel;
+}
+// <--
+
+int SwTxtNode::GetActualListLevel() const
+{
+    return GetNum() ? GetNum()->GetLevelInListTree() : -1;
 }
 
-void SwTxtNode::SetLevel(int nLevel)
+// --> OD 2008-02-25 #refactorlists#
+void SwTxtNode::SetListRestart( bool bRestart )
 {
-    if (0 <= nLevel && nLevel < MAXLEVEL)
+//    CreateNum()->SetRestart(bRestart);
+    if ( !bRestart )
     {
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        CreateNum()->SetLevel( nLevel );
-        // <--
+        // attribute not contained in paragraph style's attribute set. Thus,
+        // it can be reset to the attribute pool default by resetting the attribute.
+        ResetAttr( RES_PARATR_LIST_ISRESTART );
     }
     else
     {
-        if (0 <= nLevel && (nLevel & NO_NUMLEVEL))
-        {
-            nLevel &= ~NO_NUMLEVEL;
-
-            if (0 <= nLevel && nLevel < NO_NUMLEVEL)
-            {
-                ASSERT(false, "SetLevel(NO_NUMLEVEL) is deprecated");
-
-                SetCounted(false);
-                // --> OD 2005-11-02 #i51089 - TUNING#
-                CreateNum()->SetLevel(nLevel & ~NO_NUMLEVEL);
-                // <--
-            }
-
-        }
-        else if (nLevel == NO_NUMBERING)
-        {
-            ASSERT(false, "SetLevel(NO_NUMBERING) is deprecated");
-
-            SetCounted(false);
-        }
-        else
-        {
-            // --> OD 2005-11-02 #i51089 - TUNING#
-            if ( GetNum() )
-            {
-                mpNodeNum->RemoveMe();
-                delete mpNodeNum;
-                mpNodeNum = 0L;
-            }
-            // <--
-        }
+        SfxBoolItem aNewIsRestartItem( RES_PARATR_LIST_ISRESTART,
+                                       TRUE );
+        SetAttr( aNewIsRestartItem );
     }
 }
 
-void SwTxtNode::SetRestart(bool bRestart)
+// --> OD 2008-02-25 #refactorlists#
+bool SwTxtNode::IsListRestart() const
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    CreateNum()->SetRestart(bRestart);
-    // <--
+//    return GetNum() ? GetNum()->IsRestart() : false;
+    const SfxBoolItem& aIsRestartItem =
+        dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISRESTART ));
+
+    return aIsRestartItem.GetValue() ? true : false;
 }
+// <--
 
 /** Returns if the paragraph has a visible numbering or bullet.
     This includes all kinds of numbering/bullet/outlines.
@@ -3425,12 +3524,12 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     bool bRet = false;
 
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
-    if ( pRule && IsCounted())
+    if ( pRule && IsCountedInList())
     {
         // --> OD 2008-03-19 #i87154#
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
-        const SwNumFmt& rFmt = pRule->Get( static_cast<USHORT>(GetNum()->GetLevel() ));
+        const SwNumFmt& rFmt = pRule->Get( static_cast<USHORT>(GetActualListLevel() ));
         if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
              pRule->MakeNumString( *(GetNum()) ).Len() > 0 )
         {
@@ -3442,20 +3541,74 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     return bRet;
 }
 
-void SwTxtNode::SetStart(SwNodeNum::tSwNumTreeNumber nNumber)
+// --> OD 2008-02-25 #refactorlists#
+void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber )
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    CreateNum()->SetStart(nNumber);
-    // <--
+//    CreateNum()->SetStart(nNumber);
+    const bool bChanged( HasAttrListRestartValue()
+                         ? GetAttrListRestartValue() != nNumber
+                         : nNumber != USHRT_MAX );
+
+    if ( bChanged || !HasAttrListRestartValue() )
+    {
+        if ( nNumber == USHRT_MAX )
+        {
+            ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+        }
+        else
+        {
+            SfxInt16Item aNewListRestartValueItem( RES_PARATR_LIST_RESTARTVALUE,
+                                                   static_cast<INT16>(nNumber) );
+            SetAttr( aNewListRestartValueItem );
+        }
+    }
+}
+// <--
+
+// --> OD 2008-02-27 #refactorlists#
+bool SwTxtNode::HasAttrListRestartValue() const
+{
+    return GetpSwAttrSet() &&
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, FALSE ) == SFX_ITEM_SET;
+}
+// <--
+SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
+{
+    ASSERT( HasAttrListRestartValue(),
+            "<SwTxtNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node." );
+
+    const SfxInt16Item& aListRestartValueItem =
+        dynamic_cast<const SfxInt16Item&>(GetAttr( RES_PARATR_LIST_RESTARTVALUE ));
+    return static_cast<SwNumberTree::tSwNumTreeNumber>(aListRestartValueItem.GetValue());
 }
 
-
-SwNodeNum::tSwNumTreeNumber SwTxtNode::GetStart() const
+// --> OD 2008-02-25 #refactorlists#
+SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
 {
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    return GetNum() ? GetNum()->GetStart() : 1;
-    // <--
+//    return GetNum() ? GetNum()->GetStart() : 1;
+    SwNumberTree::tSwNumTreeNumber nListRestartValue = 1;
+
+    if ( IsListRestart() && HasAttrListRestartValue() )
+    {
+        nListRestartValue = GetAttrListRestartValue();
+    }
+    else
+    {
+        SwNumRule* pRule = GetNumRule();
+        if ( pRule )
+        {
+            const SwNumFmt* pFmt =
+                    pRule->GetNumFmt( static_cast<USHORT>(GetAttrListLevel()) );
+            if ( pFmt )
+            {
+                nListRestartValue = pFmt->GetStart();
+            }
+        }
+    }
+
+    return nListRestartValue;
 }
+// <--
 
 bool SwTxtNode::IsNotifiable() const
 {
@@ -3473,132 +3626,141 @@ bool SwTxtNode::IsNotificationEnabled() const
     return bResult;
 }
 
-void SwTxtNode::SetCounted(bool _bCounted)
+// --> OD 2008-02-27 #refactorlists#
+void SwTxtNode::SetCountedInList( bool bCounted )
 {
-    // --> OD 2005-10-19 #126009#
-    // - improvement: invalidations only, if <IsCounted()> state changes.
-    const bool bInvalidate( bCounted != _bCounted );
-    // <--
-    bCounted = _bCounted;
-    // --> OD 2005-10-19 #126009#
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( bInvalidate && GetNum() )
+    if ( bCounted )
     {
-        // --> OD 2006-04-26 #i64010# - invalidation and notification of
-        // complete numbering tree needed.
-        mpNodeNum->InvalidateAndNotifyTree();
-//        mpNodeNum->InvalidateMe();
-//        // --> OD 2005-10-19 #126009# - invalidation of children and not counted
-//        // parent needed.
-//        mpNodeNum->InvalidateChildren();
-//        mpNodeNum->InvalidateNotCountedParent();
-//        // <--
-//        // --> OD 2005-10-20 #126009# - notification of not counted parent needed.
-//        mpNodeNum->NotifyNotCountedParentSiblings();
-//        // <--
-//        mpNodeNum->NotifyInvalidSiblings();
-        // <--
+        // attribute not contained in paragraph style's attribute set. Thus,
+        // it can be reset to the attribute pool default by resetting the attribute.
+        ResetAttr( RES_PARATR_LIST_ISCOUNTED );
     }
-    // <--
-}
-
-bool SwTxtNode::IsCounted() const
-{
-    return bCounted;
-}
-
-void SwTxtNode::CopyNumber(SwTxtNode & rNode) const
-{
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( GetNum() )
+    else
     {
-        rNode.SetLevel(GetLevel());
-        rNode.SetCounted(IsCounted());
-        if ( rNode.GetNum() )
+        SfxBoolItem aIsCountedInListItem( RES_PARATR_LIST_ISCOUNTED, FALSE );
+        SetAttr( aIsCountedInListItem );
+    }
+}
+// <--
+
+bool SwTxtNode::IsCountedInList() const
+{
+    const SfxBoolItem& aIsCountedInListItem =
+        dynamic_cast<const SfxBoolItem&>(GetAttr( RES_PARATR_LIST_ISCOUNTED ));
+
+    return aIsCountedInListItem.GetValue() ? true : false;
+}
+
+// --> OD 2008-03-13 #refactorlists#
+void SwTxtNode::AddToList()
+{
+    if ( IsInList() )
+    {
+        ASSERT( false,
+                "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
+        return;
+    }
+
+    const String sListId = GetListId();
+    if ( sListId.Len() > 0 )
+    {
+        SwList* pList = GetDoc()->getListByName( sListId );
+        if ( pList == 0 )
         {
-            rNode.mpNodeNum->SetRestart( GetNum()->IsRestart() );
-            rNode.mpNodeNum->SetStart( GetNum()->GetStart() );
+            // Create corresponding list.
+            SwNumRule* pNumRule = GetNumRule();
+            if ( pNumRule )
+            {
+                pList = GetDoc()->createList( sListId, GetNumRule()->GetName() );
+            }
+        }
+        ASSERT( pList != 0,
+                "<SwTxtNode::AddToList()> - no list for given list id. Serious defect -> please inform OD" );
+        if ( pList )
+        {
+            pList->InsertListItem( *CreateNum(), GetAttrListLevel() );
+            mpList = pList;
         }
     }
-    // <--
 }
 
-void SwTxtNode::SyncNumberAndNumRule()
+void SwTxtNode::RemoveFromList()
 {
-    SwNumRule* pRule = _GetNumRule();
-
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( pRule && !GetNum() )
+    if ( IsInList() )
     {
-        CreateNum();
-    }
-    if ( GetNum() &&
-         GetNum()->GetNumRule() != pRule )
-    // <--
-    {
-        // --> OD 2005-10-26 #b6340308# - use outline level in the case that the
-        // new numbering rule is the outline rule.
-        int nLevel = pRule == GetDoc()->GetOutlineNumRule()
-                     ? GetOutlineLevel()
-                     : GetLevel();
-        // <--
-
-        // --> OD 2006-01-12 #i60395#
-        // Consider that <GetOutlineLevel()> could return NO_NUMBERING
-        if ( nLevel < 0 ||
-             nLevel == NO_NUMBERING )
-            nLevel = 0;
-        // <--
-
-        // --> OD 2006-01-12 #i60395#
-        // the valid numbering level range is [0, MAXLEVEL)
-        if (nLevel > MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-        // <--
-
-        // --> OD 2005-11-02 #i51089 - TUNING#
-        mpNodeNum->RemoveMe();
-        // <--
-
-        if (pRule)
-        {
-            // --> OD 2005-11-02 #i51089 - TUNING#
-            pRule->AddNumber( mpNodeNum, nLevel );
-            // <--
-        }
-        // --> OD 2005-11-03 #i51089 - TUNING#
-        else
-        {
-            delete mpNodeNum;
-            mpNodeNum = 0L;
-        }
-        // <--
-    }
-}
-
-void SwTxtNode::UnregisterNumber()
-{
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( GetNum() )
-    {
-        mpNodeNum->RemoveMe();
+        mpList->RemoveListItem( *mpNodeNum );
+        mpList = 0;
         delete mpNodeNum;
         mpNodeNum = 0L;
     }
-    // <--
 }
+
+bool SwTxtNode::IsInList() const
+{
+    return GetNum() != 0 && GetNum()->GetParent() != 0;
+}
+// <--
 
 bool SwTxtNode::IsFirstOfNumRule() const
 {
     bool bResult = false;
 
-    // --> OD 2005-11-02 #i51089 - TUNING#
     if ( GetNum() && GetNum()->GetNumRule())
         bResult = GetNum()->IsFirst();
-    // <--
 
     return bResult;
 }
+
+// --> OD 2008-02-20 #refactorlists#
+void SwTxtNode::SetListId( const String sListId )
+{
+    const SfxStringItem& rListIdItem =
+            dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
+    if ( rListIdItem.GetValue() != sListId )
+    {
+        if ( sListId.Len() == 0 )
+        {
+            ResetAttr( RES_PARATR_LIST_ID );
+        }
+        else
+        {
+            SfxStringItem aNewListIdItem( RES_PARATR_LIST_ID, sListId );
+            SetAttr( aNewListIdItem );
+        }
+    }
+}
+
+String SwTxtNode::GetListId() const
+{
+    String sListId;
+
+    const SfxStringItem& rListIdItem =
+                dynamic_cast<const SfxStringItem&>(GetAttr( RES_PARATR_LIST_ID ));
+    sListId = rListIdItem.GetValue();
+
+    // As long as no explicit list id attribute is set, use the list id of
+    // the list, which has been created for the applied list style.
+    if ( sListId.Len() == 0 )
+    {
+        SwNumRule* pRule = GetNumRule();
+        if ( pRule )
+        {
+            sListId = pRule->GetDefaultListId();
+//#if OSL_DEBUG_LEVEL > 1
+//            ASSERT( false,
+//                    "DEBUG ASSERTION: default list id of list style is applied." );
+//#endif
+//            // setting list id directly using <SwCntntNode::SetAttr(..)>,
+//            // because no handling of this attribute set is needed and to avoid
+//            // recursive calls of <SwTxtNode::SetAttr(..)>
+//            SfxStringItem aNewListIdItem( RES_PARATR_LIST_ID, sListId );
+//            const_cast<SwTxtNode*>(this)->SwCntntNode::SetAttr( aNewListIdItem );
+        }
+    }
+
+    return sListId;
+}
+// <--
 
 /** Determines, if the list level indent attributes can be applied to the
     paragraph.
@@ -3689,9 +3851,9 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
     bool bListTanStopPositionProvided( false );
 
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
-    if ( pNumRule && HasVisibleNumberingOrBullet() && GetLevel() >= 0 )
+    if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetLevel()) );
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetActualListLevel()) );
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
              rFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
@@ -3732,9 +3894,9 @@ XubString SwTxtNode::GetLabelFollowedBy() const
     XubString aLabelFollowedBy;
 
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
-    if ( pNumRule && HasVisibleNumberingOrBullet() && GetLevel() >= 0 )
+    if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetLevel()) );
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetActualListLevel()) );
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             switch ( rFmt.GetLabelFollowedBy() )
@@ -3787,5 +3949,573 @@ bool SwTxtNode::IsHidden() const
         return true;
 
     return false;
+}
+// <--
+
+// --> OD 2008-03-13 #refactorlists#
+namespace {
+    // Helper class for special handling of setting attributes at text node:
+    // In constructor an instance of the helper class recognize whose attributes
+    // are set and perform corresponding actions before the intrinsic set of
+    // attributes has been taken place.
+    // In the destructor - after the attributes have been set at the text
+    // node - corresponding actions are performed.
+    // The following is handled:
+    // (1) When the list style attribute - RES_PARATR_NUMRULE - is set,
+    //     (A) list style attribute is empty -> the text node is removed from
+    //         its list.
+    //     (B) list style attribute is not empty
+    //         (a) text node has no list style -> add text node to its list after
+    //             the attributes have been set.
+    //         (b) text node has list style -> change of list style is notified
+    //             after the attributes have been set.
+    // (2) When the list id attribute - RES_PARATR_LIST_ID - is set and changed,
+    //     the text node is removed from its current list before the attributes
+    //     are set and added to its new list after the attributes have been set.
+    // (3) Notify list tree, if list level - RES_PARATR_LIST_LEVEL - is set
+    //     and changed after the attributes have been set
+    // (4) Notify list tree, if list restart - RES_PARATR_LIST_ISRESTART - is set
+    //     and changed after the attributes have been set
+    // (5) Notify list tree, if list restart value - RES_PARATR_LIST_RESTARTVALUE -
+    //     is set and changed after the attributes have been set
+    // (6) Notify list tree, if count in list - RES_PARATR_LIST_ISCOUNTED - is set
+    //     and changed after the attributes have been set
+    class HandleSetAttrAtTxtNode
+    {
+        public:
+            HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                    const SfxPoolItem& pItem );
+            HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                    const SfxItemSet& rItemSet );
+            ~HandleSetAttrAtTxtNode();
+
+        private:
+            SwTxtNode& mrTxtNode;
+            bool mbAddTxtNodeToList;
+            bool mbUpdateListLevel;
+            bool mbUpdateListRestart;
+            bool mbUpdateListCount;
+    };
+
+    HandleSetAttrAtTxtNode::HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                                    const SfxPoolItem& pItem )
+        : mrTxtNode( rTxtNode ),
+          mbAddTxtNodeToList( false ),
+          mbUpdateListLevel( false ),
+          mbUpdateListRestart( false ),
+          mbUpdateListCount( false )
+    {
+        switch ( pItem.Which() )
+        {
+            // handle RES_PARATR_NUMRULE
+            case RES_PARATR_NUMRULE:
+            {
+                mrTxtNode.RemoveFromList();
+
+                const SwNumRuleItem& pNumRuleItem =
+                                dynamic_cast<const SwNumRuleItem&>(pItem);
+                if ( pNumRuleItem.GetValue().Len() > 0 )
+                {
+                    mbAddTxtNodeToList = true;
+                }
+            }
+            break;
+
+            // handle RES_PARATR_LIST_ID
+            case RES_PARATR_LIST_ID:
+            {
+                const SfxStringItem& pListIdItem =
+                                        dynamic_cast<const SfxStringItem&>(pItem);
+                ASSERT( pListIdItem.GetValue().Len() > 0,
+                        "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
+//                const SfxStringItem& rListIdItemOfTxtNode =
+//                                    dynamic_cast<const SfxStringItem&>(
+//                                        rTxtNode.GetAttr( RES_PARATR_LIST_ID ));
+//                if ( pListIdItem.GetValue() != rListIdItemOfTxtNode.GetValue() )
+                const String sListIdOfTxtNode = rTxtNode.GetListId();
+                if ( pListIdItem.GetValue() != sListIdOfTxtNode )
+                {
+                    mbAddTxtNodeToList = true;
+                    if ( mrTxtNode.IsInList() )
+                    {
+                        mrTxtNode.RemoveFromList();
+                    }
+                }
+            }
+            break;
+
+            // handle RES_PARATR_LIST_LEVEL
+            case RES_PARATR_LIST_LEVEL:
+            {
+                const SfxInt16Item& aListLevelItem =
+                                    dynamic_cast<const SfxInt16Item&>(pItem);
+                if ( aListLevelItem.GetValue() != mrTxtNode.GetAttrListLevel() )
+                {
+                    mbUpdateListLevel = true;
+                }
+            }
+            break;
+
+            // handle RES_PARATR_LIST_ISRESTART
+            case RES_PARATR_LIST_ISRESTART:
+            {
+                const SfxBoolItem& aListIsRestartItem =
+                                    dynamic_cast<const SfxBoolItem&>(pItem);
+                if ( aListIsRestartItem.GetValue() !=
+                                    (mrTxtNode.IsListRestart() ? TRUE : FALSE) )
+                {
+                    mbUpdateListRestart = true;
+                }
+            }
+            break;
+
+            // handle RES_PARATR_LIST_RESTARTVALUE
+            case RES_PARATR_LIST_RESTARTVALUE:
+            {
+                const SfxInt16Item& aListRestartValueItem =
+                                    dynamic_cast<const SfxInt16Item&>(pItem);
+                if ( !mrTxtNode.HasAttrListRestartValue() ||
+                     aListRestartValueItem.GetValue() != mrTxtNode.GetAttrListRestartValue() )
+                {
+                    mbUpdateListRestart = true;
+                }
+            }
+            break;
+
+            // handle RES_PARATR_LIST_ISCOUNTED
+            case RES_PARATR_LIST_ISCOUNTED:
+            {
+                const SfxBoolItem& aIsCountedInListItem =
+                                    dynamic_cast<const SfxBoolItem&>(pItem);
+                if ( aIsCountedInListItem.GetValue() !=
+                                    (mrTxtNode.IsCountedInList() ? TRUE : FALSE) )
+                {
+                    mbUpdateListCount = true;
+                }
+            }
+            break;
+        }
+
+    }
+
+    HandleSetAttrAtTxtNode::HandleSetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                                    const SfxItemSet& rItemSet )
+        : mrTxtNode( rTxtNode ),
+          mbAddTxtNodeToList( false ),
+          mbUpdateListLevel( false ),
+          mbUpdateListRestart( false ),
+          mbUpdateListCount( false )
+    {
+        const SfxPoolItem* pItem = 0;
+        // handle RES_PARATR_NUMRULE
+        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            mrTxtNode.RemoveFromList();
+
+            const SwNumRuleItem* pNumRuleItem =
+                            dynamic_cast<const SwNumRuleItem*>(pItem);
+            if ( pNumRuleItem->GetValue().Len() > 0 )
+            {
+                mbAddTxtNodeToList = true;
+            }
+        }
+
+        // handle RES_PARATR_LIST_ID
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxStringItem* pListIdItem =
+                                    dynamic_cast<const SfxStringItem*>(pItem);
+//            const SfxStringItem& rListIdItemOfTxtNode =
+//                                    dynamic_cast<const SfxStringItem&>(
+//                                        mrTxtNode.GetAttr( RES_PARATR_LIST_ID ));
+//            if ( pListIdItem &&
+//                 pListIdItem->GetValue() != rListIdItemOfTxtNode.GetValue() )
+            const String sListIdOfTxtNode = mrTxtNode.GetListId();
+            if ( pListIdItem &&
+                 pListIdItem->GetValue() != sListIdOfTxtNode )
+            {
+                mbAddTxtNodeToList = true;
+                if ( mrTxtNode.IsInList() )
+                {
+                    mrTxtNode.RemoveFromList();
+                }
+            }
+        }
+
+        // handle RES_PARATR_LIST_LEVEL
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxInt16Item* pListLevelItem =
+                                dynamic_cast<const SfxInt16Item*>(pItem);
+            if ( pListLevelItem->GetValue() != mrTxtNode.GetAttrListLevel() )
+            {
+                mbUpdateListLevel = true;
+            }
+        }
+
+        // handle RES_PARATR_LIST_ISRESTART
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxBoolItem* pListIsRestartItem =
+                                dynamic_cast<const SfxBoolItem*>(pItem);
+            if ( pListIsRestartItem->GetValue() !=
+                                    (mrTxtNode.IsListRestart() ? TRUE : FALSE) )
+            {
+                mbUpdateListRestart = true;
+            }
+        }
+
+        // handle RES_PARATR_LIST_RESTARTVALUE
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxInt16Item* pListRestartValueItem =
+                                dynamic_cast<const SfxInt16Item*>(pItem);
+            if ( !mrTxtNode.HasAttrListRestartValue() ||
+                 pListRestartValueItem->GetValue() != mrTxtNode.GetAttrListRestartValue() )
+            {
+                mbUpdateListRestart = true;
+            }
+        }
+
+        // handle RES_PARATR_LIST_ISCOUNTED
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SfxBoolItem* pIsCountedInListItem =
+                                dynamic_cast<const SfxBoolItem*>(pItem);
+            if ( pIsCountedInListItem->GetValue() !=
+                                (mrTxtNode.IsCountedInList() ? TRUE : FALSE) )
+            {
+                mbUpdateListCount = true;
+            }
+        }
+    }
+
+    HandleSetAttrAtTxtNode::~HandleSetAttrAtTxtNode()
+    {
+        if ( mbAddTxtNodeToList )
+        {
+            SwNumRule* pNumRuleAtTxtNode = mrTxtNode.GetNumRule();
+            if ( pNumRuleAtTxtNode )
+            {
+                mrTxtNode.AddToList();
+            }
+        }
+        else
+        {
+            if ( mbUpdateListLevel && mrTxtNode.IsInList() )
+            {
+                const_cast<SwNodeNum*>(mrTxtNode.GetNum())->SetLevelInListTree(
+                                                    mrTxtNode.GetAttrListLevel() );
+            }
+
+            if ( mbUpdateListRestart && mrTxtNode.IsInList() )
+            {
+                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTxtNode.GetNum());
+                pNodeNum->InvalidateMe();
+                pNodeNum->NotifyInvalidSiblings();
+            }
+
+            if ( mbUpdateListCount && mrTxtNode.IsInList() )
+            {
+                const_cast<SwNodeNum*>(mrTxtNode.GetNum())->InvalidateAndNotifyTree();
+            }
+        }
+    }
+    // End of class <HandleSetAttrAtTxtNode>
+}
+
+BOOL SwTxtNode::SetAttr( const SfxPoolItem& pItem )
+{
+    const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
+    mbInSetOrResetAttr = true;
+
+    HandleSetAttrAtTxtNode aHandleSetAttr( *this, pItem );
+
+    BOOL bRet = SwCntntNode::SetAttr( pItem );
+
+    mbInSetOrResetAttr = bOldIsSetOrResetAttr;
+
+    return bRet;
+}
+
+BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet )
+{
+    const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
+    mbInSetOrResetAttr = true;
+
+    HandleSetAttrAtTxtNode aHandleSetAttr( *this, rSet );
+
+    BOOL bRet = SwCntntNode::SetAttr( rSet );
+
+    mbInSetOrResetAttr = bOldIsSetOrResetAttr;
+
+    return bRet;
+}
+
+namespace {
+    // Helper class for special handling of resetting attributes at text node:
+    // In constructor an instance of the helper class recognize whose attributes
+    // are reset and perform corresponding actions before the intrinsic reset of
+    // attributes has been taken place.
+    // In the destructor - after the attributes have been reset at the text
+    // node - corresponding actions are performed.
+    // The following is handled:
+    // (1) When the list style attribute - RES_PARATR_NUMRULE - is reset,
+    //     the text is removed from its list before the attributes have been reset.
+    // (2) When the list id attribute - RES_PARATR_LIST_ID - is reset,
+    //     the text is removed from its list before the attributes have been reset.
+    // (3) Notify list tree, if list level - RES_PARATR_LIST_LEVEL - is reset.
+    // (4) Notify list tree, if list restart - RES_PARATR_LIST_ISRESTART - is reset.
+    // (5) Notify list tree, if list restart value - RES_PARATR_LIST_RESTARTVALUE - is reset.
+    // (6) Notify list tree, if count in list - RES_PARATR_LIST_ISCOUNTED - is reset.
+    class HandleResetAttrAtTxtNode
+    {
+        public:
+            HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                      const USHORT nWhich1,
+                                      const USHORT nWhich2 );
+            HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                      const SvUShorts& rWhichArr );
+            HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode );
+
+            ~HandleResetAttrAtTxtNode();
+
+        private:
+            SwTxtNode& mrTxtNode;
+            bool mbListStyleReset;
+            bool mbUpdateListLevel;
+            bool mbUpdateListRestart;
+            bool mbUpdateListCount;
+    };
+
+    HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                                        const USHORT nWhich1,
+                                                        const USHORT nWhich2 )
+        : mrTxtNode( rTxtNode ),
+          mbListStyleReset( false ),
+          mbUpdateListLevel( false ),
+          mbUpdateListRestart( false ),
+          mbUpdateListCount( false )
+    {
+        bool bRemoveFromList( false );
+        if ( nWhich2 != 0 && nWhich2 > nWhich1 )
+        {
+            // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
+            if ( nWhich1 <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= nWhich2 )
+            {
+                bRemoveFromList = mrTxtNode.GetNumRule() != 0;
+                mbListStyleReset = true;
+            }
+            else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
+            {
+                bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+            }
+
+            if ( !bRemoveFromList )
+            {
+                // RES_PARATR_LIST_LEVEL
+                mbUpdateListLevel = ( nWhich1 <= RES_PARATR_LIST_LEVEL &&
+                                      RES_PARATR_LIST_LEVEL <= nWhich2 &&
+                                      mrTxtNode.HasAttrListLevel() );
+
+                // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
+                mbUpdateListRestart =
+                    ( nWhich1 <= RES_PARATR_LIST_ISRESTART && RES_PARATR_LIST_ISRESTART <= nWhich2 &&
+                      mrTxtNode.IsListRestart() ) ||
+                    ( nWhich1 <= RES_PARATR_LIST_RESTARTVALUE && RES_PARATR_LIST_RESTARTVALUE <= nWhich2 &&
+                      mrTxtNode.HasAttrListRestartValue() );
+
+                // RES_PARATR_LIST_ISCOUNTED
+                mbUpdateListCount =
+                    ( nWhich1 <= RES_PARATR_LIST_ISCOUNTED && RES_PARATR_LIST_ISCOUNTED <= nWhich2 &&
+                      !mrTxtNode.IsCountedInList() );
+            }
+        }
+        else
+        {
+            // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
+            if ( nWhich1 == RES_PARATR_NUMRULE )
+            {
+                bRemoveFromList = mrTxtNode.GetNumRule() != 0;
+                mbListStyleReset = true;
+            }
+            else if ( nWhich1 == RES_PARATR_LIST_ID )
+            {
+                bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+            }
+
+            if ( !bRemoveFromList )
+            {
+                // RES_PARATR_LIST_LEVEL
+                mbUpdateListLevel = nWhich1 == RES_PARATR_LIST_LEVEL &&
+                                    mrTxtNode.HasAttrListLevel();
+
+                // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
+                mbUpdateListRestart = ( nWhich1 == RES_PARATR_LIST_ISRESTART &&
+                                        mrTxtNode.IsListRestart() ) ||
+                                      ( nWhich1 == RES_PARATR_LIST_RESTARTVALUE &&
+                                        mrTxtNode.HasAttrListRestartValue() );
+
+                // RES_PARATR_LIST_ISCOUNTED
+                mbUpdateListCount = nWhich1 == RES_PARATR_LIST_ISCOUNTED &&
+                                    !mrTxtNode.IsCountedInList();
+            }
+        }
+
+        if ( bRemoveFromList && mrTxtNode.IsInList() )
+        {
+            mrTxtNode.RemoveFromList();
+        }
+    }
+
+    HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
+                                                        const SvUShorts& rWhichArr )
+        : mrTxtNode( rTxtNode ),
+          mbListStyleReset( false ),
+          mbUpdateListLevel( false ),
+          mbUpdateListRestart( false ),
+          mbUpdateListCount( false )
+    {
+        bool bRemoveFromList( false );
+        {
+            const USHORT nEnd = rWhichArr.Count();
+            for ( USHORT n = 0; n < nEnd; ++n )
+            {
+                // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
+                if ( rWhichArr[ n ] == RES_PARATR_NUMRULE )
+                {
+                    bRemoveFromList = bRemoveFromList ||
+                                      mrTxtNode.GetNumRule() != 0;
+                    mbListStyleReset = true;
+                }
+                else if ( rWhichArr[ n ] == RES_PARATR_LIST_ID )
+                {
+                    bRemoveFromList = bRemoveFromList ||
+                        ( mrTxtNode.GetpSwAttrSet() &&
+                          mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET );
+                }
+
+                if ( !bRemoveFromList )
+                {
+                    // RES_PARATR_LIST_LEVEL
+                    mbUpdateListLevel = mbUpdateListLevel ||
+                                        ( rWhichArr[ n ] == RES_PARATR_LIST_LEVEL &&
+                                          mrTxtNode.HasAttrListLevel() );
+
+                    // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
+                    mbUpdateListRestart = mbUpdateListRestart ||
+                                          ( rWhichArr[ n ] == RES_PARATR_LIST_ISRESTART &&
+                                            mrTxtNode.IsListRestart() ) ||
+                                          ( rWhichArr[ n ] == RES_PARATR_LIST_RESTARTVALUE &&
+                                            mrTxtNode.HasAttrListRestartValue() );
+
+                    // RES_PARATR_LIST_ISCOUNTED
+                    mbUpdateListCount = mbUpdateListCount ||
+                                        ( rWhichArr[ n ] == RES_PARATR_LIST_ISCOUNTED &&
+                                          !mrTxtNode.IsCountedInList() );
+                }
+            }
+        }
+
+        if ( bRemoveFromList && mrTxtNode.IsInList() )
+        {
+            mrTxtNode.RemoveFromList();
+        }
+    }
+
+    HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode )
+        : mrTxtNode( rTxtNode ),
+          mbListStyleReset( false ),
+          mbUpdateListLevel( false ),
+          mbUpdateListRestart( false ),
+          mbUpdateListCount( false )
+    {
+        mbListStyleReset = true;
+        if ( rTxtNode.IsInList() )
+        {
+            rTxtNode.RemoveFromList();
+        }
+    }
+
+    HandleResetAttrAtTxtNode::~HandleResetAttrAtTxtNode()
+    {
+        if ( mbListStyleReset && !mrTxtNode.IsInList() )
+        {
+            // check, if via reset of list style, the paragraph now has
+            // a list style applied via its paragraph style.
+            if ( mrTxtNode.GetNumRule() &&
+                 mrTxtNode.GetListId().Len() > 0 )
+            {
+                mrTxtNode.AddToList();
+            }
+        }
+
+        if ( mrTxtNode.IsInList() )
+        {
+            if ( mbUpdateListLevel )
+            {
+                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTxtNode.GetNum());
+                pNodeNum->SetLevelInListTree( mrTxtNode.GetAttrListLevel() );
+            }
+
+            if ( mbUpdateListRestart )
+            {
+                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTxtNode.GetNum());
+                pNodeNum->InvalidateMe();
+                pNodeNum->NotifyInvalidSiblings();
+            }
+
+            if ( mbUpdateListCount )
+            {
+                SwNodeNum* pNodeNum = const_cast<SwNodeNum*>(mrTxtNode.GetNum());
+                pNodeNum->InvalidateAndNotifyTree();
+            }
+        }
+    }
+    // End of class <HandleResetAttrAtTxtNode>
+}
+
+BOOL SwTxtNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
+{
+    const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
+    mbInSetOrResetAttr = true;
+
+    HandleResetAttrAtTxtNode aHandleResetAttr( *this, nWhich1, nWhich2 );
+
+    BOOL bRet = SwCntntNode::ResetAttr( nWhich1, nWhich2 );
+
+    mbInSetOrResetAttr = bOldIsSetOrResetAttr;
+
+    return bRet;
+}
+
+BOOL SwTxtNode::ResetAttr( const SvUShorts& rWhichArr )
+{
+    const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
+    mbInSetOrResetAttr = true;
+
+    HandleResetAttrAtTxtNode aHandleResetAttr( *this, rWhichArr );
+
+    BOOL bRet = SwCntntNode::ResetAttr( rWhichArr );
+
+    mbInSetOrResetAttr = bOldIsSetOrResetAttr;
+
+    return bRet;
+}
+
+USHORT SwTxtNode::ResetAllAttr()
+{
+    const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
+    mbInSetOrResetAttr = true;
+
+    HandleResetAttrAtTxtNode aHandleResetAttr( *this );
+
+    USHORT nRet = SwCntntNode::ResetAllAttr();
+
+    mbInSetOrResetAttr = bOldIsSetOrResetAttr;
+
+    return nRet;
 }
 // <--
