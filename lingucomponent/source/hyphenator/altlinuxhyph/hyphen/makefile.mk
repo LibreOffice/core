@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,26 +44,17 @@ HNJLIB=$(SLB)\hyphen.lib
 HNJLIB=hyphen.lib
 .ENDIF
 
-.IF "$(ULINGULIB)"==""
-.IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu
-.ENDIF # unx
-.IF "$(GUI)"=="OS2"
-ULINGULIB=$(SLB)\libulingu.lib
-.ENDIF # unx
-.IF "$(GUI)"=="WNT"
-ULINGULIB=libulingu.lib
-.ENDIF # wnt
-.ENDIF
-
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
 
 # --- Files --------------------------------------------------------
 
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
+HUNSPELL_CFLAGS += -I$(SOLARVER)$/$(INPATH)$/inc$/hunspell
+.ENDIF
 
-CFLAGS += -I..$/..$/..$/lingutil
+CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)
 
 EXCEPTIONSFILES=	\
         $(SLO)$/hprophelp.obj\
@@ -90,13 +81,9 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-        $(HNJLIB)
-
-.IF "$(SYSTEM_HUNSPELL)" != "YES"
-SHL1STDLIBS+=   $(ULINGULIB)
-.ELSE
-SHL1STDLIBS+=   $(HUNSPELL_LIBS)
-.ENDIF
+        $(HNJLIB) \
+        $(ULINGULIB) \
+        $(HUNSPELLLIB)
 
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
