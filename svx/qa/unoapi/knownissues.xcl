@@ -57,3 +57,21 @@ svx.SvxShapeDimensioning::com::sun::star::drawing::XShape
 ### i58125 ###
 svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
 
+### i87698 ###
+svx.SvxShapeDimensioning::com::sun::star::drawing::TextProperties
+
+### i87746 	###
+svx.SvxGraphicObject
+svx.SvxShapeCircle
+svx.SvxShapeControl
+svx.SvxShapeDimensioning
+svx.SvxShapeGroup
+svx.SvxShapePolyPolygon
+svx.SvxShapePolyPolygonBezier
+
+### i88543 ###
+svx.SvxUnoTextRange::com::sun::star::beans::XPropertySet
+
+### i90294 ###
+svx.GraphicExporter
+# -> disbaled in svx.sce
