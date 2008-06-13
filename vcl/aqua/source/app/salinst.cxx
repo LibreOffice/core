@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salinst.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -660,7 +660,11 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             // fixes the problem even seems to set the correct next firing date
             // Why oh why ?
             if( ! pEvent && AquaSalTimer::pRunningTimer )
-                [AquaSalTimer::pRunningTimer fire];
+            {
+                // this cause crashes on MacOSX 10.4
+                // [AquaSalTimer::pRunningTimer fire];
+                ImplGetSVData()->mpSalTimer->CallCallback();
+            }
         }
 
         mbWaitingYield = bOldWaitingYield;
