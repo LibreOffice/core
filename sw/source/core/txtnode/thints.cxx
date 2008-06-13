@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: thints.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1181,7 +1181,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
             // we want to set them at the paragraph:
             if( aTxtSet.Count() != rSet.Count() )
             {
-                BOOL bRet = SwCntntNode::SetAttr( rSet );
+                BOOL bRet = SetAttr( rSet );
                   if( !aTxtSet.Count() )
                     return bRet;
             }
@@ -1192,7 +1192,7 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
             if ( bAutoStyle )
             {
                 boost::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
-                BOOL bRet = SwCntntNode::SetAttr( *pAutoStyleSet );
+                BOOL bRet = SetAttr( *pAutoStyleSet );
                   if( 1 == aTxtSet.Count() )
                     return bRet;
             }
@@ -1343,9 +1343,9 @@ void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
     if ( rTxtNode.AreListLevelIndentsApplicable() )
     {
         const SwNumRule* pRule = rTxtNode.GetNumRule();
-        if ( pRule && rTxtNode.GetLevel() >= 0 )
+        if ( pRule && rTxtNode.GetActualListLevel() >= 0 )
         {
-            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(rTxtNode.GetLevel()));
+            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(rTxtNode.GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
