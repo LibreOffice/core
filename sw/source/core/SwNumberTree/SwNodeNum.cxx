@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwNodeNum.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,56 +41,29 @@
 #include <IDocumentListItems.hxx>
 // <--
 
-SwNodeNum::SwNodeNum()
-    : SwNumberTreeNode(), mpTxtNode(NULL), mpNumRule(NULL), mnStart(1),
-      mbRestart(false)
-{
-}
-
-// --> OD 2007-10-26 #i83479#
+// --> OD 2008-02-19 #refactorlists#
 SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
     : SwNumberTreeNode(),
       mpTxtNode( pTxtNode ),
-      mpNumRule( NULL ),
-      mnStart( 1 ),
-      mbRestart( false )
+      mpNumRule( 0 )
 {
 }
 
-SwNodeNum::SwNodeNum( SwNumRule* pRule )
+SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
     : SwNumberTreeNode(),
-      mpTxtNode( NULL ),
-      mpNumRule( pRule ),
-      mnStart( 1 ),
-      mbRestart( false )
+      mpTxtNode( 0 ),
+      mpNumRule( pNumRule )
 {
 }
 // <--
-
-SwNodeNum::SwNodeNum(const SwNodeNum & rNodeNum)
-    : SwNumberTreeNode(rNodeNum), mpTxtNode(NULL),
-      mpNumRule(NULL), mnStart(rNodeNum.mnStart),
-      mbRestart(rNodeNum.mbRestart)
-{
-}
 
 SwNodeNum::~SwNodeNum()
 {
 }
 
-//void SwNodeNum::SetTxtNode(SwTxtNode * pTxtNode)
-//{
-//    mpTxtNode = pTxtNode;
-//}
-
 SwTxtNode * SwNodeNum::GetTxtNode() const
 {
     return mpTxtNode;
-}
-
-void SwNodeNum::SetNumRule(SwNumRule * pRule)
-{
-    mpNumRule = pRule;
 }
 
 SwNumRule * SwNodeNum::GetNumRule() const
@@ -98,75 +71,96 @@ SwNumRule * SwNodeNum::GetNumRule() const
     return mpNumRule;
 }
 
+void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
+{
+    ASSERT( GetNumRule() && GetTxtNode(),
+            "<SwNodeNum::ChangeNumRule(..)> - missing list style and/or text node. Serious defect -> please informm OD." );
+    if ( GetNumRule() && GetTxtNode() )
+    {
+        GetNumRule()->RemoveTxtNode( *(GetTxtNode()) );
+    }
+
+    mpNumRule = &rNumRule;
+
+    if ( GetNumRule() && GetTxtNode() )
+    {
+        GetNumRule()->AddTxtNode( *(GetTxtNode()) );
+    }
+}
+
 SwPosition SwNodeNum::GetPosition() const
 {
+    ASSERT( GetTxtNode(),
+            "<SwNodeNum::GetPosition()> - no text node set at <SwNodeNum> instance" );
     return SwPosition(*mpTxtNode);
 }
 
 SwNumberTreeNode * SwNodeNum::Create() const
 {
-    SwNodeNum * pResult = new SwNodeNum();
-
-    pResult->SetNumRule(mpNumRule);
+    // --> OD 2008-02-19 #refactorlists#
+//    SwNodeNum * pResult = new SwNodeNum();
+//    pResult->SetNumRule(mpNumRule);
+    SwNodeNum * pResult = new SwNodeNum( GetNumRule() );
+    // <--
 
     return pResult;
 }
 
-SwNumberTreeNode * SwNodeNum::Copy() const
+// --> OD 2008-02-19 #refactorlists#
+void SwNodeNum::PreAdd()
 {
-    return new SwNodeNum(*this);
-}
-
-// --> OD 2007-10-25 #i83479#
-void SwNodeNum::AddChild(SwNumberTreeNode * pChild, unsigned int nDepth )
-{
-    SwNumberTreeNode::AddChild( pChild, nDepth );
-
-    if ( nDepth == 0 )
+    ASSERT( GetTxtNode(),
+            "<SwNodeNum::PreAdd()> - no text node set at <SwNodeNum> instance" );
+    if ( !GetNumRule() && GetTxtNode() )
     {
-        SwNodeNum* pChildNodeNum( dynamic_cast<SwNodeNum*>(pChild) );
-        ASSERT( pChildNodeNum,
-                "<SwNodeNum::AddChild(..)> - added isn't of type <SwNodeNum>" );
-        ASSERT( !pChildNodeNum || pChildNodeNum->GetTxtNode(),
-                "<SwNodeNum::AddChild(..)> - added <SwNodeNum> has no text node" );
-        if ( pChildNodeNum && pChildNodeNum->GetTxtNode() &&
-             pChildNodeNum->GetTxtNode()->GetNodes().IsDocNodes() )
+        mpNumRule = GetTxtNode()->GetNumRule();
+    }
+    ASSERT( GetNumRule(),
+            "<SwNodeNum::PreAdd()> - no list style set at <SwNodeNum> instance" );
+    if ( GetNumRule() && GetTxtNode() )
+    {
+        GetNumRule()->AddTxtNode( *(GetTxtNode()) );
+    }
+
+
+    {
+        if ( GetTxtNode() &&
+             GetTxtNode()->GetNodes().IsDocNodes() )
         {
-            pChildNodeNum->GetTxtNode()->getIDocumentListItems().
-                                        addListItem( *pChildNodeNum );
+            GetTxtNode()->getIDocumentListItems().addListItem( *this );
         }
     }
 }
-// <--
 
-void SwNodeNum::RemoveChild(SwNumberTreeNode * pChild)
+void SwNodeNum::PostRemove()
 {
-    // --> OD 2007-11-01 #i83479#
-    SwNodeNum* pChildNodeNum( dynamic_cast<SwNodeNum*>(pChild) );
-    ASSERT( pChildNodeNum,
-            "<SwNodeNum::RemoveChild(..)> - removed child isn't of type <SwNodeNum> -> crash" );
-    ASSERT( !pChildNodeNum || pChildNodeNum->GetTxtNode(),
-            "<SwNodeNum::RemoveChild(..)> - removed <SwNodeNum> has no text node" );
-    if ( pChildNodeNum && pChildNodeNum->GetTxtNode() )
-    {
-        pChildNodeNum->GetTxtNode()->getIDocumentListItems().
-                                    removeListItem( *pChildNodeNum );
-    }
-    // <--
-    // --> OD 2006-04-21 #i64311#
-    // remove child before resetting numbering rule of child.
-    SwNumberTreeNode::RemoveChild(pChild);
+    ASSERT( GetTxtNode(),
+            "<SwNodeNum::PostRemove()> - no text node set at <SwNodeNum> instance" );
+    ASSERT( GetNumRule(),
+            "<SwNodeNum::PostRemove()> - no list style set at <SwNodeNum> instance" );
 
-    pChildNodeNum->SetNumRule(NULL);
-    // <--
+    if ( GetTxtNode() )
+    {
+        GetTxtNode()->getIDocumentListItems().removeListItem( *this );
+    }
+
+    if ( GetNumRule() )
+    {
+        if ( GetTxtNode() )
+        {
+            GetNumRule()->RemoveTxtNode( *(GetTxtNode()) );
+        }
+        mpNumRule = 0;
+    }
 }
+// <--
 
 bool SwNodeNum::IsNotifiable() const
 {
     bool aResult = true;
 
-    if (mpTxtNode)
-        aResult = mpTxtNode->IsNotifiable();
+    if ( GetTxtNode() )
+        aResult = GetTxtNode()->IsNotifiable();
 
     return aResult;
 }
@@ -175,8 +169,8 @@ bool SwNodeNum::IsNotificationEnabled() const
 {
     bool aResult = true;
 
-    if (mpTxtNode)
-        aResult = mpTxtNode->IsNotificationEnabled();
+    if ( GetTxtNode() )
+        aResult = GetTxtNode()->IsNotificationEnabled();
 
     return aResult;
 }
@@ -186,13 +180,13 @@ bool SwNodeNum::IsContinuous() const
     bool aResult = false;
 
     // --> OD 2006-04-21 #i64311#
-    if ( mpNumRule )
+    if ( GetNumRule() )
     {
         aResult = mpNumRule->IsContinusNum();
     }
-    else if ( mpParent )
+    else if ( GetParent() )
     {
-        aResult = mpParent->IsContinuous();
+        aResult = GetParent()->IsContinuous();
     }
     else
     {
@@ -207,7 +201,7 @@ bool SwNodeNum::IsCounted() const
 {
     bool aResult = false;
 
-    if (mpTxtNode)
+    if ( GetTxtNode() )
     {
         // --> OD 2006-01-25 #i59559#
         // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
@@ -218,7 +212,7 @@ bool SwNodeNum::IsCounted() const
 //            if ( nType != SVX_NUM_NUMBER_NONE)
 //                aResult = mpTxtNode->IsCounted();
 //        }
-        aResult = mpTxtNode->IsCounted();
+        aResult = GetTxtNode()->IsCountedInList();
         // <--
     }
     else
@@ -295,43 +289,52 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     return bResult;
 }
 
-void SwNodeNum::SetRestart(bool bRestart)
-{
-    // --> OD 2005-10-19 #126009#
-    // - improvement: invalidation only, if <IsRestart()> state changes.
-    const bool bInvalidate( mbRestart != bRestart );
-    // <--
-    mbRestart = bRestart;
+//void SwNodeNum::SetRestart(bool bRestart)
+//{
+//    // --> OD 2005-10-19 #126009#
+//    // - improvement: invalidation only, if <IsRestart()> state changes.
+//    const bool bInvalidate( mbRestart != bRestart );
+//    // <--
+//    mbRestart = bRestart;
 
-    // --> OD 2005-10-19 #126009#
-    if ( bInvalidate )
-    {
-        InvalidateMe();
-        NotifyInvalidSiblings();
-    }
-    // <--
-}
+//    // --> OD 2005-10-19 #126009#
+//    if ( bInvalidate )
+//    {
+//        InvalidateMe();
+//        NotifyInvalidSiblings();
+//    }
+//    // <--
+//}
 
+// --> OD 2008-02-25 #refactorlists#
 bool SwNodeNum::IsRestart() const
 {
-    return mbRestart;
-}
+    bool bIsRestart = false;
 
-void SwNodeNum::SetStart(SwNumberTreeNode::tSwNumTreeNumber nStart)
-{
-    // --> OD 2005-10-19 #126009#
-    // - improvement: invalidation only, if <IsRestart()> state changes.
-    const bool bInvalidate( mnStart != nStart );
-    // <--
-    mnStart = nStart;
-
-    // --> OD 2005-10-19 #126009#
-    if ( bInvalidate )
+    if ( GetTxtNode() )
     {
-        InvalidateMe();
-        NotifyInvalidSiblings();
+        bIsRestart = GetTxtNode()->IsListRestart();
     }
+
+    return bIsRestart;
 }
+// <--
+
+//void SwNodeNum::SetStart(SwNumberTree::tSwNumTreeNumber nStart)
+//{
+//    // --> OD 2005-10-19 #126009#
+//    // - improvement: invalidation only, if <IsRestart()> state changes.
+//    const bool bInvalidate( mnStart != nStart );
+//    // <--
+//    mnStart = nStart;
+
+//    // --> OD 2005-10-19 #126009#
+//    if ( bInvalidate )
+//    {
+//        InvalidateMe();
+//        NotifyInvalidSiblings();
+//    }
+//}
 
 bool SwNodeNum::IsCountPhantoms() const
 {
@@ -352,17 +355,15 @@ bool SwNodeNum::IsCountPhantoms() const
     return bResult;
 }
 
-SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
+// --> OD 2008-02-25 #refactorlists#
+SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
+//SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStart() const
 {
-    tSwNumTreeNumber aResult = 1;
+    SwNumberTree::tSwNumTreeNumber aResult = 1;
 
-    // --> OD 2005-11-16 #i57919# - consider that start value <USHRT_MAX>
-    // indicates, that the numbering is restarted at this node with the
-    // start value, which is set at the corresponding numbering level.
-    if ( IsRestart() && mnStart != USHRT_MAX )
-    // <--
+    if ( IsRestart() && GetTxtNode() )
     {
-        aResult = mnStart;
+        aResult = GetTxtNode()->GetActualListStartValue();
     }
     else
     {
@@ -370,11 +371,7 @@ SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
 
         if (pRule)
         {
-            // --> OD 2006-04-24 #i64311#
-            // consider root number tree node
-            // --> OD 2006-05-24 #i65705# - correct fix for i64311
-            int nLevel = GetParent() ? GetLevel() : 0;
-            // <--
+            int nLevel = GetParent() ? GetLevelInListTree() : 0;
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
@@ -389,79 +386,61 @@ SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
     return aResult;
 }
 
-String SwNodeNum::ToString() const
-{
-    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+//String SwNodeNum::ToString() const
+//{
+//    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    if (GetTxtNode())
-    {
-        char aBuffer[256];
+//    if (GetTxtNode())
+//    {
+//        char aBuffer[256];
 
-        sprintf(aBuffer, "%p ", GetTxtNode());
+//        sprintf(aBuffer, "%p ", GetTxtNode());
 
-        aResult += String(aBuffer, RTL_TEXTENCODING_ASCII_US);
-        aResult += String::CreateFromInt32(GetPosition().nNode.GetIndex());
-    }
-    else
-        aResult += String("*", RTL_TEXTENCODING_ASCII_US);
+//        aResult += String(aBuffer, RTL_TEXTENCODING_ASCII_US);
+//        aResult += String::CreateFromInt32(GetPosition().nNode.GetIndex());
+//    }
+//    else
+//        aResult += String("*", RTL_TEXTENCODING_ASCII_US);
 
-    aResult += String(" ", RTL_TEXTENCODING_ASCII_US);
+//    aResult += String(" ", RTL_TEXTENCODING_ASCII_US);
 
-    unsigned int nLvl = GetLevel();
-    aResult += String::CreateFromInt32(nLvl);
+//    unsigned int nLvl = GetLevel();
+//    aResult += String::CreateFromInt32(nLvl);
 
-    aResult += String(": ", RTL_TEXTENCODING_ASCII_US);
+//    aResult += String(": ", RTL_TEXTENCODING_ASCII_US);
 
-    tNumberVector aNumVector;
+//    tNumberVector aNumVector;
 
-    _GetNumberVector(aNumVector, false);
+//    _GetNumberVector(aNumVector, false);
 
-    for (unsigned int n = 0; n < aNumVector.size(); n++)
-    {
-        if (n > 0)
-            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+//    for (unsigned int n = 0; n < aNumVector.size(); n++)
+//    {
+//        if (n > 0)
+//            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
 
-        aResult += String::CreateFromInt32(aNumVector[n]);
-    }
+//        aResult += String::CreateFromInt32(aNumVector[n]);
+//    }
 
-    if (IsCounted())
-//        aResult += String(" counted", RTL_TEXTENCODING_ASCII_US);
-        aResult += String(" C", RTL_TEXTENCODING_ASCII_US);
+//    if (IsCounted())
+////        aResult += String(" counted", RTL_TEXTENCODING_ASCII_US);
+//        aResult += String(" C", RTL_TEXTENCODING_ASCII_US);
 
-    if (IsRestart())
-    {
-//        aResult += String(" restart(", RTL_TEXTENCODING_ASCII_US);
-        aResult += String(" R(", RTL_TEXTENCODING_ASCII_US);
-        aResult += String::CreateFromInt32(GetStart());
-        aResult += String(")", RTL_TEXTENCODING_ASCII_US);
-    }
+//    if (IsRestart())
+//    {
+////        aResult += String(" restart(", RTL_TEXTENCODING_ASCII_US);
+//        aResult += String(" R(", RTL_TEXTENCODING_ASCII_US);
+//        aResult += String::CreateFromInt32(GetStart());
+//        aResult += String(")", RTL_TEXTENCODING_ASCII_US);
+//    }
 
-    if (! IsValid())
-//        aResult += String(" invalid", RTL_TEXTENCODING_ASCII_US);
-        aResult += String(" I", RTL_TEXTENCODING_ASCII_US);
+//    if (! IsValid())
+////        aResult += String(" invalid", RTL_TEXTENCODING_ASCII_US);
+//        aResult += String(" I", RTL_TEXTENCODING_ASCII_US);
 
-    aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
+//    aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
 
-    return aResult;
-}
-
-void SwNodeNum::SetLevel(unsigned int nLevel)
-{
-    ASSERT( nLevel < MAXLEVEL, "illegal level");
-
-    if (mpParent)
-    {
-        SwNumRule * pRule = GetNumRule();
-
-        if (pRule != mpNumRule || sal::static_int_cast< int >(nLevel) != GetLevel())
-        {
-            RemoveMe();
-
-            if (pRule)
-                pRule->AddNumber(this, nLevel);
-        }
-    }
-}
+//    return aResult;
+//}
 
 // --> OD 2006-03-07 #131436#
 void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
@@ -513,7 +492,8 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwTxtNode* pTxtNode( rNodeNum.GetTxtNode() );
         if ( pTxtNode )
         {
-            pTxtNode->UnregisterNumber();
+            // --> OD 2008-03-13 #refactorlists#
+            pTxtNode->RemoveFromList();
         }
     }
 }
