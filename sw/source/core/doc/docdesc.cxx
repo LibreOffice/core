@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docdesc.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,13 +132,13 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     aLR.SetRight( nMinRight );
     aLR.SetLeft( nMinLeft );
 
-    rFmt1.SetAttr( aFrmSize );
-    rFmt1.SetAttr( aLR );
-    rFmt1.SetAttr( aUL );
+    rFmt1.SetFmtAttr( aFrmSize );
+    rFmt1.SetFmtAttr( aLR );
+    rFmt1.SetFmtAttr( aUL );
 
-    rFmt2.SetAttr( aFrmSize );
-    rFmt2.SetAttr( aLR );
-    rFmt2.SetAttr( aUL );
+    rFmt2.SetFmtAttr( aFrmSize );
+    rFmt2.SetFmtAttr( aLR );
+    rFmt2.SetFmtAttr( aUL );
 }
 
 /*************************************************************************
@@ -187,9 +187,9 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                 ( !bPage && RES_COL != nId && RES_PAPER_BIN != nId ))
             {
                 if( SFX_ITEM_SET == rSource.GetItemState( nId, FALSE, &pItem ))
-                    rDest.SetAttr( *pItem );
+                    rDest.SetFmtAttr( *pItem );
                 else
-                    rDest.ResetAttr( nId );
+                    rDest.ResetFmtAttr( nId );
             }
         }
     }
@@ -260,11 +260,11 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             ( rHead.IsActive() != rOldHead.IsActive() ||
               rChged.IsHeaderShared() != pDesc->IsHeaderShared() );
     }
-    pDesc->GetMaster().SetAttr( rHead );
+    pDesc->GetMaster().SetFmtAttr( rHead );
     if ( rChged.IsHeaderShared() || !rHead.IsActive() )
     {
         //Left teilt sich den Header mit dem Master.
-        pDesc->GetLeft().SetAttr( pDesc->GetMaster().GetHeader() );
+        pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetHeader() );
     }
     else if ( rHead.IsActive() )
     {   //Left bekommt einen eigenen Header verpasst wenn das Format nicht
@@ -276,7 +276,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         if ( !rLeftHead.IsActive() )
         {
             SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
-            pDesc->GetLeft().SetAttr( aHead );
+            pDesc->GetLeft().SetFmtAttr( aHead );
             //Weitere Attribute (Raender, Umrandung...) uebernehmen.
             ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), FALSE);
         }
@@ -286,7 +286,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aLCnt = rLeftHead.GetHeaderFmt()->GetCntnt();
             if( !aLCnt.GetCntntIdx() )
-                pDesc->GetLeft().SetAttr( rChged.GetLeft().GetHeader() );
+                pDesc->GetLeft().SetFmtAttr( rChged.GetLeft().GetHeader() );
             else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Header",
@@ -302,8 +302,8 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, FALSE );
 
-                pFmt->SetAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetLeft().SetAttr( SwFmtHeader( pFmt ) );
+                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
+                pDesc->GetLeft().SetFmtAttr( SwFmtHeader( pFmt ) );
             }
             else
                 ::lcl_DescSetAttr( *pRight,
@@ -324,10 +324,10 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             ( rFoot.IsActive() != rOldFoot.IsActive() ||
               rChged.IsFooterShared() != pDesc->IsFooterShared() );
     }
-    pDesc->GetMaster().SetAttr( rFoot );
+    pDesc->GetMaster().SetFmtAttr( rFoot );
     if ( rChged.IsFooterShared() || !rFoot.IsActive() )
         //Left teilt sich den Header mit dem Master.
-        pDesc->GetLeft().SetAttr( pDesc->GetMaster().GetFooter() );
+        pDesc->GetLeft().SetFmtAttr( pDesc->GetMaster().GetFooter() );
     else if ( rFoot.IsActive() )
     {   //Left bekommt einen eigenen Footer verpasst wenn das Format nicht
         //bereits einen hat.
@@ -338,7 +338,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         if ( !rLeftFoot.IsActive() )
         {
             SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
-            pDesc->GetLeft().SetAttr( aFoot );
+            pDesc->GetLeft().SetFmtAttr( aFoot );
             //Weitere Attribute (Raender, Umrandung...) uebernehmen.
             ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), FALSE);
         }
@@ -348,7 +348,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
             const SwFmtCntnt &aRCnt = pRight->GetCntnt();
             const SwFmtCntnt &aLCnt = rLeftFoot.GetFooterFmt()->GetCntnt();
             if( !aLCnt.GetCntntIdx() )
-                pDesc->GetLeft().SetAttr( rChged.GetLeft().GetFooter() );
+                pDesc->GetLeft().SetFmtAttr( rChged.GetLeft().GetFooter() );
             else if( (*aRCnt.GetCntntIdx()) == (*aLCnt.GetCntntIdx()) )
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), "Footer",
@@ -364,8 +364,8 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
                 aTmp = *pSttNd->EndOfSectionNode();
                 GetNodes()._Copy( aRange, aTmp, FALSE );
 
-                pFmt->SetAttr( SwFmtCntnt( pSttNd ) );
-                pDesc->GetLeft().SetAttr( SwFmtFooter( pFmt ) );
+                pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ) );
+                pDesc->GetLeft().SetFmtAttr( SwFmtFooter( pFmt ) );
             }
             else
                 ::lcl_DescSetAttr( *pRight,
@@ -489,7 +489,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
                 if( pMod->ISA( SwCntntNode ) )
                     ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
                 else if( pMod->ISA( SwFmt ))
-                    ((SwFmt*)pMod)->SetAttr( aDfltDesc );
+                    ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
                 else
                 {
                     ASSERT( !this, "was ist das fuer ein Mofify-Obj?" );
@@ -622,8 +622,8 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
             GetDefaultFrameDirection(GetAppLanguage())
             : FRMDIR_HORI_LEFT_TOP;
 
-        pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
-        pNew->GetLeft().SetAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetMaster().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
+        pNew->GetLeft().SetFmtAttr( SvxFrameDirectionItem(aFrameDirection, RES_FRAMEDIR) );
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
 
@@ -1007,10 +1007,10 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
         SwFrmFmt& rMaster = rDesc.GetMaster();
         SwFrmFmt& rLeft = rDesc.GetLeft();
 
-        SwTextGridItem aGrid((SwTextGridItem&)rMaster.GetAttr(RES_TEXTGRID));
+        SwTextGridItem aGrid((SwTextGridItem&)rMaster.GetFmtAttr(RES_TEXTGRID));
         aGrid.SwitchPaperMode( bSquaredPageMode );
-        rMaster.SetAttr(aGrid);
-        rLeft.SetAttr(aGrid);
+        rMaster.SetFmtAttr(aGrid);
+        rLeft.SetFmtAttr(aGrid);
     }
 }
 
