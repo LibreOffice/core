@@ -8,19 +8,19 @@
 -o svx.AccessiblePresentationOLEShape
 #i85539 -o svx.AccessiblePresentationShape
 -o svx.AccessibleShape
--o svx.GraphicExporter
+#i90294 -o svx.GraphicExporter
 -o svx.SvxDrawPage
 #i85501 -o svx.SvxGraphCtrlAccessibleContext
--o svx.SvxGraphicObject
+#i87746 -o svx.SvxGraphicObject
 #i85263 -o svx.SvxShape
--o svx.SvxShapeCircle
+#i87746 -o svx.SvxShapeCircle
 -o svx.SvxShapeCollection
 #i85263 -o svx.SvxShapeConnector
--o svx.SvxShapeControl
--o svx.SvxShapeDimensioning
--o svx.SvxShapeGroup
--o svx.SvxShapePolyPolygon
--o svx.SvxShapePolyPolygonBezier
+#i87746 -o svx.SvxShapeControl
+#i87746 -o svx.SvxShapeDimensioning
+#i87746 -o svx.SvxShapeGroup
+#i87746 -o svx.SvxShapePolyPolygon
+#i87746 -o svx.SvxShapePolyPolygonBezier
 -o svx.SvxUnoNumberingRules
 -o svx.SvxUnoText
 -o svx.SvxUnoTextContent
@@ -29,4 +29,3 @@
 -o svx.SvxUnoTextField
 -o svx.SvxUnoTextRange
 -o svx.SvxUnoTextRangeEnumeration
-
