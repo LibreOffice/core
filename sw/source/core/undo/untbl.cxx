@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: untbl.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -403,7 +403,7 @@ SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLe
             pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
                         pNd->GetTxt().Len(), FALSE );
         if( pNd->HasSwAttrSet() )
-            pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd, rDoc );
+            pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
 
         if( !pHstry->Count() )
             delete pHstry, pHstry = 0;
@@ -1107,7 +1107,7 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, BOOL bIsLine,
             pFmt = pDoc->MakeTableLineFmt();
         else
             pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetAttr( *aSets[ nFmtPos ] );
+        pFmt->SetFmtAttr( *aSets[ nFmtPos ] );
         aFrmFmts.Replace( pFmt, nFmtPos );
     }
 
@@ -1134,8 +1134,8 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, BOOL bIsLine,
 
     if( bModifyBox && !bIsLine )
     {
-        const SfxPoolItem& rOld = pOldFmt->GetAttr( RES_BOXATR_FORMAT ),
-                         & rNew = pFmt->GetAttr( RES_BOXATR_FORMAT );
+        const SfxPoolItem& rOld = pOldFmt->GetFmtAttr( RES_BOXATR_FORMAT ),
+                         & rNew = pFmt->GetFmtAttr( RES_BOXATR_FORMAT );
         if( rOld != rNew )
             pFmt->Modify( (SfxPoolItem*)&rOld, (SfxPoolItem*)&rNew );
     }
@@ -1200,7 +1200,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableLineFmt();
-        pFmt->SetAttr( *rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
     SwTableLine* pNew = new SwTableLine( pFmt, 1, &rParent );
@@ -1359,7 +1359,7 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
         pFmt = pDoc->MakeTableBoxFmt();
-        pFmt->SetAttr( *rSTbl.aSets[ nItemSet ] );
+        pFmt->SetFmtAttr( *rSTbl.aSets[ nItemSet ] );
         rSTbl.aFrmFmts.Replace( pFmt, nItemSet );
     }
 
@@ -2206,7 +2206,7 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
 
     pHistory->Add( pCNd->GetFmtColl(), aIdx.GetIndex(), pCNd->GetNodeType());
     if( pCNd->HasSwAttrSet() )
-        pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex(), *(pCNd->GetDoc()) );
+        pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
 }
 
 /*  */
@@ -2236,7 +2236,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
                             pTNd->GetTxt().Len(), TRUE );
 
         if( pTNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos, *pDoc );
+            pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos );
 
         aStr = pTNd->GetTxt();
         if( pTNd->GetpSwpHints() )
@@ -2294,7 +2294,7 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     ASSERT( pBox, "keine TabellenBox gefunden" );
 
     SwTableBoxFmt* pFmt = rDoc.MakeTableBoxFmt();
-    pFmt->SetAttr( *pBoxSet );
+    pFmt->SetFmtAttr( *pBoxSet );
     pBox->ChgFrmFmt( pFmt );
 
     if( ULONG_MAX == nNdPos )
@@ -2406,22 +2406,22 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         if( bNewFml )
             aBoxSet.Put( SwTblBoxFormula( aNewFml ));
         else
-            pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         if( bNewFmt )
             aBoxSet.Put( SwTblBoxNumFormat( nNewFmtIdx ));
         else
-            pBoxFmt->ResetAttr( RES_BOXATR_FORMAT );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
         if( bNewValue )
             aBoxSet.Put( SwTblBoxValue( fNewNum ));
         else
-            pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
         pBoxFmt->UnlockModify();
 
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
         RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
-        pBoxFmt->SetAttr( aBoxSet );
+        pBoxFmt->SetFmtAttr( aBoxSet );
     }
     else if( NUMBERFORMAT_TEXT != nFmtIdx )
     {
@@ -2435,14 +2435,14 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         //              Sorge dafuer, das der Text auch entsprechend
         //              formatiert wird!
         pBoxFmt->LockModify();
-        pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         pBoxFmt->UnlockModify();
 
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
         RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
-        pBoxFmt->SetAttr( aBoxSet );
+        pBoxFmt->SetFmtAttr( aBoxSet );
     }
     else
     {
@@ -2451,9 +2451,9 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // JP 15.01.99: Nur Attribute zuruecksetzen reicht nicht.
         //              Sorge dafuer, das der Text auch entsprechend
         //              formatiert wird!
-        pBoxFmt->SetAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
+        pBoxFmt->SetFmtAttr( *GetDfltAttr( RES_BOXATR_FORMAT ));
 
-        pBoxFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
     }
 
     if( bNewFml )
@@ -2610,13 +2610,13 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
         if( aTmpSet.Count() )
         {
             SwFrmFmt* pBoxFmt = rBox.ClaimFrmFmt();
-            pBoxFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-            pBoxFmt->ResetAttr( RES_VERT_ORIENT );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( RES_VERT_ORIENT );
         }
 
         if( pEntry->pBoxNumAttr )
         {
-            rBox.ClaimFrmFmt()->SetAttr( *pEntry->pBoxNumAttr );
+            rBox.ClaimFrmFmt()->SetFmtAttr( *pEntry->pBoxNumAttr );
             delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = 0;
         }
 
@@ -2693,12 +2693,12 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
         if( aTmpSet.Count() )
         {
             SwFrmFmt* pBoxFmt = rBox.ClaimFrmFmt();
-            pBoxFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-            pBoxFmt->ResetAttr( RES_VERT_ORIENT );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( RES_VERT_ORIENT );
         }
         if( pEntry->pBoxNumAttr )
         {
-            rBox.ClaimFrmFmt()->SetAttr( *pEntry->pBoxNumAttr );
+            rBox.ClaimFrmFmt()->SetFmtAttr( *pEntry->pBoxNumAttr );
             delete pEntry->pBoxNumAttr, pEntry->pBoxNumAttr = 0;
         }
 
