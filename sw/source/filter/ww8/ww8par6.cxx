@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.185 $
+ * $Revision: 1.186 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,7 +237,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     if (bVer67)
         return;
 
-    rFmt.SetAttr(SvxFrameDirectionItem(rSection.meDir, RES_FRAMEDIR));
+    rFmt.SetFmtAttr(SvxFrameDirectionItem(rSection.meDir, RES_FRAMEDIR));
 
     SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
     const SvxULSpaceItem &rUL = ItemGet<SvxULSpaceItem>(rFmt, RES_UL_SPACE);
@@ -329,7 +329,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
-    rFmt.SetAttr(aGrid);
+    rFmt.SetFmtAttr(aGrid);
 }
 
 void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
@@ -389,7 +389,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
         }
         aCol.SetWishWidth(writer_cast<USHORT>(nNettoWidth));
     }
-    rFmt.SetAttr(aCol);
+    rFmt.SetFmtAttr(aCol);
     return true;
 }
 
@@ -443,9 +443,9 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
     SwFmtFrmSize aSz( rFmt.GetFrmSize() );
     aSz.SetWidth(rSection.GetPageWidth());
     aSz.SetHeight(SnapPageDimension(rSection.GetPageHeight()));
-    rFmt.SetAttr(aSz);
+    rFmt.SetFmtAttr(aSz);
 
-    rFmt.SetAttr(
+    rFmt.SetFmtAttr(
         SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight(), 0, 0, RES_LR_SPACE));
 
     if (!bIgnoreCols)
@@ -530,7 +530,7 @@ void SwWW8ImplReader::SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) c
 
     aSet.Put(aLR);
     aSet.Put(aUL);
-    rFmt.SetAttr(aSet);
+    rFmt.SetFmtAttr(aSet);
 }
 
 void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
@@ -622,11 +622,11 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
             if (!rSection.IsFixedHeightHeader())    //normal
             {
-                pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+                pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
                 // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aHdUL.SetLower( writer_cast<USHORT>(rData.nSwHLo - cMinHdFtHeight) );
-                pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, true));
             }
             else
@@ -634,13 +634,13 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
                 // --> OD 2005-05-20 #i48832# - set correct spacing between
                 // header and body.
                 const SwTwips nHdLowerSpace( Abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
-                pHdFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
+                pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< USHORT >(nHdLowerSpace) );
                 // <--
-                pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
-            pHdFmt->SetAttr(aHdUL);
+            pHdFmt->SetFmtAttr(aHdUL);
         }
     }
 
@@ -651,11 +651,11 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
             if (!rSection.IsFixedHeightFooter())    //normal
             {
-                pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+                pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
                 // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aFtUL.SetUpper( writer_cast<USHORT>(rData.nSwFUp - cMinHdFtHeight) );
-                pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, true));
             }
             else
@@ -663,19 +663,19 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
                 // --> OD 2005-05-20 #i48832# - set correct spacing between
                 // footer and body.
                 const SwTwips nFtUpperSpace( Abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
-                pFtFmt->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
+                pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< USHORT >(nFtUpperSpace) );
                 // <--
-                pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
                     RES_HEADER_FOOTER_EAT_SPACING, false));
             }
-            pFtFmt->SetAttr(aFtUL);
+            pFtFmt->SetFmtAttr(aFtUL);
         }
     }
 
     SvxULSpaceItem aUL(writer_cast<USHORT>(rData.nSwUp),
         writer_cast<USHORT>(rData.nSwLo), RES_UL_SPACE);
-    rFmt.SetAttr(aUL);
+    rFmt.SetFmtAttr(aUL);
 }
 
 SwSectionFmt *wwSectionManager::InsertSection(
@@ -731,7 +731,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
         SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, 0, RES_LR_SPACE);
-        pFmt->SetAttr(aLR);
+        pFmt->SetFmtAttr(aLR);
     }
 
     SetCols(*pFmt, rSection, rSection.GetTextAreaWidth());
@@ -2404,8 +2404,8 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                                 SwFmtFrmSize aSize = pTblFmt->GetFrmSize();
                                 aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
-                                pFlyFmt->SetAttr(aSize);
-                                pTblFmt->SetAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
+                                pFlyFmt->SetFmtAttr(aSize);
+                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
                                 nRetWidth = aSize.GetWidth();
                             }
                         }
@@ -2630,7 +2630,7 @@ void SwWW8ImplReader::StopApo()
             pNd->JoinNext();
         }
 
-        pSFlyPara->pFlyFmt->SetAttr(SvxBrushItem(aBg, RES_BACKGROUND));
+        pSFlyPara->pFlyFmt->SetFmtAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStk();
         pAnchorStck = pSFlyPara->pOldAnchorStck;
@@ -2643,7 +2643,7 @@ void SwWW8ImplReader::StopApo()
         {
             long nW = pSFlyPara->nNewNettoWidth;
             nW += pSFlyPara->nWidth - pSFlyPara->nNettoWidth;   // Rand dazu
-            pSFlyPara->pFlyFmt->SetAttr(
+            pSFlyPara->pFlyFmt->SetFmtAttr(
                 SwFmtFrmSize( pSFlyPara->eHeightFix, nW, pSFlyPara->nHeight ) );
         }
         /*
@@ -2671,7 +2671,7 @@ void SwWW8ImplReader::StopApo()
             aSize.SetWidth(nNewWidth);
             aSize.SetWidthSizeType(ATT_VAR_SIZE);
 
-            pSFlyPara->pFlyFmt->SetAttr(aSize);
+            pSFlyPara->pFlyFmt->SetFmtAttr(aSize);
         }
 
         delete pSFlyPara->pMainTextPos, pSFlyPara->pMainTextPos = 0;
@@ -2726,7 +2726,7 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
         if (pAktColl)
         {
             ASSERT(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
-            pAktColl->SetAttr(rAttr);
+            pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
             pAktItemSet->Put(rAttr);
@@ -2745,12 +2745,12 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( USHORT nWhich )
 {
     const SfxPoolItem* pRet = 0;
     if (pAktColl)
-        pRet = &(pAktColl->GetAttr(nWhich));
+        pRet = &(pAktColl->GetFmtAttr(nWhich));
     else if (pAktItemSet)
     {
         pRet = pAktItemSet->GetItem(nWhich);
         if (!pRet)
-            pRet = pStandardFmtColl ? &(pStandardFmtColl->GetAttr(nWhich)) : 0;
+            pRet = pStandardFmtColl ? &(pStandardFmtColl->GetFmtAttr(nWhich)) : 0;
         if (!pRet)
             pRet = &rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
@@ -2762,11 +2762,11 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( USHORT nWhich )
             if (nAktColl < nColls && pCollA[nAktColl].pFmt &&
                 pCollA[nAktColl].bColl)
             {
-                pRet = &(pCollA[nAktColl].pFmt->GetAttr(nWhich));
+                pRet = &(pCollA[nAktColl].pFmt->GetFmtAttr(nWhich));
             }
         }
         if (!pRet)
-            pRet = pStandardFmtColl ? &(pStandardFmtColl->GetAttr(nWhich)) : 0;
+            pRet = pStandardFmtColl ? &(pStandardFmtColl->GetFmtAttr(nWhich)) : 0;
         if (!pRet)
             pRet = &rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
@@ -3253,7 +3253,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
            )
         {
             pCtrlStck->DeleteAndDestroy(nPos);
-            pFlyFmt->SetAttr(SwFmtVertOrient(0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::CHAR));
+            pFlyFmt->SetFmtAttr(SwFmtVertOrient(0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::CHAR));
             bIsGraphicPlacementHack = true;
         }
     }
