@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: accpara.cxx,v $
- * $Revision: 1.76 $
+ * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1034,50 +1034,6 @@ Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
-
-// --> OD 2006-07-20 #i63870# - no longer needed.
-//Sequence<OUString> getAttributeNames()
-//{
-//    static Sequence<OUString>* pNames = NULL;
-
-//    if( pNames == NULL )
-//    {
-//        Sequence<OUString>* pSeq = new Sequence<OUString>( 15 );
-//        OUString* pStrings = pSeq->getArray();
-
-//        // sorted list of strings
-//        sal_Int32 i = 0;
-
-//#define CHAR_BACK_COLOR_POS 0
-
-//#define STR(x) pStrings[i++] = OUString(RTL_CONSTASCII_USTRINGPARAM(x))
-//        STR("CharBackColor");
-//        STR("CharColor");
-//        STR("CharEscapement");
-//        STR("CharHeight");
-//        STR("CharPosture");
-//        STR("CharStrikeout");
-//        STR("CharUnderline");
-//        STR("CharWeight");
-//        STR("ParaAdjust");
-//        STR("ParaBottomMargin");
-//        STR("ParaFirstLineIndent");
-//        STR("ParaLeftMargin");
-//        STR("ParaLineSpacing");
-//        STR("ParaRightMargin");
-//        STR("ParaTabStops");
-//#undef STR
-
-//        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
-//        if( i != pSeq->getLength() )
-//            pSeq->realloc( i );
-
-//        pNames = pSeq;
-//    }
-
-//    return *pNames;
-//}
-// <--
 
 //
 //=====  XInterface  =======================================================
