@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndnum.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -180,11 +180,9 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         if (nNewLevel != NO_NUMBERING) // #115901#
         {
-            rTxtNd.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
+            rTxtNd.SetAttrListLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
 
             rTxtNd.NumRuleChgd();
-
-            //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
         }
         else
         {
