@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: content.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1515,10 +1515,10 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                         pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(nPos);
                 if( pTxtNd && pOutlRule && pTxtNd->IsNumbered())
                 {
-                    SwNodeNum::tNumberVector aNumVector =
+                    SwNumberTree::tNumberVector aNumVector =
                         pTxtNd->GetNumberVector();
                     for( sal_Int8 nLevel = 0;
-                         nLevel <= pTxtNd->GetLevel();
+                         nLevel <= pTxtNd->GetActualListLevel();
                          nLevel++ )
                     {
                         sal_uInt16 nVal = (sal_uInt16)aNumVector[nLevel];
