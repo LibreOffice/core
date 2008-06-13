@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmltbli.cxx,v $
- * $Revision: 1.64 $
+ * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1846,7 +1846,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         // --> OD 2007-01-25 #i73790# - method renamed
         pBoxFmt2->ResetAllFmtAttr();
         // <--
-        pBoxFmt2->SetAttr( aFillOrder );
+        pBoxFmt2->SetFmtAttr( aFillOrder );
         bNew = sal_True;    // it's a new format now
 
         // share this format, if allowed
@@ -1892,9 +1892,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     // --> OD 2007-01-25 #i73790# - method renamed
     pFrmFmt->ResetAllFmtAttr();
     // <--
-    pFrmFmt->SetAttr( aFillOrder );
+    pFrmFmt->SetFmtAttr( aFillOrder );
 
-    pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     SwTableLines& rLines = pBox->GetTabLines();
     sal_Bool bSplitted = sal_False;
@@ -2016,7 +2016,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
         {
             if( pAutoItemSet )
-                pBoxFmt2->SetAttr( *pAutoItemSet );
+                pBoxFmt2->SetFmtAttr( *pAutoItemSet );
         }
     }
 
@@ -2070,9 +2070,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         if( bSuppressNumericContent )
         {
             // suppress numeric content? Then reset number format!
-            pBoxFmt2->ResetAttr( RES_BOXATR_FORMULA );
-            pBoxFmt2->ResetAttr( RES_BOXATR_FORMAT );
-            pBoxFmt2->ResetAttr( RES_BOXATR_VALUE );
+            pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMULA );
+            pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMAT );
+            pBoxFmt2->ResetFmtAttr( RES_BOXATR_VALUE );
         }
         else
         {
@@ -2083,7 +2083,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             {
                 // formula cell: insert formula if valid
                 SwTblBoxFormula aFormulaItem( rFormula );
-                pBoxFmt2->SetAttr( aFormulaItem );
+                pBoxFmt2->SetFmtAttr( aFormulaItem );
             }
             else if( !pCell->HasValue() && pCell->HasTextValue() )
             {
@@ -2102,14 +2102,14 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                         static_cast<const SwTblBoxNumFormat*>( pItem );
                     if( pNumFormat != NULL && pNumberFormatter &&
                         !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
-                        pBoxFmt->ResetAttr( RES_BOXATR_FORMAT );
+                        pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
                 }
             }
             // always insert value, even if default
             if( pCell->HasValue() )
             {
                 SwTblBoxValue aValueItem( pCell->GetValue() );
-                pBoxFmt2->SetAttr( aValueItem );
+                pBoxFmt2->SetFmtAttr( aValueItem );
             }
         }
 
@@ -2122,14 +2122,14 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         SvxProtectItem aProtectItem( RES_PROTECT );
         aProtectItem.SetCntntProtect( sal_True );
-        pBoxFmt2->SetAttr( aProtectItem );
+        pBoxFmt2->SetFmtAttr( aProtectItem );
     }
 
     // restore old modify-lock state
     if (! bModifyLocked)
         pBoxFmt2->UnlockModify();
 
-    pBoxFmt2->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pBoxFmt2->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     return pBox;
 }
@@ -2156,7 +2156,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     // --> OD 2007-01-25 #i73790# - method renamed
     pFrmFmt->ResetAllFmtAttr();
     // <--
-    pFrmFmt->SetAttr( aFillOrder );
+    pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
     const OUString& rStyleName = (*pRows)[(sal_uInt16)nTopRow]->GetStyleName();
@@ -2166,7 +2166,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             XML_STYLE_FAMILY_TABLE_ROW, rStyleName, &pAutoItemSet ) )
     {
         if( pAutoItemSet )
-            pFrmFmt->SetAttr( *pAutoItemSet );
+            pFrmFmt->SetFmtAttr( *pAutoItemSet );
     }
 
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2698,7 +2698,7 @@ void SwXMLTableContext::MakeTable()
             break;
         }
 
-        pFrmFmt->SetAttr( *pAutoItemSet );
+        pFrmFmt->SetFmtAttr( *pAutoItemSet );
     }
     else
     {
@@ -2718,14 +2718,14 @@ void SwXMLTableContext::MakeTable()
     _MakeTable( 0 );
 
     if( bSetHoriOrient )
-        pFrmFmt->SetAttr( SwFmtHoriOrient( 0, eHoriOrient ) );
+        pFrmFmt->SetFmtAttr( SwFmtHoriOrient( 0, eHoriOrient ) );
 
     // This must be bahind the call to _MakeTable, because nWidth might be
     // changed there.
     pFrmFmt->LockModify();
     SwFmtFrmSize aSize( ATT_VAR_SIZE, nWidth );
     aSize.SetWidthPercent( (sal_Int8)nPrcWidth );
-    pFrmFmt->SetAttr( aSize );
+    pFrmFmt->SetFmtAttr( aSize );
     pFrmFmt->UnlockModify();
 
 
