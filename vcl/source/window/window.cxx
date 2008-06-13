@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window.cxx,v $
- * $Revision: 1.278 $
+ * $Revision: 1.279 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2931,7 +2931,7 @@ void Window::ImplScroll( const Rectangle& rRect,
                 ImplReMirror( aRegion );
             }
 
-            ImplSelectClipRegion( pGraphics, aRegion, this );
+            ImplSelectClipRegion( aRegion, pGraphics );
             pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
                                  rRect.Left(), rRect.Top(),
                                  rRect.GetWidth(), rRect.GetHeight(),
@@ -3383,7 +3383,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             SalGraphics* pGraphics = ImplGetFrameGraphics();
                             if ( pGraphics )
                             {
-                                BOOL bSelectClipRegion = ImplSelectClipRegion( pGraphics, aRegion, this );
+                                const bool bSelectClipRegion = ImplSelectClipRegion( aRegion, pGraphics );
                                 if ( bSelectClipRegion )
                                 {
                                     pGraphics->CopyArea( mnOutOffX, mnOutOffY,
