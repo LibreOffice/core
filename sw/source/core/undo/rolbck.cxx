@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rolbck.cxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,13 +82,7 @@ String SwHstryHint::GetDescription() const
 SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
     :  SwHstryHint( HSTRY_SETFMTHNT ),
        pAttr( pFmtHt->Clone() ),
-       nNode( nNd ),
-       // --> OD 2007-07-09 #i77372#
-       mnNumLvl( NO_NUMBERING ),
-       mbIsRestart( false ),
-       mnRestartVal( USHRT_MAX ),
-       mbIsCounted( false )
-       // <--
+       nNode( nNd )
 {
     switch( pAttr->Which() )
     {
@@ -115,23 +109,6 @@ SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
                 }
             }
             rNew.ChgDefinedIn( 0 );
-        }
-        break;
-    case RES_PARATR_NUMRULE:
-        {
-            const SwModify* pMod = ((SwNumRuleItem*)pFmtHt)->GetDefinedIn();
-            if( pMod && pMod->ISA( SwTxtNode ))
-            {
-                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode *>(pMod);
-
-                // --> OD 2007-07-09 #i77372#
-                mnNumLvl = pTxtNd->GetLevel();
-                mbIsRestart = pTxtNd->IsRestart();
-                mnRestartVal = pTxtNd->GetStart();
-                mbIsCounted = pTxtNd->IsCounted();
-                // <--
-            }
-            ((SwNumRuleItem*)pAttr)->ChgDefinedIn( 0 );
         }
         break;
     }
@@ -176,27 +153,16 @@ void SwSetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     if( pNode->IsCntntNode() )
     {
         ((SwCntntNode*)pNode)->SetAttr( *pAttr );
-
-        if( RES_PARATR_NUMRULE == pAttr->Which() && NO_NUMBERING != mnNumLvl)
-        {
-            SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pNode);
-            // --> OD 2007-07-09 #i77372#
-            pTxtNd->SetLevel( mnNumLvl );
-            pTxtNd->SetRestart( mbIsRestart );
-            pTxtNd->SetStart( mnRestartVal );
-            pTxtNd->SetCounted( mbIsCounted );
-            // <--
-        }
     }
     else if( pNode->IsTableNode() )
-        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->SetAttr( *pAttr );
+        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->SetFmtAttr( *pAttr );
     else if( pNode->IsStartNode() &&
             SwTableBoxStartNode == ((SwStartNode*)pNode)->GetStartNodeType() )
     {
         SwTableNode* pTNd = pNode->FindTableNode();
         SwTableBox* pBox;
         if( pTNd && 0 != ( pBox = pTNd->GetTable().GetTblBox( nNode )))
-            pBox->ClaimFrmFmt()->SetAttr( *pAttr );
+            pBox->ClaimFrmFmt()->SetFmtAttr( *pAttr );
     }
 
     if( !bTmpSet )
@@ -209,32 +175,13 @@ SwSetFmtHint::~SwSetFmtHint()
 }
 
 
-// --> OD 2007-07-11 #i56253#
-SwResetFmtHint::SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx, SwDoc& rDoc )
+// --> OD 2008-02-27 #refactorlists# - removed <rDoc>
+SwResetFmtHint::SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx )
 // <--
     : SwHstryHint( HSTRY_RESETFMTHNT ),
       nNode( nNodeIdx ),
-      nWhich( pFmtHt->Which() ),
-      // --> OD 2007-07-11 #i56253#
-      mnNumLvl( NO_NUMBERING ),
-      mbIsRestart( false ),
-      mnRestartVal( USHRT_MAX ),
-      mbIsCounted( false )
-      // <--
+      nWhich( pFmtHt->Which() )
 {
-    // --> OD 2007-07-11 #i56253#
-    if ( nWhich == RES_PARATR_NUMRULE )
-    {
-        SwTxtNode* pTxtNode = rDoc.GetNodes()[ nNode ]->GetTxtNode();
-        if ( pTxtNode )
-        {
-            mnNumLvl = pTxtNode->GetLevel();
-            mbIsRestart = pTxtNode->IsRestart();
-            mnRestartVal = pTxtNode->GetStart();
-            mbIsCounted = pTxtNode->IsCounted();
-        }
-    }
-    // <--
 }
 
 
@@ -244,20 +191,9 @@ void SwResetFmtHint::SetInDoc( SwDoc* pDoc, BOOL )
     if ( pNode->IsCntntNode() )
     {
         ((SwCntntNode*)pNode)->ResetAttr( nWhich );
-        // --> OD 2007-07-11 #i56253#
-        SwTxtNode* pTxtNode = pNode->GetTxtNode();
-        if ( pTxtNode &&
-             mnNumLvl >= 0 && mnNumLvl < MAXLEVEL )
-        {
-            pTxtNode->SetLevel( mnNumLvl );
-            pTxtNode->SetRestart( mbIsRestart );
-            pTxtNode->SetStart( mnRestartVal );
-            pTxtNode->SetCounted( mbIsCounted );
-        }
-        // <--
     }
     else if( pNode->IsTableNode() )
-        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetAttr( nWhich );
+        ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nWhich );
 }
 
 
@@ -555,27 +491,9 @@ SwChgFmtColl::SwChgFmtColl( const SwFmtColl* pFmtColl, ULONG nNd,
     : SwHstryHint( HSTRY_CHGFMTCOLL ),
     pColl( pFmtColl ),
     nNode( nNd ),
-    nNdWhich( nNodeWhich ),
-    // --> OD 2007-07-09 #i77372#
-    mnNumLvl( NO_NUMBERING ),
-    mbIsRestart( false ),
-    mnRestartVal( USHRT_MAX ),
-    mbIsCounted( false )
-    // <--
+    nNdWhich( nNodeWhich )
 {
-    const SwDoc* pDoc = pFmtColl->GetDoc();
-    const SwTxtNode* pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    if( pTxtNd )
-    {
-        // --> OD 2007-07-09 #i77372#
-        mnNumLvl = pTxtNd->GetLevel();
-        mbIsRestart = pTxtNd->IsRestart();
-        mnRestartVal = pTxtNd->GetStart();
-        mbIsCounted = pTxtNd->IsCounted();
-        // <--
-    }
 }
-
 
 void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL )
 {
@@ -591,17 +509,6 @@ void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL )
             if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( (SwTxtFmtColl*)pColl ))
             {
                 pCntntNd->ChgFmtColl( (SwFmtColl*)pColl );
-                if( NO_NUMBERING != mnNumLvl)
-                {
-                    SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pCntntNd);
-
-                    // --> OD 2007-07-09 #i77372#
-                    pTxtNd->SetLevel( mnNumLvl );
-                    pTxtNd->SetRestart( mbIsRestart );
-                    pTxtNd->SetStart( mnRestartVal );
-                    pTxtNd->SetCounted( mbIsCounted );
-                    // <--
-                }
             }
         }
         else if( USHRT_MAX != pDoc->GetGrfFmtColls()->GetPos( (SwGrfFmtColl*)pColl ))
@@ -866,21 +773,6 @@ SwHstrySetAttrSet::SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNodePos,
                     rNew.ChgDefinedIn( 0 );
                 }
                 break;
-
-            case RES_PARATR_NUMRULE:
-                if( ((SwNumRuleItem*)pItem)->GetDefinedIn() &&
-                    ((SwNumRuleItem*)pItem)->GetDefinedIn()->ISA( SwTxtNode ))
-                {
-                    SwTxtNode* pTNd = (SwTxtNode*)((SwNumRuleItem*)pItem)->GetDefinedIn();
-                    // --> OD 2007-07-09 #i77372#
-                    mnNumLvl = pTNd->GetLevel();
-                    mbIsRestart = pTNd->IsRestart();
-                    mnRestartVal = pTNd->GetStart();
-                    mbIsCounted = pTNd->IsCounted();
-                    // <--
-                }
-                ((SwNumRuleItem*)pItem)->ChgDefinedIn( 0 );
-                break;
             }
         }
 
@@ -900,30 +792,15 @@ void SwHstrySetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
     if( pNode->IsCntntNode() )
     {
         ((SwCntntNode*)pNode)->SetAttr( aOldSet );
-        const SfxPoolItem* pItem;
-        if( ((SwCntntNode*)pNode)->HasSwAttrSet() && SFX_ITEM_SET ==
-            ((SwCntntNode*)pNode)->GetpSwAttrSet()->GetItemState(
-            RES_PARATR_NUMRULE, FALSE, &pItem ) &&
-            NO_NUMBERING != mnNumLvl)
-        {
-            SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pNode);
-
-            // --> OD 2007-07-09 #i77372#
-            pTxtNd->SetLevel( mnNumLvl );
-            pTxtNd->SetRestart( mbIsRestart );
-            pTxtNd->SetStart( mnRestartVal );
-            pTxtNd->SetCounted( mbIsCounted );
-            // <--
-        }
         if( aResetArr.Count() )
             ((SwCntntNode*)pNode)->ResetAttr( aResetArr );
     }
     else if( pNode->IsTableNode() )
     {
         SwFmt& rFmt = *((SwTableNode*)pNode)->GetTable().GetFrmFmt();
-        rFmt.SetAttr( aOldSet );
+        rFmt.SetFmtAttr( aOldSet );
         if( aResetArr.Count() )
-            rFmt.ResetAttr( *aResetArr.GetData() );
+            rFmt.ResetFmtAttr( *aResetArr.GetData() );
     }
 
     pDoc->DoUndo( bDoesUndo );
@@ -1028,7 +905,7 @@ void SwHstryChgFlyAnchor::SetInDoc( SwDoc* pDoc, BOOL )
         if( !pCNd || !pCNd->GetFrm( 0, 0, FALSE ) )
             pFmt->DelFrms();
 
-        pFmt->SetAttr( aTmp );
+        pFmt->SetFmtAttr( aTmp );
     }
     pDoc->DoUndo( bDoesUndo );
 }
@@ -1056,18 +933,18 @@ void SwHstryChgFlyChain::SetInDoc( SwDoc* pDoc, BOOL )
             aChain.SetPrev( pPrevFmt );
             SwFmtChain aTmp( pPrevFmt->GetChain() );
             aTmp.SetNext( pFlyFmt );
-            pPrevFmt->SetAttr( aTmp );
+            pPrevFmt->SetFmtAttr( aTmp );
         }
         if( pNextFmt && USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pNextFmt ))
         {
             aChain.SetNext( pNextFmt );
             SwFmtChain aTmp( pNextFmt->GetChain() );
             aTmp.SetPrev( pFlyFmt );
-            pNextFmt->SetAttr( aTmp );
+            pNextFmt->SetFmtAttr( aTmp );
         }
 
         if( aChain.GetNext() || aChain.GetPrev()  )
-            pFlyFmt->SetAttr( aChain );
+            pFlyFmt->SetFmtAttr( aChain );
     }
 }
 
@@ -1084,7 +961,7 @@ void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL )
     SwCharFmt * pCharFmt = pDoc->FindCharFmtByName(sFmt);
 
     if (pCharFmt)
-        pCharFmt->SetAttr(aOldSet);
+        pCharFmt->SetFmtAttr(aOldSet);
 }
 // <- #i27615#
 
@@ -1112,9 +989,9 @@ SwHistory::~SwHistory()
 |*
 *************************************************************************/
 
-// --> OD 2007-07-11 #i56253#
+// --> OD 2008-02-27 #refactorlists# - removed <rDoc>
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-                     ULONG nNodeIdx, SwDoc& rDoc )
+                     ULONG nNodeIdx )
 // <--
 {
     ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
@@ -1133,7 +1010,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
 #endif
         pHt = new SwSetFmtHint( (SfxPoolItem*)pOldValue, nNodeIdx );
     else
-        pHt = new SwResetFmtHint( (SfxPoolItem*)pNewValue, nNodeIdx, rDoc );
+        pHt = new SwResetFmtHint( (SfxPoolItem*)pNewValue, nNodeIdx );
     Insert( pHt, Count() );
 }
 
@@ -1223,16 +1100,16 @@ void SwHistory::Add( const SwFlyFrmFmt& rFmt, USHORT& rSetPos )
                 {
                     SwFmtChain aTmp( pChainItem->GetNext()->GetChain() );
                     aTmp.SetPrev( 0 );
-                    pChainItem->GetNext()->SetAttr( aTmp );
+                    pChainItem->GetNext()->SetFmtAttr( aTmp );
                 }
                 if ( pChainItem->GetPrev() )
                 {
                     SwFmtChain aTmp( pChainItem->GetPrev()->GetChain() );
                     aTmp.SetNext( 0 );
-                    pChainItem->GetPrev()->SetAttr( aTmp );
+                    pChainItem->GetPrev()->SetFmtAttr( aTmp );
                 }
             }
-            ((SwFlyFrmFmt&)rFmt).ResetAttr( RES_CHAIN );
+            ((SwFlyFrmFmt&)rFmt).ResetFmtAttr( RES_CHAIN );
         }
     }
 }
@@ -1329,7 +1206,7 @@ USHORT SwHistory::SetTmpEnd( USHORT nNewTmpEnd )
     return nOld;
 }
 
-void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx, SwDoc& rDoc )
+void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx )
 {
     if( rSet.Count() )
     {
@@ -1338,7 +1215,7 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx, SwDoc& rDoc
             if( (SfxPoolItem*)-1 != aIter.GetCurItem() )
             {
                 const SfxPoolItem* pNew = aIter.GetCurItem();
-                Add( pNew, pNew, nNodeIdx, rDoc );
+                Add( pNew, pNew, nNodeIdx );
             }
             if( aIter.IsAtEnd() )
                 break;
@@ -1405,13 +1282,10 @@ void SwHistory::CopyAttr( const SwpHints* pHts, ULONG nNodeIdx,
 
 // Klasse zum Registrieren der History am Node, Format, HintsArray, ...
 
-SwRegHistory::SwRegHistory( SwDoc& rDoc, SwHistory* pHst )
+SwRegHistory::SwRegHistory( SwHistory* pHst )
     : SwClient( 0 ),
       pHstry( pHst ),
-      nNodeIdx( ULONG_MAX ),
-      // --> OD 2007-07-11 #i56253#
-      mrDoc( rDoc )
-      // <--
+      nNodeIdx( ULONG_MAX )
 {
     if( pHst )
         _MakeSetWhichIds();
@@ -1421,10 +1295,7 @@ SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
                             SwHistory* pHst )
     : SwClient( pRegIn ),
       pHstry( pHst ),
-      nNodeIdx( rNd.GetIndex() ),
-      // --> OD 2007-07-11 #i56253#
-      mrDoc( const_cast<SwDoc&>(*(rNd.GetDoc())) )
-      // <--
+      nNodeIdx( rNd.GetIndex() )
 {
     if( pHst )
         _MakeSetWhichIds();
@@ -1433,10 +1304,7 @@ SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
 SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     : SwClient( 0 ),
       pHstry( pHst ),
-      nNodeIdx( rNd.GetIndex() ),
-      // --> OD 2007-07-11 #i56253#
-      mrDoc( const_cast<SwDoc&>(*(rNd.GetDoc())) )
-      // <--
+      nNodeIdx( rNd.GetIndex() )
 {
     if( pHstry )
         _MakeSetWhichIds();
@@ -1448,7 +1316,7 @@ void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( pHstry && ( pOld || pNew ) )
     {
         if( pNew->Which() < POOLATTR_END )
-            pHstry->Add( pOld, pNew, nNodeIdx, mrDoc );
+            pHstry->Add( pOld, pNew, nNodeIdx );
         else if( RES_ATTRSET_CHG == pNew->Which() )
         {
             SwHstryHint* pNewHstr;
@@ -1462,7 +1330,7 @@ void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 if( aSetWhichIds.Seek_Entry( pItem->Which() ) )
                     pNewHstr = new SwSetFmtHint( pItem, nNodeIdx );
                 else
-                    pNewHstr = new SwResetFmtHint( pItem, nNodeIdx, mrDoc );
+                    pNewHstr = new SwResetFmtHint( pItem, nNodeIdx );
             }
             pHstry->Insert( pNewHstr, pHstry->Count() );
         }
@@ -1482,11 +1350,7 @@ SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
                             SwHistory* pHst )
     : SwClient( pTxtNode ),
       pHstry( pHst ),
-      nNodeIdx( pTxtNode->GetIndex() ),
-      // --> OD 2007-07-11 #i56253#
-      mrDoc( *(pTxtNode->GetDoc()) )
-      // <--
-
+      nNodeIdx( pTxtNode->GetIndex() )
 {
     if( !rSet.Count() )
         return;
