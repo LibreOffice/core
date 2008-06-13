@@ -36,3 +36,20 @@ cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XNameReplac
 
 ### i84221 ### 
 cfgmgr2.OSetElementValueSetUpdateAccess
+
+### i87744 ###
+cfgmgr2.LayerParser
+# -> test is disbaled in cfgmgr2.sce
+
+### i88358 ###
+cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
+cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::beans::XExactName
+
+### i88360 ###
+cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
+
+### i89412 ###
+cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XElementAccess
+
+### i89413 ###
+cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
