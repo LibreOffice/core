@@ -1,7 +1,9 @@
 #!/bin/sh
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
-CLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
+SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
+myCLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
+myCLASSPATH=$myCLASSPATH:$SOLVER_LIB:/net/unoapi/export/unoapi/bin/mysql.jar
 
 if [ -n "$JAVAI" ]; then
 	JAVABIN=$JAVAI
@@ -12,5 +14,8 @@ else
 	exit 1
 fi
 
-echo $JAVABIN -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
-$JAVABIN -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
+PARAM="-cs pipe,name=$USER"
+
+COMMAND="$JAVABIN -Xmx120m -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
+echo $COMMAND
+$COMMAND
