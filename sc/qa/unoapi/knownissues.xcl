@@ -102,22 +102,58 @@ sc.ScStyleObj::com::sun::star::style::Style
 sc.ScTableSheetObj::com::sun::star::sheet::XFormulaQuery
 
 ### i84726 ###
-# sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable::getAccessibleRowDescription() 
+sc.ScAccessibleCsvGrid::com::sun::star::accessibility::XAccessibleTable::getAccessibleRowDescription() 
 #-> disabled in sc.sce
 
 ### i84554 ###
-# sc.AccessibleEditableTextPara_PreviewNote 
+sc.AccessibleEditableTextPara_PreviewNote 
 #-> disabled in sc.sce
 
 ### i84641 ###
-# sc.ScAccessibleCsvRuler 
+sc.ScAccessibleCsvRuler 
 #-> disabled in sc.sce
 
 ### i84653 ###
-# sc.ScPageObj 
+sc.ScPageObj 
 #-> disabled in sc.sce
 
 ### i84656 ###
-# sc.ScTabViewObj  
+sc.ScTabViewObj  
 #-> disabled in sc.sce
 
+### i87698 ###
+sc.ScAnnotationShapeObj::com::sun::star::drawing::TextProperties
+
+### i87863 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XMultipleOperation
+
+### i87876 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XSheetFilterableEx
+
+### i88241 ###
+sc.AccessibleEditableTextPara_HeaderFooter
+#-> disabled in sc.sce
+
+### i88242 ###
+sc.ScModelObj::com::sun::star::view::XPrintable
+
+### i88311 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XCellSeries
+
+### i88330 ###
+sc.ScAccessibleDocument
+
+### i89020 ###
+sc.ScCellCursorObj::com::sun::star::table::XAutoFormattable
+
+### i89411 ###
+sc.XMLContentExporter
+sc.XMLContentImporter
+sc.XMLExporter
+sc.XMLImporter
+sc.XMLMetaExporter
+sc.XMLMetaImporter
+#-> disabled in sc.sce
+
+### i90346 ### 
+sc.ScTableValidationObj::com::sun::star::sheet::TableValidation
