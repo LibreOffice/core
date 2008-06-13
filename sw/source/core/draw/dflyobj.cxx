@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dflyobj.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -552,7 +552,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         }
     }
     if ( bPut )
-        pFmt->SetAttr( aSet );
+        pFmt->SetFmtAttr( aSet );
 }
 
 
