@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.61 $
+# $Revision: 1.62 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -2218,11 +2218,11 @@ sub get_platform_name
 {
     my $platformname = "";
 
-    if ( $installer::globals::islinuxintelrpmbuild )
+    if (( $installer::globals::islinuxintelrpmbuild ) || ( $installer::globals::islinuxinteldebbuild ))
     {
         $platformname = "LinuxIntel";
     }
-    elsif ( $installer::globals::islinuxppcrpmbuild )
+    elsif (( $installer::globals::islinuxppcrpmbuild ) || ( $installer::globals::islinuxppcdebbuild ))
     {
         $platformname = "LinuxPowerPC";
     }
