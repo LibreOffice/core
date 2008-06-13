@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gctable.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,7 +156,7 @@ void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
             if( pShareFmts )
                 pShareFmts->SetAttr( *pBox, aBox );
             else
-                pBox->ClaimFrmFmt()->SetAttr( aBox );
+                pBox->ClaimFrmFmt()->SetFmtAttr( aBox );
         }
 
         if( ++rStt >= rCollTLB.Count() )
@@ -210,7 +210,7 @@ BOOL lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
                         if( pGCPara->pShareFmts )
                             pGCPara->pShareFmts->SetAttr( *pBox, aBox );
                         else
-                            pBox->ClaimFrmFmt()->SetAttr( aBox );
+                            pBox->ClaimFrmFmt()->SetFmtAttr( aBox );
                     }
                 }
 
