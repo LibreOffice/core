@@ -8,7 +8,7 @@
 #
 # $RCSfile: globals.pm,v $
 #
-# $Revision: 1.95 $
+# $Revision: 1.96 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -294,6 +294,7 @@ BEGIN
     $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
     $csp_installlogdir = "";    # global installlogdir of createsimplepackage() in simplepackage.pm
     $csp_languagestring = "";   # global languagestring of createsimplepackage() in simplepackage.pm
+    $localunpackdir = "";
     $localinstalldirset = 0;
     $localinstalldir = "";
 
