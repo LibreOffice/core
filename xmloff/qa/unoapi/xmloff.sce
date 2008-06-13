@@ -12,7 +12,7 @@
 -o xmloff.Draw.XMLMetaImporter
 -o xmloff.Draw.XMLSettingsExporter
 -o xmloff.Draw.XMLSettingsImporter
--o xmloff.Draw.XMLStylesExporter
+#i87695 -o xmloff.Draw.XMLStylesExporter
 -o xmloff.Draw.XMLStylesImporter
 -o xmloff.Impress.XMLContentExporter
 -o xmloff.Impress.XMLContentImporter
@@ -22,5 +22,5 @@
 -o xmloff.Impress.XMLMetaImporter
 -o xmloff.Impress.XMLSettingsExporter
 -o xmloff.Impress.XMLSettingsImporter
--o xmloff.Impress.XMLStylesExporter
+#i87695 -o xmloff.Impress.XMLStylesExporter
 -o xmloff.Impress.XMLStylesImporter
