@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: shapeexport.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -507,6 +507,27 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
 ///////////////////////////////////////////////////////////////////////
 
+// --> OD 2008-05-08 #refactorlists#
+namespace
+{
+    class NewTextListsHelper
+    {
+        public:
+            NewTextListsHelper( SvXMLExport& rExp )
+                : mrExport( rExp )
+            {
+                mrExport.GetTextParagraphExport()->PushNewTextListsHelper();
+            }
+
+            ~NewTextListsHelper()
+            {
+                mrExport.GetTextParagraphExport()->PopTextListsHelper();
+            }
+
+        private:
+            SvXMLExport& mrExport;
+    };
+}
 // This method exports the given XShape
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
@@ -530,6 +551,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         DBG_ERROR( "XMLShapeExport::exportShape(): no shape info collected for a given shape" );
         return;
     }
+
+    // --> OD 2008-05-08 #refactorlists#
+    NewTextListsHelper aNewTextListsHelper( mrExport );
+    // <--
 
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
