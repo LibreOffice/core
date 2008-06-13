@@ -8,7 +8,7 @@
  *
  * $RCSfile: unattr.cxx,v $
  *
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,10 +106,7 @@ void _UndoFmtAttr::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             else
             {
                 pUndo = new SwUndoFmtAttr( *((SwAttrSetChg*)pOld)->GetChgSet(),
-                                           // --> OD 2007-07-11 #i56253#
-                                           *((SwAttrSetChg*)pNew)->GetChgSet(),
-                                           // <--
-                                        *(SwFmt*)pRegisteredIn, bSaveDrawPt );
+                                           *(SwFmt*)pRegisteredIn, bSaveDrawPt );
             }
         }
         else
@@ -125,7 +122,7 @@ struct TxtNodeNumberingAttrs
     TxtNodeNumberingAttrs( ULONG nTxtNodeIdx,
                            int nNumLvl,
                            bool bIsRestart,
-                           SwNodeNum::tSwNumTreeNumber nRestartVal,
+                           SwNumberTree::tSwNumTreeNumber nRestartVal,
                            bool bIsCounted )
         : mnTxtNodeIdx( nTxtNodeIdx ),
           mnNumLvl( nNumLvl ),
@@ -137,13 +134,12 @@ struct TxtNodeNumberingAttrs
     ULONG mnTxtNodeIdx;
     int mnNumLvl;
     bool mbIsRestart;
-    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    SwNumberTree::tSwNumTreeNumber mnRestartVal;
     bool mbIsCounted;
 };
 // <--
 
 SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
-                              const SfxItemSet& rNewSet,
                               SwFmt& rChgFmt,
                               BOOL bSvDrwPt )
     : SwUndo( UNDO_INSFMTATTR ),
@@ -153,15 +149,10 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
       // <--
       nNode( 0 ),
       nFmtWhich( rChgFmt.Which() ),
-      bSaveDrawPt( bSvDrwPt ),
-      // --> OD 2007-07-11 #i56253#
-      mpNumAttrsOfTxtNodes( 0 )
-      // <--
+      bSaveDrawPt( bSvDrwPt )
 {
     pOldSet = new SfxItemSet( rOldSet );
-    // --> OD 2007-07-11 #i56253#
-    Init( rNewSet );
-    // <--
+    Init();
 }
 
 SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
@@ -170,19 +161,14 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
       pFmt( &rChgFmt ),
       nNode( 0 ),
       nFmtWhich( rChgFmt.Which() ),
-      bSaveDrawPt( bSvDrwPt ),
-      // --> OD 2007-07-11 #i56253#
-      mpNumAttrsOfTxtNodes( 0 )
-      // <--
+      bSaveDrawPt( bSvDrwPt )
 {
     pOldSet = pFmt->GetAttrSet().Clone( FALSE );
     pOldSet->Put( rItem );
-    // --> OD 2007-07-11 #i56253#
-    Init( *pOldSet );
-    // <--
+    Init();
 }
 
-void SwUndoFmtAttr::Init( const SfxItemSet& rAffectedItems )
+void SwUndoFmtAttr::Init()
 {
     // Ankerwechsel gesondert behandeln
     if( SFX_ITEM_SET == pOldSet->GetItemState( RES_ANCHOR, FALSE ))
@@ -210,52 +196,11 @@ void SwUndoFmtAttr::Init( const SfxItemSet& rAffectedItems )
                 nNode = static_cast< SwTableBox* >(pTblBox)->GetSttIdx();
         }
     }
-
-    // --> OD 2007-07-11 #i56253#
-    if ( nFmtWhich == RES_TXTFMTCOLL )
-    {
-        mpNumAttrsOfTxtNodes = GetActualNumAttrsOfTxtNodes( &rAffectedItems );
-    }
-    // <--
 }
-
-// --> OD 2007-07-11 #i56253#
-::std::vector<TxtNodeNumberingAttrs>* SwUndoFmtAttr::GetActualNumAttrsOfTxtNodes(
-                                            const SfxItemSet* pAffectedItems )
-{
-    ::std::vector<TxtNodeNumberingAttrs>* pNumAttrsOfTxtNodes = 0;
-
-    if ( !pAffectedItems ||
-         SFX_ITEM_SET == pAffectedItems->GetItemState( RES_PARATR_NUMRULE, FALSE ) )
-    {
-        // Numbering rule attribute is affected by the action.
-        // Thus, keep numbering attributes of all depending text nodes.
-        pNumAttrsOfTxtNodes = new ::std::vector<TxtNodeNumberingAttrs>;
-
-        SwClientIter aIter( *pFmt );
-        for ( SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(aIter.First( TYPE(SwTxtNode) ));
-              pTxtNode;
-              pTxtNode = static_cast<SwTxtNode*>(aIter.Next()) )
-        {
-            TxtNodeNumberingAttrs aNumAttrs( pTxtNode->GetIndex(),
-                                             pTxtNode->GetLevel(),
-                                             pTxtNode->IsRestart(),
-                                             pTxtNode->GetStart(),
-                                             pTxtNode->IsCounted() );
-            pNumAttrsOfTxtNodes->push_back( aNumAttrs );
-        }
-    }
-
-    return pNumAttrsOfTxtNodes;
-}
-// <--
 
 SwUndoFmtAttr::~SwUndoFmtAttr()
 {
     delete pOldSet;
-    // --> OD 2007-07-11 #i56253#
-    delete mpNumAttrsOfTxtNodes;
-    // <--
 }
 
 void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
@@ -291,7 +236,7 @@ void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
     // <--
     {
         _UndoFmtAttr aTmp( *pFmt, bSaveDrawPt );
-        pFmt->SetAttr( *pOldSet );
+        pFmt->SetFmtAttr( *pOldSet );
         if( aTmp.pUndo )
         {
             delete pOldSet;
@@ -306,27 +251,6 @@ void SwUndoFmtAttr::Undo( SwUndoIter& rUndoIter)
         if( RES_FLYFRMFMT == nFmtWhich || RES_DRAWFRMFMT == nFmtWhich )
             rUndoIter.pSelFmt = (SwFrmFmt*)pFmt;
     }
-
-    // --> OD 2007-07-11 #i56253#
-    if ( mpNumAttrsOfTxtNodes && !mpNumAttrsOfTxtNodes->empty() )
-    {
-        SwDoc* pDoc = pFmt->GetDoc();
-        while ( !mpNumAttrsOfTxtNodes->empty() )
-        {
-            TxtNodeNumberingAttrs aNumAttrs = mpNumAttrsOfTxtNodes->back();
-            mpNumAttrsOfTxtNodes->pop_back();
-            SwTxtNode* pTxtNd = pDoc->GetNodes()[ aNumAttrs.mnTxtNodeIdx ]->GetTxtNode();
-            if ( pTxtNd &&
-                 aNumAttrs.mnNumLvl >= 0 && aNumAttrs.mnNumLvl < MAXLEVEL )
-            {
-                pTxtNd->SetLevel( aNumAttrs.mnNumLvl );
-                pTxtNd->SetRestart( aNumAttrs.mbIsRestart );
-                pTxtNd->SetStart( aNumAttrs.mnRestartVal );
-                pTxtNd->SetCounted( aNumAttrs.mbIsCounted );
-            }
-        }
-    }
-    // <--
 }
 
 int SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
@@ -407,24 +331,10 @@ SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 
 void SwUndoFmtAttr::Redo( SwUndoIter& rUndoIter)
 {
-    // --> OD 2007-07-11 #i56253#
-    ::std::vector<TxtNodeNumberingAttrs>* pNumAttrsOfTxtNodes = 0;
-    if ( mpNumAttrsOfTxtNodes != 0 )
-    {
-        pNumAttrsOfTxtNodes = GetActualNumAttrsOfTxtNodes();
-    }
-
     // --> OD 2004-10-26 #i35443# - Because the undo stores the attributes for
     // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
     Undo( rUndoIter );
     // <--
-
-    // --> OD 2007-07-11 #i56253#
-    if ( pNumAttrsOfTxtNodes != 0 )
-    {
-        delete mpNumAttrsOfTxtNodes;
-        mpNumAttrsOfTxtNodes = pNumAttrsOfTxtNodes;
-    }
 }
 
 void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
@@ -643,7 +553,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     {
         pOldSet->Put( aNewAnchor );
         _UndoFmtAttr aTmp( *pFmt, bSaveDrawPt );
-        pFmt->SetAttr( *pOldSet );
+        pFmt->SetFmtAttr( *pOldSet );
         if( aTmp.pUndo )
         {
             delete pOldSet;
@@ -722,7 +632,7 @@ void SwUndoFmtResetAttr::Undo( SwUndoIter& )
 {
     if ( mpOldItem )
     {
-        mpChangedFormat->SetAttr( *mpOldItem );
+        mpChangedFormat->SetFmtAttr( *mpOldItem );
     }
 }
 
@@ -730,7 +640,7 @@ void SwUndoFmtResetAttr::Redo( SwUndoIter& )
 {
     if ( mpOldItem )
     {
-        mpChangedFormat->ResetAttr( mnWhichId );
+        mpChangedFormat->ResetFmtAttr( mnWhichId );
     }
 }
 // <--
