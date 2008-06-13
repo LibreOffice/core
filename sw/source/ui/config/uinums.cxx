@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uinums.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -664,7 +664,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
 
             if( !pFmt->GetDepends() )       // Attribute setzen
                 for( USHORT n = aItems.Count(); n; )
-                    pFmt->SetAttr( *aItems[ --n ] );
+                    pFmt->SetFmtAttr( *aItems[ --n ] );
         }
     }
     ((SwNumFmt&)aFmt).SetCharFmt( pFmt );
