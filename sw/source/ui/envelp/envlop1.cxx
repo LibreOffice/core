@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: envlop1.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -222,12 +222,12 @@ short SwEnvDlg::Ok()
         if (pAddresseeSet)
         {
             SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool(RES_POOLCOLL_JAKETADRESS);
-            pColl->SetAttr(*pAddresseeSet);
+            pColl->SetFmtAttr(*pAddresseeSet);
         }
         if (pSenderSet)
         {
             SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool(RES_POOLCOLL_SENDADRESS);
-            pColl->SetAttr(*pSenderSet);
+            pColl->SetFmtAttr(*pSenderSet);
         }
     }
 
