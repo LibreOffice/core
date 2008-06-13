@@ -1,7 +1,9 @@
-@echo off
+rem @echo off
+
+setlocal
 
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
-SET CLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar
+SET APICLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar
 
 IFF "%JAVAI%" != "" THEN
     SET JAVABIN=%JAVAI%
@@ -12,7 +14,14 @@ ELSE
    exit 1
 ENDIFF
 
-set COMMAND=%JAVABIN% -Xmx120m -cp %CLASSPATH% org.openoffice.Runner %&
+SET PARAM=-cs pipe,name=%USERNAME%
+
+set COMMAND=%JAVABIN% -Xmx120m -cp %APICLASSPATH% org.openoffice.Runner %PARAM% %&
+
 
 echo %COMMAND
 %COMMAND
+
+endlocal
+
+quit
