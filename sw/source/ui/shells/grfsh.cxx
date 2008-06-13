@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: grfsh.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -269,7 +269,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
-                    pFmt->SetAttr(*pSet);
+                    pFmt->SetFmtAttr(*pSet);
                     SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
                                                     RES_SURROUND,   RES_SURROUND,
                                                     RES_ANCHOR,     RES_ANCHOR,
