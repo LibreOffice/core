@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: init.cxx,v $
- * $Revision: 1.65 $
+ * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,6 +164,9 @@ USHORT __FAR_DATA aBreakSetRange[] = {
     0 };
 
     // AttrSet-Range fuer die TxtFmtColl
+    // OD 2008-02-27 #refactorlists# :
+    // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
+    // included in the paragraph style's itemset.
 USHORT __FAR_DATA aTxtFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -185,6 +188,9 @@ USHORT __FAR_DATA aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
+    // --> OD 2008-02-25 #refactorlists#
+    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+    // <--
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
@@ -338,7 +344,10 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_HYPHENZONE, SFX_ITEM_POOLABLE },    // RES_PARATR_HYPHENZONE
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
-    { SID_ATTR_PARA_NUMRULE, 0 },                       // RES_PARATR_NUMRULE
+    // --> OD 2008-03-04 #refactorlists#
+    // RES_PARATR_NUMRULE is now poolable
+    { SID_ATTR_PARA_NUMRULE, SFX_ITEM_POOLABLE },       // RES_PARATR_NUMRULE
+    // <--
     { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
@@ -346,10 +355,13 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },          // RES_PARATR_VERTALIGN
     { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
     { SID_ATTR_BORDER_CONNECT, SFX_ITEM_POOLABLE },     // RES_PARATR_CONNECT_BORDER
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY6
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY7
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY8
+    // --> OD 2008-02-19 #refactorlists#
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ID
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_LEVEL
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISRESTART
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_RESTARTVALUE
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_LIST_ISCOUNTED
+    // <--
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
@@ -555,12 +567,13 @@ void _InitCore()
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =             new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =            new SvxParaGridItem( sal_True, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
-// ParaAttr - Dummies
-    aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );
-    aAttrTab[ RES_PARATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY6 );
-    aAttrTab[ RES_PARATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY7 );
-    aAttrTab[ RES_PARATR_DUMMY8 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY8 );
-// ParatAttr - Dummies
+    // --> OD 2008-02-19 #refactorlists#
+    aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] = new SfxStringItem( RES_PARATR_LIST_ID, aEmptyStr );
+    aAttrTab[ RES_PARATR_LIST_LEVEL - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 );
+    aAttrTab[ RES_PARATR_LIST_ISRESTART - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISRESTART, FALSE );
+    aAttrTab[ RES_PARATR_LIST_RESTARTVALUE - POOLATTR_BEGIN ] = new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 );
+    aAttrTab[ RES_PARATR_LIST_ISCOUNTED - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, TRUE );
+    // <--
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
     aAttrTab[ RES_FRM_SIZE- POOLATTR_BEGIN ] = new SwFmtFrmSize;
@@ -752,10 +765,6 @@ void _FinitCore()
     delete SwFntObj::pPixMap;
 
     delete SwEditShell::pAutoFmtFlags;
-    // --> OD 2006-06-27 #b6440955#
-    // variable is moved to class <numfunc::GetDefBulletConfig>
-//    delete SwNumRule::pDefBulletFont;
-    // <--
 
 #ifndef PRODUCT
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
