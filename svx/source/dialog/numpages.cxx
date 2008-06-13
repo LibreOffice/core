@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numpages.cxx,v $
- * $Revision: 1.63 $
+ * $Revision: 1.64 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -250,7 +250,6 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
     bModified(FALSE),
-    bHasChild(TRUE),
     bPreset(FALSE),
     nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
@@ -397,8 +396,6 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -476,7 +473,6 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
     bModified(FALSE),
-    bHasChild(TRUE),
     bPreset(FALSE),
     nNumItemId(SID_ATTR_NUMBERING_RULE)
 {
@@ -593,8 +589,6 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
 
 //  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -979,7 +973,6 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     nActNumLvl( USHRT_MAX ),
     nNumItemId(SID_ATTR_NUMBERING_RULE),
     bModified(FALSE),
-    bHasChild(/*FALSE*/TRUE),
     bPreset(FALSE)
 {
     FreeResource();
@@ -1129,10 +1122,6 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
-
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -1341,7 +1330,6 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     pPreviewWIN(    new SvxNumberingPreview(this, SVX_RES(WIN_PREVIEW   ))),
     pActNum(0),
     pSaveNum(0),
-    bHasChild(FALSE),
     bLastWidthModified(FALSE),
     bModified(FALSE),
     bPreset(FALSE),
@@ -1601,8 +1589,6 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
         }
     aLevelLB.SetUpdateMode(TRUE);
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -3502,8 +3488,6 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet& rSet )
         }
     aLevelLB.SetUpdateMode(TRUE);
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_PARAM_CHILD_LEVELS, FALSE, &pItem))
-        bHasChild = ((const SfxBoolItem*)pItem)->GetValue();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
