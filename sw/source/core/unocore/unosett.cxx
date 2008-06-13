@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unosett.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,6 +169,7 @@ const SfxItemPropertyMap* GetNumberingRulesMap()
         { SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING),   WID_CONTINUOUS,     &::getBooleanCppuType(),            PROPERTY_NONE,     0},
         { SW_PROP_NAME(UNO_NAME_NAME),                      WID_RULE_NAME   ,   &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,     0},
         { SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE),      WID_IS_OUTLINE, &::getBooleanCppuType(),            PROPERTY_NONE,     0},
+        { SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID),           WID_DEFAULT_LIST_ID, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}
     };
     return aNumberingRulesMap_Impl;
@@ -2292,8 +2293,16 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
     }
+    // --> OD 2008-04-23 #refactorlists#
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
+    {
+        delete pDocRule;
+        throw IllegalArgumentException();
+    }
+    // <--
     else
         throw UnknownPropertyException();
+
     if(pDocRule)
     {
         pDocShell->GetDoc()->SetOutlineNumRule(*pDocRule);
@@ -2341,6 +2350,14 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
         BOOL bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
+    // --> OD 2008-04-23 #refactorlists#
+    else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
+    {
+        ASSERT( pRule->GetDefaultListId().Len() != 0,
+                "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
+        aRet <<= OUString(pRule->GetDefaultListId());
+    }
+    // <--
     else
         throw UnknownPropertyException();
     return aRet;
