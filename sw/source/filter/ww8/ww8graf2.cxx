@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8graf2.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -552,7 +552,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
                 aFlySet.ClearItem( RES_ANCHOR );
 
-            pFlyFmtOfJustInsertedGraphic->SetAttr( aFlySet );
+            pFlyFmtOfJustInsertedGraphic->SetFmtAttr( aFlySet );
 
             pFlyFmtOfJustInsertedGraphic = 0;
         }
