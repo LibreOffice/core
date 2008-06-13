@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: uitool.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,7 +173,7 @@ void FillHdFt(SwFrmFmt* pFmt, const  SfxItemSet& rSet)
                             rSize.GetSize().Width(),
                             rSize.GetSize().Height());
     aSet.Put(aFrmSize);
-    pFmt->SetAttr(aSet);
+    pFmt->SetFmtAttr(aSet);
 }
 
 /*--------------------------------------------------------------------
@@ -187,7 +187,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
     // alle allgemeinen Rahmen-Attribute uebertragen
     //
-    rMaster.SetAttr(rSet);
+    rMaster.SetFmtAttr(rSet);
 
     // PageData
     //
@@ -212,7 +212,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         const SvxSizeItem& rSizeItem = (const SvxSizeItem&)rSet.Get(SID_ATTR_PAGE_SIZE);
         SwFmtFrmSize aSize(ATT_FIX_SIZE);
         aSize.SetSize(rSizeItem.GetSize());
-        rMaster.SetAttr(aSize);
+        rMaster.SetFmtAttr(aSize);
     }
     // Kopzeilen-Attribute auswerten
     //
@@ -227,7 +227,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Werte uebernehmen
             if(!rMaster.GetHeader().IsActive())
-                rMaster.SetAttr(SwFmtHeader(TRUE));
+                rMaster.SetFmtAttr(SwFmtHeader(TRUE));
 
             // Das Headerformat rausholen und anpassen
             //
@@ -245,7 +245,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             if(rMaster.GetHeader().IsActive())
             {
-                rMaster.SetAttr(SwFmtHeader(BOOL(FALSE)));
+                rMaster.SetFmtAttr(SwFmtHeader(BOOL(FALSE)));
                 rPageDesc.ChgHeaderShare(FALSE);
             }
         }
@@ -263,7 +263,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
         {
             // Werte uebernehmen
             if(!rMaster.GetFooter().IsActive())
-                rMaster.SetAttr(SwFmtFooter(TRUE));
+                rMaster.SetFmtAttr(SwFmtFooter(TRUE));
 
             // Das Footerformat rausholen und anpassen
             //
@@ -281,7 +281,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             //
             if(rMaster.GetFooter().IsActive())
             {
-                rMaster.SetAttr(SwFmtFooter(BOOL(FALSE)));
+                rMaster.SetFmtAttr(SwFmtFooter(BOOL(FALSE)));
                 rPageDesc.ChgFooterShare(FALSE);
             }
         }
@@ -322,7 +322,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
                                 (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
             }
             if( pColl )
-                pColl->SetAttr( SwRegisterItem ( TRUE ));
+                pColl->SetFmtAttr( SwRegisterItem ( TRUE ));
             rPageDesc.SetRegisterFmtColl( pColl );
         }
     }
