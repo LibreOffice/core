@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ * ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -7,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CheckModuleAPI.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,8 +27,8 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
-
+ * **********************************************************************
+ */
 /** complex tests to check the UNO-API
  **/
 package complex.unoapi;
@@ -36,15 +37,18 @@ package complex.unoapi;
 import base.java_complex;
 import complexlib.ComplexTestCase;
 import helper.OfficeProvider;
+import helper.ParameterNotFoundException;
 import helper.ProcessHandler;
 import com.sun.star.lang.XMultiServiceFactory;
+import helper.BuildEnvTools;
 import helper.ComplexDescGetter;
-import helper.OfficeWatcher;
-import helper.ProcessHandler;
+import helper.CwsDataExchangeImpl;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import share.DescEntry;
 import util.PropertyName;
 import util.utils;
@@ -76,35 +80,62 @@ import util.utils;
  */
 public class CheckModuleAPI extends ComplexTestCase {
 
-    String mSRC_ROOT = null;
-    String mCompiler = null;
-    boolean mIsInitialized = false;
-    boolean mContinue = false;
-    boolean mDebug = false;
+    private String mSRC_ROOT = null;
+    private boolean mIsInitialized = false;
+    private final static boolean mContinue = true;
+    private boolean mDebug = false;
+    private BuildEnvTools bet = null;
 
+    /**
+     * Initialize the test environment.
+     * This method checks for all neccesarry parameter and exit if not all parameter are set.
+     *
+     * Further this method starts an office instance and gets the office some more time to start. This is because
+     * some freshly installed offices don not have such a user tree. The office will create it on its first start,
+     * but this will take some time.
+     * Note: This funktionality is only reasonable with parameter <CODE>-noOffice true</CODE>
+     */
     public void before() {
 
         if (!mIsInitialized) {
             mIsInitialized = true;
-            boolean error = false;
-            String msg = "\nERROR: the following parameter must be set before executing the test:\n";
-            String envSet = (String) param.get(PropertyName.OOO_ENVSET);
-            if (envSet == null) {
-                msg += PropertyName.OOO_ENVSET + "\n\tThis parameter must ponit to the script to create a build " + "environment like '$SRC_ROOT/SolarisX86Env.Set.sh' or '%SRC_ROOT\\winenv.set.sh'\n" + "In case you are able to use \'setsolar\' or \'setcws\' just type \'setsolar\' value.\n ";
-                error = true;
+
+            try {
+
+                bet = new BuildEnvTools(param, log);
+
+            } catch (ParameterNotFoundException ex) {
+                this.failed(ex.toString(), false);
             }
-            String shell = (String) param.get(PropertyName.SHELL);
-            if (shell == null) {
-                msg += PropertyName.SHELL + "\n\tFill this parameter with a shell which can start 'OOO_ENVSET'" + "\n\t/bin/tcsh c:\\myShell\\myShell.exe\n";
-                error = true;
-            }
-            makeEnvironment();
-            if (mSRC_ROOT == null) {
-                msg += PropertyName.SRC_ROOT + "\n\tTry to fill this parameter with content of '$SRC_ROOT' like:\n\t" + PropertyName.SRC_ROOT + "=`$SRC_ROOT`\n";
-                error = true;
-            }
+
+            mSRC_ROOT = bet.getSrcRoot();
+
             mDebug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-            assure(msg, !error, false);
+
+            // this test is desingt to run against a freshly installed office. Maybe this office has currently no
+            // no user installation. The first start of an office creates this installation and this takes some
+            // more time to connect to the office.
+            // Note: This is only usefull with parameter -NoOffice true
+            try {
+                final OfficeProvider officeProvider = new OfficeProvider();
+                log.println("Receiving the ServiceManager of the Office to create User installation...");
+
+                final int timeOut = param.getInt(PropertyName.TIME_OUT);
+                param.put(PropertyName.TIME_OUT, new Integer(4 * timeOut));
+
+                final XMultiServiceFactory msf = (XMultiServiceFactory) officeProvider.getManager(param);
+
+                officeProvider.backupUserLayer(param, msf);
+
+                param.put(PropertyName.TIME_OUT, new Integer(timeOut));
+
+                if (msf == null) {
+                    failed("Could not connect the office");
+                }
+            } catch (Throwable t) {
+                failed("Could not start office " + t.toString());
+            }
+
         }
     }
 
@@ -115,33 +146,36 @@ public class CheckModuleAPI extends ComplexTestCase {
     public void checkModule(String module) {
         log.println(utils.getDateTime() + ": start testing module '" + module + "'");
 
-        log.println("start new Office instance...");
-        OfficeProvider officeProvider = new OfficeProvider();
-        log.println("Receiving the ServiceManager of the Office ");
-        XMultiServiceFactory msf = (XMultiServiceFactory) officeProvider.getManager(param);
+        log.println(utils.getDateTime() + "start new Office instance...");
+        final OfficeProvider officeProvider = new OfficeProvider();
+        log.println(utils.getDateTime() + "Receiving the ServiceManager of the Office ");
+        final XMultiServiceFactory msf = (XMultiServiceFactory) officeProvider.getManager(param);
         assure("couldnot get ServiceFarcotry", msf != null, mContinue);
         param.put("ServiceFactory", msf);
 
-        String sep = System.getProperty("file.separator");
-        String sUnoapi = getModulePath(module);
-        File fUnoapi = new File(sUnoapi);
-        String sMakeFile = sUnoapi + sep + "makefile.mk";
-        File fMakeFile = new File(sMakeFile);
+        final String sep = System.getProperty("file.separator");
+        final String sUnoapi = getModulePath(module);
+        final File fUnoapi = new File(sUnoapi);
+        final String sMakeFile = sUnoapi + sep + "makefile.mk";
+        final File fMakeFile = new File(sMakeFile);
         assure("ERROR: could not find makefile: '" + sMakeFile + "'", fMakeFile.exists(), mContinue);
 
-        String[] cmdLines = getCmdLines(sUnoapi);
-        ProcessHandler procHdl = runShellCommand(cmdLines, fUnoapi, false);
-        if (mDebug) {
-            log.println("---> Output of dmake:");
-            log.println(procHdl.getOutputText());
-            log.println("<--- Output of dmake file:");
-            log.println("---> Error output of dmake file");
-            log.println(procHdl.getErrorText());
-            log.println("<--- Error output of dmake file");
-        }
-        assure("module failed", verifyOutput(procHdl.getOutputText()), mContinue);
+        final String[] commands = getCommands(sUnoapi);
 
-        log.println("kill existing office...");
+        final ProcessHandler procHdl = bet.runCommandsInEnvironmentShell(commands, fUnoapi, false);
+        log.println("exit code of dmake: " + procHdl.getExitCode());
+        String test = procHdl.getOutputText();
+        test = procHdl.getErrorText();
+//        if (mDebug) {
+//            log.println("---> Output of dmake:");
+//            log.println(procHdl.getOutputText());
+//            log.println("<--- Output of dmake:");
+//            log.println("---> Error output of dmake:");
+//            log.println(procHdl.getErrorText());
+//            log.println("<--- Error output of dmake:");
+//        }
+        assure("module '" + module + "' failed", verifyOutput(procHdl.getOutputText()), mContinue);
+        log.println(utils.getDateTime() + " module '" + module + "': kill existing office...");
         try {
             officeProvider.closeExistingOffice(param, true);
         } catch (java.lang.UnsatisfiedLinkError exception) {
@@ -150,161 +184,209 @@ public class CheckModuleAPI extends ComplexTestCase {
 
     }
 
-    private String[] getCmdLines(String sUnoapi) {
+    private void addIfQaUnoApiFolderExist(File srcRoot, ArrayList moduleNames) {
 
-        String shell = (String) param.get(PropertyName.SHELL);
-        String envcmd = getEnvCmd();
+        if (doesQaUnoApiFolderExist(srcRoot)) {
+            moduleNames.add(srcRoot.getName());
+        }
+    }
+
+    private boolean doesQaUnoApiFolderExist(File srcRoot) {
+        final FolderFilter qaFilter = new FolderFilter("qa");
+        final File[] qaTree = srcRoot.listFiles(qaFilter);
+        if (qaTree != null) {
+            for (int j = 0; j < qaTree.length; j++) {
+                final File qaFolder = qaTree[j];
+                final FolderFilter apiFilter = new FolderFilter("unoapi");
+                final File[] apiTree = qaFolder.listFiles(apiFilter);
+                if (apiTree != null && apiTree.length > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private String[] getAllModuleCommand() {
+        String[] checkModules;
+
+        final String[] names = getModulesFromSourceRoot();
+        checkModules = getCheckModuleCommand(names);
+
+        return checkModules;
+    }
+
+    private String[] getCheckModuleCommand(String[] names) {
+        String[] checkModules;
+        checkModules = new String[names.length];
+
+        for (int i = 0; i < names.length; i++) {
+            // if a module is not added to a cws it contains a dot in its name (forms.lnk)
+            if (names[i].indexOf(".") != -1) {
+                checkModules[i] = "checkModule(" + names[i].substring(0, names[i].indexOf(".")) + ")";
+            } else {
+                checkModules[i] = "checkModule(" + names[i] + ")";
+            }
+        }
+        return checkModules;
+    }
+
+    private String[] getCommands(String sUnoapi) {
+
         String[] cmdLines = null;
-        String platform = (String) param.get(PropertyName.OPERATING_SYSTEM);
+        final String platform = (String) param.get(PropertyName.OPERATING_SYSTEM);
         log.println("prepare command for platform " + platform);
         if (platform.equals(PropertyName.WNTMSCI)) {
-            cmdLines = new String[]{shell, "/C ", envcmd + " ^ cdd " + sUnoapi + "^ dmake"};
+            cmdLines = new String[]{"cdd " + sUnoapi, "dmake"};
+//            cmdLines = new String[]{shell, "/C ", "\"echo Test ^ " + envcmd + " ^ cdd " + sUnoapi + "^ pwd ^ dmake\""};
         } else {
-            cmdLines = new String[]{shell, "-c ", envcmd + " ; cd " + sUnoapi + "; dmake"};
+            cmdLines = new String[]{"cd " + sUnoapi, "dmake"};
         }
         return cmdLines;
     }
 
-    private String getEnvValue(String line) {
-        String[] split = line.split("=");
-        return split[1];
+    private String[] getCwsModuleCommand() {
+        String[] checkModules;
+        final String version = (String) param.get(PropertyName.VERSION);
+        String[] names = null;
+        if (version.startsWith("cws_")) {
+            try {
+                // cws version: all added modules must be tested
+                final String cws = version.substring(4, version.length());
+                final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(cws, param, log);
+                final ArrayList addedModules = cde.getModules();
+
+                final ArrayList moduleNames = new ArrayList();
+                Iterator iterator = addedModules.iterator();
+                while (iterator.hasNext()) {
+                    final File sourceRoot = new File(mSRC_ROOT + File.separator + (String) iterator.next());
+                    addIfQaUnoApiFolderExist(sourceRoot, moduleNames);
+
+                }
+                names = (String[]) moduleNames.toArray(new String[0]);
+            } catch (ParameterNotFoundException ex) {
+                this.failed(ex.toString(), false);
+            }
+
+
+        } else {
+            // major version: all modules must be tested
+            names = getModulesFromSourceRoot();
+        }
+        checkModules = getCheckModuleCommand(names);
+
+        return checkModules;
+    }
+
+    private String[] getDefinedModuleCommand(String module) {
+        String[] checkModules = null;
+        // list of modules to test: (sw,sc,sd)
+        if (module.indexOf(",") != -1) {
+            final String[] names = module.split(",");
+            checkModules = new String[names.length];
+            for (int i = 0; i < names.length; i++) {
+                final String moduleName = names[i].trim();
+
+                File sourceRoot = new File(mSRC_ROOT + File.separator + moduleName);
+                if (!sourceRoot.exists()) {
+                    sourceRoot = new File(mSRC_ROOT + File.separator + moduleName + ".lnk");
+                }
+
+                if (doesQaUnoApiFolderExist(sourceRoot)) {
+                    checkModules[i] = "checkModule(" + moduleName + ")";
+                }
+            }
+        } else {
+            File sourceRoot = new File(mSRC_ROOT + File.separator + module);
+            if (!sourceRoot.exists()) {
+                sourceRoot = new File(mSRC_ROOT + File.separator + module + ".lnk");
+            }
+            if (doesQaUnoApiFolderExist(sourceRoot)) {
+                checkModules = new String[]{"checkModule(" + module + ")"};
+            }
+        }
+        return checkModules;
     }
 
     private String getModulePath(String module) {
 
         String sUnoapi = null;
-        String sep = System.getProperty("file.separator");
-        File srcRoot = new File(mSRC_ROOT);
+        final String sep = System.getProperty("file.separator");
+        final File srcRoot = new File(mSRC_ROOT);
 
-        FolderFilter qaFilter = new FolderFilter(module);
-        File[] moduleTree = srcRoot.listFiles(qaFilter);
-        if (mDebug) {
-            log.println("moduleTree: " + moduleTree[0].getAbsolutePath());
-        }
+        final FolderFilter qaFilter = new FolderFilter(module);
+        final File[] moduleTree = srcRoot.listFiles(qaFilter);
         if (moduleTree != null) {
-            sUnoapi = moduleTree[0].getAbsolutePath() + sep + "qa" + sep + "unoapi";
+            if (mDebug) {
+                log.println("moduleTree length:" + moduleTree.length);
+                log.println("moduleTree: " + moduleTree[0].getAbsolutePath());
+            }
+            if (moduleTree != null) {
+                sUnoapi = moduleTree[0].getAbsolutePath() + sep + "qa" + sep + "unoapi";
+            }
         }
         return sUnoapi;
     }
 
-    private String getSetSolarCmd() {
-        String cmd = null;
+    /**
+    Some modules contains more the one project. This methods translates given project paramater to the
+     *  correspind module name.
+     *
+     * fwk -> framework
+     * fwl -> framework
+     * sch -> chart2
+     * sysmgr1 -> configmgr
+     * cfgmgr2 -> configmgr
+     * lnn -> lingu
+     * lng -> linguistic
+     * sfx -> sfx2
+     * sm -> starmath
+     */
+    private String getTranslatedNames(String module) {
 
-        String version = (String) param.get(PropertyName.VERSION);
+        final HashMap modulez = new HashMap();
 
-        if (version.startsWith("cws_")) {
-            cmd = "setcws " + version.substring(4, version.length());
-        } else {
-            mCompiler = (String) param.get(PropertyName.COMP_ENV);
-            assure("If you use 'setsolar' you need to fill parameter 'COMP_ENV' with accordant " +
-                   "value like 'unxsols4' or wntmsci10", mCompiler != null);
+        modulez.put("fwk", "framework");
+        modulez.put("fwl", "framework");
+        modulez.put("sch", "chart2");
+        modulez.put("sysmgr1", "configmgr");
+        modulez.put("cfgmag2", "configmgr");
+        modulez.put("lnn", "lingu");
+        modulez.put("lng", "linguistic");
+        modulez.put("sfx", "sfx2");
+        modulez.put("sm", "starmath");
 
-            String[] versions = version.split("_");
+        // it could the that the parameter looks like "fwk,fwl". This results in double "famework,framework".
+        // The following loop correct this to only one "framework"
 
-            cmd = "setsolar -" + versions[0] + " -ver " + versions[1] + " -jdk14  -pro " + mCompiler;
-        }
-        return cmd;
-    }
+        final Set keys = modulez.keySet();
+        final Iterator iterator = keys.iterator();
+        while (iterator.hasNext()) {
 
-    private String getEnvCmd() {
-        String envSet = (String) param.get(PropertyName.OOO_ENVSET);
-        String cmd = null;
-        String platform = (String) param.get(PropertyName.OPERATING_SYSTEM);
-        log.println("prepare command for platform " + platform);
+            final String key = (String) iterator.next();
+            final String value = (String) modulez.get(key);
 
-        if (envSet.equals("setsolar")) {
-            cmd = getSetSolarCmd();
-            if (platform.equals(PropertyName.WNTMSCI)) {
-                cmd = "call " + cmd;
-            }
-        } else {
-            cmd = "source " + envSet;
-        }
-        return cmd;
-    }
+            module = module.replaceAll(key, value);
 
-    private void makeEnvironment() {
+            final int count = module.split(value).length;
+            if (count > 2) {
+                for (int i = 2; i < count; i++) {
+                    module.replaceFirst("," + value, "");
+                }
 
-        String cmd = getEnvCmd();
-
-        String shell = (String) param.get(PropertyName.SHELL);
-        String platform = (String) param.get(PropertyName.OPERATING_SYSTEM);
-        String[] cmdLines = null;
-
-        if (platform.equals(PropertyName.WNTMSCI)) {
-            cmdLines = new String[]{shell, "/C ", cmd + " ^ echo SRC_ROOT=%SRC_ROOT"};
-        } else {
-            cmdLines = new String[]{shell, "-c ", cmd + " ; echo \"SRC_ROOT=$SRC_ROOT\""};
-        }
-
-        ProcessHandler procHdl = runShellCommand(cmdLines, null, true);
-        if (mDebug) {
-            log.println("---> Output of command:");
-            log.println(procHdl.getOutputText());
-            log.println("<--- Output of command:");
-            log.println("---> Error output of command");
-            log.println(procHdl.getErrorText());
-            log.println("<--- Error output of command");
-        }
-        String output = procHdl.getOutputText();
-        String[] outs = output.split("\n");
-
-        for (int i = 0; i < outs.length; i++) {
-            String line = outs[i];
-            if (line.startsWith("SRC_ROOT")) {
-                mSRC_ROOT = getEnvValue(line);
             }
         }
-    }
-
-    private ProcessHandler runShellCommand(String[] cmdLines, File workDir, boolean shortWait) {
-
-        boolean changedText = true;
-        int count = 0;
-        String memText = "";
-        ProcessHandler procHdl = new ProcessHandler(cmdLines, (PrintWriter) log, workDir);
-        procHdl.executeAsynchronously();
-        int timeOut = 0;
-
-        if (shortWait) {
-            timeOut = 3000;
-        } else {
-            timeOut = param.getInt(PropertyName.TIME_OUT) / 2;
-        }
-
-        OfficeWatcher ow = (OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER);
-
-        while (changedText && !procHdl.isFinished()) {
-            count++;
-            if (ow != null) {
-                ow.ping();
-            }
-            log.println("CheckModuleAPI: waiting... " + count);
-            utils.shortWait(timeOut);
-            if (ow != null) {
-                ow.ping();
-            }
-            // check for changes in the output stream. If there are no changes, the process maybe hangs
-            if (procHdl.getOutputText().equals(memText)) {
-                changedText = false;
-            }
-            memText = procHdl.getOutputText();
-        }
-
-        if (!procHdl.isFinished()) {
-            log.println("Process ist not finished but there are no changes in output stream.");
-        }
-        return procHdl;
+        return module;
     }
 
     private boolean verifyOutput(String output) {
 
         log.println("verify output...");
         boolean ok = false;
-        String[] outs = output.split("\n");
+        final String[] outs = output.split("\n");
 
         for (int i = 0; i < outs.length; i++) {
-            String line = outs[i];
+            final String line = outs[i];
             if (line.matches("[0-9]+? of [0-9]+? tests failed")) {
                 log.println("mached line: " + line);
                 if (line.matches("0 of [0-9]+? tests failed")) {
@@ -315,6 +397,11 @@ public class CheckModuleAPI extends ComplexTestCase {
                 }
             }
         }
+
+        if (!ok) {
+            log.println("ERROR: could not find '0 of [0-9]+? tests failed' in output");
+        }
+
         return ok;
     }
 
@@ -324,77 +411,91 @@ public class CheckModuleAPI extends ComplexTestCase {
         log.println("search for qa/unoapi foldres in all modules based in ");
         log.println("'" + mSRC_ROOT + "'");
 
-        Vector moduleNames = new Vector();
-        File sourceRoot = new File(mSRC_ROOT);
-        File[] sourceTree = sourceRoot.listFiles();
+        final ArrayList moduleNames = new ArrayList();
+        final File sourceRoot = new File(mSRC_ROOT);
+        final File[] sourceTree = sourceRoot.listFiles();
 
         assure("Could not find any files in SOURCE_ROOT=" + mSRC_ROOT, sourceTree != null, false);
 
         for (int i = 0; i < sourceTree.length; i++) {
-            File moduleName = sourceTree[i];
-            FolderFilter qaFilter = new FolderFilter("qa");
-            File[] qaTree = moduleName.listFiles(qaFilter);
-            if (qaTree != null) {
-                for (int j = 0; j < qaTree.length; j++) {
-                    File qaFolder = qaTree[j];
-                    FolderFilter apiFilter = new FolderFilter("unoapi");
-                    File[] apiTree = qaFolder.listFiles(apiFilter);
-                    if (apiTree != null && apiTree.length > 0) {
-                        moduleNames.add(moduleName.getName());
-                    }
-                }
-            }
+            final File moduleName = sourceTree[i];
+            addIfQaUnoApiFolderExist(moduleName, moduleNames);
         }
 
-        String[] names = (String[]) moduleNames.toArray( new String[0] );
+        final String[] names = (String[]) moduleNames.toArray(new String[0]);
         return names;
     }
 
+    /**
+     * This function generates a list of modules to test and call <CODE>checkModule</CODE> for every module.
+     * <p>
+     *
+     * @param module names to test. This could be
+     * <ul>
+     * <li>a comma separated list of modules like 'sw,sc,sd'</li>
+     * <li>'all' to test all modules </li>
+     * <li>'auto' to check only modules which are added to the ChildWorkSpace</li>
+     * </ul>
+     */
     public void module(String module) {
 
-        String[] checkModules = null;
-        ComplexDescGetter desc = new ComplexDescGetter();
+        String[] checkModules;
+        final ComplexDescGetter desc = new ComplexDescGetter();
         DescEntry entry = null;
         module = module.trim();
 
-        /* all: check all modules which contains a qa/unoapi folder
+        /*
+        all: check all modules which contains a qa/unoapi folder
         auto: check all modules which contains a qa/unoapi folder except the module is not added
          */
         if (module.equals("all")) {
-
-            String[] names = getModulesFromSourceRoot();
-            checkModules = new String[names.length];
-
-            for (int i = 0; i < names.length; i++) {
-                // if a module is not added to a cws it contains a dot in its name (forms.lnk)
-                if (names[i].indexOf(".") != -1) {
-                    checkModules[i] = "checkModule(" + names[i].substring(0, names[i].indexOf(".")) + ")";
-                } else {
-                    checkModules[i] = "checkModule(" + names[i] + ")";
-                }
-            }
+            checkModules = getAllModuleCommand();
+        } else if (module.equals("auto")) {
+            checkModules = getCwsModuleCommand();
         } else {
-            // list of modules to test: (sw,sc,sd)
-            if (module.indexOf(",") != -1) {
-                String[] names = module.split(",");
-                checkModules = new String[names.length];
-                for (int i = 0; i < names.length; i++) {
-                    String trim = names[i].trim();
-                    checkModules[i] = "checkModule(" + trim + ")";
+            module = getTranslatedNames(module);
+            checkModules = getDefinedModuleCommand(module);
+        }
+
+        if (checkModules != null && checkModules.length > 0) {
+
+            entry = desc.createTestDesc("complex.unoapi.CheckModuleAPI", "complex.unoapi.CheckModuleAPI", checkModules,
+                log);
+
+            final java_complex complex = new java_complex();
+
+            log.println("********** start test *************");
+            final boolean result = complex.executeTest(param, new DescEntry[]{entry});
+            log.println("********** end test *************");
+
+            assure("CheckModuleAPI.module(" + module + ") PASSED.FAILED", result);
+
+        } else {
+            log.println("No modules containing qa/unoapi foder found => OK");
+            state = true;
+        }
+
+        setUnoApiCwsStatus(state);
+
+    }
+
+    private void setUnoApiCwsStatus(boolean status) {
+
+        if (!param.getBool(PropertyName.NO_CWS_ATTACH)) {
+
+            final String version = (String) param.get(PropertyName.VERSION);
+            if (version.startsWith("cws_")) {
+                try {
+
+                    // cws version: all added modules must be tested
+                    final String cws = version.substring(4, version.length());
+                    final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(cws, param, log);
+                    cde.setUnoApiCwsStatus(status);
+                } catch (ParameterNotFoundException ex) {
+                    log.println("ERROR: could not wirte status to EIS database: " + ex.toString());
                 }
-            } else {
-                checkModules = new String[]{"checkModule(" + module + ")"};
             }
         }
-        entry = desc.createTestDesc("complex.unoapi.CheckModuleAPI", "complex.unoapi.CheckModuleAPI", checkModules, log);
-
-        java_complex complex = new java_complex();
-
-        log.println("********** start test *************");
-        boolean result = complex.executeTest(param, new DescEntry[]{entry});
-        log.println("********** end test *************");
-
-        assure("CheckModuleAPI.module(" + module + ") PASSED.FAILED", result);
     }
 
     public String[] getTestMethodNames() {
