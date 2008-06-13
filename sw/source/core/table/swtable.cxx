@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swtable.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -364,7 +364,7 @@ void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
             nBox /= nOld;
             SwFmtFrmSize aNewBox( ATT_VAR_SIZE, SwTwips(nBox), 0 );
             pFmt->LockModify();
-            pFmt->SetAttr( aNewBox );
+            pFmt->SetFmtAttr( aNewBox );
             pFmt->UnlockModify();
         }
     }
@@ -403,7 +403,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
                 pFmt = rBox.ClaimFrmFmt();
                 SwFmtFrmSize aNewBox( ATT_VAR_SIZE, static_cast< SwTwips >(nBox), 0 );
                 pFmt->LockModify();
-                pFmt->SetAttr( aNewBox );
+                pFmt->SetFmtAttr( aNewBox );
                 pFmt->UnlockModify();
             }
         }
@@ -976,7 +976,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 
             aLR.SetLeft ( rNew.GetLeft() - nShLeft );
             aLR.SetRight( rNew.GetRightMax() - rNew.GetRight() - nShRight );
-            pFmt->SetAttr( aLR );
+            pFmt->SetFmtAttr( aLR );
 
             //Die Ausrichtung der Tabelle muss entsprechend angepasst werden,
             //das geschieht so, dass die Tabelle genauso stehenbleibt wie der
@@ -995,7 +995,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                 else
                     aOri.SetHoriOrient( text::HoriOrientation::NONE );
             }
-            pFmt->SetAttr( aOri );
+            pFmt->SetFmtAttr( aOri );
         }
         const long nAct = rOld.GetRight() - rOld.GetLeft(); // +1 why?
         long nTabDiff = 0;
@@ -1028,7 +1028,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             {
                 aSz.SetWidth( aParm.nNewWish );
                 aSz.SetWidthPercent( 0 );
-                pFmt->SetAttr( aSz );
+                pFmt->SetFmtAttr( aSz );
             }
         }
         UnlockModify();
@@ -1839,7 +1839,7 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
             *pNewFmt = *pFmt;
 
             // Values und Formeln entfernen
-            pNewFmt->ResetAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+            pNewFmt->ResetFmtAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
             pNewFmt->UnlockModify();
 
             pFmt = pNewFmt;
@@ -1877,7 +1877,7 @@ SwFrmFmt* SwTableBox::ClaimFrmFmt()
         *pNewFmt = *pOld;
 
         // Values und Formeln nie kopieren
-        pNewFmt->ResetAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+        pNewFmt->ResetFmtAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
         pNewFmt->UnlockModify();
 
         //Erstmal die Frms ummelden.
@@ -2042,7 +2042,7 @@ BOOL SwTable::GetInfo( SfxPoolItem& rInfo ) const
         break;
     }
     case RES_FINDNEARESTNODE:
-        if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetAttr(
+        if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
             RES_PAGEDESC )).GetPageDesc() &&
             aSortCntBoxes.Count() &&
             aSortCntBoxes[ 0 ]->GetSttNd()->GetNodes().IsDocNodes() )
@@ -2107,7 +2107,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             {
                 SvxAdjustItem aAdjust( *(SvxAdjustItem*)pItem );
                 aAdjust.SetAdjust( SVX_ADJUST_RIGHT );
-                pTNd->SwCntntNode::SetAttr( aAdjust );
+                pTNd->SetAttr( aAdjust );
             }
         }
 
@@ -2127,14 +2127,14 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             // ggfs. die alte NumFmtColor loeschen
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
             else if( pItem )
             {
                 pNewUserColor = rBox.GetSaveUserColor();
                 if( pNewUserColor )
-                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
+                    pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
                 else
-                    pTNd->SwCntntNode::ResetAttr( RES_CHRATR_COLOR );
+                    pTNd->ResetAttr( RES_CHRATR_COLOR );
             }
         }
         else
@@ -2145,7 +2145,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
 
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
         }
         rBox.SetSaveNumFmtColor( pCol );
@@ -2193,7 +2193,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                 RES_VERT_ORIENT, TRUE, &pItem ) ||
                 text::VertOrientation::TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
         {
-            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, text::VertOrientation::BOTTOM ));
+            rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::BOTTOM ));
         }
     }
 }
@@ -2234,7 +2234,7 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
             RES_PARATR_ADJUST, FALSE, &pItem ) &&
                 SVX_ADJUST_RIGHT == ((SvxAdjustItem*)pItem)->GetAdjust() )
         {
-            pTNd->SwCntntNode::SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
+            pTNd->SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
         }
 
         // Farbe umsetzen oder "Benutzer Farbe" sichern
@@ -2253,14 +2253,14 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
             // ggfs. die alte NumFmtColor loeschen
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
             else if( pItem )
             {
                 pNewUserColor = rBox.GetSaveUserColor();
                 if( pNewUserColor )
-                    pTNd->SwCntntNode::SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
+                    pTNd->SetAttr( SvxColorItem( *pNewUserColor, RES_CHRATR_COLOR ));
                 else
-                    pTNd->SwCntntNode::ResetAttr( RES_CHRATR_COLOR );
+                    pTNd->ResetAttr( RES_CHRATR_COLOR );
             }
         }
         else
@@ -2271,7 +2271,7 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
 
             if( pCol )
                 // ggfs. die Farbe setzen
-                pTNd->SwCntntNode::SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
+                pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
         }
         rBox.SetSaveNumFmtColor( pCol );
@@ -2283,7 +2283,7 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
             RES_VERT_ORIENT, FALSE, &pItem ) &&
             text::VertOrientation::BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
-            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
+            rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
         }
     }
 }
@@ -2446,7 +2446,7 @@ void SwTableBoxFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                                         // ohne Modify
                                         int bIsLockMod = IsModifyLocked();
                                         LockModify();
-                                        SetAttr( SwTblBoxValue( fVal ));
+                                        SetFmtAttr( SwTblBoxValue( fVal ));
                                         if( !bIsLockMod )
                                             UnlockModify();
                                     }
