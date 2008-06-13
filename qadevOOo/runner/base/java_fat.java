@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: java_fat.java,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,21 +29,10 @@
  ************************************************************************/
 package base;
 
-import base.TestBase;
-
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.connection.XConnection;
-import com.sun.star.connection.XConnector;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
 
 import helper.APIDescGetter;
 import helper.AppProvider;
-import helper.OfficeProvider;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -52,7 +41,6 @@ import java.io.PrintWriter;
 import java.util.Vector;
 
 import lib.MultiMethodTest;
-import lib.Status;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
@@ -67,12 +55,12 @@ import stats.Summarizer;
 
 import util.DynamicClassLoader;
 
-
 /**
  *
  * this class handles tests written in java and running on a fat Office
  */
 public class java_fat implements TestBase {
+
     public static boolean debug = false;
     public static boolean keepdocument = false;
     public static boolean logging = true;
@@ -91,18 +79,19 @@ public class java_fat implements TestBase {
         logging = param.getBool("LoggingIsActive");
         keepdocument = param.getBool("KeepDocument");
         newOffice = param.getBool(util.PropertyName.NEW_OFFICE_INSTANCE);
-        if (keepdocument) System.setProperty("KeepDocument","true");
-        if (ExclusionFile != null) {
-            exclusions = getExclusionList(ExclusionFile,debug);
+        if (keepdocument) {
+            System.setProperty("KeepDocument", "true");
         }
-
+        if (ExclusionFile != null) {
+            exclusions = getExclusionList(ExclusionFile, debug);
+        }
         //get Job-Descriptions
         System.out.println("Getting Descriptions for Job: " + job);
 
         DescEntry[] entries = dg.getDescriptionFor(job,
-                                                   (String) param.get(
-                                                           "DescriptionPath"),
-                                                   debug);
+            (String) param.get(
+            "DescriptionPath"),
+            debug);
 
         System.out.println();
 
@@ -136,8 +125,8 @@ public class java_fat implements TestBase {
                 continue;
             }
 
-            if (!firstRun && newOffice){
-                if (!office.closeExistingOffice(param, true)){
+            if (!firstRun && newOffice) {
+                if (!office.closeExistingOffice(param, true)) {
                     office.disposeManager(param);
                 }
                 startOffice(param);
@@ -166,7 +155,7 @@ public class java_fat implements TestBase {
 
             try {
                 tCase = (TestCase) dcl.getInstance("mod._" +
-                                                   entry.entryName);
+                    entry.entryName);
             } catch (java.lang.IllegalArgumentException ie) {
                 entry.ErrorMsg = ie.getMessage();
                 entry.hasErrorMsg = true;
@@ -176,7 +165,7 @@ public class java_fat implements TestBase {
             }
 
             if (tCase == null) {
-                sumIt.summarizeDown(entry, entry.ErrorMsg);
+                Summarizer.summarizeDown(entry, entry.ErrorMsg);
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
                 entry.UserDefinedParams = param;
@@ -186,10 +175,15 @@ public class java_fat implements TestBase {
                 continue;
             }
 
-            System.out.println("Creating: " + tCase.getObjectName());
+            if (debug) {
+                System.out.println("sleeping 5 seconds..");
+            }
+            util.utils.shortWait(5000);
+
+            System.out.println("Creating: " + entry.entryName);
 
             LogWriter log = (LogWriter) dcl.getInstance(
-                                    (String) param.get("LogWriter"));
+                (String) param.get("LogWriter"));
             log.initialize(entry, logging);
             entry.UserDefinedParams = param;
 
@@ -201,26 +195,26 @@ public class java_fat implements TestBase {
                 tEnv = tCase.getTestEnvironment(param);
             } catch (Exception e) {
                 System.out.println("Exception while creating " +
-                                   tCase.getObjectName());
+                    tCase.getObjectName());
                 System.out.println("Message " + e.getMessage());
-                e.printStackTrace ();
+                e.printStackTrace();
                 tEnv = null;
             } catch (java.lang.UnsatisfiedLinkError e) {
                 System.out.println("Exception while creating " +
-                                   tCase.getObjectName());
+                    tCase.getObjectName());
                 System.out.println("Message " + e.getMessage());
                 tEnv = null;
             } catch (java.lang.NoClassDefFoundError e) {
                 System.out.println("Exception while creating " +
-                                   tCase.getObjectName());
+                    tCase.getObjectName());
                 System.out.println("Message " + e.getMessage());
                 tEnv = null;
             }
 
             if (tEnv == null) {
-                sumIt.summarizeDown(entry,
-                                    "Couldn't create " +
-                                    tCase.getObjectName());
+                Summarizer.summarizeDown(entry,
+                    "Couldn't create " +
+                    tCase.getObjectName());
 
                 LogWriter sumObj = OutProducerFactory.createOutProducer(param);
                 entry.UserDefinedParams = param;
@@ -235,23 +229,22 @@ public class java_fat implements TestBase {
             for (int j = 0; j < entry.SubEntryCount; j++) {
                 if (!entry.SubEntries[j].isToTest) {
                     Summarizer.summarizeDown(entry.SubEntries[j],
-                                             "not part of the job");
+                        "not part of the job");
 
                     continue;
                 }
 
-                if (( exclusions != null ) && (exclusions.contains(entry.SubEntries[j].longName))) {
+                if ((exclusions != null) && (exclusions.contains(entry.SubEntries[j].longName))) {
                     Summarizer.summarizeDown(entry.SubEntries[j],
-                                             "known issue");
+                        "known issue");
 
                     continue;
                 }
 
-                System.out.println("running: " +
-                                   entry.SubEntries[j].entryName);
+                System.out.println("running: '" + entry.SubEntries[j].entryName + "'");
 
                 LogWriter ifclog = (LogWriter) dcl.getInstance(
-                                           (String) param.get("LogWriter"));
+                    (String) param.get("LogWriter"));
 
                 ifclog.initialize(entry.SubEntries[j], logging);
                 entry.SubEntries[j].UserDefinedParams = param;
@@ -259,7 +252,7 @@ public class java_fat implements TestBase {
 
                 if ((tEnv == null) || tEnv.isDisposed()) {
                     helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                       "AppProvider");
+                        "AppProvider");
 
                     if (ph != null) {
                         office.closeExistingOffice(param, true);
@@ -282,19 +275,19 @@ public class java_fat implements TestBase {
                         res = executeInterfaceTest(entry.SubEntries[j], tEnv, param);
                     } catch (IllegalArgumentException iae) {
                         System.out.println("Couldn't load class " +
-                                           entry.SubEntries[j].entryName);
+                            entry.SubEntries[j].entryName);
                         System.out.println("**** " + iae.getMessage() + " ****");
                         Summarizer.summarizeDown(entry.SubEntries[j],
-                                                 iae.getMessage());
+                            iae.getMessage());
                     } catch (java.lang.NoClassDefFoundError iae) {
                         System.out.println("Couldn't load class " +
-                                           entry.SubEntries[j].entryName);
+                            entry.SubEntries[j].entryName);
                         System.out.println("**** " + iae.getMessage() + " ****");
                         Summarizer.summarizeDown(entry.SubEntries[j],
-                                                 iae.getMessage());
+                            iae.getMessage());
                     } catch (java.lang.RuntimeException e) {
                         helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                                           "AppProvider");
+                            "AppProvider");
 
                         if (ph != null) {
                             office.closeExistingOffice(param, true);
@@ -304,20 +297,18 @@ public class java_fat implements TestBase {
                         tEnv = getEnv(entry, param);
                         if (countInterfaceTestRun < 2) {
                             finished = false;
-                        }
-                        else {
+                        } else {
                             Summarizer.summarizeDown(entry.SubEntries[j],
-                                                        e.toString()+".FAILED");
+                                e.toString() + ".FAILED");
                         }
                     }
                 }
                 if (res != null) {
                     for (int k = 0; k < entry.SubEntries[j].SubEntryCount; k++) {
                         if (res.hasMethod(
-                                    entry.SubEntries[j].SubEntries[k].entryName)) {
+                            entry.SubEntries[j].SubEntries[k].entryName)) {
                             entry.SubEntries[j].SubEntries[k].State = res.getStatusFor(
-                                                                              entry.SubEntries[j].SubEntries[k].entryName)
-                                                                         .toString();
+                                entry.SubEntries[j].SubEntries[k].entryName).toString();
                         }
                     }
                 }
@@ -331,7 +322,9 @@ public class java_fat implements TestBase {
             }
 
             try {
-                if (!keepdocument) tCase.cleanupTestCase(param);
+                if (!keepdocument) {
+                    tCase.cleanupTestCase(param);
+                }
             } catch (Exception e) {
                 System.out.println("couldn't cleanup");
             } catch (java.lang.NoClassDefFoundError e) {
@@ -351,7 +344,7 @@ public class java_fat implements TestBase {
 
             int counter = 0;
             System.out.println(
-                    "Failures that appeared during scenario execution:");
+                "Failures that appeared during scenario execution:");
 
             for (int i = 0; i < entries.length; i++) {
                 if (!entries[i].State.endsWith("OK")) {
@@ -361,11 +354,11 @@ public class java_fat implements TestBase {
             }
 
             System.out.println(counter + " of " + entries.length +
-                               " tests failed");
+                " tests failed");
         }
 
         helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                           "AppProvider");
+            "AppProvider");
 
         if (ph != null) {
             office.closeExistingOffice(param, true);
@@ -410,12 +403,13 @@ public class java_fat implements TestBase {
             entry.hasErrorMsg = true;
         }
 
-        System.out.println("Creating: " + tCase.getObjectName());
+        System.out.println("Creating: " + entry.entryName);
+
+        entry.UserDefinedParams = param;
 
         LogWriter log = (LogWriter) dcl.getInstance(
-                                (String) param.get("LogWriter"));
+            (String) param.get("LogWriter"));
         log.initialize(entry, logging);
-        entry.UserDefinedParams = param;
         tCase.setLogWriter((PrintWriter) log);
 
         TestEnvironment tEnv = null;
@@ -427,7 +421,7 @@ public class java_fat implements TestBase {
             System.out.println("Office disposed");
 
             helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                               "AppProvider");
+                "AppProvider");
 
             if (ph != null) {
                 office.closeExistingOffice(param, true);
@@ -437,7 +431,7 @@ public class java_fat implements TestBase {
             System.out.println(e.getMessage());
 
             helper.ProcessHandler ph = (helper.ProcessHandler) param.get(
-                                               "AppProvider");
+                "AppProvider");
 
             if (ph != null) {
                 office.closeExistingOffice(param, true);
@@ -475,15 +469,15 @@ public class java_fat implements TestBase {
 
         while (line != null) {
             try {
-                if (!line.startsWith("#")) {
-                    entryList.add(line);
+                if (!line.startsWith("#") && (line.length() > 1)) {
+                    entryList.add(line.trim());
                 }
 
                 line = exclusion.readLine();
             } catch (java.io.IOException ioe) {
                 if (debug) {
                     System.out.println(
-                            "Exception while reading exclusion list");
+                        "Exception while reading exclusion list");
                 }
 
                 return entryList;
@@ -504,28 +498,29 @@ public class java_fat implements TestBase {
     }
 
     private TestResult executeInterfaceTest(
-            DescEntry entry, TestEnvironment tEnv, TestParameters param)
-            throws IllegalArgumentException, java.lang.NoClassDefFoundError {
+        DescEntry entry, TestEnvironment tEnv, TestParameters param)
+        throws IllegalArgumentException, java.lang.NoClassDefFoundError {
         MultiMethodTest ifc = (MultiMethodTest) dcl.getInstance(entry.entryName);
         return ifc.run(entry, tEnv, param);
     }
 
-    private AppProvider startOffice(lib.TestParameters param){
+    private AppProvider startOffice(lib.TestParameters param) {
 
-        if (dcl == null)
+        if (dcl == null) {
             dcl = new DynamicClassLoader();
+        }
 
         String officeProviderName = (String) param.get("OfficeProvider");
         AppProvider office = (AppProvider) dcl.getInstance(officeProviderName);
 
         if (office == null) {
             System.out.println("ERROR: Wrong parameter 'OfficeProvider', " +
-                               " it cannot be instantiated.");
+                " it cannot be instantiated.");
             System.exit(-1);
         }
 
         XMultiServiceFactory msf = (XMultiServiceFactory) office.getManager(
-                                           param);
+            param);
 
         param.put("ServiceFactory", msf);
 
