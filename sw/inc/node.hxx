@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -390,6 +390,10 @@ protected:
     // lasse von den entsprechenden Nodes die spz. AttrSets anlegen
     virtual void NewAttrSet( SwAttrPool& ) = 0;
 
+    // There some functions that like to remove items from the internal
+    // SwAttrSet (handle):
+    USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
+
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
@@ -451,14 +455,14 @@ public:
     // Ist bInParent FALSE, wird nur in diesem Node nach dem Attribut gesucht.
     const SfxPoolItem& GetAttr( USHORT nWhich, BOOL bInParent=TRUE ) const;
     BOOL GetAttr( SfxItemSet& rSet, BOOL bInParent=TRUE ) const;
-    BOOL SetAttr( const SfxPoolItem& );
-    BOOL SetAttr( const SfxItemSet& rSet );
-    BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
-    BOOL ResetAttr( const SvUShorts& rWhichArr );
-    USHORT ResetAllAttr();
-    // There some functions that like to remove items from the internal
-    // SwAttrSet (handle):
-    USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
+    // --> OD 2008-03-13 #refactorlists#
+    // made virtual
+    virtual BOOL SetAttr( const SfxPoolItem& );
+    virtual BOOL SetAttr( const SfxItemSet& rSet );
+    virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
+    virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
+    virtual USHORT ResetAllAttr();
+    // <--
 
     // liefert das Attribut, das nicht ueber die bedingte Vorlage kommt!
     const SfxPoolItem* GetNoCondAttr( USHORT nWhich, BOOL bInParents ) const;
@@ -753,8 +757,4 @@ inline const SfxPoolItem& SwCntntNode::GetAttr( USHORT nWhich,
 {
     return GetSwAttrSet().Get( nWhich, bInParents );
 }
-
-
-#undef inline
-
 #endif
