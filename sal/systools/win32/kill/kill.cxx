@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: kill.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,7 +380,10 @@ int _tmain()
 
         if ( IsValidHandle( hProcess ) )
         {
-            RaiseSignalEx( hProcess, sig );
+            if ( SIGKILL == sig )
+                TerminateProcess( hProcess, 255 );
+            else
+                RaiseSignalEx( hProcess, sig );
             _tprintf( _T("Done\n") );
 
             CloseHandle( hProcess );
