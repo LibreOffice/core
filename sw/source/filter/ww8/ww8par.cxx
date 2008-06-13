@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.192 $
+ * $Revision: 1.193 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -881,10 +881,10 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     if (pItem && rTxtNode.GetNumRule())
     {
         String sName(((SfxStringItem*)pItem)->GetValue());
-        if (rTxtNode.IsCounted())
+        if (rTxtNode.IsCountedInList())
         {
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
-            BYTE nLvl = static_cast< BYTE >(rTxtNode.GetLevel());
+            BYTE nLvl = static_cast< BYTE >(rTxtNode.GetActualListLevel());
             pRet = &(pRule->Get(nLvl));
         }
     }
@@ -962,7 +962,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         SwFmtURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
-                        pFrm->SetAttr(aURL);
+                        pFrm->SetFmtAttr(aURL);
                     }
                     else
                         pDoc->Insert(aRegion, *pEntry->pAttr, 0);
@@ -1734,11 +1734,11 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
 
     SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_CNTNT, pPaM->GetPoint());
 
-    pFrame->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
-    pFrame->SetAttr(SwFmtSurround(SURROUND_THROUGHT));
-    pFrame->SetAttr(SwFmtHoriOrient(0, text::HoriOrientation::RIGHT)); //iFOO
+    pFrame->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
+    pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));
+    pFrame->SetFmtAttr(SwFmtHoriOrient(0, text::HoriOrientation::RIGHT)); //iFOO
     // --> OD 2005-02-28 #i43427# - send frame for header/footer into background.
-    pFrame->SetAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
+    pFrame->SetFmtAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
     SdrObject* pFrmObj = CreateContactObject( pFrame );
     ASSERT( pFrmObj,
             "<SwWW8ImplReader::Read_HdFtTextAsHackedFrame(..)> - missing SdrObject instance" );
@@ -1852,9 +1852,9 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                     bIsFooter = true;
                     //#i17196# Cannot have left without right
                     if (!pPD->GetMaster().GetFooter().GetFooterFmt())
-                        pPD->GetMaster().SetAttr(SwFmtFooter(true));
+                        pPD->GetMaster().SetFmtAttr(SwFmtFooter(true));
                     if (bUseLeft)
-                        pPD->GetLeft().SetAttr(SwFmtFooter(true));
+                        pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
                     pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
                 }
                 else
@@ -1862,9 +1862,9 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                     bIsHeader = true;
                     //#i17196# Cannot have left without right
                     if (!pPD->GetMaster().GetHeader().GetHeaderFmt())
-                        pPD->GetMaster().SetAttr(SwFmtHeader(true));
+                        pPD->GetMaster().SetFmtAttr(SwFmtHeader(true));
                     if (bUseLeft)
-                        pPD->GetLeft().SetAttr(SwFmtHeader(true));
+                        pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
                     pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
                 }
 
@@ -2568,7 +2568,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
             {
                 if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
                 {
-                    pTxtNode->SwCntntNode::SetAttr(
+                    pTxtNode->SetAttr(
                         *GetDfltAttr(RES_PARATR_NUMRULE));
                 }
             }
@@ -3063,7 +3063,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
                 sPrefix += String::CreateFromInt32( nDropCap++ );
                 pNewSwCharFmt = rDoc.MakeCharFmt(sPrefix, (SwCharFmt*)rDoc.GetDfltCharFmt());
                  pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
-                pNewSwCharFmt->SetAttr( *pAktItemSet );
+                pNewSwCharFmt->SetFmtAttr( *pAktItemSet );
             }
 
             delete pAktItemSet;
@@ -3261,7 +3261,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
                 SfxItemSet aSet(rFmt.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
                                                  mso_sptRectangle, aRect);
-                rFmt.SetAttr(aSet.Get(RES_BACKGROUND));
+                rFmt.SetFmtAttr(aSet.Get(RES_BACKGROUND));
             }
         }
     }
@@ -3331,7 +3331,7 @@ void GiveNodePageDesc(SwNodeIndex &rIdx, const SwFmtPageDesc &rPgDesc,
         SwFrmFmt* pApply = rTable.GetFrmFmt();
         ASSERT(pApply, "impossible");
         if (pApply)
-            pApply->SetAttr(rPgDesc);
+            pApply->SetFmtAttr(rPgDesc);
     }
     else
     {
@@ -3501,14 +3501,14 @@ void wwSectionManager::InsertSegments()
                 //Set the columns to be UnBalanced if that compatability option
                 //is set
                 if (mrReader.pWDop->fNoColumnBalance)
-                    pRet->SetAttr(SwFmtNoBalancedColumns(true));
+                    pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
                 else
                 {
                     //Otherwise set to unbalanced if the following section is
                     //not continuous, (which also means that the last section
                     //is unbalanced)
                     if (aNext == aEnd || !aNext->IsContinous())
-                        pRet->SetAttr(SwFmtNoBalancedColumns(true));
+                        pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
                 }
             }
 
@@ -3972,7 +3972,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                 {
                     aChain.SetNext( pNextFlyFmt );
                     aChain.SetPrev( pPrevFlyFmt );
-                    pFlyFmt->SetAttr( aChain );
+                    pFlyFmt->SetFmtAttr( aChain );
                 }
             }
 
@@ -4503,7 +4503,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                 If our spot is already taken by something we can't replace
                 then don't insert and remove our outline level.
                 */
-                rSI.pFmt->SetAttr(
+                rSI.pFmt->SetFmtAttr(
                         SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
                 ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
             }
