@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmltbl.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,7 +341,7 @@ void SwHTMLTableLayout::SetBoxWidth( SwTableBox *pBox, USHORT nCol,
 
     // und neu setzen
 
-    pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nFrmWidth, 0 ));
+    pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nFrmWidth, 0 ));
 }
 
 void SwHTMLTableLayout::GetAvail( USHORT nCol, USHORT nColSpan,
@@ -1646,7 +1646,7 @@ static BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
     {
         USHORT nWidth = 0;
         ((SwTableBox *)rpBox)->GetTabLines().ForEach( &lcl_ResizeLine, &nWidth );
-        rpBox->GetFrmFmt()->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
+        rpBox->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
         *pWidth = *pWidth + nWidth;
     }
     else
@@ -1754,7 +1754,7 @@ void SwHTMLTableLayout::SetWidths( BOOL bCallPass2, USHORT nAbsAvail,
         BOOL bRel = bUseRelWidth &&
                     text::HoriOrientation::FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
         aFrmSize.SetWidthPercent( (BYTE)(bRel ? nWidthOption : 0) );
-        pFrmFmt->SetAttr( aFrmSize );
+        pFrmFmt->SetFmtAttr( aFrmSize );
         ((SwTable *)pSwTable)->UnlockModify();
 
         // Wenn die Tabelle in einem Rahmen steht, muss auch noch dessen
@@ -1773,7 +1773,7 @@ void SwHTMLTableLayout::SetWidths( BOOL bCallPass2, USHORT nAbsAvail,
                                                             : nMin );
                     aFlyFrmSize.SetWidthPercent( (BYTE)nWidthOption );
                 }
-                pFlyFrmFmt->SetAttr( aFlyFrmSize );
+                pFlyFrmFmt->SetFmtAttr( aFlyFrmSize );
             }
         }
 
@@ -1795,12 +1795,12 @@ void SwHTMLTableLayout::SetWidths( BOOL bCallPass2, USHORT nAbsAvail,
     {
         if( pLeftFillerBox )
         {
-            pLeftFillerBox->GetFrmFmt()->SetAttr(
+            pLeftFillerBox->GetFrmFmt()->SetFmtAttr(
                 SwFmtFrmSize( ATT_VAR_SIZE, nRelLeftFill, 0 ));
         }
         if( pRightFillerBox )
         {
-            pRightFillerBox->GetFrmFmt()->SetAttr(
+            pRightFillerBox->GetFrmFmt()->SetFmtAttr(
                 SwFmtFrmSize( ATT_VAR_SIZE, nRelRightFill, 0 ));
         }
     }
