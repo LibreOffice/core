@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swstylemanager.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +78,15 @@ class SwStyleManager : public IStyleAccess
     SwStyleCache *mpParaCache;
 
 public:
-    SwStyleManager() : mpCharCache(0), mpParaCache(0) {}
+    // --> OD 2008-03-07 #refactorlists#
+    // accept empty item set for ignorable paragraph items.
+    SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
+        : aAutoCharPool(),
+          aAutoParaPool( pIgnorableParagraphItems ),
+          mpCharCache(0),
+          mpParaCache(0)
+    {}
+    // <--
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
@@ -91,9 +99,9 @@ public:
     virtual void clearCaches();
 };
 
-IStyleAccess *createStyleManager()
+IStyleAccess *createStyleManager( SfxItemSet* pIgnorableParagraphItems )
 {
-    return new SwStyleManager();
+    return new SwStyleManager( pIgnorableParagraphItems );
 }
 
 SwStyleManager::~SwStyleManager()
@@ -153,13 +161,15 @@ void SwStyleManager::getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> 
                                    IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    IStylePoolIteratorAccess *pIter = rAutoPool.createIterator();
+    // --> OD 2008-03-07 #refactorlists#
+    // setup <StylePool> iterator, which skips unused styles and ignorable items
+    IStylePoolIteratorAccess *pIter = rAutoPool.createIterator( true, true );
+    // <--
     StylePool::SfxItemSet_Pointer_t pStyle = pIter->getNext();
     while( pStyle.get() )
     {
-        // Do not consider styles which aren't used.
-        if ( pStyle.use_count() > 2 )
-            rStyles.push_back( pStyle );
+        rStyles.push_back( pStyle );
+
         pStyle = pIter->getNext();
     }
     delete pIter;
