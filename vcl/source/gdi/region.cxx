@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: region.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,6 +192,7 @@ ImplRegion::ImplRegion( const ImplRegion& rImplRegion )
 {
     mpFirstBand = NULL;
     mpLastCheckedBand = NULL;
+    mnRectCount = rImplRegion.mnRectCount;
 
     if ( rImplRegion.mpPolyPoly )
         mpPolyPoly = new PolyPolygon( *rImplRegion.mpPolyPoly );
