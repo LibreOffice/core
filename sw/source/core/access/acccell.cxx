@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acccell.cxx,v $
- * $Revision: 1.22 $
+ * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,7 +356,7 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     if( bValid )
     {
         SwTblBoxValue aValue( fValue );
-        GetTblBoxFormat()->SetAttr( aValue );
+        GetTblBoxFormat()->SetFmtAttr( aValue );
     }
     return bValid;
 }
