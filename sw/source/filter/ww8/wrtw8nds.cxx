@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.107 $
+ * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1759,7 +1759,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if( pNd->IsNumbered())
         {
             const SwNumRule* pRule = pNd->GetNumRule();
-            BYTE nLvl = static_cast< BYTE >(pNd->GetLevel());
+            BYTE nLvl = static_cast< BYTE >(pNd->GetActualListLevel());
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1770,7 +1770,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
             aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
 
-            if( pNd->IsNumbered() && pNd->IsCounted() )
+            if( pNd->IsNumbered() && pNd->IsCountedInList() )
             {
                 if (bParaRTL)
                         aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
@@ -1826,7 +1826,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         // #i44815# adjust numbering/indents for numbered paragraphs
         //          without number (NO_NUMLEVEL)
         // #i47013# need to check pNd->GetNumRule()!=NULL as well.
-        if ( ! pNd->IsCounted() && pNd->GetNumRule()!=NULL )
+        if ( ! pNd->IsCountedInList() && pNd->GetNumRule()!=NULL )
         {
             // WW8 does not know numbered paragraphs without number
             // (NO_NUMLEVEL). In OutWW8_SwNumRuleItem, we will export
@@ -1847,7 +1847,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             // new left margin = old left + label space
             const SwNumRule* pRule = pNd->GetNumRule();
-            const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(pNd->GetLevel()) );
+            const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(pNd->GetActualListLevel()) );
             aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
 
             // new first line indent = 0
