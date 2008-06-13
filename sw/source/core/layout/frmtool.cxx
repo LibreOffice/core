@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: frmtool.cxx,v $
- * $Revision: 1.106 $
+ * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1053,7 +1053,7 @@ SwCntntNotify::~SwCntntNotify()
                             SwFmtAnchor aAnch( rAnch );
                             aAnch.SetAnchor( 0 );
                             aAnch.SetPageNum( pPage->GetPhyPageNum() );
-                            pFmt->SetAttr( aAnch );
+                            pFmt->SetFmtAttr( aAnch );
                             if ( RES_DRAWFRMFMT != pFmt->Which() )
                                 pFmt->MakeFrms();
                         }
