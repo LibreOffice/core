@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: section.cxx,v $
- * $Revision: 1.30 $
+ * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -336,7 +336,7 @@ void SwSection::SetProtect( BOOL bFlag )
     {
         SvxProtectItem aItem( RES_PROTECT );
         aItem.SetCntntProtect( (BOOL)bFlag );
-        GetFmt()->SetAttr( aItem );
+        GetFmt()->SetFmtAttr( aItem );
     }
     else
         bProtectFlag = bFlag;
@@ -349,7 +349,7 @@ void SwSection::SetEditInReadonly( BOOL bFlag )
     {
         SwFmtEditInReadonly aItem;
         aItem.SetValue( (BOOL)bFlag );
-        GetFmt()->SetAttr( aItem );
+        GetFmt()->SetFmtAttr( aItem );
     }
     else
         bEditInReadonlyFlag = bFlag;
@@ -571,7 +571,7 @@ SwSectionFmt::SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc )
     : SwFrmFmt( pDoc->GetAttrPool(), sSectionFmtNm, pDrvdFrm )
 {
     LockModify();
-    SetAttr( *GetDfltAttr( RES_COL ) );
+    SetFmtAttr( *GetDfltAttr( RES_COL ) );
     UnlockModify();
 }
 
@@ -619,7 +619,7 @@ SwSectionFmt::~SwSectionFmt()
             GetDoc()->GetNodes().SectionUp( &aRg );
         }
         LockModify();
-        ResetAttr( RES_CNTNT );
+        ResetFmtAttr( RES_CNTNT );
         UnlockModify();
     }
 }
@@ -844,7 +844,7 @@ BOOL SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
     switch( rInfo.Which() )
     {
     case RES_FINDNEARESTNODE:
-        if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
+        if( ((SwFmtPageDesc&)GetFmtAttr( RES_PAGEDESC )).GetPageDesc() )
         {
             const SwSectionNode* pNd = GetSectionNode();
             if( pNd )
