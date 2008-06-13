@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: stylepool.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +45,9 @@ private:
 public:
     typedef boost::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
-    StylePool();
+    // --> OD 2008-03-07 #i86923#
+    explicit StylePool( SfxItemSet* pIgnorableItems = 0 );
+    // <--
 
     /** Insert a SfxItemSet into the style pool.
 
@@ -61,13 +63,23 @@ public:
     /** Create an iterator
 
         The iterator walks through the StylePool
+        OD 2008-03-07 #i86923#
+        introduce optional parameter to control, if unused SfxItemsSet are skipped or not
+        introduce optional parameter to control, if ignorable items are skipped or not
 
         @attention every change, e.g. destruction, of the StylePool could cause undefined effects.
+
+        @param bSkipUnusedItemSets
+        input parameter - boolean, indicating if unused SfxItemSets are skipped or not
+
+        @param bSkipIgnorableItems
+        input parameter - boolean, indicating if ignorable items are skipped or not
 
         @postcond the iterator "points before the first" SfxItemSet of the pool.
         The first StylePoolIterator::getNext() call will deliver the first SfxItemSet.
     */
-    virtual IStylePoolIteratorAccess* createIterator();
+    virtual IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
+                                                      const bool bSkipIgnorableItems = false );
 
     /** Returns the number of styles
     */
@@ -88,5 +100,4 @@ public:
     virtual ::rtl::OUString getName() = 0;
     virtual ~IStylePoolIteratorAccess() {};
 };
-
 #endif
