@@ -8,7 +8,7 @@
  *
  * $RCSfile: unocrsrhelper.cxx,v $
  *
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,15 +181,15 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     if(pMap->nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTxtNd->GetLevel());
+                        *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
                     else if(pMap->nWID == FN_UNO_IS_NUMBER)
                     {
-                        BOOL bIsNumber = pTxtNd->IsCounted();
+                        BOOL bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
-                        BOOL bIsRestart = pTxtNd->IsRestart();
+                        BOOL bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
                     }
                 }
@@ -476,12 +476,17 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsRestart())
+    // --> OD 2008-02-28 #refactorlists#
+    // correction: check, if restart value is set at the text node and use
+    // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
+    if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
+         pTxtNd->HasAttrListRestartValue() )
     {
         eState = PropertyState_DIRECT_VALUE;
-        sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetStart());
+        sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetAttrListRestartValue());
         return nTmp;
     }
+    // <--
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
 }
@@ -576,11 +581,21 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
-                        pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule );
+                    {
+                        // --> OD 2008-03-17 #refactorlists#
+                        // no start of a new list
+                        pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
+                        // <--
+                    }
                     pDoc->EndUndo( UNDO_END, NULL );
                 }
                 else
-                    pDoc->SetNumRule( rPam, aRule );
+                {
+                    // --> OD 2008-03-17 #refactorlists#
+                    // no start of a new list
+                    pDoc->SetNumRule( rPam, aRule, false );
+                    // <--
+                }
 
 
             }
@@ -591,7 +606,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
                     throw RuntimeException();
-                pDoc->SetNumRule( rPam, *pRule );
+                // --> OD 2008-03-17 #refactorlists#
+                // no start of a new list
+                pDoc->SetNumRule( rPam, *pRule, false );
+                // <--
             }
         }
     }
