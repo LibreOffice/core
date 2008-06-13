@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edattr.cxx,v $
- * $Revision: 1.46 $
+ * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,9 +107,7 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
                 if (pNumRule)
                 {
                     const String & aCharFmtName =
-                        pNumRule->Get(static_cast<USHORT>(pTxtNd->GetLevel())).
-
-                        GetCharFmtName();
+                        pNumRule->Get(static_cast<USHORT>(pTxtNd->GetActualListLevel())).GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
 
@@ -441,12 +439,13 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
     {
         bRet = FALSE;
 
-        const SwNumRule* pNumRule = rTNd.GetNumRule();
-
-        if( pNumRule && MAXLEVEL > rTNd.GetLevel() )
+        // --> OD 2008-03-19 #refactorlists#
+        if ( rTNd.IsInList() )
         {
-            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(rTNd.GetLevel()) );
-
+            ASSERT( rTNd.GetNumRule(),
+                    "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
+            const SwNumRule* pNumRule = rTNd.GetNumRule();
+            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(rTNd.GetActualListLevel()) );
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
                 if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
