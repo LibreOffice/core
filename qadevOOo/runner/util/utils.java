@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: utils.java,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package util;
 
 import com.sun.star.frame.XController;
@@ -70,24 +69,24 @@ public class utils {
      * This method adds the DOCPTH to a given file
      *
      */
-    public static String getFullTestDocName( String sDocName ) {
+    public static String getFullTestDocName(String sDocName) {
         String docpth = System.getProperty("DOCPTH");
-        if (docpth.endsWith("\\") || docpth.endsWith("/"))
-            docpth = docpth.substring(0, docpth.length() - 1) ;
+        if (docpth.endsWith("\\") || docpth.endsWith("/")) {
+            docpth = docpth.substring(0, docpth.length() - 1);
+        }
 
         if (docpth.startsWith("http:")) {
-            return docpth+"/"+sDocName;
+            return docpth + "/" + sDocName;
         }
         String testdocPth = "";
         String pthSep = System.getProperty("file.separator");
-        if (docpth == null ) {
+        if (docpth == null) {
             String objdscPth = System.getProperty("OBJDSCS");
             int i = objdscPth.indexOf("objdsc");
-            String arcPth = objdscPth.substring(0,i-1);
+            String arcPth = objdscPth.substring(0, i - 1);
             testdocPth = arcPth + pthSep + "doc" + pthSep + "java" +
-                            pthSep + "testdocs" + pthSep + sDocName;
-        }
-        else {
+                pthSep + "testdocs" + pthSep + sDocName;
+        } else {
             testdocPth = docpth + pthSep + sDocName;
         }
         return testdocPth;
@@ -99,8 +98,7 @@ public class utils {
      * and changes the format to an file URL
      *
      */
-
-    public static String getFullTestURL( String sDocName ) {
+    public static String getFullTestURL(String sDocName) {
         String fullDocPath = getFullTestDocName(sDocName);
         if (fullDocPath.startsWith("http:")) {
             return fullDocPath;
@@ -111,37 +109,38 @@ public class utils {
         String prefix = null;
 
         //  Windows: \\\\margritte\\qaapi\\workspace\\qadev\\testdocs/emptyChart.sds
-        if (fullDocPath.startsWith("\\\\"))
-        prefix = "file:";
+        if (fullDocPath.startsWith("\\\\")) {
+            prefix = "file:";
+        }
 
-        fullDocPath = fullDocPath.replace('\\','/');
-        if (prefix == null){
-            if (fullDocPath.startsWith("//"))
-                prefix="file:/";
-            else if (fullDocPath.startsWith("/"))
-                prefix="file://";
-            else
-                prefix="file:///";
+        fullDocPath = fullDocPath.replace('\\', '/');
+        if (prefix == null) {
+            if (fullDocPath.startsWith("//")) {
+                prefix = "file:/";
+            } else if (fullDocPath.startsWith("/")) {
+                prefix = "file://";
+            } else {
+                prefix = "file:///";
+            }
         }
         if (!fullDocPath.endsWith("/")) {
             File aFile = new File(fullDocPath);
             if (aFile.isDirectory()) {
-                fullDocPath +="/";
+                fullDocPath += "/";
             }
         }
-        String fulldocURL = prefix+fullDocPath;
+        String fulldocURL = prefix + fullDocPath;
         return fulldocURL;
-   }
+    }
 
-   /**
-    *
-    * This method changes a given URL to a valid file URL
-    *
-    */
-
-   public static String getFullURL( String sDocName ) {
+    /**
+     *
+     * This method changes a given URL to a valid file URL
+     *
+     */
+    public static String getFullURL(String sDocName) {
         String fullDocPath = sDocName;
-        fullDocPath = fullDocPath.replace('\\','/');
+        fullDocPath = fullDocPath.replace('\\', '/');
 
         if (fullDocPath.startsWith("http:")) {
             return fullDocPath;
@@ -150,21 +149,24 @@ public class utils {
             return fullDocPath;
         }
         String prefix = "";
-        if (! fullDocPath.startsWith("file:///")){
+        if (!fullDocPath.startsWith("file:///")) {
             if (fullDocPath.startsWith("//")) {
-                prefix="file:";
+                prefix = "file:";
             } else {
-                if (fullDocPath.startsWith("/")) prefix="file://";
-                                        else prefix="file:///";
+                if (fullDocPath.startsWith("/")) {
+                    prefix = "file://";
+                } else {
+                    prefix = "file:///";
+                }
             }
         }
         if (!fullDocPath.endsWith("/")) {
             File aFile = new File(fullDocPath);
             if (aFile.isDirectory()) {
-                fullDocPath +="/";
+                fullDocPath += "/";
             }
         }
-        String fulldocURL = prefix+fullDocPath;
+        String fulldocURL = prefix + fullDocPath;
 
         return fulldocURL;
     }
@@ -174,12 +176,10 @@ public class utils {
      * This method creates folders needed
      *
      */
-
-
     public static void make_Directories(String first, String path) {
         String already_done = null;
         String fs = System.getProperty("file.separator");
-        StringTokenizer path_tokenizer = new StringTokenizer(path,fs,false);
+        StringTokenizer path_tokenizer = new StringTokenizer(path, fs, false);
         already_done = first;
         while (path_tokenizer.hasMoreTokens()) {
             String part = path_tokenizer.nextToken();
@@ -196,32 +196,34 @@ public class utils {
      * This method get the version for a given TestBase/platform combination
      *
      */
-
     public static String getVersion(String aFile, String aPlatform, String aTestbase) {
-        if ( (aFile == null) || (aPlatform == null) || (aTestbase == null) ){
+        if ((aFile == null) || (aPlatform == null) || (aTestbase == null)) {
             return "/";
         }
 
-        File the_file = new File (aFile);
+        File the_file = new File(aFile);
         try {
             RandomAccessFile raf = new RandomAccessFile(the_file, "r");
-            String res="";
-            while (!res.equals("["+aTestbase.toUpperCase()+"]")) {
+            String res = "";
+            while (!res.equals("[" + aTestbase.toUpperCase() + "]")) {
                 res = raf.readLine();
             }
-            res="=/";
-            while ( (!res.startsWith(aPlatform)) || (res.startsWith("[")) ) {
+            res = "=/";
+            while ((!res.startsWith(aPlatform)) || (res.startsWith("["))) {
                 res = raf.readLine();
             }
             raf.close();
-            if (res.startsWith("[")) res="/";
-            return res.substring(res.indexOf("=")+1);
+            if (res.startsWith("[")) {
+                res = "/";
+            }
+            return res.substring(res.indexOf("=") + 1);
 
         } catch (Exception e) {
             System.out.println("Couldn't find version");
             return "/";
         }
     }
+
     /**
      *
      * This method get's the user dir of the connected office
@@ -231,7 +233,7 @@ public class utils {
         String userPath = null;
 
         // get a folder wich is located in the user dir
-        try{
+        try {
             userPath = (String) getOfficeSettingsValue(msf, "UserConfig");
         } catch (Exception e) {
             System.out.println("Couldn't get Office User Path");
@@ -239,11 +241,13 @@ public class utils {
         }
 
         // strip the returned folder to the user dir
-        if (userPath.charAt(userPath.length() - 1) == '/')
+        if (userPath.charAt(userPath.length() - 1) == '/') {
             userPath = userPath.substring(0, userPath.length() - 1);
+        }
         int index = userPath.lastIndexOf('/');
-        if (index != -1)
+        if (index != -1) {
             userPath = userPath.substring(0, index);
+        }
 
         return userPath;
     }
@@ -258,15 +262,15 @@ public class utils {
      * @see com.sun.star.util.PathSettings
      * @return the value as String
      */
-    public static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting){
+    public static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting) {
 
         String settingPath = null;
         try {
             Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
             XPropertySet pthSettings = null;
-            try{
+            try {
                 pthSettings = (XPropertySet) AnyConverter.toObject(
-                                    new Type(XPropertySet.class),settings);
+                    new Type(XPropertySet.class), settings);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
                 System.out.println("### couldn't get Office Settings");
             }
@@ -279,22 +283,22 @@ public class utils {
         return settingPath;
     }
 
-    public static void setOfficeSettingsValue(XMultiServiceFactory msf, String setting, String value){
+    public static void setOfficeSettingsValue(XMultiServiceFactory msf, String setting, String value) {
 
         String settingPath = null;
         try {
             Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
             XPropertySet pthSettings = null;
-            try{
+            try {
                 pthSettings = (XPropertySet) AnyConverter.toObject(
-                                    new Type(XPropertySet.class),settings);
+                    new Type(XPropertySet.class), settings);
             } catch (com.sun.star.lang.IllegalArgumentException iae) {
                 System.out.println("### couldn't get Office Settings");
             }
             pthSettings.setPropertyValue(setting, value);
 
         } catch (Exception e) {
-            System.out.println("Couldn't set '" + setting +"' to value '" + value + "'");
+            System.out.println("Couldn't set '" + setting + "' to value '" + value + "'");
             e.printStackTrace();
         }
     }
@@ -304,16 +308,17 @@ public class utils {
      * Since Java 1.4 it is not possible to read environment variables. To workaround
      * this, the Java parameter -D could be used.
      */
-    public static String getUsersTempDir(){
+    public static String getUsersTempDir() {
         String tempDir = System.getProperty("my.temp");
-        if (tempDir == null){
+        if (tempDir == null) {
             tempDir = System.getProperty("my.tmp");
-            if (tempDir == null)
-                tempDir = System.getProperty("java.io.tmpdir") ;
-    }
+            if (tempDir == null) {
+                tempDir = System.getProperty("java.io.tmpdir");
+            }
+        }
         // remove ending file separator
-        if (tempDir.endsWith(System.getProperty("file.separator"))){
-            tempDir = tempDir.substring(0,tempDir.length()-1);
+        if (tempDir.endsWith(System.getProperty("file.separator"))) {
+            tempDir = tempDir.substring(0, tempDir.length() - 1);
         }
 
         return tempDir;
@@ -324,12 +329,11 @@ public class utils {
      * This method get's the temp dir of the connected office
      *
      */
-
-    public static String getOfficeTemp (XMultiServiceFactory msf) {
+    public static String getOfficeTemp(XMultiServiceFactory msf) {
         String tmpDir = util.utils.getUsersTempDir();
         try {
             String tmp = (String) getOfficeSettingsValue(msf, "Temp");
-            if (! tmp.endsWith(System.getProperty("file.separator"))){
+            if (!tmp.endsWith(System.getProperty("file.separator"))) {
                 tmp += System.getProperty("file.separator");
             }
             tmpDir = getFullURL(tmp);
@@ -341,61 +345,66 @@ public class utils {
     }
 
     /**
-    * Gets StarOffice temp directory without 'file:///' prefix.
-    * For example is usefull for Registry URL specifying.
-    * @msf Office factory for accessing its settings.
-    * @return SOffice temporary directory in form for example
-    * 'd:/Office60/user/temp/'.
-    */
-    public static String getOfficeTempDir (XMultiServiceFactory msf) {
+     * Gets StarOffice temp directory without 'file:///' prefix.
+     * For example is usefull for Registry URL specifying.
+     * @msf Office factory for accessing its settings.
+     * @return SOffice temporary directory in form for example
+     * 'd:/Office60/user/temp/'.
+     */
+    public static String getOfficeTempDir(XMultiServiceFactory msf) {
 
-        String dir = getOfficeTemp(msf) ;
+        String dir = getOfficeTemp(msf);
 
-        int idx = dir.indexOf("file:///") ;
+        int idx = dir.indexOf("file:///");
 
-        if (idx < 0) return dir ;
+        if (idx < 0) {
+            return dir;
+        }
 
-        dir = dir.substring("file:///".length()) ;
+        dir = dir.substring("file:///".length());
 
-        idx = dir.indexOf(":") ;
+        idx = dir.indexOf(":");
 
         // is the last character a '/' or a '\'?
         boolean lastCharSet = dir.endsWith("/") || dir.endsWith("\\");
 
         if (idx < 0) { // linux or solaris
-                dir = "/"+dir ;
-                dir += lastCharSet?"":"/";
-        }
-        else {  // windows
-                dir += lastCharSet?"":"\\";
+            dir = "/" + dir;
+            dir += lastCharSet ? "" : "/";
+        } else {  // windows
+            dir += lastCharSet ? "" : "\\";
         }
 
         return dir;
     }
 
     /**
-    * Gets StarOffice temp directory without 'file:///' prefix.
-    * and System dependend file separator
-    */
-    public static String getOfficeTempDirSys (XMultiServiceFactory msf) {
+     * Gets StarOffice temp directory without 'file:///' prefix.
+     * and System dependend file separator
+     */
+    public static String getOfficeTempDirSys(XMultiServiceFactory msf) {
 
-        String dir = getOfficeTemp(msf) ;
+        String dir = getOfficeTemp(msf);
         String sysDir = "";
 
-        int idx = dir.indexOf("file://") ;
+        int idx = dir.indexOf("file://");
 
         // remove leading 'file://'
-        if (idx < 0) sysDir = dir;
-                    else sysDir = dir.substring("file://".length());
+        if (idx < 0) {
+            sysDir = dir;
+        } else {
+            sysDir = dir.substring("file://".length());
+        }
 
         // append '/' if not there (e.g. linux)
-        if ( sysDir.charAt(sysDir.length()-1) != '/' )
+        if (sysDir.charAt(sysDir.length() - 1) != '/') {
             sysDir += "/";
+        }
 
         // remove leading '/' and replace others with '\' on windows machines
-        if (sysDir.indexOf(":") != -1){
+        if (sysDir.indexOf(":") != -1) {
             sysDir = sysDir.substring(1);
-            sysDir = sysDir.replace('/','\\');
+            sysDir = sysDir.replace('/', '\\');
         }
         return sysDir;
     }
@@ -405,19 +414,22 @@ public class utils {
      * @param a file URL
      * @return a system URL
      */
-    public static String getSystemURL(String fileURL){
+    public static String getSystemURL(String fileURL) {
         String sysDir = "";
 
-        int idx = fileURL.indexOf("file://") ;
+        int idx = fileURL.indexOf("file://");
 
         // remove leading 'file://'
-        if (idx < 0) sysDir = fileURL;
-                    else sysDir = fileURL.substring("file://".length());
+        if (idx < 0) {
+            sysDir = fileURL;
+        } else {
+            sysDir = fileURL.substring("file://".length());
+        }
 
         // remove leading '/' and replace others with '\' on windows machines
-        if (sysDir.indexOf(":") != -1){
+        if (sysDir.indexOf(":") != -1) {
             sysDir = sysDir.substring(1);
-            sysDir = sysDir.replace('/','\\');
+            sysDir = sysDir.replace('/', '\\');
         }
         return sysDir;
     }
@@ -428,14 +440,16 @@ public class utils {
      * @param fileURL the file which existance should be checked
      * @return true if the file exists, else false
      */
-    public static boolean fileExists(XMultiServiceFactory msf, String fileURL){
+    public static boolean fileExists(XMultiServiceFactory msf, String fileURL) {
         boolean exists = false;
         try {
 
             Object fileacc = msf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
-                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            if (simpleAccess.exists(fileURL)) exists = true;
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                fileacc);
+            if (simpleAccess.exists(fileURL)) {
+                exists = true;
+            }
 
         } catch (Exception e) {
             System.out.println("Couldn't access file '" + fileURL + "'");
@@ -444,6 +458,7 @@ public class utils {
         }
         return exists;
     }
+
     /**
      * This method deletes via office the given file URL. It checks the existance
      * of <CODE>fileURL</CODE>. If exists it will be deletet.
@@ -451,14 +466,16 @@ public class utils {
      * @param fileURL the file to delete
      * @return true if the file could be deletet or the file does not exist
      */
-    public static boolean deleteFile(XMultiServiceFactory xMsf, String fileURL){
+    public static boolean deleteFile(XMultiServiceFactory xMsf, String fileURL) {
         boolean delete = true;
         try {
 
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
-                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            if (simpleAccess.exists(fileURL)) simpleAccess.kill(fileURL);
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                fileacc);
+            if (simpleAccess.exists(fileURL)) {
+                simpleAccess.kill(fileURL);
+            }
 
         } catch (Exception e) {
             System.out.println("Couldn't delete file '" + fileURL + "'");
@@ -475,13 +492,15 @@ public class utils {
      * @param newF the destination file
      * @return true at success
      */
-    public static boolean copyFile (XMultiServiceFactory xMsf, String source, String destinaion) {
+    public static boolean copyFile(XMultiServiceFactory xMsf, String source, String destinaion) {
         boolean res = false;
         try {
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
-                            UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            if (!simpleAccess.exists(destinaion)) simpleAccess.copy(source,destinaion);
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                fileacc);
+            if (!simpleAccess.exists(destinaion)) {
+                simpleAccess.copy(source, destinaion);
+            }
 
             res = true;
         } catch (Exception e) {
@@ -505,13 +524,15 @@ public class utils {
         try {
             Object fileacc = xMsf.createInstance("com.sun.star.comp.ucb.SimpleFileAccess");
 
-            XSimpleFileAccess simpleAccess = (XSimpleFileAccess)
-                UnoRuntime.queryInterface(XSimpleFileAccess.class,fileacc);
-            if (simpleAccess.exists(newF)) simpleAccess.kill(newF);
-            simpleAccess.copy(oldF,newF);
+            XSimpleFileAccess simpleAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                fileacc);
+            if (simpleAccess.exists(newF)) {
+                simpleAccess.kill(newF);
+            }
+            simpleAccess.copy(oldF, newF);
             res = true;
         } catch (com.sun.star.ucb.InteractiveAugmentedIOException e) {
-            return false ;
+            return false;
         } catch (com.sun.star.uno.Exception e) {
             System.out.println("Couldn't create a service.");
             e.printStackTrace();
@@ -523,9 +544,11 @@ public class utils {
     public static boolean hasPropertyByName(XPropertySet props, String aName) {
         Property[] list = props.getPropertySetInfo().getProperties();
         boolean res = false;
-        for (int i=0;i<list.length;i++) {
+        for (int i = 0; i < list.length; i++) {
             String the_name = list[i].Name;
-            if (aName.equals(the_name)) res=true;
+            if (aName.equals(the_name)) {
+                res = true;
+            }
         }
         return res;
     }
@@ -535,15 +558,13 @@ public class utils {
      * This method returns the implementation name of a given object
      *
      */
-
-    public static String getImplName (Object aObject) {
+    public static String getImplName(Object aObject) {
         String res = "Error getting Implementation name";
         try {
-            XServiceInfo xSI = (XServiceInfo)
-                UnoRuntime.queryInterface(XServiceInfo.class,aObject);
+            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, aObject);
             res = xSI.getImplementationName();
         } catch (Exception e) {
-            res = "Error getting Implementation name ( "+e+" )";
+            res = "Error getting Implementation name ( " + e + " )";
         }
 
         return res;
@@ -554,8 +575,7 @@ public class utils {
      * This method checks if an Object is void
      *
      */
-
-    public static boolean isVoid (Object aObject) {
+    public static boolean isVoid(Object aObject) {
         if (aObject instanceof com.sun.star.uno.Any) {
             com.sun.star.uno.Any oAny = (com.sun.star.uno.Any) aObject;
             return (oAny.getType().getTypeName().equals("void"));
@@ -570,8 +590,7 @@ public class utils {
      * This method replaces a substring with another
      *
      */
-
-    public static String replacePart (String all, String toReplace, String replacement) {
+    public static String replacePart(String all, String toReplace, String replacement) {
         return replaceAll13(all, toReplace, replacement);
     }
 
@@ -583,7 +602,9 @@ public class utils {
      * @return The next free port.
      */
     public static int getNextFreePort(int startPort) {
-        if (startPort < 1024) startPort = 10000;
+        if (startPort < 1024) {
+            startPort = 10000;
+        }
         for (int port = startPort; port < 65536; port++) {
             System.out.println("Scan port " + port);
             try {
@@ -591,8 +612,7 @@ public class utils {
                 // fails if there is already a server running
                 ServerSocket sSock = new ServerSocket(port);
                 sSock.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println(" -> server: occupied port " + port);
                 continue;
             }
@@ -601,8 +621,7 @@ public class utils {
                 // fails if there is no server on any connectable machine
                 Socket sock = new Socket("localhost", port);
                 System.out.println(" -> socket: occupied port: " + port);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println(" -> free port");
                 return port;
             }
@@ -610,18 +629,17 @@ public class utils {
         return 65535;
     }
 
-    public static URL parseURL(XMultiServiceFactory xMSF, String url){
+    public static URL parseURL(XMultiServiceFactory xMSF, String url) {
         URL[] rUrl = new URL[1];
         rUrl[0] = new URL();
         rUrl[0].Complete = url;
 
         XURLTransformer xTrans = null;
         try {
-            Object inst = xMSF.createInstance
-                ("com.sun.star.util.URLTransformer");
-            xTrans = (XURLTransformer) UnoRuntime.queryInterface
-                (XURLTransformer.class, inst);
-        } catch (com.sun.star.uno.Exception e) {}
+            Object inst = xMSF.createInstance("com.sun.star.util.URLTransformer");
+            xTrans = (XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class, inst);
+        } catch (com.sun.star.uno.Exception e) {
+        }
 
         xTrans.parseStrict(rUrl);
 
@@ -631,8 +649,7 @@ public class utils {
     public static String getOfficeURL(XMultiServiceFactory msf) {
         try {
             Object settings = msf.createInstance("com.sun.star.util.PathSettings");
-            XPropertySet settingProps = (XPropertySet)
-                            UnoRuntime.queryInterface(XPropertySet.class, settings);
+            XPropertySet settingProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, settings);
             String path = (String) settingProps.getPropertyValue("Module");
             return path;
         } catch (Exception e) {
@@ -649,9 +666,10 @@ public class utils {
      */
     public static String getOfficeBinPath(XMultiServiceFactory msf) {
         String sysBinDir = "";
-        try{
-            sysBinDir  = utils.getSystemURL(utils.expandMacro(msf, "$SYSBINDIR"));
-        } catch (java.lang.Exception e){}
+        try {
+            sysBinDir = utils.getSystemURL(utils.expandMacro(msf, "$SYSBINDIR"));
+        } catch (java.lang.Exception e) {
+        }
 
         return sysBinDir;
     }
@@ -669,22 +687,23 @@ public class utils {
      * @see com.sun.star.beans.Property
      * @see com.sun.star.beans.PropertyAttribute
      */
-    public static String[] getFilteredPropertyNames(XPropertySet props, short includePropertyAttribute, short excludePropertyAttribute) {
+    public static String[] getFilteredPropertyNames(XPropertySet props, short includePropertyAttribute,
+        short excludePropertyAttribute) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
         ArrayList l = new ArrayList();
-        for (int i=0;i<the_props.length;i++) {
+        for (int i = 0; i < the_props.length; i++) {
             boolean exclude = ((the_props[i].Attributes & excludePropertyAttribute) != 0);
-            boolean include = (includePropertyAttribute == 0) || ((the_props[i].Attributes & includePropertyAttribute) != 0);
+            boolean include = (includePropertyAttribute == 0) ||
+                ((the_props[i].Attributes & includePropertyAttribute) != 0);
             if (include && !exclude) {
                 l.add(the_props[i].Name);
             }
         }
         Collections.sort(l);
         String[] names = new String[l.size()];
-        names = (String[])l.toArray(names);
+        names = (String[]) l.toArray(names);
         return names;
     }
-
 
     /** Causes the thread to sleep some time.
      * It can be used f.e. like:
@@ -707,6 +726,8 @@ public class utils {
      */
     public static String validateAppExecutionCommand(String appExecCommand, String os) {
         String errorMessage = "OK";
+        appExecCommand = replaceAll13(appExecCommand, "\"", "");
+        appExecCommand = replaceAll13(appExecCommand, "'", "");
         StringTokenizer commandTokens = new StringTokenizer(appExecCommand, " \t");
         String officeExecutable = "";
         String officeExecCommand = "soffice";
@@ -718,7 +739,7 @@ public class utils {
         }
         if (index == -1) {
             errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
-            "contain '" + officeExecCommand + "'.";
+                "contain '" + officeExecCommand + "'.";
         } else {
             // does the directory exist?
             officeExecutable = officeExecutable.trim();
@@ -726,19 +747,18 @@ public class utils {
             File f = new File(officePath);
             if (!f.exists() || !f.isDirectory()) {
                 errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
-                    "point to a valid system directory.";
-            }
-            else {
+                    "point to a valid system directory: " + officePath;
+            } else {
                 // is it an office installation?
                 f = new File(officeExecutable);
                 // one try for windows platform can't be wrong...
-                if (!f.exists() || !f.isFile())
+                if (!f.exists() || !f.isFile()) {
                     f = new File(officeExecutable + ".exe");
+                }
                 if (!f.exists() || !f.isFile()) {
                     errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
                         "point to a valid office installation.";
-                }
-                else {
+                } else {
                     // do we have the accept parameter?
                     boolean gotNoAccept = true;
                     while (commandTokens.hasMoreElements()) {
@@ -748,9 +768,10 @@ public class utils {
                             errorMessage = validateConnectString(officeParam, true);
                         }
                     }
-                    if (gotNoAccept)
+                    if (gotNoAccept) {
                         errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
-                                       "contain a '-accept' parameter for connecting the office.";
+                            "contain a '-accept' parameter for connecting the office.";
+                    }
                 }
             }
         }
@@ -767,38 +788,44 @@ public class utils {
     public static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {
         String acceptPrefix = "";
         if (checkAppExecutionCommand) {
-            acceptPrefix="-accept=";
+            acceptPrefix = "-accept=";
         }
 
         String errorMessage = "OK";
         // a warning, if an unknown connection method is used
         if (connectString.indexOf("socket") != -1) {
             if (connectString.indexOf(acceptPrefix + "socket,host=") == -1 ||
-                connectString.indexOf("port=") == -1 ) {
-                if (checkAppExecutionCommand)
+                connectString.indexOf("port=") == -1) {
+                if (checkAppExecutionCommand) {
                     errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=socket,host=localhost,port=8100;urp;";
-                else
+                } else {
                     errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'socket,host=localhost,port=8100'";
+                }
             }
-        }
-        else if (connectString.indexOf("pipe") != -1) {
-            if (connectString.indexOf(acceptPrefix + "pipe,name=") == -1)
-                if (checkAppExecutionCommand)
+        } else if (connectString.indexOf("pipe") != -1) {
+            if (connectString.indexOf(acceptPrefix + "pipe,name=") == -1) {
+                if (checkAppExecutionCommand) {
                     errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=pipe,name=myuniquename;urp;'";
-                else
+                } else {
                     errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'pipe,name=myuniquename'";
-        }
-        else {
-            if (checkAppExecutionCommand)
+                }
+            }
+        } else {
+            if (checkAppExecutionCommand) {
                 errorMessage = "Warning: The '-accept' parameter contains an unknown connection method.";
-            else
+            } else {
                 errorMessage = "Warning: The 'ConnectionString' parameter contains an unknown connection method.";
+            }
         }
         return errorMessage;
     }
 
     /**
-     *
+     * String.replaceAll() ist available since Java 1.4 but the runner must be buldabale with Java 1.3
+     * @param originalString
+     * @param searchString
+     * @param replaceString
+     * @return modified string
      */
     public static String replaceAll13(String originalString, String searchString, String replaceString) {
 
@@ -807,13 +834,12 @@ public class utils {
         int replaceLength = replaceString.length();
         int index = originalString.indexOf(searchString);
         while (index != -1) {
-            changeStringBuffer = changeStringBuffer.replace(index, index+searchLength, replaceString);
+            changeStringBuffer = changeStringBuffer.replace(index, index + searchLength, replaceString);
             originalString = changeStringBuffer.toString();
-            index = originalString.indexOf(searchString, index+replaceLength);
+            index = originalString.indexOf(searchString, index + replaceLength);
         }
         return originalString;
     }
-
 
     /**
      * expand macrofied strings like <CODE>${$ORIGIN/bootstrap.ini:UserInstallation}</CODE> or
@@ -824,15 +850,16 @@ public class utils {
      * @return return the expanded string
      * @see com.sun.star.util.theMacroExpander
      */
-    public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception{
+    public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception {
         try {
             XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-            XComponentContext xContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class, xPS.getPropertyValue("DefaultContext"));
-            XMacroExpander xME = (XMacroExpander) UnoRuntime.queryInterface(XMacroExpander.class, xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));
+            XComponentContext xContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class,
+                xPS.getPropertyValue("DefaultContext"));
+            XMacroExpander xME = (XMacroExpander) UnoRuntime.queryInterface(XMacroExpander.class,
+                xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));
             return xME.expandMacros(expand);
-        }
-        catch(Exception e) {
-            throw new Exception("could not expand macro: " + e.toString(),e);
+        } catch (Exception e) {
+            throw new Exception("could not expand macro: " + e.toString(), e);
         }
 
     }
@@ -844,27 +871,30 @@ public class utils {
      * @param xMSF the XMultiServiceFactory
      * @return unxsols, unxsoli, unxlngi, wntmsci
      */
-    public static String getOfficeOS(XMultiServiceFactory xMSF){
+    public static String getOfficeOS(XMultiServiceFactory xMSF) {
         String platform = "unkown";
 
         try {
-            String theOS= expandMacro(xMSF, "$_OS");
+            String theOS = expandMacro(xMSF, "$_OS");
 
-            if (theOS.equals("Windows")) platform = "wntmsci";
-            else
-                if (theOS.equals("Linux")) platform = "unxlngi";
-            else{
-                if (theOS.equals("Solaris")){
+            if (theOS.equals("Windows")) {
+                platform = "wntmsci";
+            } else if (theOS.equals("Linux")) {
+                platform = "unxlngi";
+            } else {
+                if (theOS.equals("Solaris")) {
                     String theArch = expandMacro(xMSF, "$_ARCH");
-                    if (theArch.equals("SPARC")) platform = "unxsols";
-                    else
-                        if (theArch.equals("x86")) platform = "unxsoli";
+                    if (theArch.equals("SPARC")) {
+                        platform = "unxsols";
+                    } else if (theArch.equals("x86")) {
+                        platform = "unxsoli";
+                    }
                 }
             }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+        }
         return platform;
     }
-
 
     /**
      * dispatches given <CODE>URL</CODE> to the document <CODE>XComponent</CODE>
@@ -873,7 +903,7 @@ public class utils {
      * @param URL the <CODE>URL</CODE> to dispatch
      * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
      */
-    public static void dispatchURL(XMultiServiceFactory xMSF, XComponent xDoc, String URL)throws java.lang.Exception{
+    public static void dispatchURL(XMultiServiceFactory xMSF, XComponent xDoc, String URL) throws java.lang.Exception {
         XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class, xDoc);
 
         XController xCont = aModel.getCurrentController();
@@ -889,14 +919,13 @@ public class utils {
      * @param URL the <CODE>URL</CODE> to dispatch
      * @throws java.lang.Exception throws <CODE>java.lang.Exception</CODE> on any error
      */
-    public static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL)throws java.lang.Exception{
+    public static void dispatchURL(XMultiServiceFactory xMSF, XController xCont, String URL) throws java.lang.Exception {
         try {
 
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface( XDispatchProvider.class, xCont );
+            XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xCont);
 
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class, xMSF.createInstance("com.sun.star.util.URLTransformer"));
+            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(XURLTransformer.class,
+                xMSF.createInstance("com.sun.star.util.URLTransformer"));
 
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
@@ -906,32 +935,32 @@ public class utils {
 
             URL aURL = aParseURL[0];
 
-            XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
-            xDispatcher.dispatch( aURL, null );
+            XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+            xDispatcher.dispatch(aURL, null);
 
             utils.shortWait(3000);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new Exception("ERROR: could not dispatch URL '" + URL + "': " + e.toString());
         }
     }
 
     /** returns a String which contains the current date and time<br>
-     *  format: DD.MM.YYYY - HH:MM:SS
+     *  format: [DD.MM.YYYY - HH:MM:SS::mm]
      *
      ** @return a String which contains the current date and time
      */
-    public static String getDateTime(){
+    public static String getDateTime() {
 
         Calendar cal = new GregorianCalendar();
         DecimalFormat dfmt = new DecimalFormat("00");
-        String dateTime =   dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
-                            dfmt.format(cal.get(Calendar.MONTH)) + "." +
-                            dfmt.format(cal.get(Calendar.YEAR)) + " - " +
-                            dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
-                            dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
-                            dfmt.format(cal.get(Calendar.SECOND));
-
-        return dateTime;
+        String dateTime = dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
+            dfmt.format(cal.get(Calendar.MONTH) + 1) + "." +
+            dfmt.format(cal.get(Calendar.YEAR)) + " - " +
+            dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
+            dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
+            dfmt.format(cal.get(Calendar.SECOND)) + "," +
+            dfmt.format(cal.get(Calendar.MILLISECOND));
+        return "[" + dateTime + "]";
     }
 }
