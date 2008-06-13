@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtparae.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +44,11 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
+
+// --> OD 2008-04-25 #refactorlists#
+class XMLTextListsHelper;
+#include <vector>
+// <--
 
 class SvXMLExport;
 class SvXMLAutoStylePoolP;
@@ -100,7 +105,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     SvLongs                     *pFrameShapeIdxs;
     XMLTextFieldExport          *pFieldExport;
     OUStrings_Impl              *pListElements;
-    OUStringsSort_Impl          *pExportedLists;
+    // --> OD 2008-05-07 #refactorlists# - no longer needed
+//    OUStringsSort_Impl          *pExportedLists;
+    // <--
     XMLTextListAutoStylePool    *pListAutoPool;
     XMLSectionExport            *pSectionExport;
     XMLIndexMarkExport          *pIndexMarkExport;
@@ -117,6 +124,11 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     ::rtl::OUString             sOpenRubyText;
     ::rtl::OUString             sOpenRubyCharStyle;
     sal_Bool                    bOpenRuby;
+
+    // --> OD 2008-05-07 #refactorlists#
+    XMLTextListsHelper* mpTextListsHelper;
+    ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
+    // <--
 
     enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
 
@@ -694,6 +706,10 @@ public:
 
     sal_Int32 GetHeadingLevel( const ::rtl::OUString& rStyleName );
 
+    // --> OD 2008-05-08 #refactorlists#
+    void PushNewTextListsHelper();
+    void PopTextListsHelper();
+    // <--
 };
 
 inline const XMLTextListAutoStylePool&
