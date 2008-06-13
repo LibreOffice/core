@@ -14,10 +14,22 @@ svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadca
 svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### i85245 ###
-#svtools.AccessibleBrowseBoxTableCell
+svtools.AccessibleBrowseBoxTableCell
 # -> test is disabled in svtools.sce
 
 ### i85246 ###
-#svtools.AccessibleTabBarPageList
+svtools.AccessibleTabBarPageList
 # -> test is disabled in svtools.sce
 
+### i88276 ###
+svtools.AccessibleIconChoiceCtrlEntry
+# -> test is disabled in svtools.sce
+
+### i88296 ###
+svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i88300 ###
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleText
+
+### i88647 ###
+svtools.AccessibleTabBarPage
