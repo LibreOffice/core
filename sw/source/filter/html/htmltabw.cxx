@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmltabw.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -231,7 +231,7 @@ sal_Bool lcl_WrtHTMLTbl_HasTabBorders( const SwTableBox*& rpBox, void* pPara )
     else
     {
         const SvxBoxItem& rBoxItem =
-            (const SvxBoxItem&)rpBox->GetFrmFmt()->GetAttr( RES_BOX );
+            (const SvxBoxItem&)rpBox->GetFrmFmt()->GetFmtAttr( RES_BOX );
 
         *pBorders = rBoxItem.GetTop() || rBoxItem.GetBottom() ||
                     rBoxItem.GetLeft() || rBoxItem.GetRight();
