@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lingutil.cxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +45,7 @@
 
 
 #include <osl/thread.h>
-#ifndef _OSL_FILE_H_
 #include <osl/file.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <i18npool/mslangid.hxx>
@@ -123,6 +121,11 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 
     rtl::OUString aFormatName;
     String aDicExtension;
+#ifdef SYSTEM_DICTS
+    rtl::OUString aSystemDir;
+    rtl::OUString aSystemPrefix;
+    rtl::OUString aSystemSuffix;
+#endif
     bool bSpell = false;
     bool bHyph  = false;
     bool bThes  = false;
@@ -130,18 +133,32 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     {
         aFormatName     = A2OU("DICT_SPELL");
         aDicExtension   = String::CreateFromAscii( ".dic" );
+#ifdef SYSTEM_DICTS
+        aSystemDir      = A2OU( DICT_SYSTEM_DIR );
+        aSystemSuffix       = aDicExtension;
+#endif
         bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
         aFormatName     = A2OU("DICT_HYPH");
         aDicExtension   = String::CreateFromAscii( ".dic" );
+#ifdef SYSTEM_DICTS
+        aSystemDir      = A2OU( HYPH_SYSTEM_DIR );
+        aSystemPrefix       = A2OU( "hyph_" );
+        aSystemSuffix       = aDicExtension;
+#endif
         bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
         aFormatName     = A2OU("DICT_THES");
         aDicExtension   = String::CreateFromAscii( ".dat" );
+#ifdef SYSTEM_DICTS
+        aSystemDir      = A2OU( THES_SYSTEM_DIR );
+        aSystemPrefix       = A2OU( "th_" );
+        aSystemSuffix       = A2OU( "_v2.dat" );
+#endif
         bThes = true;
     }
 
@@ -150,7 +167,10 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         return aRes;
 
     dictentry * pDict = NULL;  // shared dict entry pointer
-    std::set< dictentry *, lt_dictentry > aAvailableDics;
+
+    // set of languages to remember the language where it is already
+    // decided to make use of the dictionary.
+    std::set< LanguageType > aDicLangInUse;
 
     const sal_Int16 USER_LAYER = 0;
     for (int k = 0;  k < 2;  ++k)
@@ -170,10 +190,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         rtl::OString aSysPathToFile( OU2ENC( aLstFileURL, osl_getThreadTextEncoding() ) );
         DictMgr aDictMgr( aSysPathToFile.getStr(), pDicType );
         int nDicts = aDictMgr.get_list( &pDict );
-
-        // set of languages to remember the language where it is already
-        // decided to make use of the dictionary.
-        std::set< LanguageType > aDicLangInUse;
 
         // Test for existence of the actual dictionary files
         // and remember the ones we like to use...
@@ -224,6 +240,52 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
             }
         }
     }
+
+#ifdef SYSTEM_DICTS
+   osl::Directory aSystemDicts(aSystemDir);
+   if (aSystemDicts.open() == osl::FileBase::E_None)
+   {
+       osl::DirectoryItem aItem;
+       osl::FileStatus aFileStatus(FileStatusMask_FileURL);
+       while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
+       {
+           aItem.getFileStatus(aFileStatus);
+           rtl::OUString sPath = aFileStatus.getFileURL();
+           if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
+           {
+               sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
+                              if (!sPath.match(aSystemPrefix, nStartIndex))
+                                      continue;
+               sal_Int32 nIndex = nStartIndex + aSystemPrefix.getLength();
+               rtl::OUString sLang = sPath.getToken( 0, '_', nIndex );
+               rtl::OUString sRegion = sPath.copy( nIndex, sPath.getLength() - nIndex - aSystemSuffix.getLength());
+                              if (!sLang.getLength() || !sRegion.getLength())
+                                      continue;
+
+                              // Thus we first get the language of the dictionary
+                              LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
+                  sLang, sRegion );
+
+                              if (aDicLangInUse.count( nLang ) == 0)
+                              {
+                                      // remember the new language in use
+                                      aDicLangInUse.insert( nLang );
+
+                                      // add the dictionary to the resulting vector
+                                      SvtLinguConfigDictionaryEntry aDicEntry;
+                                      aDicEntry.aLocations.realloc(1);
+                                      aDicEntry.aLocaleNames.realloc(1);
+                                      rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
+                      aDicEntry.aLocations[0]   = sPath;
+                                      aDicEntry.aFormatName     = aFormatName;
+                                      aDicEntry.aLocaleNames[0] = aLocaleName;
+                                      aRes.push_back( aDicEntry );
+                              }
+           }
+       }
+      }
+
+#endif
 
     return aRes;
 }
