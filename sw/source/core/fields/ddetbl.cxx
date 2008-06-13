@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ddetbl.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +136,7 @@ void SwDDETable::ChangeContent()
 
             SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
             pBoxFmt->LockModify();
-            pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+            pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
             pBoxFmt->UnlockModify();
         }
     }
