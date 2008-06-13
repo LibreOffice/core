@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: layact.cxx,v $
- * $Revision: 1.74 $
+ * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,9 +331,6 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
     if ( pCnt->IsCompletePaint() || !pCnt->IsTxtFrm() )
     {
         SwRect aPaint( pCnt->PaintArea() );
-        // OD 06.11.2002 #104171#,#103931# - paint of old area no longer needed.
-        //if( rOldRect.HasArea() )
-        //    aPaint.Union( rOldRect );
         if ( !_PaintCntnt( pCnt, pPage, aPaint ) )
             pCnt->ResetCompletePaint();
     }
