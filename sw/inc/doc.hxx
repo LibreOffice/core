@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doc.hxx,v $
- * $Revision: 1.152 $
+ * $Revision: 1.153 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +75,10 @@
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 #include <set>
+// <--
+// --> OD 2008-03-12 #refactorlists#
+#include <IDocumentListsAccess.hxx>
+class SwList;
 // <--
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -278,7 +282,10 @@ class SwDoc :
     public IDocumentChartDataProviderAccess,
     // --> OD 2007-10-26 #i83479#
     public IDocumentListItems,
-    public IDocumentOutlineNodes
+    public IDocumentOutlineNodes,
+    // <--
+    // --> OD 2008-03-12 #refactorlists#
+    public IDocumentListsAccess
     // <--
 {
 
@@ -369,7 +376,15 @@ class SwDoc :
     mutable SwNumRuleTbl    *pNumRuleTbl;           // Liste aller benannten NumRules
 
     // Hash map to find numrules by name
-    mutable std::hash_map<String, SwNumRule *, StringHash> aNumRuleMap;
+    mutable std::hash_map<String, SwNumRule *, StringHash> maNumRuleMap;
+
+    // --> OD 2008-03-12 #refactorlists#
+    typedef std::hash_map< String, SwList*, StringHash > tHashMapForLists;
+    // container to hold the lists of the text document
+    tHashMapForLists maLists;
+    // relation between list style and its default list
+    tHashMapForLists maListStyleLists;
+    // <--
 
     SwRedlineTbl    *pRedlineTbl;           // Liste aller Redlines
     String          *pAutoFmtRedlnComment;  // Kommentar fuer Redlines, die
@@ -679,8 +694,6 @@ private:
 
     BOOL _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 USHORT nMode );
-
-    void AddNumRuleRanges(SwNumRule * pRule, SwNodes & rNodes);
 
     // unser eigener 'IdlTimer' ruft folgende Methode
     DECL_LINK( DoIdleJobs, Timer * );
@@ -1017,6 +1030,18 @@ public:
     virtual SwTxtNode* getOutlineNode( const sal_Int32 nIdx ) const;
     virtual void getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const;
 
+    /** IDocumentListsAccess
+
+        OD 2008-03-26 #refactorlists#
+    */
+    virtual SwList* createList( String sListId,
+                                const String sDefaultListStyleName );
+    virtual void deleteList( const String sListId );
+    virtual SwList* getListByName( const String sListId ) const;
+    virtual SwList* createListForListStyle( const String sListStyleName );
+    virtual SwList* getListForListStyle( const String sListStyleName ) const;
+    virtual void deleteListForListStyle( const String sListStyleName );
+
     /** INextInterface here
     */
 
@@ -1250,7 +1275,7 @@ public:
     // attributes of the affected text nodes are cleared, except the break
     // attribute, the page description attribute and the list style attribute.
     // The new parameter <bResetListAttrs> indicates, if the list attributes
-    // (list style, restart at and restart with) are clearer as well in case
+    // (list style, restart at and restart with) are cleared as well in case
     // that <bReset = true> and the paragraph style has a list style attribute set.
     sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                             bool bReset = true,
@@ -1467,7 +1492,14 @@ public:
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
     // and "first line indent" are additionally reset at the provided PaM, if
     // the list style makes use of the new list level attributes.
-    void SetNumRule( const SwPaM&, const SwNumRule&,
+    // --> OD 2008-03-17 #refactorlists#
+    // introduce parameters <bCreateNewList> and <sContinuedListId>
+    // <bCreateNewList> indicates, if a new list is created by applying the
+    // given list style.
+    void SetNumRule( const SwPaM&,
+                     const SwNumRule&,
+                     const bool bCreateNewList,
+                     const String sContinuedListId = String(),
                      sal_Bool bSetItem = sal_True,
                      const bool bResetIndentAttrs = false );
     // <--
@@ -1484,7 +1516,7 @@ public:
     void MakeUniqueNumRules(const SwPaM & rPaM);
 
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
-    void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
+    void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
     SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
 
@@ -1531,7 +1563,8 @@ public:
     // #i23731#
     /** Searches for a text node with a numbering rule.
 
-       OD 2005-10-24 #i55391# - add optional parameter <_bInvestigateStartNode>
+       OD 2005-10-24 #i55391# - add optional parameter <bInvestigateStartNode>
+       OD 2008-03-18 #refactorlists# - add output parameter <sListId>
 
        \param rPos         position to start search
        \param bForward     - TRUE:  search forward
@@ -1542,7 +1575,12 @@ public:
                            - FALSE: search for outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
-        @param _bInvestigateStartNode
+
+        @param sListId
+        output parameter - in case a list style is found, <sListId> holds the
+        list id, to which the text node belongs, which applies the found list style.
+
+        @param bInvestigateStartNode
         input parameter - boolean, indicating, if start node, determined by given
         start position has to be investigated or not.
      */
@@ -1551,17 +1589,16 @@ public:
                                     BOOL bNum,
                                     BOOL bOutline,
                                     int nNonEmptyAllowed,
-                                    bool _bInvestigateStartNode = false );
+                                    String& sListId,
+                                    bool bInvestigateStartNode = false );
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum( const SwPaM& );
         // Loeschen, Splitten der Aufzaehlungsliste
-    sal_Bool DelNumRules( const SwPaM& );
+    void DelNumRules( const SwPaM& );
 
     // Invalidates all numrules
     void InvalidateNumRules();
-
-    void SyncNumRulesAndNodes();
 
         // Hoch-/Runterstufen
     sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
@@ -1939,25 +1976,33 @@ public:
     SwModify*   GetUnoCallBack() const;
 
     // -> #i27615#
-    /**
-       Marks/Unmarks a level of a numbring rule.
+    /** Marks/Unmarks a list level of a certain list
 
-       @param sNumRule   name of the numbering rule
-       @param nLevel     level to mark
-       @param bValue     - TRUE  mark the level
-                         - FALSE unmark the level
+        OD 2008-04-02 #refactorlists#
+        levels of a certain lists are marked now
+
+        @param sListId    list Id of the list whose level has to be marked/unmarked
+        @param nListLevel level to mark
+        @param bValue     - TRUE  mark the level
+                          - FALSE unmark the level
+    */
+    void MarkListLevel( const String& sListId,
+                        const int nListLevel,
+                        const BOOL bValue );
+
+    /** Marks/Unmarks a list level of a certain list
+
+        OD 2008-04-02 #refactorlists#
+        levels of a certain lists are marked now
+
+        @param rList      list whose level has to be marked/unmarked
+        @param nListLevel level to mark
+        @param bValue     - TRUE  mark the level
+                          - FALSE unmark the level
      */
-    void SetMarkedNumLevel(const String & sNumRule, BYTE nLevel, BOOL bValue);
-
-    /**
-       Marks/Unmarks a level of a numbring rule.
-
-       @param rNumRule   the numbering rule
-       @param nLevel     level to mark
-       @param bValue     - TRUE  mark the level
-                         - FALSE unmark the level
-     */
-    void SetMarkedNumLevel(SwNumRule & rNumRule, BYTE nLevel, BOOL bValue);
+    void MarkListLevel( SwList& rList,
+                        const int nListLevel,
+                        const BOOL bValue );
     // <- #i27615#
 
     // Change a format undoable.
