@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfly.cxx,v $
- * $Revision: 1.33 $
+ * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,7 +285,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
 
     //Endlich kann das Attribut gesetzt werden. Es muss das erste Attribut
     //sein; Undo depends on it!
-    rFmt.SetAttr( aNewAnch );
+    rFmt.SetFmtAttr( aNewAnch );
 
     //Positionskorrekturen
     const SfxPoolItem* pItem;
@@ -446,7 +446,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     } while( 0 != ( nWhich = aIter.NextItem()->Which() ) );
 
     if( aTmpSet.Count() )
-        rFlyFmt.SetAttr( aTmpSet );
+        rFlyFmt.SetFmtAttr( aTmpSet );
 
     if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
@@ -500,7 +500,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //Set/Reset/Abgleich usw.
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET != rNewFmt.GetAttrSet().GetItemState( RES_COL ))
-        rFmt.ResetAttr( RES_COL );
+        rFmt.ResetFmtAttr( RES_COL );
 
     if( rFmt.DerivedFrom() != &rNewFmt )
     {
@@ -510,7 +510,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         // 2. wech damit, MB!
         if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, FALSE ))
         {
-            rFmt.ResetAttr( RES_FRM_SIZE );
+            rFmt.ResetFmtAttr( RES_FRM_SIZE );
             bFrmSz = TRUE;
         }
 
@@ -542,17 +542,17 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //OS: #96584# text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
     if (!bKeepOrient)
     {
-        rFmt.ResetAttr(RES_VERT_ORIENT);
-        rFmt.ResetAttr(RES_HORI_ORIENT);
+        rFmt.ResetFmtAttr(RES_VERT_ORIENT);
+        rFmt.ResetFmtAttr(RES_HORI_ORIENT);
     }
 
-    rFmt.ResetAttr( RES_PRINT, RES_SURROUND );
-    rFmt.ResetAttr( RES_LR_SPACE, RES_UL_SPACE );
-    rFmt.ResetAttr( RES_BACKGROUND, RES_COL );
-    rFmt.ResetAttr( RES_URL, RES_EDIT_IN_READONLY );
+    rFmt.ResetFmtAttr( RES_PRINT, RES_SURROUND );
+    rFmt.ResetFmtAttr( RES_LR_SPACE, RES_UL_SPACE );
+    rFmt.ResetFmtAttr( RES_BACKGROUND, RES_COL );
+    rFmt.ResetFmtAttr( RES_URL, RES_EDIT_IN_READONLY );
 
     if( !bFrmSz )
-        rFmt.SetAttr( aFrmSz );
+        rFmt.SetFmtAttr( aFrmSz );
 
     if( bChgAnchor )
         rFmt.MakeFrms();
