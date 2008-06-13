@@ -8,21 +8,39 @@ dbaccess.ODatasourceAdministrationDialog::com::sun::star::sdb::DatasourceAdminis
 dbaccess.OQueryDesign::com::sun::star::frame::XController
 
 ### i84113 ###
-# dbaccess.ConnectionLineAccessibility -> disabled in dbaccess.sce
+dbaccess.ConnectionLineAccessibility 
+# -> disabled in dbaccess.sce
 
 ### i84114 ###
-# dbaccess.JoinViewAccessibility -> disabled in dbaccess.sce
+dbaccess.JoinViewAccessibility 
+# -> disabled in dbaccess.sce
 
 ### i84116 ###
-# dbaccess.OQueryDesign -> disabled in dbaccess.sce
+dbaccess.OQueryDesign 
+# -> disabled in dbaccess.sce
 
 ### i84125 ###
 dbaccess.SbaXGridControl::com::sun::star::view::XSelectionSupplier
 
 ### i84127 ###
 dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
-# dbaccess.SbaXGridControl -> disabled in dbaccess.sce
+
+### i86990 ###
+dbaccess.ODatabaseSource::com::sun::star::beans::XPropertySet
+dbaccess.OCommandDefinition::com::sun::star::beans::XPropertySet
 
 ### i84128 ###
-# dbaccess.TableWindowAccessibility -> disabled in dbaccess.sce
+dbaccess.TableWindowAccessibility 
+# -> disabled in dbaccess.sce
 
+### i87247 ###
+dbaccess.DBContentLoader::com::sun::star::frame::XFrameLoader
+
+### i88646 ###
+dbaccess.ODatabaseContext::com::sun::star::uno::XNamingService
+
+### i90358 ###
+dbaccess.SbaXGridControl::com::sun::star::awt::XView
+
+### i90359 ###
+dbaccess.ODatabaseSource::com::sun::star::sdb::DataSource
