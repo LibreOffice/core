@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Summarizer.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@ public class Summarizer {
     /**
      *
      * gets the state for a SuperEntry according to its subentries
+     * @param entry
      */
     public void summarizeUp(DescEntry entry) {
         if ( ( entry.State != null ) && !entry.State.equals("UNKNOWN")) return;
@@ -54,7 +55,7 @@ public class Summarizer {
             if (entry.SubEntries[i].State == null) {
                 entry.SubEntries[i].State = "PASSED.FAILED";
             }
-            if (entry.SubEntries[i].State == "known issue") {
+            if (entry.SubEntries[i].State.equals("known issue")) {
                 entry.SubEntries[i].State = "PASSED.OK";
                 knownIssues++;
             }
@@ -83,7 +84,7 @@ public class Summarizer {
     }
 
     public static void summarizeDown(DescEntry entry, String state) {
-        if ( ( entry.State == null ) || entry.State == "UNKNOWN")
+        if ( ( entry.State == null ) || entry.State.equals("UNKNOWN"))
             entry.State = state;
         for (int i=0; i<entry.SubEntryCount; i++) {
             summarizeDown(entry.SubEntries[i], entry.State);
