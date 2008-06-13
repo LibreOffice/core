@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flylay.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -484,7 +484,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                     SwFmtFrmSize aFrmSize( rSz );
                     aFrmSize.SetWidth( aFrmRect.Width() );
                     aFrmSize.SetHeight( aFrmRect.Height() );
-                    pFmt->SetAttr( aFrmSize );
+                    pFmt->SetFmtAttr( aFrmSize );
                     pFmt->UnlockModify();
                 }
             }
