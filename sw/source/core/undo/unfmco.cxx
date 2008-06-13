@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unfmco.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,18 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 //--------------------------------------------------
 
 
-SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange, SwFmtColl* pColl )
-    : SwUndo( UNDO_SETFMTCOLL ), SwUndRng( rRange ),
-    pHistory( new SwHistory ), pFmtColl( pColl )
+// --> OD 2008-04-15 #refactorlists#
+SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
+                              SwFmtColl* pColl,
+                              const bool bReset,
+                              const bool bResetListAttrs )
+    : SwUndo( UNDO_SETFMTCOLL ),
+      SwUndRng( rRange ),
+      pHistory( new SwHistory ),
+      pFmtColl( pColl ),
+      mbReset( bReset ),
+      mbResetListAttrs( bResetListAttrs )
+// <--
 {
     // --> FME 2004-08-06 #i31191#
     if ( pColl )
@@ -99,8 +108,14 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
                                                      (SwTxtFmtColl*)pFmtColl );
     // ist das Format ueberhaupt noch vorhanden?
     if( USHRT_MAX != nPos )
+    {
+        // --> OD 2008-04-15 #refactorlists#
         rUndoIter.GetDoc().SetTxtFmtColl( *rUndoIter.pAktPam,
-                                        (SwTxtFmtColl*)pFmtColl );
+                                          (SwTxtFmtColl*)pFmtColl,
+                                          mbReset,
+                                          mbResetListAttrs );
+        // <--
+    }
 
     rUndoIter.pLastUndoObj = this;
 }
