@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtcol.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,44 +53,85 @@ TYPEINIT1( SwCollCondition, SwClient );
 
 SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 
-
-// --> OD 2006-11-22 #i71574#
-void TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
-                                        SwFmt* pFmt,
-                                        const SwNumRuleItem* pNewNumRuleItem )
+// --> OD 2008-03-04 #refactorlists#
+namespace TxtFmtCollFunc
 {
-    SwTxtFmtColl* pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pFmt);
-    if ( !pTxtFmtColl )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        ASSERT( false,
-                "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
-#endif
-        return;
-    }
 
-    // --> OD 2007-01-24 #i73790#
-//    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
-    if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
-         pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
-    // <--
+    // --> OD 2006-11-22 #i71574#
+    void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
+                                            SwFmt* pFmt,
+                                            const SwNumRuleItem* pNewNumRuleItem )
     {
-        if ( !pNewNumRuleItem )
+        SwTxtFmtColl* pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pFmt);
+        if ( !pTxtFmtColl )
         {
-            pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNewNumRuleItem );
+    #if OSL_DEBUG_LEVEL > 1
+            ASSERT( false,
+                    "<TxtFmtCollFunc::CheckTxtFmtCollFuncForDeletionOfAssignmentToOutlineStyle> - misuse of method - it's only for instances of <SwTxtFmtColl>" );
+    #endif
+            return;
         }
-        if ( pNewNumRuleItem )
+
+        // --> OD 2007-01-24 #i73790#
+    //    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+        if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
+             pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
+        // <--
         {
-            String sNumRuleName = pNewNumRuleItem->GetValue();
-            if ( sNumRuleName.Len() == 0 ||
-                 sNumRuleName != pTxtFmtColl->GetDoc()->GetOutlineNumRule()->GetName() )
+            if ( !pNewNumRuleItem )
             {
-                // delete assignment of paragraph style to list level of outline style.
-                pTxtFmtColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNewNumRuleItem );
+            }
+            if ( pNewNumRuleItem )
+            {
+                String sNumRuleName = pNewNumRuleItem->GetValue();
+                if ( sNumRuleName.Len() == 0 ||
+                     sNumRuleName != pTxtFmtColl->GetDoc()->GetOutlineNumRule()->GetName() )
+                {
+                    // delete assignment of paragraph style to list level of outline style.
+                    pTxtFmtColl->DeleteAssignmentToListLevelOfOutlineStyle();
+                }
             }
         }
     }
-}
+    // <--
+
+    SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl )
+    {
+        SwNumRule* pNumRule( 0 );
+
+        const SwNumRuleItem* pNumRuleItem( 0 );
+        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, FALSE, (const SfxPoolItem**)&pNumRuleItem );
+        if ( pNumRuleItem )
+        {
+            const String sNumRuleName = pNumRuleItem->GetValue();
+            if ( sNumRuleName.Len() > 0 )
+            {
+                pNumRule = rTxtFmtColl.GetDoc()->FindNumRulePtr( sNumRuleName );
+            }
+        }
+
+        return pNumRule;
+    }
+
+    void AddToNumRule( SwTxtFmtColl& rTxtFmtColl )
+    {
+        SwNumRule* pNumRule = GetNumRule( rTxtFmtColl );
+        if ( pNumRule )
+        {
+            pNumRule->AddParagraphStyle( rTxtFmtColl );
+        }
+    }
+
+    void RemoveFromNumRule( SwTxtFmtColl& rTxtFmtColl )
+    {
+        SwNumRule* pNumRule = GetNumRule( rTxtFmtColl );
+        if ( pNumRule )
+        {
+            pNumRule->RemoveParagraphStyle( rTxtFmtColl );
+        }
+    }
+} // end of namespace TxtFmtCollFunc
 // <--
 
 /*
@@ -232,7 +273,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             }
             if( bChg )
             {
-                SetAttr( aNew );
+                SetFmtAttr( aNew );
                 bWeiter = 0 != pOldChgSet || bNewParent;
             }
             // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
@@ -264,7 +305,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         }
         if( bChg )
         {
-            SetAttr( aNew );
+            SetFmtAttr( aNew );
             bWeiter = 0 != pOldChgSet || bNewParent;
         }
         // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
@@ -300,7 +341,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                                 pOldFSize->GetPropUnit() );
                 if( nTmp != aNew.GetHeight() )
                 {
-                    SetAttr( aNew );
+                    SetFmtAttr( aNew );
                     bWeiter = 0 != pOldChgSet || bNewParent;
                 }
                 // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
@@ -325,6 +366,62 @@ BOOL SwTxtFmtColl::IsAtDocNodeSet() const
 
     return FALSE;
 }
+
+// --> OD 2008-03-04 #refactorlists#
+BOOL SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
+{
+    const bool bIsNumRuleItem = rAttr.Which() == RES_PARATR_NUMRULE;
+    if ( bIsNumRuleItem )
+    {
+        TxtFmtCollFunc::RemoveFromNumRule( *this );
+    }
+
+    const BOOL bRet = SwFmtColl::SetFmtAttr( rAttr );
+
+    if ( bIsNumRuleItem )
+    {
+        TxtFmtCollFunc::AddToNumRule( *this );
+    }
+
+    return bRet;
+}
+
+BOOL SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
+{
+    const bool bIsNumRuleItemAffected =
+                rSet.GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET;
+    if ( bIsNumRuleItemAffected )
+    {
+        TxtFmtCollFunc::RemoveFromNumRule( *this );
+    }
+
+    const BOOL bRet = SwFmtColl::SetFmtAttr( rSet );
+
+    if ( bIsNumRuleItemAffected )
+    {
+        TxtFmtCollFunc::AddToNumRule( *this );
+    }
+
+    return bRet;
+}
+
+BOOL SwTxtFmtColl::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
+{
+    const bool bIsNumRuleItemAffected =
+                ( nWhich2 != 0 && nWhich2 > nWhich1 )
+                ? ( nWhich1 <= RES_PARATR_NUMRULE &&
+                    RES_PARATR_NUMRULE <= nWhich2 )
+                : nWhich1 == RES_PARATR_NUMRULE;
+    if ( bIsNumRuleItemAffected )
+    {
+        TxtFmtCollFunc::RemoveFromNumRule( *this );
+    }
+
+    const BOOL bRet = SwFmtColl::ResetFmtAttr( nWhich1, nWhich2 );
+
+    return bRet;
+}
+// <--
 
 // --> OD 2007-01-24 #i73790#
 USHORT SwTxtFmtColl::ResetAllFmtAttr()
