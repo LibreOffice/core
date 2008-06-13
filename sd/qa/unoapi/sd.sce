@@ -19,5 +19,5 @@
 -o sd.SdXCustomPresentationAccess
 #i84994# -o sd.SdXImpressDocument
 -o sd.SdXPresentation
--o sd.SdXShape
+#i87746 -o sd.SdXShape
 
