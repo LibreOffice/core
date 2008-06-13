@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagefrm.hxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -532,7 +532,7 @@ inline BOOL SwPageFrm::IsInvalidFly() const
 
 #define GETGRID( pPage ) const SwTextGridItem *pGrid = NULL; \
  {if( pPage && pPage->HasGrid() && GRID_NONE==(pGrid=(SwTextGridItem*)&pPage->\
-     GetPageDesc()->GetMaster().GetAttr(RES_TEXTGRID))->GetGridType() ) \
+     GetPageDesc()->GetMaster().GetFmtAttr(RES_TEXTGRID))->GetGridType() ) \
     pGrid = NULL;}
 
 #define GETGRIDWIDTH( pGrid , pDoc )  pDoc->IsSquaredPageMode() ? \
