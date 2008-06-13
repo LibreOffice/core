@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsort.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -668,11 +668,11 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
             {
                 pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
-                if( pTFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
-                    pTFmt->ResetAttr( RES_VERT_ORIENT );
+                if( pTFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
+                    pTFmt->ResetFmtAttr( RES_VERT_ORIENT );
 
                 if( pSSet )
-                    pTFmt->SetAttr( *pSSet );
+                    pTFmt->SetFmtAttr( *pSSet );
                 pTFmt->UnlockModify();
             }
         }
@@ -716,11 +716,11 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, USHORT nS, USHORT nT,
             {
                 pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
-                if( pTFmt->ResetAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
-                    pTFmt->ResetAttr( RES_VERT_ORIENT );
+                if( pTFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
+                    pTFmt->ResetFmtAttr( RES_VERT_ORIENT );
 
                 if( pSSet )
-                    pTFmt->SetAttr( *pSSet );
+                    pTFmt->SetFmtAttr( *pSSet );
                 pTFmt->UnlockModify();
             }
         }
