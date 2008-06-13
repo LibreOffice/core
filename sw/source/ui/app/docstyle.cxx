@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docstyle.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -424,6 +424,9 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
     aCoreSet(GetPool().GetPool(),
             RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,
+            // --> OD 2008-02-25 #refactorlists#
+            RES_PARATR_LIST_BEGIN,  RES_PARATR_LIST_END - 1,
+            // <--
             RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,
             RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,
             SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,
@@ -1131,7 +1134,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
 // --> OD 2008-02-12 #newlistlevelattrs#
 // handling of parameter <bResetIndentAttrsAtParagraphStyle>
 void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
-                                    const bool bResetIndentAttrsAtParagraphStyle )
+                                  const bool bResetIndentAttrsAtParagraphStyle )
 {
     // gegebenenfalls Format erst ermitteln
     if(!bPhysical)
@@ -1234,6 +1237,28 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
             }
             // <--
+
+            // #i56252: If a standard numbering style is assigned to a standard paragraph style
+            // we have to create a physical instance of the numbering style. If we do not and
+            // neither the paragraph style nor the numbering style is used in the document
+            // the numbering style will not be saved with the document and the assignment got lost.
+            const SfxPoolItem* pNumRuleItem = 0;
+            if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pNumRuleItem ) )
+            {   // Setting a numbering rule?
+                String sNumRule = ((SwNumRuleItem*)pNumRuleItem)->GetValue();
+                if( sNumRule.Len() )
+                {
+                    SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
+                    if( !pRule )
+                    {   // Numbering rule not in use yet.
+                        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+                        if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
+                        {
+                            pRule = rDoc.GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
+                        }
+                    }
+                }
+            }
 
             pFmt = pColl;
 
@@ -1355,25 +1380,6 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         }
         SfxItemSet aSet(rSet);
         aSet.ClearInvalidItems();
-
-        // #i56252: If a standard numbering style is assigned to a standard paragraph style
-        // we have to create a physical instance of the numbering style. If we do not and
-        // neither the paragraph style nor the numbering style is used in the document
-        // the numbering style will not be saved with the document and the assignment got lost.
-        if( SFX_ITEM_SET == aSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) )
-        {   // Setting a numbering rule?
-            String sNumRule = ((SwNumRuleItem*)pItem)->GetValue();
-            if( sNumRule.Len() )
-            {
-                SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
-                if( !pRule )
-                {   // Numbering rule not in use yet.
-                    USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
-                    if( USHRT_MAX != nPoolId ) // It's a standard numbering rule
-                        rDoc.GetNumRuleFromPool( nPoolId ); // Create numbering rule (physical)
-                }
-            }
-        }
 
         aCoreSet.ClearItem();
 
@@ -2203,7 +2209,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
             if( pSourceFmt )
                 pTargetFmt->DelDiffs( *pSourceFmt );
             else if( USHRT_MAX != nPgDscPos )
-                pTargetFmt->ResetAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
+                pTargetFmt->ResetFmtAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
             else
             {
                 // --> OD 2007-01-25 #i73790# - method renamed
