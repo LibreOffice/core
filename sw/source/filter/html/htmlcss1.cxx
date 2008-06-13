@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlcss1.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -234,7 +234,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
         }
     }
 
-    pCharFmt->SetAttr( rItemSet );
+    pCharFmt->SetFmtAttr( rItemSet );
 
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, FALSE, &pItem ) )
     {
@@ -243,7 +243,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 
         SvxBrushItem aBrushItem( *(const SvxBrushItem *)pItem );
         aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
-        pCharFmt->SetAttr( aBrushItem );
+        pCharFmt->SetFmtAttr( aBrushItem );
     }
 }
 
@@ -364,7 +364,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
     pCSS1Parser->SetFmtBreak( rItemSet, rPropInfo );
 // /Feature: PrintExt
 
-    pColl->SetAttr( rItemSet );
+    pColl->SetFmtAttr( rItemSet );
 }
 
 void SwCSS1Parser::SetTableTxtColl( BOOL bHeader )
@@ -473,11 +473,11 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
                 SwPageDesc aNewPageDesc( *pPageDesc );
                 SwFrmFmt &rMaster = aNewPageDesc.GetMaster();
                 if( bSetBrush )
-                    rMaster.SetAttr( aBrushItem );
+                    rMaster.SetFmtAttr( aBrushItem );
                 if( bSetBox )
-                    rMaster.SetAttr( aBoxItem );
+                    rMaster.SetFmtAttr( aBoxItem );
                 if( bSetFrmDir )
-                    rMaster.SetAttr( aFrmDirItem );
+                    rMaster.SetFmtAttr( aFrmDirItem );
 
                 ChgPageDesc( pPageDesc, aNewPageDesc );
             }
@@ -515,11 +515,11 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
             if( rPropInfo.bRightMargin )
                 aLRItem.SetRight( pLRItem->GetRight() );
 
-            rMaster.SetAttr( aLRItem );
+            rMaster.SetFmtAttr( aLRItem );
         }
         else
         {
-            rMaster.SetAttr( *pItem );
+            rMaster.SetFmtAttr( *pItem );
         }
         bChanged = TRUE;
     }
@@ -540,11 +540,11 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
             if( rPropInfo.bBottomMargin )
                 aULItem.SetLower( pULItem->GetLower() );
 
-            rMaster.SetAttr( aULItem );
+            rMaster.SetFmtAttr( aULItem );
         }
         else
         {
-            rMaster.SetAttr( *pItem );
+            rMaster.SetFmtAttr( *pItem );
         }
         bChanged = TRUE;
     }
@@ -554,7 +554,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     {
         if( rPropInfo.eSizeType == SVX_CSS1_STYPE_TWIP )
         {
-            rMaster.SetAttr( SwFmtFrmSize( ATT_FIX_SIZE, rPropInfo.nWidth,
+            rMaster.SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE, rPropInfo.nWidth,
                                            rPropInfo.nHeight ) );
             bChanged = TRUE;
         }
@@ -574,7 +574,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
                 SwTwips nTmp = aFrmSz.GetHeight();
                 aFrmSz.SetHeight( aFrmSz.GetWidth() );
                 aFrmSz.SetWidth( nTmp );
-                rMaster.SetAttr( aFrmSz );
+                rMaster.SetFmtAttr( aFrmSz );
                 aNewPageDesc.SetLandscape( !bLandscape );
                 bChanged = TRUE;
             }
@@ -585,7 +585,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, FALSE, &pItem ) )
     {
         // eine Umrandung wird gesetzt
-        rMaster.SetAttr( *pItem );
+        rMaster.SetFmtAttr( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
         bChanged = TRUE;
     }
@@ -1118,7 +1118,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     (SVX_ADJUST_LEFT == rPropInfo.eFloat  ||
                      CSS1_SCRIPT_ALL == nScript) )
                 {
-                    pColl->SetAttr( aDrop );
+                    pColl->SetFmtAttr( aDrop );
                 }
             }
 
@@ -2441,7 +2441,7 @@ void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
                 SvxFontItem aFont( rFont.GetFamily(), rFont.GetFamilyName(),
                                    rFont.GetStyleName(), rFont.GetPitch(),
                                    eEnc, aWhichIds[i]);
-                rFmt.SetAttr( aFont );
+                rFmt.SetFmtAttr( aFont );
             }
         }
     }
