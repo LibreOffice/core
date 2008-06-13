@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlatr.cxx,v $
- * $Revision: 1.40 $
+ * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -481,10 +481,10 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             }
             for( sal_uInt16 i=0; i<4; i++ )
             {
-                const SfxPoolItem& rRef = pFmt->GetAttr( aWhichIds[nRef][i] );
+                const SfxPoolItem& rRef = pFmt->GetFmtAttr( aWhichIds[nRef][i] );
                 for( sal_uInt16 j=0; j<2; j++ )
                 {
-                    const SfxPoolItem& rSet = pFmt->GetAttr( aWhichIds[aSets[j]][i] );
+                    const SfxPoolItem& rSet = pFmt->GetFmtAttr( aWhichIds[aSets[j]][i] );
                     if( rSet != rRef )
                     {
                         if( !pItemSet )
@@ -541,7 +541,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         sal_uInt16 nWhichId =
             SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
         const SvxLanguageItem& rLang =
-            (const SvxLanguageItem&)pFmt->GetAttr( nWhichId );
+            (const SvxLanguageItem&)pFmt->GetFmtAttr( nWhichId );
         LanguageType eLang = rLang.GetLanguage();
         if( eLang != eDfltLang )
         {
@@ -559,7 +559,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             if( aWhichIds[i] != nWhichId )
             {
                 const SvxLanguageItem& rTmpLang =
-                    (const SvxLanguageItem&)pFmt->GetAttr(aWhichIds[i]);
+                    (const SvxLanguageItem&)pFmt->GetFmtAttr(aWhichIds[i]);
                 if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
@@ -624,9 +624,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNumbered = aNumInfo.IsNumbered();
         BYTE nLvl = aNumInfo.GetLevel();
 
-        ASSERT( pTxtNd->GetLevel() == nLvl,
+        ASSERT( pTxtNd->GetActualListLevel() == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        ASSERT( bNumbered == static_cast< BOOL >(pTxtNd->IsCounted()),
+        ASSERT( bNumbered == static_cast< BOOL >(pTxtNd->IsCountedInList()),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
@@ -637,9 +637,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             // - <nNumStart> has to contain the restart value, if the
             //   numbering is restarted at this text node. Value <USHRT_MAX>
             //   indicates, that no additional restart value has to be written.
-            if ( pTxtNd->IsRestart() )
+            if ( pTxtNd->IsListRestart() )
             {
-                nNumStart = static_cast< USHORT >(pTxtNd->GetStart());
+                nNumStart = static_cast< USHORT >(pTxtNd->GetActualListStartValue());
             }
             // <--
             DBG_ASSERT( rHWrt.nLastParaToken == 0,
@@ -3422,15 +3422,16 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_NUMRULE */            0, // Dummy:
 /* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
 /* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_DUMMY1 */             0, // Dummy:
-/* RES_PARATR_DUMMY2 */             0, // Dummy:
-/* RES_PARATR_DUMMY3 */             0, // Dummy:
-/* RES_PARATR_DUMMY4 */             0, // Dummy:
-/* RES_PARATR_DUMMY5 */             0, // Dummy:
-/* RES_PARATR_DUMMY6 */             0, // Dummy:
-/* RES_PARATR_DUMMY7 */             0, // Dummy:
-/* RES_PARATR_DUMMY8 */             0, // Dummy:
+/* RES_PARATR_FORBIDDEN_RULES */    0, // new
+/* RES_PARATR_VERTALIGN */          0, // new
+/* RES_PARATR_SNAPTOGRID*/          0, // new
+/* RES_PARATR_CONNECT_TO_BORDER */  0, // new
 
+/* RES_PARATR_LIST_ID */            0, // new
+/* RES_PARATR_LIST_LEVEL */         0, // new
+/* RES_PARATR_LIST_ISRESTART */     0, // new
+/* RES_PARATR_LIST_RESTARTVALUE */  0, // new
+/* RES_PARATR_LIST_ISCOUNTED */     0, // new
 
 /* RES_FILL_ORDER   */              0,
 /* RES_FRM_SIZE */                  0,
