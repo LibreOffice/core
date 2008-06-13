@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docedt.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,7 +226,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         aAnchor.SetAnchor( &aPos );
         pFmt->GetDoc()->GetSpzFrmFmts()->Insert(
                 pFmt, pFmt->GetDoc()->GetSpzFrmFmts()->Count() );
-        pFmt->SetAttr( aAnchor );
+        pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
         if( pCNd && pCNd->GetFrm( 0, 0, sal_False ) )
             pFmt->MakeFrms();
@@ -301,7 +301,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                     SwPosition aPos( rSttNdIdx );
                     SwFmtAnchor aAnchor( *pAnchor );
                     aAnchor.SetAnchor( &aPos );
-                    pFmt->SetAttr( aAnchor );
+                    pFmt->SetFmtAttr( aAnchor );
 //                  ((SwFmtAnchor*)pAnchor)->SetAnchor( &aPos );
                 }
             }
@@ -350,7 +350,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                 SwFmtAnchor aAnch( pFmt->GetAnchor() );
                 SwPosition aPos( rMkNdIdx );
                 aAnch.SetAnchor( &aPos );
-                pFmt->SetAttr( aAnch );
+                pFmt->SetFmtAttr( aAnch );
             }
             else
             {
@@ -1508,7 +1508,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                         sal_False, &pItem ) )
                         aSet.Put( *pItem );
                     if( aSet.Count() )
-                        pTxtNd->SwCntntNode::SetAttr( aSet );
+                        pTxtNd->SetAttr( aSet );
                 }
                 pOldTxtNd->FmtToTxtAttr( pTxtNd );
 
@@ -1566,7 +1566,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                     // nur die Zeichenattribute kopieren
                     SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFmtSetRange );
                     aTmpSet.Put( *pDelNd->GetpSwAttrSet() );
-                    pTxtNd->SwCntntNode::SetAttr( aTmpSet );
+                    pTxtNd->SetAttr( aTmpSet );
                 }
             }
 
@@ -2326,14 +2326,14 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,
                 sal_False, &pItem ) )
             {
-                pTableFmt->SetAttr( *pItem );
+                pTableFmt->SetFmtAttr( *pItem );
                 bSavePageDesc = sal_True;
             }
 
             if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
                 sal_False, &pItem ) )
             {
-                pTableFmt->SetAttr( *pItem );
+                pTableFmt->SetFmtAttr( *pItem );
                 bSavePageBreak = sal_True;
             }
         }
