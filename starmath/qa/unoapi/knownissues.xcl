@@ -1,3 +1,10 @@
 ### i23394 ###
 sm.XMLImporter::com::sun::star::xml::sax::XDocumentHandler
 sm.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
+
+### i88645 ###
+sm.XMLExporter::com::sun::star::document::XFilter
+
+#TEST#
+sm.SmEditAccessible::com::sun::star::accessibility::XAccessibleEventBroadcaster
+sm.SmGraphicAccessible::com::sun::star::accessibility::XAccessibleEventBroadcaster
