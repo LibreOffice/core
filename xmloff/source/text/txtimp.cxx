@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.cxx,v $
- * $Revision: 1.141 $
+ * $Revision: 1.142 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +101,10 @@
 #include "XMLNumberStylesImport.hxx"
 // --> OD 2006-10-12 #i69629#
 #include <com/sun/star/beans/XPropertyState.hpp>
+// <--
+
+// --> OD 2008-04-25 #refactorlists#
+#include <txtlists.hxx>
 // <--
 
 using ::rtl::OUString;
@@ -345,6 +349,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextListBlockAttrTokenMap[] =
             XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_CONTINUE_NUMBERING,
             XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING },
+    // --> OD 2008-04-22 #refactorlists#
+    { XML_NAMESPACE_TEXT, XML_ID,
+            XML_TOK_TEXT_LIST_BLOCK_ID },
+    { XML_NAMESPACE_TEXT, XML_CONTINUE_LIST,
+            XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST },
     XML_TOKEN_MAP_END
 };
 
@@ -444,6 +453,10 @@ XMLTextImportHelper::XMLTextImportHelper(
 ,   pPrevFrmNames( 0 )
 ,   pNextFrmNames( 0 )
 
+// --> OD 2008-04-25 #refactorlists#
+,   mpTextListsHelper( new XMLTextListsHelper() )
+// <--
+
 ,   pRenameMap( 0 )
 // --> OD 2006-10-12 #i69629#
 ,   mpOutlineStylesCandidates( 0 )
@@ -493,11 +506,47 @@ XMLTextImportHelper::XMLTextImportHelper(
 ,   sContent(RTL_CONSTASCII_USTRINGPARAM("Content"))
 ,   sServiceCombinedCharacters(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.CombinedCharacters"))
 ,   sNumberingStyleName(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName"))
+// --> OD 2008-04-23 #refactorlists#
+,   sPropNameDefaultListId(RTL_CONSTASCII_USTRINGPARAM("DefaultListId"))
+,   sPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"))
+// <--
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
     if( xCNSupplier.is() )
+    {
         xChapterNumbering = xCNSupplier->getChapterNumberingRules();
+        // --> OD 2008-05-15 #refactorlists#
+        if ( xChapterNumbering.is() )
+        {
+            Reference< XPropertySet > xNumRuleProps( xChapterNumbering, UNO_QUERY );
+            if ( xNumRuleProps.is() )
+            {
+                Reference< XPropertySetInfo > xNumRulePropSetInfo(
+                                            xNumRuleProps->getPropertySetInfo());
+                if ( xNumRulePropSetInfo.is() &&
+                     xNumRulePropSetInfo->hasPropertyByName( sPropNameDefaultListId) )
+                {
+                    ::rtl::OUString sListId;
+                    xNumRuleProps->getPropertyValue( sPropNameDefaultListId ) >>= sListId;
+                    DBG_ASSERT( sListId.getLength() != 0,
+                                "no default list id found at chapter numbering rules instance. Serious defect -> please inform OD." );
+                    if ( sListId.getLength() )
+                    {
+                        Reference< XNamed > xChapterNumNamed( xChapterNumbering, UNO_QUERY );
+                        if ( xChapterNumNamed.is() )
+                        {
+                            mpTextListsHelper->KeepListAsProcessed(
+                                                    sListId,
+                                                    xChapterNumNamed->getName(),
+                                                    ::rtl::OUString() );
+                        }
+                    }
+                }
+            }
+        }
+        // <--
+    }
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
 //  DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
@@ -583,6 +632,10 @@ XMLTextImportHelper::~XMLTextImportHelper()
 
     delete pPrevFrmNames;
     delete pNextFrmNames;
+
+    // --> OD 2008-04-25 #refactorlists#
+    delete mpTextListsHelper;
+    // <--
     // --> OD 2006-10-12 #i69629#
     delete [] mpOutlineStylesCandidates;
     // <--
@@ -924,6 +977,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sStyleName = OUString();
     }
 
+    // --> OD 2008-05-13 #refactorlists#
+    // keep track of setting numbering level
+    bool bNumberingLevelSet( false );
+    // <--
     // --> OD 2007-08-17 #i80724#
     if ( bSetListAttrs && bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     // <--
@@ -934,8 +991,16 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         if( IsInList() )
         {
             XMLTextListBlockContext *pListBlock = GetListBlock();
+            // --> OD 2008-05-08 #refactorlists#
+            // consider text:style-override property of <text:list-item>
+//            Reference < XIndexReplace > xNewNumRules(
+//                pListBlock->GetNumRules());
+            XMLTextListItemContext* pListItem = GetListItem();
             Reference < XIndexReplace > xNewNumRules(
-                pListBlock->GetNumRules());
+                            pListItem != 0 && pListItem->HasNumRulesOverride()
+                            ? pListItem->GetNumRulesOverride()
+                            : pListBlock->GetNumRules() );
+            // <--
 
             sal_Bool bSameNumRules = xNewNumRules == xNumRules;
             if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
@@ -979,8 +1044,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 }
             }
 
-            XMLTextListItemContext *pListItem = GetListItem();
-
             sal_Int8 nLevel = (sal_Int8)pListBlock->GetLevel();
             if( !pListItem &&
                 xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
@@ -989,6 +1052,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
 
             xPropSet->setPropertyValue( sNumberingLevel, Any(nLevel) );
+            // --> OD 2008-05-13 #refactorlists#
+            bNumberingLevelSet = true;
+            // <--
 
             if( pListBlock->IsRestartNumbering() )
             {
@@ -1007,6 +1073,26 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 xPropSet->setPropertyValue(sNumberingStartValue,
                                            makeAny(pListItem->GetStartValue()));
             }
+            // --> OD 2008-04-23 #refactorlists#
+            if ( xPropSetInfo->hasPropertyByName( sPropNameListId ) )
+            {
+                const ::rtl::OUString sContinueListId( pListBlock->GetContinueListId() );
+                if ( sContinueListId.getLength() != 0 )
+                {
+                    xPropSet->setPropertyValue( sPropNameListId,
+                                                makeAny( sContinueListId ) );
+                }
+                else
+                {
+                    const ::rtl::OUString sListBlockListId( pListBlock->GetListId() );
+                    if ( sListBlockListId.getLength() != 0 )
+                    {
+                        xPropSet->setPropertyValue( sPropNameListId,
+                                                    makeAny( sListBlockListId ) );
+                    }
+                }
+            }
+            // <--
             SetListItem( (XMLTextListItemContext *)0 );
         }
         else
@@ -1114,24 +1200,28 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     // - DO NOT set numbering rule directly at the paragraph.
     if ( bPara && nOutlineLevel != -1 )
     {
-        // --> OD 2005-08-25 #i53198# - set the outline level at the paragraph.
-        {
-            const OUString sParaChapterNumberingLevel(
-                        RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel") );
-            xPropSet->setPropertyValue( sParaChapterNumberingLevel,
-                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
-        }
-        // <--
+        // --> OD 2008-05-28 #refactorlists# - no longer needed
+//        // --> OD 2005-08-25 #i53198# - set the outline level at the paragraph.
+//        {
+//            const OUString sParaChapterNumberingLevel(
+//                        RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel") );
+//            xPropSet->setPropertyValue( sParaChapterNumberingLevel,
+//                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+//        }
+//        // <--
         // --> OD 2005-09-01 #i53198# - set numbering level of the paragraph to
         // its outline level, if no numbering level is set.
         {
+            // --> OD 2008-05-13 #refactorlists#
             sal_Int16 nNumLevel = -1;
             xPropSet->getPropertyValue( sNumberingLevel ) >>= nNumLevel;
-            if ( nNumLevel == -1 )
+            if ( nNumLevel == -1 ||
+                 ( !bNumberingLevelSet && nNumLevel != (nOutlineLevel - 1) ) )
             {
                 xPropSet->setPropertyValue( sNumberingLevel,
                         makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
             }
+            // <--
         }
         // <--
         // --> OD 2006-10-13 #i69629# - correction:
@@ -2249,3 +2339,38 @@ void XMLTextImportHelper::ResetOpenRedlineId()
     OUString sEmpty;
     SetOpenRedlineId(sEmpty);
 }
+
+// --> OD 2008-04-25 #refactorlists#
+void XMLTextImportHelper::KeepListAsProcessed( ::rtl::OUString sListId,
+                                               ::rtl::OUString sListStyleName,
+                                               ::rtl::OUString sContinueListId )
+{
+    mpTextListsHelper->KeepListAsProcessed( sListId, sListStyleName, sContinueListId );
+}
+
+sal_Bool XMLTextImportHelper::IsListProcessed( const ::rtl::OUString sListId ) const
+{
+    return mpTextListsHelper->IsListProcessed( sListId );
+}
+
+::rtl::OUString XMLTextImportHelper::GetContinueListIdOfProcessedList(
+                                        const ::rtl::OUString sListId ) const
+{
+    return mpTextListsHelper->GetContinueListIdOfProcessedList( sListId );
+}
+
+const ::rtl::OUString& XMLTextImportHelper::GetLastProcessedListId() const
+{
+    return mpTextListsHelper->GetLastProcessedListId();
+}
+
+const ::rtl::OUString& XMLTextImportHelper::GetListStyleOfLastProcessedList() const
+{
+    return mpTextListsHelper->GetListStyleOfLastProcessedList();
+}
+
+::rtl::OUString XMLTextImportHelper::GenerateNewListId() const
+{
+    return mpTextListsHelper->GenerateNewListId();
+}
+// <--
