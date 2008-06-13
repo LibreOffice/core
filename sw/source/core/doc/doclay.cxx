@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doclay.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -184,10 +184,10 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                                          ? RES_POOLCOLL_FOOTERR
                                          : RES_POOLCOLL_FOOTER )
                                      ) ) );
-            pFmt->SetAttr( SwFmtCntnt( pSttNd ));
+            pFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
 
             if( pSet )      // noch ein paar Attribute setzen ?
-                pFmt->SetAttr( *pSet );
+                pFmt->SetFmtAttr( *pSet );
 
             // JP: warum zuruecksetzen ???  Doc. ist doch veraendert ???
             // bei den Fly auf jedenfall verkehrt !!
@@ -200,7 +200,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
         {
             pFmt = MakeDrawFrmFmt( aEmptyStr, GetDfltFrmFmt() );
             if( pSet )      // noch ein paar Attribute setzen ?
-                pFmt->SetAttr( *pSet );
+                pFmt->SetFmtAttr( *pSet );
 
             if( DoesUndo() )
             {
@@ -350,7 +350,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         if( pCntIdx )
         {
             SwNode *pNode = &pCntIdx->GetNode();
-            ((SwFmtCntnt&)pFmt->GetAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
+            ((SwFmtCntnt&)pFmt->GetFmtAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
             DeleteSection( pNode );
         }
 
@@ -454,7 +454,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     pDest->CopyAttrs( rSource );
 
     //Chains werden nicht kopiert.
-    pDest->ResetAttr( RES_CHAIN );
+    pDest->ResetFmtAttr( RES_CHAIN );
 
     if( bFly )
     {
@@ -470,8 +470,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         aIdx = *pSttNd;
         SwFmtCntnt aAttr( rSource.GetCntnt() );
         aAttr.SetNewCntntIdx( &aIdx );
-        pDest->SetAttr( aAttr );
-        pDest->SetAttr( rNewAnchor );
+        pDest->SetFmtAttr( aAttr );
+        pDest->SetFmtAttr( rNewAnchor );
 
         if( !mbCopyIsMove || this != pSrcDoc )
         {
@@ -537,7 +537,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
             }
         }
         else
-            pDest->SetAttr( rNewAnchor );
+            pDest->SetFmtAttr( rNewAnchor );
 
         if( DoesUndo() )
         {
@@ -632,7 +632,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
                         GetNodes().GetEndOfAutotext() );
     GetNodes().SectionDown( &aRange, SwFlyStartNode );
 
-    pFmt->SetAttr( SwFmtCntnt( rNode.StartOfSectionNode() ));
+    pFmt->SetFmtAttr( SwFmtCntnt( rNode.StartOfSectionNode() ));
 
 
     const SwFmtAnchor* pAnchor = 0;
@@ -644,10 +644,10 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         {
             SfxItemSet aTmpSet( *pFlySet );
             aTmpSet.ClearItem( RES_CNTNT );
-            pFmt->SetAttr( aTmpSet );
+            pFmt->SetFmtAttr( aTmpSet );
         }
         else
-            pFmt->SetAttr( *pFlySet );
+            pFmt->SetFmtAttr( *pFlySet );
     }
 
     // Anker noch nicht gesetzt ?
@@ -683,7 +683,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 //              FLY_AT_FLY == eAnchorId || FLY_AUTO_CNTNT == eAnchorId )
                 aAnch.SetAnchor( &rAnchPos );
         }
-        pFmt->SetAttr( aAnch );
+        pFmt->SetFmtAttr( aAnch );
     }
     else
         eAnchorId = pFmt->GetAnchor().GetAnchorId();
@@ -712,7 +712,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
                 aFmtSize.SetHeightSizeType( ATT_FIX_SIZE );
             }
         }
-        pFmt->SetAttr( aFmtSize );
+        pFmt->SetFmtAttr( aFmtSize );
     }
 
     // Frames anlegen
@@ -917,7 +917,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     {
         pFlyAttrSet->GetItemState( RES_ANCHOR, sal_False,
                                     (const SfxPoolItem**)&pAnchor );
-        pFmt->SetAttr( *pFlyAttrSet );
+        pFmt->SetFmtAttr( *pFlyAttrSet );
     }
 
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
@@ -947,7 +947,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         ::CheckControlLayer( &rDrawObj ) &&
         IsInHeaderFooter( *pChkIdx ) )
     {
-       pFmt->SetAttr( SwFmtAnchor( eAnchorId = FLY_PAGE ) );
+       pFmt->SetFmtAttr( SwFmtAnchor( eAnchorId = FLY_PAGE ) );
     }
     else if( !pAnchor || (bIsAtCntnt && !pAnchor->GetCntntAnchor() ))
     {
@@ -969,7 +969,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                 aAnch.SetType( eAnchorId );
             }
         }
-        pFmt->SetAttr( aAnch );
+        pFmt->SetFmtAttr( aAnch );
     }
 
     // bei als Zeichen gebundenen Draws das Attribut im Absatz setzen
@@ -1359,7 +1359,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                             SwFlyStartNode, pColl );
                 pNewSet->Put( SwFmtCntnt( pSttNd ));
 
-                pNewFmt->SetAttr( *pNewSet );
+                pNewFmt->SetFmtAttr( *pNewSet );
 
                 //Bei InCntnt's wird es spannend: Das TxtAttribut muss
                 //vernichtet werden. Leider reisst dies neben den Frms auch
@@ -1423,7 +1423,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 if( pUndo )
                     pUndo->SetFlys( *pOldFmt, *pNewSet, *pNewFmt );
                 else
-                    pOldFmt->SetAttr( *pNewSet );
+                    pOldFmt->SetFmtAttr( *pNewSet );
 
                 delete pNewSet;
 
@@ -1489,14 +1489,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             if ( bBefore )
             {
                 if ( !pNew->GetSwAttrSet().GetKeep().GetValue()  )
-                    pNew->SwCntntNode::SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
+                    pNew->SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
             }
             else
             {
                 SwTableNode *pNd = GetNodes()[nNdIdx]->GetStartNode()->GetTableNode();
                 SwTable &rTbl = pNd->GetTable();
                 if ( !rTbl.GetFrmFmt()->GetKeep().GetValue() )
-                    rTbl.GetFrmFmt()->SetAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
+                    rTbl.GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem( sal_True, RES_KEEP ) );
                 if ( pUndo )
                     pUndo->SetUndoKeep();
             }
@@ -1656,8 +1656,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(RES_SHADOW,sal_True))
         pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
 
-    pNewFmt->SetAttr( SwFmtCntnt( pSttNd ));
-    pNewFmt->SetAttr( *pNewSet );
+    pNewFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
+    pNewFmt->SetFmtAttr( *pNewSet );
 
     const SwFmtAnchor& rAnchor = pNewFmt->GetAnchor();
     if( FLY_IN_CNTNT == rAnchor.GetAnchorId() )
@@ -1711,7 +1711,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         pUndo->SetDrawObj( nLayerId );
     }
     else
-        pOldFmt->SetAttr( *pNewSet );
+        pOldFmt->SetFmtAttr( *pNewSet );
 
     delete pNewSet;
 
