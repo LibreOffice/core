@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docnew.cxx,v $
- * $Revision: 1.86 $
+ * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +43,6 @@
 #ifndef _SFXMACITEM_HXX //autogen
     #include <svtools/macitem.hxx>
 #endif
-#include <svtools/stylepool.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -118,6 +117,10 @@ using namespace ::com::sun::star;
 #include <pausethreadstarting.hxx>
 // <--
 #include <numrule.hxx>
+// --> OD 2008-03-13 #refactorlists#
+#include <list.hxx>
+#include <listfunc.hxx>
+// <--
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -198,13 +201,19 @@ SwDoc::SwDoc() :
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
     pNumRuleTbl( new SwNumRuleTbl ),
+    // --> OD 2008-03-26 #refactorlists#
+    maLists(),
+    maListStyleLists(),
+    // <--
     pRedlineTbl( new SwRedlineTbl ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
-    pStyleAccess( createStyleManager() ),
+    // --> OD 2008-03-07 #refactorlists#
+    pStyleAccess( 0 ),
+    // <--
     pLayoutCache( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
     aChartDataProviderImplRef(),
@@ -338,9 +347,9 @@ SwDoc::SwDoc() :
         GetPageDescFromPool( RES_POOLPAGE_STANDARD );
 
         //Leere Seite Einstellen.
-    pEmptyPageFmt->SetAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
+    pEmptyPageFmt->SetFmtAttr( SwFmtFrmSize( ATT_FIX_SIZE ) );
         //BodyFmt fuer Spalten Einstellen.
-    pColumnContFmt->SetAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
+    pColumnContFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ) );
 
     _InitFieldTypes();
 
@@ -387,6 +396,17 @@ SwDoc::SwDoc() :
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
     pNew = new SwTOXType(TOX_AUTHORITIES,           pShellRes->aTOXAuthoritiesName   );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
+
+    // --> OD 2008-03-07 #refactorlists#
+    // pass empty item set containing the paragraph's list attributes
+    // as ignorable items to the stype manager.
+    {
+        SfxItemSet aIgnorableParagraphItems( GetAttrPool(),
+                                             RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+                                             0 );
+        pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
+    }
+    // <--
 
     ResetModified();
 }
@@ -593,6 +613,20 @@ SwDoc::~SwDoc()
     delete pDfltGrfFmtColl;
     delete pNumRuleTbl;
 
+    // --> OD 2008-03-26 #refactorlists#
+    {
+        for ( std::hash_map< String, SwList*, StringHash >::iterator
+                                                    aListIter = maLists.begin();
+              aListIter != maLists.end();
+              ++aListIter )
+        {
+            delete (*aListIter).second;
+        }
+        maLists.clear();
+    }
+    maListStyleLists.clear();
+    // <--
+
     delete pPrtData;
     delete pBookmarkTbl;
     delete pNumberFormatter;
@@ -742,7 +776,7 @@ void SwDoc::ClearDoc()
     if( pLayout )
     {
         // set the layout to the dummy pagedesc
-        pFirstNd->SwCntntNode::SetAttr( SwFmtPageDesc( pDummyPgDsc ));
+        pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
         ::PaMCorrAbs( aSttIdx, SwNodeIndex( GetNodes().GetEndOfContent() ),
