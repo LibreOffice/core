@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outmap.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1097,6 +1097,17 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
     {
         return basegfx::B2DHomMatrix();
     }
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DHomMatrix OutputDevice::ImplGetDeviceTransformation() const
+{
+    basegfx::B2DHomMatrix aTransformation = GetViewTransformation();
+    // TODO: is it worth to cache the transformed result?
+    if( mnOutOffX || mnOutOffY )
+        aTransformation.translate( mnOutOffX, mnOutOffY );
+    return aTransformation;
 }
 
 // -----------------------------------------------------------------------
