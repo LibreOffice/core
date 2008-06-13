@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fmtcolfunc.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,5 +51,42 @@ namespace TxtFmtCollFunc
                                     SwFmt* pFmt,
                                     const SwNumRuleItem* pNewNumRuleItem = 0L );
 
+    /** determines the list style, which directly set at the given paragraph style
+
+        OD 2008-03-04 #refactorlists#
+
+        @author OD
+
+        @param rTxtFmtColl
+        input parameter - paragraph style for which the list style should be retrieved
+
+        @return pointer to <SwNumRule> instance, if the given paragraph style
+        has directly set a list style, 0 otherwise
+    */
+    SwNumRule* GetNumRule( SwTxtFmtColl& rTxtFmtColl );
+
+    /** adds the given paragraph style at the directly set list style
+
+        OD 2008-03-04 #refactorlists#
+        Note: If the given paragraph style has no directly set list style, nothing happens
+
+        @param rTxtFmtColl
+        input parameter - paragraph style which is added to its directly set list style
+
+        @author OD
+    */
+    void AddToNumRule( SwTxtFmtColl& rTxtFmtColl );
+
+    /** removes te given paragraph style from the directly set list style
+
+        OD 2008-03-04 #refactorlists#
+        Note: If the given paragraph style has no directly set list style, nothing happens
+
+        @param rTxtFmtColl
+        input parameter - paragraph style which is removed from its directly set list style
+
+        @author OD
+    */
+    void RemoveFromNumRule( SwTxtFmtColl& rTxtFmtColl );
 }
 #endif
