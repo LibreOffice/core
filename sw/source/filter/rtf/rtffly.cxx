@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: rtffly.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -276,7 +276,7 @@ void SwRTFParser::SetFlysInDoc()
 
                     SwIndex aIdx( pEndNd );
                     pEndNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
-                    pEndNd->SwCntntNode::SetAttr( aDropCap );
+                    pEndNd->SetAttr( aDropCap );
                 }
                 delete pFlySave;
                 continue;
@@ -450,7 +450,7 @@ void SwRTFParser::SetFlysInDoc()
         }
 
         SwFlyFrmFmt* pFmt = pDoc->MakeFlyFrmFmt( aEmptyStr, pParent );
-        pFmt->SetAttr( pFlySave->aFlySet );
+        pFmt->SetFmtAttr( pFlySave->aFlySet );
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         if( FLY_IN_CNTNT != rAnchor.GetAnchorId() )
         {
@@ -530,7 +530,7 @@ void SwRTFParser::SetFlysInDoc()
             frameEntry &rEntry = *aQIter;
             SwFlyFrmFmt *pFrm = rEntry.first;
             SwFmtAnchor &rAnchor = rEntry.second;
-            pFrm->SetAttr(rAnchor);
+            pFrm->SetFmtAttr(rAnchor);
         }
     }
 
