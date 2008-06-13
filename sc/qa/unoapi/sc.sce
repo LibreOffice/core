@@ -1,12 +1,12 @@
-### i84653 -o sc.ScPageObj
-### i84554 -o sc.AccessibleEditableTextPara_PreviewNote
--o sc.AccessibleEditableTextPara_HeaderFooter
+# i84653 -o sc.ScPageObj
+# i84554 -o sc.AccessibleEditableTextPara_PreviewNote
+# i88241 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
 -o sc.ScAccessibleCell
 -o sc.ScAccessibleCsvCell
-### i84726 -o sc.ScAccessibleCsvGrid
-### i84641 -o sc.ScAccessibleCsvRuler
--o sc.ScAccessibleDocument
+# i84726 -o sc.ScAccessibleCsvGrid
+# i84641 -o sc.ScAccessibleCsvRuler
+# i88330 -o sc.ScAccessibleDocument
 -o sc.ScAccessiblePageHeader
 -o sc.ScAccessiblePageHeaderArea
 -o sc.ScAccessiblePreviewCell
@@ -98,7 +98,7 @@
 -o sc.ScStyleObj
 -o sc.ScSubTotalDescriptorBase
 -o sc.ScSubTotalFieldObj
-### i84656 -o sc.ScTabViewObj
+# i84656 -o sc.ScTabViewObj
 -o sc.ScTableColumnObj
 -o sc.ScTableColumnsObj
 -o sc.ScTableConditionalEntry
@@ -111,12 +111,12 @@
 -o sc.ScTableSheetsObj
 -o sc.ScTableValidationObj
 -o sc.ScViewPaneObj
--o sc.XMLContentExporter
--o sc.XMLContentImporter
--o sc.XMLExporter
--o sc.XMLImporter
--o sc.XMLMetaExporter
--o sc.XMLMetaImporter
+#i89411 -o sc.XMLContentExporter
+#i89411 -o sc.XMLContentImporter
+#i89411 -o sc.XMLExporter
+#i89411 -o sc.XMLImporter
+#i89411 -o sc.XMLMetaExporter
+#i89411 -o sc.XMLMetaImporter
 -o sc.XMLSettingsExporter
 -o sc.XMLSettingsImporter
 -o sc.XMLStylesExporter
