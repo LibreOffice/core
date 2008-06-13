@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: recently_used_file_handler.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -237,8 +237,6 @@ namespace /* private */ {
     //########################################
     // thrown if we encounter xml tags that we do not know
     class unknown_xml_format_exception {};
-    // thrown if we encounter an end tag without matching start tag
-    class end_tag_without_start_tag_exception {};
 
     //########################################
     class recently_used_file_filter : public i_xml_parser_event_handler
@@ -269,8 +267,9 @@ namespace /* private */ {
 
         virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name)
         {
+            // check for end tags w/o start tag
             if( local_name != TAG_RECENT_FILES && NULL == item_ )
-                throw end_tag_without_start_tag_exception();
+                return; // will result in an XML parser error anyway
 
             if (named_command_map_.find(local_name) != named_command_map_.end())
                 (item_->*named_command_map_[local_name])(current_element_);
@@ -546,10 +545,6 @@ extern "C" void add_to_recently_used_file_list(const rtl::OUString& file_url, co
     catch(const unknown_xml_format_exception&)
     {
         OSL_ENSURE(false, "XML format unknown");
-    }
-    catch(const end_tag_without_start_tag_exception&)
-    {
-        OSL_ENSURE(false, "XML file damaged");
     }
 }
 
