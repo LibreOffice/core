@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLSectionExport.cxx,v $
- * $Revision: 1.47 $
+ * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +41,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -65,7 +64,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include "txtflde.hxx"
-#include "XMLTextNumRuleInfo.hxx"
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
