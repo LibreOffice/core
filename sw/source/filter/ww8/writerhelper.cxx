@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: writerhelper.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -594,11 +594,11 @@ namespace sw
         {
             const SwNumRule *pRule = 0;
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
                 0 != (pRule = rTxtNode.GetNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetLevel()) ));
+                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
             }
 
             ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
@@ -606,11 +606,11 @@ namespace sw
                 return 0;
 
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
                 0 != (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetLevel()) ));
+                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
             }
 
             return 0;
@@ -626,7 +626,7 @@ namespace sw
             const SwNumRule *pRule = 0;
 
             if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCountedInList() &&
                 0 != (pRule = rTxtNode.GetNumRule())
                )
             {
