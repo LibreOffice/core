@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optpage.cxx,v $
- * $Revision: 1.60 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -735,7 +735,7 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
         bDelete = TRUE;
     }
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
-    pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
                 aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
     if(bDelete)
     {
@@ -751,7 +751,7 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
     float fSize = (float)nHeight / 10;
     nHeight = CalcToUnit( fSize, SFX_MAPUNIT_TWIP );
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
-    pColl->SetAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
+    pColl->SetFmtAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
 }
 /*-----------------03.09.96 11.53-------------------
 
@@ -833,7 +833,7 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
             pWrtShell->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
                                 aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-            pColl->ResetAttr(nFontWhich);
+            pColl->ResetFmtAttr(nFontWhich);
             if(bDelete)
             {
                 delete (SfxFont*) pFnt;
@@ -847,7 +847,7 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& )
             float fSize = (float)aStandardHeightLB.GetValue() / 10;
             pWrtShell->SetDefault(SvxFontHeightItem( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), 100, nFontHeightWhich ) );
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-            pColl->ResetAttr(nFontHeightWhich);
+            pColl->ResetFmtAttr(nFontHeightWhich);
             bMod = TRUE;
         }
 
@@ -1006,7 +1006,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         USHORT nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE );
-        const SvxFontHeightItem& rFontHeightStandard = (const SvxFontHeightItem& )pColl->GetAttr(nFontHeightWhich);
+        const SvxFontHeightItem& rFontHeightStandard = (const SvxFontHeightItem& )pColl->GetFmtAttr(nFontHeightWhich);
         nStandardHeight = (sal_Int32)rFontHeightStandard.GetHeight();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
@@ -1014,7 +1014,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetAttr( nFontHeightWhich, sal_True );
+        const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, sal_True );
         nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
 
         USHORT nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
@@ -1026,7 +1026,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
         sShellList = sListBackup = rFontLS.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
         bListHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
 
@@ -1036,7 +1036,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellLabel = sCapBackup = rFontCP.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
         nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
         bLabelHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
 
@@ -1045,7 +1045,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetAttr(nFontHeightWhich, sal_True);
+        const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, sal_True);
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
         bIndexHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
     }
