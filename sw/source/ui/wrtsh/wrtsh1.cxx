@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtsh1.cxx,v $
- * $Revision: 1.70 $
+ * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1114,7 +1114,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 // of the outline numbering has to be activated or continued.
                 SwTxtNode* pTxtNode =
                             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
-                if ( pTxtNode && !pTxtNode->IsCounted() )
+                if ( pTxtNode && !pTxtNode->IsCountedInList() )
                 {
                     // check, if numbering of the outline level of the pararaph
                     // style is active. If not, activate this outline level.
@@ -1193,10 +1193,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
     // --> OD 2005-10-25 #b6340308#
     // Search for a previous numbering/bullet rule to continue it.
-    if (!pNumRule )
+    // --> OD 2008-03-18 #refactorlists#
+    String sContinuedListId;
+    if ( !pNumRule )
     {
-        pNumRule = GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(),
-                                           FALSE, bNum, FALSE, 0);
+        pNumRule = GetDoc()->SearchNumRule( *GetCrsr()->GetPoint(),
+                                            FALSE, bNum, FALSE, 0,
+                                            sContinuedListId );
         bContinueFoundNumRule = pNumRule != 0;
     }
     // <--
@@ -1217,7 +1220,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 // level, if outline numbering has to be activated.
                 sal_Int8 nLevel = bActivateOutlineRule
                              ? nActivateOutlineLvl
-                             : sal::static_int_cast<sal_Int8, sal_Int32>(pTxtNode->GetLevel());
+                             : sal::static_int_cast<sal_Int8, sal_Int32>(pTxtNode->GetActualListLevel());
                 // <--
 
                 if (nLevel < 0)
@@ -1246,7 +1249,8 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
         // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        SetCurNumRule( aNumRule, true );
+        // --> OD 2008-03-27 #refactorlists#
+        SetCurNumRule( aNumRule, false, sContinuedListId, true );
         // <--
     }
     else
@@ -1316,7 +1320,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
         // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        SetCurNumRule( aNumRule, true );
+        // --> OD 2008-03-17 #refactorlists#
+        // start new list
+        SetCurNumRule( aNumRule, true, String(), true );
         // <--
     }
 
@@ -1344,13 +1350,16 @@ void SwWrtShell::NumOrBulletOff()
 
             if (pTxtNode)
             {
-                sal_uInt16 nLevel = sal::static_int_cast<sal_uInt16, sal_Int32>(pTxtNode->GetLevel());
+                sal_uInt16 nLevel = sal::static_int_cast<sal_uInt16, sal_Int32>(pTxtNode->GetActualListLevel());
                 SwNumFmt aFmt(aNumRule.Get(nLevel));
 
                 aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
                 aNumRule.Set(nLevel, aFmt);
 
-                SetCurNumRule(aNumRule);
+                // --> OD 2008-03-17 #refactorlists#
+                // no start or continuation of a list - the outline style is only changed.
+                SetCurNumRule( aNumRule, false );
+                // <--
             }
         }
         else
@@ -1457,9 +1466,11 @@ SelectionType SwWrtShell::GetSelectionType() const
         const SwTxtNode* pTxtNd =
             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-        if ( pTxtNd )
+        // --> OD 2008-03-19 #refactorlists#
+        if ( pTxtNd && pTxtNd->IsInList() )
+        // <--
         {
-            const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetLevel()));
+            const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetActualListLevel()));
             if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
                 nCnt |= nsSelectionType::SEL_NUM;
         }
@@ -1626,7 +1637,7 @@ void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
     StartAction();
 
     ResetFlyFrmAttr( 0, &rStyleSet );
-    pFmt->SetAttr( rStyleSet );
+    pFmt->SetFmtAttr( rStyleSet );
 
     EndAction();
 }
