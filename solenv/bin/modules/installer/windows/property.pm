@@ -8,7 +8,7 @@
 #
 # $RCSfile: property.pm,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.27 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -278,6 +278,30 @@ sub set_important_properties
     if ( $installer::globals::sundirexists )
     {
         my $onepropertyline = "SUNDIREXISTS" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::officedirhostname )
+    {
+        my $onepropertyline = "OFFICEDIRHOSTNAME" . "\t" . $installer::globals::officedirhostname . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::basisdirhostname )
+    {
+        my $onepropertyline = "BASISDIRHOSTNAME" . "\t" . $installer::globals::basisdirhostname . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::uredirhostname )
+    {
+        my $onepropertyline = "UREDIRHOSTNAME" . "\t" . $installer::globals::uredirhostname . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+
+    if ( $installer::globals::sundirhostname )
+    {
+        my $onepropertyline = "SUNDIRHOSTNAME" . "\t" . $installer::globals::sundirhostname . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 
