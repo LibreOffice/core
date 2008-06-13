@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.hxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,31 +39,34 @@ namespace com { namespace sun { namespace star {
 } } }
 #include <sal/types.h>
 
-class SvXMLExport;
+class XMLTextListAutoStylePool;
 
+/** information about list and list style for a certain paragraph
+
+    OD 2008-04-24 #refactorlists#
+    Complete refactoring of the class and enhancement of the class for lists.
+    These changes are considered by method <XMLTextParagraphExport::exportListChange(..)>
+*/
 class XMLTextNumRuleInfo
 {
-    const ::rtl::OUString sNumberingRules;
-    const ::rtl::OUString sNumberingLevel;
-    const ::rtl::OUString sNumberingStartValue;
-    const ::rtl::OUString sParaIsNumberingRestart;
-    const ::rtl::OUString sNumberingType;
-    const ::rtl::OUString sIsNumbering;
-    const ::rtl::OUString sNumberingIsNumber;
-    const ::rtl::OUString sNumberingIsOutline;
-
-
+    // numbering rules instance and its name
     ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace > xNumRules;
+                        ::com::sun::star::container::XIndexReplace > mxNumRules;
+    ::rtl::OUString     msNumRulesName;
 
-    ::rtl::OUString     sName;
-    sal_Int16           nStartValue;
-    sal_Int16           nLevel;
+    // paragraph's list attributes
+    ::rtl::OUString     msListId;
+    sal_Int16           mnListStartValue;
+    sal_Int16           mnListLevel;
+    sal_Bool            mbIsNumbered;
+    sal_Bool            mbIsRestart;
 
-    sal_Bool            bIsNumbered;
-    sal_Bool            bIsOrdered;
-    sal_Bool            bIsRestart;
-    sal_Bool            bIsNamed;
+//    // numbering rules' attributes
+//    sal_Bool            mbIsOrdered;
+//    sal_Bool            mbIsNumRulesNamed;
+    // --> OD 2008-05-07 #refactorlists#
+    sal_Int16           mnListLevelStartValue;
+    // <--
 
     // --> OD 2006-09-27 #i69627#
     sal_Bool mbOutlineStyleAsNormalListStyle;
@@ -78,38 +81,78 @@ public:
     // --> OD 2006-09-27 #i69627#
     void Set( const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & rTextContnt,
-              const sal_Bool bOutlineStyleAsNormalListStyle );
+              const sal_Bool bOutlineStyleAsNormalListStyle,
+              const XMLTextListAutoStylePool& rListAutoPool );
     // <--
     inline void Reset();
 
-    const ::rtl::OUString& GetName() const { return sName; }
-    const ::com::sun::star::uno::Reference <
+    inline const ::rtl::OUString& GetNumRulesName() const
+    {
+        return msNumRulesName;
+    }
+    inline const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
-        { return xNumRules; }
-    sal_Int16 GetLevel() const { return nLevel; }
+    {
+        return mxNumRules;
+    }
+//    sal_Bool IsOrdered() const { return mbIsOrdered; }
+//    sal_Bool IsNamed() const { return mbIsNumRulesNamed; }
+    inline const sal_Int16 GetListLevelStartValue() const
+    {
+        return mnListLevelStartValue;
+    }
 
-    sal_Bool HasStartValue() const { return nStartValue != -1; }
-    sal_uInt32 GetStartValue() const { return nStartValue; }
+    inline const ::rtl::OUString& GetListId() const
+    {
+        return msListId;
+    }
 
-    sal_Bool IsNumbered() const { return bIsNumbered; }
-    sal_Bool IsOrdered() const { return bIsOrdered; }
-    sal_Bool IsRestart() const { return bIsRestart; }
-    sal_Bool IsNamed() const { return bIsNamed; }
+    inline sal_Int16 GetLevel() const
+    {
+        return mnListLevel;
+    }
 
-    sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const;
+    inline sal_Bool HasStartValue() const
+    {
+        return mnListStartValue != -1;
+    }
+    inline sal_uInt32 GetStartValue() const
+    {
+        return mnListStartValue;
+    }
+
+    inline sal_Bool IsNumbered() const
+    {
+        return mbIsNumbered;
+    }
+    inline sal_Bool IsRestart() const
+    {
+        return mbIsRestart;
+    }
+
+    sal_Bool BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const;
+
+    inline sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
+    {
+//        return ( mbIsNumRulesNamed && rCmp.mbIsNumRulesNamed )
+//               ? ( rCmp.msNumRulesName == msNumRulesName )
+//               : ( rCmp.mxNumRules == mxNumRules );
+        return rCmp.msNumRulesName == msNumRulesName;
+    }
 };
 
 inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
         const XMLTextNumRuleInfo& rInfo )
 {
-    sName = rInfo.sName;
-    xNumRules = rInfo.xNumRules;
-    nStartValue = rInfo.nStartValue;
-    nLevel = rInfo.nLevel;
-    bIsNumbered = rInfo.bIsNumbered;
-    bIsOrdered = rInfo.bIsOrdered;
-    bIsRestart = rInfo.bIsRestart;
-    bIsNamed = rInfo.bIsNamed;
+    msNumRulesName = rInfo.msNumRulesName;
+    mxNumRules = rInfo.mxNumRules;
+    msListId = rInfo.msListId;
+    mnListStartValue = rInfo.mnListStartValue;
+    mnListLevel = rInfo.mnListLevel;
+    mbIsNumbered = rInfo.mbIsNumbered;
+    mbIsRestart = rInfo.mbIsRestart;
+//    mbIsOrdered = rInfo.mbIsOrdered;
+//    mbIsNumRulesNamed = rInfo.mbIsNumRulesNamed;
     // --> OD 2006-09-27 #i69627#
     mbOutlineStyleAsNormalListStyle = rInfo.mbOutlineStyleAsNormalListStyle;
     // <--
@@ -119,15 +162,16 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
 
 inline void XMLTextNumRuleInfo::Reset()
 {
-    sName = ::rtl::OUString();
-    xNumRules = 0;
-    nStartValue = -1;
-    nLevel = 0;
+    mxNumRules = 0;
+    msNumRulesName = ::rtl::OUString();
+    msListId = ::rtl::OUString();
+    mnListStartValue = -1;
+    mnListLevel = 0;
     // --> OD 2006-09-27 #i69627#
 //    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed = sal_False;
-    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed =
+//    mbIsNumbered = mbIsOrdered = mbIsRestart = mbIsNumRulesNamed =
+    mbIsNumbered = mbIsRestart =
     mbOutlineStyleAsNormalListStyle = sal_False;
     // <--
 }
-
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
