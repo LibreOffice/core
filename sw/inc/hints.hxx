@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hints.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -248,25 +248,27 @@ public:
 };
 
 
-DECLARE_TABLE( SwTxtNodeTable, SwTxtNode* )
+// --> OD 2008-02-19 #refactorlists#
+//DECLARE_TABLE( SwTxtNodeTable, SwTxtNode* )
 
-class SwNumRuleInfo : public SwMsgPoolItem
-{
-    SwTxtNodeTable aList;
-    const String& rName;
-public:
-    SwNumRuleInfo( const String& rRuleName );
+//class SwNumRuleInfo : public SwMsgPoolItem
+//{
+//    SwTxtNodeTable aList;
+//    const String& rName;
+//public:
+//  SwNumRuleInfo( const String& rRuleName );
 
-    const String& GetName() const { return rName; }
-    void AddNode( SwTxtNode& rNd );
+//  const String& GetName() const { return rName; }
+//  void AddNode( SwTxtNode& rNd );
 
-    // erzeuge die Liste aller Nodes der NumRule in dem angegebenem Doc
-    // Der Code steht im docnum.cxx
-    // #111955#
-    void MakeList( SwDoc& rDoc, BOOL bOutline = FALSE );
+//  // erzeuge die Liste aller Nodes der NumRule in dem angegebenem Doc
+//  // Der Code steht im docnum.cxx
+//    // #111955#
+//  void MakeList( SwDoc& rDoc, BOOL bOutline = FALSE );
 
-    const SwTxtNodeTable& GetList() const { return aList; }
-};
+//    const SwTxtNodeTable& GetTxtNodeList() const { return aList; }
+//};
+// <--
 
 class SwNRuleLowerLevel : public SwMsgPoolItem
 {
