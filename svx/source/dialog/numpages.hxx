@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: numpages.hxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +89,6 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     SvxNumRule*             pSaveNum;
     USHORT                  nActNumLvl;
     BOOL                    bModified   : 1;
-    BOOL                    bHasChild   : 1;
     BOOL                    bPreset     : 1;
 
     String              sNumCharFmtName;
@@ -130,7 +129,6 @@ class SvxBulletPickTabPage : public SfxTabPage
     SvxNumRule*         pSaveNum;
     USHORT              nActNumLvl;
     BOOL                bModified   : 1;
-    BOOL                bHasChild   : 1;
     BOOL                bPreset     : 1;
     USHORT              nNumItemId;
 
@@ -225,7 +223,6 @@ class SvxBitmapPickTabPage : public SfxTabPage
     USHORT              nNumItemId;
     SfxMapUnit          eCoreUnit;
     BOOL                bModified   : 1;
-    BOOL                bHasChild   : 1;
     BOOL                bPreset     : 1;
 
     protected:
@@ -305,7 +302,6 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     Size                aInitSize[SVX_MAX_NUM];
 
-    BOOL                bHasChild           : 1;
     BOOL                bLastWidthModified  : 1;
     BOOL                bModified           : 1;
     BOOL                bPreset             : 1;
@@ -427,7 +423,6 @@ class SvxNumPositionTabPage : public SfxTabPage
     SfxMapUnit          eCoreUnit;
 
     BOOL                bModified           : 1;
-    BOOL                bHasChild           : 1;
     BOOL                bPreset             : 1;
     BOOL                bInInintControl     : 1;  //Modify-Fehler umgehen, soll ab 391 behoben sein
     // --> OD 2008-01-11 #newlistlevelattrs#
