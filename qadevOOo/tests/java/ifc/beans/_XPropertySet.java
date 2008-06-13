@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XPropertySet.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -284,6 +284,7 @@ public class _XPropertySet extends MultiMethodTest {
             tRes.tested("setPropertyValue()", true) ;
         } else {
             try {
+                log.println("try to cheange value of property '" + PTT.normal + "'" );
                 gValue = oObj.getPropertyValue(PTT.normal);
                 sValue = ValueChanger.changePValue(gValue);
                 oObj.setPropertyValue(PTT.normal, sValue);
@@ -478,11 +479,25 @@ public class _XPropertySet extends MultiMethodTest {
         String bound = "";
         String constrained = "";
         String normal = "";
+        // some properties should not be changed in a unspecific way
+        String[] skip = {"PrinterName", "CharRelief", "IsLayerMode"};
 
         for (int i = 0; i < properties.length; i++) {
 
             Property property = properties[i];
             String name = property.Name;
+
+            boolean cont = false;
+            for (int j = 0; j < skip.length; j++) {
+                if (name.equals(skip[j])){
+                    log.println("skipping '" + name + "'");
+                    cont = true;
+                }
+            }
+
+            if (cont) continue;
+
+            if (name.equals(oObj))
             log.println("Checking '"+name+"'");
             boolean isWritable = ((property.Attributes &
                 PropertyAttribute.READONLY) == 0);
