@@ -8,7 +8,7 @@
 #
 # $RCSfile: file.pm,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.23 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -242,6 +242,10 @@ sub get_file_component_name
     $componentname =~ s/_basicidecommands_/_baic_/g;
     $componentname =~ s/_genericcommands_/_genc_/g;
     $componentname =~ s/_bibliographycommands_/_bibc_/g;
+    $componentname =~ s/_share_/_s_/g;
+    $componentname =~ s/_modules_/_ms_/g;
+    $componentname =~ s/_uiconfig_zip_/_ucz_/g;
+    $componentname =~ s/_soffice_cfg_/_sc_/g;
 
     # All this is not necessary for files, which have the flag ASSIGNCOMPOMENT
 
