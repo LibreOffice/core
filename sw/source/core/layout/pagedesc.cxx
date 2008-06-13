@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: pagedesc.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +152,7 @@ void SwPageDesc::Mirror()
     aSet.Put( aMaster.GetShadow() );
     aSet.Put( aMaster.GetCol() );
     aSet.Put( aMaster.GetFrmDir() );    // #112217#
-    aLeft.SetAttr( aSet );
+    aLeft.SetFmtAttr( aSet );
 }
 
 void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
@@ -162,7 +162,7 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
     // --> OD 2007-01-25 #i73790# - method renamed
     rFmt.ResetAllFmtAttr();
     // <--
-    rFmt.SetAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
+    rFmt.SetFmtAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
 }
 
 /*************************************************************************
