@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: window2.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -604,7 +604,7 @@ void Window::InvertTracking( const Rectangle& rRect, USHORT nFlags )
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, FALSE, FALSE );
-            ImplSelectClipRegion( pGraphics, aRegion, this );
+            ImplSelectClipRegion( aRegion, pGraphics );
         }
     }
 
@@ -670,7 +670,7 @@ void Window::InvertTracking( const Polygon& rPoly, USHORT nFlags )
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
             ImplClipBoundaries( aRegion, FALSE, FALSE );
-            ImplSelectClipRegion( pGraphics, aRegion, this );
+            ImplSelectClipRegion( aRegion, pGraphics );
         }
     }
 
