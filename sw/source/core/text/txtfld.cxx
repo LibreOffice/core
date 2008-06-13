@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtfld.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -339,9 +339,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
 
     // hat ein "gueltige" Nummer ?
-    if( pTxtNd->IsNumbered() && pTxtNd->IsCounted())
+    if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
     {
-        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetLevel()) );
+        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         // --> OD 2008-01-23 #newlistlevelattrs#
