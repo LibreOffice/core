@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -66,15 +66,14 @@ SLOFILES =  \
         $(SLO)$/txatbase.obj \
         $(SLO)$/txatritr.obj \
         $(SLO)$/txtatr2.obj \
-                $(SLO)$/txtedt.obj \
-                $(SLO)$/txtnodenumattr.obj
-                
-        
+                $(SLO)$/txtedt.obj
+
+
 EXCEPTIONSFILES = \
         $(SLO)$/ndtxt.obj \
         $(SLO)$/thints.obj \
                 $(SLO)$/txtedt.obj
-        
+
 
 .IF "$(dbutil)" != ""
 OFILES+=$(SLO)$/dbchratr.$(QBJX)
