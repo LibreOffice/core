@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.159 $
+ * $Revision: 1.160 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -4302,7 +4302,11 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 case SFX_STYLE_FAMILY_PSEUDO:
                     if( !rSh.HasReadonlySel() )
                     {
-                        rSh.SetCurNumRule( *pApplyTempl->aColl.pNumRule );
+                        // --> OD 2008-03-17 #refactorlists#
+                        rSh.SetCurNumRule( *pApplyTempl->aColl.pNumRule,
+                                           false,
+                                           pApplyTempl->aColl.pNumRule->GetDefaultListId() );
+                        // <--
                         bCallBase = FALSE;
                         pApplyTempl->bUndo = TRUE;
                         if( pApplyTempl->aColl.pNumRule )
