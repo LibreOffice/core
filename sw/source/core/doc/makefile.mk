@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,8 @@ EXCEPTIONSFILES = \
     $(SLO)$/number.obj \
     $(SLO)$/swstylemanager.obj \
     $(SLO)$/tblcpy.obj \
-    $(SLO)$/tblrwcl.obj
+        $(SLO)$/tblrwcl.obj \
+        $(SLO)$/list.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/docbasic.obj \
