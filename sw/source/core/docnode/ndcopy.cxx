@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndcopy.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +58,7 @@
 #include <paratr.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
+#include <SwNodeNum.hxx>
 #ifdef PRODUCT
 #define CHECK_TABLE(t)
 #else
@@ -130,14 +131,6 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // ??? reicht das ??? was ist mit PostIts/Feldern/FeldTypen ???
     pCpyTxtNd->Copy( pTxtNd, SwIndex( pCpyTxtNd ), pCpyTxtNd->GetTxt().Len() );
 
-    // --> OD 2005-11-01 #i53235#
-    // --> OD 2005-11-02 #i51089 - TUNING#
-    if ( pCpyAttrNd->GetNum() && pCpyAttrNd->GetNum()->GetNumRule() )
-    {
-        pCpyAttrNd->CopyNumber(*pTxtNd);
-    }
-    // <--
-
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == pColl->Which() )
         pTxtNd->ChkCondColl();
@@ -204,7 +197,7 @@ BOOL lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
                 ULONG nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
                 ULONG nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
                 if( nNewIdx != nOldIdx )
-                    pBoxFmt->SetAttr( SwTblBoxNumFormat( nNewIdx ));
+                    pBoxFmt->SetFmtAttr( SwTblBoxNumFormat( nNewIdx ));
 
             }
         }
@@ -397,7 +390,7 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
         pSet->CopyToModify( rDestNd );
 
     if( aPgBrkSet.Count() )
-        rDestNd.SwCntntNode::SetAttr( aPgBrkSet );
+        rDestNd.SetAttr( aPgBrkSet );
 }
 
 
@@ -856,8 +849,11 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     BOOL bCopyBookmarks = TRUE;
     BOOL bStartIsTxtNode = 0 != pSttNd;
 
+    // --> OD 2008-03-18 #refactorlists#
+    String aDummy;
     const SwNumRule * pNumRuleToPropagate =
-        pDoc->SearchNumRule(rPos, FALSE, FALSE, TRUE, 0);
+        pDoc->SearchNumRule(rPos, FALSE, FALSE, TRUE, 0, aDummy);
+    // <--
 
     // Block, damit aus diesem gesprungen werden kann !!
     do {
@@ -883,17 +879,11 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 }
                 else if( !bOneNode || bColumnSel )
                 {
-                    BYTE nNumLevel = static_cast<BYTE>(pDestNd->GetLevel());
-
                     xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                     BOOL bDoesUndo = pDoc->DoesUndo();
                     pDoc->DoUndo( FALSE );
                     pDoc->SplitNode( rPos, false );
                     pDoc->DoUndo( bDoesUndo );
-
-                    // Nummerierung korrigieren, SplitNode erzeugt immer einen
-                    // neuen Level
-                    pDestNd->SetLevel(nNumLevel);
 
                     if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                     {
@@ -936,8 +926,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                 if (pAttrSet != NULL)
                 {
-                    aState = pAttrSet->GetItemState
-                        (RES_PARATR_NUMRULE, FALSE, &pItem);
+                    aState =
+                        pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
 
                     if (SFX_ITEM_SET == aState)
                         aNumRuleItem = *((SwNumRuleItem *) pItem);
@@ -960,15 +950,13 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     if( bCopyCollFmt )
                     {
                         pSttNd->CopyCollFmt( *pDestNd );
-                        pSttNd->CopyNumber(*pDestNd);
 
-
-                                       /* #107213# If only a part of one paragraph is copied
+                        /* #107213# If only a part of one paragraph is copied
                            restore the numrule at the destination. */
                         if (! lcl_MarksWholeNode(rPam))
                         {
                             if (SFX_ITEM_SET == aState)
-                                pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                                pDestNd->SetAttr(aNumRuleItem);
                             else
                                 pDestNd->ResetAttr(RES_PARATR_NUMRULE);
                         }
@@ -995,17 +983,12 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 // (and joined from undo)
                 bStartIsTxtNode = TRUE;
                 // splitte den TextNode, bei dem Eingefuegt wird.
-                BYTE nNumLevel = static_cast<BYTE>(pDestNd->GetLevel());
 
                 xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                 BOOL bDoesUndo = pDoc->DoesUndo();
                 pDoc->DoUndo( FALSE );
                 pDoc->SplitNode( rPos, false );
                 pDoc->DoUndo( bDoesUndo );
-
-                // Nummerierung korrigieren, SplitNode erzeugt immer einen
-                // neuen Level
-                pDestNd->SetLevel(nNumLevel);
 
                 if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                 {
@@ -1067,8 +1050,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
             if (pAttrSet != NULL)
             {
-                aState = pAttrSet->GetItemState
-                    (RES_PARATR_NUMRULE, FALSE, &pItem);
+                aState =
+                    pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem);
 
                 if (SFX_ITEM_SET == aState)
                     aNumRuleItem = *((SwNumRuleItem *) pItem);
@@ -1084,8 +1067,6 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             {
                 pEndNd->CopyCollFmt( *pDestNd );
 
-                pEndNd->CopyNumber(*pDestNd);
-
                 if (bOneNode)
                 {
                     /* #107213# If only a part of one paragraph is copied
@@ -1093,7 +1074,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     if ( ! lcl_MarksWholeNode(rPam))
                     {
                         if (SFX_ITEM_SET == aState)
-                            pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                            pDestNd->SetAttr(aNumRuleItem);
                         else
                             pDestNd->ResetAttr(RES_PARATR_NUMRULE);
                     }
@@ -1130,7 +1111,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             if( aBrkSet.Count() && 0 != ( pDestNd = pDoc->GetNodes()[
                     aCpyPam.GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode() ) )
             {
-                pDestNd->SwCntntNode::SetAttr( aBrkSet );
+                pDestNd->SetAttr( aBrkSet );
             }
         }
     } while( FALSE );
@@ -1246,13 +1227,13 @@ void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
     if ( !aSrc.GetNext() )
     {
         aSrc.SetNext( pDest );
-        pSrc->SetAttr( aSrc );
+        pSrc->SetFmtAttr( aSrc );
     }
     SwFmtChain aDest( pDest->GetChain() );
     if ( !aDest.GetPrev() )
     {
         aDest.SetPrev( pSrc );
-        pDest->SetAttr( aDest );
+        pDest->SetFmtAttr( aDest );
     }
 }
 
