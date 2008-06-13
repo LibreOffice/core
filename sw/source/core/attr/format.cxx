@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: format.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -440,7 +440,7 @@ BOOL SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 }
 
 
-BOOL SwFmt::SetAttr(const SfxPoolItem& rAttr )
+BOOL SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
 {
     if ( IsInCache() || IsInSwFntCache() )
     {
@@ -486,7 +486,7 @@ BOOL SwFmt::SetAttr(const SfxPoolItem& rAttr )
 }
 
 
-BOOL SwFmt::SetAttr( const SfxItemSet& rSet )
+BOOL SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 {
     if( !rSet.Count() )
         return FALSE;
@@ -536,7 +536,7 @@ BOOL SwFmt::SetAttr( const SfxItemSet& rSet )
 // Nimmt den Hint mit nWhich aus dem Delta-Array
 
 
-BOOL SwFmt::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
+BOOL SwFmt::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
 {
     if( !aSet.Count() )
         return FALSE;
