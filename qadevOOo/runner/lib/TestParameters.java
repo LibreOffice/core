@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TestParameters.java,v $
- * $Revision: 1.13 $
+ * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,9 +170,9 @@ public class TestParameters extends Hashtable {
 
     /*
      * This parameter contains the time which the office could use to close for
-     * itself before its destroyed. Default is 5000 ms
+     * itself before its destroyed. Default is 15000 ms
      */
-    public Integer OfficeCloseTimeOut = new Integer(5000);
+    public Integer OfficeCloseTimeOut = new Integer(15000);
 
     /**
      * Wraper around "get()" with some debug output
@@ -256,6 +256,10 @@ public class TestParameters extends Hashtable {
      */
     public TestParameters() {
         //fill the propertyset
+        String user = System.getProperty("user.name");
+        if ( user != null) {
+            ConnectionString = "pipe,name=" + user;
+        }
         put(PropertyName.CONNECTION_STRING,ConnectionString);
         put(PropertyName.TEST_BASE,TestBase);
         put(PropertyName.TEST_DOCUMENT_PATH,TestDocumentPath);
