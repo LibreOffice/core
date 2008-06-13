@@ -7,7 +7,11 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.hxx,v $
- * $Revision: 1.9 $
+<<<<<<< XMLTextNumRuleInfo.hxx
+ * $Revision: 1.10 $
+=======
+ * $Revision: 1.10 $
+>>>>>>> 1.6.266.4
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +53,15 @@ class XMLTextListAutoStylePool;
 */
 class XMLTextNumRuleInfo
 {
+    const ::rtl::OUString msNumberingRules;
+    const ::rtl::OUString msNumberingLevel;
+    const ::rtl::OUString msNumberingStartValue;
+    const ::rtl::OUString msParaIsNumberingRestart;
+    const ::rtl::OUString msNumberingIsNumber;
+    const ::rtl::OUString msNumberingIsOutline;
+    const ::rtl::OUString msPropNameListId;
+    const ::rtl::OUString msPropNameStartWith;
+
     // numbering rules instance and its name
     ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XIndexReplace > mxNumRules;
@@ -61,9 +74,7 @@ class XMLTextNumRuleInfo
     sal_Bool            mbIsNumbered;
     sal_Bool            mbIsRestart;
 
-//    // numbering rules' attributes
-//    sal_Bool            mbIsOrdered;
-//    sal_Bool            mbIsNumRulesNamed;
+    // numbering rules' attributes
     // --> OD 2008-05-07 #refactorlists#
     sal_Int16           mnListLevelStartValue;
     // <--
@@ -95,8 +106,6 @@ public:
     {
         return mxNumRules;
     }
-//    sal_Bool IsOrdered() const { return mbIsOrdered; }
-//    sal_Bool IsNamed() const { return mbIsNumRulesNamed; }
     inline const sal_Int16 GetListLevelStartValue() const
     {
         return mnListLevelStartValue;
@@ -134,9 +143,6 @@ public:
 
     inline sal_Bool HasSameNumRules( const XMLTextNumRuleInfo& rCmp ) const
     {
-//        return ( mbIsNumRulesNamed && rCmp.mbIsNumRulesNamed )
-//               ? ( rCmp.msNumRulesName == msNumRulesName )
-//               : ( rCmp.mxNumRules == mxNumRules );
         return rCmp.msNumRulesName == msNumRulesName;
     }
 };
@@ -151,8 +157,6 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     mnListLevel = rInfo.mnListLevel;
     mbIsNumbered = rInfo.mbIsNumbered;
     mbIsRestart = rInfo.mbIsRestart;
-//    mbIsOrdered = rInfo.mbIsOrdered;
-//    mbIsNumRulesNamed = rInfo.mbIsNumRulesNamed;
     // --> OD 2006-09-27 #i69627#
     mbOutlineStyleAsNormalListStyle = rInfo.mbOutlineStyleAsNormalListStyle;
     // <--
@@ -168,8 +172,6 @@ inline void XMLTextNumRuleInfo::Reset()
     mnListStartValue = -1;
     mnListLevel = 0;
     // --> OD 2006-09-27 #i69627#
-//    bIsNumbered = bIsOrdered = bIsRestart = bIsNamed = sal_False;
-//    mbIsNumbered = mbIsOrdered = mbIsRestart = mbIsNumRulesNamed =
     mbIsNumbered = mbIsRestart =
     mbOutlineStyleAsNormalListStyle = sal_False;
     // <--

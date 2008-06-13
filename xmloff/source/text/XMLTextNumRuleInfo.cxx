@@ -7,7 +7,11 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextNumRuleInfo.cxx,v $
- * $Revision: 1.15 $
+<<<<<<< XMLTextNumRuleInfo.cxx
+ * $Revision: 1.16 $
+=======
+ * $Revision: 1.16 $
+>>>>>>> 1.12.12.6
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,17 +56,23 @@ using namespace ::com::sun::star::style;
 // --> OD 2008-05-08 #refactorlists#
 // Complete refactoring of the class and enhancement of the class for lists.
 XMLTextNumRuleInfo::XMLTextNumRuleInfo()
-    : mxNumRules(),
-      msNumRulesName(),
-      msListId(),
-      mnListStartValue( -1 ),
-      mnListLevel( 0 ),
-      mbIsNumbered( sal_False ),
-      mbIsRestart( sal_False ),
-//      mbIsOrdered( sal_False ),
-//      mbIsNumRulesNamed( sal_False ),
-      mnListLevelStartValue( -1 ),
-      mbOutlineStyleAsNormalListStyle( sal_False )
+    : msNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"))
+    , msNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel"))
+    , msNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"))
+    , msParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"))
+    , msNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"))
+    , msNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
+    , msPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"))
+    , msPropNameStartWith(RTL_CONSTASCII_USTRINGPARAM("StartWith"))
+    , mxNumRules()
+    , msNumRulesName()
+    , msListId()
+    , mnListStartValue( -1 )
+    , mnListLevel( 0 )
+    , mbIsNumbered( sal_False )
+    , mbIsRestart( sal_False )
+    , mnListLevelStartValue( -1 )
+    , mbOutlineStyleAsNormalListStyle( sal_False )
 {
     Reset();
 }
@@ -83,16 +93,14 @@ void XMLTextNumRuleInfo::Set(
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     // check if this paragraph supports a numbering
-    const ::rtl::OUString sNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel"));
-    if( !xPropSetInfo->hasPropertyByName( sNumberingLevel ) )
+    if( !xPropSetInfo->hasPropertyByName( msNumberingLevel ) )
         return;
 
-    if( xPropSet->getPropertyValue( sNumberingLevel ) >>= mnListLevel )
+    if( xPropSet->getPropertyValue( msNumberingLevel ) >>= mnListLevel )
     {
-        const ::rtl::OUString sNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"));
-        if( xPropSetInfo->hasPropertyByName( sNumberingRules ) )
+        if( xPropSetInfo->hasPropertyByName( msNumberingRules ) )
         {
-            xPropSet->getPropertyValue( sNumberingRules ) >>= mxNumRules;
+            xPropSet->getPropertyValue( msNumberingRules ) >>= mxNumRules;
         }
     }
     else
@@ -104,17 +112,17 @@ void XMLTextNumRuleInfo::Set(
 
     // --> OD 2006-09-27 #i69627#
     bool bSuppressListStyle( false );
+    if ( mxNumRules.is() )
     {
         if ( !mbOutlineStyleAsNormalListStyle )
         {
             sal_Bool bIsOutline = sal_False;
             Reference<XPropertySet> xNumRulesProps(mxNumRules, UNO_QUERY);
-            const ::rtl::OUString sNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"));
             if ( xNumRulesProps.is() &&
                  xNumRulesProps->getPropertySetInfo()->
-                                    hasPropertyByName( sNumberingIsOutline ) )
+                                    hasPropertyByName( msNumberingIsOutline ) )
             {
-                xNumRulesProps->getPropertyValue( sNumberingIsOutline ) >>= bIsOutline;
+                xNumRulesProps->getPropertyValue( msNumberingIsOutline ) >>= bIsOutline;
                 bSuppressListStyle = bIsOutline ? true : false;
             }
         }
@@ -133,22 +141,21 @@ void XMLTextNumRuleInfo::Set(
                         "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance have to be named. Serious defect -> please inform OD." );
             if( xNamed.is() )
             {
-//                mbIsNumRulesNamed = sal_True;
                 msNumRulesName = xNamed->getName();
             }
         }
+        DBG_ASSERT( msNumRulesName.getLength() > 0,
+                    "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect -> please inform OD." );
 
-        const ::rtl::OUString sPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"));
-        if( xPropSetInfo->hasPropertyByName( sPropNameListId ) )
+        if( xPropSetInfo->hasPropertyByName( msPropNameListId ) )
         {
-            xPropSet->getPropertyValue( sPropNameListId ) >>= msListId;
+            xPropSet->getPropertyValue( msPropNameListId ) >>= msListId;
         }
 
         mbIsNumbered = sal_True;
-        const ::rtl::OUString sNumberingIsNumber(RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
-        if( xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
+        if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
         {
-            if( !(xPropSet->getPropertyValue( sNumberingIsNumber ) >>= mbIsNumbered ) )
+            if( !(xPropSet->getPropertyValue( msNumberingIsNumber ) >>= mbIsNumbered ) )
             {
                 OSL_ENSURE( false, "numbered paragraph without number info" );
                 mbIsNumbered = sal_False;
@@ -157,15 +164,13 @@ void XMLTextNumRuleInfo::Set(
 
         if( mbIsNumbered )
         {
-            const ::rtl::OUString sParaIsNumberingRestart(RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"));
-            if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
+            if( xPropSetInfo->hasPropertyByName( msParaIsNumberingRestart ) )
             {
-                xPropSet->getPropertyValue( sParaIsNumberingRestart ) >>= mbIsRestart;
+                xPropSet->getPropertyValue( msParaIsNumberingRestart ) >>= mbIsRestart;
             }
-            const ::rtl::OUString sNumberingStartValue(RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"));
-            if( xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
+            if( xPropSetInfo->hasPropertyByName( msNumberingStartValue ) )
             {
-                xPropSet->getPropertyValue( sNumberingStartValue ) >>= mnListStartValue;
+                xPropSet->getPropertyValue( msNumberingStartValue ) >>= mnListStartValue;
             }
         }
 
@@ -180,32 +185,24 @@ void XMLTextNumRuleInfo::Set(
         mxNumRules->getByIndex( mnListLevel ) >>= aProps;
 
         const PropertyValue* pPropArray = aProps.getConstArray();
-//        const ::rtl::OUString sNumberingType(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
-        const ::rtl::OUString sPropNameStartWith( RTL_CONSTASCII_USTRINGPARAM("StartWith") );
         sal_Int32 nCount = aProps.getLength();
         for( sal_Int32 i=0; i<nCount; i++ )
         {
           const PropertyValue& rProp = pPropArray[i];
 
-//          if( rProp.Name == sNumberingType )
-//          {
-//              sal_Int16 nType = 0;
-//              rProp.Value >>= nType;
-//              if( NumberingType::CHAR_SPECIAL != nType &&
-//                  NumberingType::BITMAP != nType )
-//              {
-//                    mbIsOrdered = sal_True;
-//              }
-//              break;
-//          }
-            if ( rProp.Name == sPropNameStartWith )
+            if ( rProp.Name == msPropNameStartWith )
             {
                 rProp.Value >>= mnListLevelStartValue;
+                break;
             }
         }
 
         // paragraph's list level range is [0..9] representing list levels [1..10]
         ++mnListLevel;
+    }
+    else
+    {
+        mnListLevel = 0;
     }
 }
 
