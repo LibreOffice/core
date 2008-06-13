@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ednumber.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,7 +187,7 @@ BOOL SwEditShell::HasNumber() const
         // special case: outline numbered, not counted paragraph
         if ( bResult &&
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
-             !pTxtNd->IsCounted() )
+             !pTxtNd->IsCountedInList() )
         {
             bResult = FALSE;
         }
@@ -213,9 +213,8 @@ BOOL SwEditShell::HasBullet() const
 }
 // <- #i29560#
 
-BOOL SwEditShell::DelNumRules()
+void SwEditShell::DelNumRules()
 {
-    BOOL bRet = TRUE;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
@@ -225,11 +224,13 @@ BOOL SwEditShell::DelNumRules()
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
-            bRet = bRet && GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
+        {
+            GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
+        }
         GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
-        bRet = GetDoc()->DelNumRules( *pCrsr );
+        GetDoc()->DelNumRules( *pCrsr );
 
     // rufe das AttrChangeNotify auf der UI-Seite. Sollte eigentlich
     // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
@@ -242,7 +243,6 @@ BOOL SwEditShell::DelNumRules()
 
     GetDoc()->SetModified();
     EndAllAction();
-    return bRet;
 }
 
 // Hoch-/Runterstufen
@@ -269,7 +269,7 @@ BOOL SwEditShell::NumUpDown( BOOL bDown )
 
     // --> FME 2005-09-19 #i54693# Update marked numbering levels
     if ( IsInFrontOfLabel() )
-        UpdateMarkedNumLevel();
+        UpdateMarkedListLevel();
     // <--
 
     CallChgLnk();
@@ -317,7 +317,10 @@ void SwEditShell::NumIndent(short nIndent, int nLevel, BOOL bRelative)
         aRule.Indent(nIndent, nLevel, -1, bRelative);
         // <--
 
-        SetCurNumRule(aRule);
+        // --> OD 2008-03-17 #refactorlists#
+        // no start of new list
+        SetCurNumRule( aRule, false );
+        // <--
     }
 
     EndAllAction();
@@ -335,7 +338,7 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
         int nLevel = -1;
-        int nReferenceLevel = pTxtNode->GetLevel();
+        int nReferenceLevel = pTxtNode->GetActualListLevel();
 
         if (! IsFirstOfNumRule(aPaM))
             nLevel = nReferenceLevel;
@@ -345,7 +348,9 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
 
         // --> OD 2005-02-18 #i42921# - 3rd parameter = false in order to
         // suppress setting of num rule at <aPaM>.
-        GetDoc()->SetNumRule( aPaM, aRule, sal_False );
+        // --> OD 2008-03-17 #refactorlists#
+        // do not apply any list
+        GetDoc()->SetNumRule( aPaM, aRule, false, String(), sal_False );
         // <--
     }
 
@@ -438,7 +443,7 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                         if (pNd->IsSectionNode() ||
                             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()) ||
                             ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
-                              ((SwTxtNode*)pNd)->GetLevel() > nUpperLevel ))
+                              ((SwTxtNode*)pNd)->GetActualListLevel() > nUpperLevel ))
                         {
                             ++nIdx;
                         }
@@ -520,15 +525,20 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
         SwNodePtr pNd = (SwNodePtr)&rNd;
         BOOL bFirst = TRUE;
         USHORT nPos;
-        BYTE nLvl(0);
+        int nLvl(0);
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
             --nPos;
 
         for( ; nPos < rOutlNd.Count(); ++nPos )
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
-            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
-                                    GetTxtColl()->GetOutlineLevel() );
+            // --> OD 2008-04-02 #refactorlists#
+//            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
+//                                    GetTxtColl()->GetOutlineLevel() );
+            int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();
+            ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
+                    "<SwEditShell::IsProtectedOutlinePara()>" );
+            // <--
             if( bFirst )
             {
                 nLvl = nTmpLvl;
@@ -608,14 +618,15 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 
         if (pTxtNd)
         {
-            bResult =  ! pTxtNd->IsCounted();
+            bResult =  ! pTxtNd->IsCountedInList();
         }
     }
 
     return bResult;
 }
 
-BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
+// --> OD 2008-02-29 #refactorlists# - removed <pHasChilds>
+BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
     BYTE nLevel = NO_NUMBERING;
@@ -632,52 +643,13 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
-        nLevel = static_cast<BYTE>(pTxtNd->GetLevel());
-        if( pHasChilds )
+        // --> OD 2008-05-09 #refactorlists#
+        const int nListLevelOfTxtNode( pTxtNd->GetActualListLevel() );
+        if ( nListLevelOfTxtNode >= 0 )
         {
-            *pHasChilds = FALSE;
-            // dann teste ob die NumSection noch weitere UnterEbenen hat:
-            // zuerst ueber alle TextNodes und falls da nichts gefunden
-            // wurde, ueber die Formate und deren GetInfo bis zu den Nodes
-
-            BYTE nLvl = GetRealLevel(nLevel);
-            if( nLvl + 1 < MAXLEVEL )
-            {
-                const String& rRule = pRule->GetName();
-                SwModify* pMod;
-                const SfxPoolItem* pItem;
-                USHORT i, nMaxItems = GetDoc()->GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-                for( i = 0; i < nMaxItems; ++i )
-                    if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-                        0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-                        ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-                        ((SwNumRuleItem*)pItem)->GetValue() == rRule &&
-                        pMod->IsA( TYPE( SwTxtNode )) &&
-                        ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() &&
-                        nLvl < ((SwTxtNode*)pMod)->GetLevel() )
-                    {
-                        *pHasChilds = TRUE;
-                        break;
-                    }
-
-                if( !*pHasChilds )
-                {
-                    SwNRuleLowerLevel aHnt( rRule, nLvl );
-                    for( i = 0; i < nMaxItems; ++i )
-                        if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-                            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-                            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-                            ((SwNumRuleItem*)pItem)->GetValue() == rRule &&
-                            pMod->IsA( TYPE( SwFmt )) &&
-                            !pMod->GetInfo( aHnt ))
-                        {
-                            *pHasChilds = TRUE;
-                            break;
-                        }
-                }
-
-            }
+            nLevel = static_cast<BYTE>( nListLevelOfTxtNode );
         }
+        // <--
     }
 
     return nLevel;
@@ -689,7 +661,10 @@ const SwNumRule* SwEditShell::GetCurNumRule() const
 }
 
 // OD 2008-02-08 #newlistlevelattrs# - add handling of parameter <bResetIndentAttrs>
+// --> OD 2008-03-17 #refactorlists#
 void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
+                                 const bool bCreateNewList,
+                                 const String sContinuedListId,
                                  const bool bResetIndentAttrs )
 {
     StartAllAction();
@@ -704,7 +679,10 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
           {
             aRangeArr.SetPam( n, aPam );
             // --> OD 2008-02-08 #newlistlevelattrs#
-            GetDoc()->SetNumRule( aPam, rRule, sal_True, bResetIndentAttrs );
+            // --> OD 2008-03-17 #refactorlists#
+            GetDoc()->SetNumRule( aPam, rRule,
+                                  bCreateNewList, sContinuedListId,
+                                  sal_True, bResetIndentAttrs );
             // <--
             GetDoc()->SetCounted( aPam, true );
           }
@@ -712,10 +690,16 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     }
     else
     {
+        GetDoc()->StartUndo( UNDO_START, NULL );
+
         // --> OD 2008-02-08 #newlistlevelattrs#
-        GetDoc()->SetNumRule( *pCrsr, rRule, sal_True, bResetIndentAttrs );
-        // <--
+        // --> OD 2008-03-17 #refactorlists#
+        GetDoc()->SetNumRule( *pCrsr, rRule,
+                              bCreateNewList, sContinuedListId,
+                              sal_True, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
+
+        GetDoc()->EndUndo( UNDO_END, NULL );
     }
 
     EndAllAction();
@@ -766,7 +750,7 @@ BOOL SwEditShell::IsNumRuleStart() const
     BOOL bResult = FALSE;
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
     if( pTxtNd )
-        bResult = pTxtNd->IsRestart() ? TRUE : FALSE;
+        bResult = pTxtNd->IsListRestart() ? TRUE : FALSE;
     return bResult;
 }
 
@@ -790,25 +774,33 @@ void SwEditShell::SetNodeNumStart( USHORT nStt )
     EndAllAction();
 }
 
-USHORT SwEditShell::IsNodeNumStart() const
+USHORT SwEditShell::GetNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
-    if( pTxtNd )
-        return static_cast<USHORT>(pTxtNd->GetStart());
-    return FALSE;
+    // --> OD 2008-02-28 #refactorlists#
+    // correction: check, if list restart value is set at text node and
+    // use new method <SwTxtNode::GetAttrListRestartValue()>.
+    // return USHRT_MAX, if no list restart value is found.
+    if ( pTxtNd && pTxtNd->HasAttrListRestartValue() )
+    {
+        return static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
+    }
+    return USHRT_MAX;
+    // <--
 }
 
 /*-- 26.08.2005 14:47:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const SwNumRule * SwEditShell::SearchNumRule(BOOL bForward,
-                                        BOOL bNum,
-                                        BOOL bOutline,
-                                        int nNonEmptyAllowed)
+// --> OD 2008-03-18 #refactorlists#
+const SwNumRule * SwEditShell::SearchNumRule( BOOL bForward,
+                                              BOOL bNum,
+                                              BOOL bOutline,
+                                              int nNonEmptyAllowed,
+                                              String& sListId )
 {
-    return GetDoc()->SearchNumRule(*(bForward ? GetCrsr()->End() : GetCrsr()->Start()),
-                                                 bForward, bNum, bOutline, nNonEmptyAllowed);
+    return GetDoc()->SearchNumRule( *(bForward ? GetCrsr()->End() : GetCrsr()->Start()),
+                                    bForward, bNum, bOutline, nNonEmptyAllowed,
+                                    sListId );
 }
-
-
-
+// <--
