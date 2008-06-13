@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docst.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +78,9 @@
 #include "app.hrc"
 #include <fmtui.hrc>
 #include "swabstdlg.hxx"
+// --> OD 2008-03-27 #refactorlists#
+#include <list.hxx>
+// <--
 
 using namespace ::com::sun::star;
 
@@ -870,7 +873,11 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
         {
             // --> OD 2008-02-08 #newlistlevelattrs#
             // reset indent attribute on applying list style
-            pSh->SetCurNumRule( *pStyle->GetNumRule(), true );
+            // --> OD 2008-03-17 #refactorlists#
+            // continue list of list style
+            const SwNumRule* pNumRule = pStyle->GetNumRule();
+            const String sListIdForStyle =pNumRule->GetDefaultListId();
+            pSh->SetCurNumRule( *pNumRule, false, sListIdForStyle, true );
             // <--
             break;
         }
@@ -999,7 +1006,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                     text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
                     aSet.ClearItem( RES_HORI_ORIENT );*/
 
-                pFrm->SetAttr( aSet );
+                pFrm->SetFmtAttr( aSet );
 
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
@@ -1132,7 +1139,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                     aSet.ClearItem( RES_HORI_ORIENT );
  */
 
-                pFrm->SetAttr( aSet );
+                pFrm->SetFmtAttr( aSet );
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
                 pCurrWrtShell->SetFrmFmt( pFrm );
