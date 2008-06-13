@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unnum.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
         SwTxtNode* pNd;
         if( ULONG_MAX != nSttSet &&
             0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ))
-                pNd->SetRestart( TRUE );
+                pNd->SetListRestart( TRUE );
         else
             pNd = 0;
 
@@ -156,9 +156,12 @@ void SwUndoInsNum::Redo( SwUndoIter& rUndoIter )
             rDoc.ReplaceNumRule( *rUndoIter.pAktPam->GetPoint(),
                                 sReplaceRule, aNumRule.GetName() );
         else
+        {
             // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            rDoc.SetNumRule( *rUndoIter.pAktPam, aNumRule );
+            // --> OD 2008-03-18 #refactorlists#
+            rDoc.SetNumRule( *rUndoIter.pAktPam, aNumRule, false );
             // <--
+        }
     }
 }
 
@@ -173,9 +176,12 @@ void SwUndoInsNum::Repeat( SwUndoIter& rUndoIter )
     if( nSttNode )
     {
         if( !sReplaceRule.Len() )
+        {
             // --> OD 2005-02-25 #i42921# - adapt to changed signature
-            rUndoIter.GetDoc().SetNumRule( *rUndoIter.pAktPam, aNumRule );
+            // --> OD 2008-03-18 #refactorlists#
+            rUndoIter.GetDoc().SetNumRule( *rUndoIter.pAktPam, aNumRule, false );
             // <--
+        }
     }
     else
         rUndoIter.GetDoc().ChgNumRuleFmts( aNumRule );
@@ -227,7 +233,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     {
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
         ASSERT( pNd, "wo ist der TextNode geblieben?" );
-        pNd->SetLevel(aLevels[ n ] );
+        pNd->SetAttrListLevel(aLevels[ n ] );
 
         if( pNd->GetCondFmtColl() )
             pNd->ChkCondColl();
@@ -258,7 +264,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
         USHORT nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
 
-        aLevels.Insert( static_cast<BYTE>(rNd.GetLevel()), nIns );
+        aLevels.Insert( static_cast<BYTE>(rNd.GetActualListLevel()), nIns );
     }
 }
 
@@ -371,7 +377,7 @@ void SwUndoNumOrNoNum::Undo( SwUndoIter& rUndoIter )
 
     if (NULL != pTxtNd)
     {
-        pTxtNd->SetCounted(mbOldNum);
+        pTxtNd->SetCountedInList(mbOldNum);
     }
 }
 
@@ -383,7 +389,7 @@ void SwUndoNumOrNoNum::Redo( SwUndoIter& rUndoIter )
 
     if (NULL != pTxtNd)
     {
-        pTxtNd->SetCounted(mbNewNum);
+        pTxtNd->SetCountedInList(mbNewNum);
     }
 }
 
@@ -414,8 +420,19 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
     nOldStt( USHRT_MAX ), nNewStt( nStt ), bSetSttValue( TRUE )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    if( pTxtNd )
-        nOldStt = static_cast<USHORT>(pTxtNd->GetStart());
+    if ( pTxtNd )
+    {
+        // --> OD 2008-02-28 #refactorlists#
+        if ( pTxtNd->HasAttrListRestartValue() )
+        {
+            nOldStt = static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
+        }
+        else
+        {
+            nOldStt = USHRT_MAX; // indicating, that the list restart value is not set
+        }
+        // <--
+    }
 }
 
 
