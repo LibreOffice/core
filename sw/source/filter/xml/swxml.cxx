@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swxml.cxx,v $
- * $Revision: 1.82 $
+ * $Revision: 1.83 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -455,11 +455,11 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
-                aCreatedDefaultOutlineStyles[ i ]->GetAttr( RES_PARATR_NUMRULE, FALSE );
+                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, FALSE );
             if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().Len() == 0 )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
-                aCreatedDefaultOutlineStyles[ i ]->SetAttr( aItem );
+                aCreatedDefaultOutlineStyles[ i ]->SetFmtAttr( aItem );
             }
         }
     }
