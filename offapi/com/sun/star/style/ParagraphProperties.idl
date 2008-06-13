@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ParagraphProperties.idl,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -426,18 +426,27 @@ published service ParagraphProperties
         [optional, property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
 
         //-------------------------------------------------------------------------
-        /** returns <TRUE/> if the numbering of a paragraph is a number but
-            has no symbol.
+        /** returns <FALSE/> if the paragraph is part of a numbering, but has no
+            numbering label.
 
+            <p>A paragraph is part of a numbering, if a style for a numbering is
+            set - see NumberingStyleName.</p>
             <p>If the paragraph is not part of a numbering the property is void.</p>
          */
         [optional, property, maybevoid] boolean NumberingIsNumber;
+
         //-------------------------------------------------------------------------
         /** the property determines if borders set at a paragraph are merged with the
-         previous paragraph.
+         next paragraph.
          <p>Borders are only merged if they are identical.</p>
          */
         [optional, property, maybevoid] boolean ParaIsConnectBorder;
+
+        //-------------------------------------------------------------------------
+        /** specifies the id of the list to which the paragraph belongs
+
+         */
+        [optional, property] string ListId;
 
 };
 
