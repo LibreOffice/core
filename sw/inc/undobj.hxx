@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj.hxx,v $
- * $Revision: 1.43 $
+ * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -596,10 +596,6 @@ public:
     OUT_UNDOBJ( ResetAttr )
 };
 
-// --> OD 2007-07-11 #i56253#
-struct TxtNodeNumberingAttrs;
-// <--
-
 class SwUndoFmtAttr : public SwUndo
 {
     friend class SwUndoDefaultAttr;
@@ -608,9 +604,6 @@ class SwUndoFmtAttr : public SwUndo
     ULONG nNode;
     const USHORT nFmtWhich;
     const BOOL bSaveDrawPt;
-    // --> OD 2007-07-11 #i56253#
-    ::std::vector<TxtNodeNumberingAttrs>* mpNumAttrsOfTxtNodes;
-    // <--
 
     int IsFmtInDoc( SwDoc* );       // ist das Attribut-Format noch im Doc ?
     void SaveFlyAnchor( BOOL bSaveDrawPt = FALSE );
@@ -624,21 +617,14 @@ class SwUndoFmtAttr : public SwUndo
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor( SwUndoIter& rIter );
     // <--
-    // --> OD 2007-07-11 #i56253#
-    // add parameter <rAffectedItemSet>
-    void Init( const SfxItemSet& rAffectedItems );
-    // <--
-
-    // --> OD 2007-07-11 #i56253#
-    ::std::vector<TxtNodeNumberingAttrs>* GetActualNumAttrsOfTxtNodes( const SfxItemSet* pAffectedItems = 0 );
+    // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
+    void Init();
     // <--
 
 public:
     // meldet sich im Format an und sichert sich die alten Attribute
-    // --> OD 2007-07-11 #i56253#
-    // add new 2nd parameter <rNewSet>
+    // --> OD 2008-02-27 #refactorlists# - removed <rNewSet>
     SwUndoFmtAttr( const SfxItemSet& rOldSet,
-                   const SfxItemSet& rNewSet,
                    SwFmt& rFmt,
                    BOOL bSaveDrawPt = TRUE );
     // <--
@@ -707,8 +693,21 @@ class SwUndoFmtColl : public SwUndo, private SwUndRng
     String aFmtName;
     SwHistory* pHistory;
     SwFmtColl* pFmtColl;
+    // --> OD 2008-04-15 #refactorlists# - for correct <ReDo(..)> and <Repeat(..)>
+    // boolean, which indicates that the attributes are reseted at the nodes
+    // before the format has been applied.
+    const bool mbReset;
+    // boolean, which indicates that the list attributes had been reseted at
+    // the nodes before the format has been applied.
+    const bool mbResetListAttrs;
+    // <--
 public:
-    SwUndoFmtColl( const SwPaM&, SwFmtColl* );
+    // --> OD 2008-04-15 #refactorlists#
+//    SwUndoFmtColl( const SwPaM&, SwFmtColl* );
+    SwUndoFmtColl( const SwPaM&, SwFmtColl*,
+                   const bool bReset,
+                   const bool bResetListAttrs );
+    // <--
     virtual ~SwUndoFmtColl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
