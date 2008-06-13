@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: writerhelper.hxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,7 +335,7 @@ namespace sw
         template<class T> const T & ItemGet(const SwFmt &rFmt,
             sal_uInt16 eType) throw(std::bad_cast)
         {
-            return item_cast<T>(rFmt.GetAttr(eType));
+            return item_cast<T>(rFmt.GetFmtAttr(eType));
         }
 
         /** Extract a SfxPoolItem derived property from a SfxItemSet
