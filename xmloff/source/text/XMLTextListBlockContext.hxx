@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,29 +38,42 @@ class XMLTextImportHelper;
 
 class XMLTextListBlockContext : public SvXMLImportContext
 {
-    XMLTextImportHelper&    rTxtImport;
+    XMLTextImportHelper&    mrTxtImport;
 
     ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexReplace > xNumRules;
+                ::com::sun::star::container::XIndexReplace > mxNumRules;
 
-    const ::rtl::OUString   sNumberingRules;
-    ::rtl::OUString         sStyleName;
-    SvXMLImportContextRef   xParentListBlock;
-    sal_Int16               nLevel;
-    sal_Int32               nLevels;
-    sal_Bool                bRestartNumbering : 1;
-    sal_Bool                bSetDefaults : 1;
+    // text:style-name property of <list> element
+    ::rtl::OUString         msListStyleName;
 
+    SvXMLImportContextRef   mxParentListBlock;
+
+    sal_Int16               mnLevel;
+    sal_Bool                mbRestartNumbering : 1;
+    sal_Bool                mbSetDefaults : 1;
+
+    // --> OD 2008-04-22 #refactorlists#
+    // text:id property of <list> element, only valid for root <list> element
+    ::rtl::OUString msListId;
+    // text:continue-list property of <list> element, only valid for root <list> element
+    ::rtl::OUString msContinueListId;
+    // <--
 
 public:
 
     TYPEINFO();
 
-    XMLTextListBlockContext( SvXMLImport& rImport,
-            XMLTextImportHelper& rTxtImp, sal_uInt16 nPrfx,
+    // --> OD 2008-05-07 #refactorlists#
+    // add optional parameter <bRestartNumberingAtSubList>
+    XMLTextListBlockContext(
+                SvXMLImport& rImport,
+                XMLTextImportHelper& rTxtImp,
+                sal_uInt16 nPrfx,
                 const ::rtl::OUString& rLName,
-                   const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                const sal_Bool bRestartNumberingAtSubList = sal_False );
+    // <--
     virtual ~XMLTextListBlockContext();
 
     virtual void EndElement();
@@ -70,15 +83,20 @@ public:
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    const ::rtl::OUString& GetStyleName() const { return sStyleName; }
-    sal_Int16 GetLevel() const { return nLevel; }
-    sal_Bool IsRestartNumbering() const { return bRestartNumbering; }
-    void ResetRestartNumbering() { bRestartNumbering = sal_False; }
+    const ::rtl::OUString& GetListStyleName() const { return msListStyleName; }
+    sal_Int16 GetLevel() const { return mnLevel; }
+    sal_Bool IsRestartNumbering() const { return mbRestartNumbering; }
+    void ResetRestartNumbering() { mbRestartNumbering = sal_False; }
 
-//  sal_Bool HasGeneratedStyle() const { return xGenNumRule.is(); }
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
-        { return xNumRules; }
+        { return mxNumRules; }
+
+    // --> OD 2008-04-22 #refactorlists#
+    const ::rtl::OUString& GetListId() const;
+    const ::rtl::OUString& GetContinueListId() const;
+    // <--
+
 };
 
 
