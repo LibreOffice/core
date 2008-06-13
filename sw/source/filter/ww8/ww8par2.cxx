@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.142 $
+ * $Revision: 1.143 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -864,7 +864,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
                                         // Falls bereits direkt oder durch
                                         // Vererbung NumruleItems gesetzt sind,
                                         // dann jetzt ausschalten #56163
-        pAktColl->SetAttr( SwNumRuleItem() );
+        pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
         // --> OD 2008-02-11 #newlistlevelattrs#
@@ -882,7 +882,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
     }else if( pStyles->nWwNumLevel == 10 || pStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, (WW8_ANLD*)pData, 0, false);
-        pAktColl->SetAttr( SwNumRuleItem( pNR->GetName() ) );
+        pAktColl->SetFmtAttr( SwNumRuleItem( pNR->GetName() ) );
         pCollA[nAktColl].bHasStyNumRule = true;
     }
 }
@@ -1082,11 +1082,11 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
 
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
     if (nSwNumLevel < MAXLEVEL)
-        pNd->SetLevel(nSwNumLevel);
+        pNd->SetAttrListLevel( nSwNumLevel );
     else
     {
-        pNd->SetLevel(0);
-        pNd->SetCounted(FALSE);
+        pNd->SetAttrListLevel(0);
+        pNd->SetCountedInList( false );
     }
 }
 
@@ -2332,14 +2332,14 @@ void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
     if (!pApply )
         pApply = pTable->GetFrmFmt();
     ASSERT(pApply,"No frame");
-    pApply->SetAttr(aItemSet);
+    pApply->SetFmtAttr(aItemSet);
     if (pFrmFmt)
     {
         SwFmtFrmSize aSize = pFrmFmt->GetFrmSize();
         aSize.SetHeightSizeType(ATT_MIN_SIZE);
         aSize.SetHeight(MINLAY);
-        pFrmFmt->SetAttr(aSize);
-        pTable->GetFrmFmt()->SetAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
+        pFrmFmt->SetFmtAttr(aSize);
+        pTable->GetFrmFmt()->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
     }
 }
 
@@ -2378,7 +2378,7 @@ void WW8TabDesc::CreateSwTable()
 
             SwFmtSurround aSur(pIo->pFmtOfJustInsertedApo->GetSurround());
             aSur.SetAnchorOnly(true);
-            pIo->pFmtOfJustInsertedApo->SetAttr(aSur);
+            pIo->pFmtOfJustInsertedApo->SetFmtAttr(aSur);
         }
     }
 
@@ -2444,13 +2444,13 @@ void WW8TabDesc::CreateSwTable()
     // Gesamtbreite der Tabelle
     if( nMaxRight - nMinLeft > MINLAY * nDefaultSwCols )
     {
-        pTable->GetFrmFmt()->SetAttr(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
+        pTable->GetFrmFmt()->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
         aItemSet.Put(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
     }
 
     SvxFrameDirectionItem aDirection(
         bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
-    pTable->GetFrmFmt()->SetAttr(aDirection);
+    pTable->GetFrmFmt()->SetFmtAttr(aDirection);
 
     if (text::HoriOrientation::LEFT_AND_WIDTH == eOri)
     {
@@ -2469,7 +2469,7 @@ void WW8TabDesc::CreateSwTable()
                 //the maximum is what word does ?
                 aHori.SetPos(pIo->pSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
-                pIo->pSFlyPara->pFlyFmt->SetAttr(aHori);
+                pIo->pSFlyPara->pFlyFmt->SetFmtAttr(aHori);
             }
         }
         else
@@ -3008,7 +3008,7 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     else
         aFmtBox.SetDistance(nRightDist,BOX_LINE_RIGHT);
 
-    pBox->GetFrmFmt()->SetAttr(aFmtBox);
+    pBox->GetFrmFmt()->SetFmtAttr(aFmtBox);
 }
 
 void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
@@ -3022,7 +3022,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
         Color aColor(pActBand->pNewSHDs[nWwIdx]);
         if (aColor.GetColor() == 0x00333333)
             pIo->maTracer.Log(sw::log::eAutoColorBg);
-        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor, RES_BACKGROUND));
+        pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aColor, RES_BACKGROUND));
         bFound = true;
     }
 
@@ -3034,7 +3034,7 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
             return;
 
         SwWW8Shade aSh( pIo->bVer67, rSHD );
-        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
+        pBox->GetFrmFmt()->SetFmtAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));
     }
 }
 
@@ -3074,7 +3074,7 @@ void WW8TabDesc::SetTabDirection(SwTableBox* pBox, short nWwIdx)
     if (nWwIdx < 0 || nWwIdx >= pActBand->nWwCols)
         return;
     SvxFrameDirectionItem aItem(MakeDirection(pActBand->maDirections[nWwIdx], bIsBiDi), RES_FRAMEDIR);
-    pBox->GetFrmFmt()->SetAttr(aItem);
+    pBox->GetFrmFmt()->SetFmtAttr(aItem);
 }
 
 void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
@@ -3102,7 +3102,7 @@ void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
         }
     }
 
-    pBox->GetFrmFmt()->SetAttr( SwFmtVertOrient(0,eVertOri) );
+    pBox->GetFrmFmt()->SetFmtAttr( SwFmtVertOrient(0,eVertOri) );
 }
 
 void WW8TabDesc::AdjustNewBand()
@@ -3133,7 +3133,7 @@ void WW8TabDesc::AdjustNewBand()
 
             aF.SetHeight(pActBand->nLineHeight);// Min- / Exakt-Hoehe setzen
         }
-        pTabLine->GetFrmFmt()->SetAttr(aF);
+        pTabLine->GetFrmFmt()->SetFmtAttr(aF);
     }
 
     //Word stores 1 for bCantSplit if the row cannot be split, we set true if
@@ -3145,7 +3145,7 @@ void WW8TabDesc::AdjustNewBand()
     if(bSetCantSplit)
         bSetCantSplit = pActBand->bCantSplit90;
 
-    pTabLine->GetFrmFmt()->SetAttr(SwFmtRowSplit(!bSetCantSplit));
+    pTabLine->GetFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bSetCantSplit));
 
     short i;    // SW-Index
     short j;    // WW-Index
@@ -3200,10 +3200,10 @@ void WW8TabDesc::AdjustNewBand()
                 aCurrentBox.SetLine(aOldBox.GetLine(BOX_LINE_RIGHT), BOX_LINE_LEFT);
 
             aOldBox.SetLine(0, BOX_LINE_RIGHT);
-            pBox2->GetFrmFmt()->SetAttr(aOldBox);
+            pBox2->GetFrmFmt()->SetFmtAttr(aOldBox);
         }
 
-        pBox->GetFrmFmt()->SetAttr(aCurrentBox);
+        pBox->GetFrmFmt()->SetFmtAttr(aCurrentBox);
 
         SetTabVertAlign(pBox, j);
         SetTabDirection(pBox, j);
@@ -3212,7 +3212,7 @@ void WW8TabDesc::AdjustNewBand()
         j++;
 
         aFS.SetWidth( nW );
-        pBox->GetFrmFmt()->SetAttr( aFS );
+        pBox->GetFrmFmt()->SetFmtAttr( aFS );
 
         // ueberspringe nicht existente Zellen
         while( ( j < pActBand->nWwCols ) && !pActBand->bExist[j] )
@@ -3458,19 +3458,19 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 SwFmtAnchor aAnchor( FLY_AUTO_CNTNT );
                 aAnchor.SetAnchor( pTableDesc->pParentPos );
                 aFlySet.Put( aAnchor );
-                pTableDesc->pFlyFmt->SetAttr( aFlySet );
+                pTableDesc->pFlyFmt->SetFmtAttr( aFlySet );
             }
             else
             {
                 SwFmtHoriOrient aHori =
                             pTableDesc->pTable->GetFrmFmt()->GetHoriOrient();
-                pTableDesc->pFlyFmt->SetAttr(aHori);
-                pTableDesc->pFlyFmt->SetAttr( SwFmtSurround( SURROUND_NONE ) );
+                pTableDesc->pFlyFmt->SetFmtAttr(aHori);
+                pTableDesc->pFlyFmt->SetFmtAttr( SwFmtSurround( SURROUND_NONE ) );
             }
             // <--
             // --> OD 2005-01-27 #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.
-            pTableDesc->pFlyFmt->SetAttr( SwFmtFollowTextFlow( TRUE ) );
+            pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( TRUE ) );
             // <--
         }
         else
@@ -3789,15 +3789,15 @@ void WW8RStyle::Set1StyleDefaults()
     {
         // Style has no text color set, winword default is auto
         if ( !bTxtColChanged )
-            pIo->pAktColl->SetAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
+            pIo->pAktColl->SetFmtAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
         if( !bFSizeChanged )
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
-            pIo->pAktColl->SetAttr(aAttr);
+            pIo->pAktColl->SetFmtAttr(aAttr);
             aAttr.SetWhich(RES_CHRATR_CJK_FONTSIZE);
-            pIo->pAktColl->SetAttr(aAttr);
+            pIo->pAktColl->SetFmtAttr(aAttr);
         }
 
         // Style has no FontSize ? WinWord Default is 10pt for western and asian
@@ -3805,13 +3805,13 @@ void WW8RStyle::Set1StyleDefaults()
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
             aAttr.SetWhich(RES_CHRATR_CTL_FONTSIZE);
-            pIo->pAktColl->SetAttr(aAttr);
+            pIo->pAktColl->SetFmtAttr(aAttr);
         }
 
         if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
         {
-            pIo->pAktColl->SetAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
-            pIo->pAktColl->SetAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
+            pIo->pAktColl->SetFmtAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
+            pIo->pAktColl->SetFmtAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
         }
     }
 }
@@ -4542,7 +4542,7 @@ void WW8RStyle::Import()
             aAttr.GetMinTrail()   = 2;
             aAttr.GetMaxHyphens() = 0;
 
-            pIo->pStandardFmtColl->SetAttr( aAttr );
+            pIo->pStandardFmtColl->SetFmtAttr( aAttr );
         }
 
         /*
@@ -4553,7 +4553,7 @@ void WW8RStyle::Import()
         if (SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(RES_FRAMEDIR,
             false))
         {
-           pIo->pStandardFmtColl->SetAttr(
+           pIo->pStandardFmtColl->SetFmtAttr(
                 SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
         }
     }
