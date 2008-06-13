@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unspnd.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,11 +113,11 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
                 const SfxPoolItem *pItem;
                 if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
                     &pItem ) )
-                    pTableFmt->SetAttr( *pItem );
+                    pTableFmt->SetFmtAttr( *pItem );
 
                 if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, FALSE,
                      &pItem ) )
-                    pTableFmt->SetAttr( *pItem );
+                    pTableFmt->SetFmtAttr( *pItem );
             }
 
             // dann loesche den wieder
