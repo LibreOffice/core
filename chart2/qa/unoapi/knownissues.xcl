@@ -54,3 +54,10 @@ sch.ChXDataPoint::com::sun::star::drawing::LineProperties
 #i83866  	
 sch.ChXDataPoint::com::sun::star::chart::Chart3DBarProperties
 
+#i87138
+sch.ChXDiagram
+# -> disabled in sch.sce
+
+### i87295 ###
+sch.ChXChartAxis::com::sun::star::beans::XPropertySet
+sch.ChartLegend::com::sun::star::beans::XPropertySet
