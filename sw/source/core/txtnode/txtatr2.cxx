@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtatr2.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +97,7 @@ void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( pMyTxtNd )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->SwCntntNode::Modify( &aUpdateAttr, &aUpdateAttr );
+        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
@@ -195,7 +195,7 @@ void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( pMyTxtNd )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->SwCntntNode::Modify( &aUpdateAttr, &aUpdateAttr );
+        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
@@ -258,7 +258,7 @@ void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if( pMyTxtNd )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        pMyTxtNd->SwCntntNode::Modify( &aUpdateAttr, &aUpdateAttr );
+        pMyTxtNd->Modify( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
