@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndarr.hxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,24 +90,14 @@ class SwNodes: private BigPtrArray
     friend class SwNode;
     friend class SwNodeIndex;
 
-    SwNodePtr operator[]( USHORT n ) const;
-    SwNodePtr operator[]( int n ) const;
-
     SwNodeIndex* pRoot;                 // Liste aller Indizies auf Nodes
 
-    // --> OD 2006-10-16 #137792#
-    // - rename from <Insert(..)> to <InsertNode(..)>
-    // - add 3rd optional parameter <bSyncNumberAndNumRule>
+    // --> OD 2008-05-14 #refactorlists# - removed <bSyncNumberAndNumRule>
     void InsertNode( const SwNodePtr pNode,
-                     const SwNodeIndex& rPos,
-                     const bool bSyncNumberAndNumRule = true );
+                     const SwNodeIndex& rPos );
     void InsertNode( const SwNodePtr pNode,
-                     ULONG nPos,
-                     const bool bSyncNumberAndNumRule = true);
+                     ULONG nPos );
     // <--
-//  void Remove( const SwNodeIndex& rPos, USHORT nLen = 1 );
-//  void Remove( ULONG nPos, USHORT nLen = 1 );
-//  BOOL Move( const SwIndex & rOldPos, const SwIndex & rNewPos );
 
 
     SwDoc* pMyDoc;                      // in diesem Doc ist das Nodes-Array
