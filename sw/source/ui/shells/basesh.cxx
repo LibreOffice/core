@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: basesh.cxx,v $
- * $Revision: 1.85 $
+ * $Revision: 1.86 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -793,7 +793,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 aFmtCol.SetWishWidth(USHRT_MAX);
                 aFmtCol.SetGutterWidth(nGutterWidth, USHRT_MAX);
 
-                rFmt.SetAttr(aFmtCol);
+                rFmt.SetFmtAttr(aFmtCol);
 
                 rSh.ChgPageDesc(nCurIdx, aPageDesc);
             }
@@ -1196,7 +1196,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if ( rSh.IsTableMode() )
             {
                 SwFrmFmt *pFmt = rSh.GetTableFmt();
-                pFmt->SetAttr( *pItem );
+                pFmt->SetFmtAttr( *pItem );
             }
             else if ( rSh.IsFrmSelected() )
             {
@@ -1411,7 +1411,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 if ( rSh.IsTableMode() )
                 {
                     SwFrmFmt *pFmt = rSh.GetTableFmt();
-                    aSet.Put(pFmt->GetAttr( nWhich, TRUE ));
+                    aSet.Put(pFmt->GetFmtAttr( nWhich, TRUE ));
                 }
                 else if( rSh.IsFrmSelected() )
                 {
@@ -2839,18 +2839,18 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
                 USHORT nDesc = rSh.GetCurPageDesc();
                 SwPageDesc aDesc( rSh.GetPageDesc( nDesc ) );
                 if ( nPos == nPagePos )
-                    aDesc.GetMaster().SetAttr( aBrush );
+                    aDesc.GetMaster().SetFmtAttr( aBrush );
                 else if ( nPos == nHeaderPos )
                 {
                     SwFmtHeader aHead( aDesc.GetMaster().GetHeader() );
-                    aHead.GetHeaderFmt()->SetAttr( aBrush );
-                    aDesc.GetMaster().SetAttr( aHead );
+                    aHead.GetHeaderFmt()->SetFmtAttr( aBrush );
+                    aDesc.GetMaster().SetFmtAttr( aHead );
                 }
                 else if ( nPos == nFooterPos )
                 {
                     SwFmtFooter aFoot( aDesc.GetMaster().GetFooter() );
-                    aFoot.GetFooterFmt()->SetAttr( aBrush );
-                    aDesc.GetMaster().SetAttr( aFoot );
+                    aFoot.GetFooterFmt()->SetFmtAttr( aBrush );
+                    aDesc.GetMaster().SetFmtAttr( aFoot );
                 }
                 rSh.ChgPageDesc( nDesc, aDesc );
             }
