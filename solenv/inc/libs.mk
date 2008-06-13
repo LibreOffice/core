@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.133 $
+# $Revision: 1.134 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.133 $$"
+LIBSMKREV!:="$$Revision: 1.134 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -333,8 +333,12 @@ HNJLIB*=-lhyphen
 MYSPELLLIB=-lmyspell
 COSVLIB=-lcosv
 UDMLIB=-ludm
-HUNSPELLLIB*=-lhunspell
 ULINGULIB=-lulingu
+.IF "$(SYSTEM_HUNSPELL)" == "YES"
+HUNSPELLLIB=$(HUNSPELL_LIBS)
+.ELSE
+HUNSPELLLIB=-lhunspell-1.1
+.ENDIF
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
@@ -493,8 +497,12 @@ HNJLIB*=libhnj.lib
 MYSPELLLIB= $(LIBPRE) myspell.lib
 COSVLIB= $(LIBPRE) cosv.lib
 UDMLIB= $(LIBPRE) udm.lib
-HUNSPELLLIB*=hunspell.lib
 ULINGULIB=$(LIBPRE) libulingu.lib
+.IF "$(SYSTEM_HUNSPELL)" == "YES"
+HUNSPELLLIB=$(HUNSPELL_LIBS)
+.ELSE
+HUNSPELLLIB=$(LIBPRE) libhunspell.lib
+.ENDIF
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
