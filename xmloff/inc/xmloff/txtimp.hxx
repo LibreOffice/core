@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtimp.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +46,10 @@
 // counterpart
 #include <comphelper/stl_types.hxx>
 #include <xmloff/uniref.hxx>
+
+// --> OD 2008-04-25 #refactorlists#
+class XMLTextListsHelper;
+// <--
 
 class SvXMLImport;
 class SvXMLStylesContext;
@@ -250,6 +254,10 @@ enum XMLTextListBlockAttrTokens
 {
     XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME,
     XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING,
+    // --> OD 2008-04-22 #refactorlists#
+    XML_TOK_TEXT_LIST_BLOCK_ID,
+    XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST,
+    // <--
     XML_TOK_TEXT_LIST_BLOCK_END=XML_TOK_UNKNOWN
 };
 
@@ -354,6 +362,10 @@ class XMLOFF_DLLPUBLIC XMLTextImportHelper : public UniRefBase
     SvXMLTokenMap *pTextMasterPageElemTokenMap;
     SvStringsDtor *pPrevFrmNames;
     SvStringsDtor *pNextFrmNames;
+
+    // --> OD 2008-04-25 #refactorlists#
+    XMLTextListsHelper* mpTextListsHelper;
+    // <--
 
     SvXMLImportContextRef xAutoStyles;
     SvXMLImportContextRef xFontDecls;
@@ -487,6 +499,10 @@ public:
     const ::rtl::OUString sContent;
     const ::rtl::OUString sServiceCombinedCharacters;
     const ::rtl::OUString sNumberingStyleName;
+    // --> OD 2008-04-23 #refactorlists#
+    const ::rtl::OUString sPropNameDefaultListId;
+    const ::rtl::OUString sPropNameListId;
+    // <--
 
     ::rtl::OUString sCellParaStyleDefault;
     XMLTextImportHelper(
@@ -831,7 +847,22 @@ public:
     void SetInsideDeleteContext(sal_Bool bNew) { bInsideDeleteContext = bNew; }
     sal_Bool IsInsideDeleteContext() const { return bInsideDeleteContext; }
 
-   SvXMLImport& GetXMLImport() { return rSvXMLImport;}
+    SvXMLImport& GetXMLImport() { return rSvXMLImport;}
+
+    // --> OD 2008-04-25 #refactorlists#
+    void KeepListAsProcessed( ::rtl::OUString sListId,
+                              ::rtl::OUString sListStyleName,
+                              ::rtl::OUString sContinueListId );
+
+    sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
+
+    ::rtl::OUString GetContinueListIdOfProcessedList(
+                                        const ::rtl::OUString sListId ) const;
+    const ::rtl::OUString& GetLastProcessedListId() const;
+    const ::rtl::OUString& GetListStyleOfLastProcessedList() const;
+
+    ::rtl::OUString GenerateNewListId() const;
+    // <--
 };
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
