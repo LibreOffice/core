@@ -83,8 +83,6 @@
 "SwXCellRange";"com::sun::star::text::CellRange";"ChartColumnAsLabel"
 "SwXCellRange";"com::sun::star::text::CellRange";"ChartRowAsLabel"
 "SwXCellRange";"com::sun::star::text::CellRange";"NumberFormat"
-"SwXCellRange";"com::sun::star::text::CellRange";"TopMargin"
-"SwXCellRange";"com::sun::star::text::CellRange";"BottomMargin"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharFontName"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharFontStyleName"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharFontFamily"
