@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: visiturl.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,8 +97,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                           *pAttr->GetEnd(),
                                           RES_FMT_CHG );
-                ((SwTxtNode*)pTxtNd)->SwCntntNode::Modify( &aUpdateAttr,
-                                                            &aUpdateAttr );
+                ((SwTxtNode*)pTxtNd)->Modify( &aUpdateAttr, &aUpdateAttr );
             }
 
         if( bAction )
