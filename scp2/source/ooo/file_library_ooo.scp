@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_library_ooo.scp,v $
- * $Revision: 1.290 $
+ * $Revision: 1.291 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1779,25 +1779,6 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
-
-#ifndef SYSTEM_HUNSPELL
-
-File gid_File_Lib_Hunspell
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = "libhunspell.dylib";
-    #else
-       Name = "libhunspell.so";
-    #endif
-  #else
-    Name = "hunspell.dll";
-  #endif
-    Styles = (PACKED);
-End
-
-#endif
 
 File gid_File_Lib_Lnth
     TXT_FILE_BODY;
