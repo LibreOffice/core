@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,23 +35,6 @@ PRJNAME=test10
 TARGET=t1
 
 .INCLUDE : settings.mk
-
-.IF "$(OS)$(PROEXT)"=="LINUX.pro_never"
-SHL1TARGET= genstats
-SLOFILES=       $(SLO)$/genstats.obj
-SHL1OBJS=   $(SLOFILES)
-
-#
-# Java related 
-#
-
-JARFILES    =   jcommon-0.7.1.jar \
-                jfreechart-0.9.4.jar
-JARS2COPY    =  $(CLASSDIR)$/jcommon-0.7.1.jar \
-                $(CLASSDIR)$/jfreechart-0.9.4.jar
-
-JAVACLASSFILES=$(BIN)$/Graphics.class
-.ENDIF
 
 STAR_REGISTRY=
 .EXPORT : STAR_REGISTRY
