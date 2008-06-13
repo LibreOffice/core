@@ -33,4 +33,20 @@ sd.DrawController_NotesView::com::sun::star::ui::XContextMenuInterception
 sd.DrawController_OutlineView::com::sun::star::ui::XContextMenuInterception
 sd.DrawController_HandoutView::com::sun::star::ui::XContextMenuInterception
 sd.DrawController_PresentationView::com::sun::star::ui::XContextMenuInterception
+sd.DrawController_DrawView::com::sun::star::ui::XContextMenuInterception
 
+### i87746 ###
+sd.SdXShape::com::sun::star::drawing::Shape::Style
+# -> disabled in sd.sce
+
+### i88256 ### 
+sd.SdXCustomPresentationAccess::com::sun::star::container::XNameReplace
+
+### i88309 ###
+sd.DrawController_OutlineView::com::sun::star::frame::XController
+
+### i88537 ###
+sd.DrawController_OutlineView::com::sun::star::beans::XPropertySet
+
+### i88537 ###
+sd.DrawController_PresentationView::com::sun::star::beans::XPropertySet
