@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: paratr.hxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -142,23 +142,22 @@ inline SwRegisterItem& SwRegisterItem::operator=(
 
 class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
-    SwModify* pDefinedIn;   // Modify-Object, in dem das NumRule steht
-                            // kann nur TxtFmtCollection/TxtNode sein
 public:
     TYPEINFO();
 
+    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     SwNumRuleItem()
-        : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ), pDefinedIn(0) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
 
     SwNumRuleItem( const String& rRuleName )
-        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ), pDefinedIn(0) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
 
     SwNumRuleItem( const SwNumRuleItem& rCpy )
-        : SfxStringItem( RES_PARATR_NUMRULE, rCpy.GetValue() ), pDefinedIn(0) {}
-
+        : SfxStringItem( RES_PARATR_NUMRULE, rCpy.GetValue() ) {}
 
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
-    { SetValue( rCpy.GetValue() ); pDefinedIn=0; return *this; }
+    { SetValue( rCpy.GetValue() ); return *this; }
+    // <--
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -171,11 +170,6 @@ public:
 
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
-
-    // erfrage und setze den Modify-Pointer
-    inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
-    inline void ChgDefinedIn( const SwModify* pNew )
-    { pDefinedIn = (SwModify*)pNew; }
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem
