@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev.hxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -406,7 +406,7 @@ public:
     SAL_DLLPRIVATE void         ImplInitFont() const;
     SAL_DLLPRIVATE void         ImplInitTextColor();
     SAL_DLLPRIVATE void         ImplInitClipRegion();
-    SAL_DLLPRIVATE static BOOL  ImplSelectClipRegion( SalGraphics* pGraphics, const Region& rRegion, OutputDevice *pOutDev );
+    SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
     SAL_DLLPRIVATE void         ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon );
 
@@ -446,16 +446,17 @@ public:
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+
     SAL_DLLPRIVATE long         ImplLogicXToDevicePixel( long nX ) const;
     SAL_DLLPRIVATE long         ImplLogicYToDevicePixel( long nY ) const;
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
     SAL_DLLPRIVATE long         ImplLogicHeightToDevicePixel( long nHeight ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicWidth( long nWidth ) const;
     SAL_DLLPRIVATE long         ImplDevicePixelToLogicHeight( long nHeight ) const;
-    SAL_DLLPRIVATE float            ImplFloatLogicWidthToDevicePixel( float ) const;
-    SAL_DLLPRIVATE float            ImplFloatLogicHeightToDevicePixel( float ) const;
-    SAL_DLLPRIVATE float            ImplFloatDevicePixelToLogicWidth( float ) const;
-    SAL_DLLPRIVATE float            ImplFloatDevicePixelToLogicHeight( float ) const;
+    SAL_DLLPRIVATE float        ImplFloatLogicWidthToDevicePixel( float ) const;
+    SAL_DLLPRIVATE float        ImplFloatLogicHeightToDevicePixel( float ) const;
+    SAL_DLLPRIVATE float        ImplFloatDevicePixelToLogicWidth( float ) const;
+    SAL_DLLPRIVATE float        ImplFloatDevicePixelToLogicHeight( float ) const;
     SAL_DLLPRIVATE Point        ImplLogicToDevicePixel( const Point& rLogicPt ) const;
     SAL_DLLPRIVATE Size         ImplLogicToDevicePixel( const Size& rLogicSize ) const;
     SAL_DLLPRIVATE Rectangle    ImplLogicToDevicePixel( const Rectangle& rLogicRect ) const;
@@ -464,6 +465,9 @@ public:
     SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
     SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rLogicRect ) const;
     SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
+    SAL_DLLPRIVATE void         ImplInvalidateViewTransform();
+    SAL_DLLPRIVATE basegfx::B2DHomMatrix ImplGetDeviceTransformation() const;
+
     SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const PolyPolygon* pClipPolyPoly = NULL );
     SAL_DLLPRIVATE void         ImplDrawPolyPolygon( USHORT nPoly, const PolyPolygon& rPolyPoly );
@@ -894,7 +898,6 @@ public:
      // #i75163#
     basegfx::B2DHomMatrix GetViewTransformation() const;
     basegfx::B2DHomMatrix GetInverseViewTransformation() const;
-    SAL_DLLPRIVATE void ImplInvalidateViewTransform();
 
     /** Set an offset in pixel
 
