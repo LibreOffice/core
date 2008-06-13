@@ -28,7 +28,7 @@
 -o cfgmgr2.SchemaParser
 -o cfgmgr2.SingleBackendAdapter
 -o cfgmgr2.ConfigurationProviderWrapper
--o cfgmgr2.LayerParser
+#i87744# -o cfgmgr2.LayerParser
 -o cfgmgr2.CopyImporter
 -o cfgmgr2.AdministrationProvider
 -o cfgmgr2.ConfigurationProvider
