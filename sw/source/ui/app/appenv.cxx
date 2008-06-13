@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: appenv.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,7 +187,7 @@ void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
     SwTxtFmtColl* pColl;
     for( USHORT nCnt = 0; nCnt < nCollCnt; ++nCnt )
         if(nCollId == (pColl = &pOldSh->GetTxtFmtColl(nCnt))->GetPoolFmtId())
-            pNewSh->GetTxtCollFromPool(nCollId)->SetAttr(pColl->GetAttrSet());
+            pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
 }
 
 // ----------------------------------------------------------------------------
@@ -295,7 +295,7 @@ static USHORT nTitleNo = 0;
             ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
-            pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetAttr(aItem);
+            pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
         }
 
         SwWrtShell *pTmp = nMode == ENV_INSERT ? pOldSh : pSh;
@@ -427,20 +427,20 @@ static USHORT nTitleNo = 0;
         aULMargin.SetUpper((USHORT) lUpper);
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
-        rFmt.SetAttr(aLRMargin);
-        rFmt.SetAttr(aULMargin);
+        rFmt.SetFmtAttr(aLRMargin);
+        rFmt.SetFmtAttr(aULMargin);
 
         // Kopf-, Fusszeilen
-        rFmt.SetAttr(SwFmtHeader(BOOL(FALSE)));
+        rFmt.SetFmtAttr(SwFmtHeader(BOOL(FALSE)));
         pDesc->ChgHeaderShare(FALSE);
-        rFmt.SetAttr(SwFmtFooter(BOOL(FALSE)));
+        rFmt.SetFmtAttr(SwFmtFooter(BOOL(FALSE)));
         pDesc->ChgFooterShare(FALSE);
 
         // Seitennumerierung
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
         // Einstellen der Seitengroesse
-        rFmt.SetAttr(SwFmtFrmSize(ATT_FIX_SIZE,
+        rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
                                             nPageW + lLeft, nPageH + lUpper));
 
         // Einstellen der Numerierungsart der Seite
