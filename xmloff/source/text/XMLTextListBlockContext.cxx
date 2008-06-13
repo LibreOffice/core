@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLTextListBlockContext.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,39 +55,60 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLTextListBlockContext, SvXMLImportContext );
 
+// OD 2008-05-07 #refactorlists#
+// add optional parameter <bRestartNumberingAtSubList> and its handling
 XMLTextListBlockContext::XMLTextListBlockContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rTxtImp,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const sal_Bool bRestartNumberingAtSubList )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-,   rTxtImport( rTxtImp )
-,   sNumberingRules( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) )
-,   xParentListBlock( rTxtImp.GetListBlock() )
-,   nLevel( 0 )
-,   nLevels( 0 )
-,   bRestartNumbering( sal_True )
-,   bSetDefaults( sal_False )
+,   mrTxtImport( rTxtImp )
+// --> OD 2008-04-22 #refactorlists#
+,   msListStyleName()
+// <--
+,   mxParentListBlock( rTxtImp.GetListBlock() )
+,   mnLevel( 0 )
+// --> OD 2008-05-07 #refactorlists#
+//,   mbRestartNumbering( sal_True )
+,   mbRestartNumbering( sal_False )
+// <--
+,   mbSetDefaults( sal_False )
+// --> OD 2008-04-22 #refactorlists#
+,   msListId()
+,   msContinueListId()
+// <--
 {
     // Inherit style name from parent list, as well as the flags whether
     // numbering must be restarted and formats have to be created.
-    OUString sParentStyleName;
-    if( xParentListBlock.Is() )
+    OUString sParentListStyleName;
+    if( mxParentListBlock.Is() )
     {
         XMLTextListBlockContext *pParent =
-            (XMLTextListBlockContext *)&xParentListBlock;
-        sStyleName = pParent->GetStyleName();
-        xNumRules = pParent->GetNumRules();
-        sParentStyleName = sStyleName;
-        nLevels = pParent->nLevels;
-        nLevel = pParent->GetLevel() + 1;
-        bRestartNumbering = pParent->IsRestartNumbering();
-        bSetDefaults = pParent->bSetDefaults;
+                                (XMLTextListBlockContext *)&mxParentListBlock;
+        msListStyleName = pParent->GetListStyleName();
+        sParentListStyleName = msListStyleName;
+        mxNumRules = pParent->GetNumRules();
+        mnLevel = pParent->GetLevel() + 1;
+        // --> OD 2008-05-07 #refactorlists#
+//        mbRestartNumbering = pParent->IsRestartNumbering();
+        mbRestartNumbering = pParent->IsRestartNumbering() ||
+                             bRestartNumberingAtSubList;
+        // <--
+        mbSetDefaults = pParent->mbSetDefaults;
+        // --> OD 2008-04-22 #refactorlists#
+        msListId = pParent->GetListId();
+        msContinueListId = pParent->GetContinueListId();
+        // <--
     }
 
-    const SvXMLTokenMap& rTokenMap =
-        rTxtImport.GetTextListBlockAttrTokenMap();
+    const SvXMLTokenMap& rTokenMap = mrTxtImport.GetTextListBlockAttrTokenMap();
 
+    // --> OD 2008-05-07 #refactorlists#
+    bool bIsContinueNumberingAttributePresent( false );
+    // <--
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -101,92 +122,193 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_NUMBERING:
-            bRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
+            mbRestartNumbering = !IsXMLToken(rValue, XML_TRUE);
+            // --> OD 2008-05-07 #refactorlists#
+            bIsContinueNumberingAttributePresent = true;
+            // <--
             break;
         case XML_TOK_TEXT_LIST_BLOCK_STYLE_NAME:
-            sStyleName = rValue;
+            msListStyleName = rValue;
+            break;
+        // --> OD 2008-04-22 #refactorlists#
+        case XML_TOK_TEXT_LIST_BLOCK_ID:
+            if ( mnLevel == 0 ) // root <list> element
+            {
+                msListId = rValue;
+            }
+            break;
+        case XML_TOK_TEXT_LIST_BLOCK_CONTINUE_LIST:
+            if ( mnLevel == 0 ) // root <list> element
+            {
+                msContinueListId = rValue;
+            }
             break;
         }
     }
 
-    if( sStyleName.getLength() && sStyleName != sParentStyleName )
+    if ( msListStyleName.getLength() &&
+         msListStyleName != sParentListStyleName )
     {
         OUString sDisplayStyleName(
                 GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
-                                                 sStyleName ) );
+                                                 msListStyleName ) );
         const Reference < XNameContainer >& rNumStyles =
-            rTxtImport.GetNumberingStyles();
+                                            mrTxtImport.GetNumberingStyles();
         if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
         {
             Reference < XStyle > xStyle;
             Any aAny = rNumStyles->getByName( sDisplayStyleName );
             aAny >>= xStyle;
 
-            // If the style has not been used, the restart numbering has
-            // to be set never.
-            if( bRestartNumbering && !xStyle->isInUse() )
-                bRestartNumbering = sal_False;
+            // --> OD 2008-05-07 #refactorlists# - no longer needed
+//            // If the style has not been used, the restart numbering has
+//            // to be set never.
+//            if ( mbRestartNumbering && !xStyle->isInUse() )
+//            {
+//                mbRestartNumbering = sal_False;
+//            }
+            // <--
 
             Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
-            aAny = xPropSet->getPropertyValue( sNumberingRules );
-            aAny >>= xNumRules;
-            nLevels = xNumRules->getCount();
+            aAny = xPropSet->getPropertyValue( mrTxtImport.sNumberingRules );
+            aAny >>= mxNumRules;
         }
         else
         {
             const SvxXMLListStyleContext *pListStyle =
-                rTxtImport.FindAutoListStyle( sStyleName );
+                                mrTxtImport.FindAutoListStyle( msListStyleName );
             if( pListStyle )
             {
-                xNumRules = pListStyle->GetNumRules();
-                sal_Bool bUsed = xNumRules.is();
-                if( !xNumRules.is() )
+                mxNumRules = pListStyle->GetNumRules();
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                sal_Bool bUsed = mxNumRules.is();
+                // <--
+                if( !mxNumRules.is() )
                 {
                     pListStyle->CreateAndInsertAuto();
-                    xNumRules = pListStyle->GetNumRules();
+                    mxNumRules = pListStyle->GetNumRules();
                 }
-                if( bRestartNumbering && !bUsed )
-                    bRestartNumbering = sal_False;
-                nLevels = pListStyle->GetLevels();
+                // --> OD 2008-05-07 #refactorlists# - no longer needed
+//                if( mbRestartNumbering && !bUsed )
+//                    mbRestartNumbering = sal_False;
+                // <--
             }
         }
     }
 
-    if( !xNumRules.is() )
+    if( !mxNumRules.is() )
     {
         // If no style name has been specified for this style and for any
         // parent or if no num rule this the specified name is existing,
         // create a new one.
 
-        xNumRules =
+        mxNumRules =
             SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
-        DBG_ASSERT( xNumRules.is(), "go no numbering rule" );
-        if( !xNumRules.is() )
+        DBG_ASSERT( mxNumRules.is(), "go no numbering rule" );
+        if( !mxNumRules.is() )
             return;
 
-        nLevels = xNumRules->getCount();
-
         // Because its a new num rule, numbering mist be restarted never.
-        bRestartNumbering = sal_False;
-        bSetDefaults = sal_True;
+        mbRestartNumbering = sal_False;
+        mbSetDefaults = sal_True;
     }
 
-    if( nLevel >= nLevels )
-        nLevel = sal::static_int_cast< sal_Int16 >(nLevels-1);
+    const sal_Int32 nLevelCount = mxNumRules->getCount();
+    if( mnLevel >= nLevelCount )
+        mnLevel = sal::static_int_cast< sal_Int16 >(nLevelCount-1);
 
-    if( bSetDefaults )
+    if( mbSetDefaults )
     {
         // Because there is no list style sheet for this style, a default
         // format must be set for any level of this num rule.
-        SvxXMLListStyleContext::SetDefaultStyle( xNumRules, nLevel,
+        SvxXMLListStyleContext::SetDefaultStyle( mxNumRules, mnLevel,
                                                    sal_False );
     }
 
+    // --> OD 2008-04-23 #refactorlists#
+    if ( mnLevel == 0 ) // root <list> element
+    {
+        if ( msListId.getLength() == 0 )  // no text:id property found
+        {
+            sal_Int32 nUPD( 0 );
+            sal_Int32 nBuild( 0 );
+            const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+            if ( rImport.IsTextDocInOOoFileFormat() ||
+                 ( bBuildIdFound && nUPD == 680 ) )
+            {
+                // handling former documents written by OpenOffice.org:
+                // use default list id of numbering rules instance, if existing
+                uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
+                if ( xNumRuleProps.is() )
+                {
+                    uno::Reference< beans::XPropertySetInfo > xNumRulePropSetInfo(
+                                                xNumRuleProps->getPropertySetInfo());
+                    if ( xNumRulePropSetInfo.is() &&
+                         xNumRulePropSetInfo->hasPropertyByName( mrTxtImport.sPropNameDefaultListId) )
+                    {
+                        xNumRuleProps->getPropertyValue( mrTxtImport.sPropNameDefaultListId ) >>= msListId;
+                        DBG_ASSERT( msListId.getLength() != 0,
+                                    "no default list id found at numbering rules instance. Serious defect -> please inform OD." );
+                        if ( !bIsContinueNumberingAttributePresent &&
+                             !mbRestartNumbering &&
+                             mrTxtImport.IsListProcessed( msListId ) )
+                        {
+                            mbRestartNumbering = sal_True;
+                        }
+                    }
+                }
+            }
+            if ( msListId.getLength() == 0 )
+            {
+                // generate a new list id for the list
+                msListId = mrTxtImport.GenerateNewListId();
+            }
+        }
+
+        if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
+             msContinueListId.getLength() == 0 )
+        {
+            if ( mrTxtImport.GetListStyleOfLastProcessedList() == msListStyleName &&
+                 mrTxtImport.GetLastProcessedListId() != msListId )
+            {
+                msContinueListId = mrTxtImport.GetLastProcessedListId();
+            }
+        }
+
+        if ( msContinueListId.getLength() > 0 )
+        {
+            if ( !mrTxtImport.IsListProcessed( msContinueListId ) )
+            {
+                msContinueListId = ::rtl::OUString();
+            }
+            else
+            {
+                // search continue list chain for master list and
+                // continue the master list.
+                ::rtl::OUString sTmpStr =
+                    mrTxtImport.GetContinueListIdOfProcessedList( msContinueListId );
+                while ( sTmpStr.getLength() > 0 )
+                {
+                    msContinueListId = sTmpStr;
+
+                    sTmpStr =
+                        mrTxtImport.GetContinueListIdOfProcessedList( msContinueListId );
+                }
+            }
+        }
+
+        if ( !mrTxtImport.IsListProcessed( msListId ) )
+        {
+            mrTxtImport.KeepListAsProcessed( msListId, msListStyleName, msContinueListId );
+        }
+    }
+    // <--
+
     // Remember this list block.
-    rTxtImport.SetListBlock( this );
+    mrTxtImport.SetListBlock( this );
 
     // There is no list item by now.
-    rTxtImport.SetListItem( 0 );
+    mrTxtImport.SetListItem( 0 );
 }
 
 XMLTextListBlockContext::~XMLTextListBlockContext()
@@ -198,18 +320,18 @@ void XMLTextListBlockContext::EndElement()
     // Numbering has not to be restarted if it has been restarted within
     // a child list.
     XMLTextListBlockContext *pParent =
-        (XMLTextListBlockContext *)&xParentListBlock;
+                                (XMLTextListBlockContext *)&mxParentListBlock;
     if( pParent )
     {
-        pParent->bRestartNumbering = bRestartNumbering;
+        pParent->mbRestartNumbering = mbRestartNumbering;
     }
 
     // Restore current list block.
-    rTxtImport.SetListBlock( pParent );
+    mrTxtImport.SetListBlock( pParent );
 
     // Any paragraph following the list within the same list item mist not
     // be numbered.
-    rTxtImport.SetListItem( 0 );
+    mrTxtImport.SetListItem( 0 );
 }
 
 SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
@@ -220,14 +342,14 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap =
-                        rTxtImport.GetTextListBlockElemTokenMap();
+                        mrTxtImport.GetTextListBlockElemTokenMap();
     sal_Bool bHeader = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TEXT_LIST_HEADER:
         bHeader = sal_True;
     case XML_TOK_TEXT_LIST_ITEM:
-        pContext = new XMLTextListItemContext( GetImport(), rTxtImport,
+        pContext = new XMLTextListItemContext( GetImport(), mrTxtImport,
                                                 nPrefix, rLocalName,
                                               xAttrList, bHeader );
         break;
@@ -239,5 +361,14 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
     return pContext;
 }
 
+// --> OD 2008-04-22 #refactorlists#
+const ::rtl::OUString& XMLTextListBlockContext::GetListId() const
+{
+    return msListId;
+}
 
-
+const ::rtl::OUString& XMLTextListBlockContext::GetContinueListId() const
+{
+    return msContinueListId;
+}
+// <--
