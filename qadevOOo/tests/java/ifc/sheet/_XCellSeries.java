@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: _XCellSeries.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,6 +140,9 @@ public class _XCellSeries extends MultiMethodTest {
         try {
             oSheet.getCellByPosition(0, 0).setValue(2);
 
+            LoggingThread logger = new LoggingThread((LogWriter)log, tParam);
+            logger.start();
+
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, com.sun.star.sheet.FillMode.LINEAR, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8)");
             oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT,
@@ -150,6 +153,8 @@ public class _XCellSeries extends MultiMethodTest {
             double getting = oSheet.getCellByPosition(0, 4).getValue();
             boolean locres = (getting == 20);
 
+            logger.finish();
+
             if (!locres) {
                 log.println("Operation failed");
             } else {
@@ -158,7 +163,7 @@ public class _XCellSeries extends MultiMethodTest {
 
             res &= locres;
 
-            LoggingThread logger = new LoggingThread((LogWriter)log, tParam);
+            logger = new LoggingThread((LogWriter)log, tParam);
             logger.start();
 
             log.println(
