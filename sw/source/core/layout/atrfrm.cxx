@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: atrfrm.cxx,v $
- * $Revision: 1.71 $
+ * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -687,11 +687,11 @@ void SwFmtPageDesc::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( IS_TYPE( SwFmt, pDefinedIn ))
 #ifndef PRODUCT
             {
-                sal_Bool bDel = ((SwFmt*)pDefinedIn)->ResetAttr( RES_PAGEDESC );
+                sal_Bool bDel = ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
                 ASSERT( bDel, ";-) FmtPageDesc nicht zerstoert." );
             }
 #else
-                ((SwFmt*)pDefinedIn)->ResetAttr( RES_PAGEDESC );
+                ((SwFmt*)pDefinedIn)->ResetFmtAttr( RES_PAGEDESC );
 #endif
             else if( IS_TYPE( SwCntntNode, pDefinedIn ))
 #ifndef PRODUCT
@@ -2753,7 +2753,7 @@ void SwFlyFrmFmt::MakeFrms()
                             // OD 24.07.2003 #111032# - update anchor attribute
                             aAnchorAttr.SetPageNum( nPgNum );
                             aAnchorAttr.SetAnchor( 0 );
-                            SetAttr( aAnchorAttr );
+                            SetFmtAttr( aAnchorAttr );
                         }
                         break;
                     }
