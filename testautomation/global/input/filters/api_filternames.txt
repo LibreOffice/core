@@ -1,0 +1,73 @@
+StarOffice XML (Base)
+StarOffice XML (Base) Report"
+HTML (StarWriter)
+MS Word 95 Vorlage
+MS Word 97 Vorlage
+StarOffice XML (Writer)
+StarWriter 3.0 Vorlage/Template
+StarWriter 4.0 Vorlage/Template
+StarWriter 5.0 Vorlage/Template
+Text
+Text (encoded)
+writer_JustSystem_Ichitaro_10_template
+writer_StarOffice_XML_Writer_Template
+writer8
+writer8_template
+MS Word 2003 XML
+HTML
+StarWriter/Web 4.0 Vorlage/Template
+StarWriter/Web 5.0 Vorlage/Template
+Text (StarWriter/Web)
+Text (encoded) (StarWriter/Web)
+writer_web_StarOffice_XML_Writer
+writer_web_StarOffice_XML_Writer_Web_Template
+writerweb8_writer_template
+writerweb8_writer
+StarWriter 4.0/GlobalDocument
+StarWriter 5.0/GlobalDocument
+Text (encoded) (StarWriter/GlobalDocument)
+writer_globaldocument_StarOffice_XML_Writer
+writer_globaldocument_StarOffice_XML_Writer_GlobalDocument
+writerglobal8
+writerglobal8_writer
+HTML (StarCalc)
+MS Excel 4.0 Vorlage/Template
+MS Excel 5.0/95 Vorlage/Template
+MS Excel 95 Vorlage/Template
+MS Excel 97 Vorlage/Template
+StarCalc 3.0 Vorlage/Template
+StarCalc 4.0 Vorlage/Template
+StarCalc 5.0 Vorlage/Template
+StarOffice XML (Calc)
+Text - txt - csv (StarCalc)
+calc_HTML_WebQuery
+calc_StarOffice_XML_Calc_Template
+calc8
+calc8_template
+MS Excel 2003 XML
+StarDraw 3.0 Vorlage
+StarDraw 5.0 Vorlage
+StarOffice XML (Draw)
+draw_StarOffice_XML_Draw_Template
+draw8
+draw8_template
+MS PowerPoint 97 Vorlage
+StarDraw 3.0 Vorlage (StarImpress)
+StarDraw 5.0 Vorlage (StarImpress)
+impress_StarOffice_XML_Draw
+StarImpress 4.0 Vorlage
+StarImpress 5.0 Vorlage
+StarImpress 5.0 (packed)
+StarOffice XML (Impress)
+impress_StarOffice_XML_Impress_Template
+impress8
+impress8_template
+impress8_draw
+StarOffice XML (Chart)
+chart8
+StarOffice XML (Math)
+math8
+draw_html_Export
+impress_html_Export
+DocBook File
+

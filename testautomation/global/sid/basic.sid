@@ -1,0 +1,12 @@
+'**** StarBasic-Befehle und ohne Uebergabeparameter mit SlotIDs ****
+'*                                                                 *
+'*                       Test von JSI                              *
+'*                                                                 *
+'*******************************************************************
+
+BSIDAnzahlURLErmitteln FN_GET_URL_COUNT
+BSIDUpdateMail SID_MAIL_UPDATETOOLBOX
+
+
+
+

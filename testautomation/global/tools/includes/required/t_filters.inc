@@ -1,0 +1,517 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: t_filters.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:10 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/******************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*
+'*  short description : Retrieve and set filternames and suffixes
+'*
+'*******************************************************************************
+'**
+' #1 hGetSuffix               ' get the suffix for a specified build-id
+' #1 hGetFilter               ' get the filtername for a specified build-id
+' #0 hSelectUIFilter          ' Select a filter in the UI by API filter name
+' #0 hFindFilterPosition      ' Find the index of the filter in the file open dialog
+' #0 hGetFilterGroup          ' Speedier approach to hGetUIFilternames()
+' #1 GetDefaultFilterNames    ' read the default filternames from a reference list
+' #1 CreateFilterNamesList    ' write the default filternames to the reference list
+' #1 hGetValueForKeyAsString  ' find key in list, return value as string
+' #1 hGetValueForPairAsString ' find value in list, return key and value as string
+' #1 hGetKeyForPairAsString   ' get key from a key=value string as string
+' #1 hGetDataFileSection      ' read a section from a datafile into a list
+' #1 hGetFileData             ' return value for key from file directly (ignores sections)
+' #1 hGetStartOfSection       ' identify beginning of new section in datafile
+' #1 hGetEndOfSection         ' identify end of section in datafile
+' #1 hGetSection              ' retrieve list of strings from section
+'**
+'\******************************************************************************
+
+private const LENGTH_OF_FILTERFILE = 100
+private const FILE_DATA_SIZE = 300
+
+function hGetSuffix( optional cBuildId as string ) as string
+
+    ' This function retrieves the suffix depending on the build id (e.g. 680)
+    ' for a known gApplication from the program configuration.
+    
+    ' Currently known Build-IDs are:
+    ' No parameter = current
+    ' "" (empty string) = current
+    ' 300 = StarOffice 9 / OpenOffice.org 3.x
+    ' 680 = StarOffice 8 / OpenOffice.org 2.x
+    ' 645 = StarOffice 7 / OpenOffice.org 1.x
+    ' 641 = StarOffice 6 (XML format)
+    ' 569 = StarOffice 5 (Binary format)
+
+    dim sMatchingFile as string
+    dim sFilterArray( 100 ) as string
+    dim sFilterConfigName as string
+    dim sSuffix( 10 ) as string
+    
+    if ( IsMissing( cBuildId ) ) then cBuildId = "current"
+    if ( cBuildId = "" ) then cBuildId = "current"
+
+    sMatchingFile = gTesttoolPath & "global\input\filters\"
+    sMatchingFile = sMatchingFile & "build_to_suffix.txt"
+    sMatchingFile = convertpath( sMatchingFile )
+    
+    'printlog( "DEBUG: SUFFIX: Build-ID: " & cBuildId )
+    hGetDataFileSection( sMatchingFile, sFilterArray(), cBuildId, "", "" )
+    sFilterConfigName = hGetValueForKeyAsString( sFilterArray(), gApplication )
+    'printlog( "DEBUG: SUFFIX: Config name: " & sFilterConfigName )
+    sSuffix() = hGetFilterNameExtension( sFilterConfigName )
+    'printlog( "DEBUG: SUFFIX: " & sSuffix( 0 ) )
+    hGetSuffix() = "." & sSuffix( 0 )
+
+end function
+
+'*******************************************************************************
+
+function hGetFilter( optional cBuildId as string ) as string
+
+    '///<h1>Get the Filtername for a specified Build-ID</h1>
+
+    ' Currently known Build-IDs are:
+    ' No parameter = current
+    ' "" (empty string) = current
+    ' 300 = StarOffice 9 / OpenOffice.org 3.x
+    ' 680 = StarOffice 8 / OpenOffice.org 2.x
+    ' 645 = StarOffice 7 / OpenOffice.org 1.x
+    ' 641 = StarOffice 6 (XML format)
+    ' 569 = StarOffice 5 (Binary format)
+
+    dim clTemp( LENGTH_OF_FILTERFILE ) as string ' cFilterFile is stored here
+    
+    dim sMatchingFile as string
+    dim sFilterArray( 100 ) as string
+    dim sFilterConfigName as string
+    dim sFilter as string
+    
+    if ( IsMissing( cBuildId ) ) then cBuildId = "current"
+    if ( cBuildId = "" ) then cBuildId = "current"
+    
+    sMatchingFile = gTesttoolPath & "global\input\filters\"
+    sMatchingFile = sMatchingFile & "build_to_filter.txt"
+    sMatchingFile = convertpath( sMatchingFile )
+    
+    'printlog( "DEBUG: FILTER: Filter-ID: " & cBuildId )
+    hGetDataFileSection( sMatchingFile, sFilterArray(), cBuildId, "", "" )
+    sFilterConfigName = hGetValueForKeyAsString( sFilterArray(), gApplication )
+    'printlog( "DEBUG: FILTER: Config name: " & sFilterConfigName )
+    sFilter = hGetUIFilterName( sFilterConfigName )
+    'printlog( "DEBUG: FILTER: " & sFilter )
+    hGetFilter() = sFilter
+    
+end function
+
+'*******************************************************************************
+
+function hSelectUIfilter( cAPIFilter as string ) as boolean
+
+    ' Wrapper for hFindFilterPosition() which also selects the filter
+    dim irc as integer    
+    
+    irc = hFindFilterPosition( cAPIFilter )
+    if ( irc > 0 ) then
+        DateiTyp.select( irc )
+        hSelectUIfilter() = true
+    else
+        hSelectUIfilter() = false
+    endif
+    
+end function
+
+'*******************************************************************************
+
+function hFindFilterPosition( cFilter as string ) as integer
+
+    ' This function takes a filter as provided by the office API and tries to find
+    ' this filter within the File Save dialogs file type list.
+    ' The file types have a suffix appended like " (.odt)" which is not present
+    ' in the API's filter name so it is not possible to select the file
+    ' type directly and we do not have an exact match either.
+    ' To ensure that we not accidentially select the template a bracket is 
+    ' appended to the string.
+
+    dim iCurrentFilter as integer
+    dim cCurrentFilter as string
+    dim cUniqueFilter as string
+        cUniqueFilter = cFilter & " ("
+        
+    const CFN = "global::tools::inc::hFindFilterPosition::"
+    
+    for iCurrentFilter = 1 to DateiTyp.getItemCount()
+    
+        cCurrentFilter = DateiTyp.getItemText( iCurrentFilter )
+        
+        if ( cFilter = cCurrentFilter ) then
+            'printlog( CFN & "Exact match - this is a UI filter name, not API" )
+            'printlog( CFN & "The filter is at pos. " & iCurrentFilter )
+            hFindFilterPosition() = iCurrentFilter
+            exit function
+        endif
+        
+        if ( instr( cCurrentFilter, cUniqueFilter ) > 0 ) then
+            'printlog( CFN & "Filter found at pos. " & iCurrentFilter )
+            hFindFilterPosition() = iCurrentFilter
+            exit function
+        endif
+        
+    next iCurrentFilter
+    
+    warnlog( CFN & "Filter not found: " & cFilter )
+    warnlog( CFN & "Refer to global::input:.filters::api_filters.txt for a complete list of available filters" )
+    
+    hFindFilterPosition() = 0
+    
+end function
+
+'*******************************************************************************
+
+function hGetFilterGroup( api_filters() as string, ui_filters() as string ) 
+
+    ' This is a function designed to deliver a massive speed improvement
+    ' compared to multiple calls to hGetUIFiltername() which establish a fresh 
+    ' UNO connection on each call. This function establishes only one connection
+    ' and works with a list of API filter names which are matched to UI filter
+    ' names. This function does not wrap the UNO calls in a try...catch block
+    ' which means that if the function fails, it fails hard. Extra hard, that is.
+    ' There is no errorhandling. This function is intended for internal use only.
+    ' No returnvalue is defined at this time.
+
+    const CFN = "global::tools::inc::t_filters.inc::hGetFilterGroup:"
+
+    dim oUno as object
+    dim oService as object
+    dim oFilter as object
+    
+    dim iCurrentFilter as integer
+    
+    dim iFilterCount as integer
+        iFilterCount = ubound( api_filters() )
+        
+    dim iAPIfilterList as integer
+
+    oUno = hGetUNOService( true )
+    oService = oUno.createInstance("com.sun.star.document.FilterFactory")
+    
+    for iCurrentFilter = 1 to iFilterCount
+    
+        oFilter = oService.getByName( api_filters( iCurrentFilter ) )
+
+        for iAPIFilterList = 0 to ubound( oFilter )
+        
+            if ( oFilter( iAPIFilterList ).Name = "UIName" ) then
+                ui_filters( iCurrentFilter ) = oFilter( iAPIFilterList ).Value()
+                'printlog( CFN & "DEBUG: Index (iCurrentFilter): " & iCurrentFilter )
+                'printlog( CFN & "DEBUG: API Filter: " & api_filters( iCurrentFilter ) )
+                'printlog( CFN & "DEBUG: UI Filter.: " &  ui_filters( iCurrentFilter ) )
+            endif
+            
+        next iAPIFilterList
+        
+    next iCurrentFilter
+
+end function
+
+'*******************************************************************************
+
+sub GetDefaultFilterNames()
+
+    dim sMatchingFile as string
+    dim sFilterArray( 100 ) as string
+    
+    const APPLICATION_COUNT = 7  
+    dim cUIFilters( APPLICATION_COUNT ) as string
+    dim cAPIFilters( APPLICATION_COUNT ) as string
+    
+    sMatchingFile = gTesttoolPath & "global\input\filters\"
+    sMatchingFile = sMatchingFile & "build_to_filter.txt"
+    sMatchingFile = convertpath( sMatchingFile )
+
+    hGetDataFileSection( sMatchingFile, sFilterArray(), "Current", "", "" )
+
+    cAPIFilters( 1 ) = hGetValueForKeyAsString( sFilterArray(), "WRITER"    )
+    cAPIFilters( 2 ) = hGetValueForKeyAsString( sFilterArray(), "CALC"      )
+    cAPIFilters( 3 ) = hGetValueForKeyAsString( sFilterArray(), "IMPRESS"   )
+    cAPIFilters( 4 ) = hGetValueForKeyAsString( sFilterArray(), "MASTERDOC" )
+    cAPIFilters( 5 ) = hGetValueForKeyAsString( sFilterArray(), "MATH"      )
+    cAPIFilters( 6 ) = hGetValueForKeyAsString( sFilterArray(), "DRAW"      )
+    cAPIFilters( 7 ) = hGetValueForKeyAsString( sFilterArray(), "HTML"      )
+    
+    hGetFilterGroup( cAPIFilters(), cUIFilters() )
+
+    gWriterFilter     = cUIFilters( 1 ) 
+    gCalcFilter       = cUIFilters( 2 )
+    gImpressFilter    = cUIFilters( 3 )
+    gMasterDocFilter  = cUIFilters( 4 )
+    gMathFilter       = cUIFilters( 5 )
+    gDrawFilter       = cUIFilters( 6 )
+    gHTMLFilter       = cUIFilters( 7 )
+    
+end sub
+
+'*******************************************************************************
+
+function hGetValueForKeyAsString( lsList() as string, sKey as string ) as string
+
+    '/// This function returns the value of a key as string.
+    '///+ The form of the input strings is 'key=value', the list is parsed
+    '///+ The Value for the first occurrence of sKey is returned
+
+    dim iItem as integer
+    dim cComp as string
+
+    hGetValueForKeyAsString() = "Error: No matching VALUE found for key: " & sKey
+
+    ' Scan through the list and look for sKey. If found, return the Value
+    ' (everything to the right of the '=')
+
+    for iItem = 1 to listcount( lsList() )
+
+        if( instr( lsList( iItem ) , sKey ) <> 0 ) then
+
+            cComp = hGetKeyforPairAsString( lsList( iItem ) )
+
+            if( sKey = cComp ) then
+                hGetValueForKeyAsString() = hGetValueForPairAsString( lsList( iItem ) )
+                iItem = listcount( lsList() ) + 1
+            end if
+
+        end if
+
+    next iItem
+
+end function
+            
+'*******************************************************************************
+
+function hGetValueForPairAsString( cLine as string ) as string
+
+    '///  This function takes a string that (hopefully) contains one '='
+    '///+  and returns the substringstring to the right from the '=' char.
+
+    dim iCharPos as integer
+
+    iCharPos = instr( cLine , "=" )
+    iCharPos = len( cLine ) - iCharPos
+    hGetValueForPairAsString() = right( cLine , iCharPos )
+
+end function
+
+'*******************************************************************************
+
+function hGetKeyForPairAsString( cLine as string ) as string
+
+    '///  This function returns the string to the left of the '='
+
+    dim iCharPos as integer
+
+    iCharPos = instr( cLine , "=" )
+
+    ' get the string to the left of the = char
+
+    if ( iCharPos > 0 ) then
+        hGetKeyForPairAsString() = left( cLine , iCharPos -1 )
+    else
+        warnlog( "Invalid string passed to hGetKeyForPairAsString: " & cLine )
+    end if
+
+end function
+
+'*******************************************************************************
+
+function hGetDataFileSection( cFile as string, lsList() as string, cSection as string , cComment as string, cPrint as string ) as integer
+
+    const CFN = "hGetDataFileSection:"
+
+    '///  This function reads a datafile into a list.
+    '///+ Comments (lines beginning with #) are removed from the list.
+    '///+ A comment can be passed to the log.
+    '///+ Furthermore a section in the source-file can be specified. Only
+    '///+ lines within the section are returned then. The delimiter for a
+    '///+ section is [section-name] <> [ ...] (or EOF)
+    '///+ <ul>NOTES:<li>Instead of lsList() a temporary list should be used that is big
+    '///+ enough to hold all the data from the datafile.</li>
+    '///+ <li> this function does - basically the same as getinivalue(...) but
+    '///+ is easier to debug and returns a list not the key.</li></ul>
+
+    dim sFile as string
+
+    dim iSectionBegin as integer
+    dim iSectionEnd as integer
+    dim iSectionItems as integer
+
+    ' verify that the sourcefile exists, otherwise warn and abort
+    if ( dir( cFile ) = "" ) then
+        warnlog( CFN & "File not found: " & cFile )
+        hGetDataFileSection() = 0 
+        exit function
+    end if
+
+    ' print a comment to the logfile. Non optional parameter but might be ""
+    if ( cComment <> "" ) then
+        printlog( "" )
+        printlog( CFN & cComment & " : " & cFile )
+        printlog( "" )
+    end if
+
+    ' read the list from the file
+    listread( lsList() , cFile , "utf8" )
+
+    ' remove comments ( lines containing # )
+    hListClearPattern( lsList() , "#" )
+
+    ' remove all blank lines
+    hListClearBlank( lsList() )
+
+    ' honor the section, if given. Non-optional parameter that can be ""
+    if ( cSection <> "" ) then
+        iSectionBegin = hGetStartOfSection( lsList() , cSection )
+        iSectionEnd   = hGetEndOfSection( lsList() , iSectionBegin )
+        iSectionItems = hGetSection( lsList() , iSectionBegin , iSectionEnd )
+    end if
+
+    ' print the current list - if desired.
+    if ( lcase( cPrint ) <> "" ) then
+        hListPrint( lsList(), "Parent function: " & CFN )
+    end if
+
+    ' return the number of items
+    hGetDataFileSection() = listcount( lsList() )
+
+end function
+
+'*******************************************************************************
+
+function hGetFileData( sFile as string , sKey as string ) as string
+
+    dim sList( FILE_DATA_SIZE ) as string
+    dim iArraySize as integer
+
+    ' This function reads a file and returns the first line containing sKey
+    iArraySize = hGetDataFileSection( sFile, sList(), "", "", "" )
+    hGetFileData() = hGetValueForKeyAsString( sList() , sKey )
+
+end function
+
+'*******************************************************************************
+
+function hGetStartOfSection( lsList() as string , _section as string ) as integer
+
+    const CFN = "hGetStartOfSection::"
+
+    '/// This function takes a list and looks for a string of the type [_section].
+    '///+ The position of this successful hit is returned.
+    '///+ On error the returnvalue defaults to 0.
+
+    dim iThisString as integer
+    dim cThisString as string
+    dim iListSize as integer
+    dim cSection as string
+
+    iThisString = 0
+    cSection = lcase ( "[" & _section & "]" )
+    iListSize = listcount( lsList() )
+
+    do while ( iThisString <= iListSize )
+    
+        iThisString = iThisString + 1
+        cThisString = lcase( lsList( iThisString ) )
+
+        if ( instr( cThisString , cSection ) ) then
+            hGetStartOfSection() = iThisString + 1
+            iThisString = iListSize + 5
+        end if
+
+    loop
+
+    if ( iThisString = ( iListSize + 1 ) ) then
+        warnlog( CFN & "Section not found or empty: " & _section )
+        hGetStartOfSection = 0
+    end if
+
+end function
+
+'*******************************************************************************
+
+function hGetEndOfSection( lsList() as string , iOffset as integer ) as integer
+
+    dim iThisString as integer
+    dim cThisString as string
+    dim iListSize as integer
+
+    iThisString = iOffset
+    iListSize = listcount( lsList() )
+
+    do while ( iThisString <= iListSize )
+        cThisString = lsList( iThisString )
+
+        if ( ( instr( cThisString , "[" ) > 0 ) and  ( instr( cThisString , "]" ) > 0 ) )then
+            hGetEndOfSection() = iThisString - 1
+            iThisString = iListSize + 5
+        else
+            iThisString = iThisString + 1
+        end if
+
+    loop
+
+    if ( iThisString = ( iListSize + 1 ) ) then
+        hGetEndOfSection() = iListSize
+    end if
+
+end function
+
+'*******************************************************************************
+
+function hGetSection( lsList() as string , iSectionBegin as integer , iSectionEnd as integer ) as integer
+
+    dim iArraySize as integer
+    dim iThisString as integer
+
+    iArraySize = ubound( lsList() )
+
+    dim lsTempList( iArraySize ) as string
+    listcopy( lsList() , lsTempList() )
+    listalldelete( lsList() )
+
+    for iThisString = iSectionBegin to iSectionEnd
+
+        listappend( lsList() , lsTempList( iThisString ) )
+
+    next iThisString
+
+    hGetSection() = listcount( lsList() )
+
+end function
+
+

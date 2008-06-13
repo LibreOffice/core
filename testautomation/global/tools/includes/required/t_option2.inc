@@ -1,0 +1,504 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: t_option2.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:11 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* owner : thorsten.bosbach@sun.com
+'*
+'* short description : Tools library for options testcases
+'*
+'************************************************************************
+'*
+' #0 OptionTabPageZaehler           ' Counting tab pages in Tools / Options
+' #0 ToPosInOptionlist              ' Jumping to the correct position in the options tree
+' #0 DialogeFuerTypenKontrollieren  'Complete test for path-options
+' #1 hSetMacroSecurity ' switch between security levels in Tools/Options
+' #0 fGetSetMacroSecurityUNO ' switch between security levels in Tools/Options without using UI
+' #1 hGetMacroSecurityAPI  ' Retrieve the current macro security level using API
+' #1 hSetMacroSecurityAPI  ' Set the macro security level via API
+'*
+'\***********************************************************************
+
+function OptionTabPageZaehler ( SollAnzahl as Integer, optional Ausnahme as Boolean )
+'parameter Ausnahme is depracted
+   Dim IstAnzahl
+   Kontext "ExtrasOptionenDlg"
+   IstAnzahl = Optionsliste.GetItemCount - iSectionNumber
+   if Ausnahme = FALSE then
+      if IstAnzahl <> SollAnzahl then WarnLog "Number of tabpages old :  " + SollAnzahl + "   new :  " + IstAnzahl
+   end if
+   OptionTabPageZaehler = IstAnzahl
+end function
+
+'-------------------------------------------------------------------------
+
+sub ToPosInOptionlist ( Sprung as Integer )
+  Dim i as Integer
+   Kontext "OptionenDlg"
+   Optionsliste.TypeKeys "<HOME>"
+   for i = 1 to 12
+      Optionsliste.TypeKeys "-<DOWN>"
+   next i
+   Optionsliste.Select Sprung
+   Optionsliste.TypeKeys "+"
+end sub
+
+'-------------------------------------------------------------------------
+
+sub DialogeFuerTypenKontrollieren
+' Complete test for path-options, for all entries the file-dialog or the path-dialog will be opened
+  Dim i as Integer
+  Dim iCount as Integer
+  Dim iErrorCount as integer
+   Kontext "TabPfade"
+   Typ.TypeKeys "<Down><Down><Home>"
+   iCount = 0
+   iErrorCount = 0
+   for i=1 to Typ.GetItemCount
+      if i<>1 then Typ.TypeKeys "<Down>"
+      printlog "      "+typ.getText
+      if bAsianLan <> TRUE then
+         try
+            Bearbeiten.Click
+            kontext
+            if active.exists (3) then
+                iErrorCount = iErrorCount + 1
+                if (iErrorCount > 1) then
+                    Warnlog active.getText
+                endif
+                qaErrorlog "#i69014# gallery path doesn't exist: '" + active.getText + "'"
+                printlog active.getText
+                active.ok
+            endif
+            Kontext "OeffnenDlg"
+            if OeffnenDlg.Exists(2) then
+               if Dateityp.IsVisible = TRUE then Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+               OeffnenDlg.Cancel
+            else
+               Kontext "PfadeAuswaehlen"
+               PfadeAuswaehlen.Cancel
+            end if
+            Sleep (1)
+            Kontext "TabPfade"
+         catch
+            Warnlog "Error on entry " & i & "!"
+            Exceptlog
+         endcatch
+      else
+         try
+            if Bearbeiten.IsEnabled = TRUE then
+               Bearbeiten.Click
+                kontext
+                if active.exists (3) then
+                    iErrorCount = iErrorCount + 1
+                    if (iErrorCount > 1) then
+                        Warnlog active.getText
+                    endif
+                    qaErrorlog "WorkAround for #109107# has to come up only once @'Add-Ins'! else BUG!"
+                    active.ok
+                endif
+               Kontext "OeffnenDlg"
+               if OeffnenDlg.Exists(2) then
+                  if Dateityp.IsVisible = TRUE then Warnlog "The normal FileOpen-Dialog is visible with the Filetype-Listbox => BUG!"
+                  OeffnenDlg.Cancel
+               else
+                  Kontext "PfadeAuswaehlen"
+                  PfadeAuswaehlen.Cancel
+               end if
+               Sleep (1)
+               Kontext "TabPfade"
+            else
+               iCount = iCount + 1
+            end if
+         catch
+            Warnlog "Error on entry " & i & "!"
+            Exceptlog
+         endcatch
+      end if
+   next i
+   if iCount > 3 then Warnlog "There are more than 3 entries are disabled!"
+
+end sub
+
+'-------------------------------------------------------------------------
+
+function hSetMacroSecurity( iLevel as integer ) as integer
+ 
+    '///<h3>Set macro security level via GUI</h3>
+    '///<i>Set the macro security by accessing the Tools/Options->
+    '///+ OpenOffice.org/Security::Macro... Tabpage</i><br><br>
+
+    '///<u>Parameter(s):</u><br>
+    '///<ol>
+
+    '///+<li>Desired macro security level (Integer). Following symbolic names are defined:</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///</ul>
+
+    '///</ol>
+
+
+    '///<u>Returns:</u><br>
+    '///<ol>
+    '///+<li>Previous security level (Integer)</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///+<li>-1 on error</li>
+    '///</ul>
+    '///</ol>
+ 
+ 
+
+    '///Switch between macro security levels in Tools/Options
+    '///<ul>    
+    const CFN = "hSetMacroSecurity::"
+    dim iOldSecurityLevel as integer
+    
+    dim caLevel( 3 ) as string
+        caLevel( 0 ) = "low"
+        caLevel( 1 ) = "medium"
+        caLevel( 2 ) = "high"
+        caLevel( 3 ) = "very high"    
+    
+    if ( ( iLevel < GC_MACRO_SECURITY_LEVEL_LOW ) or ( iLevel > GC_MACRO_SECURITY_LEVEL_VERYHIGH ) ) then
+        warnlog( CFN & "Invalid index (0...3) passed to function: " & ilevel )
+        hSetMacroSecurity() = -1
+        exit function
+    end if
+    
+    '///+<li>Open Tools/Options -> OpenOffice.org/Security</li>
+    ToolsOptions
+    hToolsOptions( "Staroffice" , "Security" )
+    
+    '///+<li>Click on the macro security button</li>
+    Kontext "TabSecurity"
+    if ( MacroSecurity.exists( 2 ) ) then
+        MacroSecurity.click()
+        
+        '///+<li>Ensure we are on the Security Level page</li>
+        kontext "Active"
+        if ( Active.exists( 2 ) ) then
+        
+            Kontext
+            active.setpage TabSecurityLevel
+            
+            '///+<li>Get the current setting (=returnvalue)</li>
+            Kontext "TabSecurityLevel"
+            if ( TabSecurityLevel.exists( 2 ) ) then
+                if ( veryhigh.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_VERYHIGH
+                elseif( high.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_HIGH
+                elseif( medium.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_MEDIUM
+                elseif( low.isChecked() ) then
+                    iOldSecurityLevel = GC_MACRO_SECURITY_LEVEL_LOW
+                end if
+            else
+                printlog( CFN & "Security Tabpage not available. Aborting." )
+                kontext "OptionenDlg"
+                if ( OptionenDlg.exists( 2 ) ) then
+                    OptionenDlg.cancel()
+                else
+                    warnlog( CFN & "Unrecoverable error, status unknown." )
+                endif
+                hSetMacroSecurity() = -1
+                exit function
+            endif
+    
+            '///+<li>Set the new security level</li>
+            select case iLevel
+                case GC_MACRO_SECURITY_LEVEL_LOW      : low.check()
+                case GC_MACRO_SECURITY_LEVEL_MEDIUM   : medium.check()
+                case GC_MACRO_SECURITY_LEVEL_HIGH     : high.check()
+                case GC_MACRO_SECURITY_LEVEL_VERYHIGH : veryhigh.check()
+            end select
+            
+            printlog( CFN & "Setting macro security level to " & caLevel( iLevel ) )
+            
+        else
+            printlog( CFN & "Macro Security Dialog did not open. Aborting." )
+            kontext "OptionenDlg"
+            if ( OptionenDlg.exists( 2 ) ) then
+                OptionenDlg.cancel()
+            else
+                warnlog( CFN & "Unrecoverable error, status unknown." )
+            endif
+            hSetMacroSecurity() = -1
+            exit function
+        endif            
+
+        '///+<li>Close Tools/Options</li>    
+        TabSecurityLevel.ok()
+    else
+        warnlog( CFN & "The Macro Security Button is not available" )
+        iOldSecurityLevel = -1
+    end if
+    Kontext "OptionenDLG"
+    OptionenDLG.OK()
+    '///</ul>
+    hSetMacroSecurity() = iOldSecurityLevel
+end function
+
+'-------------------------------------------------------------------------
+
+function fGetSetMacroSecurityUNO (optional iLevel as integer) as integer
+    ' Input  : Security level where 0 = low and 3 = very high; empty: just return current value
+    ' Return : Previous security level, -1 on error
+    ' Changes: If iLevel is given, update global variable gMacroSecurityLevel to new level
+    ' NOTE   : If possible use this function outside the testcase
+    '///Switch between macro security levels in Tools/Options without using the UI
+    Dim sFileFunction as string
+    Dim iOldSecurityLevel as integer
+    Dim oUnoOfficeConnection as object
+    Dim oUnoConfigurationAccess as object
+    Dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
+    Dim xViewRoot
+    Dim bOptional as boolean
+
+    sFileFunction = "global::tools::inc::t_option2.inc::hSetMacroSecurity::"
+    bOptional = isMissing(iLevel)
+    iOldSecurityLevel = -1
+
+    ' Open OOo UNO-Port for communication
+    oUnoOfficeConnection=hGetUnoService(TRUE)
+    if (NOT isNull(oUnoOfficeConnection)) then
+        try
+            ' Open Configuration access
+            oUnoConfigurationAccess=oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
+            if (NOT isNull(oUnoConfigurationAccess)) then
+                ' Specifies the location of the view root in the configuration:
+                ' The value is the Path name of the configuration item to change.
+                aPropertyValue(0).Name="nodepath"
+                ' Controls how updates are handled in the cache: If false , the cache 
+                ' must operate in  write-through mode, where updates are written to 
+                ' persistent storage at once - that is before ::commitChanges()  returns.
+                aPropertyValue(1).Name="lazywrite"
+                aPropertyValue(1).Value=False
+        
+                '///Tools / Options / Security
+                '///Check which 'Macro Security Level' is set and put it into returnvalue. 
+                aPropertyValue(0).Value="/org.openoffice.Office.Common/Security/Scripting"
+                xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+                iOldSecurityLevel = xViewRoot.getByName("MacroSecurityLevel")
+                ' If input is given, use it by setting the Security Level
+                if NOT bOptional then
+                    xViewRoot.setPropertyValue("MacroSecurityLevel", iLevel)
+                    xViewRoot.commitChanges()
+                    ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
+                    ' This call to ask for pending changes is just to convince me;
+                    if xViewRoot.hasPendingChanges() then
+                        qaErrorLog(sFileFunction+"Changes still pending...")
+                        ' At this point there is no needed to think about what to do, if it doesn't work.
+                        ' If it doesn't work, the change is performed in the UI via
+                        ' global::system::inc::master.inc::mMakeGeneralOptions
+                    end if
+                    ' Update global value
+                    gMacroSecurityLevel = iLevel
+                end if
+                ' Destroy, discard, dump, get rid of, put away, throw away, trash, the object:
+                xViewRoot.dispose()
+            else
+                qaErrorLog(sFileFunction+"Couldn't create Configuration access")
+            end if
+        catch
+            qaErrorLog(sFileFunction+"Failure during reading or setting Configuration Value")
+        endcatch
+    else
+        qaErrorLog(sFileFunction+"Couldn't get UNO service")
+    end if
+    fGetSetMacroSecurityUNO = iOldSecurityLevel
+end function
+
+
+
+'*******************************************************************************
+
+function hGetMacroSecurityAPI() as integer
+
+
+    '///<h3>Retrieve the macro security level via API</h3>
+    '///<i>Use remote UNO to quickly retrieve the current macro security level.
+    '///+ This function runs silent unless an error is encountered.</i><br><br>
+
+    '///<u>Parameter(s):</u><br>
+    '///<ol>
+    '///+<li>No input parameters</li>
+    '///</ol>
+
+
+    '///<u>Returns:</u><br>
+    '///<ol>
+    '///+<li>Macro Security Level (Integer)</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///+<li>-1 = Error</li>        
+    '///</ul>
+    '///</ol>
+
+    const CFN = "hGetMacroSecurityAPI::"
+    
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue( 1 ) As new com.sun.star.beans.PropertyValue
+    dim iLevel as integer
+    dim xViewRoot
+    
+    try
+    
+        oUnoOfficeConnection=hGetUnoService(TRUE)
+        oUnoConfigurationAccess=oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
+   
+        aPropertyValue( 0 ).Name  = "nodepath"
+        aPropertyValue( 0 ).Value = "/org.openoffice.Office.Common/Security/Scripting"
+        aPropertyValue( 1 ).Name  = "lazywrite"
+        aPropertyValue( 1 ).Value = FALSE    
+    
+        xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aPropertyValue() )
+        iLevel = xViewRoot.getByName( "MacroSecurityLevel" )
+        xViewRoot.dispose()
+        
+    catch
+    
+        warnlog( CFN & "Failed to retrieve macro security Level via API" )
+        iLevel = -1
+    
+    endcatch
+    
+    hGetMacroSecurityAPI() = iLevel
+
+end function
+
+
+'*******************************************************************************
+
+function hSetMacroSecurityAPI( iSecLevel as integer ) as integer
+
+
+    '///<h3>Set macro security level using API</h3>
+    '///<i>Set the macro security using remote uno. This implementation does exactly
+    '///+ the same as hSetMacroSecurity but is considerably faster</i><br><br>
+
+    '///<u>Parameter(s):</u><br>
+    '///<ol>
+
+    '///+<li>Desired macro security level (Integer). Following symbolic names are defined:</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///</ul>
+
+    '///</ol>
+
+
+    '///<u>Returns:</u><br>
+    '///<ol>
+    '///+<li>Previous security level (Integer)</li>
+    '///<ul>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_LOW (0) for low security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_MEDIUM (1) for medium security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_HIGH (2) for high security</li>
+    '///+<li>GC_MACRO_SECURITY_LEVEL_VERYHIGH (3) for very high security</li>
+    '///+<li>-1 on error</li>
+    '///</ul>
+    '///</ol>
+
+    const CFN = "hSetMacroSecurityAPI::"
+
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue( 1 ) As new com.sun.star.beans.PropertyValue
+    dim iLevel as integer
+    dim xViewRoot
+    
+    dim caLevel( 3 ) as string
+        caLevel( 0 ) = "low"
+        caLevel( 1 ) = "medium"
+        caLevel( 2 ) = "high"
+        caLevel( 3 ) = "very high"
+    
+    aPropertyValue( 0 ).Name  = "nodepath"
+    aPropertyValue( 0 ).Value = "/org.openoffice.Office.Common/Security/Scripting"
+    aPropertyValue( 1 ).Name  = "lazywrite"
+    aPropertyValue( 1 ).Value = FALSE        
+
+    '///<u>Description:</u>
+    '///<ul>
+    
+    iLevel = 0
+    
+    '///+<li>Verify input parameter, quit function with a warning on error</li>
+    if ( iSecLevel < GC_MACRO_SECURITY_LEVEL_LOW or iSecLevel > GC_MACRO_SECURITY_LEVEL_VERYHIGH ) then
+        
+        warnlog( CFN & "Invalid security level passed to function: " & iSecLevel )
+        hSetMacroSecurityAPI() = -1
+        exit function
+        
+    endif
+    
+    
+    '///+<li>Get current security level, set the new one</li>
+    try
+    
+        oUnoOfficeConnection=hGetUnoService(TRUE)
+        oUnoConfigurationAccess=oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
+
+        xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+        iLevel = xViewRoot.getByName( "MacroSecurityLevel" )            ' Get the current value
+        xViewRoot.setPropertyValue( "MacroSecurityLevel" , iSecLevel )  ' Set the new value
+        xViewRoot.commitChanges()    
+        xViewRoot.dispose()    
+
+        printlog( CFN & "Setting macro security level to " & caLevel( iSecLevel )
+
+    catch
+
+        warnlog( CFN & "Failed to get/set new macro security level via API:" & iSecLevel )
+        iLevel = -1
+    
+    endcatch
+    '///</ul>
+
+    hSetMacroSecurityAPI() = iLevel
+
+end function

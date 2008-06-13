@@ -1,0 +1,164 @@
+' **** general print-Dialog ( File/Print )
+' ****
+*DruckenDlg svtools:ModalDialog:DLG_SVT_PRNDLG_PRINTDLG
+Drucker svtools:ListBox:DLG_SVT_PRNDLG_PRINTDLG:LB_NAMES
+Eigenschaften svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_PROPERTIES
+AusdruckInDatei svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_FILEPRINT
+Alles svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL
+Seiten svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_PAGES
+SeitenText svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_PAGES
+Auswahl svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTION
+Exemplare svtools:NumericField:DLG_SVT_PRNDLG_PRINTDLG:NUM_COPIES
+Sortieren svtools:CheckBox:DLG_SVT_PRNDLG_PRINTDLG:CBX_COLLATE
+Zusaetze svtools:PushButton:DLG_SVT_PRNDLG_PRINTDLG:BTN_OPTIONS
+EditFaxNo svtools:Edit:DLG_SVT_PRNDLG_PRINTDLG:EDT_FAXNO
+AllSheets svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_ALL_SHEETS
+SelectedSheets svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_SHEETS
+SelectedCells svtools:RadioButton:DLG_SVT_PRNDLG_PRINTDLG:RBT_SELECTED_CELLS
+
+' **** general Printersettings-Dialog ( File/Printer settings )
+' ****
+*DruckerEinrichten svtools:ModalDialog:DLG_SVT_PRNDLG_PRNSETUPDLG
+Drucker svtools:ListBox:DLG_SVT_PRNDLG_PRNSETUPDLG:LB_NAMES
+Eigenschaften svtools:PushButton:DLG_SVT_PRNDLG_PRNSETUPDLG:BTN_PROPERTIES
+
+'************************************************************************
+'************ all file-dialogs
+'************
+*GeneralFileDialog HID_EXPLORERDLG_FILE
+UebergeordneterOrdner fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
+NeuerOrdner fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
+Standard fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
+DateiAuswahl HID_FILEDLG_STANDARD
+Dateiname HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
+Oeffnen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+Auswaehlen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+
++GrafikEinfuegenDlg GeneralFileDialog
+Pfad HID_FILEDLG_AUTOCOMPLETEBOX HID_FILEDLG_PATH_FILENAME
+Stil HID_FILEOPEN_IMAGE_TEMPLATE
+Verknuepfen HID_FILEDLG_LINK_CB HID_IMPGRF_CB_LINK
+Vorschau HID_FILEDLG_PREVIEW_CB HID_IMPGRF_CB_PREVIEW
+Link HID_FILEDLG_LINK_CB
+Preview HID_FILEDLG_PREVIEW_CB
+
++OeffnenDlg GeneralFileDialog
+Pfad HID_FILEDLG_AUTOCOMPLETEBOX HID_FILEDLG_PATH_FILENAME
+Version HID_FILEOPEN_VERSION
+NurLesen HID_FILEOPEN_READONLY
+Einfuegen HID_FILEDLG_INSERT_BTN
+Play HID_FILESAVE_DOPLAY
+
++KonkordanzdateiOeffnen GeneralFileDialog
+
++VorlagenLaden GeneralFileDialog
+Text HID_LTEMPL_TEXT
+Rahmen HID_LTEMPL_FRAME
+Seite HID_LTEMPL_PAGE
+Numerierung HID_LTEMPL_NUMBERING
+Ueberschreiben HID_LTEMPL_OVERRIDE
+' Vorlagen HID_LTEMPL_TEMPLATES
+
+*SpeichernDlg HID_FILESAVE_DIALOG
+Dateiname HID_FILESAVE_FILEURL
+Vorlage HID_FILESAVE_TEMPLATE
+Dateityp HID_FILESAVE_FILETYPE
+Speichern HID_FILESAVE_DOSAVE
+NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
+Standard HID_FILESAVE_DEFAULTDIRECTORY
+DateiAuswahl HID_FILESAVE_FILEVIEW
+Passwort HID_FILESAVE_SAVEWITHPASSWORD
+AutomatischeDateinamenserweiterung HID_FILESAVE_AUTOEXTENSION
+UebergeordneterOrdner HID_FILESAVE_LEVELUP
+
++ExportierenDlg SpeichernDlg
+Selektion HID_FILESAVE_SELECTION
+
+*ExportAsPDFDlg HDE_PDF_EXPORT_DLG
+Dateiname HID_FILESAVE_FILEURL
+Vorlage HID_FILESAVE_TEMPLATE
+Dateityp HID_FILESAVE_FILETYPE
+Export HID_FILESAVE_DOSAVE
+NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
+Standard HID_FILESAVE_DEFAULTDIRECTORY
+DateiAuswahl HID_FILESAVE_FILEVIEW
+Passwort HID_FILESAVE_SAVEWITHPASSWORD
+AutomatischeDateinamenserweiterung HID_FILESAVE_AUTOEXTENSION
+UebergeordneterOrdner HID_FILESAVE_LEVELUP
+Selektion HID_FILESAVE_SELECTION
+
+' **** Hyperlink-File-Dialog
+' ****
+*HyperlinkAuswahlDlg HID_FILEDLG_CHARDLG
+UebergeordneterOrdner fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP
+NeuerOrdner fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER
+Standard fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD
+DateiAuswahl HID_FILEDLG_STANDARD
+Dateiname HID_FILEDLG_AUTOCOMPLETEBOX
+Dateityp fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_FILETYPE
+Oeffnen fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_OPEN
+NurLesen fpicker:CheckBox:DLG_SVT_EXPLORERFILE:CB_EXPLORERFILE_READONLY
+
+' **** general Color-Dialog ( under tools / options / staroffice / color / edit )
+' ****
+*FarbeDlg svtools:ModalDialog:DLG_COLOR
+'Grundfarben
+'BenutzerdefinierteFarben
+Cyan svtools:MetricField:DLG_COLOR:NUM_CYAN
+Magenta svtools:MetricField:DLG_COLOR:NUM_MAGENTA
+Yellow svtools:MetricField:DLG_COLOR:NUM_YELLOW
+Key svtools:MetricField:DLG_COLOR:NUM_KEY
+Rot svtools:NumericField:DLG_COLOR:NUM_RED
+Gruen svtools:NumericField:DLG_COLOR:NUM_GREEN
+Blau svtools:NumericField:DLG_COLOR:NUM_BLUE
+Farbton svtools:NumericField:DLG_COLOR:NUM_HUE
+Saettigung svtools:NumericField:DLG_COLOR:NUM_SATURATION
+Hell svtools:NumericField:DLG_COLOR:NUM_LUMINANCE
+Links svtools:PushButton:DLG_COLOR:BTN_1
+Rechts svtools:PushButton:DLG_COLOR:BTN_2
+
+*SendMasterDocument HID_FILESAVE_DIALOG
+Dateiname HID_SEND_MASTER_CTRL_EDIT_FILEURL
+Vorlage HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE
+Filter HID_SEND_MASTER_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern HID_SEND_MASTER_CTRL_PUSHBUTTON_OK
+Cancel HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner HID_FILESAVE_LEVELUP
+NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
+Standard HID_FILESAVE_DEFAULTDIRECTORY
+
+*SendHTMLDocument HID_FILESAVE_DIALOG
+Dateiname HID_SEND_HTML_CTRL_EDIT_FILEURL
+Vorlage HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE
+Filter HID_SEND_HTML_CTRL_LISTBOX_FILTER
+AutomatischeDateinamenserweiterung HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION
+Speichern HID_SEND_HTML_CTRL_PUSHBUTTON_OK
+Cancel HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL
+DateiAuswahl HID_SEND_HTML_CTRL_CONTROL_FILEVIEW
+UebergeordneterOrdner HID_FILESAVE_LEVELUP
+NeuerOrdner HID_FILESAVE_CREATEDIRECTORY
+Standard HID_FILESAVE_DEFAULTDIRECTORY
+
+
+' **** Messageboxes amd Lastversion-message set to the active operator
+' ****
+*MessageBox Active
+*LetzteVersion Active
+
+' **** new folder-dialog
+' ****
+*NeuerOrdner fpicker:ModalDialog:DLG_SVT_QUERYFOLDERNAME
+OrdnerName fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME
+
+' **** Translationwidow fuer das Ubersetzungstooling
+' ****
+*TranslationWindow svtools:WorkWindow:TT_INLINE_TRANSLATION svtools:FloatingWindow:TT_INLINE_TRANSLATION
+
+' **** specal longnames for bas test
+' **** author marc.schwanz@sun.com
+*MSC_Special_Dialog MSC_Super_ID
+*MSC_Special_Dialog2 MSC_Super_ID2
+*MSC_Special_Dialog3 MSC_Super_ID3
