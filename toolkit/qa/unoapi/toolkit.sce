@@ -1,5 +1,5 @@
 #i86007 -o toolkit.AccessibleButton
--o toolkit.AccessibleCheckBox
+#i88332 -o toolkit.AccessibleCheckBox
 #i86008 -o toolkit.AccessibleComboBox
 -o toolkit.AccessibleDropDownComboBox
 -o toolkit.AccessibleDropDownListBox
@@ -20,7 +20,7 @@
 -o toolkit.AccessibleTabControl
 -o toolkit.AccessibleTabPage
 #i86287 -o toolkit.AccessibleToolBox
--o toolkit.AccessibleToolBoxItem
+#i88605 -o toolkit.AccessibleToolBoxItem
 -o toolkit.AccessibleWindow
 -o toolkit.MutableTreeDataModel
 -o toolkit.MutableTreeNode
