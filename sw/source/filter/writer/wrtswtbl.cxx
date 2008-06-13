@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: wrtswtbl.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,7 +107,7 @@ long SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
     const SwFrmFmt *pFmt = pBox->GetFrmFmt();
     const SwFmtFrmSize& aFrmSize=
-        (const SwFmtFrmSize&)pFmt->GetAttr( RES_FRM_SIZE );
+        (const SwFmtFrmSize&)pFmt->GetFmtAttr( RES_FRM_SIZE );
 
     return aFrmSize.GetSize().Width();
 }
@@ -258,7 +258,7 @@ USHORT SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     USHORT nBorderMask = 0;
 
     const SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
-    const SvxBoxItem& rBoxItem = (const SvxBoxItem&)pFrmFmt->GetAttr( RES_BOX );
+    const SvxBoxItem& rBoxItem = (const SvxBoxItem&)pFrmFmt->GetFmtAttr( RES_BOX );
 
     if( rBoxItem.GetTop() )
     {
