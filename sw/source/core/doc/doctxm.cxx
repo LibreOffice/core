@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: doctxm.cxx,v $
- * $Revision: 1.51 $
+ * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -444,7 +444,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
     SwNodeIndex aStt( GetNodes(), nSttNd ), aEnd( GetNodes(), nEndNd );
     SwSectionFmt* pFmt = MakeSectionFmt( 0 );
     if(pSet)
-        pFmt->SetAttr(*pSet);
+        pFmt->SetFmtAttr(*pSet);
 
 //  --aEnd;     // im InsertSection ist Ende inclusive
 
@@ -932,7 +932,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
                 aBrkSet.Put( *pCNd->GetpSwAttrSet() );
                 if( aBrkSet.Count() )
-                    pFirstEmptyNd->SwCntntNode::SetAttr( aBrkSet );
+                    pFirstEmptyNd->SetAttr( aBrkSet );
             }
         }
         aEndIdx--;
@@ -1645,7 +1645,7 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYT
         {
             const SwNumRule* pRule = pNd->GetNumRule();
 
-            if( pRule && pNd->GetLevel() < MAXLEVEL )
+            if( pRule && pNd->GetActualListLevel() < MAXLEVEL )
                 sRet = pNd->GetNumString(bUsePrefix, nLevel);
         }
     }
@@ -1946,7 +1946,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
             aIt++; // #i21237#
         }
 
-        pTOXNd->SwCntntNode::SetAttr( aTStops );
+        pTOXNd->SetAttr( aTStops );
     }
 
     if(aLinkArr.Count())
@@ -2445,7 +2445,7 @@ void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
 {
     SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
     if( pSect && pSect->GetFmt() )
-        pSect->GetFmt()->SetAttr( rSet );
+        pSect->GetFmt()->SetFmtAttr( rSet );
 }
 
 BOOL SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
