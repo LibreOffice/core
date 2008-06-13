@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swhtml.cxx,v $
- * $Revision: 1.49 $
+ * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -834,10 +834,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 SwTxtNode* pPrev = aPrvIdx.GetNode().GetTxtNode();
                 pTxtNode->ChgFmtColl( pPrev->GetTxtColl() );
                 pTxtNode->FmtToTxtAttr( pPrev );
-                pTxtNode->SwCntntNode::ResetAllAttr();
+                pTxtNode->ResetAllAttr();
 
                 if( pPrev->HasSwAttrSet() )
-                    pTxtNode->SwCntntNode::SetAttr( *pPrev->GetpSwAttrSet() );
+                    pTxtNode->SetAttr( *pPrev->GetpSwAttrSet() );
 
                 if( &pPam->GetBound(TRUE).nNode.GetNode() == pPrev )
                     pPam->GetBound(TRUE).nContent.Assign( pTxtNode, 0 );
@@ -2126,7 +2126,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
             }
             else
             {
-                pTxtNode->SwCntntNode::SetAttr(
+                pTxtNode->SetAttr(
                     SvxULSpaceItem( rULSpace.GetUpper(),
                          AM_NOSPACE==eMode ? 0 : HTML_PARSPACE, RES_UL_SPACE ) );
             }
@@ -2261,8 +2261,11 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
         if( GetNumInfo().GetDepth() )
         {
             BYTE nLvl = GetNumInfo().GetLevel();
-            SetNoNum (&nLvl, TRUE);
-            SetNodeNum( nLvl);
+            // --> OD 2008-04-02 #refactorlists#
+//            SetNoNum (&nLvl, TRUE);
+//            SetNodeNum( nLvl);
+            SetNodeNum( nLvl, false );
+            // <--
         }
         else
             pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
@@ -2381,7 +2384,7 @@ void SwHTMLParser::AddParSpace()
         }
         else
         {
-            pTxtNode->SwCntntNode::SetAttr(
+            pTxtNode->SetAttr(
                 SvxULSpaceItem( rULSpace.GetUpper(), HTML_PARSPACE, RES_UL_SPACE )  );
         }
     }
@@ -2860,21 +2863,21 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             SwFmtAnchor aAnchor( rAnchor );
             aAnchor.SetType( FLY_AUTO_CNTNT );
             aAnchor.SetAnchor( pAttrPam->GetPoint() );
-            pFrmFmt->SetAttr( aAnchor );
+            pFrmFmt->SetFmtAttr( aAnchor );
 
             const SwFmtHoriOrient& rHoriOri = pFrmFmt->GetHoriOrient();
             if( text::HoriOrientation::LEFT == rHoriOri.GetHoriOrient() )
             {
                 SwFmtHoriOrient aHoriOri( rHoriOri );
                 aHoriOri.SetRelationOrient( text::RelOrientation::CHAR );
-                pFrmFmt->SetAttr( aHoriOri );
+                pFrmFmt->SetFmtAttr( aHoriOri );
             }
             const SwFmtVertOrient& rVertOri = pFrmFmt->GetVertOrient();
             if( text::VertOrientation::TOP == rVertOri.GetVertOrient() )
             {
                 SwFmtVertOrient aVertOri( rVertOri );
                 aVertOri.SetRelationOrient( text::RelOrientation::CHAR );
-                pFrmFmt->SetAttr( aVertOri );
+                pFrmFmt->SetFmtAttr( aVertOri );
             }
 
             pFrmFmt->MakeFrms();
@@ -4894,7 +4897,7 @@ void SwHTMLParser::InsertSpacer()
                 SvxULSpaceItem aULSpace( (const SvxULSpaceItem&)pTxtNode
                     ->SwCntntNode::GetAttr( RES_UL_SPACE ) );
                 aULSpace.SetLower( aULSpace.GetLower() + (USHORT)nSize );
-                pTxtNode->SwCntntNode::SetAttr( aULSpace );
+                pTxtNode->SetAttr( aULSpace );
             }
             else
             {
@@ -5107,7 +5110,7 @@ void SwHTMLParser::InsertLineBreak()
                         SwFmtSurround aSurround( eSurround );
                         if( SURROUND_NONE != eSurround )
                             aSurround.SetAnchorOnly( TRUE );
-                        pFmt->SetAttr( aSurround );
+                        pFmt->SetFmtAttr( aSurround );
                         bCleared = TRUE;
                     }
                 } // Anker ist nicht im Node
