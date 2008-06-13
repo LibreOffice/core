@@ -8,7 +8,7 @@
  *
  * $RCSfile: docbm.cxx,v $
  *
- * $Revision: 1.25 $
+ * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1031,7 +1031,7 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
                     else
                         aNewPos.nContent.Assign( 0, 0 );
                     aNew.SetAnchor( &aNewPos );
-                    pFrmFmt->SetAttr( aNew );
+                    pFrmFmt->SetFmtAttr( aNew );
                 }
             }
             break;
@@ -1198,7 +1198,7 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                         else
                             aNewPos.nContent.Assign( 0, 0 );
                         aNew.SetAnchor( &aNewPos );
-                        pFrmFmt->SetAttr( aNew );
+                        pFrmFmt->SetFmtAttr( aNew );
                     }
                 }
                 break;
