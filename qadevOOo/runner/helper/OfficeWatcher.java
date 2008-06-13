@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeWatcher.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,17 +27,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package helper;
 
 import lib.TestParameters;
 import java.util.StringTokenizer;
+import util.utils;
 
 public class OfficeWatcher extends Thread implements share.Watcher {
 
     public boolean finish;
-    TestParameters params;
-    int StoredPing = 0;
+    private TestParameters params;
+    private int StoredPing = 0;
+    private boolean debug = false;
 
     /** Creates new OfficeWatcher
      * @param param
@@ -45,6 +46,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     public OfficeWatcher(TestParameters param) {
         finish = false;
         this.params = param;
+        debug = params.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
     }
 
     /**
@@ -67,15 +69,16 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     }
 
     public void run() {
+        dbg("started");
         boolean isDone = false;
-        ProcessHandler ph = (ProcessHandler) params.get("AppProvider");
+        final ProcessHandler ph = (ProcessHandler) params.get("AppProvider");
         int timeOut = params.getInt("TimeOut");
         if (ph == null) {
             isDone = true;
         }
         while (!isDone) {
             timeOut = params.getInt("TimeOut");
-            int previous = StoredPing;
+            final int previous = StoredPing;
             shortWait(timeOut == 0 ? 30000 : timeOut);
             // a timeout with value 0 lets watcher not react.
             if ((StoredPing == previous) && timeOut != 0) {
@@ -87,34 +90,46 @@ public class OfficeWatcher extends Thread implements share.Watcher {
             }
         }
         if (ph != null) {
-            System.out.println("OfficeWatcher: the Office is idle for " + timeOut / 1000 + " seconds, it probably hangs and is killed NOW.");
-            String AppKillCommand = (String) params.get ("AppKillCommand");
+            dbg("the Office is idle for " + timeOut / 1000 +
+                " seconds, it probably hangs and is killed NOW.");
+            final String AppKillCommand = (String) params.get("AppKillCommand");
             if (AppKillCommand != null) {
-                StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
+                final StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
                 while (aKillCommandToken.hasMoreTokens()) {
-                    String sKillCommand = aKillCommandToken.nextToken();
+                    final String sKillCommand = aKillCommandToken.nextToken();
 
-                    System.out.println("User defined an application to destroy the started process.");
-                    System.out.println("Trying to execute: " + sKillCommand);
-                    try {
-                        Process myprc = Runtime.getRuntime().exec(sKillCommand);
-                        myprc.waitFor();
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    } catch (java.io.IOException e) {
-                        e.printStackTrace();
-                    }
+                    dbg("User defined an application to destroy the started process.");
+                    dbg("Trying to execute: " + sKillCommand);
+
+                    final ProcessHandler pHdl = new ProcessHandler(sKillCommand);
+                    pHdl.executeSynchronously();
+//                    dbg("---> Output of killoffice:");
+//                    dbg(pHdl.getOutputText());
+//                    dbg("<--- Output of killoffice");
+//                    dbg("---> Error output of killoffice:");
+//                    dbg(pHdl.getErrorText());
+//                    dbg("<--- Error output of killoffice");
+
                 }
             }
             ph.kill();
+        } else {
+            dbg("reaeched timeout but ProcessHandler is NULL");
         }
         shortWait(timeOut == 0 ? 30000 : timeOut);
+        dbg("finished");
     }
 
     protected void shortWait(int timeOut) {
         try {
             OfficeWatcher.sleep(timeOut);
         } catch (java.lang.InterruptedException ie) {
+        }
+    }
+
+    protected void dbg(String message) {
+        if (debug) {
+            System.out.println(utils.getDateTime() + "OfficeWatcher: " + message);
         }
     }
 }
