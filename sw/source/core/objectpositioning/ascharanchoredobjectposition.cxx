@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ascharanchoredobjectposition.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -241,7 +241,7 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
                 SwFmtVertOrient aVert( rVert );
                 aVert.SetPos( nRelPos );
                 const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
+                const_cast<SwFrmFmt&>(rFrmFmt).SetFmtAttr( aVert );
                 const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
             }
 
