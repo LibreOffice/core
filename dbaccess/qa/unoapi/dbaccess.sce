@@ -5,11 +5,11 @@
 -o dbaccess.ODatabaseContext
 -o dbaccess.ODatabaseSource
 -o dbaccess.ODatasourceAdministrationDialog
--o dbaccess.ODatasourceBrowser
+#-o dbaccess.ODatasourceBrowser
 -o dbaccess.OInteractionHandler
 #i84116 -o dbaccess.OQueryDesign
 -o dbaccess.ORowSet
 -o dbaccess.OSQLMessageDialog
 -o dbaccess.OSingleSelectQueryComposer
-#i84127 -o dbaccess.SbaXGridControl
+-o dbaccess.SbaXGridControl
 #i84128 -o dbaccess.TableWindowAccessibility
