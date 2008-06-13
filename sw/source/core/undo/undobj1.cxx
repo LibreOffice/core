@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobj1.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,14 +105,14 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
         aAnchor.SetAnchor( &aNewPos );
     }
 
-    pFrmFmt->SetAttr( aAnchor );        // Anker neu setzen
+    pFrmFmt->SetFmtAttr( aAnchor );     // Anker neu setzen
 
     if( RES_DRAWFRMFMT != pFrmFmt->Which() )
     {
         // Content holen und -Attribut neu setzen
         SwNodeIndex aIdx( pDoc->GetNodes() );
         RestoreSection( pDoc, &aIdx, SwFlyStartNode );
-        pFrmFmt->SetAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
+        pFrmFmt->SetFmtAttr( SwFmtCntnt( aIdx.GetNode().GetStartNode() ));
     }
 
     //JP 18.12.98: Bug 60505 - InCntntAttribut erst setzen, wenn der Inhalt
@@ -219,7 +219,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     else
         nNdPgPos = rAnchor.GetPageNum();
 
-    pFrmFmt->ResetAttr( RES_ANCHOR );       // Anchor loeschen
+    pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // Anchor loeschen
 
 
     // aus dem Array austragen
@@ -534,10 +534,10 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
         while( pItem )
         {
             if( IsInvalidItem( pItem ))
-                pFrmFmt->ResetAttr( pItemSet->GetWhichByPos(
+                pFrmFmt->ResetFmtAttr( pItemSet->GetWhichByPos(
                                         aIter.GetCurPos() ));
             else
-                pFrmFmt->SetAttr( *pItem );
+                pFrmFmt->SetFmtAttr( *pItem );
 
             if( aIter.IsAtEnd() )
                 break;
@@ -575,7 +575,7 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
             // Anker umsetzen
             SwFmtAnchor aNewAnchor( (RndStdIds) nOldAnchorTyp );
             GetAnchor( aNewAnchor, nOldNode, nOldCntnt );
-            pFrmFmt->SetAttr( aNewAnchor );
+            pFrmFmt->SetFmtAttr( aNewAnchor );
 
             if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
             {
