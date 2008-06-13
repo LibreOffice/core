@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swnewtable.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -576,7 +576,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         {
             SwFrmFmt* pFmt = pCurr->first->ClaimFrmFmt();
             long nNewWidth = pFmt->GetFrmSize().GetWidth() + pCurr->second;
-            pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nNewWidth, 0 ) );
+            pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nNewWidth, 0 ) );
             ++pCurr;
         }
     }
@@ -761,9 +761,9 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 SwFrmFmt* pFrmFmt = pCurrBox->ClaimFrmFmt();
                 SwFmtFrmSize aFrmSz( pFrmFmt->GetFrmSize() );
                 aFrmSz.SetWidth( nNewBoxWidth );
-                pFrmFmt->SetAttr( aFrmSz );
+                pFrmFmt->SetFmtAttr( aFrmSz );
                 if( pNoRightBorder && ( !bBehind || j+1 < nCnt ) )
-                    pFrmFmt->SetAttr( *pNoRightBorder );
+                    pFrmFmt->SetFmtAttr( *pNoRightBorder );
                 aInsFormat[j] = (SwTableBoxFmt*)pFrmFmt;
             }
             else
@@ -772,7 +772,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         if( bBehind && pNoRightBorder )
         {
             SwFrmFmt* pFrmFmt = pBox->ClaimFrmFmt();
-            pFrmFmt->SetAttr( *pNoRightBorder );
+            pFrmFmt->SetFmtAttr( *pNoRightBorder );
         }
         delete pNoRightBorder;
     }
@@ -928,7 +928,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         _FindSuperfluousRows( rBoxes, pFirstLn, pLastLn );
         // pNewFmt will be set to the new master box and the overlapped cells
         SwFrmFmt* pNewFmt = pMergeBox->ClaimFrmFmt();
-        pNewFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
+        pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
         for( USHORT nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
         {
             const SwSelBoxes* pBoxes = pSel->aBoxes[ nCurrLine ];
@@ -941,7 +941,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     // Even this box will be deleted soon,
                     // we have to correct the width to avoid side effects
                     SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
-                    pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, 0, 0 ) );
+                    pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, 0, 0 ) );
                 }
                 else
                     pBox->ChgFrmFmt( (SwTableBoxFmt*)pNewFmt );
@@ -956,7 +956,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aBox.SetLine( rBox.GetRight(), BOX_LINE_RIGHT );
             aBox.SetLine( rBox.GetBottom(), BOX_LINE_BOTTOM );
             if( bOld || aBox.GetLeft() || aBox.GetTop() || aBox.GetRight() || aBox.GetBottom() )
-                (*ppMergeBox)->GetFrmFmt()->SetAttr( aBox );
+                (*ppMergeBox)->GetFrmFmt()->SetFmtAttr( aBox );
         }
 
         if( pUndo )
@@ -1169,7 +1169,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, USHORT nRowIdx, USHORT nCnt )
         if( !nNewHeight )
             ++nNewHeight;
         aFSz.SetHeight( nNewHeight );
-        pFrmFmt->SetAttr( aFSz );
+        pFrmFmt->SetFmtAttr( aFSz );
     }
     _InsertRow( pDoc, aBoxes, nCnt, TRUE );
     USHORT nBoxCount = rLine.GetTabBoxes().Count();
@@ -1426,7 +1426,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
                 SwFmtFrmSize aFSz( pRowFmt->GetFrmSize() );
                 aFSz.SetHeightSizeType( ATT_MIN_SIZE );
                 aFSz.SetHeight( *pSplit - nLast );
-                pRowFmt->SetAttr( aFSz );
+                pRowFmt->SetFmtAttr( aFSz );
                 nLast = *pSplit;
                 ++pSplit;
                 ++nFirst;
@@ -1438,7 +1438,7 @@ BOOL SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
             SwFmtFrmSize aFSz( pRowFmt->GetFrmSize() );
             aFSz.SetHeightSizeType( ATT_MIN_SIZE );
             aFSz.SetHeight( *pCurr - nLast );
-            pRowFmt->SetAttr( aFSz );
+            pRowFmt->SetFmtAttr( aFSz );
             nLast = *pCurr;
             ++pCurr;
             ++nFirst;
@@ -1934,7 +1934,7 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
                 SwFrmFmt* pFrmFmt = pBox->ClaimFrmFmt();
                 SwFmtFrmSize aFrmSz( pFrmFmt->GetFrmSize() );
                 aFrmSz.SetWidth( nNewWidth );
-                pFrmFmt->SetAttr( aFrmSz );
+                pFrmFmt->SetFmtAttr( aFrmSz );
             }
         }
     }
