@@ -8,7 +8,7 @@
 -o sw.SwAccessibleFooterView
 -o sw.SwAccessibleFootnoteView
 -o sw.SwAccessibleHeaderView
--o sw.SwAccessiblePageView
+#i89022 -o sw.SwAccessiblePageView
 -o sw.SwAccessibleParagraphView
 -o sw.SwAccessibleTableCellView
 #i85634 -o sw.SwAccessibleTableView
@@ -56,7 +56,7 @@
 -o sw.SwXTableRows
 -o sw.SwXTextColumns
 -o sw.SwXTextCursor
--o sw.SwXTextDefaults
+#i89021 -o sw.SwXTextDefaults
 -o sw.SwXTextDocument
 -o sw.SwXTextEmbeddedObject
 -o sw.SwXTextEmbeddedObjects
