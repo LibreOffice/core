@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: node.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,7 +356,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     if( rWhere.GetIndex() )
     {
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-        rNodes.InsertNode( pInsNd, rWhere, false );
+        rNodes.InsertNode( pInsNd, rWhere );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -369,7 +369,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
     }
     else
     {
-        rNodes.InsertNode( pInsNd, rWhere, false );
+        rNodes.InsertNode( pInsNd, rWhere );
         pStartOfSection = (SwStartNode*)this;
     }
 
@@ -389,7 +389,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
-        rNodes.InsertNode( pInsNd, nPos, false );
+        rNodes.InsertNode( pInsNd, nPos );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -402,7 +402,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
     }
     else
     {
-        rNodes.InsertNode( pInsNd, nPos, false );
+        rNodes.InsertNode( pInsNd, nPos );
         pStartOfSection = (SwStartNode*)this;
     }
 
@@ -692,7 +692,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                         for( ; nStt < nLast; ++nStt, pFmt = &rPgDsc.GetLeft() )
                         {
                             const SwFmtHeader& rHdFt = (SwFmtHeader&)
-                                                    pFmt->GetAttr( nId );
+                                                    pFmt->GetFmtAttr( nId );
                             if( rHdFt.GetHeaderFmt() )
                             {
                                 const SwFmtCntnt& rCntnt =
@@ -1067,9 +1067,6 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
     USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
-    BOOL bNumRuleSet = FALSE, bCallModify = TRUE;
-    String sNumRule, sOldNumRule;
-    const SfxPoolItem* pItem;
 
     switch( nWhich )
     {
@@ -1110,15 +1107,6 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             // den Set an den neuen Parent haengen
             AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
         }
-        if( GetNodes().IsDocNodes() && IsTxtNode() )
-        {
-            if( 0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, TRUE )))
-            {
-                bNumRuleSet = TRUE;
-                sNumRule = ((SwNumRuleItem*)pItem)->GetValue();
-            }
-            sOldNumRule = ((SwFmtChg*)pOldValue)->pChangedFmt->GetNumRule().GetValue();
-        }
         break;
 //FEATURE::CONDCOLL
     case RES_CONDCOLL_CONDCHG:
@@ -1133,35 +1121,11 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     case RES_ATTRSET_CHG:
         if( GetNodes().IsDocNodes() && IsTxtNode() )
         {
-            if( SFX_ITEM_SET == ((SwAttrSetChg*)pNewValue)->GetChgSet()->GetItemState(
-                RES_PARATR_NUMRULE, FALSE, &pItem ))
-            {
-                bNumRuleSet = TRUE;
-                sNumRule = ((SwNumRuleItem*)pItem)->GetValue();
-            }
             if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
-                RES_PARATR_NUMRULE, FALSE, &pItem ))
-            {
-                sOldNumRule = ((SwNumRuleItem*)pItem)->GetValue();
-            }
-            if( SFX_ITEM_SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
-                RES_CHRATR_HIDDEN, FALSE, &pItem ) )
+                RES_CHRATR_HIDDEN, FALSE ) )
             {
                 ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
             }
-        }
-        break;
-
-    case RES_PARATR_NUMRULE:
-        if( GetNodes().IsDocNodes() && IsTxtNode() )
-        {
-            if( pNewValue )
-            {
-                bNumRuleSet = TRUE;
-                sNumRule = ((SwNumRuleItem*)pNewValue)->GetValue();
-            }
-            if( pOldValue )
-                sOldNumRule = ((SwNumRuleItem*)pOldValue)->GetValue();
         }
         break;
 
@@ -1178,64 +1142,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         break;
     }
 
-    // Warning: this does not have to be a SwTxtNode.
-    SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
-
-    // --> OD 2006-12-06 #i56253#
-    // Change text node after change of numbering rule is performed/modified.
-    // Otherwise, corresponding information about numbering restart is missing for the undo action.
-//    if ( pTxtNd )
-//        pTxtNd->SyncNumberAndNumRule();
-    // <--
-
-    if( bNumRuleSet )
-    {
-        if (pTxtNd)
-            pTxtNd->SetWordCountDirty( true );
-
-        // bNumRuleSet = true => pTxtNd != 0
-        if( sNumRule.Len() )
-        {
-            int nLevel = pTxtNd->GetLevel();
-
-            if (nLevel == NO_NUMBERING)
-                nLevel = pTxtNd->GetOutlineLevel();
-
-            if (nLevel == NO_NUMBERING)
-                nLevel = 0;
-
-            pTxtNd->SetLevel(nLevel);
-
-            SwNumRule* pRule = GetDoc()->FindNumRulePtr( sNumRule );
-            if( !pRule )
-            {
-                USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
-                if( USHRT_MAX != nPoolId )
-                    pRule = GetDoc()->GetNumRuleFromPool( nPoolId );
-            }
-            if( pRule )
-                pRule->SetInvalidRule( TRUE );
-        }
-        else
-        {
-            bCallModify = FALSE;
-            SwModify::Modify( pOldValue, pNewValue );
-        }
-    }
-    // --> OD 2006-12-06 #i56253#
-    if ( pTxtNd )
-        pTxtNd->SyncNumberAndNumRule();
-    // <--
-
-    if( sOldNumRule.Len() && sNumRule != sOldNumRule )
-    {
-        SwNumRule* pRule = GetDoc()->FindNumRulePtr( sOldNumRule );
-        if( pRule )
-            pRule->SetInvalidRule( TRUE );
-    }
-
-    if( bCallModify )
-        SwModify::Modify( pOldValue, pNewValue );
+    SwModify::Modify( pOldValue, pNewValue );
 }
 
 BOOL SwCntntNode::InvalidateNumRule()
@@ -1315,7 +1222,6 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
         {
             SwFmtChg aTmp1( pOldColl );
             SwFmtChg aTmp2( pNewColl );
-//          SwModify::Modify( &aTmp1, &aTmp2 );
             // damit alles was im Modify passiert hier nicht noch impl.
             // werden muss
             SwCntntNode::Modify( &aTmp1, &aTmp2 );
@@ -1581,30 +1487,32 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
             return FALSE;
         }
         break;
-    case RES_GETNUMNODES:
-        // #111955# only numbered nodes in rInfo
-        if( IsTxtNode())
-        {
-            SwTxtNode * pTxtNode = (SwTxtNode*)this;
-            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
+    // --> OD 2008-02-19 #refactorlists#
+//    case RES_GETNUMNODES:
+//        // #111955# only numbered nodes in rInfo
+//        if( IsTxtNode())
+//        {
+//            SwTxtNode * pTxtNode = (SwTxtNode*)this;
+//            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
 
-            if (0 != pItem  &&
-                pItem->GetValue().Len() &&
-                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
-                GetNodes().IsDocNodes())
-            {
-                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
-            }
-        }
+//            if (0 != pItem  &&
+//                pItem->GetValue().Len() &&
+//                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
+//                GetNodes().IsDocNodes())
+//            {
+//                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
+//            }
+//        }
 
-        return TRUE;
+//        return TRUE;
+    // <--
 
     case RES_GETLOWERNUMLEVEL:
         if( IsTxtNode() &&
             0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
             RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
             pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            ((SwTxtNode*)this)->GetLevel()
+            ((SwTxtNode*)this)->GetActualListLevel()
                 > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
         {
             return FALSE;
@@ -1648,15 +1556,6 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         ( !GetDepends() &&  RES_PARATR_NUMRULE != rAttr.Which() ))
     {
         bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rAttr );
-
-        // --> OD 2005-10-25 #126367#
-        if ( IsModifyLocked() )
-        {
-            SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
-            if ( pTxtNd )
-                pTxtNd->SyncNumberAndNumRule();
-        }
-        // <--
     }
     else
     {
@@ -1732,15 +1631,6 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     {
         // einige Sonderbehandlungen fuer Attribute
         bRet = 0 != AttrSetHandleHelper::Put( mpAttrSet, *this, rSet );
-
-        // --> OD 2005-10-25 #126367#
-        if ( IsModifyLocked() )
-        {
-            SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
-            if ( pTxtNd )
-                pTxtNd->SyncNumberAndNumRule();
-        }
-        // <--
     }
     else
     {
@@ -2014,18 +1904,7 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
 
         if( GetpSwAttrSet() )
         {
-// Attrset beibehalten oder loeschen??
-// 13.04.99: Bisher wurden er geloescht, jetzt wird er beibehalten.
-//           #64637#: Beim Laden eines Dokuments wird die bedingte
-//           Vorlage nach dem Laden der harten Attribute gesetzt. Deshalb
-//           wurden die harten Attribute geloescht.
-
             AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
-// steht im docfmt.cxx
-//extern BOOL lcl_RstAttr( const SwNodePtr&, void* );
-//          lcl_RstAttr( this, 0 );
-//          if( mpAttrSet && !mpAttrSet->Count() )
-//              delete mpAttrSet, mpAttrSet = 0;
         }
 
         if( !IsModifyLocked() )
@@ -2154,12 +2033,12 @@ void SwCntntNode::ChkCondColl()
 
         if (!bDone)
         {
-            if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRuleSync())
+            if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRule())
             {
                 // steht in einer Numerierung
                 // welcher Level?
                 aTmp.SetCondition( PARA_IN_LIST,
-                                ((SwTxtNode*)this)->GetLevel() );
+                                ((SwTxtNode*)this)->GetActualListLevel() );
                 pCColl = ((SwConditionTxtFmtColl*)GetFmtColl())->
                                 HasCondition( aTmp );
             }
