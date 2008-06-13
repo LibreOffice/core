@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unsect.cxx,v $
- * $Revision: 1.16 $
+ * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +118,7 @@ SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
             if( aBrkSet.Count() )
             {
                 pHistory = new SwHistory;
-                pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex(), rDoc );
+                pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex() );
             }
         }
     }
@@ -320,7 +320,7 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
         SwNodeIndex aEnd( rDoc.GetNodes(), nEndNd-2 );
         SwSectionFmt* pFmt = rDoc.MakeSectionFmt( 0 );
         if( pAttr )
-            pFmt->SetAttr( *pAttr );
+            pFmt->SetFmtAttr( *pAttr );
 
         /// OD 04.10.2002 #102894#
         /// remember inserted section node for further calculations
@@ -402,20 +402,20 @@ void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
     {
         // das Content- und Protect-Item muss bestehen bleiben
         const SfxPoolItem* pItem;
-        pAttr->Put( pFmt->GetAttr( RES_CNTNT ));
+        pAttr->Put( pFmt->GetFmtAttr( RES_CNTNT ));
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, TRUE, &pItem ))
             pAttr->Put( *pItem );
         pFmt->DelDiffs( *pAttr );
         pAttr->ClearItem( RES_CNTNT );
-        pFmt->SetAttr( *pAttr );
+        pFmt->SetFmtAttr( *pAttr );
         delete pAttr;
     }
     else
     {
         // dann muessen die alten entfernt werden
-        pFmt->ResetAttr( RES_FRMATR_BEGIN, RES_BREAK );
-        pFmt->ResetAttr( RES_HEADER, RES_OPAQUE );
-        pFmt->ResetAttr( RES_SURROUND, RES_FRMATR_END-1 );
+        pFmt->ResetFmtAttr( RES_FRMATR_BEGIN, RES_BREAK );
+        pFmt->ResetFmtAttr( RES_HEADER, RES_OPAQUE );
+        pFmt->ResetFmtAttr( RES_SURROUND, RES_FRMATR_END-1 );
     }
     pAttr = pCur;
 
