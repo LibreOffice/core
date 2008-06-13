@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: swatrset.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +51,9 @@
 #endif
 #include <istyleaccess.hxx>
 #include <numrule.hxx>
+// --> OD 2008-03-19 #refactorlists#
+#include <list.hxx>
+// <--
 
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
@@ -209,13 +212,6 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
         bSet = true;
     }
 
-    if( SFX_ITEM_SET == GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) &&
-        ((SwNumRuleItem*)pItem)->GetDefinedIn() != pModify  )
-    {
-        ((SwNumRuleItem*)pItem)->ChgDefinedIn( pModify );
-        bSet = true;
-    }
-
     if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, FALSE, &pItem ) &&
         ((SwFmtDrop*)pItem)->GetDefinedIn() != pModify )
     {
@@ -272,6 +268,38 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
+            // --> OD 2008-03-19 #refactorlists#
+            // copy list and if needed also the corresponding list style
+            // for text nodes
+            if ( pSrcDoc != pDstDoc &&
+                 pCNd && pCNd->IsTxtNode() &&
+                 GetItemState( RES_PARATR_LIST_ID, FALSE, &pItem ) == SFX_ITEM_SET )
+            {
+                const String& sListId =
+                        dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
+                if ( sListId.Len() > 0 &&
+                     !pDstDoc->getListByName( sListId ) )
+                {
+                    const SwList* pList = pSrcDoc->getListByName( sListId );
+                    // copy list style, if needed
+                    const String sDefaultListStyleName =
+                                            pList->GetDefaultListStyleName();
+                    if ( !pDstDoc->FindNumRulePtr( sDefaultListStyleName ) )
+                    {
+                        pDstDoc->MakeNumRule( sDefaultListStyleName,
+                                              pSrcDoc->FindNumRulePtr( sDefaultListStyleName ) );
+                    }
+                    // check again, if list exist, because <SwDoc::MakeNumRule(..)>
+                    // could have also created it.
+                    if ( !pDstDoc->getListByName( sListId ) )
+                    {
+                        // copy list
+                        pDstDoc->createList( sListId, sDefaultListStyleName );
+                    }
+                }
+            }
+            // <--
+
             // JP 04.02.99: Task #61467# Seitenvorlagenwechsel mit kopieren
             //              Gegenueber dem alten Verhalten, sie zu entfernen
             const SwPageDesc* pPgDesc;
@@ -297,12 +325,12 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 if( pCNd )
                     pCNd->SetAttr( aTmpSet );
                 else
-                    pFmt->SetAttr( aTmpSet );
+                    pFmt->SetFmtAttr( aTmpSet );
             }
             else if( pCNd )
                 pCNd->SetAttr( *this );
             else
-                pFmt->SetAttr( *this );
+                pFmt->SetFmtAttr( *this );
         }
     }
 #ifndef PRODUCT
