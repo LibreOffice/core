@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.109 $
+ * $Revision: 1.110 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -564,23 +564,25 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case FN_UNO_NUM_LEVEL  :
             case FN_UNO_IS_NUMBER  :
             {
+                // multi selection is not considered
                 SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-                const SwNumRule* pRule = pTxtNd->GetNumRule();
-                // hier wird Multiselektion nicht beruecksichtigt
-
-                if( FN_UNO_NUM_LEVEL == pMap->nWID  &&  pRule != NULL )
+                // --> OD 2008-05-14 #refactorlists# - check on list style not needed
+//                const SwNumRule* pRule = pTxtNd->GetNumRule();
+//                if( FN_UNO_NUM_LEVEL == pMap->nWID  &&  pRule != NULL )
+                if ( FN_UNO_NUM_LEVEL == pMap->nWID )
+                // <--
                 {
                     sal_Int16 nLevel = 0;
                     aValue >>= nLevel;
 
-                    pTxtNd->SetLevel(nLevel);
+                    pTxtNd->SetAttrListLevel(nLevel);
 
                 }
                 else if( FN_UNO_IS_NUMBER == pMap->nWID )
                 {
                     BOOL bIsNumber = *(sal_Bool*) aValue.getValue();
                     if(!bIsNumber)
-                        pTxtNd->SetCounted(FALSE);
+                        pTxtNd->SetCountedInList( false );
                 }
                 //PROPERTY_MAYBEVOID!
             }
@@ -2203,6 +2205,9 @@ void SAL_CALL SwXTextCursor::setAllPropertiesToDefault()
         USHORT aParaResetableSetRange[] = {
             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
             RES_PARATR_BEGIN, RES_PARATR_END-1,
+            // --> OD 2008-02-25 #refactorlists#
+            RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+            // <--
             RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
             0
         };
