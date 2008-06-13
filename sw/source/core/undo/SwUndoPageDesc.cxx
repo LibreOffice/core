@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SwUndoPageDesc.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,7 +247,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SwFmtCntnt& rDestCntnt = rDestHead.GetHeaderFmt()->GetCntnt();
         (void)rDestCntnt;
 #endif
-        pNewFmt->SetAttr( rSourceHead.GetHeaderFmt()->GetCntnt() );
+        pNewFmt->SetFmtAttr( rSourceHead.GetHeaderFmt()->GetCntnt() );
         delete pNewItem;
 
         // Let the source page description point to zero node position,
@@ -255,7 +255,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-        pNewFmt->SetAttr( SwFmtCntnt() );
+        pNewFmt->SetFmtAttr( SwFmtCntnt() );
         delete pNewItem;
 
         if( !rDest.IsHeaderShared() )
@@ -271,12 +271,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             const SwFmtCntnt& rDestCntnt1 = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
             (void)rDestCntnt1;
 #endif
-            pNewFmt->SetAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
+            pNewFmt->SetFmtAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
-            pNewFmt->SetAttr( SwFmtCntnt() );
+            pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
     }
@@ -289,7 +289,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt *pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
-        pNewFmt->SetAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
+        pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
         delete pNewItem;
 
 #ifdef DEBUG
@@ -301,7 +301,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
-        pNewFmt->SetAttr( SwFmtCntnt() );
+        pNewFmt->SetFmtAttr( SwFmtCntnt() );
         delete pNewItem;
 
         if( !rDest.IsFooterShared() )
@@ -317,12 +317,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
-            pNewFmt->SetAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
+            pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
-            pNewFmt->SetAttr( SwFmtCntnt() );
+            pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
     }
