@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-06-06 12:05:12 $
+dnl * Date: $Date: 2008-06-13 14:10:42 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.270 $ )
+AC_REVISION( $Revision: 1.271 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -271,6 +271,20 @@ AC_ARG_WITH(myspell-dicts,
                           installation set, for people building for specific
                           distributions where the myspell dictionaries are
                           installed from other sources
+],,)
+AC_ARG_WITH(system-dicts,
+[  --with-system-dicts    Use dictionaries from system paths- Specify
+                         them via --with-{dict,hyph,thes}-path=/path
+			 if you want to override the default ones
+],,)
+AC_ARG_WITH(external-dict-dir,
+[  --with-external-dict-dir Specify external dictionary dir
+],,)
+AC_ARG_WITH(external-hyph-dir,
+[  --with-external-hyph-dir Specify external hyphenation pattern dir
+],,)
+AC_ARG_WITH(external-thes-dir,
+[  --with-external-thes-dir Specify external thesaurus dir
 ],,)
 AC_ARG_WITH(writer2latex,
 [  --without-writer2latex Removes writer2latex from openoffice.org installation
@@ -1214,6 +1228,42 @@ else
   WITH_MYSPELL_DICTS=NO
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
+
+if test "$WITH_MYSPELL_DICTS" = "NO"; then
+  AC_MSG_CHECKING([whether to use dicts from external paths])
+  if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
+	AC_MSG_RESULT([yes])
+	SYSTEM_DICTS=YES
+	AC_MSG_CHECKING([for spelling dictionary directory])
+	if test -n "$with_external_dict_dir"; then
+		DICT_SYSTEM_DIR=file://$with_external_dict_dir
+	else
+		DICT_SYSTEM_DIR=file:///usr/share/hunspell
+	fi
+	AC_MSG_RESULT([$DICT_SYSTEM_DIR])
+	AC_MSG_CHECKING([for hyphenation patterns directory])
+	if test -n "$with_external_hyph_dir"; then
+		HYPH_SYSTEM_DIR=file://$with_external_hyph_dir
+	else
+		HYPH_SYSTEM_DIR=file:///usr/share/hyphen
+	fi
+	AC_MSG_RESULT([$HYPH_SYSTEM_DIR])
+	AC_MSG_CHECKING([for thesaurus directory])
+	if test -n "$with_external_thes_dir"; then
+		THES_SYSTEM_DIR=file://$with_external_thes_dir
+	else
+		THES_SYSTEM_DIR=file:///usr/share/mythes
+	fi
+	AC_MSG_RESULT([$THES_SYSTEM_DIR])
+  else
+  	AC_MSG_RESULT([no])
+  	SYSTEM_DICTS=NO
+  fi
+fi
+AC_SUBST(SYSTEM_DICTS)
+AC_SUBST(DICT_SYSTEM_DIR)
+AC_SUBST(HYPH_SYSTEM_DIR)
+AC_SUBST(THES_SYSTEM_DIR)
 
 dnl ===================================================================
 dnl WINNT uses tcsh, bash or 4nt all other O/S use tcsh or bash.
@@ -4509,6 +4559,7 @@ if test -n "$with_system_hunspell" -o -n "$with_system_libs" && \
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
+    BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
