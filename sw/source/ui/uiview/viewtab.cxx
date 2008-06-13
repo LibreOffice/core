@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewtab.cxx,v $
- * $Revision: 1.42 $
+ * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -389,9 +389,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aLR.SetRight((USHORT)aLongLR.GetRight());
 
             if ( nFrmType & FRMTYPE_HEADER && pHeaderFmt )
-                pHeaderFmt->SetAttr( aLR );
+                pHeaderFmt->SetFmtAttr( aLR );
             else if( nFrmType & FRMTYPE_FOOTER && pFooterFmt )
-                pFooterFmt->SetAttr( aLR );
+                pFooterFmt->SetFmtAttr( aLR );
         }
         else if( nFrmType == FRMTYPE_DRAWOBJ)
         {
@@ -433,7 +433,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aLR.SetRight((USHORT)aLongLR.GetRight());
             SwapPageMargin( rDesc, aLR );
             SwPageDesc aDesc( rDesc );
-            aDesc.GetMaster().SetAttr( aLR );
+            aDesc.GetMaster().SetFmtAttr( aLR );
             rSh.ChgPageDesc( nDescId, aDesc );
         }
     }
@@ -529,7 +529,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aUL.SetUpper( (USHORT)aLongULSpace.GetUpper() );
                 else
                     aUL.SetLower( (USHORT)aLongULSpace.GetLower() );
-                aDesc.GetMaster().SetAttr( aUL );
+                aDesc.GetMaster().SetFmtAttr( aUL );
 
                 if( bHead && pHeaderFmt || !bHead && pFooterFmt )
                 {
@@ -539,9 +539,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aSz.SetHeight(nPageHeight - aLongULSpace.GetLower() -
                                                 aLongULSpace.GetUpper() );
                     if ( bHead )
-                        pHeaderFmt->SetAttr( aSz );
+                        pHeaderFmt->SetFmtAttr( aSz );
                     else
-                        pFooterFmt->SetAttr( aSz );
+                        pFooterFmt->SetFmtAttr( aSz );
                 }
             }
             else
@@ -549,7 +549,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 SvxULSpaceItem aUL(RES_UL_SPACE);
                 aUL.SetUpper((USHORT)aLongULSpace.GetUpper());
                 aUL.SetLower((USHORT)aLongULSpace.GetLower());
-                aDesc.GetMaster().SetAttr(aUL);
+                aDesc.GetMaster().SetFmtAttr(aUL);
             }
 
             rSh.ChgPageDesc( nDescId, aDesc );
@@ -813,7 +813,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     USHORT(bVerticalWriting ? aPrtRect.Height() : aPrtRect.Width()),
                                 aCols );
                 SwPageDesc aDesc( rDesc );
-                aDesc.GetMaster().SetAttr( aCols );
+                aDesc.GetMaster().SetFmtAttr( aCols );
                 rSh.ChgPageDesc( rSh.GetCurPageDesc(), aDesc );
             }
         }
@@ -1470,7 +1470,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     SvxColumnItem aColItem(nNum);
                     const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT, pPt);
-                    const SvxBoxItem& rBox = (const SvxBoxItem&)rMaster.GetAttr(RES_BOX);
+                    const SvxBoxItem& rBox = (const SvxBoxItem&)rMaster.GetFmtAttr(RES_BOX);
                     long nDist = rBox.GetDistance();
                     ::lcl_FillSvxColumn(aCol,
                         USHORT(bVerticalWriting ? aPrtRect.Height() : aPrtRect.Width() ),
