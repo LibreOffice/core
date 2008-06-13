@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: w1filter.cxx,v $
- * $Revision: 1.20 $
+ * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1038,12 +1038,12 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         SwFmtFrmSize aSz(rFmt.GetFrmSize());
         aSz.SetWidth(rDOP.xaPageGet());
         aSz.SetHeight(rDOP.yaPageGet());
-        rFmt.SetAttr(aSz);
+        rFmt.SetFmtAttr(aSz);
         SvxLRSpaceItem aLR(rDOP.dxaLeftGet()+rDOP.dxaGutterGet(),
          rDOP.dxaRightGet(), 0, 0, RES_LR_SPACE);
-        rFmt.SetAttr(aLR);
+        rFmt.SetFmtAttr(aLR);
         SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
-        rFmt.SetAttr(aUL);
+        rFmt.SetFmtAttr(aUL);
     // sobald wir mit dem lesen der zeichen soweit sind, wo sep's
     // momentanes attribut beginnt, wird dieses attribut eingefuegt.
     // diese methode ist bei den meisten start/stop methoden der
@@ -1480,12 +1480,12 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     SwFmtFrmSize aSz(rFmt.GetFrmSize());
     aSz.SetWidth(rDOP.xaPageGet());
     aSz.SetHeight(rDOP.yaPageGet());
-    rFmt.SetAttr(aSz);
+    rFmt.SetFmtAttr(aSz);
     SvxLRSpaceItem aLR(rDOP.dxaLeftGet()+rDOP.dxaGutterGet(),
      rDOP.dxaRightGet(), 0, 0, RES_LR_SPACE);
-    rFmt.SetAttr(aLR);
+    rFmt.SetFmtAttr(aLR);
     SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
-    rFmt.SetAttr(aUL);
+    rFmt.SetFmtAttr(aUL);
 
     SwFtnInfo aInfo;
     aInfo = rOut.GetDoc().GetFtnInfo();     // Copy-Ctor privat
