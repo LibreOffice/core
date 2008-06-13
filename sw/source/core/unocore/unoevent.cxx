@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unoevent.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -365,12 +365,12 @@ SwFrameEventDescriptor::~SwFrameEventDescriptor()
 
 void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 {
-    rFrame.GetFrmFmt()->SetAttr(rItem);
+    rFrame.GetFrmFmt()->SetFmtAttr(rItem);
 }
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetAttr(RES_FRMMACRO);
+    return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetFmtAttr(RES_FRMMACRO);
 }
 
 sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
