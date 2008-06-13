@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: LoggingThread.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +33,7 @@ package helper;
 import share.*;
 import lib.TestParameters;
 import util.PropertyName;
+import util.utils;
 
 /**
  * This class is printing to a <CODE>LogWriter</CODE>. This could be usefull if a UNO-API
@@ -50,6 +51,7 @@ public class LoggingThread extends Thread {
     TestParameters param;
     LogWriter log = null;
     boolean finished = false;
+    boolean debug = false;
 
     /**
      *
@@ -59,16 +61,17 @@ public class LoggingThread extends Thread {
     public LoggingThread(LogWriter log, TestParameters tParam) {
         this.log = log;
         this.param = tParam;
+        this.debug = tParam.getBool(PropertyName.DEBUG_IS_ACTIVE);
     }
 
     public void run() {
-        int timeOut = param.getInt(PropertyName.TIME_OUT) / 2;
+        final int timeOut = param.getInt(PropertyName.TIME_OUT) / 2;
         int count = 0;
         finished = false;
-        log.println("TimeOutLogger: start");
+        if (debug) log.println("TimeOutLogger: " + utils.getDateTime() + " start");
         while (!finished && count < 200) {
             try {
-                log.println("TimeOutLogger: " + count);
+                if (debug) log.println("TimeOutLogger: "+utils.getDateTime() + count);
                 synchronized (this) {
                     wait(timeOut);
                 }
@@ -76,7 +79,7 @@ public class LoggingThread extends Thread {
             } catch (InterruptedException ex) {
             }
         }
-        log.println("TimeOutLogger: finished");
+        if (debug) log.println("TimeOutLogger: " + utils.getDateTime() + " finished");
     }
 
     /**
@@ -88,7 +91,7 @@ public class LoggingThread extends Thread {
             synchronized (this) {
                 notify();
             }
-            log.println("TimeOutLogger: try to finish ");
+            if (debug) log.println("TimeOutLogger: " + utils.getDateTime() + " try to finish ");
             sleep(1000);
         } catch (InterruptedException ex) {
         }
