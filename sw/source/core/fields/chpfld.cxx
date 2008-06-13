@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chpfld.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,8 +156,13 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 if( pONd && pONd->GetTxtColl() )
                 {
                     BYTE nPrevLvl = nLevel;
-                    nLevel = GetRealLevel( pONd->GetTxtColl()->
-                                            GetOutlineLevel() );
+                    // --> OD 2008-04-02 #refactorlists#
+//                    nLevel = GetRealLevel( pONd->GetTxtColl()->
+//                                            GetOutlineLevel() );
+                    ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,
+                            "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
+                    nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
+                    // <--
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
@@ -188,9 +193,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             // <--
 
             SwNumRule* pRule( pTxtNd->GetNumRule() );
-            if ( pTxtNd->IsCounted() && pRule )
+            if ( pTxtNd->IsCountedInList() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetLevel()) );
+                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
