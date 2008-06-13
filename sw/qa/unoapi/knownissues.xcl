@@ -112,3 +112,36 @@ sw.SwAccessibleDocumentView::com::sun::star::accessibility::XAccessibleComponent
 sw.SwAccessibleDocumentPageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
 #-> disabled in sw.sce 
 
+### i87978 ###
+sw.DocumentSettings::com::sun::star::beans::XPropertySet
+sw.ConditionalParagraphStyle::com::sun::star::beans::XPropertySet
+
+### i88242 ###
+sw.SwXTextDocument::com::sun::star::view::XPrintable
+sw.SwXTextDocument::com::sun::star::text::XPagePrintable
+
+### i88257 ###
+sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleImage
+
+### i88262 ###
+sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
+
+### i88374 ###
+sw.SwXTextTable::com::sun::star::table::XAutoFormattable
+
+### i88310 ###
+sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleComponent
+
+### i88606 ###
+sw.SwAccessibleTextGraphicObject::com::sun::star::accessibility::XAccessibleContext
+
+### i89021 ###
+sw.SwXTextDefaults
+#-> disabled in sw.sce 
+
+### i89022 ###
+sw.SwAccessiblePageView
+#-> disabled in sw.sce 
+
+### i89419 ###
+sw.SwXTextEmbeddedObject::com::sun::star::text::BaseFrameProperties
