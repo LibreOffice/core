@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NumberingRules.idl,v $
- * $Revision: 1.11 $
+ * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,17 +85,22 @@ published service NumberingRules
         numbering rules property
      */
     [optional, readonly, property] string Name;
-    //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
 
-    /** This numbering is used in the outline of the document (e.g. headings).
-     */
-    [optional, property] boolean    NumberingIsOutline;
-    //-------------------------------------------------------------------------
+        /** This numbering is used in the outline of the document (e.g. headings).
+         */
+        [optional, property] boolean    NumberingIsOutline;
+        //-------------------------------------------------------------------------
 
-    /** the type of numbering (arabic, characters, roman numbers, etc.).
-     */
-    [optional, property] short    NumberingType;
-    //-------------------------------------------------------------------------
+        /** the type of numbering (arabic, characters, roman numbers, etc.).
+         */
+        [optional, property] short    NumberingType;
+        //-------------------------------------------------------------------------
+
+        /** id of default list for the numbering rules instance
+         */
+        [optional, readonly, property] string DefaultListId;
+        //-------------------------------------------------------------------------
 };
 
 //=============================================================================
