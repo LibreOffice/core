@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.130 $
+ * $Revision: 1.131 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,9 +131,7 @@
 #include <unostyle.hxx>   //SwAutoStyleFamily
 #include <istyleaccess.hxx> // handling of automatic styles
 
-#ifndef _STYLEPOOL_HXX
 #include <svtools/stylepool.hxx>
-#endif
 #include <swatrset.hxx>
 
 //#include <com/sun/star/i18n/ScriptType.hpp>
@@ -1092,10 +1090,10 @@ String lcl_CreateOutlineString( USHORT nIndex,
 {
     String sEntry;
     const SwTxtNode * pTxtNd = rOutlineNodes[ nIndex ]->GetTxtNode();
-    SwNodeNum::tNumberVector aNumVector = pTxtNd->GetNumberVector();
+    SwNumberTree::tNumberVector aNumVector = pTxtNd->GetNumberVector();
     if( pOutlRule && pTxtNd->GetNumRule())
         for( sal_Int8 nLevel = 0;
-             nLevel <= pTxtNd->GetLevel();
+             nLevel <= pTxtNd->GetActualListLevel();
              nLevel++ )
         {
             long nVal = aNumVector[nLevel];
