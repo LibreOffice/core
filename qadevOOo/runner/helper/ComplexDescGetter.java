@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ComplexDescGetter.java,v $
- * $Revision: 1.8 $
+ * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,16 +84,23 @@ public class ComplexDescGetter extends DescGetter {
 
         int index = className.indexOf("::");
         if (index != -1) {
+            // case1: method()
+            // case2: method(param1,param2)
+            // case3: method1(param1,param2),method2(param1,param2)
             String method = className.substring(index + 2);
             className = className.substring(0, index);
             Vector methods = new Vector();
-            StringTokenizer t = new StringTokenizer(method, ",");
-            while (t.hasMoreTokens()) {
-                String m = t.nextToken();
-                if (m.endsWith("()"))
-                    m = m.substring(0, m.length() - 2);
-                methods.add(m);
+
+            String[] split = method.split("(?<=\\)),(?=\\w+)");
+
+            for (int i = 0; i < split.length; i++) {
+                String meth = split[i];
+
+                if (meth.endsWith("()")) meth = meth.substring(0, meth.length() - 2);
+
+                methods.add(meth);
             }
+
             methodNames = new String[methods.size()];
             methodNames = (String[])methods.toArray(methodNames);
         }
