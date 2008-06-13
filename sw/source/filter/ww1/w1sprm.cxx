@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: w1sprm.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -441,7 +441,7 @@ void Ww1SingleSprmSColumns::Start(
         return;
     SwFmtCol aCol;
     aCol.Init(nCols, nColSpace, nNettoWidth);
-    rOut.GetPageDesc().GetMaster().SetAttr(aCol);
+    rOut.GetPageDesc().GetMaster().SetFmtAttr(aCol);
 }
 
 void Ww1SingleSprmPTtp::Start(
