@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parasc.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -242,7 +242,7 @@ ULONG SwASCIIParser::CallParser()
                         if (SFX_ITEM_SET == pItemSet->GetItemState(*pWhichIds,
                             false, &pItem))
                         {
-                            pColl->SetAttr( *pItem );
+                            pColl->SetFmtAttr( *pItem );
                             pItemSet->ClearItem( *pWhichIds );
                         }
                         ++pWhichIds;
