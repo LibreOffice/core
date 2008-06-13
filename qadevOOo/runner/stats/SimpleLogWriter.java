@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: SimpleLogWriter.java,v $
- * $Revision: 1.6 $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,13 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package stats;
 
 import share.LogWriter;
 
 import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -49,12 +47,12 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
         Calendar cal = new GregorianCalendar();
         DecimalFormat dfmt = new DecimalFormat("00");
         super.println("LOG> Log started " +
-                    dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
-                    dfmt.format(cal.get(Calendar.MONTH)) + "." +
-                    dfmt.format(cal.get(Calendar.YEAR)) + " - " +
-                    dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
-                    dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
-                    dfmt.format(cal.get(Calendar.SECOND)));
+            dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
+            dfmt.format(cal.get(Calendar.MONTH)) + "." +
+            dfmt.format(cal.get(Calendar.YEAR)) + " - " +
+            dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
+            dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
+            dfmt.format(cal.get(Calendar.SECOND)));
         super.flush();
     }
 
@@ -66,24 +64,24 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
     }
 
     public void println(String msg) {
-        if (entry != null)
-        {
+        if ((ow == null) && (entry != null)) {
             this.ow = (share.Watcher) entry.UserDefinedParams.get("Watcher");
-
             if (this.ow != null) {
                 this.ow.ping();
             }
+        } else {
+            this.ow.ping();
         }
-        if (m_bLogging)
-        {
-            super.println("LOG> "+msg);
+
+        if (m_bLogging) {
+            super.println("LOG> " + msg);
             super.flush();
         }
-        // else
-        // {
-        //     super.println(" ++ " + msg);
-        //     super.flush();
-        // }
+    // else
+    // {
+    //     super.println(" ++ " + msg);
+    //     super.flush();
+    // }
     }
 
     public boolean summary(share.DescEntry entry) {
@@ -97,5 +95,4 @@ public class SimpleLogWriter extends PrintWriter implements LogWriter {
     public void setWatcher(Object watcher) {
         entry.UserDefinedParams.put("Watcher", (share.Watcher) watcher);
     }
-
 }
