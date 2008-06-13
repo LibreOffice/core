@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.36 $
+# $Revision: 1.37 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +53,7 @@ SLOFILES =	\
         $(SLO)$/txtftne.obj \
         $(SLO)$/txtimp.obj \
         $(SLO)$/txtimppr.obj \
+                $(SLO)$/txtlists.obj \
         $(SLO)$/txtparae.obj \
         $(SLO)$/txtparai.obj \
         $(SLO)$/txtprhdl.obj \
