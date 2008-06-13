@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dbmgr.cxx,v $
- * $Revision: 1.131 $
+ * $Revision: 1.132 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1210,6 +1210,9 @@ void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
+        // --> OD 2008-02-25 #refactorlists##
+        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+        // <--
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
