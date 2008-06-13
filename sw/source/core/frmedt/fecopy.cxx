@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fecopy.cxx,v $
- * $Revision: 1.52 $
+ * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,8 +423,8 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         aPos -= rSttPt - pObj->GetSnapRect().TopLeft();
                         // OD 2004-04-05 #i26791# - change attributes instead of
                         // direct positioning
-                        pFmt->SetAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-                        pFmt->SetAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+                        pFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                        pFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // --> OD 2005-04-15 #i47455# - notify draw frame format
                         // that position attributes are already set.
                         if ( pFmt->ISA(SwDrawFrmFmt) )
@@ -569,8 +569,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
                 aPos -= rSttPt - pFly->Frm().Pos();
-                pFlyFmt->SetAttr( SwFmtHoriOrient( aPos.X(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-                pFlyFmt->SetAttr( SwFmtVertOrient( aPos.Y(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+                pFlyFmt->SetFmtAttr( SwFmtHoriOrient( aPos.X(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                pFlyFmt->SetFmtAttr( SwFmtVertOrient( aPos.Y(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             }
 
             const Point aPt( pDestShell->GetCrsrDocPos() );
