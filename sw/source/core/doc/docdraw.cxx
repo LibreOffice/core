@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docdraw.cxx,v $
- * $Revision: 1.44 $
+ * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,8 +200,8 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
     }
 
-    _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
-    _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+    _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    _pFrmFmt->SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
     // --> OD 2005-03-11 #i44334#, #i44681# - positioning attributes already set
     _pFrmFmt->PosAttrSet();
     // <--
@@ -288,7 +288,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
                                 GetDfltFrmFmt() );
-        pFmt->SetAttr( aAnch );
+        pFmt->SetFmtAttr( aAnch );
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
@@ -378,7 +378,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         SdrObject* pSubObj = pLst->GetObj( i2 );
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
                                                             GetDfltFrmFmt() );
-                        pFmt->SetAttr( aAnch );
+                        pFmt->SetFmtAttr( aAnch );
                         // --> OD 2004-10-25 #i36010# - set layout direction of the position
                         pFmt->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
