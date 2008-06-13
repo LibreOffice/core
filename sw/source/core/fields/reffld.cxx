@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: reffld.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +77,8 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#include "numrule.hxx"
+#include <numrule.hxx>
+#include <SwNodeNum.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -486,7 +487,8 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
                                      const sal_uInt32 nRefNumFormat ) const
 {
-    if ( rTxtNodeOfReferencedItem.HasNumber() && rTxtNodeOfReferencedItem.IsCounted() )
+    if ( rTxtNodeOfReferencedItem.HasNumber() &&
+         rTxtNodeOfReferencedItem.IsCountedInList() )
     {
         ASSERT( rTxtNodeOfReferencedItem.GetNum(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
@@ -521,8 +523,8 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
             }
             if ( pNodeNumForTxtNodeOfField )
             {
-                const SwNodeNum::tNumberVector rFieldNumVec = pNodeNumForTxtNodeOfField->GetNumberVector();
-                const SwNodeNum::tNumberVector rRefItemNumVec = rTxtNodeOfReferencedItem.GetNum()->GetNumberVector();
+                const SwNumberTree::tNumberVector rFieldNumVec = pNodeNumForTxtNodeOfField->GetNumberVector();
+                const SwNumberTree::tNumberVector rRefItemNumVec = rTxtNodeOfReferencedItem.GetNum()->GetNumberVector();
                 sal_uInt8 nLevel( 0 );
                 while ( nLevel < rFieldNumVec.size() && nLevel < rRefItemNumVec.size() )
                 {
@@ -541,7 +543,7 @@ String SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
 
         // Determine, if superior list labels have to be included
         const bool bInclSuperiorNumLabels(
-            ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetLevel() &&
+            ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetActualListLevel() &&
               ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
 
         ASSERT( rTxtNodeOfReferencedItem.GetNumRule(),
