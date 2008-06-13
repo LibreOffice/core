@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlnum.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +54,8 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
+#include <SwNodeNum.hxx>
+
 using namespace ::com::sun::star;
 
 // TODO: Unicode: Are these characters the correct ones?
@@ -83,16 +85,18 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
          pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
     {
         pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
-        nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetLevel() + 1 : 0);
-        bNumbered = rTxtNd.IsCounted();
+        nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetActualListLevel() + 1 : 0);
+        bNumbered = rTxtNd.IsCountedInList();
+        // --> OD 2008-02-27 #refactorlists#
         // --> OD 2005-11-16 #i57919#
         // correction of refactoring done by cws swnumtree:
         // <bRestart> has to be set to <true>, if numbering is restarted at this
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
-        bRestart = rTxtNd.IsRestart() &&
-                   rTxtNd.GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
+//        bRestart = rTxtNd.IsListRestart() &&
+//                   GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
+        bRestart = rTxtNd.IsListRestart() && !rTxtNd.HasAttrListRestartValue();
         // <--
     }
     // <--
@@ -304,8 +308,11 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // den aktuellen Absatz erst einmal nicht numerieren
     {
         BYTE nLvl = nLevel;
-        SetNoNum(&nLvl, TRUE); // #115962#
-        SetNodeNum( nLvl );
+        // --> OD 2008-04-02 #refactorlists#
+//        SetNoNum(&nLvl, TRUE); // #115962#
+//        SetNodeNum( nLvl );
+        SetNodeNum( nLvl, false );
+        // <--
     }
 
     // einen neuen Kontext anlegen
@@ -383,7 +390,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
 
-        bAppend = (pTxtNode && ! pTxtNode->IsOutline() && pTxtNode->IsCounted()) ||
+        bAppend = (pTxtNode && ! pTxtNode->IsOutline() && pTxtNode->IsCountedInList()) ||
 
             HasCurrentParaFlys();
     }
@@ -449,7 +456,10 @@ void SwHTMLParser::EndNumBulList( int nToken )
         else
         {
             // den naechsten Absatz erstmal nicht numerieren
-            SetNodeNum( rInfo.GetLevel() | NO_NUMLEVEL );
+            // --> OD 2008-04-02 #refactorlists#
+//            SetNodeNum( rInfo.GetLevel() | NO_NUMLEVEL );
+            SetNodeNum( rInfo.GetLevel(), false );
+            // <--
         }
     }
 
@@ -514,8 +524,11 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         AppendTxtNode( AM_NOSPACE, sal_False );
     bNoParSpace = sal_False;    // In <LI> wird kein Abstand eingefuegt!
 
-    if( HTML_LISTHEADER_ON==nToken )
-        SetNoNum(&nLevel, TRUE);
+    // --> OD 2008-04-02 #refactorlists#
+//    if( HTML_LISTHEADER_ON==nToken )
+//        SetNoNum(&nLevel, TRUE);
+    const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
+    // <--
 
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
@@ -556,12 +569,14 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
-    pTxtNode->SetLevel(nLevel);
+    pTxtNode->SetAttrListLevel(nLevel);
     // --> OD 2005-11-14 #i57656#
     // <IsCounted()> state of text node has to be adjusted accordingly.
     if ( /*nLevel >= 0 &&*/ nLevel < MAXLEVEL )
     {
-        pTxtNode->SetCounted( true );
+        // --> OD 2008-04-02 #refactorlists#
+        pTxtNode->SetCountedInList( bCountedInList );
+        // <--
     }
     // <--
     // --> OD 2005-11-15 #i57919#
@@ -571,8 +586,8 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     //   restarted at this text node
     if ( nStart != USHRT_MAX )
     {
-        pTxtNode->SetRestart( true );
-        pTxtNode->SetStart( nStart );
+        pTxtNode->SetListRestart( true );
+        pTxtNode->SetAttrListRestartValue( nStart );
     }
     // <--
 
@@ -650,7 +665,8 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 
 /*  */
 
-void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
+// --> OD 2008-04-02 #refactorlists#
+void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
@@ -659,18 +675,22 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
-    // --> OD 2005-11-14 #i57656#
-    // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
-    if ( /*nLevel >= 0 &&*/ ( nLevel & NO_NUMLEVEL ) )
-    {
-        pTxtNode->SetLevel( nLevel & ~NO_NUMLEVEL );
-        pTxtNode->SetCounted( false );
-    }
-    else
-    {
-        pTxtNode->SetLevel( nLevel );
-        pTxtNode->SetCounted( true );
-    }
+    // --> OD 2008-04-02 #refactorlists#
+//    // --> OD 2005-11-14 #i57656#
+//    // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
+//    if ( /*nLevel >= 0 &&*/ ( nLevel & NO_NUMLEVEL ) )
+//    {
+//        pTxtNode->SetAttrListLevel( nLevel & ~NO_NUMLEVEL );
+//        pTxtNode->SetCountedInList( false );
+//    }
+//    else
+//    {
+//        pTxtNode->SetAttrListLevel( nLevel );
+//        pTxtNode->SetCountedInList( true );
+//    }
+    pTxtNode->SetAttrListLevel( nLevel );
+    pTxtNode->SetCountedInList( bCountedInList );
+    // <--
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.
@@ -775,7 +795,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                             ASSERT(! pTxtNd->IsOutline(),
                                    "outline not expected");
 
-                            if( pTxtNd->GetLevel() + 1 <
+                            if( pTxtNd->GetActualListLevel() + 1 <
                                 rInfo.GetDepth() )
                             {
                                 // node is numbered, but level is lower
@@ -882,7 +902,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
-                                ->GetTxtNode()->GetNum()->GetNumberVector()[i] );
+                                ->GetTxtNode()->GetNumberVector()[i] );
                 }
                 else
                 {
