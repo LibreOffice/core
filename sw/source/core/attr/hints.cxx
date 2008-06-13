@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: hints.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,15 +214,16 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 {
 }
 
-SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
-    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
-{
-}
+// --> OD 2008-02-19 #refactorlists#
+//SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
+//    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
+//{
+//}
 
-void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
-{
-    aList.Insert(rNd.GetIndex(), &rNd);
-}
+//void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
+//{
+//    aList.Insert(rNd.GetIndex(), &rNd);
+//}
 
 SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
     : SwMsgPoolItem( RES_GETLOWERNUMLEVEL ), rName( rRuleName ),
