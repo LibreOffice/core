@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txtattr.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,7 +240,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             }
 
             if ( pColl )
-                pColl->SetAttr( aINetFmt );
+                pColl->SetFmtAttr( aINetFmt );
             else rWrtSh.SetAttr( aINetFmt );
             rReq.Done();
         }
@@ -286,7 +286,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                 if( aAttrSet.Count() )
                 {
                     if( pColl )
-                        pColl->SetAttr( aAttrSet );
+                        pColl->SetFmtAttr( aAttrSet );
                     else
                         rWrtSh.SetAttr( aAttrSet );
                 }
@@ -495,7 +495,10 @@ SET_LINESPACE:
                     // <--
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( TRUE );
-                    GetShell().SetCurNumRule( aSetRule );
+                    // --> OD 2008-03-17 #refactorlists#
+                    // no start or continuation of a list - list style is only changed
+                    GetShell().SetCurNumRule( aSetRule, false );
+                    // <--
                 }
             }
         }
