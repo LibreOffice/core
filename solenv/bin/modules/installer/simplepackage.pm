@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -115,7 +115,14 @@ sub register_extensions
             if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
             if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
 
-            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $installer::globals::temppath . " 2\>\&1 |";
+            my $localtemppath = $installer::globals::temppath;
+            if ( $installer::globals::iswindowsbuild )
+            {
+                $windowsslash = "\/";
+                $localtemppath =~ s/\\/\//g;
+                $localtemppath = "/".$localtemppath;
+            }
+            my $systemcall = $unopkgfile . " add --shared --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
 
             print "... $systemcall ...\n";
 
@@ -132,7 +139,7 @@ sub register_extensions
 
             if ($returnvalue)
             {
-                $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
