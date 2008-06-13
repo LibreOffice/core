@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unodraw.cxx,v $
- * $Revision: 1.80 $
+ * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1101,7 +1101,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             aAnchor.SetAnchor(&aPos);
                             aAnchor.SetType(FLY_AT_FLY);
                             aItemSet.Put(aAnchor);
-                            pFmt->SetAttr(aItemSet);
+                            pFmt->SetFmtAttr(aItemSet);
                             bDone = sal_True;
                         }
                     }
@@ -1178,7 +1178,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             {
                                 aAnchor.SetAnchor( pInternalPam->GetPoint() );
                                 aSet.Put(aAnchor);
-                                pFmt->SetAttr(aSet);
+                                pFmt->SetFmtAttr(aSet);
                             }
                         }
                         else
@@ -1213,7 +1213,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     else
                     {
                         aPropSet.setPropertyValue(*pMap, aValue, aSet);
-                        pFmt->SetAttr(aSet);
+                        pFmt->SetFmtAttr(aSet);
                     }
                 }
                 else
@@ -1272,7 +1272,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             //anchor position has to be inserted after the text attribute has been inserted
                             aNewAnchor.SetAnchor( aPam.GetPoint() );
                             aSet.Put( aNewAnchor );
-                            pFmt->SetAttr(aSet);
+                            pFmt->SetFmtAttr(aSet);
                             bSetAttr = false;
                             if( text::TextContentAnchorType_AS_CHARACTER == eNewAnchor &&
                                 FLY_IN_CNTNT != eOldAnchorId )
@@ -1287,10 +1287,10 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                             }
                         }
                         if( bSetAttr )
-                            pFmt->SetAttr(aSet);
+                            pFmt->SetFmtAttr(aSet);
                     }
                     else
-                        pFmt->SetAttr(aSet);
+                        pFmt->SetFmtAttr(aSet);
                 }
             }
             else
