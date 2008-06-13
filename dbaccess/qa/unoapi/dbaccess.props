@@ -1,6 +1,6 @@
 #properties needed for dbbaccess
 
-jdbc.url=mysql://jakobus:3306/testDB
-jdbc.user=unxsols
-jdbc.password=unxsols
-mysql.url=sdbc:mysql:jdbc:jakobus:3306/TestDB
+jdbc.url=mysql://unoapi:3306/testDB
+jdbc.user=unoapi
+jdbc.password=unoapi
+mysql.url=sdbc:mysql:jdbc:unoapi:3306/TestDB
