@@ -8,7 +8,7 @@
 #
 # $RCSfile: parameter.pm,v $
 #
-# $Revision: 1.50 $
+# $Revision: 1.51 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -334,6 +334,14 @@ sub setglobalvariables
             $installer::globals::islinuxrpmbuild = 0;
             $installer::globals::islinuxdebbuild = 1;
             $installer::globals::epmoutpath = "DEBS";
+            if ( $installer::globals::compiler =~ /unxlngi/ )
+            {
+                $installer::globals::islinuxinteldebbuild = 1;
+            }
+            if ( $installer::globals::compiler =~ /unxlngppc/ )
+            {
+                $installer::globals::islinuxppcdebbuild = 1;
+            }
         }
     }
 
