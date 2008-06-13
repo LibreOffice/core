@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: edfmt.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,10 +124,10 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, BOOL bReset)
         SfxItemSet aSet( pDoc->GetAttrPool(),
                             pCharFmt->GetAttrSet().GetRanges() );
         ((SwTxtNode*)pCNd)->GetAttr( aSet, nStt, nEnd );
-        pCharFmt->SetAttr( aSet );
+        pCharFmt->SetFmtAttr( aSet );
     }
     else if( pCNd->HasSwAttrSet() )
-        pCharFmt->SetAttr( *pCNd->GetpSwAttrSet() );
+        pCharFmt->SetFmtAttr( *pCNd->GetpSwAttrSet() );
 }
 
 // Frm
