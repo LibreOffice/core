@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nodes.cxx,v $
- * $Revision: 1.32 $
+ * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +47,6 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <frame.hxx>
-// --> OD 2006-11-14 #b6492987#
-#include <txtnodenumattr.hxx>
-// <--
 
 #include <docsh.hxx>
 #include <svtools/smplhint.hxx>
@@ -178,12 +175,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             SwNodeIndex aDelIdx( *this, n );
             SwNode& rNd = aDelIdx.GetNode();
 
-            // --> OD 2006-11-14 #b6492987#
-            // presave and restore all numbering attributes for a text node.
-//            unsigned nTxtNodeLevel = 0;
-            SwTxtNodeNumAttrs* pTxtNodeNumAttrs( 0L );
-            // <--
-
             // --> OD 2005-11-16 #i57920#
             // correction of refactoring done by cws swnumtree:
             // - <SwTxtNode::SetLevel( NO_NUMBERING ) is deprecated and
@@ -192,13 +183,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if ( rNd.IsTxtNode() )
             {
                 SwTxtNode* pTxtNode = rNd.GetTxtNode();
-                // --> OD 2006-11-14 #b6492987#
-                // presave numbering attributes of text node in instance of
-                // helper class <SwTxtNodeNumAttrs>.
-//                nTxtNodeLevel = pTxtNode->GetLevel();
-                pTxtNodeNumAttrs = new SwTxtNodeNumAttrs( *pTxtNode );
+                // --> OD 2008-03-13 #refactorlists#
+//                pTxtNode->UnregisterNumber();
+                pTxtNode->RemoveFromList();
                 // <--
-                pTxtNode->UnregisterNumber();
 
                 if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )
                 {
@@ -213,17 +201,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if( rNd.IsTxtNode() )
             {
                 SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
-                rTxtNd.SyncNumberAndNumRule();
-
-                // --> OD 2006-11-14 #b6492987#
-                // restore numbering attributes
-                ASSERT( pTxtNodeNumAttrs,
-                        "<SwNodes::ChgNode(..)> - missing instance of <SwTxtNumAttrs>. This is a serious defect, please inform OD" );
-                if ( rTxtNd.GetNumRule() && pTxtNodeNumAttrs )
-                {
-//                    rTxtNd.SetLevel(nTxtNodeLevel);
-                    pTxtNodeNumAttrs->ApplyPresavedNumAttrsAtTxtNode( rTxtNd );
-                }
+                // --> OD 2008-03-13 #refactorlists#
+//                rTxtNd.SyncNumberAndNumRule();
+                rTxtNd.AddToList();
                 // <--
 
                 if( bInsOutlineIdx &&
@@ -241,10 +221,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             }
             else if( rNd.IsCntntNode() )
                 ((SwCntntNode&)rNd).InvalidateNumRule();
-
-            // --> OD 2006-11-14 #b6492987#
-            delete pTxtNodeNumAttrs;
-            // <--
         }
     }
     else
@@ -257,7 +233,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
         String sNumRule;
         SwNodeIndex aInsPos( rInsPos );
-        unsigned int nTxtNdLevel = 0;
         for( ULONG n = 0; n < nSz; n++ )
         {
             SwNode* pNd = &rDelPos.GetNode();
@@ -271,8 +246,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             else if( pNd->IsTxtNode() )
             {
                 SwTxtNode* pTxtNd = (SwTxtNode*)pNd;
-
-                nTxtNdLevel = pTxtNd->GetLevel();
 
                 // loesche die Gliederungs-Indizies aus dem alten Nodes-Array
                 if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )
@@ -297,12 +270,15 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                     // Numerierungen auch aktualisiert werden.
                     pTxtNd->InvalidateNumRule();
 
-                pTxtNd->UnregisterNumber();
+                // --> OD 2008-03-13 #refactorlists#
+//                pTxtNd->UnregisterNumber();
+                pTxtNd->RemoveFromList();
+                // <--
             }
 
             RemoveNode( rDelPos.GetIndex(), 1, FALSE );     // Indizies verschieben !!
             SwCntntNode * pCNd = pNd->GetCntntNode();
-            rNds.InsertNode( pNd, aInsPos, false );
+            rNds.InsertNode( pNd, aInsPos );
 
             if( pCNd )
             {
@@ -315,11 +291,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                         pTxtNd->GetTxtColl()->GetOutlineLevel() )
                         rNds.pOutlineNds->Insert( pTxtNd );
 
-                    // OD 21.01.2003 #106403# - invalidate numbering rule of
-                    // text node in the destination environment.
-                    //pTxtNd->InvalidateNumRule();
-                    pTxtNd->SyncNumberAndNumRule();
-                    pTxtNd->SetLevel(nTxtNdLevel);
+                    // --> OD 2008-03-13 #refactorlists#
+//                    pTxtNd->SyncNumberAndNumRule();
+                    pTxtNd->AddToList();
+                    // <--
 
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
@@ -870,13 +845,6 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
-            {
-                SwNumRule * pRule = pAktNode->GetTxtNode()->GetNumRule();
-
-                if (pRule)
-                    pRule->SetInvalidRule(TRUE);
-            }
-            // no break;
         case ND_GRFNODE:
         case ND_OLENODE:
             {
@@ -2543,7 +2511,10 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSz, BOOL bDel )
 
             if (pTxtNd)
             {
-                pTxtNd->UnregisterNumber();
+                // --> OD 2008-03-13 #refactorlists#
+//                pTxtNd->UnregisterNumber();
+                pTxtNd->RemoveFromList();
+                // <--
             }
         }
     }
@@ -2614,44 +2585,18 @@ void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
     rIdx.pPrev = 0;
 }
 
-// --> OD 2006-10-16 #137792#
 void SwNodes::InsertNode( const SwNodePtr pNode,
-                          const SwNodeIndex& rPos,
-                          const bool bSyncNumberAndNumRule )
-// <--
+                          const SwNodeIndex& rPos )
 {
     const ElementPtr pIns = pNode;
     BigPtrArray::Insert( pIns, rPos.GetIndex() );
-    // --> OD 2006-10-16 #137792#
-    if ( bSyncNumberAndNumRule )
-    {
-        SwTxtNode* pTxtNd = pNode->GetTxtNode();
-        if ( pTxtNd )
-        {
-            pTxtNd->SyncNumberAndNumRule();
-        }
-    }
-    // <--
 }
 
-// --> OD 2006-10-16 #137792#
 void SwNodes::InsertNode( const SwNodePtr pNode,
-                          ULONG nPos,
-                          const bool bSyncNumberAndNumRule )
-// <--
+                          ULONG nPos )
 {
     const ElementPtr pIns = pNode;
     BigPtrArray::Insert( pIns, nPos );
-    // --> OD 2006-10-16 #137792#
-    if ( bSyncNumberAndNumRule )
-    {
-        SwTxtNode* pTxtNd = pNode->GetTxtNode();
-        if ( pTxtNd )
-        {
-            pTxtNd->SyncNumberAndNumRule();
-        }
-    }
-    // <--
 }
 
 // ->#112139#
@@ -2678,10 +2623,10 @@ SwNode * SwNodes::DocumentSectionEndNode(SwNode * pNode) const
     return DocumentSectionStartNode(pNode)->EndOfSectionNode();
 }
 
-SwNode * SwNodes::operator[](int n) const
-{
-    return operator[]((ULONG) n);
-}
+//SwNode * SwNodes::operator[](int n) const
+//{
+//    return operator[]((ULONG) n);
+//}
 // <-#112139#
 
 sal_Bool SwNodes::IsDocNodes() const
