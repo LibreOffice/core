@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfmt.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -203,36 +203,54 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
     if( pNode && pNode->HasSwAttrSet() )
     {
-        // das erhalten der Break-Attribute und der NumRule kommt nicht ins Undo
-        BOOL bLocked = pNode->IsModifyLocked();
+        const BOOL bLocked = pNode->IsModifyLocked();
         pNode->LockModify();
+
         SwDoc* pDoc = pNode->GetDoc();
 
+        // --> OD 2008-04-14 #refactorlists#
+        // remove unused attribute RES_LR_SPACE
+        // add list attributes
         SfxItemSet aSet( pDoc->GetAttrPool(),
-                            RES_PAGEDESC, RES_BREAK,
-                            RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
-                            RES_LR_SPACE, RES_LR_SPACE,
-                            0 );
+                         RES_PAGEDESC, RES_BREAK,
+                         RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
+                         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                         0 );
         const SfxItemSet* pSet = pNode->GetpSwAttrSet();
 
-        USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,
-                                                RES_PARATR_NUMRULE };
-
-        // --> OD 2007-03-02 #i75027#
-        // numbering attributes has to be restored, if numbering rule is restored.
-        bool bRestoreNumAttrs( false );
-        int nToBeRestoredNumLevel( -1 );
-        bool bToBeRestoredIsRestart( false );
-        SwNodeNum::tSwNumTreeNumber nToBeRestoredRestartVal( 0 );
+        // --> OD 2008-04-15 #refactorlists#
+//        std::vector<USHORT> aClearWhichIds;
+        SvUShorts aClearWhichIds;
+        // <--
+        // --> OD 2008-04-15 #refactorlists#
+        // restoring all paragraph list attributes
+        {
+            SfxItemSet aListAttrSet( pDoc->GetAttrPool(),
+                                     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
+                                     0 );
+            aListAttrSet.Set( *pSet );
+            if ( aListAttrSet.Count() )
+            {
+                aSet.Put( aListAttrSet );
+                SfxItemIter aIter( aListAttrSet );
+                const SfxPoolItem* pItem = aIter.GetCurItem();
+                while( pItem )
+                {
+                    aClearWhichIds.Insert( pItem->Which(), aClearWhichIds.Count() );
+                    pItem = aIter.NextItem();
+                }
+            }
+        }
         // <--
 
         const SfxPoolItem* pItem;
-        std::vector<USHORT> aClearWhichIds;
+        USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,
+                                                RES_PARATR_NUMRULE };
         for( USHORT n = 0; n < 3; ++n )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( aSavIds[ n ], FALSE, &pItem ))
             {
-                BOOL bSave = FALSE;
+                bool bSave = false;
                 switch( aSavIds[ n ] )
                 {
                     case RES_PAGEDESC:
@@ -244,27 +262,30 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     case RES_PARATR_NUMRULE:
                     {
                         bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
-                        // --> OD 2007-03-02 #i75027#
-                        SwTxtNode* pTxtNode( dynamic_cast<SwTxtNode*>(pNode) );
-                        if ( pTxtNode )
-                        {
-                            bRestoreNumAttrs = true;
-                            nToBeRestoredNumLevel = pTxtNode->GetLevel();
-                            bToBeRestoredIsRestart = pTxtNode->IsRestart();
-                            nToBeRestoredRestartVal = pTxtNode->GetStart();
-                        }
-                        // <--
                     }
                     break;
                 }
                 if( bSave )
                 {
                     aSet.Put( *pItem );
-                    aClearWhichIds.push_back( aSavIds[n] );
+                    // --> OD 2008-04-15 #refactorlists#
+//                    aClearWhichIds.push_back( aSavIds[n] );
+                    aClearWhichIds.Insert( aSavIds[n], aClearWhichIds.Count() );
                 }
             }
         }
-        pNode->ClearItemsFromAttrSet( aClearWhichIds );
+
+        // --> OD 2008-04-14 #refactorlists#
+        // do not clear items directly from item set and only clear to be kept
+        // attributes, if no deletion item set is found.
+//        pNode->ClearItemsFromAttrSet( aClearWhichIds );
+        const bool bKeepAttributes =
+                    !pPara || !pPara->pDelSet || pPara->pDelSet->Count() == 0;
+        if ( bKeepAttributes )
+        {
+            pNode->ResetAttr( aClearWhichIds );
+        }
+        // <--
 
         if( !bLocked )
             pNode->UnlockModify();
@@ -275,11 +296,24 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
             if( pPara->pDelSet && pPara->pDelSet->Count() )
             {
+                // --> OD 2008-04-15 #refactorlists#
+                ASSERT( !bKeepAttributes,
+                        "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
+                // <--
                 SfxItemIter aIter( *pPara->pDelSet );
                 pItem = aIter.FirstItem();
                 while( TRUE )
                 {
-                    pNode->ResetAttr( pItem->Which() );
+                    // --> OD 2008-04-14 #refactorlists#
+                    //
+                    if ( ( pItem->Which() != RES_PAGEDESC &&
+                           pItem->Which() != RES_BREAK &&
+                           pItem->Which() != RES_PARATR_NUMRULE ) ||
+                         ( aSet.GetItemState( pItem->Which(), FALSE ) != SFX_ITEM_SET ) )
+                    {
+                        pNode->ResetAttr( pItem->Which() );
+                    }
+                    // <--
                     if( aIter.IsAtEnd() )
                         break;
                     pItem = aIter.NextItem();
@@ -293,19 +327,14 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         else
             pNode->ResetAllAttr();
 
-        if( aSet.Count() )
+        // --> OD 2008-04-15 #refactorlists#
+        // only restore saved attributes, if needed
+        if ( bKeepAttributes && aSet.Count() )
+        // <--
         {
             pNode->LockModify();
+
             pNode->SetAttr( aSet );
-            // --> OD 2007-03-02 #i75027#
-            if ( bRestoreNumAttrs && dynamic_cast<SwTxtNode*>(pNode) )
-            {
-                SwTxtNode* pTxtNode( dynamic_cast<SwTxtNode*>(pNode) );
-                pTxtNode->SetLevel( nToBeRestoredNumLevel );
-                pTxtNode->SetRestart( bToBeRestoredIsRestart );
-                pTxtNode->SetStart( nToBeRestoredRestartVal );
-            }
-            // <--
 
             if( !bLocked )
                 pNode->UnlockModify();
@@ -410,6 +439,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg, BOOL bTxtAttr,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
+        // --> OD 2008-02-25 #refactorlists#
+        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+        // <--
         RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
         RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
@@ -570,6 +602,9 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         }
 
         if ( RES_PARATR_BEGIN <= nWhich && nWhich < RES_PARATR_END ||
+             // --> OD 2008-02-25 #refactorlists#
+             RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END ||
+             // <--
              RES_FRMATR_BEGIN <= nWhich && nWhich < RES_FRMATR_END ||
              RES_GRFATR_BEGIN <= nWhich && nWhich < RES_GRFATR_END )
         {
@@ -593,6 +628,9 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         SfxItemSet* pTmpOtherItemSet = new SfxItemSet( pDoc->GetAttrPool(),
                                     RES_PARATR_BEGIN, RES_PARATR_END-1,
+                                    // --> OD 2008-02-25 #refactorlists#
+                                    RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+                                    // <--
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                     0 );
@@ -629,7 +667,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             }
             // <--
 
-            SwNumFmt aNumFmt = pNumRule->Get(static_cast<USHORT>(pTxtNd->GetLevel()));
+            SwNumFmt aNumFmt = pNumRule->Get(static_cast<USHORT>(pTxtNd->GetActualListLevel()));
             SwCharFmt * pCharFmt =
                 pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
 
@@ -639,7 +677,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     pHistory->Add(pCharFmt->GetAttrSet(), *pCharFmt);
 
                 if ( pCharSet )
-                    pCharFmt->SetAttr(*pCharSet);
+                    pCharFmt->SetFmtAttr(*pCharSet);
             }
 
             DELETECHARSETS
@@ -749,7 +787,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     // dann am Tabellen Format setzen
                     SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
                     SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
-                    pFmt->SetAttr( aNew );
+                    pFmt->SetFmtAttr( aNew );
                 }
                 else
                 {
@@ -786,7 +824,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // dann am Tabellen Format setzen
             SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
             SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
-            pFmt->SetAttr( *pBreak );
+            pFmt->SetFmtAttr( *pBreak );
 
             // bOtherAttr = true means that pOtherSet == rChgSet. In this case
             // we know, that there is only one attribute in pOtherSet. We cannot
@@ -1118,12 +1156,12 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
     {
         ClearRedo();
         _UndoFmtAttr aTmp( rFmt );
-        rFmt.SetAttr( rSet );
+        rFmt.SetFmtAttr( rSet );
         if( aTmp.pUndo )
             AppendUndo( aTmp.pUndo );
     }
     else
-        rFmt.SetAttr( rSet );
+        rFmt.SetFmtAttr( rSet );
     SetModified();
 }
 
@@ -1135,7 +1173,7 @@ void SwDoc::ResetAttrAtFormat( const USHORT nWhichId,
     if ( DoesUndo() )
         pUndo = new SwUndoFmtResetAttr( rChangedFormat, nWhichId );
 
-    const BOOL bAttrReset = rChangedFormat.ResetAttr( nWhichId );
+    const BOOL bAttrReset = rChangedFormat.ResetFmtAttr( nWhichId );
 
     if ( bAttrReset )
     {
@@ -1211,7 +1249,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             aCallMod.Add( pDfltCharFmt );
             bCheckSdrDflt = 0 != pSdrPool;
         }
-        else if( RES_PARATR_BEGIN <= nWhich && RES_PARATR_END > nWhich )
+        else if ( ( RES_PARATR_BEGIN <= nWhich && RES_PARATR_END > nWhich ) ||
+                  // --> OD 2008-02-25 #refactorlists#
+                  ( RES_PARATR_LIST_BEGIN <= nWhich && nWhich < RES_PARATR_LIST_END ) )
+                  // <--
         {
             aCallMod.Add( pDfltTxtFmtColl );
             bCheckSdrDflt = 0 != pSdrPool;
@@ -1655,22 +1696,42 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
             lcl_RstAttr( pCNd, pPara );
 
             // --> OD 2007-11-06 #i62675#
+            // --> OD 2008-04-15 #refactorlists#
+            // check, if paragraph style has changed
             if ( pPara->bResetListAttrs &&
+                 pFmt != pCNd->GetFmtColl() &&
                  pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
             {
+                // --> OD 2008-04-08 #refactorlists#
+//                if ( pPara->pHistory )
+//                {
+//                    SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
+//                    ASSERT( pTNd,
+//                            "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
+//                    SwRegHistory aRegH( pTNd, *pTNd, pPara->pHistory );
+//                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
+//                }
+//                else
+//                {
+//                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
+//                }
+                std::auto_ptr< SwRegHistory > pRegH;
                 if ( pPara->pHistory )
                 {
                     SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
                     ASSERT( pTNd,
                             "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
-                    SwRegHistory aRegH( pTNd, *pTNd, pPara->pHistory );
+                    pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
+                }
 
-                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
-                }
-                else
-                {
-                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
-                }
+                pCNd->ResetAttr( RES_PARATR_NUMRULE );
+
+                // reset all list attributes
+                pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
+                pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
+                pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+                pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+                pCNd->ResetAttr( RES_PARATR_LIST_ID );
             }
             // <--
         }
@@ -1701,7 +1762,11 @@ BOOL SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     if( DoesUndo() )
     {
         ClearRedo();
-        SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt );
+        // --> OD 2008-04-15 #refactorlists#
+        SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt,
+                                                  bReset,
+                                                  bResetListAttrs );
+        // <--
         pHst = pUndo->GetHistory();
         AppendUndo( pUndo );
     }
@@ -1929,7 +1994,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 //      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
 //JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
-        pDest->SetAttr( pSrc->GetAttrSet() );      // kopiere Attribute
+        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
 
         //JP 18.08.98: Bug 55115 - PageDescAttribute in diesem Fall doch
         //              kopieren
@@ -1945,7 +2010,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
             if( !pDesc )
                 pDesc = aPageDescs[ MakePageDesc( rNm ) ];
             pDesc->Add( &aDesc );
-            pDest->SetAttr( aDesc );
+            pDest->SetFmtAttr( aDesc );
         }
 
         pDest->SetPoolFmtId( pSrc->GetPoolFmtId() );
@@ -2025,16 +2090,16 @@ void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
                 rSrcNds._Copy( aRg, aTmpIdx );
                 aTmpIdx = *pSttNd;
                 rSrcFmt.GetDoc()->_CopyFlyInFly( aRg, aTmpIdx );
-                pNewFmt->SetAttr( SwFmtCntnt( pSttNd ));
+                pNewFmt->SetFmtAttr( SwFmtCntnt( pSttNd ));
             }
             else
-                pNewFmt->ResetAttr( RES_CNTNT );
+                pNewFmt->ResetFmtAttr( RES_CNTNT );
         }
         if( bCpyHeader )
             pNewFmt->Add( (SwFmtHeader*)pNewItem );
         else
             pNewFmt->Add( (SwFmtFooter*)pNewItem );
-        rDestFmt.SetAttr( *pNewItem );
+        rDestFmt.SetFmtAttr( *pNewItem );
     }
     delete pNewItem;
 }
@@ -2083,7 +2148,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         aAttrSet.ClearItem( RES_FOOTER );
 
         rDstDesc.GetMaster().DelDiffs( aAttrSet );
-        rDstDesc.GetMaster().SetAttr( aAttrSet );
+        rDstDesc.GetMaster().SetFmtAttr( aAttrSet );
 
         aAttrSet.ClearItem();
         aAttrSet.Put( rSrcDesc.GetLeft().GetAttrSet() );
@@ -2091,7 +2156,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         aAttrSet.ClearItem( RES_FOOTER );
 
         rDstDesc.GetLeft().DelDiffs( aAttrSet );
-        rDstDesc.GetLeft().SetAttr( aAttrSet );
+        rDstDesc.GetLeft().SetFmtAttr( aAttrSet );
     }
 
     CopyHeader( rSrcDesc.GetMaster(), rDstDesc.GetMaster() );
@@ -2099,12 +2164,12 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     if( !rDstDesc.IsHeaderShared() )
         CopyHeader( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
-        rDstDesc.GetLeft().SetAttr( rDstDesc.GetMaster().GetHeader() );
+        rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
 
     if( !rDstDesc.IsFooterShared() )
         CopyFooter( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
-        rDstDesc.GetLeft().SetAttr( rDstDesc.GetMaster().GetFooter() );
+        rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
 
     if( bNotifyLayout && GetRootFrm() )
         //Layot benachrichtigen!
@@ -2248,7 +2313,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
             aLS.SetTxtLeft( nNext );
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
-            pTNd->SwCntntNode::SetAttr( aLS );
+            pTNd->SetAttr( aLS );
         }
         aIdx++;
     }
@@ -2439,14 +2504,12 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
             }
         }
 
-        // --> OD 2007-07-11 #i56253#
-        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rSet, rFmt);
-        // <--
+        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rFmt);
 
         AppendUndo(pUndo);
     }
 
-    rFmt.SetAttr(rSet);
+    rFmt.SetFmtAttr(rSet);
 }
 
 void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
