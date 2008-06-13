@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: flyincnt.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,14 +205,6 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        // --> OD 2004-08-12 #i32795# - calling methods <::DeepCalc(..)> and
-        // <GetAnchorFrm()->GetFormatted()> no longer needed due to the changed
-        // formatting of floating screen objects. It also causes layout loops.
-//        if ( !GetAnchorFrm()->IsTxtFrm() || !((SwTxtFrm*)GetAnchorFrm())->IsLocked() )
-//            ::DeepCalc( GetAnchorFrm() );
-//        if( GetAnchorFrm()->IsTxtFrm() )
-//            ((SwTxtFrm*)GetAnchorFrm())->GetFormatted();
-        // <--
         bValidPos = TRUE;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
@@ -229,7 +221,7 @@ void SwFlyInCntFrm::MakeObjPos()
             SwFmtVertOrient aVert( rVert );
             aVert.SetPos( nAct );
             pFmt->LockModify();
-            pFmt->SetAttr( aVert );
+            pFmt->SetFmtAttr( aVert );
             pFmt->UnlockModify();
         }
     }
