@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwbassh.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -288,14 +288,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
 
-                        aSet.Put( pFrmFmt->GetAttr(RES_FOLLOW_TEXT_FLOW) );
+                        aSet.Put( pFrmFmt->GetFmtAttr(RES_FOLLOW_TEXT_FLOW) );
 
-                        SwFmtVertOrient aVOrient((const SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
+                        SwFmtVertOrient aVOrient((const SwFmtVertOrient&)pFrmFmt->GetFmtAttr(RES_VERT_ORIENT));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, aVOrient.GetVertOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, aVOrient.GetRelationOrient() ));
                         aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, aVOrient.GetPos()));
 
-                        SwFmtHoriOrient aHOrient((const SwFmtHoriOrient&)pFrmFmt->GetAttr(RES_HORI_ORIENT));
+                        SwFmtHoriOrient aHOrient((const SwFmtHoriOrient&)pFrmFmt->GetFmtAttr(RES_HORI_ORIENT));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, aHOrient.GetHoriOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
@@ -514,9 +514,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSh->StartAction();
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
-                            SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
+                            SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetFmtAttr(RES_VERT_ORIENT));
                             aVOrient.SetVertOrient( nVertOrient );
-                            pFrmFmt->SetAttr(aVOrient);
+                            pFrmFmt->SetFmtAttr(aVOrient);
                             pSh->EndAction();
                         }
                         break;
