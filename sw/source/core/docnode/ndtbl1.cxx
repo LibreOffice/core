@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ndtbl1.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,7 +293,7 @@ void lcl_ProcessRowAttr( SvPtrarr& rFmtCmp, SwTableLine* pLine, const SfxPoolIte
     {
         SwFrmFmt *pOld = pLine->GetFrmFmt();
         SwFrmFmt *pNew = pLine->ClaimFrmFmt();
-        pNew->SetAttr( rNew );
+        pNew->SetFmtAttr( rNew );
         rFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), rFmtCmp.Count());
     }
 }
@@ -792,7 +792,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 {
                     SwFrmFmt *pOld = pBox->GetFrmFmt();
                     SwFrmFmt *pNew = pBox->ClaimFrmFmt();
-                    pNew->SetAttr( aBox );
+                    pNew->SetFmtAttr( aBox );
                     aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, nType ), aFmtCmp.Count());
                 }
             }
@@ -893,7 +893,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                         ::lcl_SetLineStyle( (SvxBorderLine*)aBox.GetRight(),
                                         pColor, pBorderLine );
                 }
-                pFmt->SetAttr( aBox );
+                pFmt->SetFmtAttr( aBox );
             }
         }
 
@@ -1152,7 +1152,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             {
                 SwFrmFmt *pOld = pBox->GetFrmFmt();
                 SwFrmFmt *pNew = pBox->ClaimFrmFmt();
-                pNew->SetAttr( rNew );
+                pNew->SetFmtAttr( rNew );
                 aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), aFmtCmp.Count());
             }
         }
@@ -1588,7 +1588,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
     if ( aHori.GetHoriOrient() != nOriHori )
     {
         aHori.SetHoriOrient( nOriHori );
-        pFmt->SetAttr( aHori );
+        pFmt->SetFmtAttr( aHori );
     }
 
     //Bei Automatischer Breite wird auf Linksbuendig umgeschaltet.
@@ -1598,7 +1598,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
         if( aHori.GetHoriOrient() == text::HoriOrientation::FULL )
         {
             aHori.SetHoriOrient( text::HoriOrientation::LEFT );
-            pFmt->SetAttr( aHori );
+            pFmt->SetFmtAttr( aHori );
         }
     }
 
