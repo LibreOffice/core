@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.84 $
+ * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1698,12 +1698,6 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     // OD 2004-04-23 #116347#
     GetOut()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
     GetOut()->SetLineColor();
-    // OD 14.02.2003 #107424# - no longer needed, because color configuration
-    // is loaded in constructor of <SwModule>.
-    /*
-    //make sure the color configuration has been loaded
-    SW_MOD()->GetColorConfig();
-    */
 
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
     {
