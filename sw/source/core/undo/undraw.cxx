@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undraw.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,7 +170,7 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
         else if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
             nCntntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
 
-        pFmt->SetAttr( SwFmtAnchor( rAnchor.GetAnchorId(), nCntntPos ) );
+        pFmt->SetFmtAttr( SwFmtAnchor( rAnchor.GetAnchorId(), nCntntPos ) );
     }
 }
 
@@ -193,7 +193,7 @@ void lcl_RestoreAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
             FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
             aPos.nContent.Assign( aIdx.GetNode().GetCntntNode(), nCntntPos );
         aTmp.SetAnchor( &aPos );
-        pFmt->SetAttr( aTmp );
+        pFmt->SetFmtAttr( aTmp );
 
         if( FLY_IN_CNTNT == rAnchor.GetAnchorId() )
         {
