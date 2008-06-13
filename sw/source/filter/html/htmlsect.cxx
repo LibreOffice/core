@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: htmlsect.cxx,v $
- * $Revision: 1.19 $
+ * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,7 +175,7 @@ void SwHTMLParser::NewDivision( int nToken )
             if( !pHdFtFmt )
             {
                 // noch keine Header, dann erzeuge einen.
-                rPageFmt.SetAttr( SwFmtHeader( sal_True ));
+                rPageFmt.SetFmtAttr( SwFmtHeader( sal_True ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt();
                 bNew = sal_True;
             }
@@ -187,7 +187,7 @@ void SwHTMLParser::NewDivision( int nToken )
             if( !pHdFtFmt )
             {
                 // noch keine Footer, dann erzeuge einen.
-                rPageFmt.SetAttr( SwFmtFooter( sal_True ));
+                rPageFmt.SetFmtAttr( SwFmtFooter( sal_True ));
                 pHdFtFmt = (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
                 bNew = sal_True;
             }
@@ -475,7 +475,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
         if( rCollULSpace.GetUpper() == rULSpace.GetUpper() )
             pTxtNode->ResetAttr( RES_UL_SPACE );
         else
-            pTxtNode->SwCntntNode::SetAttr(
+            pTxtNode->SetAttr(
                 SvxULSpaceItem( rULSpace.GetUpper(),
                                 rCollULSpace.GetLower(), RES_UL_SPACE ) );
     }
@@ -509,7 +509,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
         if( rCollULSpace.GetLower() == rULSpace.GetLower() )
             pTxtNode->ResetAttr( RES_UL_SPACE );
         else
-            pTxtNode->SwCntntNode::SetAttr(
+            pTxtNode->SetAttr(
                 SvxULSpaceItem( rCollULSpace.GetUpper(),
                                 rULSpace.GetLower(), RES_UL_SPACE ) );
     }
@@ -520,7 +520,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     else
         aULSpace.SetUpper( nSpace );
 
-    pHdFtFmt->SetAttr( aULSpace );
+    pHdFtFmt->SetFmtAttr( aULSpace );
 }
 
 sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
@@ -866,7 +866,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                 GetItemState( RES_PAGEDESC, sal_False, &pItem ) )
         {
             pDestCntntNd->SetAttr( *pItem );
-            pFrmFmt->ResetAttr( RES_PAGEDESC );
+            pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
         }
     }
 }
