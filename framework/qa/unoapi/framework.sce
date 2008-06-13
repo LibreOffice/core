@@ -29,7 +29,7 @@
 -o fwk.FontMenuController
 -o fwk.ModuleUIConfigurationManagerSupplier
 -o fwk.ModuleUIConfigurationManager
-# i84321 -o fwk.PopupMenuControllerFactory
--o fwk.Frame
+#i84321 -o fwk.PopupMenuControllerFactory
+#i88644 -o fwk.Frame
 -o fwk.Desktop
 
