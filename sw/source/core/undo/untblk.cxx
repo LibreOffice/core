@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: untblk.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +61,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
                             0, pTxtNd->GetTxt().Len(), FALSE );
         if( pTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode, *pDoc );
+            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
 
         if( !nSttCntnt )    // dann werden Flys mitgenommen !!
         {
@@ -258,8 +258,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
             }
 
             // setze alle Attribute im Node zurueck
-// ALT          pDoc->ResetAttr( *pPam, FALSE );
-            pTxtNode->SwCntntNode::ResetAllAttr();
+            pTxtNode->ResetAllAttr();
 
             if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pTxtFmtColl ))
                 pTxtFmtColl = (SwTxtFmtColl*)pTxtNode->ChgFmtColl( pTxtFmtColl );
