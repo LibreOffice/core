@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsh.cxx,v $
- * $Revision: 1.57 $
+ * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +67,7 @@
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
+#include <SwNodeNum.hxx>
 
 using namespace com::sun::star;
 
@@ -912,16 +913,10 @@ void SwEditShell::SetNumberingRestart()
 
                             if ( pNumRule && pTxtNd->GetNum() &&
                                  ( pTxtNd->HasNumber() || pTxtNd->HasBullet() ) &&
-                                 pTxtNd->IsCounted() &&
-                                 !pTxtNd->IsRestart() &&
-                                 pTxtNd->GetNum()->GetNumber() == pNumRule->Get(
-                                    static_cast<USHORT>(pTxtNd->GetLevel()) ).GetStart() )
-//                            const SwNodeNum* pNodeNum = ((SwTxtNode*)pNd)->_GetNodeNum();
-//                            SwNumRule *pNumRule = ((SwTxtNode*)pNd)->GetNumRule();
-
-//                            if(pNodeNum && pNumRule &&
-//                                    pNodeNum->IsNum() && pNodeNum->IsShowNum() && !pNodeNum->IsStart() &&
-//                                    *pNodeNum->GetLevelVal() == pNumRule->Get(pNodeNum->GetLevel()).GetStart())
+                                 pTxtNd->IsCountedInList() &&
+                                 !pTxtNd->IsListRestart() &&
+                                 pTxtNd->GetNum()->GetNumber() ==
+                                    pNumRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) ).GetStart() )
                             {
                                 //now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
