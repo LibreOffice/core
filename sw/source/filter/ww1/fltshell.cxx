@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fltshell.cxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -427,7 +427,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
             SwFrmFmt* pFmt = ((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
             SwFmtAnchor aAnchor(pFmt->GetAnchor());
             aAnchor.SetAnchor(aRegion.GetPoint());
-            pFmt->SetAttr(aAnchor);
+            pFmt->SetFmtAttr(aAnchor);
                     // Damit die Frames bei Einfuegen in existierendes Doc
                     //  erzeugt werden (erst nach Setzen des Ankers!):
             if(pDoc->GetRootFrm()
@@ -457,7 +457,10 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                                                 aTmpStart, aTmpEnd ) )
                     {
                         SwPaM aTmpPam( aTmpStart, aTmpEnd );
-                        pDoc->SetNumRule( aTmpPam, *pRul );
+                        // --> OD 2008-03-17 #refactorlists#
+                        // no start of a new list
+                        pDoc->SetNumRule( aTmpPam, *pRul, false );
+                        // <--
 
                         aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
                         aTmpStart++;
@@ -1039,7 +1042,7 @@ SwFltShell& SwFltShell::operator << (const SwField& rField)
 /*virtual*/ SwFltOutBase& SwFltFormatCollection::operator <<
                                 (const SfxPoolItem& rItem)
 {
-    pColl->SetAttr(rItem);
+    pColl->SetFmtAttr(rItem);
     return *this;
 }
 
@@ -1050,7 +1053,7 @@ const SfxPoolItem& SwFltOutDoc::GetAttr(USHORT nWhich)
 
 const SfxPoolItem& SwFltFormatCollection::GetAttr(USHORT nWhich)
 {
-    return GetColl()->GetAttr(nWhich);  // mit Parents
+    return GetColl()->GetFmtAttr(nWhich);   // mit Parents
 }
 
 // GetNodeOrStyAttr holt Attribute fuer Toggle- und Modify-Attribute:
@@ -1070,7 +1073,7 @@ const SfxPoolItem& SwFltOutDoc::GetNodeOrStyAttr(USHORT nWhich)
 
 const SfxPoolItem& SwFltFormatCollection::GetNodeOrStyAttr(USHORT nWhich)
 {
-    return GetColl()->GetAttr(nWhich);  // mit Parents
+    return GetColl()->GetFmtAttr(nWhich);   // mit Parents
 }
 
 const SfxPoolItem& SwFltShell::GetNodeOrStyAttr(USHORT nWhich)
@@ -1332,7 +1335,7 @@ void SwFltOutDoc::SetTableWidth(SwTwips nSwWidth)
     if( nSwWidth != nTableWidth ){
         if( nTableWidth )           // Nicht beim ersten Setzen
             SplitTable();
-        pTable->GetFrmFmt()->SetAttr( SwFmtFrmSize(ATT_VAR_SIZE, nSwWidth));
+        pTable->GetFrmFmt()->SetFmtAttr( SwFmtFrmSize(ATT_VAR_SIZE, nSwWidth));
         nTableWidth = nSwWidth;
     }
 }
@@ -1343,7 +1346,7 @@ void SwFltOutDoc::SetTableOrient(sal_Int16 eOri)
         ASSERT(pTable, "SetTableOrient ohne Tabelle");
         return;
     }
-    pTable->GetFrmFmt()->SetAttr( SwFmtHoriOrient( 0, eOri ));
+    pTable->GetFrmFmt()->SetFmtAttr( SwFmtHoriOrient( 0, eOri ));
 }
 
 void SwFltOutDoc::SetCellWidth(SwTwips nWidth, USHORT nCell /* = USHRT_MAX */ )
@@ -1360,7 +1363,7 @@ void SwFltOutDoc::SetCellWidth(SwTwips nWidth, USHORT nCell /* = USHRT_MAX */ )
     if(pTableBox && pTableBox->GetFrmFmt() ){
         SwFmtFrmSize aFmtFrmSize(ATT_FIX_SIZE);
         aFmtFrmSize.SetWidth(nWidth);
-        pTableBox->GetFrmFmt()->SetAttr(aFmtFrmSize);
+        pTableBox->GetFrmFmt()->SetFmtAttr(aFmtFrmSize);
     }
 }
 
@@ -1377,7 +1380,7 @@ void SwFltOutDoc::SetCellHeight(SwTwips nHeight)
     if (nHeight < MINLAY)
         nHeight = MINLAY;
     aFmtFrmSize.SetHeight(nHeight);
-    pTableLine->GetFrmFmt()->SetAttr(aFmtFrmSize);
+    pTableLine->GetFrmFmt()->SetFmtAttr(aFmtFrmSize);
 }
 
 const SfxPoolItem& SwFltOutDoc::GetCellAttr(USHORT nWhich)
@@ -1390,7 +1393,7 @@ const SfxPoolItem& SwFltOutDoc::GetCellAttr(USHORT nWhich)
     SwTableBox* pTableBox = GetBox(usTableY, usTableX);
     if(!pTableBox)
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
-    return pTableBox->GetFrmFmt()->GetAttr( nWhich );
+    return pTableBox->GetFrmFmt()->GetFmtAttr( nWhich );
 }
 
 void SwFltOutDoc::SetCellBorder(const SvxBoxItem& rFmtBox,
@@ -1398,7 +1401,7 @@ void SwFltOutDoc::SetCellBorder(const SvxBoxItem& rFmtBox,
 {
     SwTableBox* pTableBox = GetBox(usTableY, nCell);
     if(pTableBox)
-        pTableBox->GetFrmFmt()->SetAttr(rFmtBox);
+        pTableBox->GetFrmFmt()->SetFmtAttr(rFmtBox);
 }
 
 // nicht aktiviert !!!
@@ -1413,7 +1416,7 @@ void SwFltOutDoc::SetCellSpace(USHORT nDist)
         return;
 
     SvxBoxItem aFmtBox( *((SvxBoxItem*)
-                        &pTableBox->GetFrmFmt()->GetAttr( RES_BOX )));
+                        &pTableBox->GetFrmFmt()->GetFmtAttr( RES_BOX )));
 
     // versteh ich nich, sven: if (!nDist) nDist = 18; // ca. 0.03 cm
     if (nDist > 42) // max. 0.7 mm
@@ -1422,7 +1425,7 @@ void SwFltOutDoc::SetCellSpace(USHORT nDist)
         if (nDist < MIN_BORDER_DIST)
             nDist = MIN_BORDER_DIST;
     aFmtBox.SetDistance(nDist);
-    pTableBox->GetFrmFmt()->SetAttr(aFmtBox);
+    pTableBox->GetFrmFmt()->SetFmtAttr(aFmtBox);
 }
 
 void SwFltOutDoc::DeleteCell(USHORT nCell /* = USHRT_MAX */)
@@ -1632,16 +1635,15 @@ BOOL SwFltOutDoc::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
 /*virtual*/ void SwFltOutDoc::SetFlyFrmAttr(const SfxPoolItem& rAttr)
 {
     if (pFly)
-        pFly->SetAttr( rAttr );
-    else {
+        pFly->SetFmtAttr( rAttr );
+    else
         ASSERT(pFly, "SetFlyAttr ohne Doc-Fly");
-    }
 }
 
 /*virtual*/ const SfxPoolItem& SwFltOutDoc::GetFlyFrmAttr(USHORT nWhich)
 {
     if (pFly){
-        return pFly->GetAttr( nWhich );
+        return pFly->GetFmtAttr( nWhich );
     }else{
         ASSERT(pFly, "GetFlyAttr ohne Fly");
         return GetDoc().GetAttrPool().GetDefaultItem(nWhich);
@@ -1825,7 +1827,7 @@ void SwFltShell::BeginHeader(SwPageDesc* /*pPD*/)
     SwFrmFmt* pFmt = &pCurrentPageDesc->GetMaster(
      ); //(bUseLeft) ?  &pCurrentPageDesc->GetLeft() :
     SwFrmFmt* pHdFtFmt;
-    pFmt->SetAttr(SwFmtHeader(TRUE));
+    pFmt->SetFmtAttr(SwFmtHeader(TRUE));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
     const SwNodeIndex* pStartIndex = pHdFtFmt->GetCntnt().GetCntntIdx();
     if (!pStartIndex)
@@ -1842,7 +1844,7 @@ void SwFltShell::BeginFooter(SwPageDesc* /*pPD*/)
     SwFrmFmt* pFmt =  &pCurrentPageDesc->GetMaster(
      ); //(bUseLeft) ?  &pCurrentPageDesc->GetLeft() :
     SwFrmFmt* pHdFtFmt;
-    pFmt->SetAttr(SwFmtFooter(TRUE));
+    pFmt->SetFmtAttr(SwFmtFooter(TRUE));
     pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
     const SwNodeIndex* pStartIndex = pHdFtFmt->GetCntnt().GetCntntIdx();
     if (!pStartIndex)
