@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: txatritr.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -156,7 +156,7 @@ sal_Bool SwTxtAttrIterator::Next()
                         sal_uInt16 nWId = bIsUseGetWhichOfScript ?
                                 GetWhichOfScript( nWhichId,
                                                   aSIter.GetCurrScript() ) : nWhichId;
-                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetAttr(nWId);
+                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetFmtAttr(nWId);
                     }
                     else
                         pCurItem = &pHt->GetAttr();
