@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportDrawPage.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +35,8 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/documentconstants.hxx>
+
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -73,6 +75,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
     if ( xSection.is() )
         xFactory.set(xSection->getReportDefinition(),uno::UNO_QUERY);
     uno::Reference< drawing::XShape > xRet;
+    uno::Reference< drawing::XShape > xShape;
     if ( xFactory.is() )
     {
         bool bChangeOrientation = false;
@@ -125,7 +128,17 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         if ( pObj->ISA(OUnoObject) )
         {
             OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
-            bChangeOrientation = pUnoObj->getObjectId() == OBJ_DLG_HFIXEDLINE;
+            bChangeOrientation = pUnoObj->GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
+
+            SvxShapeControl* pShape = new SvxShapeControl( pObj );
+            xShape.set(*pShape,uno::UNO_QUERY);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
+        }
+        else if ( pObj->ISA(OCustomShape) )
+        {
+            SvxCustomShape* pShape = new SvxCustomShape( pObj );
+            xShape.set(*pShape,uno::UNO_QUERY);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
         }
         else if ( pObj->ISA(SdrOle2Obj) )
         {
@@ -155,9 +168,14 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
                 xObj->setVisualAreaSize( nAspect, aSz );
             }
+            SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
+            xShape.set(*pShape,uno::UNO_QUERY);
+            pShape->setShapeKind(pObj->GetObjIdentifier());
+            //xShape = new SvxOle2Shape( pOle2Obj );
         }
 
-        uno::Reference< drawing::XShape > xShape( SvxDrawPage::_CreateShape( pObj ) );
+        if ( !xShape.is() )
+            xShape.set( SvxDrawPage::_CreateShape( pObj ) );
 
         try
         {
