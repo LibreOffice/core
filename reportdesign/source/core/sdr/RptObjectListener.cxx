@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: RptObjectListener.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,15 +91,6 @@ DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
 }
 
 //----------------------------------------------------------------------------
-
-DlgEdHint::DlgEdHint( DlgEdHintKind eHint, OUnoObject* pObj )
-    :eHintKind( eHint )
-    ,pDlgEdObj( pObj )
-{
-}
-
-//----------------------------------------------------------------------------
-
 DlgEdHint::~DlgEdHint()
 {
 }
