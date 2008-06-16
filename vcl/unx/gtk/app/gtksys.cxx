@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gtksys.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
             pSVData->mpIntroWindow->Hide();
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "GtkSalSystem::ShowNativeDialog\n");
+    std::fprintf( stderr, "GtkSalSystem::ShowNativeDialog\n");
 #endif
 
     ByteString aTitle( rTitle, RTL_TEXTENCODING_UTF8 );
