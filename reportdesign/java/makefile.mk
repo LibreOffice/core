@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.4 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,6 +38,7 @@ TARGET  = sun-report-builder
 
 COPYFILES = \
   $(CLASSDIR)$/jfreereport.properties \
+  $(CLASSDIR)$/libformula.properties \
   $(CLASSDIR)$/loader.properties
 
 .INCLUDE : target.mk

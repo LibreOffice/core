@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ReportEngineParameterNames.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +49,8 @@ public class ReportEngineParameterNames
   public static final String INPUT_MASTER_VALUES = "input.master-values";
   public static final String INPUT_DETAIL_COLUMNS = "input.detail-columns";
   public static final String MIMETYPE = "output.mimetype";
+  public static final String AUTHOR = "Author";
+  public static final String TITLE = "Title";
 
   private ReportEngineParameterNames ()
   {
