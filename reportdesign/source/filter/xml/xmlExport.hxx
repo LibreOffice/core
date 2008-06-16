@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,7 +158,6 @@ private:
     void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
-    void                    exportImagePosition(sal_Int16 _nImagePosition);
     sal_Bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
