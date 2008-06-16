@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ChartRawReportTarget.java,v $
- * $Revision: 1.4 $
+ * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +75,6 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             throws ReportProcessingException
     {
         super(reportJob, resourceManager, baseResource, inputRepository, outputRepository, target, imageService, dataSourceFactory);
-        Log.getInstance().addTarget(new PrintStreamLogTarget());
     }
 
     protected String getTargetMimeType()
