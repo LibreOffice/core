@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XReportControlFormat.idl,v $
- * $Revision: 1.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +43,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 #include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/awt/FontSlant.idl>
 
 //=============================================================================
 
@@ -79,13 +80,33 @@ interface XReportControlFormat
 
         @since OOo 2.0.0
      */
-    [attribute,bound] short ParaAdjust;
+    [attribute,bound] short ParaAdjust
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
 
     //-------------------------------------------------------------------------
 
     /** specifies the font attributes of the text in the control.
      */
     [attribute,bound] com::sun::star::awt::FontDescriptor FontDescriptor
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** specifies the font attributes of the text in the control.
+     */
+    [attribute,bound] com::sun::star::awt::FontDescriptor FontDescriptorAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** specifies the font attributes of the text in the control.
+     */
+    [attribute,bound] com::sun::star::awt::FontDescriptor FontDescriptorComplex
     {
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
@@ -440,6 +461,161 @@ interface XReportControlFormat
     /** contains the character style name for unvisited hyperlinks.
      */
     [attribute,bound] string UnvisitedCharStyleName
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    /** This value contains the height of the characters in point.
+     */
+    [attribute,bound] float CharHeightAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
+     */
+    [attribute,bound] float CharWeightAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property specifies the name of the font style.
+        <p>It may contain more than one name separated by comma.</p>
+     */
+    [attribute,bound] string CharFontNameAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the name of the font style.
+        <p>This property may be empty.</p>
+     */
+    [attribute,bound] string CharFontStyleNameAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains font family as specified in
+        com.sun.star.awt.FontFamily .
+     */
+    [attribute,bound] short CharFontFamilyAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the text encoding of the font as specified in
+        com.sun.star.awt.CharSet.
+     */
+    [attribute,bound] short CharFontCharSetAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
+     */
+    [attribute,bound] short CharFontPitchAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
+     */
+    [attribute,bound] com::sun::star::awt::FontSlant CharPostureAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    //-------------------------------------------------------------------------
+    /** contains the value of the locale.
+     */
+    [attribute,bound] com::sun::star::lang::Locale CharLocaleAsian
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    //-------------------------------------------------------------------------
+    /** This value contains the height of the characters in point.
+     */
+    [attribute,bound] float CharHeightComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the value of the font weight.@see com::sun::star::awt::FontWeight
+     */
+    [attribute,bound] float CharWeightComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property specifies the name of the font style.
+        <p>It may contain more than one name separated by comma.</p>
+     */
+    [attribute,bound] string CharFontNameComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the name of the font style.
+        <p>This property may be empty.</p>
+     */
+    [attribute,bound] string CharFontStyleNameComplex
+
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains font family as specified in
+        com.sun.star.awt.FontFamily .
+     */
+    [attribute,bound] short CharFontFamilyComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the text encoding of the font as specified in
+        com.sun.star.awt.CharSet.
+     */
+    [attribute,bound] short CharFontCharSetComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the font pitch as specified in com.sun.star.awt.FontPitch.
+     */
+    [attribute,bound] short CharFontPitchComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+    //-------------------------------------------------------------------------
+    /** This property contains the value of the posture of the document.@see com::sun::star::awt::FontSlant
+     */
+    [attribute,bound] com::sun::star::awt::FontSlant CharPostureComplex
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    //-------------------------------------------------------------------------
+    /** contains the value of the locale.
+     */
+    [attribute,bound] com::sun::star::lang::Locale CharLocaleComplex
     {
         set raises ( com::sun::star::beans::UnknownPropertyException );
         get raises ( com::sun::star::beans::UnknownPropertyException );
