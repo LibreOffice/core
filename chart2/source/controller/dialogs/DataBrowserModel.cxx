@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DataBrowserModel.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,7 +112,7 @@ void lcl_copyDataSequenceProperties(
 {
     Reference< beans::XPropertySet > xOldSeqProp( xOldSequence, uno::UNO_QUERY );
     Reference< beans::XPropertySet > xNewSeqProp( xNewSequence, uno::UNO_QUERY );
-    ::chart::PropertyHelper::copyProperties( xOldSeqProp, xNewSeqProp );
+    comphelper::copyProperties( xOldSeqProp, xNewSeqProp );
 }
 
 bool lcl_SequenceOfSeriesIsShared(
@@ -691,7 +691,7 @@ Reference< chart2::data::XLabeledDataSequence >
     return m_apDialogModel->getCategories();
 }
 
-DataBrowserModel::tDataHeaderVector DataBrowserModel::getDataHeaders() const
+const DataBrowserModel::tDataHeaderVector& DataBrowserModel::getDataHeaders() const
 {
     return m_aHeaders;
 }
