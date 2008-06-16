@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ImageProducer.java,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -394,7 +394,7 @@ public class ImageProducer
             final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
             final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
 
-            if (!preserveIRI)
+            if (preserveIRI)
             {
                 final OfficeImage retval = new OfficeImage(url.toString(), widthVal, heightVal);
                 imageCache.put(url, retval);
