@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: typeconverter.hxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +58,6 @@ namespace configmgr
                 CFG_UNO_THROW1( script::CannotConvertException );
 
     // Type conversion
-    uno::TypeClass toTypeClass(const ::rtl::OUString& _rType);
     ::rtl::OUString toTypeName(const uno::TypeClass& _rTypeClass);
 
     uno::Type toType(const ::rtl::OUString& _rsType);
@@ -77,7 +76,6 @@ namespace configmgr
     ::rtl::OUString toTemplateName(const ::rtl::OUString& _rBasicTypeName, bool bList = false);
 
      uno::Type parseTemplateName(::rtl::OUString const& sTypeName);
-     bool parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList);
      bool parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList);
 
 } // namespace configmgr
