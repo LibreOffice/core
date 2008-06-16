@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlFormatCondition.cxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,11 +109,6 @@ OXMLFormatCondition::~OXMLFormatCondition()
 {
 
     DBG_DTOR( rpt_OXMLFormatCondition,NULL);
-}
-// -----------------------------------------------------------------------------
-ORptFilter& OXMLFormatCondition::GetOwnImport()
-{
-    return static_cast<ORptFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
 void OXMLFormatCondition::EndElement()
